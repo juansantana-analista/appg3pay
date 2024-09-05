@@ -1628,3 +1628,20 @@ function solicitarPermissaoNotificacao() {
 
 //Fim Função de Notificação
 
+//Inicio função compartilhar
+function onCompartilhar(titulo, texto, url) {
+    if (navigator.share) {
+        navigator.share({
+            title: titulo,
+            text: texto,
+            url: url,
+        }).then(() => {
+            console.log('Compartilhamento bem-sucedido');
+        }).catch((error) => {
+            console.error('Erro ao compartilhar:', error);
+        });
+    } else {
+        alert('Compartilhamento não suportado neste navegador.');
+    }
+}
+//Fim função compartilhar

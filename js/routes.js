@@ -386,24 +386,10 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+          var platform = device.platform;
+          console.log(platform);
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
-
-          $('#teste').on('click', function () {
-            if (navigator.share) {
-              navigator.share({
-                  title: 'Título do Compartilhamento',
-                  text: 'Texto do compartilhamento',
-                  url: 'https://www.seusite.com.br',
-              }).then(() => {
-                  console.log('Compartilhamento bem-sucedido');
-              }).catch((error) => {
-                  console.error('Erro ao compartilhar:', error);
-              });
-          } else {
-              alert('Compartilhamento não suportado neste navegador.');
-          }
-          });
 
           $('.abrir-popup').on('click', function (e) {
             e.preventDefault(); // Prevent default link behavior
