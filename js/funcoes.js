@@ -1604,8 +1604,8 @@ function solicitarPermissaoNotificacao() {
             if (registration) {
                 registration.showNotification("Teste de Notificação", {
                     body: "Essa é uma notificação de teste.",
-                    icon: 'icon.png',
-                    badge: 'badge.png',
+                    icon: 'favicon.png',
+                    badge: 'favicon.png',
                     data: {
                         url: '/'
                     }
