@@ -1600,7 +1600,7 @@ function solicitarPermissaoNotificacao() {
   function mostrarNotificacao() {
     const notification = new Notification("Olá! Você tem uma nova notificação.");
   }
-
+  mostrarNotificacao();
   function enviarNotificacao() {
     if (Notification.permission === "granted") {
       const options = {
