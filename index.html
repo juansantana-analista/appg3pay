@@ -8,10 +8,16 @@
          content="width=device-width, initial-scale=1, maximum-scale=0.9, minimum-scale=0.9, user-scalable=no, viewport-fit=cover"
          />
       <meta name="apple-mobile-web-app-capable" content="yes" />
+      <link rel="manifest" href="manifest.json">
       <!-- Color theme for statusbar (Android only) -->
       <meta name="theme-color" content="#ff7700" />
       <!-- Your app title -->
       <title>G3 PAY</title>
+      <script>
+          if(typeof navigator.serviceWorker !== 'undefined') {
+              navigator.serviceWorker.register('pwabuilder-sw.js')
+          }
+      </script>
       <!-- Path to Framework7 Library Bundle CSS -->
       <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
       <!-- CSS PERSONALIZADO PARA MENU-->
