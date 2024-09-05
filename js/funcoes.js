@@ -1656,4 +1656,16 @@ function onCompartilhar(titulo, texto, url) {
         alert('Compartilhamento não suportado neste navegador.');
     }
 }
+async function shareLink(shareTitle, shareText, link) {
+    const shareData = {
+        title: shareTitle,
+        text: shareText,
+        url: link,
+    };
+    try {
+        await navigator.share(shareData);
+    } catch (e) {
+        console.error(e);
+    }
+}
 //Fim função compartilhar
