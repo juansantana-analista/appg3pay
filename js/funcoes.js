@@ -1582,4 +1582,41 @@ function copiarParaAreaDeTransferencia(texto) {
 }
 //Fim da função para copiar
 
+//Início Função de Notificação
+function solicitarPermissaoNotificacao() {
+    // Verifique se a permissão já foi concedida
+    if (Notification.permission === "granted") {
+      mostrarNotificacao();
+    } 
+    // Caso a permissão não tenha sido negada, solicite-a
+    else if (Notification.permission !== "denied") {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          mostrarNotificacao();
+        }
+      });
+    }
+  }
+  function mostrarNotificacao() {
+    const notification = new Notification("Olá! Você tem uma nova notificação.");
+  }
+
+  function enviarNotificacao() {
+    if (Notification.permission === "granted") {
+      const options = {
+        body: "Esta é uma notificação de teste para seu PWA.",
+        icon: "/img/notificacao-icone.png",
+        badge: "/img/emblema.png",
+        vibrate: [200, 100, 200],
+        tag: "notificacao-pwa"
+      };
+      const notification = new Notification("Notificação PWA", options);
+      
+      notification.onclick = function() {
+        window.focus();
+      };
+    }
+  }
+
+//Fim Função de Notificação
 
