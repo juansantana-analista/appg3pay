@@ -44,4 +44,42 @@ self.addEventListener('fetch', (event) => {
       }
     })());
   }
+  
+});
+
+// Push Notification event listener
+self.addEventListener('push', (event) => {
+  const data = event.data ? event.data.json() : {};
+  
+  const options = {
+    body: data.body || 'New notification!',
+    icon: data.icon || 'icon.png',  // Set the icon for the notification
+    badge: data.badge || 'badge.png',  // Optional badge icon
+    data: {
+      url: data.url || '/'  // Custom URL to open on click
+    }
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(data.title || 'Notification', options)
+  );
+});
+
+// Handle notification click event
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();  // Close the notification when clicked
+  
+  // Open the URL provided in the notification data
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(windowClients => {
+      for (let client of windowClients) {
+        if (client.url === event.notification.data.url && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow(event.notification.data.url);
+      }
+    })
+  );
 });

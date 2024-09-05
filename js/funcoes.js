@@ -1599,6 +1599,14 @@ function solicitarPermissaoNotificacao() {
   }
   function mostrarNotificacao() {
     const notification = new Notification("Olá! Você tem uma nova notificação.");
+    registration.showNotification("Teste de Notificação", {
+        body: "Essa é uma notificação de teste.",
+        icon: 'icon.png',
+        badge: 'badge.png',
+        data: {
+          url: '/'
+        }
+      });
   }
   mostrarNotificacao();
   function enviarNotificacao() {
