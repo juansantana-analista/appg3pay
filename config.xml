@@ -8,7 +8,7 @@
     <content src="index.html" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
-    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarOverlaysWebView" value="true" />
     <preference name="StatusBarBackgroundColor" value="#FF3D00" />
     <preference name="StatusBarStyle" value="default" />
     <preference name="NavigationBarBackgroundColor" value="#FFFFFF" />
