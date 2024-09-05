@@ -470,6 +470,14 @@
       }
     }
   ],
+  "screenshots": [
+    {
+      "src": "img/screenshot.png",
+      "sizes": "1280x720",
+      "type": "image/jpg",
+      "platform": "wide"
+    }
+  ],
   "handle_links": {
     "action": "/handle-link",
     "accept": {
