@@ -1677,9 +1677,7 @@ function isPWA() {
 }
 if (isPWA()) { 
     //CONFIRMAR
-    app.dialog.confirm('Permitir Notificações?', 'Notificações', function () {
         solicitarPermissaoNotificacao();
-    });
 } else {
     console.log('App não está instalado como PWA');
 }
