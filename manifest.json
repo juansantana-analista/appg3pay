@@ -1,12 +1,12 @@
 {
   "background_color": "#ffffff",
   "dir": "ltr",
-  "display": "fullscreen",
   "name": "G3 Pay",
-  "orientation": "any",
   "scope": "/",
   "short_name": "G3 Pay",
   "start_url": "/",
+  "display": "standalone",
+  "display_override": ["standalone"],
   "theme_color": "#ff7700",
   "icons": [
     {
