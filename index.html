@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <!-- Required meta tags-->
+      <meta charset="utf-8" />
+      <meta
+         name="viewport"
+         content="width=device-width, initial-scale=1, maximum-scale=0.9, minimum-scale=0.9, user-scalable=no, viewport-fit=cover"
+         />
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <!-- Color theme for statusbar (Android only) -->
+      <meta name="theme-color" content="#ff7700" />
+      <!-- Your app title -->
+      <title>G3 PAY</title>
+      <!-- Path to Framework7 Library Bundle CSS -->
+      <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
+      <!-- CSS PERSONALIZADO PARA MENU-->
+      <link rel="stylesheet" href="css/index.css" />
+      <link rel="stylesheet" href="css/detalhes.css" />
+      <link rel="stylesheet" href="css/carrinho.css" />
+      <!--Ícones Material Design-->
+      <link rel="stylesheet" href="css/materialdesignicons.min.css" />
+      <!-- Icones do Remix icon-->
+      <link rel="stylesheet" href="css/remixicon/remixicon.css" />
+   </head>
+   <body>
+      <!-- App root element -->
+      <div id="app">
+         <!-- Your main view, should have "view-main" class -->
+         <div class="view view-main">
+            <!-- TAB BAR-->
+            <div id="menuPrincipal" class="toolbar toolbar-bottom display-none">
+               <div class="toolbar-inner display-flex">
+                  <a href="/produtos/" class="tab-link link">
+                  <i class="mdi mdi-package-variant"></i>
+                  <span>Produtos</span>
+                  </a>
+                  <a href="/equipe/" class="tab-link link">
+                  <i class="mdi mdi-account-group"></i>
+                  <span>Equipe</span>
+                  </a>
+                  <a href="/home/" class="tab-link link active">
+                  <i class="mdi mdi-home"></i>
+                  <span>Início</span>
+                  </a>
+                  <a href="/pedidos/" class="tab-link link">
+                  <i class="mdi mdi-file-check"></i>
+                  <span>Pedidos</span>
+                  </a>
+                  <a href="/perfil/" class="tab-link link">
+                  <i class="mdi mdi-account"></i>
+                  <span>Perfil</span>
+                  </a>
+               </div>
+            </div>
+            <!-- Nested panel has parent page specified in containerEl parameter -->
+            <div class="panel panel-left panel-cover panel-init" id="panel-nested" data-container-el="#panel-page">
+               <div class="block topo-painel skin" id="blocoMenu">
+                  <div class="block-header">
+                     <div class="row" style="color: #fff;">
+                        <div class="col-20" style="font-size:28px;"><i class="mdi mdi-account-circle"></i></div>
+                        <div class="col-80"><strong id="menuNome">G3 Pay</strong><br /><small id="nomeUsuario">Juan Santana</small></div>
+                     </div>
+                  </div>
+               </div>
+               <!--<div class="block-title">Se quiser colocar uma divisória copie esse trecho e descomente</div>-->
+               <div class="list links-list no-hairlines no-hairlines-between no-chevron">
+                  <ul>
+                     <li>
+                        <a href="/home/" class="panel-close">
+                           <div class="item-content panel-close">
+                              <div class="item-media" style="font-size:28px;"><i class="mdi mdi-home-outline"></i></div>
+                              <div class="item-inner">Início</div>
+                           </div>
+                        </a>
+                     </li>
+                     <li>
+                        <a href="/equipe/" class="panel-close">
+                           <div class="item-content class="panel-close">
+                              <div class="item-media" style="font-size:28px;"><i class="mdi mdi-account-group"></i></div>
+                              <div class="item-inner">Equipe</div>
+                           </div>
+                        </a>
+                     </li>
+                     <li>
+                        <a href="/produtos/" class="panel-close">
+                           <div class="item-content class="panel-close">
+                              <div class="item-media" style="font-size:28px;"><i class="mdi mdi-package-variant"></i></div>
+                              <div class="item-inner">Produtos</div>
+                           </div>
+                        </a>
+                     </li>
+                     <li>
+                        <a href="/pedidos/" class="panel-close">
+                           <div class="item-content">
+                              <div class="item-media" style="font-size:28px;"><i class="mdi mdi-file-check"></i></div>
+                              <div class="item-inner">Meus Pedidos</div>
+                           </div>
+                        </a>
+                     </li>
+                     <li>
+                        <a href="/curso/" class="panel-close">
+                           <div class="item-content panel-close">
+                              <div class="item-media" style="font-size:28px;"><i class="mdi mdi-school"></i></div>
+                              <div class="item-inner">Cursos</div>
+                           </div>
+                        </a>
+                     </li>
+                     <li>
+                        <a href="/perfil/" class="panel-close">
+                           <div class="item-content ">
+                              <div class="item-media" style="font-size:28px;"><i class="mdi mdi-account"></i></div>
+                              <div class="item-inner">Perfil</div>
+                           </div>
+                        </a>
+                     </li>
+                     <li>
+                        <br>
+                        <center><img src="img/logo.png" width="130px"></center>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <!-- Initial Page, "data-name" contains page name -->
+            <div data-name="index" class="page color-theme-blue">
+               <!-- Scrollable page content -->
+               <div class="page-content"></div>
+            </div>
+         </div>
+      </div>
+      <!-- Path to Framework7 Library Bundle JS-->
+      <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <!-- jQuery -->
+      <script type="text/javascript" src="lib/jquery-3.7.0.min.js"></script>
+      <script type="text/javascript" src="lib/jquery.mask.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+      <script src="lib/jwt-decode.min.js"></script>
+      <!-- Roteamento do app-->
+      <script type="text/javascript" src="js/routes.js"></script>
+      <script src="cordova.js"></script>
+   </body>
+</html>

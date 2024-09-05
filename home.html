@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Required meta tags-->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- Color theme for statusbar (Android only) -->
+    <meta name="theme-color" content="#FF4B00" />
+    <!-- Your app title -->
+    <title>G3 PAY</title>
+    <!-- Path to Framework7 Library Bundle CSS -->
+    <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
+    <!-- CSS PERSONALIZADO PARA MENU-->
+    <link rel="stylesheet" href="css/index.css" />
+    <!--Ícones Material Design-->
+    <link rel="stylesheet" href="css/materialdesignicons.min.css" />
+    <!-- Icones do Remix icon-->
+    <link rel="stylesheet" href="css/remixicon/remixicon.css" />
+  </head>
+
+  <body>
+    <!-- App root element -->
+    <div id="app">
+      <!-- Your main view, should have "view-main" class -->
+      <div class="view view-main">
+        <!-- Initial Page, "data-name" contains page name -->
+        <div data-name="home" class="page color-theme-blue">
+          <!-- NAV TOPO-->
+          <div class="top-nav">
+            <div class="left">
+              <a
+                href="#"
+                class="link panel-open btn-novo"
+                data-panel="#panel-nested"
+              >
+                <i class="mdi mdi-menu"></i>
+              </a>
+            </div>
+            <img src="img/logo-nav.png" class="title-logo" width="110px" />
+            <a href="/informacoes/" class="btn-header">
+              <i class="mdi mdi-information-variant"></i>
+            </a>
+          </div>
+          <!-- Scrollable page content -->
+
+          <div
+            class="page-content"
+            style="background-color: #f4f4f4; padding-bottom: 160px"
+          >
+            <div class="block">
+              <h2 class="titulo-pagina">Início</h2>
+
+              <div class="card-container">
+                <div class="card-color white">
+                  <i class="mdi mdi-finance"></i>
+                  <div class="card-text">
+                    <span class="quantity">0</span>
+                    <span class="label">Vendas</span>
+                  </div>
+                </div>
+                <div class="card-color green">
+                  <i class="mdi mdi-account-arrow-right"></i>
+                  <div class="card-text">
+                    <span class="quantity">0</span>
+                    <span class="label">Quantidade Diretos</span>
+                  </div>
+                </div>
+                <div class="card-color purple">
+                  <i class="mdi mdi-account-network"></i>
+                  <div class="card-text">
+                    <span class="quantity">0</span>
+                    <span class="label">Quantidade Indiretos</span>
+                  </div>
+                </div>
+                <div class="card-color blue">
+                  <i class="mdi mdi-account-check"></i>
+                  <div class="card-text">
+                    <span class="quantity">0</span>
+                    <span class="label">Ativos</span>
+                  </div>
+                </div>
+                <a href="" class="abrir-popup">
+                  <div class="card-color black">
+                    <i class="mdi mdi-qrcode-scan"></i>
+                    <div class="card-text">
+                      <span class="quantity">Link de Indicação</span>
+                      <span class="label">Clique aqui e compartilhe</span>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <!--
+              <div class="chart-container">
+                
+                <canvas id="revenueChart"></canvas>
+              <div class="row">
+                <div class="col">
+                  <div class="item-content">
+                    <div class="item-inner filters">
+                      <select id="timeFilter" class="custom-select">
+                        <option value="all">Tempo todo</option></select
+                      ><br />
+                      <select id="productFilter" class="custom-select">
+                        <option value="all">Todos os produtos</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              -->     
+              <!--
+              <div class="summary">
+                <div class="card-summary">
+                  <div class="card-content card-content-padding">
+                    <div class="row align-items-center">
+                      <div class="col-15">
+                        <i class="mdi mdi-cash"></i>
+                      </div>
+                      <div class="col-85">
+                        <p>Total de Ganhos</p>
+                        <h2>R$ 134.711,22</h2>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="summary">
+                <div class="card-summary">
+                  <div class="card-content card-content-padding">
+                    <div class="row align-items-center">
+                      <div class="col-15">
+                        <i class="mdi mdi-trophy"></i>
+                      </div>
+                      <div class="col-85">
+                        <p>Bônus Afiliado</p>
+                        <h2>R$ 2.545,80</h2>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>!-->
+          </div>
+
+          
+          <!-- INÍCIO POPUP COMPARTILHAR LINK -->
+          <div class="popup popup-compartilhar">
+            <div class="view popup-view">
+              <div class="page">
+                <div class="top-nav">
+                  <div class="left">
+                    <a href="#" class="link btn-novo popup-close">
+                      <i class="mdi mdi-arrow-left"></i>
+                    </a>
+                  </div>
+                  <strong class="title-descricao">
+                    <i class="ri-share-2-line"></i> Compartilhar</strong
+                  >
+                  <a href="/informacoes/" class="btn-header">
+                    <i class="mdi mdi-information-variant"></i>
+                  </a>
+                </div>
+                <div
+                  class="page-content container-principal"
+                  style="padding-bottom: 180px"
+                >
+                <div class="container-share">
+                    <div class="header">
+                        <h2>Link de Indicação</h2>
+                    </div>
+                    <div class="qr-section">
+                        <span id="qrcode"></span>
+                        <p>Escaneie o QRCode</p>
+                    </div>
+                    <div class="transaction-history">
+                        <button id="compartilharLink">Compartilhar link</button>
+                        <span>Divulgue esse link para ampliar a sua rede!!!</span>
+                    </div>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- FIM POPUP COMPARTILHAR LINK -->
+
+
+        </div>
+      </div>
+    </div>
+    <!-- Path to Framework7 Library Bundle JS-->
+    <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
+    <!-- jQuery -->
+    <script type="text/javascript" src="lib/jquery-3.7.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Roteamento do app-->
+    <script type="text/javascript" src="js/routes.js"></script>
+    <script src="cordova.js"></script>
+  </body>
+</html>
