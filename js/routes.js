@@ -389,10 +389,6 @@ var app = new Framework7({
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
 
-          $('#teste').on('click', function () {
-            solicitarPermissaoNotificacao();
-          });
-
           $('.abrir-popup').on('click', function (e) {
             e.preventDefault(); // Prevent default link behavior
             app.popup.open('.popup-compartilhar');
