@@ -6,8 +6,11 @@
   "short_name": "G3 Pay",
   "start_url": "/",
   "display": "standalone",
-  "display_override": ["standalone"],
+  "display_override": ["standalone", "fullscreen"],
   "theme_color": "#ff7700",
+  "window-controls-overlay": {
+    "color": "#ff7700"
+  },
   "icons": [
     {
       "src": "windows11/SmallTile.scale-100.png",
