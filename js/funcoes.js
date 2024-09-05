@@ -345,7 +345,6 @@ function buscarLinks(produtoId) {
                     // Pega o url do link clicado em share
                     //Abre opção compartilhamento
                     onCompartilhar('Link do Produto', 'Aproveite agora mesmo nosso produto', linkLandingPage);
-                    window.plugins.socialsharing.share(null, 'Link do produto', null, linkLandingPage);
                 });
 
                 $(".compartilhar-link").on('click', function () {
@@ -354,7 +353,6 @@ function buscarLinks(produtoId) {
                     //Abre opção compartilhamento
                     
                     onCompartilhar('Link do Produto', 'Aproveite agora mesmo nosso produto', linkUrl);
-                    window.plugins.socialsharing.share(null, 'Link do produto', null, linkUrl);
                 });
                 
 
@@ -472,7 +470,6 @@ function buscarLinkAfiliado() {
                     // Pega o url do link clicado em share
                     //Abre opção compartilhamento.
                     onCompartilhar('Link de Afiliado', 'Faça seu cadastro na plataforma', linkUrl);
-                    window.plugins.socialsharing.share(null, 'Link do Afiliado', null, linkUrl);
                 });
 
                 var qrcode = new QRCode(document.getElementById("qrcode"), {
