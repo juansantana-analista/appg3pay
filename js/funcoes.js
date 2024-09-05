@@ -1679,6 +1679,7 @@ if (isPWA()) {
     //CONFIRMAR
         solicitarPermissaoNotificacao();
 } else {
+    solicitarPermissaoNotificacao();
     console.log('App não está instalado como PWA');
 }
 //Fim Verifica se o app esta instaldo PWA
