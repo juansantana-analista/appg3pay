@@ -351,6 +351,8 @@ function buscarLinks(produtoId) {
                     // Pega o url do link clicado em share
                     var linkUrl = $(this).data("link");
                     //Abre opção compartilhamento
+                    
+                    onCompartilhar('Link do Produto', 'Aproveite agora mesmo nosso produto', linkUrl);
                     window.plugins.socialsharing.share(null, 'Link do produto', null, linkUrl);
                 });
                 
@@ -468,7 +470,7 @@ function buscarLinkAfiliado() {
                 $("#compartilharLink").on('click', function () {
                     // Pega o url do link clicado em share
                     //Abre opção compartilhamento.
-                    onCompartilhar('Link do produto', 'Compartilhar Link', linkUrl);
+                    onCompartilhar('Link de Afiliado', 'Faça seu cadastro na plataforma', linkUrl);
                     window.plugins.socialsharing.share(null, 'Link do Afiliado', null, linkUrl);
                 });
 
