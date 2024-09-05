@@ -1609,7 +1609,7 @@ function solicitarPermissaoNotificacao() {
         }
       });
   }
-  //mostrarNotificacao();
+  mostrarNotificacao();
   function enviarNotificacao() {
     if (Notification.permission === "granted") {
       const options = {
