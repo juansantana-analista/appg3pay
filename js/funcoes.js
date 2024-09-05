@@ -1676,8 +1676,10 @@ function isPWA() {
     return window.matchMedia('(display-mode: standalone)').matches || (navigator.standalone === true);
 }
 if (isPWA()) { 
-    //Solicitar Noticações
-    solicitarPermissaoNotificacao();
+    //CONFIRMAR
+    app.dialog.confirm('Permitir Notificações?', 'Notificações', function () {
+        solicitarPermissaoNotificacao();
+    });
 } else {
     console.log('App não está instalado como PWA');
 }
