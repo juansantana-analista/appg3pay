@@ -1195,8 +1195,7 @@ app.on('routeChange', function (route) {
   }
 });
 
-document.addEventListener('deviceready', setTimeout(SetStatusBarColor, 500), false);
-function SetStatusBarColor() {
+function onDeviceReady() {
   StatusBar.overlaysWebView(false);
 
   StatusBar.backgroundColorByHexString("#ff7700");
@@ -1205,10 +1204,6 @@ function SetStatusBarColor() {
 
   StatusBar.styleDefault();
   NavigationBar.backgroundColorByHexString("#FFFFFF", true);
-
-}
-
-function onDeviceReady() {
   //Quando estiver rodando no celular
   var mainView = app.views.create('.view-main', { url: '/index/' });
 
