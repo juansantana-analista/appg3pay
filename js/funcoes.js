@@ -352,7 +352,7 @@ function buscarLinks(produtoId) {
                     var linkUrl = $(this).data("link");
                     //Abre opção compartilhamento
                     
-                    onCompartilhar('Link do Produto', 'Aproveite agora mesmo nosso produto', linkUrl);
+                    //onCompartilhar('Link do Produto', 'Aproveite agora mesmo nosso produto', linkUrl);
                     window.plugins.socialsharing.share(null, 'Link do produto', null, linkUrl);
                 });
                 
