@@ -462,7 +462,7 @@
     }
   ],
   "launch_handler": {
-    "client_mode": "focus", // Pode ser 'window' ou 'focus'
+    "client_mode": "focus",
     "clients": {
       "open_window": "/"
     }
