@@ -1599,16 +1599,27 @@ function solicitarPermissaoNotificacao() {
     }
   }
   function mostrarNotificacao() {
-    const notification = new Notification("Olá! Você tem uma nova notificação.");
-    registration.showNotification("Teste de Notificação", {
-        body: "Essa é uma notificação de teste.",
-        icon: 'icon.png',
-        badge: 'badge.png',
-        data: {
-          url: '/'
-        }
-      });
-  }
+    if (navigator.serviceWorker && Notification.permission === 'granted') {
+        navigator.serviceWorker.getRegistration().then(function(registration) {
+            if (registration) {
+                registration.showNotification("Teste de Notificação", {
+                    body: "Essa é uma notificação de teste.",
+                    icon: 'icon.png',
+                    badge: 'badge.png',
+                    data: {
+                        url: '/'
+                    }
+                });
+            } else {
+                console.warn('Nenhum Service Worker registrado.');
+            }
+        }).catch(function(error) {
+            console.error('Erro ao obter o registro do service worker:', error);
+        });
+    } else {
+        console.warn('Notificações não estão permitidas ou o Service Worker não está disponível.');
+    }
+}
   mostrarNotificacao();
   function enviarNotificacao() {
     if (Notification.permission === "granted") {
