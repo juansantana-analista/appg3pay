@@ -467,8 +467,9 @@ function buscarLinkAfiliado() {
                 
                 $("#compartilharLink").on('click', function () {
                     // Pega o url do link clicado em share
-                    //Abre opção compartilhamento
-                    window.plugins.socialsharing.share(null, 'Link do produto', null, linkUrl);
+                    //Abre opção compartilhamento.
+                    onCompartilhar('Link do produto', 'Compartilhar Link', linkUrl);
+                    window.plugins.socialsharing.share(null, 'Link do Afiliado', null, linkUrl);
                 });
 
                 var qrcode = new QRCode(document.getElementById("qrcode"), {
