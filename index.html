@@ -14,10 +14,35 @@
       <!-- Your app title -->
       <title>G3 PAY</title>
       <script>
-          if(typeof navigator.serviceWorker !== 'undefined') {
-              navigator.serviceWorker.register('pwabuilder-sw.js')
-          }
-      </script>
+         if (typeof navigator.serviceWorker !== 'undefined') {
+             navigator.serviceWorker.register('pwabuilder-sw.js')
+             .then(function(registration) {
+                 console.log('Service Worker registrado com sucesso:', registration);
+                 
+                 // Aqui você pode solicitar permissão e mostrar a notificação
+                 mostrarNotificacao(registration);
+             })
+             .catch(function(error) {
+                 console.error('Falha ao registrar o Service Worker:', error);
+             });
+         }
+     
+         function mostrarNotificacao(registration) {
+             // Verifica se a permissão para notificações foi concedida
+             Notification.requestPermission().then(function(permission) {
+                 if (permission === "granted") {
+                     registration.showNotification("Teste de Notificação", {
+                         body: "Essa é uma notificação de teste.",
+                         icon: 'icon.png',  // Adicione ícones corretos se desejar
+                         badge: 'badge.png',
+                         data: {
+                             url: '/'
+                         }
+                     });
+                 }
+             });
+         }
+     </script>
       <!-- Path to Framework7 Library Bundle CSS -->
       <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
       <!-- CSS PERSONALIZADO PARA MENU-->
