@@ -1669,3 +1669,15 @@ async function shareLink(shareTitle, shareText, link) {
     }
 }
 //Fim função compartilhar
+
+//Inicio Verifica se o app esta instaldo PWA
+function isPWA() {
+    // Verifica se está rodando em modo standalone
+    return window.matchMedia('(display-mode: standalone)').matches || (navigator.standalone === true);
+}
+if (isPWA()) {
+    console.log('App está instalado como PWA');
+} else {
+    console.log('App não está instalado como PWA');
+}
+//Fim Verifica se o app esta instaldo PWA
