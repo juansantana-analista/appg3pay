@@ -461,6 +461,12 @@
       "sizes": "1024x1024"
     }
   ],
+  "launch_handler": {
+    "client_mode": "focus", // Pode ser 'window' ou 'focus'
+    "clients": {
+      "open_window": "/"
+    }
+  },
   "id": "app.g3pay.com",
   "description": "A Primeira plataforma de Múltiplos Ganhos no Mundo",
   "lang": "pt",
