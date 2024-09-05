@@ -461,12 +461,27 @@
       "sizes": "1024x1024"
     }
   ],
-  "launch_handler": {
-    "client_mode": "focus",
-    "clients": {
-      "open_window": "/"
+  "file_handlers": [
+    {
+      "action": "/open-file",
+      "accept": {
+        "application/pdf": [".pdf"],
+        "image/*": [".jpg", ".jpeg", ".png"]
+      }
+    }
+  ],
+  "handle_links": {
+    "action": "/handle-link",
+    "accept": {
+      "application/vnd.w3c.webapp-manifest+json": [".webmanifest"]
     }
   },
+  "protocol_handlers": [
+    {
+      "protocol": "web+g3pay",
+      "url": "/handle-protocol?url=%s"
+    }
+  ],
   "id": "app.g3pay.com",
   "description": "A Primeira plataforma de Múltiplos Ganhos no Mundo",
   "lang": "pt",
