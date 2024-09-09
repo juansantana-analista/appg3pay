@@ -1587,13 +1587,13 @@ function copiarParaAreaDeTransferencia(texto) {
 function solicitarPermissaoNotificacao() {
     // Verifique se a permissão já foi concedida
     if (Notification.permission === "granted") {
-      mostrarNotificacao();
+      //mostrarNotificacao();
     } 
     // Caso a permissão não tenha sido negada, solicite-a
     else if (Notification.permission !== "denied") {
       Notification.requestPermission().then((permission) => {
         if (permission === "granted") {
-          mostrarNotificacao();
+          //mostrarNotificacao();
         }
       });
     }
@@ -1620,7 +1620,7 @@ function solicitarPermissaoNotificacao() {
         console.warn('Notificações não estão permitidas ou o Service Worker não está disponível.');
     }
 }
-  mostrarNotificacao();
+
   function enviarNotificacao() {
     if (Notification.permission === "granted") {
       const options = {
@@ -1670,7 +1670,7 @@ async function shareLink(shareTitle, shareText, link) {
 }
 //Fim função compartilhar
 
-//Inicio Verifica se o app esta instaldo PWA
+/* Inicio Verifica se o app esta instaldo PWA
 function isPWA() {
     // Verifica se está rodando em modo standalone
     return window.matchMedia('(display-mode: standalone)').matches || (navigator.standalone === true);
@@ -1683,11 +1683,4 @@ if (isPWA()) {
     console.log('App não está instalado como PWA');
 }
 //Fim Verifica se o app esta instaldo PWA
-
-Notification.requestPermission().then(permission => {
-    if (permission === 'granted') {
-      app.dialog.alert('Permissão para notificações concedida.');
-    } else {
-        app.dialog.alert('Permissão para notificações negada.');
-    }
-  });
+*/

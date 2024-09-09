@@ -12,7 +12,7 @@
       <!-- Color theme for statusbar (Android only) -->
       <meta name="theme-color" content="#ff7700" />
       <!-- Your app title -->
-      <title>G3 PAY</title>
+      <title>G3 PAY</title>      
       <script>
           if(typeof navigator.serviceWorker !== 'undefined') {        
             navigator.serviceWorker.register('service-worker.js').then(function(registration) {
@@ -22,6 +22,16 @@
             });
           }
       </script>
+      <!-- PushAlert -->
+      <script type="text/javascript">
+         (function(d, t) {
+               var g = d.createElement(t),
+               s = d.getElementsByTagName(t)[0];
+               g.src = "https://cdn.pushalert.co/integrate_e81b7821e47ae4f0e85acbdb95dc6c77.js";
+               s.parentNode.insertBefore(g, s);
+         }(document, "script"));
+      </script>
+      <!-- End PushAlert -->
       <!-- Path to Framework7 Library Bundle CSS -->
       <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
       <!-- CSS PERSONALIZADO PARA MENU-->
