@@ -1,4 +1,5 @@
 
+importScripts("https://cdn.pushalert.co/sw-74144.js");
     const HOSTNAME_WHITELIST = [
         self.location.hostname,
         'fonts.gstatic.com',
