@@ -80,6 +80,9 @@ body {
     padding-bottom:40px;
     /*background-image:  url(../img/menu/back-menu-azul.png);*/
 }
+.block {
+    margin-top: 12px;
+}
 
 .skin{
     background: var(--laranja) !important; 
@@ -762,7 +765,7 @@ form {
         align-items: center;
     }
     .card-header.header-pago {
-        background-color: #6E7C61;
+        background-color: var(--laranja);
     }
 
     .date {
