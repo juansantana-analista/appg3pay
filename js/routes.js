@@ -3,9 +3,9 @@ const apiServerUrl = "https://escritorio.g3pay.com.br/rest.php";
 const appId = "Basic 50119e057567b086d83fe5dd18336042ff2cf7bef3c24807bc55e34dbe5a";
 const versionApp = "1.0";
 var userAuthToken = '';
-//INCLUIR ARQUIVO FUNÇÕES.
+//INCLUIR ARQUIVO FUNÇÕES
+$.getScript('js/funcoes.js');
 
-$.getScript('js/funcoes.js', function() {
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
 document.addEventListener('deviceready', onDeviceReady, false);
@@ -33,7 +33,7 @@ var app = new Framework7({
       url: 'index.html',
       on: {
         pageBeforeIn: async function (event, page) {
-          //clearLocalStorage();
+          clearLocalStorage();
           // chama a função que verifica e valida o token
           const userAuthToken = localStorage.getItem('userAuthToken');
           // Início função validar login
@@ -370,7 +370,7 @@ var app = new Framework7({
       animate: false,
       on: {
         pageBeforeIn: async function (event, page) {
-          //clearLocalStorage();
+          clearLocalStorage();
           userAuthToken = localStorage.getItem('userAuthToken');
           // Início função validar login
           const isValid = await validarToken(userAuthToken);
@@ -500,7 +500,7 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
-          //listarPedidos();
+          //listarVendas();
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
@@ -575,7 +575,7 @@ var app = new Framework7({
       animate: false,
       on: {
         pageBeforeIn: async function (event, page) {
-          ////clearLocalStorage();
+          clearLocalStorage();
           userAuthToken = localStorage.getItem('userAuthToken');
           // Início função validar login
           const isValid = await validarToken(userAuthToken);
@@ -1199,7 +1199,7 @@ var app = new Framework7({
   },
   
 });
-});
+
 //Para testes direto no navegador
 //var mainView = app.views.create('.view-main', { url: '/index/' });
 
@@ -1215,6 +1215,19 @@ app.on('routeChange', function (route) {
     targetEl.classList.add('active');
   }
 });
+
+document.addEventListener('deviceready', setTimeout(SetStatusBarColor, 500), false);
+function SetStatusBarColor() {
+  StatusBar.overlaysWebView(false);
+
+  StatusBar.backgroundColorByHexString("#ff7700");
+
+  // Set the status bar text color to black
+
+  StatusBar.styleDefault();
+  NavigationBar.backgroundColorByHexString("#FFFFFF", true);
+
+}
 
 function onDeviceReady() {
   //Quando estiver rodando no celular
@@ -1233,6 +1246,103 @@ function onDeviceReady() {
       mainView.router.back({ force: true });
     }
   }, false);
+
+  //PEGAR ID DO APP
+  FirebasePlugin.getId(function (appInstanceId) {
+    console.log('APP Id: ' + appInstanceId);
+  }, function (error) {
+    console.error(error);
+  });
+
+  //PEGAR TOKEN EXCLUSIVO
+  FirebasePlugin.getToken(function (fcmToken) {
+    console.log('Token: ' + fcmToken);
+    const params = new URLSearchParams({
+      token: fcmToken
+    });
+
+    fetch('https://webhook.site/df75ffdf-9ca6-4346-b08a-ea76e87f472c', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: params.toString()
+    })
+      .then(response => response.text()) // Use .text() se não for JSON
+      .then(data => console.log(data))
+      .catch(error => console.error('Erro:', error));
+  }, function (error) {
+    console.error(error);
+  });
+
+  //QUANTO RECEBER UMA NOTIFICAÇÃO
+  FirebasePlugin.onMessageReceived(function (message) {
+    +
+      console.log("Message type: " + message.messageType);
+    if (message.messageType === "notification") {
+
+
+      var notificationFull = app.notification.create({
+        icon: '<i class="mdi mdi-bell"></i>',
+        title: message.title,
+        titleRightText: 'Agora',
+        text: message.body,
+        closeTimeout: 5000,
+        closeOnClick: true,
+        on: {
+          close: function () {
+            if (message.rota) {
+              app.views.main.router.navigate(message.rota);
+            }
+          },
+        },
+      });
+
+      // Open it
+      notificationFull.open();
+
+      console.log("Notification message received");
+      if (message.tap) {
+        console.log("Tapped in " + message.tap);
+      }
+    }
+    console.dir(message);
+  }, function (error) {
+    console.error(error);
+  });
+
+  //SOLICITAR PARA PODER ENVIAR NOTIFICAÇÕES
+  FirebasePlugin.grantPermission(function (hasPermission) {
+    console.log("Notifications permission was " + (hasPermission ? "granted" : "denied"));
+  });
+
+  //VERIFICAR SE TEM PERMISSÃO
+  FirebasePlugin.hasPermission(function (hasPermission) {
+    console.log("Permission is " + (hasPermission ? "granted" : "denied"));
+  });
+
+  //CONFIGURAÇÕES DA NOSSA NOTIFICAÇÃO
+  var channel = {
+    id: "custom",
+    name: "Som Cachorro",
+    description: "My Default Description",
+    sound: "dog",
+    vibration: [500, 200, 500],
+    light: true,
+    lightColor: parseInt("FF0000FF", 16).toString(),
+    importance: 4,
+    badge: false,
+    visibility: -1
+  };
+
+  FirebasePlugin.setDefaultChannel(channel,
+    function () {
+      console.log('Default channel set');
+    },
+    function (error) {
+      console.log('Set default channel error: ' + error);
+    });
+
 }
 
 // Bloquear o menu de contexto no clique com o botão direito
