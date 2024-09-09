@@ -81,4 +81,3 @@
           })
         );
     });
-    importScripts("https://cdn.pushalert.co/sw-74144.js");
