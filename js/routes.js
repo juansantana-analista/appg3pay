@@ -3,8 +3,6 @@ const apiServerUrl = "https://escritorio.g3pay.com.br/rest.php";
 const appId = "Basic 50119e057567b086d83fe5dd18336042ff2cf7bef3c24807bc55e34dbe5a";
 const versionApp = "1.0";
 var userAuthToken = '';
-//INCLUIR ARQUIVO FUNÇÕES
-$.getScript('js/funcoes.js');
 
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
