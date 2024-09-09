@@ -33,7 +33,7 @@ var app = new Framework7({
       url: 'index.html',
       on: {
         pageBeforeIn: async function (event, page) {
-          //clearLocalStorage();
+          clearLocalStorage();
           // chama a função que verifica e valida o token
           const userAuthToken = localStorage.getItem('userAuthToken');
           // Início função validar login
@@ -370,7 +370,7 @@ var app = new Framework7({
       animate: false,
       on: {
         pageBeforeIn: async function (event, page) {
-          //clearLocalStorage();
+          clearLocalStorage();
           userAuthToken = localStorage.getItem('userAuthToken');
           // Início função validar login
           const isValid = await validarToken(userAuthToken);
@@ -575,7 +575,7 @@ var app = new Framework7({
       animate: false,
       on: {
         pageBeforeIn: async function (event, page) {
-          //clearLocalStorage();
+          clearLocalStorage();
           userAuthToken = localStorage.getItem('userAuthToken');
           // Início função validar login
           const isValid = await validarToken(userAuthToken);
