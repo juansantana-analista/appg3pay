@@ -1683,3 +1683,9 @@ if (isPWA()) {
     console.log('App não está instalado como PWA');
 }
 //Fim Verifica se o app esta instaldo PWA
+
+if ('Notification' in window && 'serviceWorker' in navigator) {
+    app.dialog.alert("O suporte a notificações está disponível.");
+  } else {
+    app.dialog.alert("Notificações não são suportadas neste navegador.");
+  }
