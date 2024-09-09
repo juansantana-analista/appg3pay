@@ -1684,8 +1684,10 @@ if (isPWA()) {
 }
 //Fim Verifica se o app esta instaldo PWA
 
-if ('Notification' in window && 'serviceWorker' in navigator) {
-    app.dialog.alert("O suporte a notificações está disponível.");
-  } else {
-    app.dialog.alert("Notificações não são suportadas neste navegador.");
-  }
+Notification.requestPermission().then(permission => {
+    if (permission === 'granted') {
+      app.dialog.alert('Permissão para notificações concedida.');
+    } else {
+        app.dialog.alert('Permissão para notificações negada.');
+    }
+  });
