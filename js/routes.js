@@ -386,6 +386,7 @@ var app = new Framework7({
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
+          onDashboard();
 
           $('.abrir-popup').on('click', function (e) {
             e.preventDefault(); // Prevent default link behavior

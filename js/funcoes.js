@@ -1429,6 +1429,51 @@ function contarCarrinho() {
 }
 //Fim Função contar Carrinho
 
+//Inicio Funçao Dados Dashboard
+function onDashboard() {
+    const pessoaId = localStorage.getItem('pessoaId');
+
+    const dados = {
+          pessoa_id: pessoaId
+    };
+
+    // Cabeçalhos da requisição
+    const headers = {
+        "Content-Type": "application/json",
+        "Authorization": appId,
+    };
+
+    const body = JSON.stringify({
+        class: "PessoaContadorRest",
+        method: "RetornaDados",
+        dados: dados
+    });
+
+    // Opções da requisição
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: body,
+    };
+
+    // Fazendo a requisição
+    fetch(apiServerUrl, options)
+        .then((response) => response.json())
+        .then((responseJson) => {
+            // Verifica se o status é 'success'
+            if(responseJson.status == 'success' && responseJson.data.status == 'success'){
+                //Desenha o dashboard
+                console.log(responseJson);
+            }
+        })
+        .catch((error) => {
+            app.dialog.close();
+            console.error("Erro:", error);
+            app.dialog.alert("Erro ao listar carrinho: " + error.message, "Falha na requisição!");
+        });
+}
+//Fim Função Dados Dashboard
+
 
 //Inicio Funçao Listar Carrinho Checkout
 function listarCarrinhoCheckout() {
