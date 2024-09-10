@@ -79,11 +79,40 @@ importScripts("https://cdn.pushalert.co/sw-74144.js");
         event.waitUntil(
         );
     });
+
+    let deferredPrompt;
+    const installPromptDiv = document.getElementById('installPrompt');
+    const installButton = document.getElementById('btnInstall');
+
+    // Capturar o evento beforeinstallprompt
     window.addEventListener('beforeinstallprompt', (event) => {
-        console.log('O navegador está pronto para exibir o prompt de instalação.');
-        // Não faz nada aqui, deixa o navegador lidar com o prompt.
+        // Prevenir que o navegador exiba o prompt automaticamente
+        event.preventDefault();
+        deferredPrompt = event;
+
+        // Mostrar o prompt sempre que o usuário abrir o site, se ainda não estiver instalado
+        if (!window.matchMedia('(display-mode: standalone)').matches) {
+            installPromptDiv.style.display = 'block';
+        }
     });
 
+    // Quando o botão for clicado, exibir o prompt de instalação
+    installButton.addEventListener('click', () => {
+        installPromptDiv.style.display = 'none'; // Esconder o prompt personalizado
+        deferredPrompt.prompt(); // Exibir o prompt nativo de instalação
+
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('Usuário aceitou a instalação.');
+            } else {
+                console.log('Usuário rejeitou a instalação.');
+            }
+            deferredPrompt = null;
+        });
+    });
+
+    // Verificar se o PWA já está instalado
     window.addEventListener('appinstalled', () => {
-        console.log('O PWA foi instalado.');
+        console.log('PWA instalado.');
+        installPromptDiv.style.display = 'none'; // Ocultar o prompt se o PWA foi instalado
     });
