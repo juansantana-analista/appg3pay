@@ -78,3 +78,39 @@ importScripts("https://cdn.pushalert.co/sw-74144.js");
         event.waitUntil(
         );
     });
+    let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (event) => {
+    // Evita que o prompt de instalação seja mostrado automaticamente
+    event.preventDefault();
+    
+    // Armazena o evento para ser exibido depois
+    deferredPrompt = event;
+    
+    // Aqui você pode exibir um botão ou notificação personalizada
+    const installButton = document.getElementById('install-button');
+    installButton.style.display = 'block';
+
+    installButton.addEventListener('click', () => {
+        // Mostra o prompt de instalação
+        deferredPrompt.prompt();
+        
+        // Verifica a escolha do usuário
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('Usuário aceitou instalar o PWA');
+            } else {
+                console.log('Usuário recusou a instalação do PWA');
+            }
+            // Limpa o deferredPrompt
+            deferredPrompt = null;
+        });
+    });
+});
+
+// Opcional: pode ocultar o botão caso o PWA já tenha sido instalado
+window.addEventListener('appinstalled', (event) => {
+    console.log('PWA foi instalado');
+    const installButton = document.getElementById('install-button');
+    installButton.style.display = 'none';
+});
