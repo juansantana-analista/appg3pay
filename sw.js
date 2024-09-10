@@ -79,7 +79,25 @@ importScripts("https://cdn.pushalert.co/sw-74144.js");
         event.waitUntil(
         );
     });
-
     self.addEventListener('notificationclick', (event) => {
-        app.dialog.alert('notificaçõ clicada');
+        // Prevenir o comportamento padrão
+        event.preventDefault();
+    
+        // Abrir uma URL específica ou a página principal do seu app
+        const urlToOpen = new URL('/', self.location.origin).href;
+    
+        event.waitUntil(
+            clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
+                // Verificar se já há uma janela aberta
+                for (const client of windowClients) {
+                    if (client.url === urlToOpen && 'focus' in client) {
+                        return client.focus();
+                    }
+                }
+                // Caso contrário, abrir uma nova janela
+                if (clients.openWindow) {
+                    return clients.openWindow(urlToOpen);
+                }
+            })
+        );
     });
