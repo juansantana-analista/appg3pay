@@ -19,57 +19,46 @@
     <link rel="stylesheet" href="css/materialdesignicons.min.css">
     <!-- Icones do Remix icon-->
     <link rel="stylesheet" href="css/remixicon/remixicon.css">
+    <style>
+        .offline-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            background-color: #f4f4f4;
+            color: #8D51FF;
+        }
 
+        .offline-page h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .offline-page p {
+            font-size: 18px;
+        }
+
+        .offline-page .icon-offline {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 
 <body>
     <!-- App root element -->
     <div id="app">
-
         <!-- Your main view, should have "view-main" class -->
         <div class="view view-main">
             <!-- Initial Page, "data-name" contains page name -->
             <div data-name="splash-view" class="page color-theme-blue">
                 <!-- Scrollable page content -->
                 <div class="page-content">
-                    <div data-speed="900" data-pagination='{"el": ".swiper-pagination"}' data-space-between="50"
-                        class="swiper swiper-init demo-swiper">
-                        <div class="swiper-pagination"></div>
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <center>
-                                    <h3 style="color:#2e2e2e;">Seja muito Bem Vindo!</h3>
-                                    <p style="color:#757575; padding: 10px;">Esse é o <b>MR Reforma PDV</b>, seu
-                                        aplicativo para gestão de orçamentos e pedidos.</p>
-                                    <img src="img/slide-01.jpg" style="max-width: 85%;">
-                                </center>
-                            </div>
-                            <div class="swiper-slide">
-                                <center>
-                                    <h3 style="color:#2e2e2e;">Pedidos e Orçamentos</h3>
-                                    <p style="color:#757575; padding: 10px;">Adicione quantos itens desejar ao seu
-                                        orçamento e visualize um resumo detalhado do seu pedido.</p>
-                                    <img src="img/slide-02.jpg" style="max-width: 85%">
-                                </center>
-                            </div>
-                            <div class="swiper-slide">
-                                <center>
-                                    <h3 style="color:#2e2e2e;">Compartilhe seus orçamentos</h3>
-                                    <p style="color:#757575; padding: 10px;">Envie orçamentos para seus clientes e
-                                        facilite o fechamento de vendas.
-                                    </p>
-                                    <img src="img/slide-03.jpg" style="max-width: 85%;">
-
-                                    <div class="block">
-                                        <p class="row">
-                                            <button class="col button button-big button-fill" id="signInSplash"
-                                                style="background-color:#1942b2;"><i class="mdi mdi-login-variant"
-                                                    style="color:#fff;"></i>Fazer Login</button>
-                                        </p>
-                                    </div>
-                                </center>
-                            </div>
-                        </div>
+                    <div>
+                        <i class="mdi mdi-wifi-off icon-offline"></i>
+                        <h1>Você está offline</h1>
+                        <p>Verifique sua conexão com a internet e tente novamente.</p>
                     </div>
                 </div>
             </div>
