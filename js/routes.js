@@ -1237,6 +1237,9 @@ function onDeviceReady() {
       event.preventDefault();
       deferredPrompt = event;
 
+      
+      $("#instalation-app").removeClass("display-none");
+
       // Mostrar o diálogo de confirmação usando o Framework7
       app.dialog.confirm(
           'Deseja instalar nosso app para uma melhor experiência?', 
