@@ -1,21 +1,5 @@
 
 importScripts("https://cdn.pushalert.co/sw-74144.js");
-const CACHE = "pwabuilder-page";
-// TODO: replace the following with the correct offline fallback page i.e.: const offlineFallbackPage = "offline.html";
-const offlineFallbackPage = "offline.html";
-
-self.addEventListener("message", (event) => {
-  if (event.data && event.data.type === "SKIP_WAITING") {
-    self.skipWaiting();
-  }
-});
-
-self.addEventListener('install', async (event) => {
-  event.waitUntil(
-    caches.open(CACHE)
-      .then((cache) => cache.add(offlineFallbackPage))
-  );
-});
 
     const HOSTNAME_WHITELIST = [
         self.location.hostname,
@@ -95,3 +79,47 @@ self.addEventListener('install', async (event) => {
         event.waitUntil(
         );
     });
+
+    let deferredPrompt;
+
+// Verifica se o PWA já está instalado
+if (!window.matchMedia('(display-mode: standalone)').matches) {
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Previne o prompt automático de instalação
+        e.preventDefault();
+        // Guarda o evento para ser usado depois
+        deferredPrompt = e;
+
+        // Exibe a mensagem para o usuário instalar o PWA
+        showInstallMessage();
+    });
+}
+
+// Função para mostrar a mensagem personalizada
+function showInstallMessage() {
+    const installBanner = document.createElement('div');
+    installBanner.innerHTML = `
+        <div style="position: fixed; bottom: 10px; left: 10px; background-color: #fff; padding: 10px; border-radius: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000;">
+            <p>Instale nosso app para uma melhor experiência!</p>
+            <button id="installBtn">Instalar</button>
+        </div>
+    `;
+    document.body.appendChild(installBanner);
+
+    const installBtn = document.getElementById('installBtn');
+    installBtn.addEventListener('click', () => {
+        // Exibe o prompt de instalação
+        deferredPrompt.prompt();
+        // Espera o usuário responder ao prompt
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('Usuário aceitou a instalação');
+            } else {
+                console.log('Usuário rejeitou a instalação');
+            }
+            deferredPrompt = null;
+            // Remove o banner de instalação
+            installBanner.remove();
+        });
+    });
+}
