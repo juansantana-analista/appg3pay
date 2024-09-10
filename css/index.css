@@ -1118,26 +1118,7 @@ form {
           .button.add-to-cart-button:hover {
             background-color: #0056b3;
           }
-          
 
-
-        #installPrompt {
-            display: none;
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-        }
-
-        #installPrompt button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+        #instalation-app {
+            z-index: 9999;
         }
