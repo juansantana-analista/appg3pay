@@ -1214,8 +1214,6 @@ app.on('routeChange', function (route) {
   }
 });
 
-let deferredPrompt;
-
 function onDeviceReady() {
   //Quando estiver rodando no celular
   var mainView = app.views.create('.view-main', { url: '/index/' });
@@ -1233,49 +1231,6 @@ function onDeviceReady() {
       mainView.router.back({ force: true });
     }
   }, false);
-  
-  // Capture the beforeinstallprompt event
-  window.addEventListener('beforeinstallprompt', function(event) {
-      // Prevent the default prompt
-      event.preventDefault();
-      deferredPrompt = event;
-      // Show the custom dialog
-      app.dialog.create({
-          el: '#installDialog',
-          on: {
-              close: function () {
-                  deferredPrompt = null;
-              }
-          }
-      }).open();
-  });
-
-  // Handle dialog button clicks
-  $(document).on('click', '.dialog-button-confirm', function() {
-      if (deferredPrompt) {
-          deferredPrompt.prompt();
-          deferredPrompt.userChoice.then(function(choiceResult) {
-              if (choiceResult.outcome === 'accepted') {
-                  console.log('Usuário aceitou a instalação.');
-              } else {
-                  console.log('Usuário rejeitou a instalação.');
-              }
-              deferredPrompt = null;
-          });
-      }
-      app.dialog.close('#installDialog');
-  });
-
-  $(document).on('click', '.dialog-button-cancel', function() {
-      app.dialog.close('#installDialog');
-  });
-
-  // Detect PWA installation
-  window.addEventListener('appinstalled', function() {
-      console.log('PWA instalado.');
-      // Optionally, hide the dialog if the app is installed
-      app.dialog.close('#installDialog');
-  });
 
 }
 
