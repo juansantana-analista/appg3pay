@@ -79,3 +79,43 @@ importScripts("https://cdn.pushalert.co/sw-74144.js");
         event.waitUntil(
         );
     });
+
+    let deferredPrompt;
+
+        // Capturar o evento beforeinstallprompt
+        window.addEventListener('beforeinstallprompt', (event) => {
+            // Prevenir o comportamento padrão
+            event.preventDefault();
+            deferredPrompt = event;
+
+            // Mostrar o diálogo de confirmação usando o Framework7
+            app.dialog.confirm(
+                'Deseja instalar nosso app para uma melhor experiência?', 
+                'Instalar o App',
+                () => {
+                    // Usuário clicou em "Confirmar"
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        deferredPrompt.userChoice.then((choiceResult) => {
+                            if (choiceResult.outcome === 'accepted') {
+                                console.log('Usuário aceitou a instalação.');
+                            } else {
+                                console.log('Usuário rejeitou a instalação.');
+                            }
+                            deferredPrompt = null;
+                        });
+                    }
+                },
+                () => {
+                    // Usuário clicou em "Cancelar"
+                    console.log('Usuário cancelou a instalação.');
+                }
+            );
+        });
+
+        // Verificar se o PWA já está instalado
+        window.addEventListener('appinstalled', () => {
+            console.log('PWA instalado.');
+            // Esconder a mensagem se o PWA estiver instalado
+            $('#installPrompt').hide();
+        });
