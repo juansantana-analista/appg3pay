@@ -1,46 +1,6 @@
 
 importScripts("https://cdn.pushalert.co/sw-74144.js");
 
-let deferredPrompt;
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  // Impede que o mini-infobar apareça no mobile
-  e.preventDefault();
-  // Guarda o evento para que possamos acioná-lo mais tarde
-  deferredPrompt = e;
-  // Atualiza a interface para notificar o usuário que ele pode instalar o PWA
-  showInstallPromotion();
-});
-
-function showInstallPromotion() {
-  // Exibe a mensagem para o usuário
-  const installBanner = document.createElement('div');
-  installBanner.innerHTML = `
-    <div style="position: fixed; bottom: 0; width: 100%; background: #fff; padding: 10px; text-align: center; box-shadow: 0 -2px 5px rgba(0,0,0,0.2);">
-      <p>Instale nosso aplicativo para uma melhor experiência!</p>
-      <button id="installButton">Instalar</button>
-    </div>
-  `;
-  document.body.appendChild(installBanner);
-
-  const installButton = document.getElementById('installButton');
-  installButton.addEventListener('click', () => {
-    // Esconde a mensagem de instalação
-    installBanner.style.display = 'none';
-    // Mostra o prompt de instalação
-    deferredPrompt.prompt();
-    // Espera pelo usuário para responder ao prompt
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('Usuário aceitou a instalação');
-      } else {
-        console.log('Usuário rejeitou a instalação');
-      }
-      deferredPrompt = null;
-    });
-  });
-}
-
     const HOSTNAME_WHITELIST = [
         self.location.hostname,
         'fonts.gstatic.com',
