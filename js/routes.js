@@ -833,8 +833,8 @@ var app = new Framework7({
       }
     },
     {
-      path: '/teste/',
-      url: 'teste.html',
+      path: '/offline/',
+      url: 'offline.html',
       options: {
         transition: 'f7-push',
       },
@@ -848,9 +848,6 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada      
-          $('#irCheckout').on('click', function () {
-            app.views.main.router.navigate("/checkout/");
-          });
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM

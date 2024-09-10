@@ -8,10 +8,6 @@ importScripts("https://cdn.pushalert.co/sw-74144.js");
         'cdn.jsdelivr.net'
     ];
 
-
-    // O URL da página de "offline"
-    const OFFLINE_URL = 'offline.html';
-
     // The Util Function to hack URLs of intercepted requests
     const getFixedUrl = (req) => {
         var now = Date.now()
@@ -44,15 +40,6 @@ importScripts("https://cdn.pushalert.co/sw-74144.js");
       event.waitUntil(self.clients.claim())
     })
 
-    // Adicionar a página offline ao cache na instalação do Service Worker
-    self.addEventListener('install', event => {
-        event.waitUntil(
-            caches.open('pwa-cache').then(cache => {
-                return cache.add(OFFLINE_URL);
-            })
-        );
-    });
-
     /**
      *  @Functional Fetch
      *  All network requests are being intercepted here.
@@ -60,40 +47,33 @@ importScripts("https://cdn.pushalert.co/sw-74144.js");
      *  void respondWith(Promise<Response> r)
      */
     self.addEventListener('fetch', event => {
-        const { request } = event;
-        const fixedUrl = getFixedUrl(request);
+    // Skip some of cross-origin requests, like those for Google Analytics.
+    if (HOSTNAME_WHITELIST.indexOf(new URL(event.request.url).hostname) > -1) {
+        // Stale-while-revalidate
+        // similar to HTTP's stale-while-revalidate: https://www.mnot.net/blog/2007/12/12/stale
+        // Upgrade from Jake's to Surma's: https://gist.github.com/surma/eb441223daaedf880801ad80006389f1
+        const cached = caches.match(event.request)
+        const fixedUrl = getFixedUrl(event.request)
+        const fetched = fetch(fixedUrl, { cache: 'no-store' })
+        const fetchedCopy = fetched.then(resp => resp.clone())
 
-        // Verifica se o pedido está na whitelist
-        if (HOSTNAME_WHITELIST.indexOf(new URL(request.url).hostname) > -1) {
-            // Stale-while-revalidate
-            const cached = caches.match(request);
-            const fetched = fetch(fixedUrl, { cache: 'no-store' })
-                .then(response => response)
-                .catch(() => cached); // Se o fetch falhar, tenta o cache
+        // Call respondWith() with whatever we get first.
+        // If the fetch fails (e.g disconnected), wait for the cache.
+        // If there’s nothing in cache, wait for the fetch.
+        // If neither yields a response, return offline pages.
+        event.respondWith(
+        Promise.race([fetched.catch(_ => cached), cached])
+            .then(resp => resp || fetched)
+            .catch(_ => { /* eat any errors */ })
+        )
 
-            event.respondWith(
-                fetched.then(response => {
-                    // Se não conseguir buscar da rede ou cache, mostra a página offline
-                    return response || caches.match(OFFLINE_URL);
-                })
-            );
-
-            // Atualiza o cache
-            event.waitUntil(
-                fetched.then(response => {
-                    return caches.open("pwa-cache").then(cache => {
-                        if (response && response.ok) {
-                            cache.put(request, response.clone());
-                        }
-                    });
-                }).catch(() => { /* lidar com erros */ })
-            );
-        } else {
-            // Redireciona para a página offline se não conseguir acessar a rede
-            event.respondWith(
-                fetch(fixedUrl).catch(() => caches.match(OFFLINE_URL))
-            );
-        }
+        // Update the cache with the version we fetched (only for ok status)
+        event.waitUntil(
+        Promise.all([fetchedCopy, caches.open("pwa-cache")])
+            .then(([response, cache]) => response.ok && cache.put(event.request, response))
+            .catch(_ => { /* eat any errors */ })
+        )
+    }
     });
     self.addEventListener('push', (event) => {
         event.waitUntil(
