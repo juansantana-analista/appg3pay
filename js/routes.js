@@ -1239,30 +1239,27 @@ function onDeviceReady() {
 
       
       $("#instalation-app").removeClass("display-none");
-
-      // Mostrar o diálogo de confirmação usando o Framework7
-      app.dialog.confirm(
-          'Deseja instalar nosso app para uma melhor experiência?', 
-          'Instalar o App',
-          () => {
-              // Usuário clicou em "Confirmar"
-              if (deferredPrompt) {
-                  deferredPrompt.prompt();
-                  deferredPrompt.userChoice.then((choiceResult) => {
-                      if (choiceResult.outcome === 'accepted') {
-                          console.log('Usuário aceitou a instalação.');
-                      } else {
-                          console.log('Usuário rejeitou a instalação.');
-                      }
-                      deferredPrompt = null;
-                  });
-              }
-          },
-          () => {
-              // Usuário clicou em "Cancelar"
-              console.log('Usuário cancelou a instalação.');
-          }
-      );
+    
+      //AÇÃO DOS BOTÕES
+      $("#btnNaoInstalar").on("click", function () {
+        $("#instalation-app").addClass("display-none");
+        console.log('Usuário cancelou a instalação.');
+      });
+      $("#btnInstalar").on("click", function () {
+        $("#instalation-app").addClass("display-none");
+        // Usuário clicou em "Confirmar"
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('Usuário aceitou a instalação.');
+                } else {
+                    console.log('Usuário rejeitou a instalação.');
+                }
+                deferredPrompt = null;
+            });
+        }
+      });
   });
 
   // Verificar se o PWA já está instalado
