@@ -1463,7 +1463,6 @@ function onDashboard() {
             // Verifica se o status é 'success'
             if(responseJson.status == 'success' && responseJson.data.status == 'success'){
                 //Desenha o dashboard
-                console.log(responseJson);
                 $('#valorVenda').text(responseJson.data.dados.valor_venda_mes);
                 $('#qtdeDiretos').text(responseJson.data.dados.rede_direta);
                 $('#qtdeGeral').text(responseJson.data.dados.rede_geral);
@@ -1640,7 +1639,6 @@ function onCompartilhar(titulo, texto, url) {
             text: texto,
             url: url,
         }).then(() => {
-            console.log('Compartilhamento bem-sucedido');
         }).catch((error) => {
             console.error('Erro ao compartilhar:', error);
         });
