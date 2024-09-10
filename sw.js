@@ -79,3 +79,11 @@ importScripts("https://cdn.pushalert.co/sw-74144.js");
         event.waitUntil(
         );
     });
+    window.addEventListener('beforeinstallprompt', (event) => {
+        console.log('O navegador está pronto para exibir o prompt de instalação.');
+        // Não faz nada aqui, deixa o navegador lidar com o prompt.
+    });
+
+    window.addEventListener('appinstalled', () => {
+        console.log('O PWA foi instalado.');
+    });
