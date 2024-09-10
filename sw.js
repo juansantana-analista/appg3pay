@@ -81,8 +81,5 @@ importScripts("https://cdn.pushalert.co/sw-74144.js");
     });
 
     self.addEventListener('notificationclick', (event) => {
-        event.notification.close(); 
-        var fullPath = self.location.origin + event.notification.data.path; 
-        clients.openWindow(fullPath); 
-        alert('notificaçõ clicada');
+        app.dialog.alert('notificaçõ clicada');
     });
