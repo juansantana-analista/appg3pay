@@ -1231,7 +1231,7 @@ function onDeviceReady() {
 
   let deferredPrompt;
 
-  // Capturar o evento beforeinstallprompt
+  /* Capturar o evento beforeinstallprompt
   window.addEventListener('beforeinstallprompt', (event) => {
       // Prevenir o comportamento padrão
       event.preventDefault();
@@ -1268,6 +1268,7 @@ function onDeviceReady() {
       // Esconder a mensagem se o PWA estiver instalado
       $('#installPrompt').hide();
   });
+  */
 }
 
 // Bloquear o menu de contexto no clique com o botão direito

@@ -1118,7 +1118,3 @@ form {
           .button.add-to-cart-button:hover {
             background-color: #0056b3;
           }
-
-        #instalation-app {
-            z-index: 9999;
-        }
