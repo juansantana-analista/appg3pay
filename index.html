@@ -140,10 +140,6 @@
                   </ul>
                </div>
             </div>
-            <div id="installPrompt">
-               <p>Instale nosso app para uma melhor experiência!</p>
-               <button id="btnInstall">Instalar</button>
-           </div>
             <!-- Initial Page, "data-name" contains page name -->
             <div data-name="index" class="page color-theme-blue">
                <!-- Scrollable page content -->
@@ -151,6 +147,17 @@
             </div>
          </div>
       </div>
+          <!-- Dialog -->
+         <div id="installDialog" class="dialog">
+               <div class="dialog-inner">
+                  <div class="dialog-title">Instalar o App</div>
+                  <div class="dialog-text">Deseja instalar nosso app para uma melhor experiência?</div>
+                  <div class="dialog-buttons">
+                     <button class="dialog-button dialog-button-cancel">Cancelar</button>
+                     <button class="dialog-button dialog-button-confirm">Instalar</button>
+                  </div>
+               </div>
+         </div>
       <!-- Path to Framework7 Library Bundle JS-->
       <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
