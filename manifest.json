@@ -1,13 +1,4 @@
 {
-  "display_override": ["window-controls-overlay"],
-  "shortcuts": [
-    {
-      "name": "G3 Pay",
-      "short_name": "G3 Pay",
-      "description": "A Primeira plataforma de Múltiplos Ganhos no Mundo",
-      "url": "https://app.g3pay.com.br/"
-    }
-  ],
   "background_color": "#ffffff",
   "dir": "ltr",
   "name": "G3 Pay",
