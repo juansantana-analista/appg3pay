@@ -147,6 +147,13 @@
             </div>
          </div>
       </div>
+      <script>          
+         //titlebar color
+         Windows.UI.ViewManagement.ApplicationView.getForCurrentView().titleBar.backgroundColor = {a:255, r:58, g:74, b:85};
+         Windows.UI.ViewManagement.ApplicationView.getForCurrentView().titleBar.buttonBackgroundColor = { a: 255, r: 58, g: 74, b:85};
+         Windows.UI.ViewManagement.ApplicationView.getForCurrentView().titleBar.buttonForegroundColor = Windows.UI.Colors.white;
+         Windows.UI.ViewManagement.ApplicationView.getForCurrentView().titleBar.foregroundColor = Windows.UI.Colors.white;
+      </script>
       <!-- Path to Framework7 Library Bundle JS-->
       <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
