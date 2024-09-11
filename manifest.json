@@ -1,4 +1,13 @@
 {
+  "display_override": ["window-controls-overlay"],
+  "shortcuts": [
+    {
+      "name": "G3 Pay",
+      "short_name": "G3 Pay",
+      "description": "A Primeira plataforma de Múltiplos Ganhos no Mundo",
+      "url": "https://app.g3pay.com.br/"
+    }
+  ],
   "background_color": "#ffffff",
   "dir": "ltr",
   "name": "G3 Pay",
@@ -9,6 +18,9 @@
   "display": "fullscreen",
   "theme_color": "#ff7700",
   "orientation": "any",
+  "description": "A Primeira plataforma de Múltiplos Ganhos no Mundo",
+  "lang": "pt",
+  "categories": ["business", "finance"],
   "window-controls-overlay": {
     "color": "#ff7700"
   },
@@ -732,8 +744,5 @@
       "protocol": "web+g3pay",
       "url": "/handle-protocol?url=%s"
     }
-  ],
-  "description": "A Primeira plataforma de Múltiplos Ganhos no Mundo",
-  "lang": "pt",
-  "categories": ["business", "finance"]
+  ]
 }
