@@ -7,12 +7,8 @@
   "start_url": "https://app.g3pay.com.br/",
   "id": "https://app.g3pay.com.br/",
   "display": "fullscreen",
-  "display_override": ["fullscreen", "window-controls-overlay"],
   "theme_color": "#ff7700",
   "orientation": "any",
-  "window-controls-overlay": {
-    "color": "#ff7700"
-  },
   "icons": [
     {
       "src": "windows11/SmallTile.scale-100.png",
