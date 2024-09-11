@@ -1,4 +1,18 @@
 {
+  "shortcuts": [
+    {
+      "name": "Start Live Session",
+      "short_name": "Start Live",
+      "description": "Jump direction into starting or joining a live session",
+      "url": "/?startLive",
+      "icons": [
+        {
+          "src": "https://pwabuilder.com/assets/icons/icon_192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
   "background_color": "#ffffff",
   "dir": "ltr",
   "name": "G3 Pay",
@@ -7,7 +21,7 @@
   "start_url": "https://app.g3pay.com.br/",
   "id": "br.com.g3pay",
   "display": "fullscreen",
-  "display_override": ["standalone", "window-controls-overlay"],
+  "display_override": "fullscreen",
   "theme_color": "#ff7700",
   "orientation": "any",
   "window-controls-overlay": {
