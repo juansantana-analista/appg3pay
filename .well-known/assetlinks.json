@@ -1,8 +1,12 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "br.com.g3pay",
-        "sha256_cert_fingerprints": ["34:8D:5A:E8:9F:2B:60:27:5E:8C:2A:B9:9A:B7:17:CD:61:9D:99:F8:93:CE:BD:87:44:70:32:32:0B:A4:83:65"]
-      }
-    }]
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "br.com.g3pay.app",
+      "sha256_cert_fingerprints": [
+        "9F:CC:C2:C0:12:D8:C6:5B:38:FA:BF:3E:13:6B:ED:EC:D4:52:30:1E:93:2B:71:6E:32:96:E2:03:AA:0A:13:F1"
+      ]
+    }
+  }
+]
