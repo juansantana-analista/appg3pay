@@ -7,8 +7,7 @@
   "short_name": "G3 Pay",
   "start_url": "https://app.g3pay.com.br/",
   "id": "https://app.g3pay.com.br/",
-  "display": "standalone",
-  "display_override": ["standalone", "fullscreen", "window-controls-overlay"],
+  "display": "fullscreen",
   "theme_color": "#ff7700",
   "orientation": "any",
   "window-controls-overlay": {
