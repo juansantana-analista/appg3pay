@@ -1,12 +1,4 @@
 {
-  "shortcuts": [
-    {
-      "name": "G3 Pay",
-      "short_name": "G3 Pay",
-      "description": "Gerencie suas vendas e maximize seus ganhos com a G3 Pay na palma da mão.",
-      "url": "https://app.g3pay.com.br/"
-    }
-  ],
   "background_color": "#ffffff",
   "dir": "ltr",
   "name": "G3 Pay",
@@ -15,12 +7,20 @@
   "start_url": "https://app.g3pay.com.br/",
   "id": "br.com.g3pay",
   "display": "fullscreen",
-  "display_override": "standalone",
+  "display_override": ["fullscreen", "minimal-ui"],
   "theme_color": "#ff7700",
   "orientation": "any",
   "window-controls-overlay": {
     "color": "#ff7700"
   },
+  "shortcuts": [
+    {
+      "name": "G3 Pay",
+      "short_name": "G3 Pay",
+      "description": "Gerencie suas vendas e maximize seus ganhos com a G3 Pay na palma da mão.",
+      "url": "https://app.g3pay.com.br/"
+    }
+  ],
   "icons": [
     {
       "src": "windows11/SmallTile.scale-100.png",
