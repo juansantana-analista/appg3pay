@@ -1,16 +1,10 @@
 {
   "shortcuts": [
     {
-      "name": "Start Live Session",
-      "short_name": "Start Live",
-      "description": "Jump direction into starting or joining a live session",
-      "url": "/?startLive",
-      "icons": [
-        {
-          "src": "https://pwabuilder.com/assets/icons/icon_192.png",
-          "sizes": "192x192"
-        }
-      ]
+      "name": "G3 Pay",
+      "short_name": "G3 Pay",
+      "description": "Gerencie suas vendas e maximize seus ganhos com a G3 Pay na palma da mão.",
+      "url": "https://app.g3pay.com.br/"
     }
   ],
   "background_color": "#ffffff",
