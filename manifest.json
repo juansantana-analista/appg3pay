@@ -5,7 +5,7 @@
   "scope": "/",
   "short_name": "G3 Pay",
   "start_url": "https://app.g3pay.com.br/",
-  "id": "https://app.g3pay.com.br/",
+  "id": "br.com.g3pay",
   "display": "fullscreen",
   "display_override": ["standalone", "window-controls-overlay"],
   "theme_color": "#ff7700",
@@ -734,7 +734,7 @@
       "url": "/handle-protocol?url=%s"
     }
   ],
-  "description": "A Primeira plataforma de Múltiplos Ganhos no Mundo",
+  "description": "Gerencie suas vendas e maximize seus ganhos com a G3 Pay na palma da mão.",
   "lang": "pt",
   "categories": ["business", "finance"]
 }
