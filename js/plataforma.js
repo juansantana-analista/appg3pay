@@ -47,13 +47,13 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
   
   if (platform === 'iOS') {
     // Ações específicas para iOS
-    alert('Rodando em iOS');
+    
   } else if (platform === 'Android') {
     // Ações específicas para Android
-    alert('Rodando em Android');
+    
   } else {
     // Ações para desktop ou plataformas desconhecidas
-    alert('Rodando em ' + platform);
+    
   }
   
   
