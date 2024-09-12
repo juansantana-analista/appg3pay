@@ -60,7 +60,7 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
   document.addEventListener('DOMContentLoaded', function() {
         var conteudoInstall = document.getElementById('conteudoInstall');
 
-        setTimeout(function() {
+        $("#installBanner").removeClass("display-none");
         if (conteudoInstall && platform === 'iOS') {
             conteudoInstall.innerHTML = `
                 <p>Adicione <strong>o aplicativo G3 Pay</strong> à sua tela inicial para obter atualizações regulares. Toque em Compartilhar 
@@ -74,5 +74,4 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
                 <button class="button button-fill color-red"><span class="mdi mdi-cellphone-arrow-down-variant"></span> Instalar</button>
                 </div>`;
         }
-    }, 3000)
    });
