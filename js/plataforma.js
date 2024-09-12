@@ -67,4 +67,14 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
         } else {
             console.error('Elemento com id "conteudoInstall" não encontrado.');
         }
+
+        var conteudoInstall = document.getElementById('conteudoInstall');
+        if (conteudoInstall) {
+            conteudoInstall.innerHTML = `
+                <p>Instale <strong>o aplicativo G3 Pay</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>                
+          <button class="button button-fill color-red">Instalar</button>
+          <button class="button button-fill color-green">Depois</button>`;
+        } else {
+            console.error('Elemento com id "conteudoInstall" não encontrado.');
+        }
    });
