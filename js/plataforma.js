@@ -73,8 +73,8 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
             conteudoInstall.innerHTML = `
                 <p>Instale <strong>o aplicativo G3 Pay</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>      
                 <div class="display-flex flex-direction-row">
-          <button class="button button-fill color-red">Instalar</button>
-          <button class="button button-fill color-green">Depois</button>
+                <button class="button button-fill color-white">Depois</button>
+                <button class="button button-fill color-red">Instalar</button>
                 </div>`;
         } else {
             console.error('Elemento com id "conteudoInstall" não encontrado.');
