@@ -1,3 +1,5 @@
+
+document.addEventListener('DOMContentLoaded', function() {
 if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches) {
     console.log('O app está rodando em modo standalone ou fullscreen');
   } else {
@@ -65,3 +67,5 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
     // Ações para desktop ou plataformas desconhecidas
     
   }
+
+});
