@@ -33,10 +33,17 @@
             },
           });
           
-          OneSignal.getUserId().then(function(userId) {
-            // Enviar userId para o seu servidor ou banco de dados
-            console.log("OneSignal User ID:", userId);
-          });
+          // Cria uma variável para armazenar o userId
+let userId;
+
+// Função assíncrona para obter o userId e armazená-lo na variável
+async function fetchAndStoreUserId() {
+  // Obtém o userId do OneSignal
+  userId = await OneSignal.getUserId();
+
+  // Exibe o userId no console para verificação
+  console.log("OneSignal User ID:", userId);
+}
         });        
       </script>
       <!-- Path to Framework7 Library Bundle CSS -->
