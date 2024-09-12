@@ -93,9 +93,9 @@ var app = new Framework7({
               $("#installBanner").removeClass("display-none");
             }
             conteudoInstall.innerHTML = `
-    <p>Adicione <strong>o aplicativo G3 Pay</strong> à sua tela inicial para obter atualizações regulares. Toque em Compartilhar 
-    <span class="mdi mdi-export-variant"></span> e depois <strong>Adicionar à <br>tela inicial </strong><span class="mdi mdi-plus-box-outline"></span>
-    </p>`;
+            <p>Adicione <strong>o aplicativo G3 Pay</strong> à sua tela inicial para obter atualizações regulares. Toque em Compartilhar 
+            <span class="mdi mdi-export-variant"></span> e depois <strong>Adicionar à <br>tela inicial </strong><span class="mdi mdi-plus-box-outline"></span>
+            </p>`;
           } else if (platform === 'Android') {
             // Ações específicas para Android
             if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches) {
@@ -105,20 +105,70 @@ var app = new Framework7({
               $("#installBanner").removeClass("display-none");
             }
             conteudoInstall.innerHTML = `
-    <p>Instale <strong>o aplicativo G3 Pay</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
-    <div class="display-flex flex-direction-row justify-content-space-between">
-        <button class="button margin-right text-color-gray">Depois</button>
-        <button class="button button-fill color-red"><span class="mdi mdi-cellphone-arrow-down-variant"></span> Instalar</button>
-    </div>`;
+            <p>Instale <strong>o aplicativo G3 Pay</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
+            <div class="display-flex flex-direction-row justify-content-space-between">
+                <button id="fecharInstall" class="button margin-right text-color-gray">Depois</button>
+                <button id="installAppAndroid" class="button button-fill color-red"><span class="mdi mdi-cellphone-arrow-down-variant"></span> Instalar</button>
+            </div>`;
           } else {
             // Ações para desktop ou plataformas desconhecidas
             if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches) {
+              conteudoInstall.innerHTML = `
+              <p>Instale <strong>o aplicativo G3 Pay</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
+              <div class="display-flex flex-direction-row justify-content-space-between">
+                  <button id="fecharInstallDesktop" class="button margin-right text-color-gray">Depois</button>
+                  <button id="installAppDesktop" class="button button-fill color-red"><span class="mdi mdi-cellphone-arrow-down-variant"></span> Instalar</button>
+              </div>`;
               console.log('O app está rodando em modo standalone ou fullscreen');
               $("#installBanner").addClass("display-none");
             } else {
               $("#installBanner").removeClass("display-none");
             }
           }
+          window.addEventListener('beforeinstallprompt', (event) => {
+            // Prevenir o comportamento padrão
+            event.preventDefault();
+            deferredPrompt = event;
+          
+            //AÇÃO DOS BOTÕES
+            $("#fecharInstall").on("click", function () {
+              $("#installBanner").addClass("display-none");
+            });
+            $("#fecharInstallDesktop").on("click", function () {
+              $("#installBanner").addClass("display-none");
+            });
+            $("#installAppAndroid").on("click", function () {
+              $("#installBanner").addClass("display-none");
+              // Usuário clicou em "Confirmar"
+              if (deferredPrompt) {
+                  deferredPrompt.prompt();
+                  deferredPrompt.userChoice.then((choiceResult) => {
+                      if (choiceResult.outcome === 'accepted') {
+                          console.log('Usuário aceitou a instalação.');
+                      } else {
+                          console.log('Usuário rejeitou a instalação.');
+                      }
+                      deferredPrompt = null;
+                  });
+              }
+            });
+            $("#installAppDesktop").on("click", function () {
+              $("#installBanner").addClass("display-none");
+              // Usuário clicou em "Confirmar"
+              if (deferredPrompt) {
+                  deferredPrompt.prompt();
+                  deferredPrompt.userChoice.then((choiceResult) => {
+                      if (choiceResult.outcome === 'accepted') {
+                          console.log('Usuário aceitou a instalação.');
+                      } else {
+                          console.log('Usuário rejeitou a instalação.');
+                      }
+                      deferredPrompt = null;
+                  });
+              }
+            });
+        });
+
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
