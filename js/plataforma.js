@@ -1,16 +1,11 @@
-if (window.matchMedia('(display-mode: fullscreen)').matches) {
-    alert('O app está instalado e rodando em modo standalone');
+if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches) {
+    console.log('O app está rodando em modo standalone ou fullscreen');
   } else {
-    alert('O app não está instalado.');
+    console.log('O app não está rodando em modo standalone nem fullscreen');
   }
   
-  if (window.navigator.fullscreen) {
-    alert('O app está instalado e rodando em modo standalone');
+  if (window.navigator.standalone) {
+    console.log('O app está rodando em modo standalone (fixado na tela inicial no iOS)');
   } else {
-    alert('O app não está instalado.');
-  }
-  if (window.matchMedia('(display-mode: standalone)').matches) {
-    console.log('O app está instalado e rodando em modo standalone');
-  } else {
-    console.log('O app não está instalado.');
+    console.log('O app não está rodando em modo standalone no iOS');
   }
