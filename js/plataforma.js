@@ -56,7 +56,6 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
     alert('Rodando em ' + platform);
   }
   
-  document.addEventListener('DOMContentLoaded', function() {
         var conteudoInstall = document.getElementById('conteudoInstall');
         $("#installBanner").removeClass("display-none");
 
@@ -73,4 +72,3 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
                 <button class="button button-fill color-red"><span class="mdi mdi-cellphone-arrow-down-variant"></span> Instalar</button>
                 </div>`;
         }
-   });
