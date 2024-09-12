@@ -20,9 +20,9 @@ function detectMobileOS() {
   
   // Você pode usar essa variável `os` para tomar ações específicas
   if (os === 'iOS') {
-    onApplePwa ();
+    alert(onApplePwa ());
   } else if (os === 'Android') {
-    onAndroidPwa ();
+    alert(onAndroidPwa ());
   } else {
     console.log('Usuário está usando outro tipo de dispositivo.');
   }
@@ -34,6 +34,7 @@ function detectMobileOS() {
     if (window.matchMedia('(display-mode: standalone)').matches) {
         isPWAInstalled = true;
     }
+    return isPWAInstalled;
   }
 
   function onApplePwa () {
@@ -41,6 +42,5 @@ function detectMobileOS() {
     if (window.navigator.standalone) {
         isPWAInstalled = true;
     }
+    return isPWAInstalled;
   }
-
-  alert(isPWAInstalled);
