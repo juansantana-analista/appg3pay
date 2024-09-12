@@ -477,9 +477,6 @@ var app = new Framework7({
             app.views.main.router.navigate("/registerView/");
           });
           //END AÇÃO BOTÃO REGISTER
-          $("#testenotifi").on("click", function () {
-            OneSignal.Notifications.requestPermission();
-          });
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
@@ -507,7 +504,8 @@ var app = new Framework7({
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
-        pageInit: function (event, page) {
+        pageInit: function (event, page) {          
+          OneSignal.Notifications.requestPermission();
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
           onDashboard();
