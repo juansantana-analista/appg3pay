@@ -20,9 +20,11 @@ function detectMobileOS() {
   
   // Você pode usar essa variável `os` para tomar ações específicas
   if (os === 'iOS') {
-    alert(onApplePwa ());
+    var estaInstalado = onApplePwa();
+    alert(estaInstalado);
   } else if (os === 'Android') {
-    alert(onAndroidPwa ());
+    var estaInstalado = onAndroidPwa();
+    alert(estaInstalado);
   } else {
     console.log('Usuário está usando outro tipo de dispositivo.');
   }
