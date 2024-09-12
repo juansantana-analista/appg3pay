@@ -7,6 +7,7 @@
   "start_url": "https://app.g3pay.com.br/",
   "id": "br.com.g3pay",
   "display": "fullscreen",
+  "display_override": ["standalone", "window-controls-overlay"],
   "theme_color": "#ff7700",
   "orientation": "portrait",
   "shortcuts": [
