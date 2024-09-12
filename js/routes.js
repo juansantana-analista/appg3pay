@@ -505,20 +505,13 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {          
-          // Solicita permissão para notificações
-          OneSignal.Notifications.requestPermission().then(() => {
-            // Chama a função assíncrona para obter e armazenar o userId após a permissão ser concedida
-            fetchAndStoreUserId();
-          });
+          OneSignal.Notifications.requestPermission();
+          const options = {method: 'GET', headers: {accept: 'application/json'}};
 
-          // Função assíncrona para obter o userId e armazená-lo na variável
-          async function fetchAndStoreUserId() {
-            // Obtém o userId do OneSignal
-            let userId = await OneSignal.getUserId();
-
-            // Exibe o userId no console para verificação
-            console.log("OneSignal User ID:", userId);
-          }
+          fetch('https://api.onesignal.com/apps/app_id/subscriptions/subscription_id/user/identity', options)
+            .then(response => response.json())
+            .then(response => console.log(response))
+            .catch(err => console.error(err));
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
           onDashboard();
