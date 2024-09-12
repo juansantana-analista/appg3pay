@@ -21,16 +21,15 @@
             });
           }
       </script>
-      <!-- PushAlert -->
-      <script type="text/javascript">
-         (function(d, t) {
-               var g = d.createElement(t),
-               s = d.getElementsByTagName(t)[0];
-               g.src = "https://cdn.pushalert.co/integrate_e81b7821e47ae4f0e85acbdb95dc6c77.js";
-               s.parentNode.insertBefore(g, s);
-         }(document, "script"));
+      <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+      <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+         await OneSignal.init({
+            appId: "7bfc9cb0-b251-4b3a-be5c-be82c1a143e2",
+         });
+      });
       </script>
-      <!-- End PushAlert -->
       <!-- Path to Framework7 Library Bundle CSS -->
       <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
       <!-- CSS PERSONALIZADO PARA MENU-->

@@ -1,5 +1,5 @@
 
-importScripts("https://cdn.pushalert.co/sw-74144.js");
+importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
 
     const HOSTNAME_WHITELIST = [
         self.location.hostname,
