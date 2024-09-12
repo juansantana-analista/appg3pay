@@ -72,7 +72,7 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
         if (conteudoInstall) {
             conteudoInstall.innerHTML = `
                 <p>Instale <strong>o aplicativo G3 Pay</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>      
-                <div class="display-flex flex-direction-row">
+                <div class="display-flex flex-direction-row justify-content-space-between">
                 <button class="button button-fill color-white">Depois</button>
                 <button class="button button-fill color-red">Instalar</button>
                 </div>`;
