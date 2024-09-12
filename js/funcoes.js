@@ -1663,7 +1663,7 @@ async function shareLink(shareTitle, shareText, link) {
 let isPWAInstalled = false;
 
 // Verifica se o PWA está instalado
-if (window.matchMedia('(display-mode: standalone)').matches) {
+if (window.matchMedia('(display-mode: fullscreen)').matches) {
   isPWAInstalled = true;
 }
 
