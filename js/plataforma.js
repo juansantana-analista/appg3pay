@@ -56,7 +56,7 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
     alert('Rodando em ' + platform);
   }
   
-  
+  window.onload = function() {
   document.addEventListener('DOMContentLoaded', function() {
         var conteudoInstall = document.getElementById('conteudoInstall');
 
@@ -75,3 +75,4 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
                 </div>`;
         }
    });
+}
