@@ -29,20 +29,21 @@ function detectMobileOS() {
     console.log('Usuário está usando outro tipo de dispositivo.');
   }
   
-  let isPWAInstalled = false;
 
   function onAndroidPwa () {
+    let isPWAInstalled = false;
     // Verifica se o PWA está instalado
     if (window.matchMedia('(display-mode: standalone)').matches) {
         isPWAInstalled = true;
+        return isPWAInstalled;
     }
-    return isPWAInstalled;
   }
 
   function onApplePwa () {
+    let isPWAInstalled = false;
     // Verifica se o PWA está instalado
     if (window.navigator.standalone) {
         isPWAInstalled = true;
+        return isPWAInstalled;
     }
-    return isPWAInstalled;
   }
