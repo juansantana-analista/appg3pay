@@ -506,6 +506,16 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {          
           OneSignal.Notifications.requestPermission();
+          let userId;
+
+// Função assíncrona para obter o userId e armazená-lo na variável
+async function fetchAndStoreUserId() {
+  // Obtém o userId do OneSignal
+  userId = await OneSignal.getUserId();
+
+  // Exibe o userId no console para verificação
+  console.log("OneSignal User ID:", userId);
+}
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
           onDashboard();
