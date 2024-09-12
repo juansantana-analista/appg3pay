@@ -65,9 +65,7 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
                 <p>Adicione <strong>o aplicativo G3 Pay</strong> à sua tela inicial para obter atualizações regulares. Toque em Compartilhar 
                 <span class="mdi mdi-export-variant"></span> e depois <strong>Adicionar à <br>tela inicial </strong><span class="mdi mdi-plus-box-outline"></span>
                 </p>`;
-        }
-        
-        if (conteudoInstall && platform === 'Android') {
+        } else {
             conteudoInstall.innerHTML = `
                 <p>Instale <strong>o aplicativo G3 Pay</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
                 <div class="display-flex flex-direction-row justify-content-space-between">
