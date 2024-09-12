@@ -4,8 +4,6 @@ const appId = "Basic 50119e057567b086d83fe5dd18336042ff2cf7bef3c24807bc55e34dbe5
 const versionApp = "1.0";
 var userAuthToken = '';
 
-$.getScript('js/plataforma.js');
-
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
 document.addEventListener('deviceready', onDeviceReady, false);
 var app = new Framework7({
@@ -1274,6 +1272,8 @@ function onDeviceReady() {
       $('#installPrompt').hide();
   });
   */
+ 
+$.getScript('js/plataforma.js');
 }
 
 // Bloquear o menu de contexto no clique com o botão direito
