@@ -49,16 +49,17 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
   const platform = detectPlatform();
   
 
+  $("#installBanner").removeClass("display-none");
+  var conteudoInstall = document.getElementById('conteudoInstall');
+
   if (platform === 'iOS') {
     // Ações específicas para iOS    
-  var conteudoInstall = document.getElementById('conteudoInstall');
     conteudoInstall.innerHTML = `
     <p>Adicione <strong>o aplicativo G3 Pay</strong> à sua tela inicial para obter atualizações regulares. Toque em Compartilhar 
     <span class="mdi mdi-export-variant"></span> e depois <strong>Adicionar à <br>tela inicial </strong><span class="mdi mdi-plus-box-outline"></span>
     </p>`;
   } else if (platform === 'Android') {
     // Ações específicas para Android
-  var conteudoInstall = document.getElementById('conteudoInstall');
     conteudoInstall.innerHTML = `
     <p>Instale <strong>o aplicativo G3 Pay</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
     <div class="display-flex flex-direction-row justify-content-space-between">
