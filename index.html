@@ -32,6 +32,11 @@
               enable: false,
             },
           });
+          
+          OneSignal.getUserId().then(function(userId) {
+            // Enviar userId para o seu servidor ou banco de dados
+            console.log("OneSignal User ID:", userId);
+          });
         });        
       </script>
       <!-- Path to Framework7 Library Bundle CSS -->

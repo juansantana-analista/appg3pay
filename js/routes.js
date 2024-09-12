@@ -506,10 +506,6 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {          
           OneSignal.Notifications.requestPermission();
-          OneSignal.getUserId().then(function(userId) {
-            // Enviar userId para o seu servidor ou banco de dados
-            console.log("OneSignal User ID:", userId);
-          });
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
           onDashboard();
