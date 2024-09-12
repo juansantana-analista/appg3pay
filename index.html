@@ -20,6 +20,14 @@
                   console.error('Falha ao registrar o Service Worker:', error);
             });
           }
+          let isPWAInstalled = false;
+
+         // Verifica se o PWA está instalado
+         if (window.matchMedia('(display-mode: fullscreen)').matches) {
+         isPWAInstalled = true;
+         }
+
+         alert('PWA instalado no Android:', isPWAInstalled);
       </script>
       <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
       <script>
