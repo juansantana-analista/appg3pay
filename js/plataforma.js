@@ -58,11 +58,9 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
   
   document.addEventListener('DOMContentLoaded', function() {
         var conteudoInstall = document.getElementById('conteudoInstall');
-
-        $("#installBanner").removeClass("display-none");
         if (conteudoInstall && platform === 'iOS') {
             $('.view.view-main').append(`
-            <div id="installBanner" class="install-banner display-none">
+            <div id="installBanner" class="install-banner">
                <div class="col-15">
                   <img src="favicon.png" alt="G3 Pay Logo" class="app-logo">
                </div>
@@ -74,7 +72,7 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
            </div>`);
         } else {
             $('.view.view-main').append(`
-            <div id="installBanner" class="install-banner display-none">
+            <div id="installBanner" class="install-banner">
                <div class="col-15">
                   <img src="favicon.png" alt="G3 Pay Logo" class="app-logo">
                </div>
