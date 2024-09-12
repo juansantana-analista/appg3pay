@@ -23,7 +23,7 @@
           let isPWAInstalled = false;
 
          // Verifica se o PWA está instalado
-         if (window.matchMedia('(display-mode: fullscreen)').matches) {
+         if (window.matchMedia('(display-mode: standalone)').matches) {
          isPWAInstalled = true;
          }
          console.log(isPWAInstalled);
