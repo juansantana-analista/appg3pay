@@ -3,14 +3,15 @@
 document.addEventListener('DOMContentLoaded', function() {
 if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches) {
     console.log('O app está rodando em modo standalone ou fullscreen');
-  } else {
-    console.log('O app não está rodando em modo standalone nem fullscreen');
+  } else {  
+    $("#installBanner").removeClass("display-none");
   }
   
   if (window.navigator.standalone) {
     console.log('O app está rodando em modo standalone (fixado na tela inicial no iOS)');
   } else {
-    console.log('O app não está rodando em modo standalone no iOS');
+    console.log('O app não está rodando em modo standalone no iOS');    
+    $("#installBanner").removeClass("display-none");
   }
 
   function detectPlatform() {
@@ -48,8 +49,6 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
   // Use this function to take actions based on the platform
   const platform = detectPlatform();
   
-
-  $("#installBanner").removeClass("display-none");
   var conteudoInstall = document.getElementById('conteudoInstall');
 
   if (platform === 'iOS') {
