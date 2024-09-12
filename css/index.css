@@ -1118,3 +1118,49 @@ form {
           .button.add-to-cart-button:hover {
             background-color: #0056b3;
           }
+
+          .install-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #f8f9fa;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            z-index: 1000;
+            font-family: Arial, sans-serif;
+        }
+        
+        .banner-content {
+            display: flex;
+            align-items: center;
+        }
+        
+        .app-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .install-btn {
+            background-color: #ff6600;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        #installBanner {
+            display: flex; /* Oculto por padrão */
+        }
