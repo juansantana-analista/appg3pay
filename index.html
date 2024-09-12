@@ -12,8 +12,7 @@
       <!-- Color theme for statusbar (Android only) -->
       <meta name="theme-color" content="#ff7700" />
       <!-- Your app title -->
-      <title>G3 PAY</title>         
-      <script type="text/javascript" src="js/plataforma.js"></script>
+      <title>G3 PAY</title>   
       <script>
           if(typeof navigator.serviceWorker !== 'undefined') {        
             navigator.serviceWorker.register('sw.js').then(function(registration) {
@@ -21,6 +20,15 @@
                   console.error('Falha ao registrar o Service Worker:', error);
             });
           }
+          let isPWAInstalled = false;
+
+         // Verifica se o PWA está instalado
+         if (window.matchMedia('(display-mode: standalone)').matches) {
+         isPWAInstalled = true;
+         }
+         console.log(isPWAInstalled);
+
+         alert('PWA instalado no Android:', isPWAInstalled);
       </script>
       <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
       <script>
@@ -146,7 +154,14 @@
                <div class="page-content"></div>
             </div>
          </div>
-      </div>>
+      </div>
+      <script>          
+         //titlebar color
+         Windows.UI.ViewManagement.ApplicationView.getForCurrentView().titleBar.backgroundColor = {a:255, r:58, g:74, b:85};
+         Windows.UI.ViewManagement.ApplicationView.getForCurrentView().titleBar.buttonBackgroundColor = { a: 255, r: 58, g: 74, b:85};
+         Windows.UI.ViewManagement.ApplicationView.getForCurrentView().titleBar.buttonForegroundColor = Windows.UI.Colors.white;
+         Windows.UI.ViewManagement.ApplicationView.getForCurrentView().titleBar.foregroundColor = Windows.UI.Colors.white;
+      </script>
       <!-- Path to Framework7 Library Bundle JS-->
       <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
