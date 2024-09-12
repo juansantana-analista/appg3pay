@@ -356,6 +356,9 @@ var app = new Framework7({
             app.views.main.router.navigate("/registerView/");
           });
           //END AÇÃO BOTÃO REGISTER
+          $("#testenotifi").on("click", function () {
+            OneSignal.Notifications.requestPermission();
+          });
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
