@@ -97,7 +97,23 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
-
+          var conteudoInstall = document.getElementById('conteudoInstall');
+          $("#installBanner").removeClass("display-none");
+          
+          if (conteudoInstall && platform === 'iOS') {
+              conteudoInstall.innerHTML = `
+                          <p>Adicione <strong>o aplicativo G3 Pay</strong> à sua tela inicial para obter atualizações regulares. Toque em Compartilhar 
+                          <span class="mdi mdi-export-variant"></span> e depois <strong>Adicionar à <br>tela inicial </strong><span class="mdi mdi-plus-box-outline"></span>
+                          </p>`;
+          } else {
+              conteudoInstall.innerHTML = `
+                          <p>Instale <strong>o aplicativo G3 Pay</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
+                          <div class="display-flex flex-direction-row justify-content-space-between">
+                          <button class="button margin-right text-color-gray">Depois</button>
+                          <button class="button button-fill color-red"><span class="mdi mdi-cellphone-arrow-down-variant"></span> Instalar</button>
+                          </div>`;
+          }
+          
           //START AÇÃO BOTÃO ENTRAR
           $("#signIn").on("click", function () {
             app.dialog.preloader("Carregando...");
@@ -1273,23 +1289,7 @@ function onDeviceReady() {
   });
   */
  
-  var conteudoInstall = document.getElementById('conteudoInstall');
-  $("#installBanner").removeClass("display-none");
-  
-  if (conteudoInstall && platform === 'iOS') {
-      conteudoInstall.innerHTML = `
-                  <p>Adicione <strong>o aplicativo G3 Pay</strong> à sua tela inicial para obter atualizações regulares. Toque em Compartilhar 
-                  <span class="mdi mdi-export-variant"></span> e depois <strong>Adicionar à <br>tela inicial </strong><span class="mdi mdi-plus-box-outline"></span>
-                  </p>`;
-  } else {
-      conteudoInstall.innerHTML = `
-                  <p>Instale <strong>o aplicativo G3 Pay</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
-                  <div class="display-flex flex-direction-row justify-content-space-between">
-                  <button class="button margin-right text-color-gray">Depois</button>
-                  <button class="button button-fill color-red"><span class="mdi mdi-cellphone-arrow-down-variant"></span> Instalar</button>
-                  </div>`;
-  }
-  
+
 }
 
 // Bloquear o menu de contexto no clique com o botão direito
