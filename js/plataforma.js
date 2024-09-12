@@ -1,20 +1,6 @@
 
 
 document.addEventListener('DOMContentLoaded', function() {
-if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches) {
-    console.log('O app está rodando em modo standalone ou fullscreen');
-    $("#installBanner").addClass("display-none");
-  } else {  
-    $("#installBanner").removeClass("display-none");
-  }
-  
-  if (window.navigator.standalone) {
-    console.log('O app está rodando em modo standalone (fixado na tela inicial no iOS)');
-    $("#installBanner").addClass("display-none");
-  } else {
-    console.log('O app não está rodando em modo standalone no iOS');    
-    $("#installBanner").removeClass("display-none");
-  }
 
   function detectPlatform() {
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -55,12 +41,25 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
 
   if (platform === 'iOS') {
     // Ações específicas para iOS    
+    if (window.navigator.standalone) {
+        console.log('O app está rodando em modo standalone (fixado na tela inicial no iOS)');
+        $("#installBanner").addClass("display-none");
+    } else {
+        console.log('O app não está rodando em modo standalone no iOS');    
+        $("#installBanner").removeClass("display-none");
+    }  
     conteudoInstall.innerHTML = `
     <p>Adicione <strong>o aplicativo G3 Pay</strong> à sua tela inicial para obter atualizações regulares. Toque em Compartilhar 
     <span class="mdi mdi-export-variant"></span> e depois <strong>Adicionar à <br>tela inicial </strong><span class="mdi mdi-plus-box-outline"></span>
     </p>`;
   } else if (platform === 'Android') {
     // Ações específicas para Android
+    if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches) {
+        console.log('O app está rodando em modo standalone ou fullscreen');
+        $("#installBanner").addClass("display-none");
+    } else {  
+        $("#installBanner").removeClass("display-none");
+    }
     conteudoInstall.innerHTML = `
     <p>Instale <strong>o aplicativo G3 Pay</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
     <div class="display-flex flex-direction-row justify-content-space-between">
@@ -69,6 +68,12 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
     </div>`;
   } else {
     // Ações para desktop ou plataformas desconhecidas
+    if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches) {
+        console.log('O app está rodando em modo standalone ou fullscreen');
+        $("#installBanner").addClass("display-none");
+    } else {  
+        $("#installBanner").removeClass("display-none");
+    }
     alert('Rodando em ' + platform);
   }
 });
