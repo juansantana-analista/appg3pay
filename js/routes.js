@@ -506,12 +506,7 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {          
           OneSignal.Notifications.requestPermission();
-          const options = {method: 'GET', headers: {accept: 'application/json'}};
 
-          fetch('https://api.onesignal.com/apps/app_id/subscriptions/subscription_id/user/identity', options)
-            .then(response => response.json())
-            .then(response => console.log(response))
-            .catch(err => console.error(err));
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
           onDashboard();
