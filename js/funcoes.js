@@ -1660,3 +1660,11 @@ async function shareLink(shareTitle, shareText, link) {
 }
 //Fim função compartilhar
 
+let isPWAInstalled = false;
+
+// Verifica se o PWA está instalado
+if (window.matchMedia('(display-mode: standalone)').matches) {
+  isPWAInstalled = true;
+}
+
+app.dialog.alert('PWA instalado no Android:', isPWAInstalled);
