@@ -46,7 +46,79 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
-          // fazer algo quando a página for inicializada
+          // fazer algo quando a página for inicializada  
+          function detectPlatform() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+            // Detect iOS (iPhone, iPad, etc.)
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+              return 'iOS';
+            }
+
+            // Detect Android
+            if (/android/i.test(userAgent)) {
+              return 'Android';
+            }
+
+            // Detect Windows (desktop)
+            if (/Win/.test(userAgent)) {
+              return 'Windows';
+            }
+
+            // Detect macOS (desktop)
+            if (/Mac/.test(userAgent)) {
+              return 'MacOS';
+            }
+
+            // Detect Linux (desktop)
+            if (/Linux/.test(userAgent)) {
+              return 'Linux';
+            }
+
+            // Fallback if not detected
+            return 'Unknown';
+          }
+          // Use this function to take actions based on the platform
+          const platform = detectPlatform();
+
+          var conteudoInstall = document.getElementById('conteudoInstall');
+
+          if (platform === 'iOS') {
+            // Ações específicas para iOS    
+            if (window.navigator.standalone) {
+              console.log('O app está rodando em modo standalone (fixado na tela inicial no iOS)');
+              $("#installBanner").addClass("display-none");
+            } else {
+              console.log('O app não está rodando em modo standalone no iOS');
+              $("#installBanner").removeClass("display-none");
+            }
+            conteudoInstall.innerHTML = `
+    <p>Adicione <strong>o aplicativo G3 Pay</strong> à sua tela inicial para obter atualizações regulares. Toque em Compartilhar 
+    <span class="mdi mdi-export-variant"></span> e depois <strong>Adicionar à <br>tela inicial </strong><span class="mdi mdi-plus-box-outline"></span>
+    </p>`;
+          } else if (platform === 'Android') {
+            // Ações específicas para Android
+            if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches) {
+              console.log('O app está rodando em modo standalone ou fullscreen');
+              $("#installBanner").addClass("display-none");
+            } else {
+              $("#installBanner").removeClass("display-none");
+            }
+            conteudoInstall.innerHTML = `
+    <p>Instale <strong>o aplicativo G3 Pay</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
+    <div class="display-flex flex-direction-row justify-content-space-between">
+        <button class="button margin-right text-color-gray">Depois</button>
+        <button class="button button-fill color-red"><span class="mdi mdi-cellphone-arrow-down-variant"></span> Instalar</button>
+    </div>`;
+          } else {
+            // Ações para desktop ou plataformas desconhecidas
+            if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches) {
+              console.log('O app está rodando em modo standalone ou fullscreen');
+              $("#installBanner").addClass("display-none");
+            } else {
+              $("#installBanner").removeClass("display-none");
+            }
+          }
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
@@ -595,7 +667,7 @@ var app = new Framework7({
           // fazer algo quando a página for inicializada
           contarCarrinho();
           listarBanners();
-          
+
           var swiper = new Swiper(".mySwiper", {
             slidesPerView: 1,
             spaceBetween: 30,
@@ -800,7 +872,7 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          $("#menuPrincipal").hide("fast");          
+          $("#menuPrincipal").hide("fast");
           localStorage.removeItem('enderecoDetalhes');
         },
         pageAfterIn: function (event, page) {
@@ -809,23 +881,23 @@ var app = new Framework7({
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada    
           listarCarrinho();
-          
+
           $("#btnSelecionarEndereco").on('click', function () {
-            listarEnderecos();     
+            listarEnderecos();
             app.popup.open(".popup-enderecos");
           });
 
           $("#esvaziar").on('click', function () {
-              app.dialog.confirm('Tem certeza que quer esvaziar o carrinho?', '<strong>ESVAZIAR</strong>', function () {
-                  //Chamar a funçao que limpa o carrinho
-                  limparCarrinho();
-              });
+            app.dialog.confirm('Tem certeza que quer esvaziar o carrinho?', '<strong>ESVAZIAR</strong>', function () {
+              //Chamar a funçao que limpa o carrinho
+              limparCarrinho();
+            });
           });
           $('#irCheckout').on('click', function () {
             var enderecoSelecionado = localStorage.getItem('enderecoDetalhes');
-            if(enderecoSelecionado && enderecoSelecionado != null){              
+            if (enderecoSelecionado && enderecoSelecionado != null) {
               app.views.main.router.navigate("/checkout/");
-            } else {              
+            } else {
               app.dialog.alert("Por favor selecione um endereço de entrega. ", "Erro!");
             }
           });
@@ -879,9 +951,9 @@ var app = new Framework7({
           var clienteNome = localStorage.getItem('userName');
           var nomeElemento = document.getElementById("clienteNome");
           nomeElemento.innerHTML = clienteNome;
-          
+
           var enderecoDetalhes = JSON.parse(localStorage.getItem('enderecoDetalhes'));
-          
+
           // Atualiza o HTML com o endereço selecionado
           $('#enderecoRua').html(enderecoDetalhes.endEntregaRua);
           $('#enderecoNumero').html(enderecoDetalhes.endEntregaNumero);
@@ -1097,11 +1169,11 @@ var app = new Framework7({
                 pagamentoButtons.innerHTML = `
                   <button class="button button-fill color-green margin-bottom margin-top" id="confirmarCartao"><span class="mdi mdi-credit-card"></span> Confirmar Pagamento</button>
                 `;
-            
+
                 document.getElementById('confirmarCartao').addEventListener('click', function () {
                   confirmarPagamentoCartao();
                 });
-            
+
               } else if (formaSelecionada == 2) {
                 formaPagamento = 'Boleto';
                 pagamentoBody.innerHTML = `
@@ -1131,12 +1203,12 @@ var app = new Framework7({
               `;
 
                 // Copiar linha digitável
-              $('#copiarLinha').on('click', function () {
+                $('#copiarLinha').on('click', function () {
                   copiarParaAreaDeTransferencia(data.linhaDigitavel);
                 });
 
                 // Baixar boleto
-              $('#baixarBoleto').on('click', function () {
+                $('#baixarBoleto').on('click', function () {
                   app.dialog.confirm('Deseja baixar o boleto no navegador?', function () {
                     var ref = cordova.InAppBrowser.open(data.linkBoleto, '_system', 'location=no,zoom=no');
                     ref.show();
@@ -1163,7 +1235,7 @@ var app = new Framework7({
                 pagamentoButtons.innerHTML = `
                   <button class="button button-fill color-green margin-bottom margin-top" id="copiarPix"><span class="mdi mdi-content-copy"></span> Copiar Código Pix</button>
                 `;
-            
+
                 // Copiar código Pix
                 document.getElementById('copiarPix').addEventListener('click', function () {
                   copiarParaAreaDeTransferencia(data.pixCopiaCola);
@@ -1176,7 +1248,7 @@ var app = new Framework7({
             // Inicializar o conteúdo do pagamento
             criarConteudoPagamento(data);
 
-            
+
             localStorage.removeItem('pagamentoData');
             // Usar os dados conforme necessário
           }
@@ -1195,7 +1267,7 @@ var app = new Framework7({
     iosDynamicNavbar: false, // Disable dynamic navbar animations for iOS
     stackPages: true, // To prevent reloading pages, useful if still facing issues
   },
-  
+
 });
 
 //Para testes direto no navegador
