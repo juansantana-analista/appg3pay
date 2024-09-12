@@ -9,3 +9,50 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
   } else {
     console.log('O app não está rodando em modo standalone no iOS');
   }
+
+  function detectPlatform() {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  
+    // Detect iOS (iPhone, iPad, etc.)
+    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+      return 'iOS';
+    }
+  
+    // Detect Android
+    if (/android/i.test(userAgent)) {
+      return 'Android';
+    }
+  
+    // Detect Windows (desktop)
+    if (/Win/.test(userAgent)) {
+      return 'Windows';
+    }
+  
+    // Detect macOS (desktop)
+    if (/Mac/.test(userAgent)) {
+      return 'MacOS';
+    }
+  
+    // Detect Linux (desktop)
+    if (/Linux/.test(userAgent)) {
+      return 'Linux';
+    }
+  
+    // Fallback if not detected
+    return 'Unknown';
+  }
+  
+  // Use this function to take actions based on the platform
+  const platform = detectPlatform();
+  
+  if (platform === 'iOS') {
+    // Ações específicas para iOS
+    alert('Rodando em iOS');
+  } else if (platform === 'Android') {
+    // Ações específicas para Android
+    alert('Rodando em Android');
+  } else {
+    // Ações para desktop ou plataformas desconhecidas
+    alert('Rodando em ' + platform);
+  }
+  
