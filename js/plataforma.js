@@ -58,8 +58,8 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
   
   document.addEventListener('DOMContentLoaded', function() {
         var conteudoInstall = document.getElementById('conteudoInstall');
-
         $("#installBanner").removeClass("display-none");
+
         if (conteudoInstall && platform === 'iOS') {
             conteudoInstall.innerHTML = `
                 <p>Adicione <strong>o aplicativo G3 Pay</strong> à sua tela inicial para obter atualizações regulares. Toque em Compartilhar 
