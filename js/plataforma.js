@@ -42,4 +42,4 @@ function detectMobileOS() {
         isPWAInstalled = true;
     }
   }
-  console.log(userAgent);
+  alert(userAgent);
