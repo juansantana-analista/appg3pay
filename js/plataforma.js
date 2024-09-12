@@ -42,4 +42,4 @@ function detectMobileOS() {
         isPWAInstalled = true;
     }
   }
-  alert(userAgent);
+  alert(os);
