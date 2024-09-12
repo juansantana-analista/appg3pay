@@ -508,7 +508,7 @@ var app = new Framework7({
           OneSignal.Notifications.requestPermission();
           const options = {method: 'GET', headers: {accept: 'application/json'}};
 
-          fetch('https://api.onesignal.com/apps/app_id/subscriptions/subscription_id/iams', options)
+          fetch('https://api.onesignal.com/apps/7bfc9cb0-b251-4b3a-be5c-be82c1a143e2/subscriptions/subscription_id/iams', options)
             .then(response => response.json())
             .then(response => console.log(response))
             .catch(err => console.error(err));
