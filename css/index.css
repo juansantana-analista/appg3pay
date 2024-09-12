@@ -1158,7 +1158,3 @@ form {
             cursor: pointer;
             color: #333;
         }
-        
-        #installBanner {
-            display: none; /* Oculto por padrão */
-        }
