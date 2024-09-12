@@ -56,3 +56,10 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
     alert('Rodando em ' + platform);
   }
   
+  
+  var conteudoInstall = document.getElementById('conteudoInstall');
+  
+  conteudoInstall.innerHTML = `
+                   <p>Adicione <strong>o aplicativo G3 Pay</strong> à sua tela inicial para obter atualizações regulares. Toque em Compartilhar 
+                   <span class="mdi mdi-export-variant"></span> e depois <strong>Adicionar à tela inicial</strong><span class="mdi mdi-plus-box-outline"></span>
+                   </p>`;
