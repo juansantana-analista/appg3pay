@@ -1,4 +1,3 @@
-window.onload = function() {
 if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches) {
     console.log('O app está rodando em modo standalone ou fullscreen');
   } else {
@@ -62,17 +61,30 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia
 
         $("#installBanner").removeClass("display-none");
         if (conteudoInstall && platform === 'iOS') {
-            conteudoInstall.innerHTML = `
+            $('.view.view-main').append(`
+            <div id="installBanner" class="install-banner display-none">
+               <div class="col-15">
+                  <img src="favicon.png" alt="G3 Pay Logo" class="app-logo">
+               </div>
+               <div class="banner-text col-85" id="conteudoInstall">
                 <p>Adicione <strong>o aplicativo G3 Pay</strong> à sua tela inicial para obter atualizações regulares. Toque em Compartilhar 
                 <span class="mdi mdi-export-variant"></span> e depois <strong>Adicionar à <br>tela inicial </strong><span class="mdi mdi-plus-box-outline"></span>
-                </p>`;
+                </p>
+               </div>
+           </div>`);
         } else {
-            conteudoInstall.innerHTML = `
+            $('.view.view-main').append(`
+            <div id="installBanner" class="install-banner display-none">
+               <div class="col-15">
+                  <img src="favicon.png" alt="G3 Pay Logo" class="app-logo">
+               </div>
+               <div class="banner-text col-85" id="conteudoInstall">
                 <p>Instale <strong>o aplicativo G3 Pay</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
                 <div class="display-flex flex-direction-row justify-content-space-between">
                 <button class="button margin-right text-color-gray">Depois</button>
                 <button class="button button-fill color-red"><span class="mdi mdi-cellphone-arrow-down-variant"></span> Instalar</button>
-                </div>`;
+                </div>
+               </div>
+           </div>`);
         }
    });
-}
