@@ -243,10 +243,36 @@ var app = new Framework7({
                   data: JSON.stringify({
                       userName: userName,
                       userPassword: userPassword
-                  }),                     // Converte o objeto em JSON
+                  }),                     
+                  // Converte o objeto em JSON
                   success: function(response) {
-                      // Tratamento de sucesso
+                    if(response.status === "success" && response.data != ''){
+                    // Tratamento de sucesso
+                    const token = response.data;
+                    localStorage.setItem('userAuthToken', token);
+                    userAuthToken = token;
+                    const decodedToken = jwt_decode(token);
+                    // Navegar para outra página ou realizar outras ações necessárias
+
+                    localStorage.setItem("user", decodedToken.user);
+                    localStorage.setItem("userId", decodedToken.userid);
+                    localStorage.setItem("userName", decodedToken.username);
+                    localStorage.setItem("userEmail", decodedToken.usermail);
+                    localStorage.setItem("pessoaId", decodedToken.pessoa_id);
+                    localStorage.setItem("validadeToken", decodedToken.expires);
+                    //localStorage.setItem("validadeToken", decodedToken.expires);
+
+                    buscarPessoaId(decodedToken.userid);
+
+                    setTimeout(function () {
+                      app.dialog.close();
+                      app.views.main.router.navigate("/home/");
+                    }, 300);
                       console.log("Resposta do servidor:", response);
+                    } else {
+                      app.dialog.close();
+                      app.dialog.alert("Erro no login: " + (response.message || "Dados inválidos"), "Falha no Login");
+                    }
                   },
                   error: function(xhr, status, error) {
                       // Tratamento de erro
