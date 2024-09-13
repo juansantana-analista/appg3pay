@@ -240,21 +240,19 @@ var app = new Framework7({
                 '<i class="mdi mdi-alert"></i> Campos Vazios'
               );
             } else {
-              const body = {
-                userName: userName,
-                userPassword: userPassword
-              };
-
-              // Opções da requisição
-              const options = {
-                method: "POST",
-                body: body,
-              };
-
               //START Fazendo a requisição
-              fetch('https://escritorio.g3pay.com.br/api/auth_app.php', options)
-                .then((response) => response.json())
-                .then((data) => {
+              fetch('https://escritorio.g3pay.com.br/api/auth_app.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userName: userName,
+                        userPassword: userPassword
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
                   if (data.data) {
                     const token = data.data;
                     localStorage.setItem('userAuthToken', token);
@@ -283,11 +281,9 @@ var app = new Framework7({
                     app.dialog.alert("Erro no login: " + (data.message || "Dados inválidos"), "Falha no Login");
                   }
                 })
-                .catch((error) => {
-                  app.dialog.close();
-                  // Manipule os erros aqui
-                  console.error("Erro:", error);
-                });
+                .catch(error => {
+                    console.error('Error:', error);
+                })              
               //END Fazendo a requisição
             }
           });
