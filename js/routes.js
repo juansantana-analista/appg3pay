@@ -261,9 +261,29 @@ var app = new Framework7({
               .then(text => {
                 console.log('Response Text:', text);
                 try {
-                  const data = JSON.parse(text);  // Tente converter o texto em JSON
+                  const data = text ? JSON.parse(text) : {};
                   if (data && data.data) {
-                    // Continue com o processamento
+                    const token = data.data;
+                    localStorage.setItem('userAuthToken', token);
+                    appId = 'Bearer ' + token;
+                    userAuthToken = token;
+                    const decodedToken = jwt_decode(token);
+                    // Navegar para outra página ou realizar outras ações necessárias
+            
+                    localStorage.setItem("user", decodedToken.user);
+                    localStorage.setItem("userId", decodedToken.userid);
+                    localStorage.setItem("userName", decodedToken.username);
+                    localStorage.setItem("userEmail", decodedToken.usermail);
+                    localStorage.setItem("pessoaId", decodedToken.pessoa_id);
+                    localStorage.setItem("validadeToken", decodedToken.expires);
+            
+                    buscarPessoaId(decodedToken.userid);
+            
+                    setTimeout(function () {
+                      app.dialog.close();
+                      app.views.main.router.navigate("/home/");
+                    }, 300);
+            
                   } else {
                     app.dialog.close();
                     app.dialog.alert("Erro no login: " + (data.message || "Dados inválidos"), "Falha no Login");
