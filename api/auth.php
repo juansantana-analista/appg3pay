@@ -45,7 +45,7 @@ if (curl_errno($ch)) {
 }
 
 // Retorna a resposta para o cliente
-echo $data;
+echo json_encode($response);
 
 // Fecha a requisição
 curl_close($ch);
