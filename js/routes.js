@@ -235,14 +235,20 @@ var app = new Framework7({
                 '<i class="mdi mdi-alert"></i> Campos Vazios'
               );
             } else {
-              const body = JSON.stringify({
+              // Cabeçalhos da requisição
+              const headers = {
+                "Content-Type": "application/json"
+              };
+
+              const body = {
                 userName: userName,
                 userPassword: userPassword
-              });
+              };
 
               // Opções da requisição
               const options = {
                 method: "POST",
+                headers: headers,
                 body: body,
               };
 
