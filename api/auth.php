@@ -45,7 +45,7 @@ if (curl_errno($ch)) {
 }
 
 // Retorna a resposta para o cliente
-return $postData;
+var_dump($postData);
 
 // Fecha a requisição
 curl_close($ch);
