@@ -251,9 +251,10 @@ var app = new Framework7({
                 headers: headers,
                 body: body,
               };
-
+              console.log('userName:', userName);
+              console.log('userPassword:', userPassword);
               //START Fazendo a requisição
-              fetch('../api/auth.php', options)
+              fetch('https://app.g3pay.com.br/api/auth.php', options)
               .then(response => {
                 console.log('Response Status:', response.status);
                 return response.text();  // Primeiro obtenha como texto para verificar o que está sendo retornado
