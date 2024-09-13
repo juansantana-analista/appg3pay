@@ -7,8 +7,8 @@ $appId = "Basic 50119e057567b086d83fe5dd18336042ff2cf7bef3c24807bc55e34dbe5a";
 // Verifica se os dados foram enviados via POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Obtém os parâmetros
-    $userName = isset($_POST['parametro1']) ? $_POST['parametro1'] : '';
-    $userPassword = isset($_POST['parametro2']) ? $_POST['parametro2'] : '';
+    $userName = isset($_POST['userName']) ? $_POST['userName'] : '';
+    $userPassword = isset($_POST['userPassword']) ? $_POST['userPassword'] : '';
     if($userName && $userPassword) {
         // Cabeçalhos da requisição para o backend
         $headers = array(
