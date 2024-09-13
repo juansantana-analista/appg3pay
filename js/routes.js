@@ -254,50 +254,49 @@ var app = new Framework7({
 
               //START Fazendo a requisição
               fetch('../api/auth.php', options)
-                .then(response => {
-                  if (!response.ok) {
-                    app.dialog.close();
-                    app.dialog.alert(
-                      "Erro, verifique as credenciais e tente novamente.",
-                      '<i class="mdi mdi-alert"></i> Erro ao logar!'
-                    );
-                  }
-                  return response.json();
-                })
-                .then((data) => {
-                  if (data && data.data) {
-                    const token = data.data;
-                    localStorage.setItem('userAuthToken', token);
-                    appId = 'Bearer ' + token;
-                    userAuthToken = token;
-                    const decodedToken = jwt_decode(token);
-                    // Navegar para outra página ou realizar outras ações necessárias
-
-                    localStorage.setItem("user", decodedToken.user);
-                    localStorage.setItem("userId", decodedToken.userid);
-                    localStorage.setItem("userName", decodedToken.username);
-                    localStorage.setItem("userEmail", decodedToken.usermail);
-                    localStorage.setItem("pessoaId", decodedToken.pessoa_id);
-                    localStorage.setItem("validadeToken", decodedToken.expires);
-                    //localStorage.setItem("validadeToken", decodedToken.expires);
-
-                    buscarPessoaId(decodedToken.userid);
-
-                    setTimeout(function () {
-                      app.dialog.close();
-                      app.views.main.router.navigate("/home/");
-                    }, 300);
-
-                  } else {
-                    app.dialog.close();
-                    app.dialog.alert("Erro no login: " + (data.message || "Dados inválidos"), "Falha no Login");
-                  }
-                })
-                .catch((error) => {
+              .then(response => {
+                if (!response.ok) {
                   app.dialog.close();
-                  // Manipule os erros aqui
-                  console.error("Erro:", error);
-                });
+                  app.dialog.alert(
+                    "Erro, verifique as credenciais e tente novamente.",
+                    '<i class="mdi mdi-alert"></i> Erro ao logar!'
+                  );
+                  throw new Error('Erro na resposta: ' + response.status);
+                }
+                return response.json();
+              })
+              .then((data) => {
+                if (data && data.data) {
+                  const token = data.data;
+                  localStorage.setItem('userAuthToken', token);
+                  appId = 'Bearer ' + token;
+                  userAuthToken = token;
+                  const decodedToken = jwt_decode(token);
+                  // Navegar para outra página ou realizar outras ações necessárias
+            
+                  localStorage.setItem("user", decodedToken.user);
+                  localStorage.setItem("userId", decodedToken.userid);
+                  localStorage.setItem("userName", decodedToken.username);
+                  localStorage.setItem("userEmail", decodedToken.usermail);
+                  localStorage.setItem("pessoaId", decodedToken.pessoa_id);
+                  localStorage.setItem("validadeToken", decodedToken.expires);
+                  
+                  buscarPessoaId(decodedToken.userid);
+            
+                  setTimeout(function () {
+                    app.dialog.close();
+                    app.views.main.router.navigate("/home/");
+                  }, 300);
+            
+                } else {
+                  app.dialog.close();
+                  app.dialog.alert("Erro no login: " + (data.message || "Dados inválidos"), "Falha no Login");
+                }
+              })
+              .catch((error) => {
+                app.dialog.close();
+                console.error("Erro:", error);
+              });
               //END Fazendo a requisição
             }
           });
