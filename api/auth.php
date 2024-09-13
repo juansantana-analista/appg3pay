@@ -8,12 +8,6 @@ $appId = "Basic 50119e057567b086d83fe5dd18336042ff2cf7bef3c24807bc55e34dbe5a";
 $postData = file_get_contents('php://input');
 $data = json_decode($postData);
 
-// Verifica se os dados foram recebidos corretamente
-if (!$data || !isset($data->userName) || !isset($data->userPassword)) {
-    header("HTTP/1.1 400 Bad Request");
-    exit();
-}
-
 // Dados de login
 $userName = $data->userName;
 $userPassword = $data->userPassword;
