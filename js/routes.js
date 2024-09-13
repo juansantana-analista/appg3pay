@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://escritorio.g3pay.com.br/rest.php";
-var appId = 'Bearer ' + localStorage.getItem('userAuthToken');
+const appId = "Basic 50119e057567b086d83fe5dd18336042ff2cf7bef3c24807bc55e34dbe5a";
 const versionApp = "1.0";
 var userAuthToken = '';
 
@@ -237,12 +237,15 @@ var app = new Framework7({
             } else {
               // Cabeçalhos da requisição
               const headers = {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": appId,
               };
 
               const body = JSON.stringify({
-                userName: userName,
-                userPassword: userPassword
+                class: "ApplicationAuthenticationRestService",
+                method: "getToken",
+                login: userName,
+                password: userPassword
               });
 
               // Opções da requisição
@@ -251,54 +254,43 @@ var app = new Framework7({
                 headers: headers,
                 body: body,
               };
-              console.log('userName:', userName);
-              console.log('userPassword:', userPassword);
+
               //START Fazendo a requisição
-              fetch('https://app.g3pay.com.br/api/auth.php', options)
-              .then(response => {
-                console.log('Response Status:', response.status);
-                return response.text();  // Primeiro obtenha como texto para verificar o que está sendo retornado
-              })
-              .then(text => {
-                console.log('Response Text:', text);
-                try {
-                  const data = text ? JSON.parse(text) : {};
-                  if (data && data.data) {
+              fetch(apiServerUrl, options)
+                .then((response) => response.json())
+                .then((data) => {
+                  if (data.data) {
                     const token = data.data;
                     localStorage.setItem('userAuthToken', token);
-                    appId = 'Bearer ' + token;
                     userAuthToken = token;
                     const decodedToken = jwt_decode(token);
                     // Navegar para outra página ou realizar outras ações necessárias
-            
+
                     localStorage.setItem("user", decodedToken.user);
                     localStorage.setItem("userId", decodedToken.userid);
                     localStorage.setItem("userName", decodedToken.username);
                     localStorage.setItem("userEmail", decodedToken.usermail);
                     localStorage.setItem("pessoaId", decodedToken.pessoa_id);
                     localStorage.setItem("validadeToken", decodedToken.expires);
-            
+                    //localStorage.setItem("validadeToken", decodedToken.expires);
+
                     buscarPessoaId(decodedToken.userid);
-            
+
                     setTimeout(function () {
                       app.dialog.close();
                       app.views.main.router.navigate("/home/");
                     }, 300);
-            
+
                   } else {
                     app.dialog.close();
                     app.dialog.alert("Erro no login: " + (data.message || "Dados inválidos"), "Falha no Login");
                   }
-                } catch (e) {
-                  console.error("Erro ao parsear JSON:", e);
+                })
+                .catch((error) => {
                   app.dialog.close();
-                  app.dialog.alert("Erro de processamento de resposta", "Erro");
-                }
-              })
-              .catch((error) => {
-                app.dialog.close();
-                console.error("Erro:", error);
-              });
+                  // Manipule os erros aqui
+                  console.error("Erro:", error);
+                });
               //END Fazendo a requisição
             }
           });
