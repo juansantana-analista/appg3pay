@@ -78,3 +78,14 @@ importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
         event.waitUntil(
         );
     });
+    self.addEventListener('activate', event => {
+        event.waitUntil(caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cache => {
+                    if (cache !== currentCache) {
+                        return caches.delete(cache);
+                    }
+                })
+            );
+        }));
+    });
