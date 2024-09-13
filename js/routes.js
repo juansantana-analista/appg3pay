@@ -1,7 +1,7 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://escritorio.g3pay.com.br/rest.php";
-const appId = "Basic 50119e057567b086d83fe5dd18336042ff2cf7bef3c24807bc55e34dbe5a";
 const versionApp = "1.0";
+var appId = 'Bearer ' + localStorage.getItem('userAuthToken');
 var userAuthToken = '';
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -237,15 +237,12 @@ var app = new Framework7({
             } else {
               // Cabeçalhos da requisição
               const headers = {
-                "Content-Type": "application/json",
-                "Authorization": appId,
+                "Content-Type": "application/json"
               };
 
               const body = JSON.stringify({
-                class: "ApplicationAuthenticationRestService",
-                method: "getToken",
-                login: userName,
-                password: userPassword
+                userName: userName,
+                userPassword: userPassword
               });
 
               // Opções da requisição
@@ -256,40 +253,53 @@ var app = new Framework7({
               };
 
               //START Fazendo a requisição
-              fetch(apiServerUrl, options)
-                .then((response) => response.json())
-                .then((data) => {
-                  if (data.data) {
+              fetch('../api/auth.php', options)
+                .then(response => {
+                  if (!response.ok) {
+                    app.dialog.close();
+                    app.dialog.alert(
+                      "Erro, verifique as credenciais e tente novamente.",
+                      '<i class="mdi mdi-alert"></i> Erro ao logar!'
+                    );
+                  }
+                  return response.json();
+                })
+                .then(data => {
+                  if (data && data.data) {
                     const token = data.data;
                     localStorage.setItem('userAuthToken', token);
+                    appId = 'Bearer ' + localStorage.getItem('userAuthToken');
                     userAuthToken = token;
                     const decodedToken = jwt_decode(token);
-                    // Navegar para outra página ou realizar outras ações necessárias
-
-                    localStorage.setItem("user", decodedToken.user);
-                    localStorage.setItem("userId", decodedToken.userid);
-                    localStorage.setItem("userName", decodedToken.username);
-                    localStorage.setItem("userEmail", decodedToken.usermail);
+                    localStorage.setItem('user', decodedToken.user);
+                    localStorage.setItem('userId', decodedToken.userid);
+                    localStorage.setItem('userName', decodedToken.username);
+                    localStorage.setItem('userEmail', decodedToken.usermail);
                     localStorage.setItem("pessoaId", decodedToken.pessoa_id);
-                    localStorage.setItem("validadeToken", decodedToken.expires);
-                    //localStorage.setItem("validadeToken", decodedToken.expires);
+                    localStorage.setItem('validadeToken', decodedToken.expires);
 
                     buscarPessoaId(decodedToken.userid);
 
-                    setTimeout(function () {
+                    setTimeout(() => {
                       app.dialog.close();
-                      app.views.main.router.navigate("/home/");
+                      app.views.main.router.navigate('/home/');
                     }, 300);
-
                   } else {
                     app.dialog.close();
-                    app.dialog.alert("Erro no login: " + (data.message || "Dados inválidos"), "Falha no Login");
+                    app.dialog.alert(
+                      "Erro, verifique as credenciais e tente novamente.",
+                      '<i class="mdi mdi-alert"></i> Erro ao logar!'
+                    );
                   }
                 })
-                .catch((error) => {
+                .catch(error => {
                   app.dialog.close();
-                  // Manipule os erros aqui
-                  console.error("Erro:", error);
+                  app.dialog.alert(
+                    "Erro, verifique as credenciais e tente novamente.",
+                    '<i class="mdi mdi-alert"></i> Erro ao logar!'
+                  );
+                  console.error('Erro:', error.message);
+                  // Aqui você pode exibir uma mensagem de erro para o usuário
                 });
               //END Fazendo a requisição
             }

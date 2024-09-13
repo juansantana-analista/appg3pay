@@ -1,7 +1,7 @@
 <?php
 
 // Configurações
-$apiServerUrl = "https://mrreforma.com.br/rest.php";
+$apiServerUrl = "https://escritorio.g3pay.com.br/rest.php";
 $appId = "Basic 50119e057567b086d83fe5dd18336042ff2cf7bef3c24807bc55e34dbe5a";
 
 // Recebe os dados do POST
