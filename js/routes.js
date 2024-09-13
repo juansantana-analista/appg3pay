@@ -238,13 +238,12 @@ var app = new Framework7({
                 // Requisição AJAX
                 $.ajax({
                   url: "../api/auth.php",  // Substitua pela URL do seu servidor
-                  type: "POST",                         // Método de requisição
+                  type: "POST",           // Método de requisição
                   contentType: "application/json",
-                  data: {
-                    userName: userName,
-                    userPassword: userPassword
-                  },
-                  // Converte o objeto em JSON
+                  data: JSON.stringify({
+                      userName: userName,
+                      userPassword: userPassword
+                  }),                     // Converte o objeto em JSON
                   success: function(response) {
                       // Tratamento de sucesso
                       console.log("Resposta do servidor:", response);
