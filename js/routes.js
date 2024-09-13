@@ -253,7 +253,7 @@ var app = new Framework7({
               };
 
               //START Fazendo a requisição
-              fetch('../api/auth.php', options)
+              fetch('https://app.g3pay.com.br/api/auth.php', options)
                 .then(response => {
                   if (!response.ok) {
                     app.dialog.close();
