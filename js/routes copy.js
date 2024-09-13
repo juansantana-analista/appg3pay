@@ -1,13 +1,9 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://escritorio.g3pay.com.br/rest.php";
+const appId = "Basic 50119e057567b086d83fe5dd18336042ff2cf7bef3c24807bc55e34dbe5a";
 const versionApp = "1.0";
-
 var userAuthToken = '';
-var appId = ''
-var userToken = localStorage.getItem('userAuthToken');
-if(userToken){
-  appId = 'Bearer ' + userToken;
-}
+
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
 document.addEventListener('deviceready', onDeviceReady, false);
 var app = new Framework7({
@@ -240,19 +236,28 @@ var app = new Framework7({
                 '<i class="mdi mdi-alert"></i> Campos Vazios'
               );
             } else {
-              const body = {
-                userName: userName,
-                userPassword: userPassword
+              // Cabeçalhos da requisição
+              const headers = {
+                "Content-Type": "application/json",
+                "Authorization": appId,
               };
+
+              const body = JSON.stringify({
+                class: "ApplicationAuthenticationRestService",
+                method: "getToken",
+                login: userName,
+                password: userPassword
+              });
 
               // Opções da requisição
               const options = {
                 method: "POST",
+                headers: headers,
                 body: body,
               };
 
               //START Fazendo a requisição
-              fetch('https://escritorio.g3pay.com.br/api/auth_app.php', options)
+              fetch(apiServerUrl, options)
                 .then((response) => response.json())
                 .then((data) => {
                   if (data.data) {
