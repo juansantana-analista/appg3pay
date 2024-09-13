@@ -8,6 +8,19 @@ $appId = "Basic 50119e057567b086d83fe5dd18336042ff2cf7bef3c24807bc55e34dbe5a";
 $postData = file_get_contents('php://input');
 $data = json_decode($postData);
 
+// Verifique se a decodificação foi bem-sucedida
+if (json_last_error() !== JSON_ERROR_NONE) {
+    header("HTTP/1.1 400 Bad Request");
+    echo "Erro ao decodificar JSON: " . json_last_error_msg();
+    exit();
+}
+
+// Verifique se o objeto contém as propriedades esperadas
+if (!isset($data->userName) || !isset($data->userPassword)) {
+    header("HTTP/1.1 400 Bad Request");
+    echo "Dados de login ausentes";
+    exit();
+}
 
 // Dados de login
 $userName = $data->userName;
