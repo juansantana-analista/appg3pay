@@ -253,21 +253,11 @@ var app = new Framework7({
               };
 
               console.log(options);
-              //START Fazendo a requisição
               fetch('https://app.g3pay.com.br/api/auth.php', options)
-                .then(response => {
-                  if (!response.ok) {
-                    app.dialog.close();
-                    app.dialog.alert(
-                      "Erro, verifique as credenciais e tente novamente.",
-                      '<i class="mdi mdi-alert"></i> Erro ao logar!'
-                    );
-                  }
-                  return response.json();
-                })
-                .then(data => {
-                  if (data && data.data) {
-                    const token = data.data;
+              .then((response) => response.json())
+              .then((responseJson) => {
+                if (responseJson && responseJson.data) {
+                    const token = responseJson.data;
                     localStorage.setItem('userAuthToken', token);
                     appId = 'Bearer ' + localStorage.getItem('userAuthToken');
                     userAuthToken = token;
@@ -292,17 +282,12 @@ var app = new Framework7({
                       '<i class="mdi mdi-alert"></i> Erro ao logar!'
                     );
                   }
-                })
-                .catch(error => {
+              })
+              .catch((error) => {
                   app.dialog.close();
-                  app.dialog.alert(
-                    "Erro, verifique as credenciais e tente novamente.",
-                    '<i class="mdi mdi-alert"></i> Erro ao logar!'
-                  );
-                  console.error('Erro:', error.message);
-                  // Aqui você pode exibir uma mensagem de erro para o usuário
-                });
-              //END Fazendo a requisição
+                  console.error("Erro:", error);
+                  app.dialog.alert("Erro ao carregar categorias: " + error.message, "Falha na requisição!");
+              });
             }
           });
           //END AÇÃO BOTÃO ENTRAR
