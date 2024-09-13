@@ -8,6 +8,7 @@ $appId = "Basic 50119e057567b086d83fe5dd18336042ff2cf7bef3c24807bc55e34dbe5a";
 $postData = file_get_contents('php://input');
 $data = json_decode($postData);
 
+
 // Dados de login
 $userName = $data->userName;
 $userPassword = $data->userPassword;

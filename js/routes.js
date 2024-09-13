@@ -235,11 +235,6 @@ var app = new Framework7({
                 '<i class="mdi mdi-alert"></i> Campos Vazios'
               );
             } else {
-              // Cabeçalhos da requisição
-              const headers = {
-                "Content-Type": "application/json"
-              };
-
               const body = JSON.stringify({
                 userName: userName,
                 userPassword: userPassword
@@ -248,7 +243,6 @@ var app = new Framework7({
               // Opções da requisição
               const options = {
                 method: "POST",
-                headers: headers,
                 body: body,
               };
 
@@ -299,7 +293,6 @@ var app = new Framework7({
                     "Erro, verifique as credenciais e tente novamente.",
                     '<i class="mdi mdi-alert"></i> Erro ao logar!'
                   );
-                  console.log(options);
                   console.error('Erro:', error.message);
                   // Aqui você pode exibir uma mensagem de erro para o usuário
                 });
