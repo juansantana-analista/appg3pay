@@ -804,6 +804,101 @@ var app = new Framework7({
           $.getScript('js/detalhes.js');
           var produtoId = localStorage.getItem('produtoId');
 
+          $('#shareButton').on('click', function () {
+            // Defina o conteúdo HTML que você deseja converter em PDF
+            let htmlContent = `
+                
+            <html>
+                <head>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        h1 { color: #333; }
+                        p { font-size: 14px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                    </style>
+                </head>
+                <body>
+                    <h1>Resumo do Pedido</h1>
+                    <p>Detalhes do pedido...</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Quantidade</th>
+                                <th>Preço</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Produto 1</td>
+                                <td>2</td>
+                                <td>R$ 50,00</td>
+                            </tr>
+                            <tr>
+                                <td>Produto 2</td>
+                                <td>1</td>
+                                <td>R$ 30,00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>Total: R$ 130,00</p>
+                </body>
+            </html>
+            `;
+
+            // Opções para o PDF
+            let options = {
+              documentSize: 'A4',
+              type: 'base64'
+            };
+
+            // Gera o PDF a partir do HTML
+            pdf.fromData(htmlContent, options)
+              .then(function (base64) {
+                // Salva o PDF no sistema de arquivos
+                let filePath = cordova.file.cacheDirectory + 'order-summary.pdf';
+                let pdfBlob = base64ToBlob(base64, 'application/pdf');
+
+                window.resolveLocalFileSystemURL(cordova.file.cacheDirectory, function (dir) {
+                  dir.getFile('order-summary.pdf', { create: true }, function (file) {
+                    file.createWriter(function (fileWriter) {
+                      fileWriter.write(pdfBlob);
+
+                      fileWriter.onwriteend = function () {
+                        // Compartilha o PDF usando o plugin de compartilhamento
+                        window.plugins.socialsharing.share(null, 'Resumo do Pedido', filePath, null);
+                      };
+
+                      fileWriter.onerror = function (e) {
+                        console.error('Erro ao gravar o arquivo: ' + e.toString());
+                      };
+                    });
+                  });
+                });
+              })
+              .catch(function (err) {
+                console.error('Erro ao gerar o PDF: ' + err.toString());
+              });
+          });
+          // Função para converter base64 para Blob
+          function base64ToBlob(base64, contentType) {
+            const byteCharacters = atob(base64);
+            const byteArrays = [];
+
+            for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+              const slice = byteCharacters.slice(offset, offset + 512);
+              const byteNumbers = new Array(slice.length);
+              for (let i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+              }
+              const byteArray = new Uint8Array(byteNumbers);
+              byteArrays.push(byteArray);
+            }
+
+            return new Blob(byteArrays, { type: contentType });
+          }
           // JavaScript to open popup
           document.querySelector('.abrir-popup').addEventListener('click', function (e) {
             e.preventDefault(); // Prevent default link behavior
@@ -1164,10 +1259,8 @@ var app = new Framework7({
                 // Baixar boleto
                 $('#baixarBoleto').on('click', function () {
                   app.dialog.confirm('Deseja baixar o boleto no navegador?', function () {
-                    /*
                     var ref = cordova.InAppBrowser.open(data.linkBoleto, '_system', 'location=no,zoom=no');
                     ref.show();
-                    */
                   });
                 });
 

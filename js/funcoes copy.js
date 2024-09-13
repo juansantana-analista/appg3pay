@@ -1429,53 +1429,6 @@ function contarCarrinho() {
 }
 //Fim Função contar Carrinho
 
-//Inicio Funçao Dados Dashboard
-function onDashboard() {
-    const pessoaId = localStorage.getItem('pessoaId');
-
-    const dados = {
-          pessoa_id: pessoaId
-    };
-
-    // Cabeçalhos da requisição
-    const headers = {
-        "Content-Type": "application/json",
-        "Authorization": appId,
-    };
-
-    const body = JSON.stringify({
-        class: "PessoaContadorRest",
-        method: "RetornaDados",
-        dados: dados
-    });
-
-    // Opções da requisição
-    const options = {
-        method: "POST",
-        headers: headers,
-        body: body,
-    };
-
-    // Fazendo a requisição
-    fetch(apiServerUrl, options)
-        .then((response) => response.json())
-        .then((responseJson) => {
-            // Verifica se o status é 'success'
-            if(responseJson.status == 'success' && responseJson.data.status == 'success'){
-                //Desenha o dashboard
-                $('#valorVenda').text(responseJson.data.dados.valor_venda_mes);
-                $('#qtdeDiretos').text(responseJson.data.dados.rede_direta);
-                $('#qtdeGeral').text(responseJson.data.dados.rede_geral);
-            }
-        })
-        .catch((error) => {
-            app.dialog.close();
-            console.error("Erro:", error);
-            app.dialog.alert("Erro ao listar carrinho: " + error.message, "Falha na requisição!");
-        });
-}
-//Fim Função Dados Dashboard
-
 
 //Inicio Funçao Listar Carrinho Checkout
 function listarCarrinhoCheckout() {
@@ -1630,6 +1583,62 @@ function copiarParaAreaDeTransferencia(texto) {
 }
 //Fim da função para copiar
 
+//Início Função de Notificação
+function solicitarPermissaoNotificacao() {
+    // Verifique se a permissão já foi concedida
+    if (Notification.permission === "granted") {
+      //mostrarNotificacao();
+    } 
+    // Caso a permissão não tenha sido negada, solicite-a
+    else if (Notification.permission !== "denied") {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          //mostrarNotificacao();
+        }
+      });
+    }
+  }
+  function mostrarNotificacao() {
+    if (navigator.serviceWorker && Notification.permission === 'granted') {
+        navigator.serviceWorker.getRegistration().then(function(registration) {
+            if (registration) {
+                registration.showNotification("Teste de Notificação", {
+                    body: "Essa é uma notificação de teste.",
+                    icon: 'favicon.png',
+                    badge: 'favicon.png',
+                    data: {
+                        url: '/'
+                    }
+                });
+            } else {
+                console.warn('Nenhum Service Worker registrado.');
+            }
+        }).catch(function(error) {
+            console.error('Erro ao obter o registro do service worker:', error);
+        });
+    } else {
+        console.warn('Notificações não estão permitidas ou o Service Worker não está disponível.');
+    }
+}
+
+  function enviarNotificacao() {
+    if (Notification.permission === "granted") {
+      const options = {
+        body: "Esta é uma notificação de teste para seu PWA.",
+        icon: "/img/notificacao-icone.png",
+        badge: "/img/emblema.png",
+        vibrate: [200, 100, 200],
+        tag: "notificacao-pwa"
+      };
+      const notification = new Notification("Notificação PWA", options);
+      
+      notification.onclick = function() {
+        window.focus();
+      };
+    }
+  }
+
+//Fim Função de Notificação
 
 //Inicio função compartilhar
 function onCompartilhar(titulo, texto, url) {
@@ -1639,6 +1648,7 @@ function onCompartilhar(titulo, texto, url) {
             text: texto,
             url: url,
         }).then(() => {
+            console.log('Compartilhamento bem-sucedido');
         }).catch((error) => {
             console.error('Erro ao compartilhar:', error);
         });
@@ -1659,3 +1669,18 @@ async function shareLink(shareTitle, shareText, link) {
     }
 }
 //Fim função compartilhar
+
+/* Inicio Verifica se o app esta instaldo PWA
+function isPWA() {
+    // Verifica se está rodando em modo standalone
+    return window.matchMedia('(display-mode: standalone)').matches || (navigator.standalone === true);
+}
+if (isPWA()) { 
+    //CONFIRMAR
+        solicitarPermissaoNotificacao();
+} else {
+    solicitarPermissaoNotificacao();
+    console.log('App não está instalado como PWA');
+}
+//Fim Verifica se o app esta instaldo PWA
+*/
