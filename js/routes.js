@@ -258,6 +258,7 @@ var app = new Framework7({
                   if (data.data) {
                     const token = data.data;
                     localStorage.setItem('userAuthToken', token);
+                    appId = token;
                     userAuthToken = token;
                     const decodedToken = jwt_decode(token);
                     // Navegar para outra página ou realizar outras ações necessárias
