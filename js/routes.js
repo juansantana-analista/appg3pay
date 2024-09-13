@@ -125,18 +125,19 @@ var app = new Framework7({
               $("#installBanner").removeClass("display-none");
             }
           }
+          
+          $("#fecharInstall").on("click", function () {
+            $("#installBanner").addClass("display-none");
+          });
+          $("#fecharInstallDesktop").on("click", function () {
+            $("#installBanner").addClass("display-none");
+          });
           window.addEventListener('beforeinstallprompt', (event) => {
             // Prevenir o comportamento padrão
             event.preventDefault();
             deferredPrompt = event;
 
             //AÇÃO DOS BOTÕES
-            $("#fecharInstall").on("click", function () {
-              $("#installBanner").addClass("display-none");
-            });
-            $("#fecharInstallDesktop").on("click", function () {
-              $("#installBanner").addClass("display-none");
-            });
             $("#installAppAndroid").on("click", function () {
               $("#installBanner").addClass("display-none");
               // Usuário clicou em "Confirmar"
