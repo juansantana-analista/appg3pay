@@ -8,9 +8,15 @@ $appId = "Basic 50119e057567b086d83fe5dd18336042ff2cf7bef3c24807bc55e34dbe5a";
 $postData = file_get_contents('php://input');
 $data = json_decode($postData);
 
+// Log para depuração
+error_log("POST Data: " . $postData);
+error_log("Decoded Data: " . print_r($data, true));
+
 // Verifica se os dados foram recebidos corretamente
 if (!$data || !isset($data->userName) || !isset($data->userPassword)) {
+    error_log("Invalid data received");
     header("HTTP/1.1 400 Bad Request");
+    echo json_encode(["error" => "Dados inválidos"]);
     exit();
 }
 
@@ -44,12 +50,22 @@ $response = curl_exec($ch);
 
 // Verifica se houve algum erro na requisição cURL
 if (curl_errno($ch)) {
+    error_log("cURL Error: " . curl_error($ch));
     header("HTTP/1.1 500 Internal Server Error");
-    echo "Erro na requisição: " . curl_error($ch);
+    echo json_encode(["error" => "Erro na requisição: " . curl_error($ch)]);
+    exit();
+}
+
+// Verifica se a resposta não está vazia
+if (empty($response)) {
+    error_log("Empty response from backend");
+    header("HTTP/1.1 500 Internal Server Error");
+    echo json_encode(["error" => "Resposta vazia do backend"]);
     exit();
 }
 
 // Retorna a resposta para o cliente
+header('Content-Type: application/json');
 echo $response;
 
 // Fecha a requisição
