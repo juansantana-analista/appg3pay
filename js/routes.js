@@ -129,7 +129,7 @@ var app = new Framework7({
             // Prevenir o comportamento padrão
             event.preventDefault();
             deferredPrompt = event;
-          
+
             //AÇÃO DOS BOTÕES
             $("#fecharInstall").on("click", function () {
               $("#installBanner").addClass("display-none");
@@ -141,33 +141,33 @@ var app = new Framework7({
               $("#installBanner").addClass("display-none");
               // Usuário clicou em "Confirmar"
               if (deferredPrompt) {
-                  deferredPrompt.prompt();
-                  deferredPrompt.userChoice.then((choiceResult) => {
-                      if (choiceResult.outcome === 'accepted') {
-                          console.log('Usuário aceitou a instalação.');
-                      } else {
-                          console.log('Usuário rejeitou a instalação.');
-                      }
-                      deferredPrompt = null;
-                  });
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                  if (choiceResult.outcome === 'accepted') {
+                    console.log('Usuário aceitou a instalação.');
+                  } else {
+                    console.log('Usuário rejeitou a instalação.');
+                  }
+                  deferredPrompt = null;
+                });
               }
             });
             $("#installAppDesktop").on("click", function () {
               $("#installBanner").addClass("display-none");
               // Usuário clicou em "Confirmar"
               if (deferredPrompt) {
-                  deferredPrompt.prompt();
-                  deferredPrompt.userChoice.then((choiceResult) => {
-                      if (choiceResult.outcome === 'accepted') {
-                          console.log('Usuário aceitou a instalação.');
-                      } else {
-                          console.log('Usuário rejeitou a instalação.');
-                      }
-                      deferredPrompt = null;
-                  });
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                  if (choiceResult.outcome === 'accepted') {
+                    console.log('Usuário aceitou a instalação.');
+                  } else {
+                    console.log('Usuário rejeitou a instalação.');
+                  }
+                  deferredPrompt = null;
+                });
               }
             });
-        });
+          });
 
         },
         pageBeforeRemove: function (event, page) {
@@ -235,22 +235,24 @@ var app = new Framework7({
                 '<i class="mdi mdi-alert"></i> Campos Vazios'
               );
             } else {
-                // Requisição AJAX
-                $.ajax({
-                  url: "../api/auth.php",  // Substitua pela URL do seu servidor
-                  type: "POST",           // Método de requisição
-                  contentType: "application/json",
-                  data: JSON.stringify({
-                      userName: userName,
-                      userPassword: userPassword
-                  }),                     
-                  // Converte o objeto em JSON
-                  success: function(response) {
-                    if(response.status === "success" && response.data != ''){
+              // Requisição AJAX
+              $.ajax({
+                url: "../api/auth.php",  // Substitua pela URL do seu servidor
+                type: "POST",           // Método de requisição
+                contentType: "application/json",
+                data: JSON.stringify({
+                  userName: userName,
+                  userPassword: userPassword
+                }),
+                // Converte o objeto em JSON
+                success: function (response) {
+                  if (response.status === "success" && response.data != '') {
                     // Tratamento de sucesso
                     const token = response.data;
                     localStorage.setItem('userAuthToken', token);
                     userAuthToken = token;
+                    localStorage.setItem('userAuthToken', token);
+                    appId = 'Bearer ' + localStorage.getItem('userAuthToken');
                     const decodedToken = jwt_decode(token);
                     // Navegar para outra página ou realizar outras ações necessárias
 
@@ -268,16 +270,15 @@ var app = new Framework7({
                       app.dialog.close();
                       app.views.main.router.navigate("/home/");
                     }, 300);
-                      console.log("Resposta do servidor:", response);
-                    } else {
-                      app.dialog.close();
-                      app.dialog.alert("Erro no login: " + (response.message || "Dados inválidos"), "Falha no Login");
-                    }
-                  },
-                  error: function(xhr, status, error) {
-                      // Tratamento de erro
-                      console.error("Erro:", error);
+                  } else {
+                    app.dialog.close();
+                    app.dialog.alert("Erro no login: " + (response.message || "Dados inválidos"), "Falha no Login");
                   }
+                },
+                error: function (xhr, status, error) {
+                  // Tratamento de erro
+                  console.error("Erro:", error);
+                }
               });
             }
           });
@@ -491,7 +492,7 @@ var app = new Framework7({
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
-        pageInit: function (event, page) {          
+        pageInit: function (event, page) {
           OneSignal.Notifications.requestPermission();
 
           // fazer algo quando a página for inicializada  
