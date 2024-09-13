@@ -2,12 +2,6 @@
 const apiServerUrl = "https://escritorio.g3pay.com.br/rest.php";
 const versionApp = "1.0";
 
-var userAuthToken = '';
-var appId = ''
-var userToken = localStorage.getItem('userAuthToken');
-if(userToken){
-  appId = 'Bearer ' + userToken;
-}
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
 document.addEventListener('deviceready', onDeviceReady, false);
 var app = new Framework7({
@@ -256,7 +250,6 @@ var app = new Framework7({
                   if (data.data) {
                     const token = data.data;
                     localStorage.setItem('userAuthToken', token);
-                    appId = token;
                     userAuthToken = token;
                     const decodedToken = jwt_decode(token);
                     // Navegar para outra página ou realizar outras ações necessárias

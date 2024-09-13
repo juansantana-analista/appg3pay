@@ -1,6 +1,5 @@
 // Início função validar login
 async function validarToken(userAuthToken) {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     if (userAuthToken) {
         const apiServerUrl = 'https://escritorio.g3pay.com.br/rest.php';
 
@@ -46,13 +45,12 @@ async function validarToken(userAuthToken) {
 
 //Inicio Funçao listar categorias
 function listarCategorias() {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     app.dialog.preloader("Carregando...");
 
     // Cabeçalhos da requisição
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
+        "Authorization": appId,
     };
 
     const body = JSON.stringify({
@@ -123,7 +121,6 @@ function listarCategorias() {
 
 //Inicio Funçao listar produtos tela Home
 function listarProdutos(searchQuery = "", categoriaId) {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     app.dialog.preloader("Carregando...");
 
     var imgUrl = "https://escritorio.g3pay.com.br/";
@@ -131,7 +128,7 @@ function listarProdutos(searchQuery = "", categoriaId) {
     // Cabeçalhos da requisição
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
+        "Authorization": appId,
     };
 
     const body = JSON.stringify({
@@ -237,7 +234,6 @@ function listarProdutos(searchQuery = "", categoriaId) {
 
 //Inicio Função Detalhes Produto 
 function buscarProduto(produtoId) {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     app.dialog.preloader("Carregando...");
 
     var imgUrl = "https://escritorio.g3pay.com.br/";
@@ -245,7 +241,7 @@ function buscarProduto(produtoId) {
     // Cabeçalhos da requisição
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
+        "Authorization": appId,
     };
 
     const body = JSON.stringify({
@@ -288,7 +284,6 @@ function buscarProduto(produtoId) {
 
 //Inicio Função obter Links
 function buscarLinks(produtoId) {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     app.dialog.preloader("Carregando...");
 
     var imgUrl = "https://escritorio.g3pay.com.br/";
@@ -296,7 +291,7 @@ function buscarLinks(produtoId) {
     // Cabeçalhos da requisição
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
+        "Authorization": appId,
     };
 
     const body = JSON.stringify({
@@ -388,13 +383,12 @@ function buscarLinks(produtoId) {
 
 //Inicio Função obter id da Pessoa
 function buscarPessoaId(userId) {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     app.dialog.preloader("Carregando...");
 
     // Cabeçalhos da requisição
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
+        "Authorization": appId,
     };
 
     const body = JSON.stringify({
@@ -437,7 +431,6 @@ function buscarPessoaId(userId) {
 
 //Inicio Função obter Link Afiliado
 function buscarLinkAfiliado() {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     const pessoaId = localStorage.getItem('pessoaId');
     app.dialog.preloader("Carregando...");
 
@@ -446,7 +439,7 @@ function buscarLinkAfiliado() {
     // Cabeçalhos da requisição
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
+        "Authorization": appId,
     };
 
     const body = JSON.stringify({
@@ -507,14 +500,13 @@ function buscarLinkAfiliado() {
 
 //Inicio Funçao listar pedidos tela Pedidos
 function listarPedidos(searchQuery = "") {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     var pessoaId = localStorage.getItem('pessoaId');
     app.dialog.preloader("Carregando...");
 
     // Cabeçalhos da requisição
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
+        "Authorization": appId,
     };
 
     const body = JSON.stringify({
@@ -604,14 +596,13 @@ function listarPedidos(searchQuery = "") {
 
 // Início da função detalhesPedido
 function detalhesPedido() {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     var pedidoId = localStorage.getItem('pedidoId');
     app.dialog.preloader("Carregando...");
 
     // Cabeçalhos da requisição
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
+        "Authorization": appId,
     };
 
     const body = JSON.stringify({
@@ -703,11 +694,10 @@ function detalhesPedido() {
 
 //Inicio Funçao Listar Banners
 function listarBanners() {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     app.dialog.preloader("Carregando...");
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
+        "Authorization": appId,
     };
     const dados = {
         local: 1
@@ -757,12 +747,11 @@ function listarBanners() {
 
 //Inicio Funçao Listar Categorias
 function listarCategoriasCurso() {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     app.dialog.preloader("Carregando...");
     // Cabeçalhos da requisição
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
+        "Authorization": appId,
     };
 
     const body = JSON.stringify({
@@ -816,13 +805,12 @@ function listarCategoriasCurso() {
 
 //Inicio Funçao Listar Endereços
 function listarEnderecos() {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     app.dialog.preloader("Carregando...");
     const pessoaId = localStorage.getItem('userId');
     // Cabeçalhos da requisição
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
+        "Authorization": appId,
     };
 
     const body = JSON.stringify({
@@ -927,7 +915,6 @@ function listarEnderecos() {
 
 //Inicio Funçao Selecionar Endereço
 function selecionarEndereco(enderecoId) {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     const pessoaId = localStorage.getItem('pessoaId');
     
     const dados = {
@@ -938,7 +925,7 @@ function selecionarEndereco(enderecoId) {
     // Cabeçalhos da requisição
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
+        "Authorization": appId,
     };
 
     const body = JSON.stringify({
@@ -975,7 +962,6 @@ function selecionarEndereco(enderecoId) {
 
 //Inicio Funçao Listar Categorias
 function finalizarCompra(formaPagamento) {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     app.dialog.preloader("Carregando...");
     const pessoaId = localStorage.getItem('pessoaId');    
     var enderecoDetalhes = JSON.parse(localStorage.getItem('enderecoDetalhes'));
@@ -1002,7 +988,7 @@ function finalizarCompra(formaPagamento) {
     // Cabeçalhos da requisição
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
+        "Authorization": appId,
     };
 
     const body = JSON.stringify({
@@ -1058,7 +1044,6 @@ function finalizarCompra(formaPagamento) {
 
 //Inicio Funçao Listar Carrinho
 function listarCarrinho() {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     app.dialog.preloader("Carregando...");
     const pessoaId = localStorage.getItem('pessoaId');
 
@@ -1069,7 +1054,7 @@ function listarCarrinho() {
     // Cabeçalhos da requisição
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
+        "Authorization": appId,
     };
 
     const body = JSON.stringify({
@@ -1200,7 +1185,6 @@ function listarCarrinho() {
 
 //Inicio Funçao Alterar Carrinho
 function alterarCarrinho(pessoaId, produtoId, quantidade) {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     app.dialog.preloader("Carregando...");
 
     const dados = {
@@ -1212,7 +1196,7 @@ function alterarCarrinho(pessoaId, produtoId, quantidade) {
     // Cabeçalhos da requisição
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
+        "Authorization": appId,
     };
 
     const body = JSON.stringify({
@@ -1250,7 +1234,6 @@ function alterarCarrinho(pessoaId, produtoId, quantidade) {
 
 //Inicio Adicionar Item Carrinho
 function adicionarItemCarrinho(produtoId) {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     const pessoaId = localStorage.getItem('pessoaId');
     app.dialog.preloader("Carregando...");
 
@@ -1263,7 +1246,7 @@ function adicionarItemCarrinho(produtoId) {
     // Cabeçalhos da requisição
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
+        "Authorization": appId,
     };
 
     const body = JSON.stringify({
@@ -1307,7 +1290,6 @@ function adicionarItemCarrinho(produtoId) {
 
 //Inicio Remover Item do Carrinho
 function removerItemCarrinho(pessoaId, produtoId) {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     app.dialog.preloader("Carregando...");
 
     const dados = {
@@ -1318,7 +1300,7 @@ function removerItemCarrinho(pessoaId, produtoId) {
     // Cabeçalhos da requisição
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
+        "Authorization": appId,
     };
 
     const body = JSON.stringify({
@@ -1355,7 +1337,6 @@ function removerItemCarrinho(pessoaId, produtoId) {
 
 //Inicio Funçao Esvaziar Carrinho
 function limparCarrinho() {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     const pessoaId = localStorage.getItem('pessoaId');
     app.dialog.preloader("Carregando...");
 
@@ -1366,7 +1347,7 @@ function limparCarrinho() {
     // Cabeçalhos da requisição
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
+        "Authorization": appId,
     };
 
     const body = JSON.stringify({
@@ -1404,7 +1385,6 @@ function limparCarrinho() {
 
 //Inicio Funçao contar Carrinho
 function contarCarrinho() {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     const pessoaId = localStorage.getItem('pessoaId');
 
     const dados = {
@@ -1414,7 +1394,7 @@ function contarCarrinho() {
     // Cabeçalhos da requisição
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
+        "Authorization": appId,
     };
 
     const body = JSON.stringify({
@@ -1451,7 +1431,6 @@ function contarCarrinho() {
 
 //Inicio Funçao Dados Dashboard
 function onDashboard() {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     const pessoaId = localStorage.getItem('pessoaId');
 
     const dados = {
@@ -1461,7 +1440,7 @@ function onDashboard() {
     // Cabeçalhos da requisição
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
+        "Authorization": appId,
     };
 
     const body = JSON.stringify({
@@ -1500,7 +1479,6 @@ function onDashboard() {
 
 //Inicio Funçao Listar Carrinho Checkout
 function listarCarrinhoCheckout() {
-    var userAuthToken = localStorage.getItem('userAuthToken');
     app.dialog.preloader("Carregando...");
     const pessoaId = localStorage.getItem('pessoaId');
 
@@ -1511,7 +1489,7 @@ function listarCarrinhoCheckout() {
     // Cabeçalhos da requisição
     const headers = {
         "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
+        "Authorization": appId,
     };
 
     const body = JSON.stringify({
