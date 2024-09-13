@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://escritorio.g3pay.com.br/rest.php";
-const appId = "Basic 50119e057567b086d83fe5dd18336042ff2cf7bef3c24807bc55e34dbe5a";
+const appId = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiYWRtaW4iLCJ1c2VyaWQiOiIxIiwidXNlcm5hbWUiOiJBZG1pbmlzdHJhdG9yIiwidXNlcm1haWwiOiJyYWZhZWwuZW1lcmVuY2lhbm9AdGVjc2tpbGwuY29tLmJyIiwicGVzc29hX2lkIjoiMSIsImV4cGlyZXMiOjE3MjYyNTk3NDF9.lb5ndYPlo6YJmPcQLmND8-8YGv5ug_ZvKw59JIweuE0";
 const versionApp = "1.0";
 var userAuthToken = '';
 
