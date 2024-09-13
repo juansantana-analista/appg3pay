@@ -1027,10 +1027,6 @@ function finalizarCompra(formaPagamento) {
 
                 app.dialog.close();
                 app.views.main.router.navigate('/pagamento/');
-
-                /* Abrir navegador para baixar boleto
-                var ref = cordova.InAppBrowser.open(linkBoleto, '_system', 'location=no,zoom=no');
-                ref.show();*/
             }
         })
         .catch((error) => {
