@@ -45,7 +45,7 @@ if (curl_errno($ch)) {
 }
 
 // Retorna a resposta para o cliente
-var_dump($response);
+echo $response;
 
 // Fecha a requisição
 curl_close($ch);
