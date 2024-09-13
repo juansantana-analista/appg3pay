@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://escritorio.g3pay.com.br/rest.php";
-const appId = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiYWRtaW4iLCJ1c2VyaWQiOiIxIiwidXNlcm5hbWUiOiJBZG1pbmlzdHJhdG9yIiwidXNlcm1haWwiOiJyYWZhZWwuZW1lcmVuY2lhbm9AdGVjc2tpbGwuY29tLmJyIiwicGVzc29hX2lkIjoiMSIsImV4cGlyZXMiOjE3MjYyNTk3NDF9.lb5ndYPlo6YJmPcQLmND8-8YGv5ug_ZvKw59JIweuE0";
+var appId = 'Bearer ' + localStorage.getItem('userAuthToken');
 const versionApp = "1.0";
 var userAuthToken = '';
 
@@ -237,15 +237,12 @@ var app = new Framework7({
             } else {
               // Cabeçalhos da requisição
               const headers = {
-                "Content-Type": "application/json",
-                "Authorization": appId,
+                "Content-Type": "application/json"
               };
 
               const body = JSON.stringify({
-                class: "ApplicationAuthenticationRestService",
-                method: "getToken",
-                login: userName,
-                password: userPassword
+                userName: userName,
+                userPassword: userPassword
               });
 
               // Opções da requisição
@@ -256,12 +253,22 @@ var app = new Framework7({
               };
 
               //START Fazendo a requisição
-              fetch(apiServerUrl, options)
-                .then((response) => response.json())
+              fetch('../api/auth.php', options)
+                .then(response => {
+                  if (!response.ok) {
+                    app.dialog.close();
+                    app.dialog.alert(
+                      "Erro, verifique as credenciais e tente novamente.",
+                      '<i class="mdi mdi-alert"></i> Erro ao logar!'
+                    );
+                  }
+                  return response.json();
+                })
                 .then((data) => {
-                  if (data.data) {
+                  if (data && data.data) {
                     const token = data.data;
                     localStorage.setItem('userAuthToken', token);
+                    appId = 'Bearer ' + token;
                     userAuthToken = token;
                     const decodedToken = jwt_decode(token);
                     // Navegar para outra página ou realizar outras ações necessárias
