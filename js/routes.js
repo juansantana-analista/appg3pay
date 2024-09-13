@@ -235,17 +235,16 @@ var app = new Framework7({
                 '<i class="mdi mdi-alert"></i> Campos Vazios'
               );
             } else {
-              const body = {
-                userName: userName,
-                userPassword: userPassword
-              };
-
                 // Requisição AJAX
                 $.ajax({
                   url: "../api/auth.php",  // Substitua pela URL do seu servidor
                   type: "POST",                         // Método de requisição
-                  contentType: "application/json",      // Tipo de conteúdo enviado
-                  data: JSON.stringify(body),      // Converte o objeto em JSON
+                  contentType: "application/json",
+                  data: {
+                    userName: userName,
+                    userPassword: userPassword
+                  },
+                  // Converte o objeto em JSON
                   success: function(response) {
                       // Tratamento de sucesso
                       console.log("Resposta do servidor:", response);
