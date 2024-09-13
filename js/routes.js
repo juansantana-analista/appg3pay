@@ -252,6 +252,7 @@ var app = new Framework7({
                 body: body,
               };
 
+              console.log(options);
               //START Fazendo a requisição
               fetch('https://app.g3pay.com.br/api/auth.php', options)
                 .then(response => {
@@ -298,7 +299,6 @@ var app = new Framework7({
                     "Erro, verifique as credenciais e tente novamente.",
                     '<i class="mdi mdi-alert"></i> Erro ao logar!'
                   );
-                  console.log(options);
                   console.error('Erro:', error.message);
                   // Aqui você pode exibir uma mensagem de erro para o usuário
                 });
