@@ -235,58 +235,25 @@ var app = new Framework7({
                 '<i class="mdi mdi-alert"></i> Campos Vazios'
               );
             } else {
-              // Cabeçalhos da requisição
-              const headers = {
-                "Content-Type": "application/json"
-              };
-
               const body = {
                 userName: userName,
                 userPassword: userPassword
               };
 
-              // Opções da requisição
-              const options = {
-                method: "POST",
-                headers: headers,
-                body: body,
-              };
-
-              console.log(options);
-              fetch('https://app.g3pay.com.br/api/auth.php', options)
-              .then((response) => response.json())
-              .then((responseJson) => {
-                if (responseJson && responseJson.data) {
-                    const token = responseJson.data;
-                    localStorage.setItem('userAuthToken', token);
-                    appId = 'Bearer ' + localStorage.getItem('userAuthToken');
-                    userAuthToken = token;
-                    const decodedToken = jwt_decode(token);
-                    localStorage.setItem('user', decodedToken.user);
-                    localStorage.setItem('userId', decodedToken.userid);
-                    localStorage.setItem('userName', decodedToken.username);
-                    localStorage.setItem('userEmail', decodedToken.usermail);
-                    localStorage.setItem("pessoaId", decodedToken.pessoa_id);
-                    localStorage.setItem('validadeToken', decodedToken.expires);
-
-                    buscarPessoaId(decodedToken.userid);
-
-                    setTimeout(() => {
-                      app.dialog.close();
-                      app.views.main.router.navigate('/home/');
-                    }, 300);
-                  } else {
-                    app.dialog.close();
-                    app.dialog.alert(
-                      "Erro, verifique as credenciais e tente novamente.",
-                      '<i class="mdi mdi-alert"></i> Erro ao logar!'
-                    );
+                // Requisição AJAX
+                $.ajax({
+                  url: "../api/auth.php",  // Substitua pela URL do seu servidor
+                  type: "POST",                         // Método de requisição
+                  contentType: "application/json",      // Tipo de conteúdo enviado
+                  data: JSON.stringify(body),      // Converte o objeto em JSON
+                  success: function(response) {
+                      // Tratamento de sucesso
+                      console.log("Resposta do servidor:", response);
+                  },
+                  error: function(xhr, status, error) {
+                      // Tratamento de erro
+                      console.error("Erro:", error);
                   }
-              })
-              .catch((error) => {
-                  app.dialog.close();
-                  console.error("Erro:", error);
-                  app.dialog.alert("Erro ao carregar categorias: " + error.message, "Falha na requisição!");
               });
             }
           });
