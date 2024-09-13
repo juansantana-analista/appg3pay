@@ -30,7 +30,7 @@ var app = new Framework7({
         pageBeforeIn: async function (event, page) {
           clearLocalStorage();
           // chama a função que verifica e valida o token
-          const userAuthToken = localStorage.getItem('userAuthToken');
+          var userAuthToken = localStorage.getItem('userAuthToken');
           // Início função validar login
           const isValid = await validarToken(userAuthToken);
           if (!isValid) {
@@ -250,7 +250,6 @@ var app = new Framework7({
                   if (data.data) {
                     const token = data.data;
                     localStorage.setItem('userAuthToken', token);
-                    userAuthToken = token;
                     const decodedToken = jwt_decode(token);
                     // Navegar para outra página ou realizar outras ações necessárias
 
@@ -476,7 +475,7 @@ var app = new Framework7({
       on: {
         pageBeforeIn: async function (event, page) {
           clearLocalStorage();
-          userAuthToken = localStorage.getItem('userAuthToken');
+          var userAuthToken = localStorage.getItem('userAuthToken');
           // Início função validar login
           const isValid = await validarToken(userAuthToken);
           if (!isValid) {
@@ -684,7 +683,7 @@ var app = new Framework7({
       on: {
         pageBeforeIn: async function (event, page) {
           clearLocalStorage();
-          userAuthToken = localStorage.getItem('userAuthToken');
+          var userAuthToken = localStorage.getItem('userAuthToken');
           // Início função validar login
           const isValid = await validarToken(userAuthToken);
           if (!isValid) {
