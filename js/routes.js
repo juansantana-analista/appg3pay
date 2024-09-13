@@ -299,6 +299,7 @@ var app = new Framework7({
                     "Erro, verifique as credenciais e tente novamente.",
                     '<i class="mdi mdi-alert"></i> Erro ao logar!'
                   );
+                  console.log(data);
                   console.error('Erro:', error.message);
                   // Aqui você pode exibir uma mensagem de erro para o usuário
                 });
