@@ -1,7 +1,7 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://escritorio.g3pay.com.br/rest.php";
+const appId = "Basic 50119e057567b086d83fe5dd18336042ff2cf7bef3c24807bc55e34dbe5a";
 const versionApp = "1.0";
-var appId = 'Bearer ' + localStorage.getItem('userAuthToken');
 var userAuthToken = '';
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -235,23 +235,34 @@ var app = new Framework7({
                 '<i class="mdi mdi-alert"></i> Campos Vazios'
               );
             } else {
-              // Requisição AJAX
-              $.ajax({
-                url: "../api/auth.php",  // Substitua pela URL do seu servidor
-                type: "POST",           // Método de requisição
-                contentType: "application/json",
-                data: JSON.stringify({
-                  userName: userName,
-                  userPassword: userPassword
-                }),
-                // Converte o objeto em JSON
-                success: function (response) {
-                  if (response.status === "success" && response.data != '') {
-                    // Tratamento de sucesso
-                    const token = response.data;
+              // Cabeçalhos da requisição
+              const headers = {
+                "Content-Type": "application/json",
+                "Authorization": appId,
+              };
+
+              const body = JSON.stringify({
+                class: "ApplicationAuthenticationRestService",
+                method: "getToken",
+                login: userName,
+                password: userPassword
+              });
+
+              // Opções da requisição
+              const options = {
+                method: "POST",
+                headers: headers,
+                body: body,
+              };
+
+              //START Fazendo a requisição
+              fetch(apiServerUrl, options)
+                .then((response) => response.json())
+                .then((data) => {
+                  if (data.data) {
+                    const token = data.data;
                     localStorage.setItem('userAuthToken', token);
                     userAuthToken = token;
-                    appId = 'Bearer ' + token;
                     const decodedToken = jwt_decode(token);
                     // Navegar para outra página ou realizar outras ações necessárias
 
@@ -269,16 +280,18 @@ var app = new Framework7({
                       app.dialog.close();
                       app.views.main.router.navigate("/home/");
                     }, 300);
+
                   } else {
                     app.dialog.close();
-                    app.dialog.alert("Erro no login: " + (response.message || "Dados inválidos"), "Falha no Login");
+                    app.dialog.alert("Erro no login: " + (data.message || "Dados inválidos"), "Falha no Login");
                   }
-                },
-                error: function (xhr, status, error) {
-                  // Tratamento de erro
+                })
+                .catch((error) => {
+                  app.dialog.close();
+                  // Manipule os erros aqui
                   console.error("Erro:", error);
-                }
-              });
+                });
+              //END Fazendo a requisição
             }
           });
           //END AÇÃO BOTÃO ENTRAR
