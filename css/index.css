@@ -25,6 +25,7 @@
 }
 
 body {
+    background-color: var(--laranja);
     font-family: 'SFProDisplayLight', sans-serif;
     padding-top: env(safe-area-inset-top);
     padding-right: env(safe-area-inset-right);
