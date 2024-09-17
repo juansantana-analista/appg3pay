@@ -1016,7 +1016,7 @@ form {
             background-color: #EBF3E7;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(230, 230, 230, 0.1);
-            color: #fff;
+            color: var(--preto);
         }
         
         .payment-container {
