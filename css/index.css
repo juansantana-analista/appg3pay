@@ -1034,22 +1034,22 @@ form {
             box-sizing: border-box;
         }  
         .payment-container input::placeholder {
-            color: #ffffff;
+            color: var(--preto);
         }
         #payment-details .payment-container input::-webkit-input-placeholder { /* Chrome, Safari, Opera */
-            color: #ffffff;
+            color: var(--preto);
         }
         #payment-details .payment-container input::-moz-placeholder { /* Firefox 19+ */
-            color: #ffffff;
+            color: var(--preto);
         }
         #payment-details .payment-container input:-ms-input-placeholder { /* Internet Explorer 10+ */
-            color: #ffffff;
+            color: var(--preto);
         }
         #payment-details .payment-container input::-ms-input-placeholder { /* Microsoft Edge */
-            color: #ffffff;
+            color: var(--preto);
         }
         #payment-details .payment-container input::placeholder { /* Versão padrão */
-            color: #ffffff;
+            color: var(--preto);
         }
         
         .payment-container input:focus {
