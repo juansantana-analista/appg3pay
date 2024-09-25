@@ -22,9 +22,6 @@
   <link rel="stylesheet" href="css/materialdesignicons.min.css" />
   <!-- Icones do Remix icon-->
   <link rel="stylesheet" href="css/remixicon/remixicon.css" />
-  <style>
-    
-  </style>
 </head>
 
 <body>
@@ -49,38 +46,32 @@
         <!-- Scrollable page content -->
 
 
-        <div class="page-content">
+        <div class="page-content" style="background-color: #f4f4f4; padding-bottom: 160px">
           <div class="block">
-              <h2 class="text-align-center">Saldo Disponível:</h2>
-              <div class="row justify-content-space-between align-items-center no-gap">
-                  <div class="col-85">
-                      <h1 class="text-align-left">R$ 8.320,00</h1>
-                  </div>
-                  <div class="col-15 text-align-right">
-                      <a href="#" class="link icon-only">
-                          <i class="f7-icons">eye</i>
-                      </a>
-                  </div>
+            <h2 class="titulo-pagina">Carteira</h2> 
+            
+            <div class="container-order" id="container-carteira">
+              <div class="card">
+                <div class="header-saldo">
+                  <span>Saldo Disponível</span>
+                  <span class="mdi mdi-eye-outline"></span>
+                </div>
               </div>
-
-              <div class="list simple-list no-margin">
-                  <ul>
-                      <li class="item-content">
-                          <a href="#" class="link">Ver suas criptomoedas</a>
-                      </li>
-                  </ul>
+              <div class="card">
+                <div class="header-saldo">
+                  <span>Saldo Aguardando</span>
+                  <span class="mdi mdi-eye-outline"></span>
+                </div>
               </div>
-
-              <div class="row no-gap">
-                  <div class="col-50">
-                      <a href="#" class="button button-fill color-red">Sacar Saldo</a>
-                  </div>
-                  <div class="col-50">
-                      <a href="#" class="button button-fill color-green">Adicionar Saldo</a>
-                  </div>
+              <div class="card">
+                <div class="header-saldo">
+                  <span>Saldo Bloqueado</span>
+                  <span class="mdi mdi-eye-outline"></span>
+                </div>
               </div>
+            </div>     
           </div>
-      </div>
+        </div>
       </div>
     </div>
   </div>
