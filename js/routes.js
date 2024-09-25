@@ -627,18 +627,18 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
-          let oculto = 0;
+          let isHidden = false;
 
+          $('#balance-value').text('*****');
           $('#toggle-visibility').click(function() {
-            if (oculto == 1) {
+            if (isHidden) {
               $('#balance-value').text('8.320,00');
               $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565655.png');
-              oculto = 1
             } else {
               $('#balance-value').text('*****');
               $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565654.png');
-              oculto = 0
             }
+            isHidden = !isHidden;
           });
 
         },
