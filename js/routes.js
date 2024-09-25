@@ -627,10 +627,9 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
-          let isHidden = false;
-
           $('#balance-value').text('*****');
-          $('#toggle-visibility').click(function() {
+          $('#toggle-visibility').click(function() {            
+            let isHidden = true;
             if (isHidden) {
               $('#balance-value').text('8.320,00');
               $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565655.png');
