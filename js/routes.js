@@ -627,7 +627,7 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
-          let isHidden = true;
+          let isHidden = false;
 
           $('#toggle-visibility').click(function() {
             if (isHidden) {
