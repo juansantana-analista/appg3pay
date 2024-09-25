@@ -627,6 +627,18 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
+          let isHidden = false;
+
+          $('#toggle-visibility').click(function() {
+            if (isHidden) {
+              $('#balance-value').text('8.320,00');
+              $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565655.png');
+            } else {
+              $('#balance-value').text('****');
+              $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565654.png');
+            }
+            isHidden = !isHidden;
+          });
 
         },
         pageBeforeRemove: function (event, page) {
