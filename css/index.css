@@ -1166,12 +1166,11 @@ form {
 
         .container-carteira {
             background-color: white;
-            border-radius: 5px;
-            width: 100%;
-            text-align: left;
-          }
-          .conteudo-carteira{
-            margin: 10px 10px 10px 10px;
+            border-radius: 10px;
+            padding: 20px;
+            width: 300px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
           }
           .balance-header {
             font-size: 18px;
