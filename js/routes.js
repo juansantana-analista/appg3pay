@@ -637,7 +637,7 @@ var app = new Framework7({
               $('#balance-value').text('*****');
               $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565654.png');
             }
-            isHidden = !isHidden;
+            oculto = !oculto;
           });
 
         },
