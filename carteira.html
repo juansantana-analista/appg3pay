@@ -23,84 +23,7 @@
   <!-- Icones do Remix icon-->
   <link rel="stylesheet" href="css/remixicon/remixicon.css" />
   <style>
-    .wallet-container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
-}
-
-.balance-section {
-    margin-bottom: 20px;
-}
-
-.balance-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.balance-header h2 {
-    font-size: 18px;
-    color: #333;
-}
-
-.eye-icon {
-    border: none;
-    background: none;
-    font-size: 18px;
-    cursor: pointer;
-}
-
-.balance-value h1 {
-    font-size: 36px;
-    color: #333;
-    margin: 10px 0;
-}
-
-a {
-    display: inline-block;
-    margin-top: 10px;
-    color: #007bff;
-    text-decoration: none;
-    font-size: 14px;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-.buttons {
-    display: flex;
-    justify-content: space-between;
-}
-
-.btn {
-    width: 48%;
-    padding: 15px;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.withdraw {
-    background-color: #ff4b4b;
-    color: white;
-}
-
-.add {
-    background-color: #4caf50;
-    color: white;
-}
-
-.btn:hover {
-    opacity: 0.9;
-}
+    
   </style>
 </head>
 
@@ -126,29 +49,38 @@ a:hover {
         <!-- Scrollable page content -->
 
 
-        <div class="page-content" style="background-color: #f4f4f4; padding-bottom: 160px">
+        <div class="page-content">
           <div class="block">
-            <h2 class="titulo-pagina">Carteira</h2> 
-            
-            <div class="wallet-container">
-              <div class="balance-section">
-                  <div class="balance-header">
-                      <h2>Saldo Disponível:</h2>
-                      <button class="eye-icon">👁️</button>
+              <h2 class="text-align-center">Saldo Disponível:</h2>
+              <div class="row justify-content-space-between align-items-center no-gap">
+                  <div class="col-85">
+                      <h1 class="text-align-left">R$ 8.320,00</h1>
                   </div>
-                  <div class="balance-value">
-                      <h1>R$ 8.320,00</h1>
+                  <div class="col-15 text-align-right">
+                      <a href="#" class="link icon-only">
+                          <i class="f7-icons">eye</i>
+                      </a>
                   </div>
-                  <a href="#">Ver suas criptomoedas</a>
               </div>
-      
-              <div class="buttons">
-                  <button class="btn withdraw">Sacar Saldo</button>
-                  <button class="btn add">Adicionar Saldo</button>
+
+              <div class="list simple-list no-margin">
+                  <ul>
+                      <li class="item-content">
+                          <a href="#" class="link">Ver suas criptomoedas</a>
+                      </li>
+                  </ul>
               </div>
-          </div>    
+
+              <div class="row no-gap">
+                  <div class="col-50">
+                      <a href="#" class="button button-fill color-red">Sacar Saldo</a>
+                  </div>
+                  <div class="col-50">
+                      <a href="#" class="button button-fill color-green">Adicionar Saldo</a>
+                  </div>
+              </div>
           </div>
-        </div>
+      </div>
       </div>
     </div>
   </div>
