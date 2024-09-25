@@ -1169,7 +1169,7 @@ form {
             border-radius: 10px;
             width: 100%;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            text-align: left;
           }
           .balance-header {
             font-size: 18px;
