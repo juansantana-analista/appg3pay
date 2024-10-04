@@ -232,7 +232,13 @@ var app = new Framework7({
             var userPassword = $("#userPassword").val();
             //END OBTER VALORES DO LOGIN
 
-            if (userName == "" || userPassword == "") {
+            // Função para validar o e-mail usando regex
+            function validarEmail(email) {
+              var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+              return regex.test(email);
+            }
+
+            if (userName == "" || userPassword == "" || !validarEmail(userName)) {
               app.dialog.close();
               app.dialog.alert(
                 "Por favor, preencha seu Usuário e Senha.",
