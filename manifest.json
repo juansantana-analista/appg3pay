@@ -735,7 +735,7 @@
   },
   "protocol_handlers": [
     {
-      "protocol": "web+g3pay",
+      "protocol": "web+gpay",
       "url": "/handle-protocol?url=%s"
     }
   ],
