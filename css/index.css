@@ -31,17 +31,19 @@ body {
 
 .toolbar {
     height: 70px;
+    padding-bottom: env(safe-area-inset-bottom); /* Adiciona o padding relativo à área segura no iOS */
+}
+
+.toolbar-inner {
+    background: var(--branco);
+    border-top: 1px solid var(--gelo);
+    padding-bottom: env(safe-area-inset-bottom); /* Garante que o conteúdo da toolbar também esteja ajustado */
 }
 
 .tab-link {
     display: flex;
     justify-content: center;
     flex-flow: column wrap;
-}
-
-.toolbar-inner {
-    background: var(--branco);
-    border-top: 1px solid var(--gelo);
 }
 
 .toolbar-inner .link {
@@ -60,7 +62,6 @@ body {
 .toolbar-inner>.link i {
     font-size: 28px;
 }
-
 
 .top-nav {
     width: 100%;
