@@ -30,14 +30,15 @@ body {
 }
 
 .toolbar {
-    height: 70px;
-    padding-bottom: env(safe-area-inset-bottom); /* Adiciona o padding relativo à área segura no iOS */
+    height: 80px; /* Defina uma altura maior para garantir que a toolbar fique visível */
+    padding-bottom: env(safe-area-inset-bottom); /* Mantenha o padding para a área segura */
+    box-sizing: border-box; /* Inclui o padding na altura total */
 }
 
 .toolbar-inner {
     background: var(--branco);
     border-top: 1px solid var(--gelo);
-    padding-bottom: env(safe-area-inset-bottom); /* Garante que o conteúdo da toolbar também esteja ajustado */
+    height: 100%; /* Faz com que a toolbar-inner ocupe toda a altura da toolbar */
 }
 
 .tab-link {
@@ -48,7 +49,6 @@ body {
 
 .toolbar-inner .link {
     flex: 1;
-    height: 80px;
     line-height: 25px;
     font-weight: bold;
     color: #FF3D00;
@@ -59,9 +59,15 @@ body {
     font-weight: normal;
 }
 
-.toolbar-inner>.link i {
+.toolbar-inner > .link i {
     font-size: 28px;
 }
+
+/* Se necessário, ajuste o tamanho dos links para preencher a toolbar */
+.toolbar-inner .link {
+    height: calc(80px - env(safe-area-inset-bottom)); /* Ajuste a altura dos links */
+}
+
 
 .top-nav {
     width: 100%;
