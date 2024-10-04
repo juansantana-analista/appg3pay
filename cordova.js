@@ -1006,7 +1006,6 @@ module.exports = {
 
     // example: cordova.commandProxy.add("Accelerometer",{getCurrentAcceleration: function(successCallback, errorCallback, options) {...},...);
     add: function (id, proxyObj) {
-        console.log('adding proxy for ' + id);
         CommandProxyMap[id] = proxyObj;
         return proxyObj;
     },
