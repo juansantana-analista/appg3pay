@@ -241,7 +241,7 @@ var app = new Framework7({
             if (userName == "" || userPassword == "" || !validarEmail(userName)) {
               app.dialog.close();
               app.dialog.alert(
-                "Por favor, verifique seu Email e Senha.",
+                "Por favor, verifique seu Email e Senha e tente novamente.",
                 '<i class="mdi mdi-alert"></i> Erro!'
               );
             } else {
