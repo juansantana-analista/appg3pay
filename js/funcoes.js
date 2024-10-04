@@ -1270,7 +1270,8 @@ function adicionarEndereco() {
         complemento: complemento,
         bairro: bairro,
         cidade: cidade,
-        estado: estado
+        estado: estado,
+        tipo: 1
     };
 
     // Cabeçalhos da requisição
