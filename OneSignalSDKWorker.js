@@ -78,4 +78,10 @@ importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
         event.waitUntil(
         );
     });
-    
+    self.addEventListener('install', event => {
+        self.skipWaiting(); // Faz com que o novo Service Worker ative imediatamente
+      });
+      
+      self.addEventListener('activate', event => {
+        event.waitUntil(self.clients.claim()); // Faz com que o novo Service Worker controle todos os clientes
+      });
