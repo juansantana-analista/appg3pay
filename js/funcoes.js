@@ -169,7 +169,7 @@ function listarProdutos(searchQuery = "", categoriaId) {
                     <div class="item-card">
                         <a data-id="${produto.id}" 
                         data-nome="${produto.nome}" 
-                        data-preco2="${produto.preco2}"
+                        data-preco="${produto.preco}"
                         data-imagem="${imagemProduto}"
                         href="#" class="item">
                             <div class="img-container">
@@ -185,7 +185,7 @@ function listarProdutos(searchQuery = "", categoriaId) {
                                 <span class="star"></span>
                                 <span class="star"></span>
                             </div>
-                            <div class="price">${formatarMoeda(produto.preco2)}</div>
+                            <div class="price">${formatarMoeda(produto.preco)}</div>
                         </a>
                     </div>
                     `;
@@ -202,7 +202,7 @@ function listarProdutos(searchQuery = "", categoriaId) {
                 $(".item").on('click', function () {
                     var id = $(this).attr('data-id');
                     var nomeProduto = $(this).attr('data-nome');
-                    var preco2 = $(this).attr('data-preco2');
+                    var preco = $(this).attr('data-preco');
                     var imagem = $(this).attr('data-imagem');
                     localStorage.setItem('produtoId', id);
                     const produto = {
@@ -212,8 +212,8 @@ function listarProdutos(searchQuery = "", categoriaId) {
                         rating: 5,
                         likes: 5,
                         reviews: 5,
-                        preco: preco2,
-                        preco_promocional: preco2
+                        preco: preco,
+                        preco_promocional: preco
                     };
                     localStorage.setItem('produto', JSON.stringify(produto));
                     app.views.main.router.navigate('/detalhes/');
