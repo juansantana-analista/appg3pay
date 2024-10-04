@@ -39,6 +39,10 @@ var app = new Framework7({
             // Lógica para continuar usando o token
             app.views.main.router.navigate("/home/");
           }
+          var userName = localStorage.getItem('userName');
+          if(userName != '' && userName != null) {
+            $("#nomeUsuario").val(userName);
+          }
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
