@@ -968,7 +968,7 @@ var app = new Framework7({
             if (enderecoSelecionado && enderecoSelecionado != null) {
               app.views.main.router.navigate("/checkout/");
             } else {
-              app.dialog.alert("Por favor selecione um endereço de entrega. ", "Erro!");
+              app.dialog.alert("Por favor selecione um endereço de entrega para os produtos escolhidos. ", "Erro!");
             }
           });
         },
