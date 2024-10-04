@@ -980,40 +980,7 @@ var app = new Framework7({
               const validacep = /^[0-9]{8}$/;
 
               if (validacep.test(cep)) {
-                fetch(`https://viacep.com.br/ws/${cep}/json/`)
-                  .then(response => {
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    return response.json();
-                  })
-                  .then(data => {
-                    if (!data.erro) {
-                      logradouroInput.value = data.logradouro;
-                      bairroInput.value = data.bairro;
-                      cidadeInput.value = data.localidade;
-                      estadoInput.value = data.uf;
-                      // Remover a classe display-none para exibir os campos preenchidos
-                      document.getElementById('divLogradouroCliente').classList.remove('display-none');
-                      document.getElementById('divNumeroCliente').classList.remove('display-none');
-                      document.getElementById('divBairroCliente').classList.remove('display-none');
-                      document.getElementById('divCidadeCliente').classList.remove('display-none');
-                      document.getElementById('divEstadoCliente').classList.remove('display-none');
-                    } else {
-                      app.dialog.alert("Erro ao buscar o CEP: ", "CEP não encontrado!");
-                      cepInput.value = "";
-                      logradouroInput.value = "";
-                      bairroInput.value = "";
-                      cidadeInput.value = "";
-                      estadoInput.value = "";
-                    }
-                  })
-                  .catch(error => {
-                    app.dialog.alert("Erro ao buscar o CEP: " + (error), "CEP Inválido!");
-                    cepInput.value = "";
-                    logradouroInput.value = "";
-                    bairroInput.value = "";
-                    cidadeInput.value = "";
-                    estadoInput.value = "";
-                  });
+                cepEndereco(cep)
               } else {
                 // Não faz nada se o CEP não estiver completo ou for inválido
               }

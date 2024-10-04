@@ -755,6 +755,56 @@ function listarBanners() {
 }
 //Fim Função Listar Banners
 
+//Inicio Funçao CEP
+function cepEndereco(cep) {
+    var userAuthToken = localStorage.getItem('userAuthToken');
+    app.dialog.preloader("Carregando...");
+    const headers = {
+        "Content-Type": "application/json",
+        "Authorization": 'Bearer ' + userAuthToken,
+    };
+    const dados = {
+        cep: cep
+    };
+    const body = JSON.stringify({
+        class: "PessoaRestService",
+        method: "ConsultaCEP",
+        dados: dados
+    });
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: body,
+    };
+    fetch(apiServerUrl, options)
+        .then((response) => response.json())
+        .then((responseJson) => {
+            app.dialog.close();
+            if (responseJson.status === "success") {
+                var dadosEndereco = responseJson.data;
+                $('#logradouroEndCliente').val(dadosEndereco.rua);
+                $('#bairroEndCliente').val(dadosEndereco.bairro);
+                $('#cidadeEndCliente').val(dadosEndereco.cidade);
+                $('#estadoEndCliente').val(dadosEndereco.uf);
+
+                // Remover a classe display-none para exibir os campos preenchidos
+                document.getElementById('divLogradouroCliente').classList.remove('display-none');
+                document.getElementById('divNumeroCliente').classList.remove('display-none');
+                document.getElementById('divBairroCliente').classList.remove('display-none');
+                document.getElementById('divCidadeCliente').classList.remove('display-none');
+                document.getElementById('divEstadoCliente').classList.remove('display-none');
+            } else {
+                console.error("Erro ao obter dados do endereço:", responseJson.message);
+            }
+        })
+        .catch((error) => {
+            app.dialog.close();
+            console.error("Erro:", error);
+            app.dialog.alert("Erro ao buscar endereço: " + error.message, "Falha na requisição!");
+        });
+}
+//Fim Função CEP
+
 //Inicio Funçao Listar Categorias
 function listarCategoriasCurso() {
     var userAuthToken = localStorage.getItem('userAuthToken');
