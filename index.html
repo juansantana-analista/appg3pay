@@ -14,7 +14,7 @@
       <title>G3 PAY</title>   
       <script>
           if(typeof navigator.serviceWorker !== 'undefined') {        
-            navigator.serviceWorker.register('OneSignalSDKWorker.js?v=1.6').then(function(registration) {
+            navigator.serviceWorker.register('OneSignalSDKWorker.js?v=1.7').then(function(registration) {
             }).catch(function(error) {
                   console.error('Falha ao registrar o Service Worker:', error);
             });
@@ -153,6 +153,33 @@
             </div>
          </div>
       </div>
+      <div id="cookie-banner" style="display: none; position: fixed; bottom: 0; width: 100%; background: #f8d7da; color: #721c24; text-align: center; padding: 10px;">
+         Este site usa cookies para melhorar a sua experiência. 
+         <button id="accept-cookies" style="margin-left: 10px;">Aceitar</button>
+     </div>
+     
+     <script>
+         document.addEventListener('DOMContentLoaded', function() {
+             if (!localStorage.getItem('cookiesAccepted')) {
+                 document.getElementById('cookie-banner').style.display = 'block';
+             }
+     
+             document.getElementById('accept-cookies').onclick = function() {
+                 localStorage.setItem('cookiesAccepted', 'true');
+                 document.getElementById('cookie-banner').style.display = 'none';
+                 // Aqui você pode inicializar o OneSignal após a aceitação de cookies
+                 initializeOneSignal();
+             };
+         });
+     
+         function initializeOneSignal() {
+             window.OneSignal = window.OneSignal || [];
+             OneSignal.push(["init", {
+                 appId: "YOUR_ONESIGNAL_APP_ID",
+                 // outras configurações do OneSignal
+             }]);
+         }
+     </script>
       <!-- Path to Framework7 Library Bundle JS-->
       <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -162,8 +189,8 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
       <script src="lib/jwt-decode.min.js"></script>
       <!-- Roteamento do app-->
-      <script type="text/javascript" src="js/funcoes.js?v=1.6"></script>
-      <script type="text/javascript" src="js/routes.js?v=1.6"></script>
+      <script type="text/javascript" src="js/funcoes.js?v=1.7"></script>
+      <script type="text/javascript" src="js/routes.js?v=1.7"></script>
       <script src="cordova.js"></script>
    </body>
 </html>
