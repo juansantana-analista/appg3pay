@@ -1021,8 +1021,7 @@ var app = new Framework7({
           });
           //FIM API CEP PARA ENDEREÇO DE NOVO CLIENTE
 
-          $('#salvarEndereco').on('click', function(e) {
-            e.preventDefault();
+          $('#salvarEndereco').on('click', function () {
             adicionarEndereco();
           });
 
