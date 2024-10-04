@@ -40,7 +40,6 @@ var app = new Framework7({
             app.views.main.router.navigate("/home/");
           }
           var userName = localStorage.getItem('userName');
-          console.log(userName);
           if(userName != '' && userName != null) {
             $("#nomeUsuario").html(userName);
           }
