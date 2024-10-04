@@ -27,18 +27,15 @@
 body {
     background-color: var(--laranja);
     font-family: 'SFProDisplayLight', sans-serif;
-    padding-bottom: env(safe-area-inset-bottom);
 }
 
 .toolbar {
     height: calc(80px + env(safe-area-inset-bottom));
-    padding-bottom: env(safe-area-inset-bottom); /* Garante que a toolbar não fique cortada no iOS */
 }
 
 .toolbar-inner {
     background: var(--branco);
     border-top: 1px solid var(--gelo);
-    padding-bottom: env(safe-area-inset-bottom); /* Ajusta a altura interna da toolbar para a área segura */
 }
 
 .tab-link {
