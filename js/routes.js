@@ -636,7 +636,7 @@ var app = new Framework7({
           $('#balance-value').text('*****');        
           $('#toggle-visibility').click(function() {    
             if (isHidden) {
-              $('#balance-value').text('8.320,00');
+              $('#balance-value').text('0');
               $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565655.png');
             } else {
               $('#balance-value').text('*****');
