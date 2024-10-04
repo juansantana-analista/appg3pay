@@ -1305,7 +1305,7 @@ function adicionarEndereco() {
                     position: 'center',
                     closeTimeout: 2000,
                 });
-
+                listarEnderecos();
                 toastCenter.open();
                 app.dialog.close();  
                 app.popup.close('.popup-novo-endereco');       
