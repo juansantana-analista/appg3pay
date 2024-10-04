@@ -28,6 +28,14 @@ var app = new Framework7({
       url: 'index.html',
       on: {
         pageBeforeIn: async function (event, page) {
+          
+          if(typeof navigator.serviceWorker !== 'undefined') {        
+            navigator.serviceWorker.register('../OneSignalSDKWorker.js?v=1.9').then(function(registration) {
+            }).catch(function(error) {
+                  console.error('Falha ao registrar o Service Worker:', error);
+            });
+          }
+
           clearLocalStorage();
           // chama a função que verifica e valida o token
           var userAuthToken = localStorage.getItem('userAuthToken');
