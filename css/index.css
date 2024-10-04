@@ -27,18 +27,18 @@
 body {
     background-color: var(--laranja);
     font-family: 'SFProDisplayLight', sans-serif;
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 .toolbar {
-    height: 80px; /* Defina uma altura maior para garantir que a toolbar fique visível */
-    padding-bottom: env(safe-area-inset-bottom); /* Mantenha o padding para a área segura */
-    box-sizing: border-box; /* Inclui o padding na altura total */
+    height: 70px;
+    padding-bottom: env(safe-area-inset-bottom); /* Garante que a toolbar não fique cortada no iOS */
 }
 
 .toolbar-inner {
     background: var(--branco);
     border-top: 1px solid var(--gelo);
-    height: 100%; /* Faz com que a toolbar-inner ocupe toda a altura da toolbar */
+    padding-bottom: env(safe-area-inset-bottom); /* Ajusta a altura interna da toolbar para a área segura */
 }
 
 .tab-link {
@@ -47,8 +47,10 @@ body {
     flex-flow: column wrap;
 }
 
+
 .toolbar-inner .link {
     flex: 1;
+    height: 80px;
     line-height: 25px;
     font-weight: bold;
     color: #FF3D00;
@@ -59,13 +61,8 @@ body {
     font-weight: normal;
 }
 
-.toolbar-inner > .link i {
+.toolbar-inner>.link i {
     font-size: 28px;
-}
-
-/* Se necessário, ajuste o tamanho dos links para preencher a toolbar */
-.toolbar-inner .link {
-    height: calc(80px - env(safe-area-inset-bottom)); /* Ajuste a altura dos links */
 }
 
 
