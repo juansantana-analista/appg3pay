@@ -13,7 +13,7 @@
       <title>G3 PAY</title>   
       <script>
           if(typeof navigator.serviceWorker !== 'undefined') {        
-            navigator.serviceWorker.register('OneSignalSDKWorker.js').then(function(registration) {
+            navigator.serviceWorker.register('OneSignalSDKWorker.js?v=1.6').then(function(registration) {
             }).catch(function(error) {
                   console.error('Falha ao registrar o Service Worker:', error);
             });
