@@ -1298,7 +1298,7 @@ function adicionarEndereco() {
         .then((response) => response.json())
         .then((responseJson) => {
             // Verifica se o status é 'success'
-            if(responseJson.status == 'success' && responseJson.data.status == 'sucess'){
+            if(responseJson.status == 'success' && responseJson.data.status == 'success'){
                 // Sucesso na alteração  
                 var toastCenter = app.toast.create({
                     text: `Endereço adicionado com sucesso`,
