@@ -289,6 +289,7 @@ function buscarProduto(produtoId) {
 //Inicio Função obter Links
 function buscarLinks(produtoId) {
     var userAuthToken = localStorage.getItem('userAuthToken');
+    var codigo_indicador = localStorage.getItem('codigo_indicador');
     app.dialog.preloader("Carregando...");
 
     var imgUrl = "https://escritorio.g3pay.com.br/";
@@ -334,7 +335,7 @@ function buscarLinks(produtoId) {
                         <h3>${link.nome}</h3>
                         <p>${linkUrl}</p>
                       </div>
-                      <span class="mdi mdi-share compartilhar-link col-15" data-link="${link.link_url}"></span>
+                      <span class="mdi mdi-share compartilhar-link col-15" data-link="${link.link_url + codigo_indicador}"></span>
                     </li>
                     `;
 

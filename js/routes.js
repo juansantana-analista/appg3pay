@@ -277,6 +277,7 @@ var app = new Framework7({
                     localStorage.setItem("userName", decodedToken.username);
                     localStorage.setItem("userEmail", decodedToken.usermail);
                     localStorage.setItem("pessoaId", decodedToken.pessoa_id);
+                    localStorage.setItem("codigo_indicador", decodedToken.codigo_indicador);
                     localStorage.setItem("validadeToken", decodedToken.expires);
                     //localStorage.setItem("validadeToken", decodedToken.expires);
 
