@@ -964,6 +964,67 @@ var app = new Framework7({
               limparCarrinho();
             });
           });
+
+          //INICIO API CEP PARA ENDEREÇO DE NOVO CLIENTE
+          $('#cepCliente').mask('00000-000');
+          const cepInput = document.getElementById('cepCliente');
+          const logradouroInput = document.getElementById('logradouroEndCliente');
+          const bairroInput = document.getElementById('bairroEndCliente');
+          const cidadeInput = document.getElementById('cidadeEndCliente');
+          const estadoInput = document.getElementById('estadoEndCliente');
+
+          cepInput.addEventListener('input', function () {
+            const cep = cepInput.value.replace(/\D/g, '');
+
+            if (cep.length === 8) {
+              const validacep = /^[0-9]{8}$/;
+
+              if (validacep.test(cep)) {
+                fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                  .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                  })
+                  .then(data => {
+                    if (!data.erro) {
+                      logradouroInput.value = data.logradouro;
+                      bairroInput.value = data.bairro;
+                      cidadeInput.value = data.localidade;
+                      estadoInput.value = data.uf;
+                      // Remover a classe display-none para exibir os campos preenchidos
+                      document.getElementById('divLogradouroCliente').classList.remove('display-none');
+                      document.getElementById('divNumeroCliente').classList.remove('display-none');
+                      document.getElementById('divBairroCliente').classList.remove('display-none');
+                      document.getElementById('divCidadeCliente').classList.remove('display-none');
+                      document.getElementById('divEstadoCliente').classList.remove('display-none');
+                    } else {
+                      app.dialog.alert("Erro ao buscar o CEP: ", "CEP não encontrado!");
+                      cepInput.value = "";
+                      logradouroInput.value = "";
+                      bairroInput.value = "";
+                      cidadeInput.value = "";
+                      estadoInput.value = "";
+                    }
+                  })
+                  .catch(error => {
+                    app.dialog.alert("Erro ao buscar o CEP: " + (error), "CEP Inválido!");
+                    cepInput.value = "";
+                    logradouroInput.value = "";
+                    bairroInput.value = "";
+                    cidadeInput.value = "";
+                    estadoInput.value = "";
+                  });
+              } else {
+                // Não faz nada se o CEP não estiver completo ou for inválido
+              }
+            }
+          });
+          //FIM API CEP PARA ENDEREÇO DE NOVO CLIENTE
+          
+          $('#salvarEndereco').on('click', function(e) {
+            e.preventDefault();
+          });
+
           $('#irCheckout').on('click', function () {
             var enderecoSelecionado = localStorage.getItem('enderecoDetalhes');
             if (enderecoSelecionado && enderecoSelecionado != null) {
@@ -1094,63 +1155,6 @@ var app = new Framework7({
               paymentDetails.append('<p>O boleto será gerado após a finalização da compra. Utilize-o para realizar o pagamento.</p>');
             }
           }
-
-
-          //INICIO API CEP PARA ENDEREÇO DE NOVO CLIENTE
-          $('#cepCliente').mask('00000-000');
-          const cepInput = document.getElementById('cepCliente');
-          const logradouroInput = document.getElementById('logradouroEndCliente');
-          const bairroInput = document.getElementById('bairroEndCliente');
-          const cidadeInput = document.getElementById('cidadeEndCliente');
-          const estadoInput = document.getElementById('estadoEndCliente');
-
-          cepInput.addEventListener('input', function () {
-            const cep = cepInput.value.replace(/\D/g, '');
-
-            if (cep.length === 8) {
-              const validacep = /^[0-9]{8}$/;
-
-              if (validacep.test(cep)) {
-                fetch(`https://viacep.com.br/ws/${cep}/json/`)
-                  .then(response => {
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    return response.json();
-                  })
-                  .then(data => {
-                    if (!data.erro) {
-                      logradouroInput.value = data.logradouro;
-                      bairroInput.value = data.bairro;
-                      cidadeInput.value = data.localidade;
-                      estadoInput.value = data.uf;
-                      // Remover a classe display-none para exibir os campos preenchidos
-                      document.getElementById('divLogradouroCliente').classList.remove('display-none');
-                      document.getElementById('divNumeroCliente').classList.remove('display-none');
-                      document.getElementById('divBairroCliente').classList.remove('display-none');
-                      document.getElementById('divCidadeCliente').classList.remove('display-none');
-                      document.getElementById('divEstadoCliente').classList.remove('display-none');
-                    } else {
-                      app.dialog.alert("Erro ao buscar o CEP: ", "CEP não encontrado!");
-                      cepInput.value = "";
-                      logradouroInput.value = "";
-                      bairroInput.value = "";
-                      cidadeInput.value = "";
-                      estadoInput.value = "";
-                    }
-                  })
-                  .catch(error => {
-                    app.dialog.alert("Erro ao buscar o CEP: " + (error), "CEP Inválido!");
-                    cepInput.value = "";
-                    logradouroInput.value = "";
-                    bairroInput.value = "";
-                    cidadeInput.value = "";
-                    estadoInput.value = "";
-                  });
-              } else {
-                // Não faz nada se o CEP não estiver completo ou for inválido
-              }
-            }
-          });
-          //FIM API CEP PARA ENDEREÇO DE NOVO CLIENTE
 
 
           // Clicou em finalizar compra

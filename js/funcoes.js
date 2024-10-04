@@ -1247,6 +1247,77 @@ function alterarCarrinho(pessoaId, produtoId, quantidade) {
 }
 //Fim Função Alterar Carrinho
 
+//Inicio Adicionar Endereço
+function adicionarEndereco() {    
+    app.dialog.preloader("Carregando...");
+
+    var userAuthToken = localStorage.getItem('userAuthToken');
+    const pessoaId = localStorage.getItem('pessoaId');
+    // Captura os valores dos inputs
+    var cep = $('#cepCliente').val();
+    var logradouro = $('#logradouroEndCliente').val();
+    var numero = $('#numeroEndCliente').val();
+    var complemento = $('#complementoEndCliente').val();
+    var bairro = $('#bairroEndCliente').val();
+    var cidade = $('#cidadeEndCliente').val();
+    var estado = $('#estadoEndCliente').val();
+
+    const dados = {
+        pessoa_id: pessoaId,          
+        cep: cep,
+        endereco: logradouro,
+        numero: numero,
+        complemento: complemento,
+        bairro: bairro,
+        cidade: cidade,
+        estado: estado
+    };
+
+    // Cabeçalhos da requisição
+    const headers = {
+        "Content-Type": "application/json",
+        "Authorization": 'Bearer ' + userAuthToken,
+    };
+
+    const body = JSON.stringify({
+        class: "EnderecoRest",
+        method: "salvarEnderecoEntrega",
+        dados: dados
+    });
+
+    // Opções da requisição
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: body,
+    };
+
+    // Fazendo a requisição
+    fetch(apiServerUrl, options)
+        .then((response) => response.json())
+        .then((responseJson) => {
+            // Verifica se o status é 'success'
+            if(responseJson.status == 'success' && responseJson.data.status == 'sucess'){
+                // Sucesso na alteração  
+                var toastCenter = app.toast.create({
+                    text: `Endereço adicionado com sucesso`,
+                    position: 'center',
+                    closeTimeout: 2000,
+                });
+
+                toastCenter.open();
+                app.dialog.close();  
+                app.popup.close('.popup-novo-endereco');       
+            }
+        })
+        .catch((error) => {
+            app.dialog.close();
+            console.error("Erro:", error);
+            app.dialog.alert("Erro ao alterar carrinho: " + error.message, "Falha na requisição!");
+            app.popup.close('.popup-novo-endereco');
+        });
+}
+//Fim Função Adicionar Endereço
 
 //Inicio Adicionar Item Carrinho
 function adicionarItemCarrinho(produtoId) {
