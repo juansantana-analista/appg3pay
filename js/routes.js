@@ -42,7 +42,7 @@ var app = new Framework7({
           var userName = localStorage.getItem('userName');
           console.log(userName);
           if(userName != '' && userName != null) {
-            $("#nomeUsuario").val(userName);
+            $("#nomeUsuario").html(userName);
           }
         },
         pageAfterIn: function (event, page) {
