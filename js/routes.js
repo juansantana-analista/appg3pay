@@ -92,6 +92,7 @@ var app = new Framework7({
               $("#installBanner").addClass("display-none");
             } else {
               console.log('O app não está rodando em modo standalone no iOS');
+              
               $("#installBanner").removeClass("display-none");
             }
             conteudoInstall.innerHTML = `
