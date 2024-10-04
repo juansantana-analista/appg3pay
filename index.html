@@ -153,33 +153,7 @@
             </div>
          </div>
       </div>
-      <div id="cookie-banner" style="display: none; position: fixed; bottom: 0; width: 100%; background: #f8d7da; color: #721c24; text-align: center; padding: 10px;">
-         Este site usa cookies para melhorar a sua experiência. 
-         <button id="accept-cookies" style="margin-left: 10px;">Aceitar</button>
-     </div>
-     
-     <script>
-         document.addEventListener('DOMContentLoaded', function() {
-             if (!localStorage.getItem('cookiesAccepted')) {
-                 document.getElementById('cookie-banner').style.display = 'block';
-             }
-     
-             document.getElementById('accept-cookies').onclick = function() {
-                 localStorage.setItem('cookiesAccepted', 'true');
-                 document.getElementById('cookie-banner').style.display = 'none';
-                 // Aqui você pode inicializar o OneSignal após a aceitação de cookies
-                 initializeOneSignal();
-             };
-         });
-     
-         function initializeOneSignal() {
-             window.OneSignal = window.OneSignal || [];
-             OneSignal.push(["init", {
-                 appId: "YOUR_ONESIGNAL_APP_ID",
-                 // outras configurações do OneSignal
-             }]);
-         }
-     </script>
+
       <!-- Path to Framework7 Library Bundle JS-->
       <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
