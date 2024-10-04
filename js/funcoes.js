@@ -868,7 +868,7 @@ function listarCategoriasCurso() {
 function listarEnderecos() {
     var userAuthToken = localStorage.getItem('userAuthToken');
     app.dialog.preloader("Carregando...");
-    const pessoaId = localStorage.getItem('userId');
+    const pessoaId = localStorage.getItem('pessoaId');
     // Cabeçalhos da requisição
     const headers = {
         "Content-Type": "application/json",
