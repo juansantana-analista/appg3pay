@@ -241,7 +241,7 @@ var app = new Framework7({
             if (userName == "" || userPassword == "" || !validarEmail(userName)) {
               app.dialog.close();
               app.dialog.alert(
-                "Por favor, preencha seu Usuário e Senha.",
+                "Por favor, preencha seu Email e Senha.",
                 '<i class="mdi mdi-alert"></i> Campos Vazios'
               );
             } else {
