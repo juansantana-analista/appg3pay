@@ -350,7 +350,7 @@ function buscarLinks(produtoId) {
                 $("#shareLanding").on('click', function () {
                     // Pega o url do link clicado em share
                     //Abre opção compartilhamento
-                    onCompartilhar('Link do Produto', 'Aproveite agora mesmo nosso produto', linkLandingPage);
+                    onCompartilhar('Link do Produto', 'Aproveite agora mesmo nosso produto', linkLandingPage + codigo_indicador);
                 });
 
                 $(".compartilhar-link").on('click', function () {
