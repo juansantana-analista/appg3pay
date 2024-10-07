@@ -677,7 +677,7 @@ function detalhesPedido() {
                         <div class="order-total">
                             <h3>Total</h3>
                             <p><strong>Total dos Itens:</strong> ${formatarMoeda(detalhes.valor_total)}</p>
-                            <p><strong>Frete:</strong> R$ 10,00</p>
+                            <p><strong>Frete:</strong></p>
                             <p><strong>Total:</strong> ${formatarMoeda(detalhes.valor_total)}</p>
                         </div>
                     </div>
@@ -1013,6 +1013,7 @@ function selecionarEndereco(enderecoId) {
             if(responseJson.status == 'success' && responseJson.data.status == 'success'){
                 // Dados a serem armazenados
                 var valorFrete = responseJson.data.data.frete;
+                console.log(valorFrete);
                 
                 //MOSTRAR O VALOR FRETE
                 $("#freteCarrinho").html('Alterar ' + valorFrete.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
