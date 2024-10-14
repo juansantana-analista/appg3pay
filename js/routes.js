@@ -842,28 +842,29 @@ var app = new Framework7({
           $.getScript('js/detalhes.js');
           var produtoId = localStorage.getItem('produtoId');
 
-          let isHidden = true;
+          let isCompra = true;
+          let isVenda = true;
           $('#valor-compra').text('****');    
           $('#valor-venda').text('****');       
           $('#toggle-compra').click(function() {    
-            if (isHidden) {
+            if (isCompra) {
               $('#valor-compra').text('0');
               $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565655.png');
             } else {
               $('#valor-compra').text('****');
               $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565654.png');
             }
-            isHidden = !isHidden;
+            isCompra = !isCompra;
           });
           $('#toggle-venda').click(function() {    
-            if (isHidden) {
+            if (isVenda) {
               $('#valor-venda').text('0');
               $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565655.png');
             } else {
               $('#valor-venda').text('****');
               $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565654.png');
             }
-            isHidden = !isHidden;
+            isVenda = !isVenda;
           });
           
           $('#shareButton').on('click', function () {
