@@ -849,14 +849,14 @@ var app = new Framework7({
 
           let isCompra = true;
           let isVenda = true;
-          $('#valor-compra').text('****');    
-          $('#valor-venda').text('****');       
+          $('#valor-compra').text('R$ ****');    
+          $('#valor-venda').text('R$ ****');       
           $('#toggle-compra').click(function() {    
             if (isCompra) {
               $('#valor-compra').text(formatarMoeda(preco));
               $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565655.png');
             } else {
-              $('#valor-compra').text('****');
+              $('#valor-compra').text('R$ ****');
               $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565654.png');
             }
             isCompra = !isCompra;
@@ -866,7 +866,7 @@ var app = new Framework7({
               $('#valor-venda').text('0');
               $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565655.png');
             } else {
-              $('#valor-venda').text('****');
+              $('#valor-venda').text('R$ ****');
               $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565654.png');
             }
             isVenda = !isVenda;
