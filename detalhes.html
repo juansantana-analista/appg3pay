@@ -29,27 +29,39 @@
       <div class="view view-main">
         <!-- Initial Page, "data-name" contains page name -->
         <div data-name="detalhes" class="page color-theme-blue">
-          <!-- TAB BAR-->
-          <div class="toolbar toolbar-bottom">
-            <div
-              class="toolbar-inner display-flex align-items-center justify-content-center"
-            >
-              <div class="flex-40 text-align-center">
-                <span id="preco-detalhe" class="riscado color-gray"
-                  ></span
-                >
-                <h3
-                  id="precopromo-detalhe"
-                  class="princing no-padding no-margin"
-                >
-                  
-                </h3>
-              </div>
-              <div class="flex-60" id="containerBtnCarrinho">
-                <!-- <a class="button button-fill sheet-open" data-sheet=".demo-sheet-swipe-to-close">Ver modal</a> !-->
-              </div>
-            </div>
-          </div>
+                          <!-- TAB BAR-->
+                          <div id="toolbarTotais" style="margin-bottom: 100px;" class="toolbar toolbar-car toolbar-bottom">
+                            <div id="totais" class="toolbar-inner display-flex align-items-center justify-content-center">
+                                <div class="bd-bottom margin-top w-80 display-flex justify-content-space-between">
+                                    <span>Referência: </span>
+                                    <div class="custo-container display-flex align-items-center">
+                                        <i id="toggleCusto" class="mdi mdi-eye-outline"></i>
+                                        <span id="custo" class="blurred"></span>
+                                    </div>
+                                </div>
+                                <div id="variacaoContainer" class="w-80 display-flex justify-content-space-between display-none">
+                                    <span id="tipoVariacao">Desconto: </span>
+                                    <span id="valorVariacao" class="bold">R$ 100,00</span>
+                                </div>
+                                <div class="w-80 display-flex justify-content-space-between">
+                                    <span>Total: </span>
+                                    <span id="preco-final" class="bold"></span>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <!-- TAB BAR-->
+                        <div id="toolbarCheckout" class="toolbar toolbar-bottom">
+                            <div class="toolbar-inner display-flex align-items-center justify-content-center">
+                                <div class="flex-100">                          
+                                    <button class="proximo-passo" id="detalhesProx" style="margin: 10px;">
+                                        Avançar
+                                        <span class="mdi mdi-chevron-right"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+        
 
           <!-- Scrollable page content -->
           <div class="page-content">
@@ -65,10 +77,12 @@
             </div>
             <div class="prod-content">
               <div class="block">
+                <!--
                 <div class="line padding-top">
                   <b id="nome-detalhe" class="margin-left"></b>
                   <button id="compartilharBtn" class="share-btn">Compartilhar <i class="ri-share-2-line"></i></button>
                 </div>
+                -->
                 <div
                   class="margin-top display-flex align-items-center justify-content-start"
                 >
