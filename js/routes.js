@@ -843,7 +843,8 @@ var app = new Framework7({
           var produtoId = localStorage.getItem('produtoId');
 
           let isHidden = true;
-          $('#balance-value').text('*****');        
+          $('#valor-compra').text('****');    
+          $('#valor-venda').text('****');       
           $('#toggle-visibility').click(function() {    
             if (isHidden) {
               $('#balance-value').text('0');
