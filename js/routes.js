@@ -845,12 +845,22 @@ var app = new Framework7({
           let isHidden = true;
           $('#valor-compra').text('****');    
           $('#valor-venda').text('****');       
-          $('#toggle-visibility').click(function() {    
+          $('#toggle-compra').click(function() {    
             if (isHidden) {
-              $('#balance-value').text('0');
+              $('#valor-compra').text('0');
               $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565655.png');
             } else {
-              $('#balance-value').text('*****');
+              $('#valor-compra').text('****');
+              $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565654.png');
+            }
+            isHidden = !isHidden;
+          });
+          $('#toggle-venda').click(function() {    
+            if (isHidden) {
+              $('#valor-venda').text('0');
+              $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565655.png');
+            } else {
+              $('#valor-venda').text('****');
               $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565654.png');
             }
             isHidden = !isHidden;
