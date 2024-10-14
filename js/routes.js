@@ -841,7 +841,11 @@ var app = new Framework7({
           $.getScript('js/qrcode.min.js');
           $.getScript('js/detalhes.js');
           var produtoId = localStorage.getItem('produtoId');
-          var precoCompra = localStorage.getItem('preco');
+          // Supondo que o item já esteja salvo no localStorage com a chave 'produto'
+          let itemSalvo = localStorage.getItem('produto');
+          // Converte o JSON de volta para um objeto JavaScript
+          let produto = JSON.parse(itemSalvo);
+          let preco = produto.preco;
 
           let isCompra = true;
           let isVenda = true;
@@ -849,7 +853,7 @@ var app = new Framework7({
           $('#valor-venda').text('****');       
           $('#toggle-compra').click(function() {    
             if (isCompra) {
-              $('#valor-compra').text(precoCompra);
+              $('#valor-compra').text(formatarMoeda(preco));
               $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565655.png');
             } else {
               $('#valor-compra').text('****');
