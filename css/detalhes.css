@@ -79,7 +79,9 @@
     padding: 10px;
     color: var(--branco);
 }
-
+#descricao-detalhe {
+    padding-bottom: 180px;
+}
 .btn-rates {
     border: 1px solid #cbcbcb;
     border-radius: 20px;
