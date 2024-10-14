@@ -841,6 +841,7 @@ var app = new Framework7({
           $.getScript('js/qrcode.min.js');
           $.getScript('js/detalhes.js');
           var produtoId = localStorage.getItem('produtoId');
+          var precoCompra = localStorage.getItem('preco');
 
           let isCompra = true;
           let isVenda = true;
@@ -848,7 +849,7 @@ var app = new Framework7({
           $('#valor-venda').text('****');       
           $('#toggle-compra').click(function() {    
             if (isCompra) {
-              $('#valor-compra').text('0');
+              $('#valor-compra').text(precoCompra);
               $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565655.png');
             } else {
               $('#valor-compra').text('****');
