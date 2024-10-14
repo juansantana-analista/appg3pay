@@ -942,7 +942,14 @@ var app = new Framework7({
             app.popup.open('.popup-compartilhar');
             buscarLinks(produtoId);
           });
+          document.querySelector('#compartilharBtn').addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent default link behavior
+            app.popup.open('.popup-compartilhar');
+            buscarLinks(produtoId);
+          });
 
+          
+          
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
