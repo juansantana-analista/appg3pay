@@ -1701,9 +1701,9 @@ function listarCarrinhoCheckout() {
                     });
 
                     //MOSTRAR O SUBTOTAL
-                    $("#subTotalCheckout").html(subtotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
-                    $("#freteCheckout").html(valor_frete.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
-                    $("#totalCheckout").html(total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
+                    $("#subTotalCheckout").html(formatarMoeda(subtotal));
+                    $("#freteCheckout").html(formatarMoeda(valor_frete));
+                    $("#totalCheckout").html(formatarMoeda(total));
 
                 } 
 
