@@ -1031,7 +1031,7 @@ function selecionarEndereco(enderecoId) {
 //Fim Função Selecionar Endereço
 
 //Inicio Funçao Listar Categorias
-function finalizarCompra(formaPagamento) {
+function finalizarCompra(formaPagamento, titular, numero_cartao, data_expiracao, cvc) {
     var userAuthToken = localStorage.getItem('userAuthToken');
     app.dialog.preloader("Carregando...");
     const pessoaId = localStorage.getItem('pessoaId');    
@@ -1040,10 +1040,10 @@ function finalizarCompra(formaPagamento) {
 
     const pagamento = {
         forma_pagamento: formaPagamento,
-        titular: '',
-        numero_cartao: '',
-        data_expiracao: '',
-        cvc: ''
+        titular: titular,
+        numero_cartao: numero_cartao,
+        data_expiracao: data_expiracao,
+        cvc: cvc
     };
     const destinatario = {
           pessoa_id: pessoaId,
