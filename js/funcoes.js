@@ -1665,7 +1665,10 @@ function listarCarrinhoCheckout() {
                 console.log(responseJson);
                 // Supondo que responseJson seja o objeto que você obteve no console.log
                 const quantidadeItens = responseJson.data.data.itens.length;
-                const total = responseJson.data.data.total;
+                const subtotal = responseJson.data.data.total;
+                const valor_frete = responseJson.data.data.valor_frete;
+                const total = subtotal + valor_frete;
+                
                 var pessoaIdCarrinho = responseJson.data.data.pessoa_id; 
 
                 if (quantidadeItens > 0) {
@@ -1698,7 +1701,9 @@ function listarCarrinhoCheckout() {
                     });
 
                     //MOSTRAR O SUBTOTAL
-                    $("#subTotalCheckout").html(total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
+                    $("#subTotalCheckout").html(subtotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
+                    $("#freteCheckout").html(valor_frete.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
+                    $("#totalCheckout").html(total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
 
                 } 
 
