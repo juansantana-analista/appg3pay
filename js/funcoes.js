@@ -1701,6 +1701,7 @@ function listarCarrinhoCheckout() {
                     });
 
                     //MOSTRAR O SUBTOTAL
+                    console.log(valor_frete);
                     $("#subTotalCheckout").html(formatarMoeda(subtotal));
                     $("#freteCheckout").html(formatarMoeda(valor_frete));
                     $("#totalCheckout").html(formatarMoeda(total));
