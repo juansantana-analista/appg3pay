@@ -846,6 +846,7 @@ var app = new Framework7({
           // Converte o JSON de volta para um objeto JavaScript
           let produto = JSON.parse(itemSalvo);
           let preco = produto.preco;
+          let preco_lojavirtual = produto.preco_lojavirtual;
 
           let isCompra = true;
           let isVenda = true;
@@ -863,7 +864,7 @@ var app = new Framework7({
           });
           $('#toggle-venda').click(function() {    
             if (isVenda) {
-              $('#valor-venda').text(formatarMoeda(preco));
+              $('#valor-venda').text(formatarMoeda(preco_lojavirtual));
               $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565655.png');
             } else {
               $('#valor-venda').text('R$ ****');

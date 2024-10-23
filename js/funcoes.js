@@ -170,6 +170,8 @@ function listarProdutos(searchQuery = "", categoriaId) {
                         <a data-id="${produto.id}" 
                         data-nome="${produto.nome}" 
                         data-preco="${produto.preco}"
+                        data-preco2="${produto.preco2}"
+                        data-preco_lojavirtual="${produto.preco_lojavirtual}"
                         data-imagem="${imagemProduto}"
                         href="#" class="item">
                             <div class="img-container">
@@ -203,6 +205,8 @@ function listarProdutos(searchQuery = "", categoriaId) {
                     var id = $(this).attr('data-id');
                     var nomeProduto = $(this).attr('data-nome');
                     var preco = $(this).attr('data-preco');
+                    var preco2 = $(this).attr('data-preco2');
+                    var preco_lojavirtual = $(this).attr('data-preco_lojavirtual');
                     var imagem = $(this).attr('data-imagem');
                     localStorage.setItem('produtoId', id);
                     const produto = {
@@ -213,7 +217,8 @@ function listarProdutos(searchQuery = "", categoriaId) {
                         likes: 5,
                         reviews: 5,
                         preco: preco,
-                        preco_promocional: preco
+                        preco2: preco2,
+                        preco_lojavirtual: preco_lojavirtual
                     };
                     localStorage.setItem('produto', JSON.stringify(produto));
                     app.views.main.router.navigate('/detalhes/');
