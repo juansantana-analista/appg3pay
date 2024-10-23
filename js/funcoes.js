@@ -1662,6 +1662,7 @@ function listarCarrinhoCheckout() {
         .then((responseJson) => {
             // Verifica se o status é 'success'
             if(responseJson.status == 'success' && responseJson.data.status == 'sucess'){
+                console.log(responseJson);
                 // Supondo que responseJson seja o objeto que você obteve no console.log
                 const quantidadeItens = responseJson.data.data.itens.length;
                 const total = responseJson.data.data.total;
