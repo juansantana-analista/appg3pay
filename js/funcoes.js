@@ -1667,7 +1667,7 @@ function listarCarrinhoCheckout() {
                 const quantidadeItens = responseJson.data.data.itens.length;
                 const subtotal = responseJson.data.data.total;
                 const valor_frete = responseJson.data.data.valor_frete;
-                const total = subtotal + valor_frete;
+                const total = parseFloat(subtotal) + parseFloat(valor_frete);
                 
                 var pessoaIdCarrinho = responseJson.data.data.pessoa_id; 
 
@@ -1702,6 +1702,9 @@ function listarCarrinhoCheckout() {
 
                     //MOSTRAR O SUBTOTAL
                     console.log(valor_frete);
+                    if(valor_frete == 0) {
+                        valor_frete = 'GRÁTIS'
+                    }
                     $("#subTotalCheckout").html(formatarMoeda(subtotal));
                     $("#freteCheckout").html(formatarMoeda(valor_frete));
                     $("#totalCheckout").html(formatarMoeda(total));
