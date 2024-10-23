@@ -1075,7 +1075,7 @@ function finalizarCompra(formaPagamento) {
         headers: headers,
         body: body,
     };
-
+console.log(options);
     // Fazendo a requisição
     fetch(apiServerUrl, options)
         .then((response) => response.json())
