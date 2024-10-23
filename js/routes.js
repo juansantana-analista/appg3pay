@@ -30,7 +30,7 @@ var app = new Framework7({
         pageBeforeIn: async function (event, page) {
           
           if(typeof navigator.serviceWorker !== 'undefined') {        
-            navigator.serviceWorker.register('../OneSignalSDKWorker.js?v=2.1').then(function(registration) {
+            navigator.serviceWorker.register('../OneSignalSDKWorker.js?v=2.2').then(function(registration) {
             }).catch(function(error) {
                   console.error('Falha ao registrar o Service Worker:', error);
             });
