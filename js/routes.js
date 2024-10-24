@@ -1346,7 +1346,7 @@ var app = new Framework7({
             criarConteudoPagamento(data);
 
 
-            localStorage.removeItem('pagamentoData');
+            //localStorage.removeItem('pagamentoData');
             // Usar os dados conforme necessário
           }
 
