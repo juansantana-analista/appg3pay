@@ -1038,8 +1038,6 @@ function finalizarCompra(formaPagamento, titular, numero_cartao, data_expiracao,
     var enderecoDetalhes = JSON.parse(localStorage.getItem('enderecoDetalhes'));
     const enderecoEntregaId = enderecoDetalhes.enderecoId;
 
-    const url = 'https://sua-api.com/endpoint'; // Substitua pela URL da API
-
     const data = {
         "class": "PagamentoSafe2payRest",
         "method": "IncluirVenda",
@@ -1060,7 +1058,7 @@ function finalizarCompra(formaPagamento, titular, numero_cartao, data_expiracao,
         }
     };
 
-    fetch(url, {
+    fetch(apiServerUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
