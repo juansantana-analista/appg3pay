@@ -1232,6 +1232,16 @@ var app = new Framework7({
             // Exemplo de dados JSON para o pagamento
             var data = JSON.parse(pagamentoData);
         
+            // Inicializa a variável status
+            var status = '';
+
+            // Verifica o valor de status_compra e define o status correspondente
+            if (data.status_compra == 3 ) {
+              status = 'Autorizado';
+            } else {
+              status = 'Não Autorizado'; // Caso queira lidar com outros valores
+            }
+
             // Função para criar o conteúdo dinâmico
             function criarConteudoPagamento(data) {
               var pagamentoBody = document.getElementById('pagamentoBody');
@@ -1247,29 +1257,33 @@ var app = new Framework7({
                 pagamentoBody.innerHTML = `
                   <div class="cartao-info">
                     <div class="cartao-info-item">
+                      <span class="label">Status do Pagamento:</span>
+                      <p>${status}</p>
+                    </div>
+                    <div class="cartao-info-item">
                       <span class="label">Bandeira:</span>
-                      <input type="text" id="bandeiraCartao" />
+                      <input type="text" id="bandeiraCartao" value="${data.bandeira}" readonly />
                     </div>
                     <div class="cartao-info-item">
                       <span class="label">Número do Cartão:</span>
-                      <input type="text" id="numeroCartao" />
+                      <input type="text" id="numeroCartao" value="${data.cartao_numero}" readonly />
                     </div>
                     <div class="cartao-info-item">
                       <span class="label">Nome no Titular:</span>
-                      <input type="text" id="nomeCartao" />
+                      <input type="text" id="nomeCartao" value="${data.nome_cartao}" readonly />
                     </div>
                     <div class="cartao-info-item">
-                      <span class="label">Data de Validade:</span>
-                      <input type="text" id="validadeCartao" />
+                      <span class="label">Mensagem:</span>
+                      <p>${data.status_mensagem}</p>
                     </div>
                   </div>
                 `;
                 pagamentoButtons.innerHTML = `
-                  <button class="button button-fill color-green margin-bottom margin-top" id="confirmarCartao"><span class="mdi mdi-credit-card"></span> Confirmar Pagamento</button>
+                  <button class="button button-fill color-green margin-bottom margin-top" id="onPedidos">Meus Pedidos</button>
                 `;
         
-                document.getElementById('confirmarCartao').addEventListener('click', function () {
-                  confirmarPagamentoCartao();
+                document.getElementById('onPedidos').addEventListener('click', function () {
+                  app.views.main.router.navigate('/pedidos/');
                 });
         
               } else if (formaSelecionada == 2) {
@@ -1316,18 +1330,20 @@ var app = new Framework7({
               } else if (formaSelecionada == 3) {
                 formaPagamento = 'Pix';
                 pagamentoBody.innerHTML = `
-                  <div class="pix-info">
-                    <div class="pix-info-item">
+                  <div class="pix-info" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                    <div class="pix-info-item" style="margin-bottom: 20px;">
                       <img src="${data.qrCodePix}" alt="QR Code Pix" id="qrCodePix" width="180px" />
                     </div>
-                    <div class="pix-info-item">
-                      <span class="label">Pix Copia e Cola:</span>
+                    <div class="pix-info-item" style="max-width: 100%; word-wrap: break-word; overflow-wrap: break-word;">
+                      <span class="label" style="font-weight: bold;">Pix Copia e Cola:</span>
                       <span class="value" id="pixCopiaCola">${data.pixKey}</span>
                     </div>
                   </div>
                 `;
                 pagamentoButtons.innerHTML = `
-                  <button class="button button-fill color-green margin-bottom margin-top" id="copiarPix"><span class="mdi mdi-content-copy"></span> Copiar Código Pix</button>
+                  <div style="display: flex; justify-content: center; margin-top: 20px;">
+                    <button class="button button-fill color-green" id="copiarPix" style="max-width: 200px;"><span class="mdi mdi-content-copy"></span> Copiar Código Pix</button>
+                  </div>
                 `;
         
                 // Copiar código Pix

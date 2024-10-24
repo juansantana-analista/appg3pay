@@ -1079,7 +1079,12 @@ function finalizarCompra(formaPagamento, titular, numero_cartao, data_expiracao,
                 linkBoleto: responseJson.data.data.boleto_impressao,
                 dataVencimento: responseJson.data.data.data_vencimento,
                 valorTotal: responseJson.data.data.valor_total,
-                pedidoId: responseJson.data.data.pedido_id
+                pedidoId: responseJson.data.data.pedido_id,
+                status_compra: responseJson.data.data.status_compra,
+                status_mensagem: responseJson.data.data.status_mensagem,
+                bandeira: responseJson.data.data.bandeira,
+                cartao_numero: responseJson.data.data.cartao_numero,
+                nome_cartao: responseJson.data.data.nome_cartao
             };
 
             // Armazenar no localStorage
