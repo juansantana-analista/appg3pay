@@ -1038,77 +1038,71 @@ function finalizarCompra(formaPagamento, titular, numero_cartao, data_expiracao,
     var enderecoDetalhes = JSON.parse(localStorage.getItem('enderecoDetalhes'));
     const enderecoEntregaId = enderecoDetalhes.enderecoId;
 
-    const pagamento = {
-        forma_pagamento: formaPagamento,
-        titular: titular,
-        numero_cartao: numero_cartao,
-        data_expiracao: data_expiracao,
-        cvc: cvc
-    };
-    const destinatario = {
-          pessoa_id: pessoaId,
-          endereco_id: enderecoEntregaId,
-          frete: 0
-    };
-    const dados = {
-        pessoa_id: pessoaId,
-        pagamento: pagamento,
-        destinatario: destinatario
-    };
+    const url = 'https://sua-api.com/endpoint'; // Substitua pela URL da API
 
-    // Cabeçalhos da requisição
-    const headers = {
-        "Content-Type": "application/json",
-        "Authorization": 'Bearer ' + userAuthToken,
-    };
-
-    const body = JSON.stringify({
-        class: "PagamentoSafe2payRest",
-        method: "IncluirVenda",
-        dados: dados
-
-    });
-    
-    // Opções da requisição
-    const options = {
-        method: "POST",
-        headers: headers,
-        body: body,
-    };
-console.log(options);
-    // Fazendo a requisição
-    fetch(apiServerUrl, options)
-        .then((response) => response.json())
-        .then((responseJson) => {
-            // Verifica se o status é 'success'
-            if(responseJson.status == 'success' && responseJson.data.status == 'success'){
-                // Dados a serem armazenados
-                var data = {
-                    formaSelecionada: formaPagamento,
-                    linhaDigitavel: responseJson.data.data.boleto_linhadigitavel,
-                    pixKey: responseJson.data.data.pix_key,
-                    linkBoleto: responseJson.data.data.boleto_impressao,
-                    dataVencimento: responseJson.data.data.data_vencimento,
-                    valorTotal: responseJson.data.data.valor_total,
-                    pedidoId: responseJson.data.data.pedido_id
-                };
-
-                // Armazenar no localStorage
-                localStorage.setItem('pagamentoData', JSON.stringify(data));
-
-                app.dialog.close();
-                app.views.main.router.navigate('/pagamento/');
-
-                /* Abrir navegador para baixar boleto
-                var ref = cordova.InAppBrowser.open(linkBoleto, '_system', 'location=no,zoom=no');
-                ref.show();*/
+    const data = {
+        "class": "PagamentoSafe2payRest",
+        "method": "IncluirVenda",
+        "dados": {
+            "pessoa_id": "95",
+            "pagamento": {
+                "forma_pagamento": formaPagamento,
+                "titular": titular,
+                "numero_cartao": numero_cartao,
+                "data_expiracao": data_expiracao,
+                "cvc": cvc
+            },
+            "destinatario": {
+                "pessoa_id": pessoaId,
+                "endereco_id": enderecoEntregaId,
+                "frete": 0
             }
-        })
-        .catch((error) => {
+        }
+    };
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            "Authorization": 'Bearer ' + userAuthToken,
+        },
+        body: JSON.stringify(data),
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+        // Verifica se o status é 'success'
+        if(responseJson.status == 'success' && responseJson.data.status == 'success'){
+            // Dados a serem armazenados
+            var data = {
+                formaSelecionada: formaPagamento,
+                linhaDigitavel: responseJson.data.data.boleto_linhadigitavel,
+                pixKey: responseJson.data.data.pix_key,
+                linkBoleto: responseJson.data.data.boleto_impressao,
+                dataVencimento: responseJson.data.data.data_vencimento,
+                valorTotal: responseJson.data.data.valor_total,
+                pedidoId: responseJson.data.data.pedido_id
+            };
+
+            // Armazenar no localStorage
+            localStorage.setItem('pagamentoData', JSON.stringify(data));
+
             app.dialog.close();
-            console.error("Erro:", error);
-            app.dialog.alert("Erro ao finalizar compra: " + error.message, "Falha na requisição!");
-        });
+            app.views.main.router.navigate('/pagamento/');
+
+            /* Abrir navegador para baixar boleto
+            var ref = cordova.InAppBrowser.open(linkBoleto, '_system', 'location=no,zoom=no');
+            ref.show();*/
+        } else {
+            app.dialog.close();
+            app.dialog.alert("Erro ao finalizar compra: " + responseJson, "Falha na requisição!");
+        }
+        console.log('Success:', responseJson);
+    })
+    .catch(error => {
+        app.dialog.close();
+        app.dialog.alert("Erro ao finalizar compra: " + error, "Falha na requisição!");
+        console.error('Error:', error);
+    });
 }
 //Fim Função Finalizar Compra
 
