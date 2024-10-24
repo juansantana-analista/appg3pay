@@ -30,7 +30,7 @@ var app = new Framework7({
         pageBeforeIn: async function (event, page) {
           
           if(typeof navigator.serviceWorker !== 'undefined') {        
-            navigator.serviceWorker.register('../OneSignalSDKWorker.js?v=2.6').then(function(registration) {
+            navigator.serviceWorker.register('../OneSignalSDKWorker.js?v=2.7').then(function(registration) {
             }).catch(function(error) {
                   console.error('Falha ao registrar o Service Worker:', error);
             });
@@ -1191,7 +1191,7 @@ var app = new Framework7({
             } else if (method === "boleto") {
               formaPagamento = 2;
 
-            } else if (method === "pix") {
+            } else if (method === "pix" || method == '') {
               formaPagamento = 3;
 
             } else {
@@ -1318,7 +1318,7 @@ var app = new Framework7({
                 pagamentoBody.innerHTML = `
                   <div class="pix-info">
                     <div class="pix-info-item">
-                      <img src="${data.qrCodePix}" alt="QR Code Pix" id="qrCodePix" />
+                      <img src="${data.qrCodePix}" alt="QR Code Pix" id="qrCodePix" width="180px" />
                     </div>
                     <div class="pix-info-item">
                       <span class="label">Pix Copia e Cola:</span>
