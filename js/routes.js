@@ -1227,20 +1227,21 @@ var app = new Framework7({
           // Recuperar do localStorage
           var pagamentoData = localStorage.getItem('pagamentoData');
           var clienteNome = localStorage.getItem('userName');
+          
           if (pagamentoData) {
             // Exemplo de dados JSON para o pagamento
             var data = JSON.parse(pagamentoData);
-
+        
             // Função para criar o conteúdo dinâmico
             function criarConteudoPagamento(data) {
               var pagamentoBody = document.getElementById('pagamentoBody');
               var pagamentoButtons = document.getElementById('pagamentoButtons');
               var formaSelecionada = data.formaSelecionada;
               var formaPagamento = '';
-
+        
               pagamentoBody.innerHTML = '';
               pagamentoButtons.innerHTML = '';
-
+        
               if (formaSelecionada == 1) {
                 formaPagamento = 'Cartão';
                 pagamentoBody.innerHTML = `
@@ -1266,11 +1267,11 @@ var app = new Framework7({
                 pagamentoButtons.innerHTML = `
                   <button class="button button-fill color-green margin-bottom margin-top" id="confirmarCartao"><span class="mdi mdi-credit-card"></span> Confirmar Pagamento</button>
                 `;
-
+        
                 document.getElementById('confirmarCartao').addEventListener('click', function () {
                   confirmarPagamentoCartao();
                 });
-
+        
               } else if (formaSelecionada == 2) {
                 formaPagamento = 'Boleto';
                 pagamentoBody.innerHTML = `
@@ -1298,20 +1299,20 @@ var app = new Framework7({
                 <button class="button button-fill color-green margin-bottom margin-top" id="copiarLinha"><span class="mdi mdi-content-copy"></span> Copiar Código</button>
                 <button class="button button-fill color-blue" id="baixarBoleto"><span class="mdi mdi-file-download-outline"></span> Baixar Boleto</button>
               `;
-
+        
                 // Copiar linha digitável
-                $('#copiarLinha').on('click', function () {
+                document.getElementById('copiarLinha').addEventListener('click', function () {
                   copiarParaAreaDeTransferencia(data.linhaDigitavel);
                 });
-
+        
                 // Baixar boleto
-                $('#baixarBoleto').on('click', function () {
+                document.getElementById('baixarBoleto').addEventListener('click', function () {
                   app.dialog.confirm('Deseja baixar o boleto no navegador?', function () {
                     var ref = cordova.InAppBrowser.open(data.linkBoleto, '_system', 'location=no,zoom=no');
                     ref.show();
                   });
                 });
-
+        
               } else if (formaSelecionada == 3) {
                 formaPagamento = 'Pix';
                 pagamentoBody.innerHTML = `
@@ -1321,36 +1322,28 @@ var app = new Framework7({
                     </div>
                     <div class="pix-info-item">
                       <span class="label">Pix Copia e Cola:</span>
-                      <span class="value" id="pixCopiaCola">${data.pixCopiaCola}</span>
-                    </div>
-                    <div class="pix-info-item">
-                      <span class="label">Pix Copia e Cola:</span>
-                      <span class="value" id="pixCopiaCola">${data.pixCopiaCola}</span>
+                      <span class="value" id="pixCopiaCola">${data.pixKey}</span>
                     </div>
                   </div>
                 `;
                 pagamentoButtons.innerHTML = `
                   <button class="button button-fill color-green margin-bottom margin-top" id="copiarPix"><span class="mdi mdi-content-copy"></span> Copiar Código Pix</button>
                 `;
-
+        
                 // Copiar código Pix
                 document.getElementById('copiarPix').addEventListener('click', function () {
-                  copiarParaAreaDeTransferencia(data.pixCopiaCola);
+                  copiarParaAreaDeTransferencia(data.pixKey);
                 });
               }
-
+        
               document.getElementById('formaSelecionada').innerText = formaPagamento;
             }
-
+        
             // Inicializar o conteúdo do pagamento
             criarConteudoPagamento(data);
-
-
-            //localStorage.removeItem('pagamentoData');
-            // Usar os dados conforme necessário
           }
-
         },
+        
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
         },
