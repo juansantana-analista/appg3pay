@@ -1042,7 +1042,7 @@ function finalizarCompra(formaPagamento, titular, numero_cartao, data_expiracao,
         "class": "PagamentoSafe2payRest",
         "method": "IncluirVenda",
         "dados": {
-            "pessoa_id": "95",
+            "pessoa_id": pessoaId,
             "pagamento": {
                 "forma_pagamento": formaPagamento,
                 "titular": titular,
@@ -1054,6 +1054,80 @@ function finalizarCompra(formaPagamento, titular, numero_cartao, data_expiracao,
                 "pessoa_id": pessoaId,
                 "endereco_id": enderecoEntregaId,
                 "frete": 0
+            }
+        }
+    };
+
+    fetch(apiServerUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            "Authorization": 'Bearer ' + userAuthToken,
+        },
+        body: JSON.stringify(data),
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+        // Verifica se o status é 'success'
+        if(responseJson.status == 'success' && responseJson.data.status == 'success'){
+            // Dados a serem armazenados
+            var data = {
+                formaSelecionada: formaPagamento,
+                linhaDigitavel: responseJson.data.data.boleto_linhadigitavel,
+                pixKey: responseJson.data.data.pix_key,
+                qrCodePix: responseJson.data.data.pix_qrcode,
+                linkBoleto: responseJson.data.data.boleto_impressao,
+                dataVencimento: responseJson.data.data.data_vencimento,
+                valorTotal: responseJson.data.data.valor_total,
+                pedidoId: responseJson.data.data.pedido_id,
+                status_compra: responseJson.data.data.status_compra,
+                status_mensagem: responseJson.data.data.status_mensagem,
+                bandeira: responseJson.data.data.bandeira,
+                cartao_numero: responseJson.data.data.cartao_numero,
+                nome_cartao: responseJson.data.data.nome_cartao
+            };
+
+            // Armazenar no localStorage
+            localStorage.setItem('pagamentoData', JSON.stringify(data));            
+            localStorage.setItem('pedidoIdPagamento', responseJson.data.data.pedido_id);
+
+            app.dialog.close();
+            app.views.main.router.navigate('/pagamento/');
+
+            /* Abrir navegador para baixar boleto
+            var ref = cordova.InAppBrowser.open(linkBoleto, '_system', 'location=no,zoom=no');
+            ref.show();*/
+        } else {
+            app.dialog.close();
+            app.dialog.alert("Erro ao finalizar compra: " + responseJson, "Falha na requisição!");
+        }
+        console.log('Success:', responseJson);
+    })
+    .catch(error => {
+        app.dialog.close();
+        app.dialog.alert("Erro ao finalizar compra: " + error, "Falha na requisição!");
+        console.error('Error:', error);
+    });
+}
+//Fim Função Finalizar Compra
+
+//Inicio Função Refazer Pagamento
+function refazerPagamento(formaPagamento, titular, numero_cartao, data_expiracao, cvc) {
+    var userAuthToken = localStorage.getItem('userAuthToken');
+    app.dialog.preloader("Carregando...");
+    const pedidoId = localStorage.getItem('pedidoIdPagamento');    
+
+    const data = {
+        "class": "PagamentoSafe2payRest",
+        "method": "PagamentoPedido",
+        "dados": {
+            "pedido_id": pedidoId,
+            "pagamento": {
+                "forma_pagamento": formaPagamento,
+                "titular": titular,
+                "numero_cartao": numero_cartao,
+                "data_expiracao": data_expiracao,
+                "cvc": cvc
             }
         }
     };
@@ -1108,8 +1182,7 @@ function finalizarCompra(formaPagamento, titular, numero_cartao, data_expiracao,
         console.error('Error:', error);
     });
 }
-//Fim Função Finalizar Compra
-
+//Fim Função Refazer Pagamento
 
 //Inicio Funçao Listar Carrinho
 function listarCarrinho() {

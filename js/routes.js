@@ -1380,7 +1380,7 @@ var app = new Framework7({
 
 
           // Clicou em finalizar compra
-          $('#finalizarCompra').on('click', function () {
+          $('#refazerPagamento').on('click', function () {
             var formaPagamento = '';
             if (method === "card") {
               formaPagamento = 1;
@@ -1399,7 +1399,7 @@ var app = new Framework7({
             }
 
             if (formaPagamento) {
-              finalizarCompra(formaPagamento, nomeTitular, numeroCartao, dataExpiracao, cvc);
+              refazerPagamento(formaPagamento, nomeTitular, numeroCartao, dataExpiracao, cvc);
             }
           });
         },
