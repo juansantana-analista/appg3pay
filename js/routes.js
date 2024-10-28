@@ -30,7 +30,7 @@ var app = new Framework7({
         pageBeforeIn: async function (event, page) {
           
           if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').then(registration => {
+            navigator.serviceWorker.register('/OneSignalSDKWorker.js').then(registration => {
                 // Verifica se há uma atualização
                 registration.onupdatefound = () => {
                     const installingWorker = registration.installing;
@@ -61,6 +61,7 @@ var app = new Framework7({
                 }
             });
         }
+        
 
           clearLocalStorage();
           // chama a função que verifica e valida o token
