@@ -1241,11 +1241,13 @@ var app = new Framework7({
             } else {
               status = 'Não Autorizado';
             }
-
+            totalCompra
             // Função para criar o conteúdo dinâmico
             function criarConteudoPagamento(data) {
-              var formaSelecionada = data.formaSelecionada;                            
-        
+              var formaSelecionada = data.formaSelecionada;   
+              var totalCompra = document.getElementById('totalCompra');
+              totalCompra.innerHTML = `${data.valorTotal}`;
+              
               if (formaSelecionada == 1) {
                 $("#cartao-section").removeClass("display-none");
                 var cartaoDetalhes = document.getElementById('cartao-detalhes');
@@ -1273,7 +1275,8 @@ var app = new Framework7({
                     </div>
                 `;
                 if (data.status_compra != 3 ) {
-                  $("#btnAlterarPagamento").removeClass("display-none");                  
+                  $("#btnAlterarPagamento").removeClass("display-none");                      
+                  $("#instrucao-cartao").removeClass("display-none");              
                   localStorage.setItem('pgtoPedidoId', data.pedidoId);
                 }
         
