@@ -1178,24 +1178,41 @@ var app = new Framework7({
             }
           }
 
-
           // Clicou em finalizar compra
           $('#finalizarCompra').on('click', function () {
             var formaPagamento = '';
+            
             if (method === "card") {
               formaPagamento = 1;
               var nomeTitular = $("#nomeTitular").val();
               var numeroCartao = $("#numeroCartao").val();
               var dataExpiracao = $("#dataExpiracao").val();
               var cvc = $("#cvc").val();
+
+              // Validações dos campos
+              if (!nomeTitular) {
+                app.dialog.alert("Por favor, preencha o nome do titular.", "Erro!");
+                return;
+              }
+              if (!numeroCartao || numeroCartao.length < 16) {
+                app.dialog.alert("Por favor, insira um número de cartão válido com 16 dígitos.", "Erro!");
+                return;
+              }
+              if (!dataExpiracao || !validarDataExpiracao(dataExpiracao)) {
+                app.dialog.alert("Por favor, insira a data de expiração no formato MM/YYYY.", "Erro!");
+                return;
+              }
+              if (!cvc || cvc.length < 3) {
+                app.dialog.alert("Por favor, insira um código CVC válido de 3 dígitos.", "Erro!");
+                return;
+              }
             } else if (method === "boleto") {
               formaPagamento = 2;
-
             } else if (method === "pix" || method == '') {
               formaPagamento = 3;
-
             } else {
-              app.dialog.alert("Forma de pagamento não selecionada. ", "Erro!");
+              app.dialog.alert("Forma de pagamento não selecionada.", "Erro!");
+              return;
             }
 
             if (formaPagamento) {
@@ -1387,15 +1404,15 @@ var app = new Framework7({
             } else if (method === 'card') {
               repaymentDetails.append(`
                               <div class="payment-container">
-                                <input type="text" name="nomeTitular" id="nomeTitular" placeholder="Nome">
-                                <input type="text" name="numeroCartao" id="numeroCartao" placeholder="0000 0000 0000 0000">
-                                <input type="text" name="dataExpiracao" id="dataExpiracao" placeholder="DD/AAAA">
-                                <input type="text" name="cvc" id="cvc" placeholder="000">
+                                <input type="text" name="nomeTitularRe" id="nomeTitularRe" placeholder="Nome">
+                                <input type="text" name="numeroCartaoRe" id="numeroCartaoRe" placeholder="0000 0000 0000 0000">
+                                <input type="text" name="dataExpiracaoRe" id="dataExpiracaoRe" placeholder="DD/AAAA">
+                                <input type="text" name="cvcRe" id="cvcRe" placeholder="000">
                               </div>
                             `);
-              $('#numeroCartao').mask('0000 0000 0000 0000');
-              $('#dataExpiracao').mask('00/0000');
-              $('#cvc').mask('000');
+              $('#numeroCartaoRe').mask('0000 0000 0000 0000');
+              $('#dataExpiracaoRe').mask('00/0000');
+              $('#cvcRe').mask('000');
             } else if (method === 'boleto') {
               repaymentDetails.append('<p>O boleto será gerado após a finalização da compra. Utilize-o para realizar o pagamento.</p>');
             }
@@ -1407,10 +1424,10 @@ var app = new Framework7({
             var formaPagamento = '';
             if (method === "card") {
               formaPagamento = 1;
-              var nomeTitular = $("#nomeTitular").val();
-              var numeroCartao = $("#numeroCartao").val();
-              var dataExpiracao = $("#dataExpiracao").val();
-              var cvc = $("#cvc").val();
+              var nomeTitularRe = $("#nomeTitularRe").val();
+              var numeroCartaoRe = $("#numeroCartaoRe").val();
+              var dataExpiracaoRe = $("#dataExpiracaoRe").val();
+              var cvcRe = $("#cvcRe").val();
             } else if (method === "boleto") {
               formaPagamento = 2;
 
@@ -1422,7 +1439,7 @@ var app = new Framework7({
             }
 
             if (formaPagamento) {
-              refazerPagamento(formaPagamento, nomeTitular, numeroCartao, dataExpiracao, cvc);
+              refazerPagamento(formaPagamento, nomeTitularRe, numeroCartaoRe, dataExpiracaoRe, cvcRe);
             }
           });
 
@@ -1530,3 +1547,4 @@ document.querySelectorAll('img, a').forEach(function (element) {
   });
 });
 //Fim dos bloqueios do menu contexto
+

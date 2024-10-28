@@ -1891,3 +1891,9 @@ async function shareLink(shareTitle, shareText, link) {
     }
 }
 //Fim função compartilhar
+
+// Função para validar a data no formato MM/YYYY
+function validarDataExpiracao(data) {
+    const regex = /^(0[1-9]|1[0-2])\/\d{4}$/; // Aceita de 01 a 12 para MM e 4 dígitos para o ano
+    return regex.test(data);
+  }
