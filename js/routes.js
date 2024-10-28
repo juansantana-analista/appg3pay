@@ -1344,7 +1344,7 @@ var app = new Framework7({
           pixElement.addClass('active');
 
           // Exibir os detalhes de pagamento para PIX
-          showPaymentDetails('pix');
+          onShowPaymentDetails('pix');
 
           // Handle payment method selection
           $('.payment-method').on('click', function () {
@@ -1352,10 +1352,10 @@ var app = new Framework7({
             $(this).addClass('active');
 
             method = $(this).data('method');
-            showPaymentDetails(method);
+            onShowPaymentDetails(method);
           });
 
-          function showPaymentDetails(method) {
+          function onShowPaymentDetails(method) {
             var paymentDetails = $('#repayment-details');
             paymentDetails.empty();
 
