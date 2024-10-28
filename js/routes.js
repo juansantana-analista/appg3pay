@@ -36,8 +36,8 @@ var app = new Framework7({
                     const installingWorker = registration.installing;
                     installingWorker.onstatechange = () => {
                         if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            // Nova versão disponível
-                            console.log('Uma nova versão do app está disponível. Recarregando...');
+                            // Nova versão disponível                            
+                            app.dialog.preloader("Atualizando App Aguarde...");
                             window.location.reload(); // Recarrega a página para usar a nova versão
                         }
                     };
@@ -48,16 +48,6 @@ var app = new Framework7({
             navigator.serviceWorker.getRegistration().then(registration => {
                 if (registration) {
                     registration.update(); // Tenta atualizar o service worker
-                }
-            });
-        
-            // Verifica a versão a cada carregamento de página
-            navigator.serviceWorker.addEventListener('message', event => {
-                if (event.data.type === 'NEW_VERSION') {
-                    // Notifica o usuário para recarregar
-                    if (confirm("Uma nova versão do aplicativo está disponível. Deseja recarregar?")) {
-                        window.location.reload();
-                    }
                 }
             });
         }
