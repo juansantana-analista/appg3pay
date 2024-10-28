@@ -1295,6 +1295,8 @@ var app = new Framework7({
                   $("#btnAlterarPagamento").removeClass("display-none");                   
                   $("#instrucao-cartao").removeClass("display-none");              
                   localStorage.setItem('pgtoPedidoId', data.pedidoId);
+                } else {
+                  localStorage.removeItem('pgtoPedidoId');
                 }
 
                 $("#meusPedidos").removeClass("display-none");             
