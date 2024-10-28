@@ -1,6 +1,6 @@
 importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
 
-const CACHE_NAME = 'pwa-cache-v3'; // Altere a versão aqui sempre que modificar os arquivos
+const CACHE_NAME = 'pwa-cache-v4'; // Altere a versão aqui sempre que modificar os arquivos
 const HOSTNAME_WHITELIST = [
     self.location.hostname,
     'fonts.gstatic.com',
