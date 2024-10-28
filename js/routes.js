@@ -1246,7 +1246,7 @@ var app = new Framework7({
             function criarConteudoPagamento(data) {
               var formaSelecionada = data.formaSelecionada;   
               var totalCompra = document.getElementById('totalCompra');
-              totalCompra.innerHTML = `${data.valorTotal}`;
+              totalCompra.innerHTML = `${formatarMoeda(data.valorTotal)}`;
               
               if (formaSelecionada == 1) {
                 $("#cartao-section").removeClass("display-none");
