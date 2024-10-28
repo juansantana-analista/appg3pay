@@ -1344,7 +1344,7 @@ var app = new Framework7({
           pixElement.addClass('active');
 
           // Exibir os detalhes de pagamento para PIX
-          onShowPaymentDetails('pix');
+          showPaymentDetails('pix');
 
           // Handle payment method selection
           $('.payment-method').on('click', function () {
@@ -1352,17 +1352,17 @@ var app = new Framework7({
             $(this).addClass('active');
 
             method = $(this).data('method');
-            onShowPaymentDetails(method);
+            showPaymentDetails(method);
           });
 
-          function onShowPaymentDetails(method) {
-            var paymentDetails = $('#repayment-details');
-            paymentDetails.empty();
+          function showPaymentDetails(method) {
+            var repaymentDetails = $('#repayment-details');
+            repaymentDetails.empty();
 
             if (method === 'pix') {
-              paymentDetails.append('<p>Por favor, utilize o QR Code gerado para realizar o pagamento via PIX.</p>');
+              repaymentDetails.append('<p>Por favor, utilize o QR Code gerado para realizar o pagamento via PIX.</p>');
             } else if (method === 'card') {
-              paymentDetails.append(`
+              repaymentDetails.append(`
                               <div class="payment-container">
                                 <input type="text" name="nomeTitular" id="nomeTitular" placeholder="Nome">
                                 <input type="text" name="numeroCartao" id="numeroCartao" placeholder="0000 0000 0000 0000">
@@ -1374,7 +1374,7 @@ var app = new Framework7({
               $('#dataExpiracao').mask('00/0000');
               $('#cvc').mask('000');
             } else if (method === 'boleto') {
-              paymentDetails.append('<p>O boleto será gerado após a finalização da compra. Utilize-o para realizar o pagamento.</p>');
+              repaymentDetails.append('<p>O boleto será gerado após a finalização da compra. Utilize-o para realizar o pagamento.</p>');
             }
           }
 
