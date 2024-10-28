@@ -1301,7 +1301,12 @@ form {
       }
 
       .tab-produtos {
-        display: flex;
-        position: absolute;
-        width: 100%;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 10px 0;
       }
