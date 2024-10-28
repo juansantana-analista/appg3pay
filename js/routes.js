@@ -30,7 +30,7 @@ var app = new Framework7({
         pageBeforeIn: async function (event, page) {
           
           if(typeof navigator.serviceWorker !== 'undefined') {        
-            navigator.serviceWorker.register('../OneSignalSDKWorker.js?v=3.1').then(function(registration) {
+            navigator.serviceWorker.register('../OneSignalSDKWorker.js?v=3.2').then(function(registration) {
             }).catch(function(error) {
                   console.error('Falha ao registrar o Service Worker:', error);
             });
@@ -1292,24 +1292,26 @@ var app = new Framework7({
                     </div>
                 `;
                 if (data.status_compra != 3 ) {
-                  $("#btnAlterarPagamento").removeClass("display-none");                      
+                  $("#btnAlterarPagamento").removeClass("display-none");                   
                   $("#instrucao-cartao").removeClass("display-none");              
                   localStorage.setItem('pgtoPedidoId', data.pedidoId);
                 }
-        
-                
-                $("#onPedidos").on("click", function () {
-                  app.views.main.router.navigate('/pedidos/');
-                });
 
-                $("#refazerPagamento").on("click", function () {
-                  app.views.main.router.navigate('/checkout/');
+                $("#meusPedidos").removeClass("display-none");             
+                
+                $("#meusPedidos").on("click", function () {
+                  app.views.main.router.navigate('/pedidos/');
                 });
         
               } else if (formaSelecionada == 2) {
                 $("#boleto-section").removeClass("display-none");
                 $("#instrucao-boleto").removeClass("display-none");
-                $("#btnAlterarPagamento").removeClass("display-none");     
+                $("#btnAlterarPagamento").removeClass("display-none");  
+                $("#meusPedidos").removeClass("display-none");             
+                
+                $("#meusPedidos").on("click", function () {
+                  app.views.main.router.navigate('/pedidos/');
+                });   
                 
                 var codigoBoleto = document.getElementById('boleto-code');                
                 codigoBoleto.innerHTML = `${data.linhaDigitavel}`;
@@ -1331,7 +1333,12 @@ var app = new Framework7({
               } else if (formaSelecionada == 3) {
                 $("#pix-section").removeClass("display-none");
                 $("#instrucao-pix").removeClass("display-none");
-                $("#btnAlterarPagamento").removeClass("display-none");     
+                $("#btnAlterarPagamento").removeClass("display-none");   
+                $("#meusPedidos").removeClass("display-none");             
+                
+                $("#meusPedidos").on("click", function () {
+                  app.views.main.router.navigate('/pedidos/');
+                });  
                 var pixQrcode = document.getElementById('pix-qrcode');
                 var pixCodigo = document.getElementById('pix-code');
 
