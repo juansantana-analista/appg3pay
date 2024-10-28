@@ -1311,7 +1311,8 @@ form {
         margin: 10px;
       }
       .detalhes-btn {
-        display: flex;
-        flex-direction: column;
+        display: flex; /* Ativa o modelo flexbox */
+        justify-content: flex-start; /* Alinha os itens à esquerda */
+        align-items: center; /* Alinha verticalmente os itens ao centro */
         width: 100%;
-      }
+    }
