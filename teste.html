@@ -1,104 +1,160 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Saldo Disponível</title>
+  <title>Pagamento</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f4f9;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 20px;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      margin: 0;
     }
-    .container {
-      background-color: white;
-      border-radius: 10px;
+
+    .payment-container {
+      background-color: #fff;
+      border-radius: 8px;
       padding: 20px;
       width: 300px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       text-align: center;
     }
-    .balance-header {
+
+    .payment-title {
       font-size: 18px;
-      margin-bottom: 10px;
-      color: #555;
-    }
-    .balance-amount {
-      font-size: 28px;
       font-weight: bold;
       margin-bottom: 10px;
     }
-    .balance-amount span {
-      color: #333;
+
+    .total-amount {
+      color: #e74c3c;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
     }
-    .crypto-link {
-      display: block;
+
+    .due-date {
+      color: #e74c3c;
       font-size: 14px;
-      color: #007bff;
-      text-decoration: none;
       margin-bottom: 20px;
     }
-    .buttons {
-      display: flex;
-      justify-content: space-between;
+
+    .payment-method {
+      margin-bottom: 10px;
     }
-    .button {
-      width: 48%;
+
+    .pix-code {
+      background-color: #f5f5f5;
       padding: 10px;
-      border: none;
-      border-radius: 5px;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
+      border-radius: 4px;
+      margin-bottom: 10px;
     }
-    .withdraw {
+
+    .copy-button, .change-button {
       background-color: #e74c3c;
-    }
-    .add {
-      background-color: #27ae60;
-    }
-    .eye-icon {
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
       cursor: pointer;
-      margin-left: 10px;
-      vertical-align: middle;
+      font-size: 14px;
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    .instructions {
+      text-align: left;
+      font-size: 14px;
+      margin-top: 20px;
+    }
+
+    .instructions li {
+      margin-bottom: 5px;
     }
   </style>
 </head>
 <body>
+  <div class="payment-container">
+    <div class="payment-title">Pagamento Total</div>
+    <div class="total-amount">R$199,59</div>
+    <div class="due-date">Vencimento em 29 out 2024, 09:06</div>
+    
+    <div id="payment-method-section">
+      <!-- Seção de pagamento por Pix -->
+      <div class="payment-method" id="pix-section">
+        <h4>Pagamento com Pix</h4>
+        <div class="pix-code" id="pix-code">00020101021226850014br.gov.bcb.pix...</div>
+        <button class="copy-button" onclick="copyPixCode()">Copiar Código Pix</button>
+      </div>
 
-  <div class="container">
-    <div class="balance-header">Saldo Disponível:</div>
-    <div class="balance-amount">
-      R$ <span id="balance-value">8.320,00</span>
-      <img src="https://cdn-icons-png.flaticon.com/512/565/565655.png" alt="eye" width="20" class="eye-icon" id="toggle-visibility">
+      <!-- Seção de pagamento por Boleto (oculta inicialmente) -->
+      <div class="payment-method" id="boleto-section" style="display: none;">
+        <h4>Pagamento com Boleto</h4>
+        <div class="pix-code" id="boleto-code">Clique no botão para gerar o boleto.</div>
+        <button class="copy-button" onclick="generateBoleto()">Gerar Boleto</button>
+      </div>
+
+      <!-- Seção de pagamento por Cartão (oculta inicialmente) -->
+      <div class="payment-method" id="cartao-section" style="display: none;">
+        <h4>Pagamento com Cartão</h4>
+        <button class="copy-button" onclick="payWithCard()">Pagar com Cartão</button>
+      </div>
     </div>
-    <a href="#" class="crypto-link">Ver suas criptomoedas</a>
-    <div class="buttons">
-      <button class="button withdraw">Sacar Saldo</button>
-      <button class="button add">Adicionar Saldo</button>
-    </div>
+
+    <button class="change-button" onclick="changePaymentMethod()">Alterar Forma de Pagamento</button>
+
+    <ul class="instructions">
+      <li>1. Copie o código Pix acima.</li>
+      <li>2. Acesse o app do seu banco ou internet banking de preferência.</li>
+      <li>3. Escolha pagar com o Pix, cole o código e finalize o pagamento.</li>
+    </ul>
   </div>
 
   <script>
-    const balanceValue = document.getElementById('balance-value');
-    const toggleVisibility = document.getElementById('toggle-visibility');
-    let isHidden = false;
+    let currentMethod = "pix"; // Método de pagamento atual
 
-    toggleVisibility.addEventListener('click', function () {
-      if (isHidden) {
-        balanceValue.textContent = '8.320,00';
-        toggleVisibility.src = 'https://cdn-icons-png.flaticon.com/512/565/565655.png';
+    // Função para copiar o código Pix
+    function copyPixCode() {
+      const pixCode = document.getElementById("pix-code").innerText;
+      navigator.clipboard.writeText(pixCode);
+      alert("Código Pix copiado!");
+    }
+
+    // Função para simular geração de boleto
+    function generateBoleto() {
+      document.getElementById("boleto-code").innerText = "Boleto gerado com sucesso!";
+      alert("Boleto gerado!");
+    }
+
+    // Função para simular pagamento com cartão
+    function payWithCard() {
+      alert("Pagamento com cartão iniciado.");
+    }
+
+    // Função para alternar entre os métodos de pagamento
+    function changePaymentMethod() {
+      // Oculta todos os métodos
+      document.getElementById("pix-section").style.display = "none";
+      document.getElementById("boleto-section").style.display = "none";
+      document.getElementById("cartao-section").style.display = "none";
+
+      // Altera o método de pagamento
+      if (currentMethod === "pix") {
+        currentMethod = "boleto";
+        document.getElementById("boleto-section").style.display = "block";
+      } else if (currentMethod === "boleto") {
+        currentMethod = "cartao";
+        document.getElementById("cartao-section").style.display = "block";
       } else {
-        balanceValue.textContent = '****';
-        toggleVisibility.src = 'https://cdn-icons-png.flaticon.com/512/565/565654.png';
+        currentMethod = "pix";
+        document.getElementById("pix-section").style.display = "block";
       }
-      isHidden = !isHidden;
-    });
+    }
   </script>
-
 </body>
 </html>

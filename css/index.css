@@ -1231,3 +1231,65 @@ form {
             margin-left: 10px;
             vertical-align: middle;
           }
+
+          
+    .payment-container {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        width: 300px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+  
+      .payment-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+  
+      .total-amount {
+        color: #e74c3c;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+  
+      .due-date {
+        color: #e74c3c;
+        font-size: 14px;
+        margin-bottom: 20px;
+      }
+  
+      .payment-method {
+        margin-bottom: 10px;
+      }
+  
+      .pix-code {
+        background-color: #f5f5f5;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+      }
+  
+      .copy-button, .change-button {
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        margin-top: 10px;
+        width: 100%;
+      }
+  
+      .instructions {
+        text-align: left;
+        font-size: 14px;
+        margin-top: 20px;
+      }
+  
+      .instructions li {
+        margin-bottom: 5px;
+      }

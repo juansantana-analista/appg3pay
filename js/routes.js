@@ -1239,7 +1239,7 @@ var app = new Framework7({
             if (data.status_compra == 3 ) {
               status = 'Autorizado';
             } else {
-              status = 'Não Autorizado'; // Caso queira lidar com outros valores
+              status = 'Não Autorizado';
             }
 
             // Função para criar o conteúdo dinâmico
@@ -1248,14 +1248,16 @@ var app = new Framework7({
               var pagamentoButtons = document.getElementById('pagamentoButtons');
               var formaSelecionada = data.formaSelecionada;
               var formaPagamento = '';
-        
+                            
               pagamentoBody.innerHTML = '';
               pagamentoButtons.innerHTML = '';
         
               if (formaSelecionada == 1) {
-                formaPagamento = 'Cartão';
-                pagamentoBody.innerHTML = `
-                  <div class="cartao-info">
+                $("#cartao-section").removeClass("display-none");
+                var cartaoDetalhes = document.getElementById('cartao-detalhes');
+                cartaoDetalhes.innerHTML = '';
+                
+                cartaoDetalhes.innerHTML = `
                     <div class="cartao-info-item">
                       <span class="label">Status do Pagamento:</span>
                       <p>${status}</p>
@@ -1276,51 +1278,38 @@ var app = new Framework7({
                       <span class="label">Mensagem:</span>
                       <p>${data.status_mensagem}</p>
                     </div>
-                  </div>
                 `;
-                pagamentoButtons.innerHTML = `
-                  <button class="button button-fill color-green margin-bottom margin-top" id="onPedidos">Meus Pedidos</button>
-                `;
+                if (data.status_compra != 3 ) {
+                  $("#btnAlterarPagamento").removeClass("display-none");                  
+                  localStorage.setItem('pgtoPedidoId', data.pedidoId);
+                }
         
-                document.getElementById('onPedidos').addEventListener('click', function () {
+                
+                $("#onPedidos").on("click", function () {
                   app.views.main.router.navigate('/pedidos/');
+                });
+
+                $("#refazerPagamento").on("click", function () {
+                  app.views.main.router.navigate('/checkout/');
                 });
         
               } else if (formaSelecionada == 2) {
-                formaPagamento = 'Boleto';
-                pagamentoBody.innerHTML = `
-                <div class="linha-digitavel" id="linhaDigitavel">${data.linhaDigitavel}</div>
-                <div class="boleto-info">
-                  <div class="boleto-info-item">
-                    <span class="label">Vencimento:</span>
-                    <span class="value" id="dataVencimento">${data.dataVencimento}</span>
-                  </div>
-                  <div class="boleto-info-item">
-                    <span class="label">Valor:</span>
-                    <span class="value" id="valorTotal">${data.valorTotal}</span>
-                  </div>
-                  <div class="boleto-info-item">
-                    <span class="label">Beneficiário:</span>
-                    <span class="value">G3 Pay</span>
-                  </div>
-                  <div class="boleto-info-item">
-                    <span class="label">Pagador:</span>
-                    <span class="value" id="clienteNome">${clienteNome}</span>
-                  </div>
-                </div>
-              `;
-                pagamentoButtons.innerHTML = `
-                <button class="button button-fill color-green margin-bottom margin-top" id="copiarLinha"><span class="mdi mdi-content-copy"></span> Copiar Código</button>
-                <button class="button button-fill color-blue" id="baixarBoleto"><span class="mdi mdi-file-download-outline"></span> Baixar Boleto</button>
-              `;
+                $("#boleto-section").removeClass("display-none");
+                $("#instrucao-boleto").removeClass("display-none");
+                
+                var codigoBoleto = document.getElementById('boleto-code');
+                codigoBoleto.innerHTML = '';
+                
+                codigoBoleto.innerHTML = `${data.linhaDigitavel}`;
         
                 // Copiar linha digitável
-                document.getElementById('copiarLinha').addEventListener('click', function () {
-                  copiarParaAreaDeTransferencia(data.linhaDigitavel);
-                });
+                
+              $('#copiarLinha').on('click', function () {                
+                copiarParaAreaDeTransferencia(data.linhaDigitavel);
+              });
         
                 // Baixar boleto
-                document.getElementById('baixarBoleto').addEventListener('click', function () {
+                $('#baixarBoleto').on('click', function () {   
                   app.dialog.confirm('Deseja baixar o boleto no navegador?', function () {
                     var ref = cordova.InAppBrowser.open(data.linkBoleto, '_system', 'location=no,zoom=no');
                     ref.show();
@@ -1328,18 +1317,17 @@ var app = new Framework7({
                 });
         
               } else if (formaSelecionada == 3) {
-                formaPagamento = 'Pix';
-                pagamentoBody.innerHTML = `
-                  <div class="pix-info" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-                    <div class="pix-info-item" style="margin-bottom: 20px;">
-                      <img src="${data.qrCodePix}" alt="QR Code Pix" id="qrCodePix" width="180px" />
-                    </div>
-                    <div class="pix-info-item" style="max-width: 100%; word-wrap: break-word; overflow-wrap: break-word;">
-                      <span class="label" style="font-weight: bold;">Pix Copia e Cola:</span>
-                      <span class="value" id="pixCopiaCola">${data.pixKey}</span>
-                    </div>
-                  </div>
-                `;
+                $("#pix-section").removeClass("display-none");
+                $("#instrucao-pix").removeClass("display-none");
+                var pixQrcode = document.getElementById('pix-qrcode');
+                var pixCodigo = document.getElementById('pix-code');
+
+                pixQrcode.innerHTML = '';
+                pixCodigo.innerHTML = '';
+
+                pixQrcode.innerHTML = `<img src="${data.qrCodePix}" alt="QR Code Pix" id="qrCodePix" width="180px" />`;
+                pixCodigo.innerHTML = `${data.pixKey}`;
+                
                 pagamentoButtons.innerHTML = `
                   <div style="display: flex; justify-content: center; margin-top: 20px;">
                     <button class="button button-fill color-green" id="copiarPix" style="max-width: 200px;"><span class="mdi mdi-content-copy"></span> Copiar Código Pix</button>
@@ -1347,12 +1335,11 @@ var app = new Framework7({
                 `;
         
                 // Copiar código Pix
-                document.getElementById('copiarPix').addEventListener('click', function () {
+                $('#copiarPix').on('click', function () {   
                   copiarParaAreaDeTransferencia(data.pixKey);
                 });
               }
         
-              document.getElementById('formaSelecionada').innerText = formaPagamento;
             }
         
             // Inicializar o conteúdo do pagamento
