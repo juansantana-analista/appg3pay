@@ -1289,6 +1289,7 @@ var app = new Framework7({
               } else if (formaSelecionada == 2) {
                 $("#boleto-section").removeClass("display-none");
                 $("#instrucao-boleto").removeClass("display-none");
+                $("#btnAlterarPagamento").removeClass("display-none");     
                 
                 var codigoBoleto = document.getElementById('boleto-code');                
                 codigoBoleto.innerHTML = `${data.linhaDigitavel}`;
@@ -1310,6 +1311,7 @@ var app = new Framework7({
               } else if (formaSelecionada == 3) {
                 $("#pix-section").removeClass("display-none");
                 $("#instrucao-pix").removeClass("display-none");
+                $("#btnAlterarPagamento").removeClass("display-none");     
                 var pixQrcode = document.getElementById('pix-qrcode');
                 var pixCodigo = document.getElementById('pix-code');
 
