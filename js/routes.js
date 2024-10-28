@@ -1249,7 +1249,6 @@ var app = new Framework7({
               if (formaSelecionada == 1) {
                 $("#cartao-section").removeClass("display-none");
                 var cartaoDetalhes = document.getElementById('cartao-detalhes');
-                cartaoDetalhes.innerHTML = '';
                 
                 cartaoDetalhes.innerHTML = `
                     <div class="cartao-info-item">
@@ -1313,9 +1312,6 @@ var app = new Framework7({
                 $("#instrucao-pix").removeClass("display-none");
                 var pixQrcode = document.getElementById('pix-qrcode');
                 var pixCodigo = document.getElementById('pix-code');
-
-                pixQrcode.innerHTML = '';
-                pixCodigo.innerHTML = '';
 
                 pixQrcode.innerHTML = `<img src="${data.qrCodePix}" alt="QR Code Pix" id="qrCodePix" width="180px" />`;
                 pixCodigo.innerHTML = `${data.pixKey}`;
