@@ -1165,8 +1165,7 @@ function refazerPagamento(formaPagamento, titular, numero_cartao, data_expiracao
             localStorage.setItem('pagamentoData', JSON.stringify(data));
 
             app.dialog.close();
-            app.popup.close(".popup-pagamento");
-            app.views.main.router.refreshPage();
+            app.views.main.router.navigate('/pagamento/');
 
             /* Abrir navegador para baixar boleto
             var ref = cordova.InAppBrowser.open(linkBoleto, '_system', 'location=no,zoom=no');

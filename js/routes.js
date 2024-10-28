@@ -1335,9 +1335,32 @@ var app = new Framework7({
           }
           
           $('#btnAlterarPagamento').on('click', function () {   
-            app.popup.open(".popup-pagamento");
+            app.views.main.router.navigate('/refazer-pagamento/');
           });
           
+        },
+        
+        pageBeforeRemove: function (event, page) {
+          // fazer algo antes da página ser removida do DOM
+        },
+      }
+    },    
+    {
+      path: '/refazer-pagamento/',
+      url: 'refazer-pagamento.html',
+      options: {
+        transition: 'f7-push',
+      },
+      on: {
+        pageBeforeIn: function (event, page) {
+          // fazer algo antes da página ser exibida
+          $("#menuPrincipal").hide("fast");
+        },
+        pageAfterIn: function (event, page) {
+          // fazer algo depois da página ser exibida
+        },
+        pageInit: function (event, page) {
+          // fazer algo quando a página for inicializada 
 
           // Preselecionar o método de pagamento PIX
           var pixElement = $('.payment-method[data-method="pix"]');
@@ -1402,8 +1425,8 @@ var app = new Framework7({
               refazerPagamento(formaPagamento, nomeTitular, numeroCartao, dataExpiracao, cvc);
             }
           });
+
         },
-        
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
         },
