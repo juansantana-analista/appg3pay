@@ -53,20 +53,20 @@
             class="page-content"
             style="background-color: #f4f4f4; padding-bottom: 160px"
           >
-          <div class="payment-container">
+          <div class="payment-container payment-container-a">
             <div class="payment-title">Pagamento Total</div>
             <div class="total-amount" id="totalCompra">R$199,59</div>
             <div class="due-date" id="dataVencimento">Vencimento em 29 out 2024, 09:06</div>
             
             <div id="payment-method-section">
               <!-- Seção de pagamento por Cartão (oculta inicialmente) -->
-              <div class="payment-method display-none" id="cartao-section">
+              <div class="payment-method-a display-none" id="cartao-section">
                 <h4>Pagamento com Cartão</h4>
                 <div class="pix-code" id="cartao-detalhes"></div>
               </div>
 
               <!-- Seção de pagamento por Pix -->
-              <div class="payment-method display-none" id="pix-section">
+              <div class="payment-method-a display-none" id="pix-section">
                 <h4>Pagamento com Pix</h4>
                 <div class="pix-code" id="pix-qrcode"></div>
                 <div class="pix-code" id="pix-code"></div>
@@ -74,7 +74,7 @@
               </div>
         
               <!-- Seção de pagamento por Boleto (oculta inicialmente) -->
-              <div class="payment-method display-none" id="boleto-section">
+              <div class="payment-method-a display-none" id="boleto-section">
                 <h4>Pagamento com Boleto</h4>
                 <div class="pix-code" id="boleto-code"></div>
                 <button class="copy-button" id="copiarLinha">Copiar Código do Boleto</button>
@@ -91,9 +91,9 @@
               <li>3. Escolha pagar com o Pix, cole o código e finalize o pagamento.</li>
             </ul>
             <ul class="instructions display-none" id="instrucao-boleto">
-              <li>1. Copie o código Pix acima.</li>
+              <li>1. Copie o código do Boleto acima.</li>
               <li>2. Acesse o app do seu banco ou internet banking de preferência.</li>
-              <li>3. Escolha pagar com o Pix, cole o código e finalize o pagamento.</li>
+              <li>3. Escolha pagar Boleto, cole o código e finalize o pagamento.</li>
             </ul>
             <ul class="instructions display-none" id="instrucao-cartao">
               <li>1. Copie o código Pix acima.</li>

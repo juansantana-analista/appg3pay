@@ -1233,7 +1233,7 @@ form {
           }
 
           
-    .payment-container {
+    .payment-container-a {
         background-color: #fff;
         border-radius: 8px;
         padding: 20px;
@@ -1261,7 +1261,7 @@ form {
         margin-bottom: 20px;
       }
   
-      .payment-method {
+      .payment-method-a {
         margin-bottom: 10px;
       }
   
