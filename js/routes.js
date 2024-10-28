@@ -1353,6 +1353,7 @@ var app = new Framework7({
 
             method = $(this).data('method');
             showPaymentDetails(method);
+            console.log(method);
           });
 
           function showPaymentDetails(method) {
