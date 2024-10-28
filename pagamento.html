@@ -112,7 +112,7 @@
 
           
           <!-- INÍCIO POPUP COMPARTILHAR LINK -->
-          <div class="popup popup-compartilhar">
+          <div class="popup popup-pagamento">
             <div class="view popup-view">
               <div class="page">
                 <div class="top-nav">
@@ -122,7 +122,7 @@
                     </a>
                   </div>
                   <strong class="title-descricao">
-                    <i class="ri-share-2-line"></i> Compartilhar</strong
+                    <i class="ri-share-2-line"></i> Refazer Pagamento</strong
                   >
                   <a href="/informacoes/" class="btn-header">
                     <i class="mdi mdi-information-variant"></i>
@@ -132,19 +132,25 @@
                   class="page-content container-principal"
                   style="padding-bottom: 180px"
                 >
-                <div class="container-share">
-                    <div class="header">
-                        <h2>Link de Indicação</h2>
-                    </div>
-                    <div class="qr-section">
-                        <span id="qrcode"></span>
-                        <p>Escaneie o QRCode</p>
-                    </div>
-                    <div class="transaction-history">
-                        <button>Compartilhar link</button>
-                        <span>Divulgue esse link para ampliar a sua rede!!!</span>
-                    </div>
-                </div>
+                <div class="block" style="padding-bottom: 20px;">
+                  <!-- Payment Methods Section -->
+                  <div class="section">
+                     <div class="payment-methods">
+                        <div class="payment-method active" data-method="pix">
+                           <i class="mdi mdi-qrcode"></i><br>
+                           <span>Pix</span>
+                        </div>
+                        <div class="payment-method" data-method="card">
+                           <i class="mdi mdi-credit-card"></i><br>
+                           <span>Cartão</span>
+                        </div>
+                        <div class="payment-method" data-method="boleto">
+                           <i class="mdi mdi-barcode"></i><br>
+                           <span>Boleto</span>
+                        </div>
+                     </div>
+                  </div>
+               </div>
                 </div>
               </div>
             </div>

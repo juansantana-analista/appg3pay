@@ -1331,7 +1331,77 @@ var app = new Framework7({
         
             // Inicializar o conteúdo do pagamento
             criarConteudoPagamento(data);
+
           }
+          
+          $('#btnAlterarPagamento').on('click', function () {   
+            app.popup.open(".popup-pagamento");
+          });
+          
+
+          // Preselecionar o método de pagamento PIX
+          var pixElement = $('.payment-method[data-method="pix"]');
+          pixElement.addClass('active');
+
+          // Exibir os detalhes de pagamento para PIX
+          showPaymentDetails('pix');
+
+          // Handle payment method selection
+          $('.payment-method').on('click', function () {
+            $('.payment-method').removeClass('active');
+            $(this).addClass('active');
+
+            method = $(this).data('method');
+            showPaymentDetails(method);
+          });
+
+          function showPaymentDetails(method) {
+            var paymentDetails = $('#payment-details');
+            paymentDetails.empty();
+
+            if (method === 'pix') {
+              paymentDetails.append('<p>Por favor, utilize o QR Code gerado para realizar o pagamento via PIX.</p>');
+            } else if (method === 'card') {
+              paymentDetails.append(`
+                              <div class="payment-container">
+                                <input type="text" name="nomeTitular" id="nomeTitular" placeholder="Nome">
+                                <input type="text" name="numeroCartao" id="numeroCartao" placeholder="0000 0000 0000 0000">
+                                <input type="text" name="dataExpiracao" id="dataExpiracao" placeholder="DD/AAAA">
+                                <input type="text" name="cvc" id="cvc" placeholder="000">
+                              </div>
+                            `);
+              $('#numeroCartao').mask('0000 0000 0000 0000');
+              $('#dataExpiracao').mask('00/0000');
+              $('#cvc').mask('000');
+            } else if (method === 'boleto') {
+              paymentDetails.append('<p>O boleto será gerado após a finalização da compra. Utilize-o para realizar o pagamento.</p>');
+            }
+          }
+
+
+          // Clicou em finalizar compra
+          $('#finalizarCompra').on('click', function () {
+            var formaPagamento = '';
+            if (method === "card") {
+              formaPagamento = 1;
+              var nomeTitular = $("#nomeTitular").val();
+              var numeroCartao = $("#numeroCartao").val();
+              var dataExpiracao = $("#dataExpiracao").val();
+              var cvc = $("#cvc").val();
+            } else if (method === "boleto") {
+              formaPagamento = 2;
+
+            } else if (method === "pix" || method == '') {
+              formaPagamento = 3;
+
+            } else {
+              app.dialog.alert("Forma de pagamento não selecionada. ", "Erro!");
+            }
+
+            if (formaPagamento) {
+              finalizarCompra(formaPagamento, nomeTitular, numeroCartao, dataExpiracao, cvc);
+            }
+          });
         },
         
         pageBeforeRemove: function (event, page) {
