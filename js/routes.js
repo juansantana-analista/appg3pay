@@ -1353,11 +1353,10 @@ var app = new Framework7({
 
             method = $(this).data('method');
             showPaymentDetails(method);
-            console.log(method);
           });
 
           function showPaymentDetails(method) {
-            var paymentDetails = $('#payment-details');
+            var paymentDetails = $('#repayment-details');
             paymentDetails.empty();
 
             if (method === 'pix') {
