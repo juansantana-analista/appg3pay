@@ -1267,7 +1267,6 @@ form {
   
       .pix-code {
         width: 100%; /* ou um valor fixo como 200px, se necessário */
-        max-width: 250px; /* define a largura máxima */
         padding: 10px;
         background-color: #f5f5f5;
         border-radius: 4px;
