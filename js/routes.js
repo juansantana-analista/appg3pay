@@ -1244,13 +1244,7 @@ var app = new Framework7({
 
             // Função para criar o conteúdo dinâmico
             function criarConteudoPagamento(data) {
-              var pagamentoBody = document.getElementById('pagamentoBody');
-              var pagamentoButtons = document.getElementById('pagamentoButtons');
-              var formaSelecionada = data.formaSelecionada;
-              var formaPagamento = '';
-                            
-              pagamentoBody.innerHTML = '';
-              pagamentoButtons.innerHTML = '';
+              var formaSelecionada = data.formaSelecionada;                            
         
               if (formaSelecionada == 1) {
                 $("#cartao-section").removeClass("display-none");
@@ -1325,13 +1319,7 @@ var app = new Framework7({
 
                 pixQrcode.innerHTML = `<img src="${data.qrCodePix}" alt="QR Code Pix" id="qrCodePix" width="180px" />`;
                 pixCodigo.innerHTML = `${data.pixKey}`;
-                
-                pagamentoButtons.innerHTML = `
-                  <div style="display: flex; justify-content: center; margin-top: 20px;">
-                    <button class="button button-fill color-green" id="copiarPix" style="max-width: 200px;"><span class="mdi mdi-content-copy"></span> Copiar Código Pix</button>
-                  </div>
-                `;
-        
+                       
                 // Copiar código Pix
                 $('#copiarPix').on('click', function () {   
                   copiarParaAreaDeTransferencia(data.pixKey);
