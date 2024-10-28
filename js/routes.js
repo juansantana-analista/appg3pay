@@ -29,12 +29,38 @@ var app = new Framework7({
       on: {
         pageBeforeIn: async function (event, page) {
           
-          if(typeof navigator.serviceWorker !== 'undefined') {        
-            navigator.serviceWorker.register('../OneSignalSDKWorker.js?v=3.3').then(function(registration) {
-            }).catch(function(error) {
-                  console.error('Falha ao registrar o Service Worker:', error);
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').then(registration => {
+                // Verifica se há uma atualização
+                registration.onupdatefound = () => {
+                    const installingWorker = registration.installing;
+                    installingWorker.onstatechange = () => {
+                        if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            // Nova versão disponível
+                            console.log('Uma nova versão do app está disponível. Recarregando...');
+                            window.location.reload(); // Recarrega a página para usar a nova versão
+                        }
+                    };
+                };
             });
-          }
+        
+            // Força a atualização a cada vez que a página é carregada
+            navigator.serviceWorker.getRegistration().then(registration => {
+                if (registration) {
+                    registration.update(); // Tenta atualizar o service worker
+                }
+            });
+        
+            // Verifica a versão a cada carregamento de página
+            navigator.serviceWorker.addEventListener('message', event => {
+                if (event.data.type === 'NEW_VERSION') {
+                    // Notifica o usuário para recarregar
+                    if (confirm("Uma nova versão do aplicativo está disponível. Deseja recarregar?")) {
+                        window.location.reload();
+                    }
+                }
+            });
+        }
 
           clearLocalStorage();
           // chama a função que verifica e valida o token
