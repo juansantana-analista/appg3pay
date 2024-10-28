@@ -1297,9 +1297,7 @@ var app = new Framework7({
                 $("#boleto-section").removeClass("display-none");
                 $("#instrucao-boleto").removeClass("display-none");
                 
-                var codigoBoleto = document.getElementById('boleto-code');
-                codigoBoleto.innerHTML = '';
-                
+                var codigoBoleto = document.getElementById('boleto-code');                
                 codigoBoleto.innerHTML = `${data.linhaDigitavel}`;
         
                 // Copiar linha digitável
