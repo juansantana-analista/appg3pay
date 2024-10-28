@@ -1299,3 +1299,9 @@ form {
       .instructions li {
         margin-bottom: 5px;
       }
+
+      .tab-produtos {
+        display: flex;
+        position: absolute;
+        width: 100%;
+      }
