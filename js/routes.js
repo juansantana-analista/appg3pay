@@ -35,11 +35,13 @@ var app = new Framework7({
                 registration.onupdatefound = () => {
                     const installingWorker = registration.installing;
                     installingWorker.onstatechange = () => {
+                      /*
                         if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
                             // Nova versão disponível                            
                             app.dialog.preloader("Atualizando App Aguarde...");
                             window.location.reload(); // Recarrega a página para usar a nova versão
                         }
+                            */
                     };
                 };
             });
