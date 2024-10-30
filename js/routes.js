@@ -45,11 +45,11 @@ var app = new Framework7({
             });
         
             // Força a atualização a cada vez que a página é carregada
-            navigator.serviceWorker.getRegistration().then(registration => {
-                if (registration) {
-                    registration.update(); // Tenta atualizar o service worker
-                }
-            });
+            //navigator.serviceWorker.getRegistration().then(registration => {
+              //  if (registration) {
+                //    registration.update(); // Tenta atualizar o service worker
+                //}
+            //});
         }
         
 
