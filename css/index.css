@@ -1324,8 +1324,8 @@ form {
       }
       
       .update-button {
-        width: 60px; /* Ajuste conforme necessário */
-        height: 60px; /* Ajuste conforme necessário */
+        width: 48px; /* Ajuste conforme necessário */
+        height: 48px; /* Ajuste conforme necessário */
         border-radius: 50%;
         border: none;
         background-color: var(--laranja); /* Cor do botão */
