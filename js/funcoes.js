@@ -796,6 +796,7 @@ function cepEndereco(cep) {
                 // Remover a classe display-none para exibir os campos preenchidos
                 document.getElementById('divLogradouroCliente').classList.remove('display-none');
                 document.getElementById('divNumeroCliente').classList.remove('display-none');
+                document.getElementById('divComplementoCliente').classList.remove('display-none');
                 document.getElementById('divBairroCliente').classList.remove('display-none');
                 document.getElementById('divCidadeCliente').classList.remove('display-none');
                 document.getElementById('divEstadoCliente').classList.remove('display-none');
