@@ -27,34 +27,7 @@ var app = new Framework7({
       path: '/index/',
       url: 'index.html',
       on: {
-        pageBeforeIn: async function (event, page) {
-          /*
-          if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/OneSignalSDKWorker.js').then(registration => {
-                // Verifica se há uma atualização
-                registration.onupdatefound = () => {
-                    const installingWorker = registration.installing;
-                    installingWorker.onstatechange = () => {
-                      
-                        if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            // Nova versão disponível                            
-                            app.dialog.preloader("Atualizando App Aguarde...");
-                            window.location.reload(); // Recarrega a página para usar a nova versão
-                        }
-                            
-                    };
-                };
-            });
-        
-            // Força a atualização a cada vez que a página é carregada
-            //navigator.serviceWorker.getRegistration().then(registration => {
-              //  if (registration) {
-                //    registration.update(); // Tenta atualizar o service worker
-                //}
-            //});
-        }
-        */
-        
+        pageBeforeIn: async function (event, page) {       
 
           clearLocalStorage();
           // chama a função que verifica e valida o token
