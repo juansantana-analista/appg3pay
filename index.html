@@ -13,26 +13,47 @@
       <!-- Your app title -->
       <title>G3 PAY</title>   
       <script>
+         // Inicialização do Framework7
+         const app = new Framework7({
+             // Configurações do app Framework7
+         });
+ 
          if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/OneSignalSDKWorker.js').then(registration => {
-               if (registration.waiting) {
-                     registration.waiting.postMessage('skipWaiting');
-               }
-
-               // Escuta por atualizações do Service Worker
-               registration.addEventListener('updatefound', () => {
+             navigator.serviceWorker.register('/service-worker.js').then(registration => {
+                 if (registration.waiting) {
+                     showUpdateDialog();
+                 }
+ 
+                 // Escuta por atualizações do Service Worker
+                 registration.addEventListener('updatefound', () => {
                      const newWorker = registration.installing;
                      if (newWorker) {
-                        newWorker.addEventListener('statechange', () => {
-                           if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                 newWorker.postMessage('skipWaiting');
-                           }
-                        });
+                         newWorker.addEventListener('statechange', () => {
+                             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                 showUpdateDialog();
+                             }
+                         });
                      }
-               });
-            });
+                 });
+             });
+ 
+             // Função para exibir o diálogo de atualização
+             function showUpdateDialog() {
+                 app.dialog.confirm(
+                     'Uma nova versão está disponível. Deseja atualizar agora?',
+                     'Atualização Disponível',
+                     () => {
+                         navigator.serviceWorker.getRegistration().then(reg => {
+                             if (reg.waiting) {
+                                 reg.waiting.postMessage('skipWaiting');
+                                 window.location.reload(); // Recarrega o app após confirmação
+                             }
+                         });
+                     }
+                 );
+             }
          }
-      </script>
+     </script>
       <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
       <script>
         window.OneSignalDeferred = window.OneSignalDeferred || [];
