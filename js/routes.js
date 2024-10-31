@@ -1071,6 +1071,7 @@ var app = new Framework7({
             if (enderecoSelecionado && enderecoSelecionado != null) {
               app.views.main.router.navigate("/checkout/");
             } else {              
+              listarEnderecos();
               app.popup.open(".popup-enderecos");
             }
           });
