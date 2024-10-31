@@ -28,43 +28,6 @@ var app = new Framework7({
       url: 'index.html',
       on: {
         pageBeforeIn: async function (event, page) {       
-
-          let updateDialogShown = false; // Flag para controlar exibição do diálogo
-         
-          if ('serviceWorker' in navigator) {
-              navigator.serviceWorker.register('/OneSignalSDKWorker.js').then(registration => {
-                  if (registration.waiting && !updateDialogShown) {
-                      showUpdateDialog();
-                  }
-          
-                  registration.addEventListener('updatefound', () => {
-                      const newWorker = registration.installing;
-                      if (newWorker) {
-                          newWorker.addEventListener('statechange', () => {
-                              if (newWorker.state === 'installed' && navigator.serviceWorker.controller && !updateDialogShown) {
-                                  showUpdateDialog();
-                              }
-                          });
-                      }
-                  });
-              });
-          
-              function showUpdateDialog() {
-                  updateDialogShown = true; // Atualiza a flag para evitar múltiplos diálogos
-                  app.dialog.confirm(
-                      'Uma nova versão está disponível. Deseja atualizar agora?',
-                      'Atualização Disponível',
-                      () => {
-                          navigator.serviceWorker.getRegistration().then(reg => {
-                              if (reg.waiting) {
-                                  reg.waiting.postMessage('skipWaiting');
-                                  window.location.reload();
-                              }
-                          });
-                      }
-                  );
-              }
-          }
           clearLocalStorage();
           // chama a função que verifica e valida o token
           var userAuthToken = localStorage.getItem('userAuthToken');
