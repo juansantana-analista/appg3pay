@@ -1070,8 +1070,8 @@ var app = new Framework7({
             var enderecoSelecionado = localStorage.getItem('enderecoDetalhes');
             if (enderecoSelecionado && enderecoSelecionado != null) {
               app.views.main.router.navigate("/checkout/");
-            } else {
-              app.dialog.alert("Por favor selecione um endereço de entrega para os produtos escolhidos. ", "Erro!");
+            } else {              
+              app.popup.open(".popup-enderecos");
             }
           });
         },
