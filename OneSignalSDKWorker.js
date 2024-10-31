@@ -1,7 +1,7 @@
 importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
 
 // nome do cache, altere quando houver alterações nos arquivos
-const CACHE_NAME = 'pwa-cache-v1.0'; 
+const CACHE_NAME = 'pwa-cache-v1.1'; 
 const RESOURCES_TO_CACHE = [
     '/',
     '/index.html',
