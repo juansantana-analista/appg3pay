@@ -12,12 +12,7 @@
       <meta name="theme-color" content="#ff7700" />
       <!-- Your app title -->
       <title>G3 PAY</title>   
-      <script>
-         // Inicialização do Framework7
-         const app = new Framework7({
-             // Configurações do app Framework7
-         });
- 
+      <script> 
          if ('serviceWorker' in navigator) {
              navigator.serviceWorker.register('/service-worker.js').then(registration => {
                  if (registration.waiting) {
