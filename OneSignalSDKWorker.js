@@ -26,23 +26,25 @@ if (workbox.navigationPreload.isSupported()) {
 }
 
 self.addEventListener('fetch', (event) => {
-  if (event.request.mode === 'navigate') {
     event.respondWith((async () => {
       try {
-        const preloadResp = await event.preloadResponse;
-
-        if (preloadResp) {
-          return preloadResp;
+        // Sempre tente buscar da rede
+        const networkResponse = await fetch(event.request);
+  
+        // Se a resposta for bem-sucedida, retorne-a
+        if (networkResponse.ok) {
+          return networkResponse;
+        } else {
+          // Se houver um erro, você pode optar por retornar uma página offline
+          const cache = await caches.open(CACHE);
+          const cachedResp = await cache.match(offlineFallbackPage);
+          return cachedResp;
         }
-
-        const networkResp = await fetch(event.request);
-        return networkResp;
       } catch (error) {
-
+        // Se a requisição falhar, tente retornar a página offline
         const cache = await caches.open(CACHE);
         const cachedResp = await cache.match(offlineFallbackPage);
         return cachedResp;
       }
     })());
-  }
-});
+  });
