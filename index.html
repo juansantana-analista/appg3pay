@@ -13,21 +13,24 @@
       <!-- Your app title -->
       <title>G3 PAY</title>   
       <script>
+let updatePending = false;
+
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/OneSignalSDKWorker.js').then(registration => {
         console.log('Service Worker registrado com sucesso:', registration);
 
-        // Escuta mudanças no estado do Service Worker
         registration.onupdatefound = () => {
             const newWorker = registration.installing;
 
             newWorker.onstatechange = () => {
                 if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                    // Uma nova versão foi instalada, peça ao usuário para atualizar
-                    console.log('Novo conteúdo disponível; atualize a página');
-                    if (confirm('Uma nova versão está disponível. Deseja atualizar agora?')) {
-                        newWorker.postMessage({ type: 'SKIP_WAITING' });
-                        window.location.reload(); // Recarrega a página
+                    // Verifica se a atualização já foi solicitada
+                    if (!updatePending) {
+                        updatePending = true; // Marca que a atualização foi solicitada
+                        if (confirm('Uma nova versão está disponível. Deseja atualizar agora?')) {
+                            newWorker.postMessage({ type: 'SKIP_WAITING' });
+                            window.location.reload();
+                        }
                     }
                 }
             };
