@@ -542,7 +542,7 @@ var app = new Framework7({
                     */
         },
         pageBeforeRemove: function (event, page) {
-          // fazer algo antes da página ser removida do DOM
+          // fazer algo antes da página ser removida do DOM      
           
           window.location.reload(true);
         },
