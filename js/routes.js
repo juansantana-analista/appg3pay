@@ -28,20 +28,20 @@ var app = new Framework7({
       url: 'index.html',
       on: {
         pageBeforeIn: async function (event, page) {
-          
+          /*
           if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/OneSignalSDKWorker.js').then(registration => {
                 // Verifica se há uma atualização
                 registration.onupdatefound = () => {
                     const installingWorker = registration.installing;
                     installingWorker.onstatechange = () => {
-                      /*
+                      
                         if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
                             // Nova versão disponível                            
                             app.dialog.preloader("Atualizando App Aguarde...");
                             window.location.reload(); // Recarrega a página para usar a nova versão
                         }
-                            */
+                            
                     };
                 };
             });
@@ -53,6 +53,7 @@ var app = new Framework7({
                 //}
             //});
         }
+        */
         
 
           clearLocalStorage();

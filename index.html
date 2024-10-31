@@ -12,6 +12,27 @@
       <meta name="theme-color" content="#ff7700" />
       <!-- Your app title -->
       <title>G3 PAY</title>   
+      <script>
+         if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/OneSignalSDKWorker.js').then(registration => {
+               if (registration.waiting) {
+                     registration.waiting.postMessage('skipWaiting');
+               }
+
+               // Escuta por atualizações do Service Worker
+               registration.addEventListener('updatefound', () => {
+                     const newWorker = registration.installing;
+                     if (newWorker) {
+                        newWorker.addEventListener('statechange', () => {
+                           if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                 newWorker.postMessage('skipWaiting');
+                           }
+                        });
+                     }
+               });
+            });
+         }
+      </script>
       <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
       <script>
         window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -157,8 +178,8 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
       <script src="lib/jwt-decode.min.js"></script>
       <!-- Roteamento do app-->
-      <script type="text/javascript" src="js/funcoes.js?v=3.3"></script>
-      <script type="text/javascript" src="js/routes.js?v=3.3"></script>
+      <script type="text/javascript" src="js/funcoes.js?"></script>
+      <script type="text/javascript" src="js/routes.js"></script>
       <script src="cordova.js"></script>
    </body>
 </html>
