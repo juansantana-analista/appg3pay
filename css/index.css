@@ -1316,3 +1316,28 @@ form {
         align-items: center; /* Alinha verticalmente os itens ao centro */
         width: 100%;
     }
+
+    .update-button-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px; /* Ajuste conforme necessário */
+      }
+      
+      .update-button {
+        width: 60px; /* Ajuste conforme necessário */
+        height: 60px; /* Ajuste conforme necessário */
+        border-radius: 50%;
+        border: none;
+        background-color: var(--laranja); /* Cor do botão */
+        color: white; /* Cor do ícone */
+        font-size: 24px; /* Tamanho do ícone */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      
+      .update-button:hover {
+        background-color: #e66800; /* Cor ao passar o mouse */
+      }

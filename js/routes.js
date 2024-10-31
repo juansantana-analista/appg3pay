@@ -514,6 +514,9 @@ var app = new Framework7({
             app.popup.open('.popup-compartilhar');
             buscarLinkAfiliado();
           });
+          $('#updateData').on('click', function () {
+            location.reload();
+          });
           /*
                     var ctx = document.getElementById('revenueChart').getContext('2d');
                     var revenueChart = new Chart(ctx, {
