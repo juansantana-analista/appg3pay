@@ -680,7 +680,7 @@ function detalhesPedido() {
                             <p>${detalhes.endereco_entrega.cep}</p>
                         </div>
                         <div class="order-total">
-                            <h3>Total</h3>
+                            <h3>Resumo</h3>
                             <p><strong>Total dos Itens:</strong> ${formatarMoeda(detalhes.valor_total)}</p>
                             <p><strong>Frete:</strong></p>
                             <p><strong>Total:</strong> ${formatarMoeda(detalhes.valor_total)}</p>

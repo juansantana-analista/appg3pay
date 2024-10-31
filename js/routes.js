@@ -1183,9 +1183,9 @@ var app = new Framework7({
             } else if (method === 'card') {
               paymentDetails.append(`
                               <div class="payment-container">
-                                <input type="text" name="nomeTitular" id="nomeTitular" placeholder="Nome">
+                                <input type="text" name="nomeTitular" id="nomeTitular" placeholder="Nome" style="text-transform: uppercase;">
                                 <input type="text" name="numeroCartao" id="numeroCartao" placeholder="0000 0000 0000 0000">
-                                <input type="text" name="dataExpiracao" id="dataExpiracao" placeholder="DD/AAAA">
+                                <input type="text" name="dataExpiracao" id="dataExpiracao" placeholder="MM/AAAA">
                                 <input type="text" name="cvc" id="cvc" placeholder="000">
                               </div>
                             `);
