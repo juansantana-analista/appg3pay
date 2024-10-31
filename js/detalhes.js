@@ -7,7 +7,7 @@ if (produto) {
     $("#nome-detalhe").html(produto.nome);
     $("#rating-detalhe").html(produto.rating);
     $("#like-detalhe").html(produto.likes);
-    $("#reviews-detalhe").html(produto.reviews + ' reviews');
+    //$("#reviews-detalhe").html(produto.reviews + ' reviews');
     $("#descricao-detalhe").html(produto.descricao);
     $("#preco-detalhe").html(formatarMoeda(produto.preco));
     $("#precopromo-detalhe").html(formatarMoeda(produto.preco_promocional));
