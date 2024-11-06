@@ -572,14 +572,14 @@ var app = new Framework7({
             //buscarLinkAfiliado();
           });
           let zoomLevel = 1;
-          const maxZoom = 2;  // Limite de zoom máximo
+          const maxZoom = 1;  // Define o zoom máximo para o tamanho original da tela
           const minZoom = 0.5;  // Limite de zoom mínimo
-      
+          
           // Função para ajustar o nível de zoom
           function applyZoom() {
               $('#treeContainer').css('transform', `scale(${zoomLevel})`);
           }
-      
+          
           // Aumentar zoom
           $('#zoomIn').on('click', function () {
               if (zoomLevel < maxZoom) {
@@ -587,7 +587,7 @@ var app = new Framework7({
                   applyZoom();
               }
           });
-      
+          
           // Diminuir zoom
           $('#zoomOut').on('click', function () {
               if (zoomLevel > minZoom) {
@@ -595,6 +595,7 @@ var app = new Framework7({
                   applyZoom();
               }
           });
+          
 
         },
         pageBeforeRemove: function (event, page) {
