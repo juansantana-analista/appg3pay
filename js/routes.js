@@ -562,7 +562,7 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
-            //listarEquipe();
+          listarEquipe();
           $.getScript('js/qrcode.min.js');
           // Abrir popup compartilhamento
 
