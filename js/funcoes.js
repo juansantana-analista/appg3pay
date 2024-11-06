@@ -1829,45 +1829,39 @@ function listarEquipe() {
         .then((responseJson) => {
             // Verifica se o status é 'success'
             if (responseJson.status === 'success') {
+                const data = responseJson.data;
                 app.dialog.close();
                 
-                // Limpa o container da árvore antes de adicionar novos elementos
+                // Limpa o container de árvore
                 $('#treeContainer').empty();
 
-                // Função recursiva para montar a árvore de nós
-                function montarNos(data, parentId) {
-                    const filhos = data.filter(item => item.pid === parentId);
+                // Encontra o nó principal
+                const root = data.find(member => member.pid === null);
+                if (root) {
+                    // Insere o nó principal
+                    $('#treeContainer').append(`
+                        <div class="node">
+                            <img src="${root.img}" alt="${root.name}">
+                            <div class="name">${root.name}</div>
+                            <div class="title">${root.title}</div>
+                        </div>
+                        <div class="branch" id="branch-${root.id}"></div>
+                    `);
 
-                    if (filhos.length === 0) return null;
+                    // Filtra os filhos do nó principal
+                    const children = data.filter(member => member.pid === root.id);
 
-                    const $branch = $('<div class="branch"></div>');
-
-                    filhos.forEach(item => {
-                        // Cria o nó atual
-                        const $node = $(`
+                    // Insere cada filho no branch do nó principal
+                    children.forEach(child => {
+                        $(`#branch-${root.id}`).append(`
                             <div class="node">
-                                <img src="${item.img}" alt="${item.name}">
-                                <div class="name">${item.name}</div>
-                                <div class="title">${item.title}</div>
+                                <img src="${child.img}" alt="${child.name}">
+                                <div class="name">${child.name}</div>
+                                <div class="title">${child.title}</div>
                             </div>
                         `);
-
-                        // Recursivamente cria e adiciona os filhos desse nó
-                        const childrenBranch = montarNos(data, item.id);
-                        if (childrenBranch) {
-                            $node.append(childrenBranch);
-                        }
-
-                        // Adiciona o nó atual ao branch
-                        $branch.append($node);
                     });
-
-                    return $branch;
                 }
-
-                // Monta a árvore a partir do nó raiz (pid === null)
-                const arvoreEquipe = montarNos(responseJson.data, null);
-                $('#treeContainer').append(arvoreEquipe);
             }
         })
         .catch((error) => {
