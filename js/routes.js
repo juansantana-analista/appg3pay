@@ -564,6 +564,7 @@ var app = new Framework7({
           // fazer algo quando a página for inicializada
           listarEquipe();
           $.getScript('js/qrcode.min.js');
+          $.getScript('js/hammer.min.js');
           // Abrir popup compartilhamento
 
           $('.abrir-popup').on('click', function (e) {
@@ -572,28 +573,37 @@ var app = new Framework7({
             //buscarLinkAfiliado();
           });
           let zoomLevel = 1;
-          const maxZoom = 1;  // Define o zoom máximo para o tamanho original da tela
+          const maxZoom = 1;  // Limite de zoom máximo (tamanho original)
           const minZoom = 0.5;  // Limite de zoom mínimo
           
-          // Função para ajustar o nível de zoom
+          // Função para aplicar o zoom
           function applyZoom() {
               $('#treeContainer').css('transform', `scale(${zoomLevel})`);
           }
           
-          // Aumentar zoom
-          $('#zoomIn').on('click', function () {
-              if (zoomLevel < maxZoom) {
-                  zoomLevel += 0.1;
+          // Inicializa o Hammer.js no elemento que você quer aplicar o zoom
+          const treeContainer = document.getElementById('treeContainer');
+          const hammer = new Hammer(treeContainer);
+          
+          // Configura o Hammer.js para suportar gestos de pinça
+          hammer.get('pinch').set({ enable: true });
+          
+          // Detecta o movimento de pinça
+          hammer.on('pinch', (event) => {
+              let newZoomLevel = zoomLevel * event.scale;  // Ajusta o nível de zoom com a escala do gesto
+          
+              // Verifica se o novo zoom está dentro dos limites
+              if (newZoomLevel >= minZoom && newZoomLevel <= maxZoom) {
+                  zoomLevel = newZoomLevel;
                   applyZoom();
               }
           });
           
-          // Diminuir zoom
-          $('#zoomOut').on('click', function () {
-              if (zoomLevel > minZoom) {
-                  zoomLevel -= 0.1;
-                  applyZoom();
-              }
+          // Reseta o zoom quando o gesto de pinça termina
+          hammer.on('pinchend', () => {
+              // Arredonda o zoom para evitar valores flutuantes exagerados
+              zoomLevel = Math.min(maxZoom, Math.max(minZoom, Math.round(zoomLevel * 10) / 10));
+              applyZoom();
           });
           
 
