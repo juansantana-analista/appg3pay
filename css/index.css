@@ -1416,7 +1416,7 @@ form {
   }
   
   .zoom-controls button {
-      background-color: #007bff;
+      background-color: var(--laranja);
       color: #fff;
       border: none;
       border-radius: 50%;
