@@ -1,160 +1,104 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pagamento</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .payment-container {
-      background-color: #fff;
-      border-radius: 8px;
-      padding: 20px;
-      width: 300px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      text-align: center;
-    }
-
-    .payment-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .total-amount {
-      color: #e74c3c;
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .due-date {
-      color: #e74c3c;
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
-
-    .payment-method {
-      margin-bottom: 10px;
-    }
-
-    .pix-code {
-      background-color: #f5f5f5;
-      padding: 10px;
-      border-radius: 4px;
-      margin-bottom: 10px;
-    }
-
-    .copy-button, .change-button {
-      background-color: #e74c3c;
-      color: white;
-      border: none;
-      padding: 10px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-      margin-top: 10px;
-      width: 100%;
-    }
-
-    .instructions {
-      text-align: left;
-      font-size: 14px;
-      margin-top: 20px;
-    }
-
-    .instructions li {
-      margin-bottom: 5px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organograma Multinível</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            margin: 0;
+        }
+        .tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+        .node {
+            width: 150px;
+            height: 200px;
+            text-align: center;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+        .node img {
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+        }
+        .node .name {
+            font-size: 1rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        .node .title {
+            font-size: 0.9rem;
+            color: #777;
+            margin: 0;
+        }
+        .branch {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            position: relative;
+        }
+        .branch::before {
+            content: '';
+            position: absolute;
+            top: -1rem;
+            width: 100%;
+            height: 1px;
+            background-color: #ddd;
+        }
+        .branch::after {
+            content: '';
+            position: absolute;
+            top: -1rem;
+            left: 50%;
+            width: 1px;
+            height: 1rem;
+            background-color: #ddd;
+        }
+    </style>
 </head>
 <body>
-  <div class="payment-container">
-    <div class="payment-title">Pagamento Total</div>
-    <div class="total-amount">R$199,59</div>
-    <div class="due-date">Vencimento em 29 out 2024, 09:06</div>
-    
-    <div id="payment-method-section">
-      <!-- Seção de pagamento por Pix -->
-      <div class="payment-method" id="pix-section">
-        <h4>Pagamento com Pix</h4>
-        <div class="pix-code" id="pix-code">00020101021226850014br.gov.bcb.pix...</div>
-        <button class="copy-button" onclick="copyPixCode()">Copiar Código Pix</button>
-      </div>
 
-      <!-- Seção de pagamento por Boleto (oculta inicialmente) -->
-      <div class="payment-method" id="boleto-section" style="display: none;">
-        <h4>Pagamento com Boleto</h4>
-        <div class="pix-code" id="boleto-code">Clique no botão para gerar o boleto.</div>
-        <button class="copy-button" onclick="generateBoleto()">Gerar Boleto</button>
-      </div>
-
-      <!-- Seção de pagamento por Cartão (oculta inicialmente) -->
-      <div class="payment-method" id="cartao-section" style="display: none;">
-        <h4>Pagamento com Cartão</h4>
-        <button class="copy-button" onclick="payWithCard()">Pagar com Cartão</button>
-      </div>
+<div class="tree">
+    <!-- Nodo principal -->
+    <div class="node">
+        <img src="https://static.wixstatic.com/media/81ddb0_444389da9c0d46728c64944a86ccb524~mv2.jpg/v1/fill/w_1903,h_790,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/81ddb0_444389da9c0d46728c64944a86ccb524~mv2.jpg" alt="Juan Santana da Silva">
+        <div class="name">Juan Santana da Silva</div>
+        <div class="title">PRINCIPAL</div>
     </div>
+    <!-- Filhos -->
+    <div class="branch">
+        <div class="node">
+            <img src="https://g3pay.com.br/wp-content/uploads/2024/07/LOGO-G3-PAY-SEM-FUNDO-1024x1024.png" alt="Matheus Bonfim da Rocha">
+            <div class="name">Matheus Bonfim da Rocha</div>
+            <div class="title">Afiliado</div>
+        </div>
+        <div class="node">
+            <img src="https://g3pay.com.br/wp-content/uploads/2024/07/LOGO-G3-PAY-SEM-FUNDO-1024x1024.png" alt="Maycon Fernandes">
+            <div class="name">Maycon Fernandes</div>
+            <div class="title">Afiliado</div>
+        </div>
+    </div>
+</div>
 
-    <button class="change-button" onclick="changePaymentMethod()">Alterar Forma de Pagamento</button>
-
-    <ul class="instructions">
-      <li>1. Copie o código Pix acima.</li>
-      <li>2. Acesse o app do seu banco ou internet banking de preferência.</li>
-      <li>3. Escolha pagar com o Pix, cole o código e finalize o pagamento.</li>
-    </ul>
-  </div>
-
-  <script>
-    let currentMethod = "pix"; // Método de pagamento atual
-
-    // Função para copiar o código Pix
-    function copyPixCode() {
-      const pixCode = document.getElementById("pix-code").innerText;
-      navigator.clipboard.writeText(pixCode);
-      alert("Código Pix copiado!");
-    }
-
-    // Função para simular geração de boleto
-    function generateBoleto() {
-      document.getElementById("boleto-code").innerText = "Boleto gerado com sucesso!";
-      alert("Boleto gerado!");
-    }
-
-    // Função para simular pagamento com cartão
-    function payWithCard() {
-      alert("Pagamento com cartão iniciado.");
-    }
-
-    // Função para alternar entre os métodos de pagamento
-    function changePaymentMethod() {
-      // Oculta todos os métodos
-      document.getElementById("pix-section").style.display = "none";
-      document.getElementById("boleto-section").style.display = "none";
-      document.getElementById("cartao-section").style.display = "none";
-
-      // Altera o método de pagamento
-      if (currentMethod === "pix") {
-        currentMethod = "boleto";
-        document.getElementById("boleto-section").style.display = "block";
-      } else if (currentMethod === "boleto") {
-        currentMethod = "cartao";
-        document.getElementById("cartao-section").style.display = "block";
-      } else {
-        currentMethod = "pix";
-        document.getElementById("pix-section").style.display = "block";
-      }
-    }
-  </script>
 </body>
 </html>
