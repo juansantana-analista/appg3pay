@@ -1406,10 +1406,13 @@ form {
     }
 
     .zoom-controls {
+      position: fixed;
+      bottom: 100px;  /* Distância do final da tela */
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
       justify-content: center;
-      margin-bottom: 10px;
-      z-index: 9999;
+      z-index: 1000;  /* Certifique-se de que fica acima do conteúdo */
   }
   
   .zoom-controls button {
@@ -1417,11 +1420,12 @@ form {
       color: #fff;
       border: none;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      font-size: 20px;
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
       margin: 0 5px;
       cursor: pointer;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   }
   
   .zoom-controls button:focus {
