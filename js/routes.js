@@ -566,6 +566,7 @@ var app = new Framework7({
           // Abrir popup compartilhamento
 
           $('.abrir-popup').on('click', function (e) {
+            listarEquipe();
             e.preventDefault(); // Prevent default link behavior
             app.popup.open('.popup-compartilhar');
             //buscarLinkAfiliado();
