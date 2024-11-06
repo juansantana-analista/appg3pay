@@ -1794,6 +1794,83 @@ function listarCarrinhoCheckout() {
 }
 //Fim Função Listar Carrinho Checkout
 
+//Inicio Funçao Listar Equipe
+function listarEquipe() {
+    var userAuthToken = localStorage.getItem('userAuthToken');
+    app.dialog.preloader("Carregando...");
+    const pessoaId = localStorage.getItem('pessoaId');
+
+    const dados = {
+          pessoa_id: pessoaId
+    };
+
+    // Cabeçalhos da requisição
+    const headers = {
+        "Content-Type": "application/json",
+        "Authorization": 'Bearer ' + userAuthToken,
+    };
+
+    const body = JSON.stringify({
+        class: "PessoaRestService",
+        method: "ListaRede",
+        dados: dados
+    });
+
+    // Opções da requisição
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: body,
+    };
+
+    // Fazendo a requisição
+    fetch(apiServerUrl, options)
+        .then((response) => response.json())
+        .then((responseJson) => {
+            // Verifica se o status é 'success'
+            if (responseJson.status === 'success') {
+                app.dialog.close();
+                
+                // Limpa o container da árvore antes de adicionar novos elementos
+                $('#treeContainer').empty();
+
+                // Função recursiva para montar a árvore de nós
+                function montarNos(data, parentId) {
+                    return data.filter(item => item.pid === parentId)
+                               .map(item => {
+                        // Cria um elemento de nó
+                        const $node = $(`
+                            <div class="node">
+                                <img src="${item.img}" alt="${item.name}">
+                                <div class="name">${item.name}</div>
+                                <div class="title">${item.title}</div>
+                            </div>
+                        `);
+
+                        // Adiciona filhos ao nó
+                        const children = montarNos(data, item.id);
+                        if (children.length > 0) {
+                            const $branch = $('<div class="branch"></div>').append(children);
+                            $node.append($branch);
+                        }
+
+                        return $node;
+                    });
+                }
+
+                // Monta a árvore a partir do nó raiz (pid === null)
+                const arvoreEquipe = montarNos(responseJson.data, null);
+                $('#treeContainer').append(arvoreEquipe);
+            }
+        })
+        .catch((error) => {
+            app.dialog.close();
+            console.error("Erro:", error);
+            app.dialog.alert("Erro ao listar Equipe: " + error.message, "Falha na requisição!");
+        });
+}
+//Fim Função Listar Equipe
+
 //Inicio da Funçao formatar Moeda
 function formatarMoeda(valor) {
     var precoFormatado = parseFloat(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });

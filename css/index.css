@@ -1342,17 +1342,19 @@ form {
         background-color: #e66800; /* Cor ao passar o mouse */
       }
 
-      .tree {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 2rem;
+
+      /* Estilo da tela Equipe */
+    .tree {
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       gap: 2rem;
     }
     .node {
-        width: 150px;
-        height: 200px;
+        width: 80px;
+        height: 110px;
         text-align: center;
-        padding: 1rem;
+        padding: 0.5rem;
         border: 1px solid #ddd;
         border-radius: 8px;
         background-color: #fff;
@@ -1364,17 +1366,17 @@ form {
     }
     .node img {
         border-radius: 50%;
-        width: 80px;
-        height: 80px;
+        width: 40px;
+        height: 40px;
         object-fit: cover;
     }
     .node .name {
-        font-size: 1rem;
+        font-size: 0.6rem;
         font-weight: bold;
         margin: 0;
     }
     .node .title {
-        font-size: 0.9rem;
+        font-size: 0.5rem;
         color: #777;
         margin: 0;
     }
