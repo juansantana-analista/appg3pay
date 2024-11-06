@@ -1409,6 +1409,7 @@ form {
       display: flex;
       justify-content: center;
       margin-bottom: 10px;
+      z-index: 9999;
   }
   
   .zoom-controls button {
