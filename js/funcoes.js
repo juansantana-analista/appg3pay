@@ -1836,9 +1836,14 @@ function listarEquipe() {
 
                 // Função recursiva para montar a árvore de nós
                 function montarNos(data, parentId) {
-                    return data.filter(item => item.pid === parentId)
-                               .map(item => {
-                        // Cria um elemento de nó
+                    const filhos = data.filter(item => item.pid === parentId);
+
+                    if (filhos.length === 0) return null;
+
+                    const $branch = $('<div class="branch"></div>');
+
+                    filhos.forEach(item => {
+                        // Cria o nó atual
                         const $node = $(`
                             <div class="node">
                                 <img src="${item.img}" alt="${item.name}">
@@ -1847,15 +1852,17 @@ function listarEquipe() {
                             </div>
                         `);
 
-                        // Adiciona filhos ao nó
-                        const children = montarNos(data, item.id);
-                        if (children.length > 0) {
-                            const $branch = $('<div class="branch"></div>').append(children);
-                            $node.append($branch);
+                        // Recursivamente cria e adiciona os filhos desse nó
+                        const childrenBranch = montarNos(data, item.id);
+                        if (childrenBranch) {
+                            $node.append(childrenBranch);
                         }
 
-                        return $node;
+                        // Adiciona o nó atual ao branch
+                        $branch.append($node);
                     });
+
+                    return $branch;
                 }
 
                 // Monta a árvore a partir do nó raiz (pid === null)
