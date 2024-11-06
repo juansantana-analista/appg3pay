@@ -1404,3 +1404,25 @@ form {
         height: 1rem;
         background-color: #ddd;
     }
+
+    .zoom-controls {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 10px;
+  }
+  
+  .zoom-controls button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+      margin: 0 5px;
+      cursor: pointer;
+  }
+  
+  .zoom-controls button:focus {
+      outline: none;
+  }

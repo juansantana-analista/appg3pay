@@ -571,6 +571,30 @@ var app = new Framework7({
             app.popup.open('.popup-compartilhar');
             //buscarLinkAfiliado();
           });
+          let zoomLevel = 1;
+          const maxZoom = 2;  // Limite de zoom máximo
+          const minZoom = 0.5;  // Limite de zoom mínimo
+      
+          // Função para ajustar o nível de zoom
+          function applyZoom() {
+              $('#treeContainer').css('transform', `scale(${zoomLevel})`);
+          }
+      
+          // Aumentar zoom
+          $('#zoomIn').on('click', function () {
+              if (zoomLevel < maxZoom) {
+                  zoomLevel += 0.1;
+                  applyZoom();
+              }
+          });
+      
+          // Diminuir zoom
+          $('#zoomOut').on('click', function () {
+              if (zoomLevel > minZoom) {
+                  zoomLevel -= 0.1;
+                  applyZoom();
+              }
+          });
 
         },
         pageBeforeRemove: function (event, page) {
