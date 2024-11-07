@@ -482,7 +482,7 @@ var app = new Framework7({
     },
     {
       path: '/home/',
-      url: 'home.html',
+      url: 'home.html?v=1.0.0',
       animate: false,
       on: {
         pageBeforeIn: async function (event, page) {
