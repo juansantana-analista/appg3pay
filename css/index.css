@@ -370,8 +370,7 @@ form {
     background-color: #ffffffb4;
     height: 270px;
     /* border: 1px solid red; */
-    flex: 50%;
-    margin-right: 5px;
+    flex: 45%;
     margin-bottom: 5px;
 }
 
