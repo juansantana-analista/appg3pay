@@ -364,15 +364,17 @@ form {
 }
 
 .item-card {
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: column;
-    background-color: #ffffffb4;
-    height: 270px;
-    /* border: 1px solid red; */
-    flex: 45%;
-    margin-right: 5px;
-    margin-bottom: 5px;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  background-color: #ffffffb4;
+  height: 270px;
+  flex: 45%;
+  margin-bottom: 5px;
+}
+
+.item-card:not(:last-child) {
+  margin-right: 5px;  /* Adiciona margem direita, mas não no último item */
 }
 
 .img-container {
