@@ -883,7 +883,7 @@ var app = new Framework7({
                 listarProdutos(searchQuery, '', 'compra');
               }
             });
-            listarProdutos('', '', 'compra');
+            listarProdutos(null, null, 'compra');
           });
 
           listarProdutos();
