@@ -877,10 +877,10 @@ var app = new Framework7({
             $(document).on("input", "#search", function () {
               const searchQuery = $(this).val();
               if (searchQuery.length >= 3) {
-                listarProdutos(searchQuery, '', 'compra');
+                listarProdutos(searchQuery, null, 'compra');
               }
               if (searchQuery.length < 1) {
-                listarProdutos(searchQuery, '', 'compra');
+                listarProdutos(searchQuery, null, 'compra');
               }
             });
             listarProdutos(null, null, 'compra');
