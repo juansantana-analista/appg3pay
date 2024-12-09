@@ -365,7 +365,6 @@ form {
     justify-content: center;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px; /* Espaçamento entre os itens */
 }
 
 .item-card {
