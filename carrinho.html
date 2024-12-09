@@ -55,28 +55,14 @@
                 </div>
 
                 <!-- TAB BAR-->
-                <div id="toolbarTotais" style="margin-bottom: 100px;" class="toolbar toolbar-bottom">
-                    <div id="totais" class="toolbar-inner display-flex align-items-center justify-content-center">
-                        <div class="bd-bottom margin-top w-80 display-flex justify-content-space-between">
-                            <span>Subtotal: </span>
-                            <span id="subtotal" class="bold"></span>
-                        </div>
-                        <div class="w-80 display-flex justify-content-space-between">
-                            <span>Frete: </span>
-                            <a href="#" id="btnSelecionarEndereco"><span id="freteCarrinho" class="bold">Selecionar Endereço</span></a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TAB BAR-->
            <div class="checkout-summary">
             <div class="summary-row">
                 <span class="label">Subtotal</span>
-                <span class="value">R$10.00</span>
+                <span id="subtotal" class="value bold"></span>
             </div>
             <div class="summary-row">
                 <span class="label">Frete</span>
-                <span class="value link">Selecionar Endereço</span>
+                <a href="#" id="btnSelecionarEndereco"><span id="freteCarrinho" class="value link bold">Selecionar Endereço</span></a>
             </div>
             <button id="irCheckout" class="add-cart">Comprar 😎</button>
         </div>
