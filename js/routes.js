@@ -836,6 +836,37 @@ var app = new Framework7({
             }
           });
 
+          // Manipular clique no botão "Venda"
+          $('#btn-venda').click(function () {
+            // Alterar estilos para o botão "Venda"
+            $(this).css({
+              'background-color': '#FF4B00',
+              color: '#ffffff',
+            });
+            // Alterar estilos para o botão "Compra"
+            $('#btn-compra').css({
+              'background-color': '#f4f4f4',
+              color: '#333',
+            });
+
+            // Adicionar lógica adicional para seleção "Venda"
+            console.log('Modo Venda selecionado');
+          });
+
+          // Manipular clique no botão "Compra"
+          $('#btn-compra').click(function () {
+            // Alterar estilos para o botão "Compra"
+            $(this).css({
+              'background-color': '#FF4B00',
+              color: '#ffffff',
+            });
+            // Alterar estilos para o botão "Venda"
+            $('#btn-venda').css({
+              'background-color': '#f4f4f4',
+              color: '#333',
+            });
+
+
           $(document).on("input", "#search", function () {
             const searchQuery = $(this).val();
             if (searchQuery.length >= 3) {
