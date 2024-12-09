@@ -81,7 +81,7 @@ body {
 }
 
 .bottom-nav a.active {
-  color: #007BFF;
+  color: var(--laranja);
 }
 
 .bottom-nav a i {
