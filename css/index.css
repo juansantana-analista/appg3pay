@@ -1431,3 +1431,77 @@ form {
   .zoom-controls button:focus {
       outline: none;
   }
+
+  /*Page Code reset senha/*
+      /* Custom styling for code input screen */
+      .page-code {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        padding: 20px;
+        background: #f7f8fa;
+      }
+  
+      .form-container {
+        text-align: center;
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+  
+      .form-container h1 {
+        font-size: 24px;
+        margin-bottom: 15px;
+        color: #333;
+      }
+  
+      .form-container p {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 20px;
+      }
+  
+      .code-inputs {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+  
+      .code-inputs input {
+        width: 48px;
+        height: 48px;
+        font-size: 18px;
+        text-align: center;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        background: #f9f9f9;
+        transition: border-color 0.3s;
+      }
+  
+      .code-inputs input:focus {
+        border-color: #8D51FF;
+        outline: none;
+        background: #fff;
+      }
+  
+      .btn-submit {
+        width: 100%;
+        padding: 12px;
+        background-color: #8D51FF;
+        color: #fff;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+  
+      .btn-submit:hover {
+        background-color: #7a46db;
+      }
