@@ -361,6 +361,9 @@ form {
 
 .item {
     color: var(--preto);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* Espaçamento entre os itens */
 }
 
 .item-card {
@@ -371,10 +374,26 @@ form {
   height: 270px;
   flex: 45%;
   margin-bottom: 5px;
+  position: relative;
 }
 
-.item-card:not(:last-child) {
-  margin-right: 5px;  /* Adiciona margem direita, mas não no último item */
+.item-card:not(:nth-child(2n)) {
+  margin-right: 5px; /* Adiciona margem somente nos itens da esquerda (não no último item) */
+}
+
+.item-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1px;
+  background-color: #ccc;
+  height: 100%;
+  display: block;
+}
+
+.item-card:nth-child(2n)::after {
+  display: none; /* Remove a divisória para o último item */
 }
 
 .img-container {
