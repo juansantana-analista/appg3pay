@@ -39,39 +39,43 @@
               <input type="text" maxlength="1" class="code" data-index="4">
               <input type="text" maxlength="1" class="code" data-index="5">
             </div>
-            <button class="btn-submit">Confirmar</button>
+            <button class="btn-submit-code" id="confirmarCodigo">Confirmar</button>
           </div>
+          <div class="popup popup-redefinir-senha">
+            <div class="view popup-view">
+              <div class="page">
+                <div class="navbar tema no-shadow">
+                  <div class="navbar-inner">
+                    <div class="left">
+                      <a class="link popup-close">
+                        <i class="mdi mdi-arrow-left"></i>
+                      </a>
+                    </div>
+                    <div class="title">Redefinir Senha</div>
+                  </div>
+                </div>
+                <div class="page-content">
+                  <h2>Nova Senha</h2>
+                  <p>Digite uma nova senha segura para sua conta.</p>
+                  <div class="form-group">
+                    <input type="password" id="new-password" placeholder="Nova senha">
+                  </div>
+                  <div class="form-group">
+                    <input type="password" id="confirm-password" placeholder="Confirme a nova senha">
+                  </div>
+                  <button id="submit-password">Salvar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
   </div>
   <!-- Path to Framework7 Library Bundle JS-->
   <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
-    <!-- Custom JavaScript -->
-    <script>
-      document.querySelectorAll('.code').forEach((input, index) => {
-        input.addEventListener('input', (e) => {
-          if (e.target.value.length === 1 && index < 5) {
-            document.querySelector(`.code[data-index="${index + 1}"]`).focus();
-          }
-        });
-  
-        input.addEventListener('keydown', (e) => {
-          if (e.key === "Backspace" && index > 0 && e.target.value === "") {
-            document.querySelector(`.code[data-index="${index - 1}"]`).focus();
-          }
-        });
-      });
-  
-      document.querySelector('.btn-submit').addEventListener('click', () => {
-        const code = Array.from(document.querySelectorAll('.code')).map(input => input.value).join('');
-        if (code.length === 6) {
-          alert(`Código inserido: ${code}`);
-        } else {
-          alert('Por favor, insira todos os 6 dígitos do código.');
-        }
-      });
-    </script>
+
   <!-- jQuery -->
   <script type="text/javascript" src="lib/jquery-3.7.0.min.js"></script>
   <!-- Roteamento do app-->

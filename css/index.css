@@ -1489,7 +1489,7 @@ form {
         background: #fff;
       }
   
-      .btn-submit {
+      .btn-submit-code {
         width: 100%;
         padding: 12px;
         background-color: #8D51FF;
@@ -1502,6 +1502,78 @@ form {
         transition: background-color 0.3s;
       }
   
-      .btn-submit:hover {
+      .btn-submit-code:hover {
         background-color: #7a46db;
+      }
+      .popup-redefinir-senha {
+        max-width: 400px;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      }
+  
+      .popup-redefinir-senha .navbar {
+        background: #8D51FF;
+        color: white;
+      }
+  
+      .popup-redefinir-senha .navbar .title {
+        font-size: 18px;
+        font-weight: bold;
+      }
+  
+      .popup-redefinir-senha .page-content {
+        padding: 20px;
+      }
+  
+      .popup-redefinir-senha h2 {
+        font-size: 22px;
+        margin-bottom: 10px;
+        color: #333;
+      }
+  
+      .popup-redefinir-senha p {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 20px;
+      }
+  
+      .popup-redefinir-senha .form-group {
+        margin-bottom: 15px;
+      }
+  
+      .popup-redefinir-senha input[type="password"],
+      .popup-redefinir-senha button {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        outline: none;
+        box-sizing: border-box;
+      }
+  
+      .popup-redefinir-senha input[type="password"] {
+        background: #f9f9f9;
+        margin-bottom: 15px;
+      }
+  
+      .popup-redefinir-senha input[type="password"]:focus {
+        border-color: #8D51FF;
+        background: #fff;
+      }
+  
+      .popup-redefinir-senha button {
+        background: #8D51FF;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.3s;
+      }
+  
+      .popup-redefinir-senha button:hover {
+        background: #7a46db;
       }
