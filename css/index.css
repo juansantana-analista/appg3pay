@@ -1300,6 +1300,37 @@ form {
         margin-bottom: 5px;
       }
 
+      .tab-toggle-container {
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 0;
+        padding: 5px;
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .tab-toggle {
+        flex: 1;
+        text-align: center;
+        padding: 10px 0;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 6px;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .tab-toggle.active {
+        background-color: #ff4b00;
+        color: #ffffff;
+      }
+
+      .tab-toggle:not(.active) {
+        background-color: #f7f7f7;
+        color: #333;
+      }
+      
       .tab-produtos {
         position: fixed;
         bottom: 0;
