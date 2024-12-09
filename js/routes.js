@@ -333,77 +333,6 @@ var app = new Framework7({
           });
           //END BOTÃO RECUPERAR SENHA
 
-          //START BOTÃO SALVAR SENHA
-          $("#salvarSenha").on("click", function () {
-            var emailRecuperacao = localStorage.getItem("emailRecuperacao");
-            var codigoRecuperacao = localStorage.getItem("codigoRecuperacao");
-            // Obtenha os valores dos campos de senha
-            var novaSenha = $("#novaSenha").val();
-            var reNovaSenha = $("#reNovaSenha").val();
-
-            // Verifique se as senhas conferem
-            if (novaSenha !== reNovaSenha) {
-              app.dialog.alert('As senhas não conferem. Por favor, verifique.');
-              return;
-            }
-
-            // Verifique se as senhas têm no mínimo 8 caracteres
-            if (novaSenha.length < 8) {
-              app.dialog.alert('A senha deve ter no mínimo 8 caracteres.');
-              return;
-            }
-
-            const apiServerUrl = apiServer + "salvar_senha.php";
-
-            const headers = {
-              "Content-Type": "application/json",
-              "Authorization": "Bearer " + appId,
-            };
-
-            const body = JSON.stringify({
-              email: emailRecuperacao,
-              codigo: codigoRecuperacao,
-              senha: novaSenha,
-            });
-
-            const options = {
-              method: "POST",
-              headers: headers,
-              body: body,
-            };
-
-            fetch(apiServerUrl, options)
-              .then((response) => response.json())
-              .then((data) => {
-                app.dialog.close();
-                if (data.message == true) {
-                  app.popup.close(".popup-nova-senha");
-                  app.dialog.alert(
-                    "Sucesso, Senha alterada com sucesso, faça o Login.",
-                    '<i class="mdi mdi-alert"></i> Sucesso'
-                  );
-                } else {
-                  app.dialog.close();
-                  app.dialog.alert(
-                    "Erro, Código informado inválido ou expirado.",
-                    '<i class="mdi mdi-alert"></i> Código Inválido'
-                  );
-                }
-              })
-              .catch((error) => {
-                console.error("Erro:", error);
-                app.dialog.close();
-                app.dialog.alert(
-                  "Erro, Código informado invalido ou expirado.",
-                  '<i class="mdi mdi-alert"></i> Código Inválido'
-                );
-              });
-
-          });
-          localStorage.removeItem("emailRecuperacao");
-          localStorage.removeItem("codigoRecuperacao");
-          //END BOTÃO SALVAR SENHA
-
           //START AÇÃO BOTÃO REGISTER
           $("#register").on("click", function () {
             app.views.main.router.navigate("/registerView/");
@@ -491,10 +420,69 @@ var app = new Framework7({
             } else {
               return('Por favor, insira todos os 6 dígitos do código.');
             }
-
-
           });
           //END BOTÃO VALIDAR CODIGO
+             
+          //START BOTÃO SALVAR NOVA SENHA
+          $("#submit-password").on("click", function () {
+            var emailRecuperacao = localStorage.getItem("emailRecuperacao");
+            var codigoRecuperacao = localStorage.getItem("codigoRecuperacao");
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+      
+            if (newPassword && confirmPassword && newPassword === confirmPassword) {
+              const headers = {
+                  "Content-Type": "application/json"
+                };
+    
+                const body = JSON.stringify({
+                  email: emailRecuperacao,
+                  code: codigoRecuperacao,
+                  password: newPassword
+                });
+    
+                const options = {
+                  method: "POST",
+                  headers: headers,
+                  body: body,
+                };
+    
+                fetch('https://escritorio.g3pay.com.br/api/validate_code.php', options)
+                  .then((response) => response.json())
+                  .then((data) => {
+                    app.dialog.close();
+                    if (data.status == 'success' && data.data.status == 'success') {
+                      app.dialog.alert(
+                        "Sucesso, Senha alterada.",
+                        '<i class="mdi mdi-alert"></i> Sucesso'
+                      );
+                      app.popup.close(".popup-redefinir-senha");                      
+                      app.views.main.router.navigate("/login-view/");    
+                    } else {
+                      app.dialog.close();
+                      app.dialog.alert(
+                        "Erro, Código informado invalido ou expirado.",
+                        '<i class="mdi mdi-alert"></i> Código Inválido'
+                      );
+                    }
+                  })
+                  .catch((error) => {
+                    console.error("Erro:", error);
+                    app.dialog.close();
+                    app.dialog.alert(
+                      "Erro, Código informado invalido ou expirado.",
+                      '<i class="mdi mdi-alert"></i> Código Inválido'
+                    );
+                  });
+            } else {
+              app.dialog.alert(
+                "As senhas não coincidem. Por favor, tente novamente",
+                '<i class="mdi mdi-alert"></i> Erro'
+              );
+            }
+            
+          });
+          //END BOTÃO SALVAR NOVA SENHA
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM      
