@@ -784,7 +784,6 @@ var app = new Framework7({
           // fazer algo quando a página for inicializada
           contarCarrinho();
           listarBanners();
-          var teste ='';
 
           var swiper = new Swiper(".mySwiper", {
             slidesPerView: 1,
@@ -897,7 +896,7 @@ var app = new Framework7({
     },
     {
       path: '/detalhes/',
-      url: 'detalhes.html',
+      url: 'detalhes.html?v=1.0.1',
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
