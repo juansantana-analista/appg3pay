@@ -25,7 +25,7 @@ var app = new Framework7({
   routes: [
     {
       path: '/index/',
-      url: 'index.html',
+      url: 'index.html?v=1.0.1',
       on: {
         pageBeforeIn: async function (event, page) {       
           clearLocalStorage();
@@ -346,7 +346,7 @@ var app = new Framework7({
     },
     {
       path: '/validar-codigo/',
-      url: 'validar-codigo.html',
+      url: 'validar-codigo.html?v=1.0.1',
       animate: false,
       on: {
         pageBeforeIn: async function (event, page) {
@@ -491,7 +491,7 @@ var app = new Framework7({
     },
     {
       path: '/home/',
-      url: 'home.html',
+      url: 'home.html?v=1.0.1',
       animate: false,
       on: {
         pageBeforeIn: async function (event, page) {
@@ -761,7 +761,7 @@ var app = new Framework7({
     },
     {
       path: '/produtos/',
-      url: 'produtos.html',
+      url: 'produtos.html?v=1.0.1',
       animate: false,
       on: {
         pageBeforeIn: async function (event, page) {
@@ -1061,7 +1061,7 @@ var app = new Framework7({
     },
     {
       path: '/carrinho/',
-      url: 'carrinho.html',
+      url: 'carrinho.html?v=1.0.1',
       options: {
         transition: 'f7-push',
       },
@@ -1135,7 +1135,7 @@ var app = new Framework7({
     },
     {
       path: '/offline/',
-      url: 'offline.html',
+      url: 'offline.html?v=1.0.1',
       options: {
         transition: 'f7-push',
       },
@@ -1157,7 +1157,7 @@ var app = new Framework7({
     },
     {
       path: '/checkout/',
-      url: 'checkout.html',
+      url: 'checkout.html?v=1.0.1',
       options: {
         transition: 'f7-push',
       },
@@ -1300,7 +1300,7 @@ var app = new Framework7({
     },
     {
       path: '/pagamento/',
-      url: 'pagamento.html',
+      url: 'pagamento.html?v=1.0.1',
       options: {
         transition: 'f7-push',
       },
@@ -1445,7 +1445,7 @@ var app = new Framework7({
     },    
     {
       path: '/refazer-pagamento/',
-      url: 'refazer-pagamento.html',
+      url: 'refazer-pagamento.html?v=1.0.1',
       options: {
         transition: 'f7-push',
       },
