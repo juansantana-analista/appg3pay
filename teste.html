@@ -1,104 +1,110 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organograma Multinível</title>
+    <title>Detalhes do Produto</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/framework7/7.0.0/css/framework7.bundle.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f5f5f5;
             margin: 0;
+            font-family: Arial, sans-serif;
         }
-        .tree {
+        .navbar-carrinho {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2rem;
-        }
-        .node {
-            width: 80px;
-            height: 110px;
-            text-align: center;
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: space-between;
-            box-sizing: border-box;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: #007aff;
+            color: #fff;
         }
-        .node img {
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
+        .navbar-carrinho .left {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-carrinho .right {
+            display: flex;
+            gap: 15px;
+        }
+        .navbar-carrinho .icon {
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .product-image {
+            width: 100%;
+            height: 300px;
             object-fit: cover;
         }
-        .node .name {
-            font-size: 0.6rem;
-            font-weight: bold;
-            margin: 0;
+        .product-info {
+            padding: 15px;
         }
-        .node .title {
-            font-size: 0.5rem;
-            color: #777;
-            margin: 0;
-        }
-        .branch {
+        .product-info .stats {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 2rem;
-            position: relative;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+            gap: 20px;
+            color: #666;
         }
-        .branch::before {
-            content: '';
-            position: absolute;
-            top: -1rem;
-            width: 100%;
-            height: 1px;
-            background-color: #ddd;
+        .product-info h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
         }
-        .branch::after {
-            content: '';
-            position: absolute;
-            top: -1rem;
-            left: 50%;
-            width: 1px;
-            height: 1rem;
-            background-color: #ddd;
+        .product-info p {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #666;
         }
     </style>
 </head>
 <body>
-
-<div class="tree">
-    <!-- Nodo principal -->
-    <div class="node">
-        <img src="https://static.wixstatic.com/media/81ddb0_444389da9c0d46728c64944a86ccb524~mv2.jpg/v1/fill/w_1903,h_790,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/81ddb0_444389da9c0d46728c64944a86ccb524~mv2.jpg" alt="Juan Santana da Silva">
-        <div class="name">Juan Santana da Silva</div>
-        <div class="title">PRINCIPAL</div>
-    </div>
-    <!-- Filhos -->
-    <div class="branch">
-        <div class="node">
-            <img src="https://g3pay.com.br/wp-content/uploads/2024/07/LOGO-G3-PAY-SEM-FUNDO-1024x1024.png" alt="Matheus Bonfim da Rocha">
-            <div class="name">Matheus Bonfim da Rocha</div>
-            <div class="title">Afiliado</div>
+    <div id="app">
+        <!-- Navbar -->
+        <div class="navbar-carrinho">
+            <div class="left">
+                <div class="icon" id="back-button">&lt;</div>
+            </div>
+            <div class="right">
+                <div class="icon" id="like-button">&#10084;</div>
+                <div class="icon" id="share-button">&#x1F517;</div>
+            </div>
         </div>
-        <div class="node">
-            <img src="https://g3pay.com.br/wp-content/uploads/2024/07/LOGO-G3-PAY-SEM-FUNDO-1024x1024.png" alt="Maycon Fernandes">
-            <div class="name">Maycon Fernandes</div>
-            <div class="title">Afiliado</div>
+
+        <!-- Product Image -->
+        <img src="https://via.placeholder.com/300" alt="Produto" class="product-image">
+
+        <!-- Product Info -->
+        <div class="product-info">
+            <div class="stats">
+                <span id="likes-count">💖 100 curtidas</span>
+                <span id="reviews-count">⭐ 50 avaliações</span>
+            </div>
+            <h1 id="product-name">Nome do Produto</h1>
+            <p id="product-description">Descrição detalhada do produto para atrair os usuários e fornecer informações úteis.</p>
         </div>
     </div>
-</div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/framework7/7.0.0/js/framework7.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Ação do botão de voltar
+            $('#back-button').on('click', function () {
+                alert('Voltando à página anterior');
+            });
+
+            // Ação do botão de like
+            $('#like-button').on('click', function () {
+                const likesCountElement = $('#likes-count');
+                let likes = parseInt(likesCountElement.text().match(/\d+/)[0]);
+                likes++;
+                likesCountElement.text(`💖 ${likes} curtidas`);
+            });
+
+            // Ação do botão de compartilhar
+            $('#share-button').on('click', function () {
+                alert('Link copiado para a área de transferência!');
+            });
+        });
+    </script>
 </body>
 </html>
