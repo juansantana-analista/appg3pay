@@ -13,18 +13,7 @@
       <!-- Your app title -->
       <title>G3 PAY</title>   
       <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>    
-      <script>
-         if (typeof navigator.serviceWorker !== 'undefined') {
-           navigator.serviceWorker.register('OneSignalSDKWorker.js')
-         }
-        window.OneSignalDeferred = window.OneSignalDeferred || [];
-        OneSignalDeferred.push(async function(OneSignal) {
-          await OneSignal.init({
-            appId: "7bfc9cb0-b251-4b3a-be5c-be82c1a143e2",
-            safari_web_id: "web.onesignal.auto.3fd215f3-eebf-45ec-a840-b342bc8d8df9"
-          });
-        });
-      </script>
+
       <!-- Path to Framework7 Library Bundle CSS -->
       <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
       <!-- CSS PERSONALIZADO PARA MENU-->
