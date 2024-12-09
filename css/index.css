@@ -1669,9 +1669,6 @@ form {
       .popup-redefinir-senha button:hover {
         background: #7a46db;
       }
-      .product-info {
-        padding: 8px;
-    }
     .product-info .stats {
         display: flex;
         justify-content: flex-end;
