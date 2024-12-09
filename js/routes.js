@@ -865,7 +865,9 @@ var app = new Framework7({
               'background-color': '#f4f4f4',
               color: '#333',
             });
-
+            // Adicionar lógica adicional para seleção "Compra"
+            console.log('Modo Compra selecionado');
+          });
 
           $(document).on("input", "#search", function () {
             const searchQuery = $(this).val();
