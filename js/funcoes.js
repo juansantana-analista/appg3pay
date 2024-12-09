@@ -279,6 +279,8 @@ function buscarProduto(produtoId) {
             // Verifica se o status é 'success' e se há dados de pedidos
             if (responseJson.status === "success") {
                 const detalhes = responseJson.data;
+            
+                $("#product-name").html(detalhes.nome);
                 $("#descricao-detalhe").html(detalhes.descricao_app);
 
                 app.dialog.close();
