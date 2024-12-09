@@ -364,14 +364,19 @@ form {
 }
 
 .item-card {
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: column;
-    background-color: #ffffffb4;
-    height: 270px;
-    /* border: 1px solid red; */
-    flex: 45%;
-    margin-bottom: 5px;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  background-color: #ffffffb4;
+  height: 270px;
+  flex: 45%;
+  margin-bottom: 5px;
+  margin-right: 10px;  /* Espaço entre os itens */
+  position: relative;
+}
+
+.item-card:not(:last-child) {
+  border-right: 1px solid #ccc; /* Adiciona uma borda direita */
 }
 
 .img-container {
