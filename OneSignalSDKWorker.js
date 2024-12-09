@@ -33,14 +33,17 @@ self.addEventListener('activate', (event) => {
 // Evento fetch para interceptar requisições
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    fetch(event.request)
+    fetch(event.request, { cache: 'no-store' }) // Força a busca sem cache
       .then((response) => {
-        // Retorna a resposta diretamente do servidor
-        return response;
+        return response; // Retorna a resposta diretamente do servidor
       })
       .catch((error) => {
-        console.error('Falha ao buscar:', error);
-        throw error; // Opcional: pode exibir uma mensagem de erro customizada
+        console.error('Erro ao buscar o recurso:', error);
+        // Exibe um fallback ou mensagem de erro se necessário
+        return new Response('Falha ao carregar o conteúdo.', {
+          status: 503,
+          statusText: 'Service Unavailable',
+        });
       })
   );
 });
