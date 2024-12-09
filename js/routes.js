@@ -761,7 +761,7 @@ var app = new Framework7({
     },
     {
       path: '/produtos/',
-      url: 'produtos.html',
+      url: 'produtos.html?v=1.0.1',
       animate: false,
       on: {
         pageBeforeIn: async function (event, page) {
