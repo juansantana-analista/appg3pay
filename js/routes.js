@@ -849,8 +849,17 @@ var app = new Framework7({
               color: '#333',
             });
 
-            // Adicionar lógica adicional para seleção "Venda"
-            console.log('Modo Venda selecionado');
+            $(document).on("input", "#search", function () {
+              const searchQuery = $(this).val();
+              if (searchQuery.length >= 3) {
+                listarProdutos(searchQuery);
+              }
+              if (searchQuery.length < 1) {
+                listarProdutos(searchQuery);
+              }
+            });
+            listarProdutos();
+
           });
 
           // Manipular clique no botão "Compra"
@@ -865,19 +874,18 @@ var app = new Framework7({
               'background-color': '#f4f4f4',
               color: '#333',
             });
-            // Adicionar lógica adicional para seleção "Compra"
-            console.log('Modo Compra selecionado');
+            $(document).on("input", "#search", function () {
+              const searchQuery = $(this).val();
+              if (searchQuery.length >= 3) {
+                listarProdutos(searchQuery, '', 'compra');
+              }
+              if (searchQuery.length < 1) {
+                listarProdutos(searchQuery, '', 'compra');
+              }
+            });
+            listarProdutos('', '', 'compra');
           });
 
-          $(document).on("input", "#search", function () {
-            const searchQuery = $(this).val();
-            if (searchQuery.length >= 3) {
-              listarProdutos(searchQuery);
-            }
-            if (searchQuery.length < 1) {
-              listarProdutos(searchQuery);
-            }
-          });
           listarProdutos();
 
         },

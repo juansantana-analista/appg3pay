@@ -122,7 +122,7 @@ function listarCategorias() {
 //Fim Função Lista categorias
 
 //Inicio Funçao listar produtos tela Home
-function listarProdutos(searchQuery = "", categoriaId) {
+function listarProdutos(searchQuery = "", categoriaId, compra) {
     var userAuthToken = localStorage.getItem('userAuthToken');
     app.dialog.preloader("Carregando...");
 
@@ -159,6 +159,12 @@ function listarProdutos(searchQuery = "", categoriaId) {
                 $("#container-produtos").empty();
 
                 produtos.forEach((produto) => {
+                    var produtoPreco = '';
+                    if(compra == 'compra'){
+                        produtoPreco = formatarMoeda(produto.preco);
+                    } else {
+                        produtoPreco = formatarMoeda(produto.preco_lojavirtual);
+                    }
                     var imgUrl = "https://escritorio.g3pay.com.br/";
                     const imagemProduto = produto.foto ? imgUrl + produto.foto : 'img/default.png';
                     const nomeProduto = truncarNome(produto.nome, 18);
@@ -187,7 +193,7 @@ function listarProdutos(searchQuery = "", categoriaId) {
                                 <span class="star"></span>
                                 <span class="star"></span>
                             </div>
-                            <div class="price">${formatarMoeda(produto.preco)}</div>
+                            <div class="price">${produtoPreco}</div>
                         </a>
                     </div>
                     `;
