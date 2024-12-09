@@ -94,41 +94,49 @@ body {
 }
 
 
-.summary-section {
+.bottom-info {
+  position: fixed;
+  bottom: 0;
+  left: 0;
   width: 100%;
   background-color: #ffffff;
-  padding: 15px;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-  position: fixed;
-  bottom: 60px; /* Ajusta para não sobrepor o menu fixo */
-  left: 0;
-  z-index: 1000;
   border-top: 1px solid #ccc;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  z-index: 1000;
+  box-sizing: border-box;
 }
 
-.line {
+.info-row {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 10px;
+  font-size: 14px;
+  color: #333;
 }
 
-.line .label {
-  font-size: 14px;
-  color: #555;
+.label {
+  font-weight: bold;
 }
 
-.line .value {
-  font-size: 14px;
-  color: #007BFF; /* Cor azul para link/seleção */
+.value {
+  color: #666;
+}
+
+.value.link {
+  color: #007BFF;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .buy-button {
   width: 100%;
   padding: 10px;
+  background-color: #007BFF;
+  color: #ffffff;
   font-size: 16px;
   font-weight: bold;
-  color: #ffffff;
-  background-color: #007BFF;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -136,7 +144,7 @@ body {
 }
 
 .buy-button:hover {
-  background-color: #0056b3; /* Tom mais escuro no hover */
+  background-color: #0056b3;
 }
 
 .tab-link {
