@@ -333,75 +333,6 @@ var app = new Framework7({
           });
           //END BOTÃO RECUPERAR SENHA
 
-          //START BOTÃO VALIDAR CODIGO
-          $("#confirmarCodigo").on("click", function () {
-            var emailRecuperacao = localStorage.getItem("emailRecuperacao");
-
-            document.querySelectorAll('.code').forEach((input, index) => {
-              input.addEventListener('input', (e) => {
-                if (e.target.value.length === 1 && index < 5) {
-                  document.querySelector(`.code[data-index="${index + 1}"]`).focus();
-                }
-              });
-        
-              input.addEventListener('keydown', (e) => {
-                if (e.key === "Backspace" && index > 0 && e.target.value === "") {
-                  document.querySelector(`.code[data-index="${index - 1}"]`).focus();
-                }
-              });
-            });
-            
-            const code = Array.from(document.querySelectorAll('.code')).map(input => input.value).join('');
-
-            if (code.length === 6) {            
-
-              const headers = {
-                "Content-Type": "application/json"
-              };
-  
-              const body = JSON.stringify({
-                email: emailRecuperacao,
-                code: code,
-              });
-  
-              const options = {
-                method: "POST",
-                headers: headers,
-                body: body,
-              };
-  
-              fetch('https://escritorio.g3pay.com.br/api/validate_code.php', options)
-                .then((response) => response.json())
-                .then((data) => {
-                  app.dialog.close();
-                  if (data.status == 'success' && data.data.status == 'success') {
-                    localStorage.setItem("codigoRecuperacao", code);
-  
-                    app.popup.open(".popup-redefinir-senha");
-                  } else {
-                    app.dialog.close();
-                    app.dialog.alert(
-                      "Erro, Código informado invalido ou expirado.",
-                      '<i class="mdi mdi-alert"></i> Código Inválido'
-                    );
-                  }
-                })
-                .catch((error) => {
-                  console.error("Erro:", error);
-                  app.dialog.close();
-                  app.dialog.alert(
-                    "Erro, Código informado invalido ou expirado.",
-                    '<i class="mdi mdi-alert"></i> Código Inválido'
-                  );
-                });
-            } else {
-              return('Por favor, insira todos os 6 dígitos do código.');
-            }
-
-
-          });
-          //END BOTÃO VALIDAR CODIGO
-
           //START BOTÃO SALVAR SENHA
           $("#salvarSenha").on("click", function () {
             var emailRecuperacao = localStorage.getItem("emailRecuperacao");
@@ -495,7 +426,75 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
-          // fazer algo quando a página for inicializada
+          // fazer algo quando a página for inicializada          
+          //START BOTÃO VALIDAR CODIGO
+          $("#confirmarCodigo").on("click", function () {
+            var emailRecuperacao = localStorage.getItem("emailRecuperacao");
+
+            document.querySelectorAll('.code').forEach((input, index) => {
+              input.addEventListener('input', (e) => {
+                if (e.target.value.length === 1 && index < 5) {
+                  document.querySelector(`.code[data-index="${index + 1}"]`).focus();
+                }
+              });
+        
+              input.addEventListener('keydown', (e) => {
+                if (e.key === "Backspace" && index > 0 && e.target.value === "") {
+                  document.querySelector(`.code[data-index="${index - 1}"]`).focus();
+                }
+              });
+            });
+            
+            const code = Array.from(document.querySelectorAll('.code')).map(input => input.value).join('');
+
+            if (code.length === 6) {            
+
+              const headers = {
+                "Content-Type": "application/json"
+              };
+  
+              const body = JSON.stringify({
+                email: emailRecuperacao,
+                code: code,
+              });
+  
+              const options = {
+                method: "POST",
+                headers: headers,
+                body: body,
+              };
+  
+              fetch('https://escritorio.g3pay.com.br/api/validate_code.php', options)
+                .then((response) => response.json())
+                .then((data) => {
+                  app.dialog.close();
+                  if (data.status == 'success' && data.data.status == 'success') {
+                    localStorage.setItem("codigoRecuperacao", code);
+  
+                    app.popup.open(".popup-redefinir-senha");
+                  } else {
+                    app.dialog.close();
+                    app.dialog.alert(
+                      "Erro, Código informado invalido ou expirado.",
+                      '<i class="mdi mdi-alert"></i> Código Inválido'
+                    );
+                  }
+                })
+                .catch((error) => {
+                  console.error("Erro:", error);
+                  app.dialog.close();
+                  app.dialog.alert(
+                    "Erro, Código informado invalido ou expirado.",
+                    '<i class="mdi mdi-alert"></i> Código Inválido'
+                  );
+                });
+            } else {
+              return('Por favor, insira todos os 6 dígitos do código.');
+            }
+
+
+          });
+          //END BOTÃO VALIDAR CODIGO
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM      
