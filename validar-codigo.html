@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Required meta tags-->
+  <meta charset="utf-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!-- Color theme for statusbar (Android only) -->
+  <meta name="theme-color" content="#8D51FF">
+  <!-- Your app title -->
+    <title>G3 PAY</title>
+  <!-- Path to Framework7 Library Bundle CSS -->
+  <link rel="stylesheet" href="lib/framework7-bundle.min.css">
+  <!-- CSS PERSONALIZADO PARA MENU-->
+  <link rel="stylesheet" href="css/index.css">
+  <!--Ícones Material Design-->
+  <link rel="stylesheet" href="css/materialdesignicons.min.css">
+  <!-- Icones do Remix icon-->
+  <link rel="stylesheet" href="css/remixicon/remixicon.css">
+  <style>
+    /* Custom styling for code input screen */
+    .page-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+      background: #f7f8fa;
+    }
+
+    .form-container {
+      text-align: center;
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container h1 {
+      font-size: 24px;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .form-container p {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .code-inputs {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .code-inputs input {
+      width: 48px;
+      height: 48px;
+      font-size: 18px;
+      text-align: center;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #f9f9f9;
+      transition: border-color 0.3s;
+    }
+
+    .code-inputs input:focus {
+      border-color: #8D51FF;
+      outline: none;
+      background: #fff;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      background-color: #8D51FF;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn-submit:hover {
+      background-color: #7a46db;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- App root element -->
+  <div id="app">
+    <div class="view view-main">
+      <div data-name="validar-codigo" class="page color-theme-blue">
+        <div class="page-content">
+          <div class="form-container">
+            <h1>Redefinir Senha</h1>
+            <p>Insira o código de 6 dígitos que enviamos para o seu email.</p>
+            <div class="code-inputs">
+              <input type="text" maxlength="1" class="code" data-index="0">
+              <input type="text" maxlength="1" class="code" data-index="1">
+              <input type="text" maxlength="1" class="code" data-index="2">
+              <input type="text" maxlength="1" class="code" data-index="3">
+              <input type="text" maxlength="1" class="code" data-index="4">
+              <input type="text" maxlength="1" class="code" data-index="5">
+            </div>
+            <button class="btn-submit">Confirmar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Path to Framework7 Library Bundle JS-->
+  <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script>
+      document.querySelectorAll('.code').forEach((input, index) => {
+        input.addEventListener('input', (e) => {
+          if (e.target.value.length === 1 && index < 5) {
+            document.querySelector(`.code[data-index="${index + 1}"]`).focus();
+          }
+        });
+  
+        input.addEventListener('keydown', (e) => {
+          if (e.key === "Backspace" && index > 0 && e.target.value === "") {
+            document.querySelector(`.code[data-index="${index - 1}"]`).focus();
+          }
+        });
+      });
+  
+      document.querySelector('.btn-submit').addEventListener('click', () => {
+        const code = Array.from(document.querySelectorAll('.code')).map(input => input.value).join('');
+        if (code.length === 6) {
+          alert(`Código inserido: ${code}`);
+        } else {
+          alert('Por favor, insira todos os 6 dígitos do código.');
+        }
+      });
+    </script>
+  <!-- jQuery -->
+  <script type="text/javascript" src="lib/jquery-3.7.0.min.js"></script>
+  <!-- Roteamento do app-->
+  <script type="text/javascript" src="js/routes.js"></script>
+  <script src="cordova.js"></script>
+</body>
+
+</html>

@@ -316,7 +316,7 @@ var app = new Framework7({
                   if (data.status == 'success' && data.data.status == 'success') {
                     localStorage.setItem("emailRecuperacao", email);
                       app.dialog.close();
-                      app.views.main.router.navigate("/home/");
+                      app.views.main.router.navigate("/validar-codigo/");
                   } else {
                     app.dialog.close();
                     app.dialog.alert("Erro na requisição: " + (data.message || "Dados inválidos"), "Falha");
@@ -466,6 +466,24 @@ var app = new Framework7({
           // fazer algo antes da página ser removida do DOM
         },
       },
+    },
+    {
+      path: '/validar-codigo/',
+      url: 'validar-codigo.html',
+      animate: false,
+      on: {
+        pageBeforeIn: async function (event, page) {
+        },
+        pageAfterIn: function (event, page) {
+          // fazer algo depois da página ser exibida
+        },
+        pageInit: function (event, page) {
+          // fazer algo quando a página for inicializada
+        },
+        pageBeforeRemove: function (event, page) {
+          // fazer algo antes da página ser removida do DOM      
+        },
+      }
     },
     {
       path: '/home/',
