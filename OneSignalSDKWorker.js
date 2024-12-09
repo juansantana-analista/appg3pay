@@ -15,9 +15,19 @@ self.addEventListener("message", (event) => {
 });
 
 self.addEventListener('install', async (event) => {
+  self.skipWaiting();
+});
+self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.open(CACHE)
-      .then((cache) => cache.add(offlineFallbackPage))
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE) {
+            return caches.delete(cacheName); // Remove caches antigos
+          }
+        })
+      );
+    })
   );
 });
 
