@@ -299,48 +299,35 @@ var app = new Framework7({
               "Informe o e-mail de login",
               "<b>SEU EMAIL DE LOGIN</b>",
               function (email) {
-                localStorage.setItem("emailRecuperacao", email);
-
                 app.dialog.preloader("Carregando...");
 
-                const apiServerUrl = apiServer + "gerar_codigo.php";
-
-                const headers = {
-                  "Content-Type": "application/json",
-                  "Authorization": "Bearer " + appId,
-                };
-
-                const body = JSON.stringify({
-                  email: email,
-                });
-
-                const options = {
-                  method: "POST",
-                  headers: headers,
-                  body: body,
-                };
-
-                fetch(apiServerUrl, options)
-                  .then((response) => response.json())
-                  .then((data) => {
+              //START Fazendo a requisição
+                fetch('https://escritorio.g3pay.com.br/api/request_reset.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                  if (data.status == 'success' && data.data.status == 'success') {
+                    localStorage.setItem("emailRecuperacao", email);
+                      app.dialog.close();
+                      app.views.main.router.navigate("/home/");
+                  } else {
                     app.dialog.close();
-                    if (data.message == true) {
-                      app.popup.open(".popup-recuperar-senha");
-                      app.dialog.alert(
-                        "Sucesso, um código foi enviado ao email informado.",
-                        '<i class="mdi mdi-alert"></i> Código Enviado'
-                      );
-                    } else {
-                      app.dialog.alert(data.message); // Exibe a mensagem da API
-                    }
-                  })
-                  .catch((error) => {
-                    console.error("Erro:", error);
-                    app.dialog.close();
-                    app.dialog.alert(
-                      "Erro ao tentar recuperar a senha: " + error.message
-                    );
-                  });
+                    app.dialog.alert("Erro na requisição: " + (data.message || "Dados inválidos"), "Falha");
+                  }
+                })
+                .catch(error => {
+                  app.dialog.close();
+                  app.dialog.alert("Erro na requisição: " + (error || "Dados inválidos"), "Falha");
+                    console.error('Error:', error);
+                })              
+              //END Fazendo a requisição
               }
             );
           });
