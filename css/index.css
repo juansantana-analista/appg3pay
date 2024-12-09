@@ -56,15 +56,18 @@ body {
 }
 
 .bottom-nav {
+  display: flex;
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  display: flex;
   justify-content: space-around;
   background-color: #ffffff;
   border-top: 1px solid #ccc;
   z-index: 1000;
+}
+.d-flex{
+  display: flex;
 }
 
 .bottom-nav a {

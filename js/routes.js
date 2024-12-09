@@ -504,6 +504,7 @@ var app = new Framework7({
           }
           // fazer algo antes da página ser exibida
           $("#menuPrincipal").show("fast");
+          $("#menuPrincipal").addClass("d-flex");
           $("#menuPrincipal").removeClass("display-none");
 
         },
