@@ -1669,3 +1669,22 @@ form {
       .popup-redefinir-senha button:hover {
         background: #7a46db;
       }
+      .product-info {
+        padding: 15px;
+    }
+    .product-info .stats {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 10px;
+        gap: 20px;
+        color: #666;
+    }
+    .product-info h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+    .product-info p {
+        font-size: 16px;
+        line-height: 1.5;
+        color: #666;
+    }
