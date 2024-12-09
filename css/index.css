@@ -1670,13 +1670,13 @@ form {
         background: #7a46db;
       }
       .product-info {
-        padding: 15px;
+        padding: 8px;
     }
     .product-info .stats {
         display: flex;
         justify-content: flex-end;
         margin-bottom: 10px;
-        gap: 20px;
+        gap: 10px;
         color: #666;
     }
     .product-info h1 {
