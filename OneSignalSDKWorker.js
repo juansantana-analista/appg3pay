@@ -3,56 +3,44 @@ importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
 
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
 
-const CACHE = "pwabuilder-cache-v3";
+// Nome do cache - embora não usemos, ainda é boa prática nomear
+const CACHE_NAME = 'no-cache';
 
-// TODO: replace the following with the correct offline fallback page i.e.: const offlineFallbackPage = "offline.html";
-const offlineFallbackPage = "offline.html";
-
-self.addEventListener("message", (event) => {
-  if (event.data && event.data.type === "SKIP_WAITING") {
-    self.skipWaiting();
-  }
+// Evento de instalação do Service Worker
+self.addEventListener('install', (event) => {
+  console.log('Service Worker instalado.');
+  self.skipWaiting(); // Força o Service Worker a entrar em controle imediatamente
 });
 
-self.addEventListener('install', async (event) => {
-  self.skipWaiting();
-});
+// Evento de ativação
 self.addEventListener('activate', (event) => {
+  console.log('Service Worker ativado.');
+  // Remove caches antigos, mesmo que não seja usado
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE) {
-            return caches.delete(cacheName); // Remove caches antigos
+        cacheNames.map((cache) => {
+          if (cache !== CACHE_NAME) {
+            return caches.delete(cache);
           }
         })
       );
     })
   );
+  return self.clients.claim(); // Assume controle imediato
 });
 
-if (workbox.navigationPreload.isSupported()) {
-  workbox.navigationPreload.enable();
-}
-
+// Evento fetch para interceptar requisições
 self.addEventListener('fetch', (event) => {
-  if (event.request.mode === 'navigate') {
-    event.respondWith((async () => {
-      try {
-        const preloadResp = await event.preloadResponse;
-
-        if (preloadResp) {
-          return preloadResp;
-        }
-
-        const networkResp = await fetch(event.request);
-        return networkResp;
-      } catch (error) {
-
-        const cache = await caches.open(CACHE);
-        const cachedResp = await cache.match(offlineFallbackPage);
-        return cachedResp;
-      }
-    })());
-  }
+  event.respondWith(
+    fetch(event.request)
+      .then((response) => {
+        // Retorna a resposta diretamente do servidor
+        return response;
+      })
+      .catch((error) => {
+        console.error('Falha ao buscar:', error);
+        throw error; // Opcional: pode exibir uma mensagem de erro customizada
+      })
+  );
 });
