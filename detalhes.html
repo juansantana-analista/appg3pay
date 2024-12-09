@@ -32,32 +32,44 @@
 
           <!-- Scrollable page content -->
           <div class="page-content">
-            
-        <!-- Navbar -->
-        <div class="navbar-carrinho">
-          <div class="left">
-              <div class="icon" id="back-button"><a href="/produtos/"><i class="ri-arrow-left-s-line"></i></a></div>
-          </div>
-          <div class="right">
-              <div class="icon" id="like-button"><a href="#"> <i class="ri-heart-3-line"></i></a></div>
-              <div class="icon" id="share-button"><a href="#" class="abrir-popup"
-                ><i class="ri-share-2-line"></i
-              ></a></div>
-          </div>
-      </div>
-
-      <!-- Product Image -->
-      <img id="imagem-detalhe" src="img/default.png" alt="Produto" class="product-image">
-
-      <!-- Product Info -->
-      <div class="product-info">
-          <div class="stats">
-              <span id="likes-count"><i class="ri-heart-3-line"></i> 100 curtidas</span>
-              <span id="reviews-count"><i class="ri-share-2-line"></i> 50 avaliações</span>
-          </div>
-          <h1 id="product-name">Nome do Produto</h1>
-          <p id="descricao-detalhe">Descrição detalhada do produto para atrair os usuários e fornecer informações úteis.</p>
-      </div>
+            <div class="prod-detail">
+              <div class="buttons-top">
+                <a href="/produtos/"><i class="ri-arrow-left-s-line"></i></a>
+                <a href="#"> <i class="ri-heart-3-line"></i></a>
+                <a href="#" class="abrir-popup"
+                  ><i class="ri-share-2-line"></i
+                ></a>
+              </div>
+              <img id="imagem-detalhe" src="img/default.png" />
+            </div>
+            <div class="prod-content">
+              <div class="block">
+                <!--
+                <div class="line padding-top">
+                  <b id="nome-detalhe" class="margin-left"></b>
+                  <button id="compartilharBtn" class="share-btn">Compartilhar <i class="ri-share-2-line"></i></button>
+                </div>
+                -->
+                <div
+                  class="margin-top display-flex align-items-center justify-content-start"
+                >
+                  <button class="margin-left btn-rates">
+                    <i class="mdi mdi-star"></i>
+                    <span id="rating-detalhe">4.8</span>
+                  </button>
+                  <button class="btn-rates">
+                    <i class="ri-thumb-up-fill"></i>
+                    <span id="like-detalhe"></span>
+                  </button>
+                  <span id="reviews-detalhe" class="color-gray"></span>
+                </div>
+                <div
+                  class="display-flex align-items-center justify-content-center"
+                >
+                  <p id="descricao-detalhe"></p>
+                </div>
+              </div>
+            </div>
             
             <div class="bottom-nav">
               <div class="detalhes-btn">
