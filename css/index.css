@@ -366,7 +366,10 @@ form {
   display: flex;
   flex-wrap: wrap;
 }
+.d-none{
+  display: none;
 
+}
 .item-card {
   display: flex;
   flex-wrap: nowrap;
