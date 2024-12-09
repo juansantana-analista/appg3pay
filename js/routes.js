@@ -27,7 +27,9 @@ var app = new Framework7({
       path: '/index/',
       url: 'index.html?v=1.0.1',
       on: {
-        pageBeforeIn: async function (event, page) {       
+        pageBeforeIn: async function (event, page) {  
+          $("#menuPrincipal").addClass("display-none");
+          $("#menuPrincipal").hide("fast");     
           clearLocalStorage();
           // chama a função que verifica e valida o token
           var userAuthToken = localStorage.getItem('userAuthToken');
@@ -217,8 +219,8 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          $("#menuPrincipal").hide("fast");
           $("#menuPrincipal").addClass("display-none");
+          $("#menuPrincipal").hide("fast");
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
