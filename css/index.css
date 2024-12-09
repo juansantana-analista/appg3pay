@@ -1679,6 +1679,10 @@ form {
         background-color: var(--laranja);
         color: #fff;
     }
+    .navbar-carrinho a{
+      text-decoration: none;
+      color: #fff;
+  }
     .navbar-carrinho .left {
         display: flex;
         align-items: center;
