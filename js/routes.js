@@ -784,6 +784,7 @@ var app = new Framework7({
           // fazer algo quando a página for inicializada
           contarCarrinho();
           listarBanners();
+          var teste ='';
 
           var swiper = new Swiper(".mySwiper", {
             slidesPerView: 1,
