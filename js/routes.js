@@ -634,6 +634,8 @@ var app = new Framework7({
           $('#sairAgora').on('click', function () {
             app.dialog.confirm('Deseja sair do aplicativo?', function () {
               localStorage.clear();
+              $("#menuPrincipal").hide("fast");
+              $("#menuPrincipal").addClass("display-none");
               app.views.main.router.navigate("/login-view/");
             });
           });
