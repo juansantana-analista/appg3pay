@@ -70,11 +70,14 @@ body {
 
 .bottom-nav a {
   text-align: center;
-  padding: 10px;
+  padding: 10px 0;
   flex: 1;
   color: #333;
   text-decoration: none;
   font-size: 14px;
+  display: flex;
+  flex-direction: column; /* Alinha ícone acima do texto */
+  align-items: center;
 }
 
 .bottom-nav a.active {
@@ -82,14 +85,12 @@ body {
 }
 
 .bottom-nav a i {
-  display: block;
-  font-size: 20px;
-  margin-bottom: 5px;
+  font-size: 20px; /* Tamanho do ícone */
+  margin-bottom: 5px; /* Espaço entre ícone e texto */
 }
 
 .bottom-nav a span {
-  display: block;
-  font-size: 12px;
+  font-size: 12px; /* Tamanho do texto */
 }
 
 .tab-link {
