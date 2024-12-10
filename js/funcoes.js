@@ -184,16 +184,16 @@ function listarProdutos(searchQuery = "", categoriaId, compra) {
                                 <img src="${imagemProduto}">
                             </div>
                             <div class="nome-rating">
-                                <span class="color-gray">${nomeProduto.toLocaleUpperCase()}</span>
-                            </div>                      
-                            <div class="star-rating">
-                                <span class="star"></span>
-                                <span class="star"></span>
-                                <span class="star"></span>
-                                <span class="star"></span>
-                                <span class="star"></span>
-                            </div>
-                            <div class="price">${produtoPreco}</div>
+                                    <span class="color-gray">${nomeProduto.toLocaleUpperCase()}</span>                     
+                                <div class="star-rating">
+                                    <span class="star"></span>
+                                    <span class="star"></span>
+                                    <span class="star"></span>
+                                    <span class="star"></span>
+                                    <span class="star"></span>
+                                </div>
+                                <div class="price">${produtoPreco}</div>
+                            </div> 
                         </a>
                     </div>
                     `;
