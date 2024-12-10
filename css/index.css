@@ -372,7 +372,6 @@ form {
 
 .item-card {
   display: flex;
-  flex-direction: column;
   flex-wrap: nowrap;
   flex-direction: column;
   background-color: #ffffffb4;
@@ -418,6 +417,7 @@ form {
 
 .nome-rating {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     text-align: center;
     font-size: 14px;
