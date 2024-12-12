@@ -932,6 +932,13 @@ var app = new Framework7({
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
           $("#menuPrincipal").hide("fast");
+          
+          var operacao = localStorage.getItem('operacao');
+          if (operacao == 'venda'){            
+            $('#addCarrinho').addClass('display-none');
+          } else {            
+            $('#addCarrinho').removeClass('display-none');
+          }
 
         },
         pageAfterIn: function (event, page) {
@@ -942,37 +949,7 @@ var app = new Framework7({
           $.getScript('js/qrcode.min.js');
           $.getScript('js/detalhes.js');
           var produtoId = localStorage.getItem('produtoId');
-          // Supondo que o item já esteja salvo no localStorage com a chave 'produto'
-          let itemSalvo = localStorage.getItem('produto');
-          // Converte o JSON de volta para um objeto JavaScript
-          let produto = JSON.parse(itemSalvo);
-          let preco = produto.preco;
-          let preco_lojavirtual = produto.preco_lojavirtual;
 
-          let isCompra = true;
-          let isVenda = true;
-          $('#valor-compra').text('R$ ****');    
-          $('#valor-venda').text('R$ ****');       
-          $('#toggle-compra').click(function() {    
-            if (isCompra) {
-              $('#valor-compra').text(formatarMoeda(preco));
-              $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565655.png');
-            } else {
-              $('#valor-compra').text('R$ ****');
-              $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565654.png');
-            }
-            isCompra = !isCompra;
-          });
-          $('#toggle-venda').click(function() {    
-            if (isVenda) {
-              $('#valor-venda').text(formatarMoeda(preco_lojavirtual));
-              $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565655.png');
-            } else {
-              $('#valor-venda').text('R$ ****');
-              $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565654.png');
-            }
-            isVenda = !isVenda;
-          });
           
           $('#shareButton').on('click', function () {
             // Defina o conteúdo HTML que você deseja converter em PDF
