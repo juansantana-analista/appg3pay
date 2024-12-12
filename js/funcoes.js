@@ -697,6 +697,9 @@ function detalhesPedido() {
                 `;
 
                 detalhesContainer.innerHTML = detalhesHTML;
+                if(detalhes.status_compra != 3 ) {                    
+                    $(".filter-btn").removeClass("active");
+                }
                 app.dialog.close();
             } else {
                 app.dialog.close();
@@ -1312,8 +1315,7 @@ function listarCarrinho() {
                     $("#listaCarrinho").empty();
 
                     //SUMIR OS ITENS DE BAIXO BOTÃO E TOTAIS
-                    $("#toolbarTotais").addClass('display-none');
-                    $("#toolbarCheckout").addClass('display-none');
+                    $("#toolbar-carrinho").addClass('display-none');
 
                     //MOSTRAR SACOLINHA VAZIA
                     $("#listaCarrinho").html(`
