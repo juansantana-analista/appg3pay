@@ -1554,13 +1554,12 @@ form {
         justify-content: center;
         align-items: center;
         height: 100vh;
-        padding: 20px;
         background: #f7f8fa;
       }
   
       .form-container {
         text-align: center;
-        width: 94%;
+        width: 100%;
         max-width: 400px;
         padding: 20px;
         background: #ffffff;
