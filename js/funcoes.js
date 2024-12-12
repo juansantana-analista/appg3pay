@@ -1555,6 +1555,8 @@ console.log(produtoId);
             if(responseJson.status == 'success' && responseJson.data.status == 'sucess'){
                 // Sucesso na alteração        
                 app.views.main.router.refreshPage();           
+            }else{                
+                app.dialog.alert("Erro ao alterar carrinho: " + responseJson.data.message, responseJson.data.status);
             }
         })
         .catch((error) => {
