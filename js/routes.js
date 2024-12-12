@@ -416,9 +416,10 @@ var app = new Framework7({
             }
           });
 
-          // Função para limpar inputs e focar no primeiro
+          // Função para limpar inputs e focar no primeiro+
           function resetInputs() {
             $(".code").each(function () {
+              console.log("Limpando input:", $(this).data("index")); // Verifica quais inputs estão sendo limpos
               $(this).val(""); // Limpa o valor de cada input
             });
             $(".code[data-index='0']").focus(); // Foca no primeiro input
