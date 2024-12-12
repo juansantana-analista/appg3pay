@@ -447,7 +447,7 @@ var app = new Framework7({
                   body: body,
                 };
     
-                fetch('https://escritorio.g3pay.com.br/api/validate_code.php', options)
+                fetch('https://escritorio.g3pay.com.br/api/reset_password.php', options)
                   .then((response) => response.json())
                   .then((data) => {
                     app.dialog.close();
@@ -475,6 +475,7 @@ var app = new Framework7({
                     );
                   });
             } else {
+              app.dialog.close();
               app.dialog.alert(
                 "As senhas não coincidem. Por favor, tente novamente",
                 '<i class="mdi mdi-alert"></i> Erro'
