@@ -1238,7 +1238,7 @@ function listarCarrinho() {
 
                 if (quantidadeItens > 0) {
                     //TEM ITENS NO CARRINHO
-
+                    $("#toolbar-carrinho").removeClass('display-none');
                     //ESVAZIAR A ÁREA DOS ITENS
                     $("#listaCarrinho").empty();
 
