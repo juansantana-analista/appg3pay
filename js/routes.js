@@ -355,7 +355,17 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
-          // fazer algo quando a página for inicializada          
+          // fazer algo quando a página for inicializada 
+          // Função para limpar inputs e focar no primeiro+
+          function resetInputs() {
+            $(".code").each(function () {
+              console.log("Limpando input:", $(this).data("index")); // Verifica quais inputs estão sendo limpos
+              $(this).val(""); // Limpa o valor de cada input
+            });
+            $(".code[data-index='0']").focus(); // Foca no primeiro input
+          }
+          resetInputs();   
+                
           // START BOTÃO VALIDAR CÓDIGO
           $("#confirmarCodigo").on("click", function () {
             var emailRecuperacao = localStorage.getItem("emailRecuperacao");
@@ -416,15 +426,6 @@ var app = new Framework7({
             }
           });
 
-          // Função para limpar inputs e focar no primeiro+
-          function resetInputs() {
-            $(".code").each(function () {
-              console.log("Limpando input:", $(this).data("index")); // Verifica quais inputs estão sendo limpos
-              $(this).val(""); // Limpa o valor de cada input
-            });
-            $(".code[data-index='0']").focus(); // Foca no primeiro input
-          }
-
           // Evento para mover o foco entre os inputs
           $(".code").on("input", function () {
             const $this = $(this);
@@ -443,7 +444,6 @@ var app = new Framework7({
               $(`.code[data-index="${index - 1}"]`).focus();
             }
           });
-          resetInputs();
           // END BOTÃO VALIDAR CÓDIGO
 
 
