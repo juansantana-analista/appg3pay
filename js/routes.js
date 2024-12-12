@@ -936,7 +936,9 @@ var app = new Framework7({
           var operacao = localStorage.getItem('operacao');
           if (operacao == 'venda'){            
             $('#addCarrinho').addClass('display-none');
+            $('#compartilharBtn').removeClass('display-none');
           } else {            
+            $('#compartilharBtn').addClass('display-none');
             $('#addCarrinho').removeClass('display-none');
           }
 
