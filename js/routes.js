@@ -365,7 +365,7 @@ var app = new Framework7({
             $(".code[data-index='0']").focus(); // Foca no primeiro input
           }
           resetInputs();   
-                
+
           // START BOTÃO VALIDAR CÓDIGO
           $("#confirmarCodigo").on("click", function () {
             var emailRecuperacao = localStorage.getItem("emailRecuperacao");
@@ -803,7 +803,7 @@ var app = new Framework7({
           // fazer algo antes da página ser exibida
           $("#menuPrincipal").show("fast");
           $("#menuPrincipal").removeClass("display-none");
-
+          localStorage.setItem('operacao', 'venda');
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
@@ -867,6 +867,7 @@ var app = new Framework7({
           // Manipular clique no botão "Venda"
           $('#btn-venda').click(function () {
             // Alterar estilos para o botão "Venda"
+            localStorage.setItem('operacao', 'venda');
             $(this).css({
               'background-color': '#FF4B00',
               color: '#ffffff',
@@ -893,6 +894,7 @@ var app = new Framework7({
           // Manipular clique no botão "Compra"
           $('#btn-compra').click(function () {
             // Alterar estilos para o botão "Compra"
+            localStorage.setItem('operacao', 'compra');
             $(this).css({
               'background-color': '#FF4B00',
               color: '#ffffff',

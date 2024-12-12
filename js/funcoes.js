@@ -1506,6 +1506,9 @@ function adicionarItemCarrinho(produtoId) {
                 toastCenter.open();
                 app.dialog.close();  
                 app.views.main.router.navigate("/produtos/");          
+            }else{  
+                app.dialog.close();               
+                app.dialog.alert("Erro ao alterar carrinho: " + responseJson.data.message, responseJson.data.status);
             }
         })
         .catch((error) => {
@@ -1903,6 +1906,7 @@ function clearLocalStorage() {
     localStorage.removeItem('produtoId');
     localStorage.removeItem('produto');
     localStorage.removeItem('enderecoDetalhes');
+    localStorage.removeItem('emailRecuperacao');
 }
 // Fim Função para limpar o local storage
 
