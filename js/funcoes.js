@@ -1520,7 +1520,8 @@ function adicionarItemCarrinho(produtoId) {
 function removerItemCarrinho(pessoaId, produtoId) {
     var userAuthToken = localStorage.getItem('userAuthToken');
     app.dialog.preloader("Carregando...");
-
+console.log(pessoaId);
+console.log(produtoId);
     const dados = {
           pessoa_id: pessoaId,
           produto_id: produtoId
@@ -1549,11 +1550,11 @@ function removerItemCarrinho(pessoaId, produtoId) {
     fetch(apiServerUrl, options)
         .then((response) => response.json())
         .then((responseJson) => {
-            // Verifica se o status é 'success'
+            // Verifica se o status é 'success'      
+            app.dialog.close();       
             if(responseJson.status == 'success' && responseJson.data.status == 'sucess'){
-                // Sucesso na alteração                
-                app.views.main.router.refreshPage();
-                app.dialog.close();                
+                // Sucesso na alteração        
+                app.views.main.router.refreshPage();           
             }
         })
         .catch((error) => {

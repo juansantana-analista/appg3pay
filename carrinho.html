@@ -1,179 +1,231 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <!-- Required meta tags-->
-    <meta charset="utf-8">
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <!-- Color theme for statusbar (Android only) -->
-    <meta name="theme-color" content="#FF4B00">
+    <meta name="theme-color" content="#FF4B00" />
     <!-- Your app title -->
     <title>G3 PAY</title>
     <!-- Path to Framework7 Library Bundle CSS -->
-    <link rel="stylesheet" href="lib/framework7-bundle.min.css">
+    <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
     <!-- CSS PERSONALIZADO PARA MENU-->
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/index.css" />
     <!--Ícones Material Design-->
-    <link rel="stylesheet" href="css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="css/materialdesignicons.min.css" />
     <!-- Icones do Remix icon-->
-    <link rel="stylesheet" href="css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="css/remixicon/remixicon.css" />
+  </head>
 
-</head>
-
-<body>
+  <body>
     <!-- App root element -->
     <div id="app">
+      <!-- Your main view, should have "view-main" class -->
+      <div class="view view-main">
+        <!-- Initial Page, "data-name" contains page name -->
+        <div data-name="carrinho" class="page color-theme-blue">
+          <div class="nav-top cart">
+            <a href="/produtos/"><i class="ri-arrow-left-s-line"></i></a>
+            <strong> <i class="mdi mdi-cart-outline"></i> Carrinho</strong>
+            <a href="#" class="link popover-open" data-popover=".popover-menu"
+              ><i class="mdi mdi-delete"></i
+            ></a>
+          </div>
 
-        <!-- Your main view, should have "view-main" class -->
-        <div class="view view-main">
-
-            <!-- Initial Page, "data-name" contains page name -->
-            <div data-name="carrinho" class="page color-theme-blue">
-
-                <div class="nav-top cart">
-                    <a href="/produtos/"><i class="ri-arrow-left-s-line"></i></a>
-                    <strong> <i class="mdi mdi-cart-outline"></i> Carrinho</strong>
-                    <a href="#" class="link popover-open" data-popover=".popover-menu"><i class="mdi mdi-delete"></i></a>
-                </div>
-
-                <div class="popover popover-menu">
-                    <div class="popover-angle"></div>
-                    <div class="popover-inner">
-                        <div class="list">
-                            <ul>
-                                <li>
-                                    <a id="esvaziar" href="#" class="list-button popover-close">
-                                        <i class="mdi mdi-broom"></i> Esvaziar Carrinho
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-
-
-
-                <!-- Scrollable page content -->
-                <div class="page-content">
-                                  <!-- TAB BAR-->
-                                  <div class="bottom-info display-none" id="toolbar-carrinho">
-                                    <div class="info-row">
-                                        <span class="label">Subtotal</span>
-                                        <span id="subtotal" class="value bold"></span>
-                                    </div>
-                                    <div class="info-row">
-                                        <span class="label">Frete</span>
-                                        <a href="#" id="btnSelecionarEndereco"><span id="freteCarrinho" class="value bold">Selecionar Endereço</span></a>
-                                    </div>
-                                    <button id="irCheckout" class="buy-button">Comprar 😎</button>
-                                </div>
-                    <div id="listaCarrinho">
-                        <!-- ITEM DO CARRINHO-->
-                    </div>
-                </div>
-                
-               <!-- INÍCIO POPUP ENDEREÇOS -->
-               <div class="popup popup-enderecos">
-                <div class="view popup-view">
-                   <div class="page">
-                      <div class="toolbar toolbar-bottom" id="toolbar-next">
-                      </div>
-                      <div class="top-nav">
-                         <div class="left">
-                            <a href="#" class="link btn-novo popup-close">
-                            <i class="mdi mdi-arrow-left"></i>
-                            </a>
-                         </div>
-                         <strong class="title-descricao"> <i class="mdi mdi-account-plus-outline"></i> Endereço de Entrega</strong>                    
-                         <a href="#" data-popup=".popup-novo-endereco" class="btn-novo popup-open">
-                         <i class="mdi mdi-plus"></i>
-                         </a>
-                      </div>
-                      <div class="page-content input-cliente" style="background:#f0f0f0;" >
-                         <div id="listaDeEnderecos" style="margin: 12px;">   
-                         </div>
-                      </div>
-                   </div>
-                </div>
-             </div>
-             <!-- FIM POPUP ENDEREÇOS -->
-             <!-- INÍCIO NOVO ENDEREÇO -->
-             <div class="popup popup-novo-endereco">
-                <div class="view popup-view">
-                   <div class="page">
-                      <div class="toolbar toolbar-bottom" id="toolbar-next">
-                         <div class="toolbar-inner display-flex align-items-center justify-content-center">                        
-                            <button class="btn-primary" id="salvarEndereco" style="margin: 10px;">
-                            Salvar Endereço
-                            <span class="mdi mdi-content-save"></span>
-                            </button>
-                         </div>
-                      </div>
-                      <div class="top-nav">
-                         <div class="left">
-                            <a href="#" class="link btn-novo popup-close">
-                            <i class="mdi mdi-arrow-left"></i>
-                            </a>
-                         </div>
-                         <strong class="title-descricao"> <i class="mdi mdi-account-plus-outline"></i> Adicionar Endereço</strong>                    
-                         <a href="#">
-                         <!--<i class="mdi mdi-information"></i>-->
-                         </a>
-                      </div>
-                      <div class="page-content input-cliente" style="background:#f0f0f0;" >
-                          <div class="block-title label-color">
-                             CEP<sup>*</sup>
-                          </div>
-                          <div class="block">
-                             <input type="text" id="cepCliente" placeholder="00000-000">										
-                          </div>
-                          <div id="divLogradouroCliente" class="display-none">
-                             <div class="block-title label-color">Logradouro<sup>*</sup></div>
-                             <div class=" block">
-                                <input type="text" id="logradouroEndCliente" placeholder="Logradouro">
-                             </div>
-                          </div>
-                          <div id="divNumeroCliente" class="display-none">
-                             <div class="block-title label-color">Número<sup>*</sup></div>
-                             <div class=" block">
-                                <input type="text" id="numeroEndCliente" placeholder="Número">
-                             </div>
-                          </div>
-                          <div id="divComplementoCliente" class="display-none">
-                             <div class="block-title label-color">Complemento</div>
-                             <div class=" block">
-                                <input type="text" id="complementoEndCliente" placeholder="Ex: Apt 400">
-                             </div>
-                          </div>
-                          <div id="divBairroCliente" class="display-none">
-                             <div class="block-title label-color">Bairro<sup>*</sup></div>
-                             <div class=" block">
-                                <input type="text" id="bairroEndCliente" placeholder="Bairro">
-                             </div>
-                          </div>
-                          <div id="divCidadeCliente" class="display-none">
-                             <div class="block-title label-color">Cidade<sup>*</sup></div>
-                             <div class=" block">
-                                <input type="text" id="cidadeEndCliente" placeholder="Cidade" readonly>
-                             </div>
-                          </div>
-                          <div id="divEstadoCliente" class="display-none">
-                             <div class="block-title label-color">Estado<sup>*</sup></div>
-                             <div class=" block">
-                               <input type="text" id="estadoEndCliente" readonly>
-                             </div>
-                          </div>
-                      </div>
-                   </div>
-                </div>
-             </div>
-             <!-- FIM POPUP NOVO ENDEREÇO -->
+          <div class="popover popover-menu">
+            <div class="popover-angle"></div>
+            <div class="popover-inner">
+              <div class="list">
+                <ul>
+                  <li>
+                    <a id="esvaziar" href="#" class="list-button popover-close">
+                      <i class="mdi mdi-broom"></i> Esvaziar Carrinho
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
+          </div>
+
+          <!-- Scrollable page content -->
+          <div class="page-content">
+            <!-- TAB BAR-->
+            <div class="bottom-info display-none" id="toolbar-carrinho">
+              <div class="info-row">
+                <span class="label">Subtotal</span>
+                <span id="subtotal" class="value bold"></span>
+              </div>
+              <div class="info-row">
+                <span class="label">Frete</span>
+                <a href="#" id="btnSelecionarEndereco"
+                  ><span id="freteCarrinho" class="value bold"
+                    >Selecionar Endereço</span
+                  ></a
+                >
+              </div>
+              <button id="irCheckout" class="buy-button">Comprar 😎</button>
+            </div>
+            <div id="listaCarrinho">
+              <!-- ITEM DO CARRINHO-->
+            </div>
+          </div>
+
+          <!-- INÍCIO POPUP ENDEREÇOS -->
+          <div class="popup popup-enderecos">
+            <div class="view popup-view">
+              <div class="page">
+                <div class="toolbar toolbar-bottom" id="toolbar-next"></div>
+                <div class="top-nav">
+                  <div class="left">
+                    <a href="#" class="link btn-novo popup-close">
+                      <i class="mdi mdi-arrow-left"></i>
+                    </a>
+                  </div>
+                  <strong class="title-descricao">
+                    <i class="mdi mdi-account-plus-outline"></i> Endereço de
+                    Entrega</strong
+                  >
+                  <a
+                    href="#"
+                    data-popup=".popup-novo-endereco"
+                    class="btn-novo popup-open"
+                  >
+                    <i class="mdi mdi-plus"></i>
+                  </a>
+                </div>
+                <div
+                  class="page-content input-cliente"
+                  style="background: #f0f0f0"
+                >
+                  <div id="listaDeEnderecos" style="margin: 12px"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- FIM POPUP ENDEREÇOS -->
+          <!-- INÍCIO NOVO ENDEREÇO -->
+          <div class="popup popup-novo-endereco">
+            <div class="view popup-view">
+              <div class="page">
+                <div class="toolbar toolbar-bottom" id="toolbar-next">
+                  <div
+                    class="toolbar-inner display-flex align-items-center justify-content-center"
+                  >
+                    <button
+                      class="btn-primary"
+                      id="salvarEndereco"
+                      style="margin: 10px"
+                    >
+                      Salvar Endereço
+                      <span class="mdi mdi-content-save"></span>
+                    </button>
+                  </div>
+                </div>
+                <div class="top-nav">
+                  <div class="left">
+                    <a href="#" class="link btn-novo popup-close">
+                      <i class="mdi mdi-arrow-left"></i>
+                    </a>
+                  </div>
+                  <strong class="title-descricao">
+                    <i class="mdi mdi-account-plus-outline"></i> Adicionar
+                    Endereço</strong
+                  >
+                  <a href="#">
+                    <!--<i class="mdi mdi-information"></i>-->
+                  </a>
+                </div>
+                <div
+                  class="page-content input-cliente"
+                  style="background: #f0f0f0"
+                >
+                  <div class="block-title label-color">CEP<sup>*</sup></div>
+                  <div class="block">
+                    <input
+                      type="text"
+                      id="cepCliente"
+                      placeholder="00000-000"
+                    />
+                  </div>
+                  <div id="divLogradouroCliente" class="display-none">
+                    <div class="block-title label-color">
+                      Logradouro<sup>*</sup>
+                    </div>
+                    <div class="block">
+                      <input
+                        type="text"
+                        id="logradouroEndCliente"
+                        placeholder="Logradouro"
+                      />
+                    </div>
+                  </div>
+                  <div id="divNumeroCliente" class="display-none">
+                    <div class="block-title label-color">
+                      Número<sup>*</sup>
+                    </div>
+                    <div class="block">
+                      <input
+                        type="text"
+                        id="numeroEndCliente"
+                        placeholder="Número"
+                      />
+                    </div>
+                  </div>
+                  <div id="divComplementoCliente" class="display-none">
+                    <div class="block-title label-color">Complemento</div>
+                    <div class="block">
+                      <input
+                        type="text"
+                        id="complementoEndCliente"
+                        placeholder="Ex: Apt 400"
+                      />
+                    </div>
+                  </div>
+                  <div id="divBairroCliente" class="display-none">
+                    <div class="block-title label-color">
+                      Bairro<sup>*</sup>
+                    </div>
+                    <div class="block">
+                      <input
+                        type="text"
+                        id="bairroEndCliente"
+                        placeholder="Bairro"
+                      />
+                    </div>
+                  </div>
+                  <div id="divCidadeCliente" class="display-none">
+                    <div class="block-title label-color">
+                      Cidade<sup>*</sup>
+                    </div>
+                    <div class="block">
+                      <input
+                        type="text"
+                        id="cidadeEndCliente"
+                        placeholder="Cidade"
+                        readonly
+                      />
+                    </div>
+                  </div>
+                  <div id="divEstadoCliente" class="display-none">
+                    <div class="block-title label-color">
+                      Estado<sup>*</sup>
+                    </div>
+                    <div class="block">
+                      <input type="text" id="estadoEndCliente" readonly />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- FIM POPUP NOVO ENDEREÇO -->
         </div>
+      </div>
     </div>
     <!-- Path to Framework7 Library Bundle JS-->
     <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
@@ -182,6 +234,5 @@
     <!-- Roteamento do app-->
     <script type="text/javascript" src="js/routes.js"></script>
     <script src="cordova.js"></script>
-</body>
-
+  </body>
 </html>
