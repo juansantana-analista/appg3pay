@@ -394,7 +394,6 @@ var app = new Framework7({
                     localStorage.setItem("codigoRecuperacao", code);
                     app.popup.open(".popup-redefinir-senha");
                   } else {
-                    app.dialog.close();
                     app.dialog.alert(
                       "Erro, Código informado inválido ou expirado.",
                       '<i class="mdi mdi-alert"></i> Código Inválido'
@@ -422,6 +421,7 @@ var app = new Framework7({
             const $this = $(this);
             const index = parseInt($this.data("index"), 10);
             if ($this.val().length === 1 && index < 5) {
+              // Move para o próximo input
               $(`.code[data-index="${index + 1}"]`).focus();
             }
           });
@@ -430,10 +430,12 @@ var app = new Framework7({
             const $this = $(this);
             const index = parseInt($this.data("index"), 10);
             if (e.key === "Backspace" && $this.val() === "" && index > 0) {
+              // Volta para o input anterior
               $(`.code[data-index="${index - 1}"]`).focus();
             }
           });
           // END BOTÃO VALIDAR CÓDIGO
+
 
              
           //START BOTÃO SALVAR NOVA SENHA
