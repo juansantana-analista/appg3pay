@@ -416,6 +416,12 @@ var app = new Framework7({
             }
           });
 
+          // Função para limpar inputs e focar no primeiro
+          function resetInputs() {
+            $(".code").val(""); // Limpa todos os inputs
+            $(".code[data-index='0']").focus(); // Dá foco no primeiro input
+          }
+
           // Evento para mover o foco entre os inputs
           $(".code").on("input", function () {
             const $this = $(this);
@@ -434,6 +440,7 @@ var app = new Framework7({
               $(`.code[data-index="${index - 1}"]`).focus();
             }
           });
+          resetInputs();
           // END BOTÃO VALIDAR CÓDIGO
 
 
