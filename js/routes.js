@@ -356,55 +356,47 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada          
-          //START BOTÃO VALIDAR CODIGO
+          // START BOTÃO VALIDAR CÓDIGO
           $("#confirmarCodigo").on("click", function () {
             var emailRecuperacao = localStorage.getItem("emailRecuperacao");
 
-            document.querySelectorAll('.code').forEach((input, index) => {
-              input.addEventListener('input', (e) => {
-                if (e.target.value.length === 1 && index < 5) {
-                  document.querySelector(`.code[data-index="${index + 1}"]`).focus();
-                }
-              });
-        
-              input.addEventListener('keydown', (e) => {
-                if (e.key === "Backspace" && index > 0 && e.target.value === "") {
-                  document.querySelector(`.code[data-index="${index - 1}"]`).focus();
-                }
-              });
-            });
-            
-            const code = Array.from(document.querySelectorAll('.code')).map(input => input.value).join('');
+            // Captura os valores dos inputs e concatena
+            const code = $(".code")
+              .map(function () {
+                return $(this).val();
+              })
+              .get()
+              .join("");
 
-            if (code.length === 6) {            
-
+            if (code.length === 6) {
+              // Prepara a requisição
               const headers = {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
               };
-  
+
               const body = JSON.stringify({
                 email: emailRecuperacao,
                 code: code,
               });
-  
+
               const options = {
                 method: "POST",
                 headers: headers,
                 body: body,
               };
-  
-              fetch('https://escritorio.g3pay.com.br/api/validate_code.php', options)
+
+              // Faz a requisição ao servidor
+              fetch("https://escritorio.g3pay.com.br/api/validate_code.php", options)
                 .then((response) => response.json())
                 .then((data) => {
                   app.dialog.close();
-                  if (data.status == 'success' && data.data.status == 'success') {
+                  if (data.status === "success" && data.data.status === "success") {
                     localStorage.setItem("codigoRecuperacao", code);
-  
                     app.popup.open(".popup-redefinir-senha");
                   } else {
                     app.dialog.close();
                     app.dialog.alert(
-                      "Erro, Código informado invalido ou expirado.",
+                      "Erro, Código informado inválido ou expirado.",
                       '<i class="mdi mdi-alert"></i> Código Inválido'
                     );
                   }
@@ -413,15 +405,36 @@ var app = new Framework7({
                   console.error("Erro:", error);
                   app.dialog.close();
                   app.dialog.alert(
-                    "Erro, Código informado invalido ou expirado.",
+                    "Erro, Código informado inválido ou expirado.",
                     '<i class="mdi mdi-alert"></i> Código Inválido'
                   );
                 });
             } else {
-              return('Por favor, insira todos os 6 dígitos do código.');
+              return app.dialog.alert(
+                "Por favor, insira todos os 6 dígitos do código.",
+                '<i class="mdi mdi-alert"></i> Código Incompleto'
+              );
             }
           });
-          //END BOTÃO VALIDAR CODIGO
+
+          // Evento para mover o foco entre os inputs
+          $(".code").on("input", function () {
+            const $this = $(this);
+            const index = parseInt($this.data("index"), 10);
+            if ($this.val().length === 1 && index < 5) {
+              $(`.code[data-index="${index + 1}"]`).focus();
+            }
+          });
+
+          $(".code").on("keydown", function (e) {
+            const $this = $(this);
+            const index = parseInt($this.data("index"), 10);
+            if (e.key === "Backspace" && $this.val() === "" && index > 0) {
+              $(`.code[data-index="${index - 1}"]`).focus();
+            }
+          });
+          // END BOTÃO VALIDAR CÓDIGO
+
              
           //START BOTÃO SALVAR NOVA SENHA
           $("#submit-password").on("click", function () {
