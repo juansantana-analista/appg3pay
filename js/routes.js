@@ -541,13 +541,13 @@ var app = new Framework7({
             id: 'my-intro',
             steps: [
                 {
-                    target: '.card-color.white',
+                    target: '#valorVenda',
                     title: 'Vendas Mensais',
                     content: 'Aqui você pode visualizar suas vendas mensais!',
                     placement: 'bottom'
                 },
                 {
-                    target: '.card-color.green',
+                    target: '#qtdeDiretos',
                     title: 'Indicados Diretos',
                     content: 'Aqui você vê os indicados diretos.',
                     placement: 'bottom'
