@@ -535,21 +535,14 @@ var app = new Framework7({
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
-          const guide = new Guided();
-
-          guide.addStep({
-              element: document.querySelector('.card-color.white'),
-              content: 'Aqui você vê suas vendas mensais!',
-              position: 'bottom'
-          });
-          
-          guide.addStep({
-              element: document.querySelector('.card-color.green'),
-              content: 'Aqui você vê os indicados diretos.',
-              position: 'bottom'
-          });
-          
-          guide.start();
+          introJs().setOptions({
+            nextLabel: 'Próximo',
+            prevLabel: 'Anterior',
+            doneLabel: 'Concluir',
+            skipLabel: 'Pular',
+            tooltipPosition: 'auto',
+            showProgress: true
+        }).start();
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
