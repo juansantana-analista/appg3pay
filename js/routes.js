@@ -537,36 +537,26 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
-          const driver = new Driver();
-
-driver.highlight({
-    element: '.card-color.white',
-    popover: {
-        title: 'Vendas Mensais',
-        description: 'Aqui você pode visualizar suas vendas mensais.'
-    }
-});
-
-driver.defineSteps([
-    {
-        element: '.card-color.white',
-        popover: {
-            title: 'Vendas Mensais',
-            description: 'Aqui você pode visualizar suas vendas mensais.',
-            position: 'bottom'
-        }
-    },
-    {
-        element: '.card-color.green',
-        popover: {
-            title: 'Indicados Diretos',
-            description: 'Aqui você vê os indicados diretos.',
-            position: 'bottom'
-        }
-    }
-]);
-
-driver.start();
+          var tour = {
+            id: 'my-intro',
+            steps: [
+                {
+                    target: '.card-color.white',
+                    title: 'Vendas Mensais',
+                    content: 'Aqui você pode visualizar suas vendas mensais!',
+                    placement: 'bottom'
+                },
+                {
+                    target: '.card-color.green',
+                    title: 'Indicados Diretos',
+                    content: 'Aqui você vê os indicados diretos.',
+                    placement: 'bottom'
+                }
+            ]
+        };
+        
+        // Inicia o tour
+        hopscotch.startTour(tour);
           // fazer algo quando a página for inicializada
           OneSignal.Notifications.requestPermission();
 
