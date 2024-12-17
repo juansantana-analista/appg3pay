@@ -537,12 +537,49 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
-          introJs().setOptions({
-              nextLabel: 'Próximo',
-              prevLabel: 'Anterior',
-              doneLabel: 'Concluir',
-              skipLabel: 'Pular',
-          }).start();
+          const tour = new Shepherd.Tour({
+            defaultStepOptions: {
+                scrollTo: true,
+                classes: 'shepherd-theme-arrows',
+                cancelIcon: { enabled: true },
+            }
+        });
+        
+        tour.addStep({
+            title: 'Vendas Mensais',
+            text: 'Aqui você pode ver suas vendas mensais!',
+            attachTo: {
+                element: '.card-color.white',
+                on: 'bottom'
+            },
+            buttons: [
+                {
+                    text: 'Próximo',
+                    action: tour.next
+                }
+            ]
+        });
+        
+        tour.addStep({
+            title: 'Indicados Diretos',
+            text: 'Aqui você vê os indicados diretos.',
+            attachTo: {
+                element: '.card-color.green',
+                on: 'bottom'
+            },
+            buttons: [
+                {
+                    text: 'Anterior',
+                    action: tour.back
+                },
+                {
+                    text: 'Concluir',
+                    action: tour.complete
+                }
+            ]
+        });
+        
+        tour.start();
           // fazer algo quando a página for inicializada
           OneSignal.Notifications.requestPermission();
 
