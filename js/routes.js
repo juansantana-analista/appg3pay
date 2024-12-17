@@ -539,7 +539,7 @@ var app = new Framework7({
             nextLabel: 'Próximo',
             prevLabel: 'Anterior',
             doneLabel: 'Concluir',
-            skipLabel: 'Pular',
+            skipLabel: 'x',
             tooltipPosition: 'auto',
             showProgress: true
         }).start();
