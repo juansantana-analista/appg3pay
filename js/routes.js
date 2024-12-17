@@ -537,49 +537,36 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
-          const tour = new Shepherd.Tour({
-            defaultStepOptions: {
-                scrollTo: true,
-                classes: 'shepherd-theme-arrows',
-                cancelIcon: { enabled: true },
-            }
-        });
-        
-        tour.addStep({
+          const driver = new Driver();
+
+driver.highlight({
+    element: '.card-color.white',
+    popover: {
+        title: 'Vendas Mensais',
+        description: 'Aqui você pode visualizar suas vendas mensais.'
+    }
+});
+
+driver.defineSteps([
+    {
+        element: '.card-color.white',
+        popover: {
             title: 'Vendas Mensais',
-            text: 'Aqui você pode ver suas vendas mensais!',
-            attachTo: {
-                element: '.card-color.white',
-                on: 'bottom'
-            },
-            buttons: [
-                {
-                    text: 'Próximo',
-                    action: tour.next
-                }
-            ]
-        });
-        
-        tour.addStep({
+            description: 'Aqui você pode visualizar suas vendas mensais.',
+            position: 'bottom'
+        }
+    },
+    {
+        element: '.card-color.green',
+        popover: {
             title: 'Indicados Diretos',
-            text: 'Aqui você vê os indicados diretos.',
-            attachTo: {
-                element: '.card-color.green',
-                on: 'bottom'
-            },
-            buttons: [
-                {
-                    text: 'Anterior',
-                    action: tour.back
-                },
-                {
-                    text: 'Concluir',
-                    action: tour.complete
-                }
-            ]
-        });
-        
-        tour.start();
+            description: 'Aqui você vê os indicados diretos.',
+            position: 'bottom'
+        }
+    }
+]);
+
+driver.start();
           // fazer algo quando a página for inicializada
           OneSignal.Notifications.requestPermission();
 
