@@ -563,7 +563,7 @@ var app = new Framework7({
                             position: 'bottom'
                         },
                         {
-                            element: '.update-button-container',
+                            element: '.update-button',
                             intro: 'Clique para atualizar a tela!',
                             position: 'bottom'
                         },
