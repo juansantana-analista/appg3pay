@@ -537,6 +537,7 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
           // Verifica se o tutorial já foi concluído
           if (!localStorage.getItem('tutorialCompleted')) {
+            $("#installBanner").addClass("display-none");            
             // Configuração do Intro.js
             introJs()
                 .setOptions({
@@ -606,6 +607,8 @@ var app = new Framework7({
                     localStorage.setItem('tutorialCompleted', 'true');
                 })
                 .start();
+          } else {            
+            $("#installBanner").removeClass("display-none");
           }
         },
         pageInit: function (event, page) {
