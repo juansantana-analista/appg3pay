@@ -535,26 +535,21 @@ var app = new Framework7({
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
-          var tour = {
-            id: 'my-intro',
-            steps: [
-                {
-                    target: '.card-color.white',
-                    title: 'Vendas Mensais',
-                    content: 'Aqui você pode visualizar suas vendas mensais!',
-                    placement: 'bottom'
-                },
-                {
-                    target: '.card-color.green',
-                    title: 'Indicados Diretos',
-                    content: 'Aqui você vê os indicados diretos.',
-                    placement: 'bottom'
-                }
-            ]
-        };
-        
-        // Inicia o tour
-        hopscotch.startTour(tour);
+          const guide = new Guided();
+
+          guide.addStep({
+              element: document.querySelector('.card-color.white'),
+              content: 'Aqui você vê suas vendas mensais!',
+              position: 'bottom'
+          });
+          
+          guide.addStep({
+              element: document.querySelector('.card-color.green'),
+              content: 'Aqui você vê os indicados diretos.',
+              position: 'bottom'
+          });
+          
+          guide.start();
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
