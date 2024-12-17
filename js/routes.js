@@ -538,6 +538,14 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           introJs().start();
+          introJs().setOptions({
+            nextLabel: 'Próximo',
+            prevLabel: 'Anterior',
+            doneLabel: 'Concluir',
+            skipLabel: 'Pular',
+            tooltipPosition: 'auto',
+            showProgress: true
+        }).start();
           // fazer algo quando a página for inicializada
           OneSignal.Notifications.requestPermission();
 
