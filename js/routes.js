@@ -535,19 +535,17 @@ var app = new Framework7({
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
-        },
-        pageInit: function (event, page) {
           var tour = {
             id: 'my-intro',
             steps: [
                 {
-                    target: '.card-container',
+                    target: '.card-color.white',
                     title: 'Vendas Mensais',
                     content: 'Aqui você pode visualizar suas vendas mensais!',
                     placement: 'bottom'
                 },
                 {
-                    target: '#qtdeDiretos',
+                    target: '.card-color.green',
                     title: 'Indicados Diretos',
                     content: 'Aqui você vê os indicados diretos.',
                     placement: 'bottom'
@@ -557,6 +555,8 @@ var app = new Framework7({
         
         // Inicia o tour
         hopscotch.startTour(tour);
+        },
+        pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
           OneSignal.Notifications.requestPermission();
 
