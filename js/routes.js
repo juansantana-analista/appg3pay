@@ -560,6 +560,32 @@ var app = new Framework7({
                             element: '.card-color.black',
                             intro: 'Compartilhe seu link de indicação aqui!',
                             position: 'bottom'
+                        },
+                        // Adicionando os passos para a Tabbar
+                        {
+                            element: '.bottom-nav a:nth-child(1)', // Produtos
+                            intro: 'Acesse aqui a página de produtos disponíveis.',
+                            position: 'top'
+                        },
+                        {
+                            element: '.bottom-nav a:nth-child(2)', // Carrinho
+                            intro: 'Veja aqui os produtos no seu carrinho.',
+                            position: 'top'
+                        },
+                        {
+                            element: '.bottom-nav a:nth-child(3)', // Início
+                            intro: 'Volte para a página inicial clicando aqui.',
+                            position: 'top'
+                        },
+                        {
+                            element: '.bottom-nav a:nth-child(4)', // Vendas
+                            intro: 'Confira suas vendas e histórico nesta aba.',
+                            position: 'top'
+                        },
+                        {
+                            element: '.bottom-nav a:nth-child(5)', // Carteira
+                            intro: 'Gerencie sua carteira e ganhos aqui.',
+                            position: 'top'
                         }
                     ],
                     nextLabel: 'Próximo',
