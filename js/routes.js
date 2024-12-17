@@ -535,14 +535,52 @@ var app = new Framework7({
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
-          introJs().setOptions({
-            nextLabel: 'Próximo',
-            prevLabel: 'Anterior',
-            doneLabel: 'Concluir',
-            skipLabel: 'x',
-            tooltipPosition: 'auto',
-            showProgress: true
-        }).start();
+          // Verifica se o tutorial já foi concluído
+          if (!localStorage.getItem('tutorialCompleted')) {
+            // Configuração do Intro.js
+            introJs()
+                .setOptions({
+                    steps: [
+                        {
+                            element: '.card-color.white',
+                            intro: 'Aqui você vê suas vendas mensais!',
+                            position: 'bottom'
+                        },
+                        {
+                            element: '.card-color.green',
+                            intro: 'Aqui você vê os indicados diretos.',
+                            position: 'bottom'
+                        },
+                        {
+                            element: '.card-color.purple',
+                            intro: 'Indicados gerais são mostrados aqui.',
+                            position: 'bottom'
+                        },
+                        {
+                            element: '.card-color.black',
+                            intro: 'Compartilhe seu link de indicação aqui!',
+                            position: 'bottom'
+                        }
+                    ],
+                    nextLabel: 'Próximo',
+                    prevLabel: 'Anterior',
+                    doneLabel: 'Concluir',
+                    skipLabel: 'x',
+                    tooltipPosition: 'auto', // Ajusta a posição da tooltip automaticamente
+                    showProgress: true,     // Exibe o progresso do tutorial
+                    showBullets: true,      // Mostra os indicadores de passos
+                    scrollToElement: true   // Rola a tela para o elemento em destaque
+                })
+                .oncomplete(function() {
+                    // Quando o usuário concluir o tutorial
+                    localStorage.setItem('tutorialCompleted', 'true');
+                })
+                .onexit(function() {
+                    // Mesmo se o usuário sair antes de concluir, marcamos como concluído
+                    localStorage.setItem('tutorialCompleted', 'true');
+                })
+                .start();
+          }
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
