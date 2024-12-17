@@ -562,6 +562,11 @@ var app = new Framework7({
                             intro: 'Compartilhe seu link de indicação aqui!',
                             position: 'bottom'
                         },
+                        {
+                            element: '.update-button-container',
+                            intro: 'Clique para atualizar a tela!',
+                            position: 'bottom'
+                        },
                         // Adicionando os passos para a Tabbar
                         {
                             element: '.bottom-nav a:nth-child(1)', // Produtos
