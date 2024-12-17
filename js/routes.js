@@ -541,7 +541,7 @@ var app = new Framework7({
             id: 'my-intro',
             steps: [
                 {
-                    target: '#valorVenda',
+                    target: '.card-container',
                     title: 'Vendas Mensais',
                     content: 'Aqui você pode visualizar suas vendas mensais!',
                     placement: 'bottom'
