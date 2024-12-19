@@ -690,8 +690,8 @@ function listarVendas(searchQuery = "") {
 
                 $(".card-list").click(function () {
                     // Atualiza o ícone de seleção
-                    var pedidoId = $(this).data("id-pedido");
-                    localStorage.setItem('pedidoId', pedidoId);
+                    var vendaId = $(this).data("id-venda");
+                    localStorage.setItem('vendaId', vendaId);
                     app.views.main.router.navigate("/resumo-pedido/");
                 });
 
@@ -700,13 +700,13 @@ function listarVendas(searchQuery = "") {
                 app.dialog.close();
                 // Verifica se há uma mensagem de erro definida
                 const errorMessage = responseJson.message || "Formato de dados inválido";
-                app.dialog.alert("Erro ao carregar pedidos: " + errorMessage, "Falha na requisição!");
+                app.dialog.alert("Erro ao carregar vendas: " + errorMessage, "Falha na requisição!");
             }
         })
         .catch((error) => {
             app.dialog.close();
             console.error("Erro:", error);
-            app.dialog.alert("Erro ao carregar pedidos: " + error.message, "Falha na requisição!");
+            app.dialog.alert("Erro ao carregar vendas: " + error.message, "Falha na requisição!");
         });
 }
 //Fim Função Lista Vendas
