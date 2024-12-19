@@ -612,8 +612,6 @@ var app = new Framework7({
                     localStorage.setItem('tutorialCompleted', 'true');
                 })
                 .start();
-          } else {            
-            $("#installBanner").removeClass("display-none");
           }
         },
         pageInit: function (event, page) {

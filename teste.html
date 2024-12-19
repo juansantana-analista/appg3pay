@@ -1,110 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes do Produto</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/framework7/7.0.0/css/framework7.bundle.min.css">
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-        .navbar-carrinho {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 15px;
-            background-color: #007aff;
-            color: #fff;
-        }
-        .navbar-carrinho .left {
-            display: flex;
-            align-items: center;
-        }
-        .navbar-carrinho .right {
-            display: flex;
-            gap: 15px;
-        }
-        .navbar-carrinho .icon {
-            font-size: 20px;
-            cursor: pointer;
-        }
-        .product-image {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-        }
-        .product-info {
-            padding: 15px;
-        }
-        .product-info .stats {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 10px;
-            gap: 20px;
-            color: #666;
-        }
-        .product-info h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        .product-info p {
-            font-size: 16px;
-            line-height: 1.5;
-            color: #666;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obrigado!</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    .message {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    .redirect-link {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #25d366;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    .redirect-link:hover {
+      background-color: #1ebe57;
+    }
+  </style>
 </head>
 <body>
-    <div id="app">
-        <!-- Navbar -->
-        <div class="navbar-carrinho">
-            <div class="left">
-                <div class="icon" id="back-button">&lt;</div>
-            </div>
-            <div class="right">
-                <div class="icon" id="like-button">&#10084;</div>
-                <div class="icon" id="share-button">&#x1F517;</div>
-            </div>
-        </div>
+  <h1>Obrigado pelo contato!</h1>
+  <p class="message">Estamos felizes em ajudar você. Nosso atendimento pelo WhatsApp abrirá em uma nova aba.</p>
+  <a href="https://wa.me/5511999999999" target="_blank" class="redirect-link">Ir para o WhatsApp</a>
 
-        <!-- Product Image -->
-        <img src="https://via.placeholder.com/300" alt="Produto" class="product-image">
-
-        <!-- Product Info -->
-        <div class="product-info">
-            <div class="stats">
-                <span id="likes-count">💖 100 curtidas</span>
-                <span id="reviews-count">⭐ 50 avaliações</span>
-            </div>
-            <h1 id="product-name">Nome do Produto</h1>
-            <p id="product-description">Descrição detalhada do produto para atrair os usuários e fornecer informações úteis.</p>
-        </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/framework7/7.0.0/js/framework7.bundle.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            // Ação do botão de voltar
-            $('#back-button').on('click', function () {
-                alert('Voltando à página anterior');
-            });
-
-            // Ação do botão de like
-            $('#like-button').on('click', function () {
-                const likesCountElement = $('#likes-count');
-                let likes = parseInt(likesCountElement.text().match(/\d+/)[0]);
-                likes++;
-                likesCountElement.text(`💖 ${likes} curtidas`);
-            });
-
-            // Ação do botão de compartilhar
-            $('#share-button').on('click', function () {
-                alert('Link copiado para a área de transferência!');
-            });
-        });
-    </script>
+  <script>
+    // Abrir o WhatsApp automaticamente em uma nova aba
+    window.onload = function() {
+      window.open("https://wa.me/5511999999999", "_blank");
+    };
+  </script>
 </body>
 </html>
