@@ -772,8 +772,29 @@ var app = new Framework7({
       },
     },
     {
-      path: "/carteira/",
-      url: "carteira.html",
+      path: "/vendas/",
+      url: "vendas.html",
+      animate: false,
+      on: {
+        pageBeforeIn: function (event, page) {
+          // fazer algo antes da página ser exibida
+          $("#menuPrincipal").show("fast");
+        },
+        pageAfterIn: function (event, page) {
+          // fazer algo depois da página ser exibida
+        },
+        pageInit: function (event, page) {
+          // fazer algo quando a página for inicializada
+          listarVendas();
+        },
+        pageBeforeRemove: function (event, page) {
+          // fazer algo antes da página ser removida do DOM
+        },
+      },
+    },
+    {
+      path: "/resumo-venda/",
+      url: "resumo-venda.html",
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
@@ -783,20 +804,8 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
-          // fazer algo quando a página for inicializada
-          let isHidden = true;
-          $('#balance-value').text('*****');        
-          $('#toggle-visibility').click(function() {    
-            if (isHidden) {
-              $('#balance-value').text('0');
-              $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565655.png');
-            } else {
-              $('#balance-value').text('*****');
-              $(this).attr('src', 'https://cdn-icons-png.flaticon.com/512/565/565654.png');
-            }
-            isHidden = !isHidden;
-          });
-
+          // fazer algo quando a página for inicializada          
+          detalhesPedido();
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM

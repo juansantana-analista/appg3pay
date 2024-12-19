@@ -696,7 +696,7 @@ function listarVendas(searchQuery = "") {
                 $(".card-list").click(function () {
                     // Atualiza o ícone de seleção
                     var vendaId = $(this).data("id-venda");
-                    localStorage.setItem('vendaId', vendaId);
+                    localStorage.setItem('pedidoId', vendaId);
                     app.views.main.router.navigate("/resumo-pedido/");
                 });
 
@@ -715,6 +715,7 @@ function listarVendas(searchQuery = "") {
         });
 }
 //Fim Função Lista Vendas
+
 
 // Início da função detalhesPedido
 function detalhesPedido() {
