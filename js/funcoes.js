@@ -627,11 +627,16 @@ function listarVendas(searchQuery = "") {
         "Authorization": 'Bearer ' + userAuthToken,
     };
 
+    // Cabeçalhos da requisição
+    const dados = {
+        "vendedor": pessoaId
+    };
+
+
     const body = JSON.stringify({
         class: "PedidoDigitalRest",
         method: "MinhasVendasDigitais",
-        vendedor: pessoaId,
-        limit: 15
+        dados: dados
     });
 
     // Opções da requisição
