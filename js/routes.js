@@ -813,6 +813,26 @@ var app = new Framework7({
       },
     },
     {
+      path: "/carteira/",
+      url: "carteira.html",
+      animate: false,
+      on: {
+        pageBeforeIn: function (event, page) {
+          // fazer algo antes da página ser exibida
+          $("#menuPrincipal").show("fast");
+        },
+        pageAfterIn: function (event, page) {
+          // fazer algo depois da página ser exibida
+        },
+        pageInit: function (event, page) {
+          // fazer algo quando a página for inicializada
+        },
+        pageBeforeRemove: function (event, page) {
+          // fazer algo antes da página ser removida do DOM
+        },
+      },
+    },
+    {
       path: "/pedidos/",
       url: "pedidos.html",
       animate: false,
