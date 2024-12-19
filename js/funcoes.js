@@ -615,6 +615,101 @@ function listarPedidos(searchQuery = "") {
 }
 //Fim Função Lista tela Pedidos
 
+//Inicio Funçao listar Vendas
+function listarVendas(searchQuery = "") {
+    var userAuthToken = localStorage.getItem('userAuthToken');
+    var pessoaId = localStorage.getItem('pessoaId');
+    app.dialog.preloader("Carregando...");
+
+    // Cabeçalhos da requisição
+    const headers = {
+        "Content-Type": "application/json",
+        "Authorization": 'Bearer ' + userAuthToken,
+    };
+
+    const body = JSON.stringify({
+        class: "PedidoDigitalRest",
+        method: "MinhasVendasDigitais",
+        vendedor: pessoaId,
+        limit: 15
+    });
+
+    // Opções da requisição
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: body,
+    };
+
+    // Fazendo a requisição
+    fetch(apiServerUrl, options)
+        .then((response) => response.json())
+        .then((responseJson) => {
+            // Verifica se o status é 'success' e se há dados de pedidos
+            if (responseJson.status === "success" && responseJson.data.status === "success") {
+                const vendas = responseJson.data.data;
+                const vendasContainer = document.getElementById("container-vendas");
+                vendasContainer.innerHTML = "";
+
+                vendas.forEach((venda) => {
+                    const vendasHTML = `                    
+                        <div class="card-list" 
+                        data-id-venda="${venda.pedido_id}">
+                           <div class="card-principal">
+                              <div class="card-header open header-pago">
+                                 <div class="date">${formatarData(venda.data_criacao)}</div>
+                                 <div class="status">${venda.cliente.status_compra}</div>
+                              </div>
+                              <div class="card-body">
+                                 <div class="name">PEDIDO #${venda.pedido_id}</div>
+                                 <div class="details">
+                                    <div class="detail">
+                                       <span>Nº</span>
+                                       <span>${venda.pedido_id}</span>
+                                    </div>
+                                    <div class="detail">
+                                       <span class="mdi mdi-cash-multiple"></span>
+                                       <span>${venda.forma_pagamento.opcao}</span>
+                                    </div>
+                                    <div class="detail">
+                                       <span>Total</span>
+                                       <span>${formatarMoeda(venda.cliente.valor_total)}</span>
+                                    </div>
+                                    <div class="detail">
+                                       <span>A pagar</span>
+                                       <span>${formatarMoeda(venda.cliente.valor_total)}</span>
+                                    </div>
+                                    <div class="items">${venda.pedido_id}</div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                    `;
+                    vendasContainer.innerHTML += vendasHTML;
+                });
+
+                $(".card-list").click(function () {
+                    // Atualiza o ícone de seleção
+                    var pedidoId = $(this).data("id-pedido");
+                    localStorage.setItem('pedidoId', pedidoId);
+                    app.views.main.router.navigate("/resumo-pedido/");
+                });
+
+                app.dialog.close();
+            } else {
+                app.dialog.close();
+                // Verifica se há uma mensagem de erro definida
+                const errorMessage = responseJson.message || "Formato de dados inválido";
+                app.dialog.alert("Erro ao carregar pedidos: " + errorMessage, "Falha na requisição!");
+            }
+        })
+        .catch((error) => {
+            app.dialog.close();
+            console.error("Erro:", error);
+            app.dialog.alert("Erro ao carregar pedidos: " + error.message, "Falha na requisição!");
+        });
+}
+//Fim Função Lista Vendas
 
 // Início da função detalhesPedido
 function detalhesPedido() {
