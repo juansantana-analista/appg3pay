@@ -697,7 +697,7 @@ function listarVendas(searchQuery = "") {
                     // Atualiza o ícone de seleção
                     var vendaId = $(this).data("id-venda");
                     localStorage.setItem('pedidoId', vendaId);
-                    app.views.main.router.navigate("/resumo-pedido/");
+                    app.views.main.router.navigate("/resumo-venda/");
                 });
 
                 app.dialog.close();
