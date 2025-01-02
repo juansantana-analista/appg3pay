@@ -1388,22 +1388,15 @@ form {
       flex-direction: column; /* Empilha os itens verticalmente */
       align-items: center; /* Centraliza os itens horizontalmente */
       justify-content: center; /* Centraliza os itens verticalmente */
-      height: 100vh; /* Faz o contêiner ocupar toda a altura da tela */
       text-align: center; /* Centraliza o texto */
-  }
-  
-  .payment-center img {
-      margin-bottom: 20px; /* Espaço entre a imagem e o código Pix */
   }
   
   .payment-center .pix-key {
       background-color: #f5f5f5;
-      padding: 10px;
       border: 1px solid #ddd;
       border-radius: 5px;
       word-break: break-word; /* Permite quebrar o código Pix se for longo */
       display: block;
-      margin-bottom: 20px; /* Espaço entre o código Pix e o botão */
   }
   
       .pix-code {
