@@ -880,6 +880,17 @@ var app = new Framework7({
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
           detalhesPedido();
+
+          
+          $('#copiarPix').on('click', function () {
+              const elementoPix = document.getElementById("pixKey");
+              copiarParaAreaDeTransferencia(elementoPix);
+          });
+
+          $('#copiarBoleto').on('click', function () {
+              const elementoBoleto = document.getElementById("linhaBoleto");
+              copiarParaAreaDeTransferencia(elementoBoleto);
+          });
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM

@@ -786,7 +786,7 @@ function detalhesPedido() {
                                 <h4>Pagamento com ${detalhes.forma_pagamento}</h4>
                                 <div class="payment-center">
                                     <img src="https://escritorio.g3pay.com.br/${detalhes.pix_qrcode}" width="250px" alt="QR Code">
-                                    <span class="pix-key">${detalhes.pix_key}</span>
+                                    <span class="pix-key" id="pixKey">${detalhes.pix_key}</span>
                                     <button class="copy-button" id="copiarPix">Copiar Código Pix</button>
                                 </div>
                             </div>
@@ -794,7 +794,7 @@ function detalhesPedido() {
                             <div class="payment-method-a display-none" id="pagamentoBoleto">
                                 <h4>Pagamento com ${detalhes.forma_pagamento}</h4>
                                 <div class="payment-center">
-                                    <span class="pix-key">${detalhes.boleto_linhadigitavel}</span>
+                                    <span class="pix-key" id="linhaBoleto">${detalhes.boleto_linhadigitavel}</span>
                                     <button class="copy-button" id="copiarBoleto">Copiar Linha Digitável</button>
                                     <button class="copy-button" id="baixarBoleto">Baixar Boleto PDF</button>
                                 </div>
@@ -803,9 +803,6 @@ function detalhesPedido() {
                             <div class="payment-method-a display-none" id="pagamentoCartao">
                                 <h4>Pagamento com ${detalhes.forma_pagamento}</h4>
                                 <div class="payment-center">
-                                    <img src="https://escritorio.g3pay.com.br/${detalhes.pix_qrcode}" width="250px" alt="QR Code">
-                                    <span class="pix-key">${detalhes.pix_key}</span>
-                                    <button class="copy-button" id="copiarPix">Copiar Código Pix</button>
                                 </div>
                             </div>
                         </div>
