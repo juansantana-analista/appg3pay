@@ -779,7 +779,7 @@ function detalhesPedido() {
                         </div>
                         <div class="order-payment">
                             <h3>Forma de Pagamento</h3>
-                            <p><strong>Método:</strong> ${detalhes.forma_pagamento}</p>
+                            <p><strong>Método:</strong> ${detalhes.forma_pagamento} <a href="#" class="pagamento-display display-none">Alterar</a></p>
                             <p><strong>Status:</strong> ${detalhes.mensagem_compra}</p>
                         </div>
                         <div class="order-address">
@@ -799,7 +799,7 @@ function detalhesPedido() {
 
                 detalhesContainer.innerHTML = detalhesHTML;
                 if(detalhes.status_compra != 3 ) {                    
-                    $(".filter-btn").removeClass("active");
+                    $(".pagamento-display").removeClass("display-none");
                 }
                 app.dialog.close();
             } else {
