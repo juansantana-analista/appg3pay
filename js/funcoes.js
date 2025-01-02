@@ -781,6 +781,17 @@ function detalhesPedido() {
                             <h3>Forma de Pagamento</h3>
                             <p><strong>Método:</strong> ${detalhes.forma_pagamento} <a href="#" class="pagamento-display display-none">Alterar</a></p>
                             <p><strong>Status:</strong> ${detalhes.mensagem_compra}</p>
+                            <!-- Seção de pagamento -->
+                            <div class="payment-method-a pagamento-display display-none">
+                                <h4>Pagamento com ${detalhes.forma_pagamento}</h4>
+                                <div>
+                                    <img src="https://escritorio.g3pay.com.br/${detalhes.pix_qrcode}" width="250px">
+                                </div>
+                                <div>
+                                    <span>${detalhes.pix_key}</span>
+                                </div>
+                                <button class="copy-button" id="copiarPix">Copiar Código Pix</button>
+                            </div>
                         </div>
                         <div class="order-address">
                             <h3>Endereço de Entrega</h3>
