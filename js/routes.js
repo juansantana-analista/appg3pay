@@ -25,7 +25,7 @@ var app = new Framework7({
   routes: [
     {
       path: '/index/',
-      url: 'index.html?v=1.0.1',
+      url: 'index.html?v=1.0.2',
       on: {
         pageBeforeIn: async function (event, page) {    
           clearLocalStorage();
@@ -181,7 +181,7 @@ var app = new Framework7({
     },
     {
       path: "/splash-view/",
-      url: "splash-view.html",
+      url: "splash-view.html?v=1.0.2",
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
@@ -212,7 +212,7 @@ var app = new Framework7({
     },
     {
       path: "/login-view/",
-      url: "login-view.html",
+      url: "login-view.html?v=1.0.2",
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
@@ -346,7 +346,7 @@ var app = new Framework7({
     },
     {
       path: '/validar-codigo/',
-      url: 'validar-codigo.html?v=1.0.1',
+      url: 'validar-codigo.html?v=1.0.2',
       animate: false,
       on: {
         pageBeforeIn: async function (event, page) {
@@ -517,7 +517,7 @@ var app = new Framework7({
     },
     {
       path: '/home/',
-      url: 'home.html?v=1.0.1',
+      url: 'home.html?v=1.0.2',
       animate: false,
       on: {
         pageBeforeIn: async function (event, page) {
@@ -908,7 +908,7 @@ var app = new Framework7({
     },
     {
       path: '/produtos/',
-      url: 'produtos.html?v=1.0.1',
+      url: 'produtos.html?v=1.0.2',
       animate: false,
       on: {
         pageBeforeIn: async function (event, page) {
@@ -1045,7 +1045,7 @@ var app = new Framework7({
     },
     {
       path: '/detalhes/',
-      url: 'detalhes.html?v=1.0.1',
+      url: 'detalhes.html?v=1.0.2',
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
@@ -1189,7 +1189,7 @@ var app = new Framework7({
     },
     {
       path: '/carrinho/',
-      url: 'carrinho.html?v=1.0.1',
+      url: 'carrinho.html?v=1.0.2',
       options: {
         transition: 'f7-push',
       },
@@ -1263,7 +1263,7 @@ var app = new Framework7({
     },
     {
       path: '/offline/',
-      url: 'offline.html?v=1.0.1',
+      url: 'offline.html?v=1.0.2',
       options: {
         transition: 'f7-push',
       },
@@ -1285,7 +1285,7 @@ var app = new Framework7({
     },
     {
       path: '/checkout/',
-      url: 'checkout.html?v=1.0.1',
+      url: 'checkout.html?v=1.0.2',
       options: {
         transition: 'f7-push',
       },
@@ -1428,7 +1428,7 @@ var app = new Framework7({
     },
     {
       path: '/pagamento/',
-      url: 'pagamento.html?v=1.0.1',
+      url: 'pagamento.html?v=1.0.2',
       options: {
         transition: 'f7-push',
       },
@@ -1573,7 +1573,7 @@ var app = new Framework7({
     },    
     {
       path: '/refazer-pagamento/',
-      url: 'refazer-pagamento.html?v=1.0.1',
+      url: 'refazer-pagamento.html?v=1.0.2',
       options: {
         transition: 'f7-push',
       },
