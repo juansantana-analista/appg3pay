@@ -1379,6 +1379,10 @@ form {
       .payment-method-a {
         margin-bottom: 10px;
       }
+      .payment-method-a span {
+        word-break: break-word; /* Para quebrar longas palavras */
+        overflow-wrap: anywhere; /* Adicional para suporte em navegadores */
+    }
   
       .pix-code {
         width: 100%; /* ou um valor fixo como 200px, se necessário */
