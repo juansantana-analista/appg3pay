@@ -840,6 +840,15 @@ function detalhesPedido() {
                 $('#copiarBoleto').on('click', function () {
                     copiarParaAreaDeTransferencia(detalhes.boleto_linhadigitavel);
                 });
+                
+                // Baixar boleto
+                $('#baixarBoleto').on('click', function () {   
+                    app.dialog.confirm('Deseja baixar o boleto no navegador?', function () {
+                      var ref = cordova.InAppBrowser.open(detalhes.boleto_impressao, '_system', 'location=no,zoom=no');
+                      ref.show();
+                    });
+                });
+
                 app.dialog.close();
             } else {
                 app.dialog.close();
