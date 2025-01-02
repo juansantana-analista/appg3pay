@@ -784,13 +784,11 @@ function detalhesPedido() {
                             <!-- Seção de pagamento -->
                             <div class="payment-method-a pagamento-display display-none">
                                 <h4>Pagamento com ${detalhes.forma_pagamento}</h4>
-                                <div>
-                                    <img src="https://escritorio.g3pay.com.br/${detalhes.pix_qrcode}" width="250px">
+                                <div class="payment-center">
+                                    <img src="https://escritorio.g3pay.com.br/${detalhes.pix_qrcode}" width="250px" alt="QR Code">
+                                    <span class="pix-key">${detalhes.pix_key}</span>
+                                    <button class="copy-button" id="copiarPix">Copiar Código Pix</button>
                                 </div>
-                                <div>
-                                    <span>${detalhes.pix_key}</span>
-                                </div>
-                                <button class="copy-button" id="copiarPix">Copiar Código Pix</button>
                             </div>
                         </div>
                         <div class="order-address">
