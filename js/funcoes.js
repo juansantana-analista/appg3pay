@@ -782,7 +782,25 @@ function detalhesPedido() {
                             <p><strong>Método:</strong> ${detalhes.forma_pagamento} <a href="#" class="pagamento-display display-none">Alterar</a></p>
                             <p><strong>Status:</strong> ${detalhes.mensagem_compra}</p>
                             <!-- Seção de pagamento -->
-                            <div class="payment-method-a pagamento-display display-none">
+                            <div class="payment-method-a display-none" id="pagamentoPix">
+                                <h4>Pagamento com ${detalhes.forma_pagamento}</h4>
+                                <div class="payment-center">
+                                    <img src="https://escritorio.g3pay.com.br/${detalhes.pix_qrcode}" width="250px" alt="QR Code">
+                                    <span class="pix-key">${detalhes.pix_key}</span>
+                                    <button class="copy-button" id="copiarPix">Copiar Código Pix</button>
+                                </div>
+                            </div>
+                            <!-- Seção de pagamento -->
+                            <div class="payment-method-a display-none" id="pagamentoBoleto">
+                                <h4>Pagamento com ${detalhes.forma_pagamento}</h4>
+                                <div class="payment-center">
+                                    <span class="pix-key">${detalhes.boleto_linhadigitavel}</span>
+                                    <button class="copy-button" id="copiarBoleto">Copiar Linha Digitável</button>
+                                    <button class="copy-button" id="baixarBoleto">Baixar Boleto PDF</button>
+                                </div>
+                            </div>
+                            <!-- Seção de pagamento -->
+                            <div class="payment-method-a display-none" id="pagamentoCartao">
                                 <h4>Pagamento com ${detalhes.forma_pagamento}</h4>
                                 <div class="payment-center">
                                     <img src="https://escritorio.g3pay.com.br/${detalhes.pix_qrcode}" width="250px" alt="QR Code">
@@ -810,6 +828,14 @@ function detalhesPedido() {
                 if(detalhes.status_compra != 3 ) {                    
                     $(".pagamento-display").removeClass("display-none");
                 }
+                if(detalhes.forma_pagamento == "PIX" ) {                    
+                    $("#pagamentoPix").removeClass("display-none");
+                } else if(detalhes.forma_pagamento == "BOLETO") {      
+                    $("#pagamentoBoleto").removeClass("display-none");
+                } else {
+                    $("#pagamentoCartao").removeClass("display-none");
+                }
+
                 app.dialog.close();
             } else {
                 app.dialog.close();

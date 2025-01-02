@@ -1391,6 +1391,10 @@ form {
       text-align: center; /* Centraliza o texto */
   }
   
+  .payment-center img {
+      margin-bottom: 10px; /* Espaço entre a imagem e o código Pix */
+  }
+  
   .payment-center .pix-key {
       background-color: #f5f5f5;
       border: 1px solid #ddd;
