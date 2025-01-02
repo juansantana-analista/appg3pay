@@ -834,13 +834,11 @@ function detalhesPedido() {
                 }
                 
                 $('#copiarPix').on('click', function () {
-                    const elementoPix = document.getElementById("pixKey");
-                    copiarParaAreaDeTransferencia(elementoPix);
+                    copiarParaAreaDeTransferencia(detalhes.pix_key);
                 });
 
                 $('#copiarBoleto').on('click', function () {
-                    const elementoBoleto = document.getElementById("linhaBoleto");
-                    copiarParaAreaDeTransferencia(elementoBoleto);
+                    copiarParaAreaDeTransferencia(detalhes.boleto_linhadigitavel);
                 });
                 app.dialog.close();
             } else {
