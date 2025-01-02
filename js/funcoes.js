@@ -832,7 +832,16 @@ function detalhesPedido() {
                 } else {
                     $("#pagamentoCartao").removeClass("display-none");
                 }
+                
+                $('#copiarPix').on('click', function () {
+                    const elementoPix = document.getElementById("pixKey");
+                    copiarParaAreaDeTransferencia(elementoPix);
+                });
 
+                $('#copiarBoleto').on('click', function () {
+                    const elementoBoleto = document.getElementById("linhaBoleto");
+                    copiarParaAreaDeTransferencia(elementoBoleto);
+                });
                 app.dialog.close();
             } else {
                 app.dialog.close();
