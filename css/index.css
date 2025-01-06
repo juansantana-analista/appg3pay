@@ -107,6 +107,7 @@ body {
   padding: 15px;
   z-index: 1000;
   box-sizing: border-box;
+  padding-bottom: env(safe-area-inset-bottom); /* Ajusta para o Safe Area */
 }
 
 .info-row {
