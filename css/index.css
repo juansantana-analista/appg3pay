@@ -65,6 +65,7 @@ body {
   background-color: #ffffff;
   border-top: 1px solid #ccc;
   z-index: 1000;
+  padding-bottom: env(safe-area-inset-bottom); /* Ajusta para o Safe Area */
 }
 .d-flex{
   display: flex;
