@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://escritorio.g3pay.com.br/rest.php";
-const versionApp = "1.0";
+const versionApp = "1.0.3";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
 document.addEventListener('deviceready', onDeviceReady, false);
@@ -25,7 +25,7 @@ var app = new Framework7({
   routes: [
     {
       path: '/index/',
-      url: 'index.html?v=1.0.2',
+      url: 'index.html?v=' + versionApp,
       on: {
         pageBeforeIn: async function (event, page) {    
           clearLocalStorage();
@@ -181,7 +181,7 @@ var app = new Framework7({
     },
     {
       path: "/splash-view/",
-      url: "splash-view.html?v=1.0.2",
+      url: "splash-view.html?v=" + versionApp,
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
@@ -212,7 +212,7 @@ var app = new Framework7({
     },
     {
       path: "/login-view/",
-      url: "login-view.html?v=1.0.2",
+      url: "login-view.html?v=" + versionApp,
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
@@ -346,7 +346,7 @@ var app = new Framework7({
     },
     {
       path: '/validar-codigo/',
-      url: 'validar-codigo.html?v=1.0.2',
+      url: 'validar-codigo.html?v=' + versionApp,
       animate: false,
       on: {
         pageBeforeIn: async function (event, page) {
@@ -517,7 +517,7 @@ var app = new Framework7({
     },
     {
       path: '/home/',
-      url: 'home.html?v=1.0.2',
+      url: 'home.html?v=' + versionApp,
       animate: false,
       on: {
         pageBeforeIn: async function (event, page) {
@@ -910,7 +910,7 @@ var app = new Framework7({
     },
     {
       path: '/produtos/',
-      url: 'produtos.html?v=1.0.2',
+      url: 'produtos.html?v=' + versionApp,
       animate: false,
       on: {
         pageBeforeIn: async function (event, page) {
@@ -1047,7 +1047,7 @@ var app = new Framework7({
     },
     {
       path: '/detalhes/',
-      url: 'detalhes.html?v=1.0.2',
+      url: 'detalhes.html?v=' + versionApp,
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
@@ -1191,7 +1191,7 @@ var app = new Framework7({
     },
     {
       path: '/carrinho/',
-      url: 'carrinho.html?v=1.0.2',
+      url: 'carrinho.html?v=' + versionApp,
       options: {
         transition: 'f7-push',
       },
@@ -1265,7 +1265,7 @@ var app = new Framework7({
     },
     {
       path: '/offline/',
-      url: 'offline.html?v=1.0.2',
+      url: 'offline.html?v=' + versionApp,
       options: {
         transition: 'f7-push',
       },
@@ -1287,7 +1287,7 @@ var app = new Framework7({
     },
     {
       path: '/checkout/',
-      url: 'checkout.html?v=1.0.2',
+      url: 'checkout.html?v=' + versionApp,
       options: {
         transition: 'f7-push',
       },
@@ -1430,7 +1430,7 @@ var app = new Framework7({
     },
     {
       path: '/pagamento/',
-      url: 'pagamento.html?v=1.0.2',
+      url: 'pagamento.html?v=' + versionApp,
       options: {
         transition: 'f7-push',
       },
@@ -1575,7 +1575,7 @@ var app = new Framework7({
     },    
     {
       path: '/refazer-pagamento/',
-      url: 'refazer-pagamento.html?v=1.0.2',
+      url: 'refazer-pagamento.html?v=' + versionApp,
       options: {
         transition: 'f7-push',
       },
