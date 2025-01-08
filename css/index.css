@@ -642,14 +642,17 @@ form {
 
 .green {
     background-color: #E6E6FA;
+    color: #000;
 }
 
 .black {
     background-color: #FFD700;
+    color: #000;
 }
 
 .purple {
     background-color: #D3D3D3;
+    color: #000;
 }
 
 .blue {
