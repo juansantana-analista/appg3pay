@@ -3,8 +3,7 @@
     --gelo: #f1f1f1;
     --verde: #19c463;
     --preto: #2a2a2a;
-    --rosa: #ff5500;
-    --rosa: #FFC0CB;
+    --laranja: #ff5500;
 }
 
 /* Impede a seleção de texto em todo o aplicativo */
@@ -26,7 +25,7 @@
 }
 
 body {
-    background-color: var(--rosa);
+    background-color: var(--laranja);
     font-family: 'SFProDisplayLight', sans-serif;
 }
 
@@ -85,7 +84,7 @@ body {
 }
 
 .bottom-nav a.active {
-  color: var(--rosa);
+  color: var(--laranja);
 }
 
 .bottom-nav a i {
@@ -179,7 +178,7 @@ body {
 .top-nav {
     width: 100%;
     height: 60px;
-    background: var(--rosa);
+    background: var(--laranja);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -200,7 +199,7 @@ body {
 }
 
 .skin{
-    background: var(--rosa) !important; 
+    background: var(--laranja) !important; 
     /*AZUL #0061ab; */	
     /*VERMELHO #0061ab; */	
 }
@@ -215,7 +214,7 @@ body {
 }
 
 .title-logo span {
-    color: var(--rosa);
+    color: var(--laranja);
 }
 
 .btn-novo {
@@ -259,7 +258,7 @@ body {
 
 .btn-cart::before {
     content: attr(data-count);
-    background: var(--rosa);
+    background: var(--laranja);
     width: 17px;
     height: 17px;
     border-radius: 50%;
@@ -279,7 +278,7 @@ body {
 }
 
 a {
-    color: var(--rosa);
+    color: var(--laranja);
     font-weight: 600;
     text-decoration: none;
 }
@@ -355,7 +354,7 @@ form {
 }
 
 .filter-btn.active {
-    background: var(--rosa);
+    background: var(--laranja);
     color: var(--branco);
     border: none;
 }
@@ -477,7 +476,7 @@ form {
     height: 50px;
     border-radius: 15px;
     border: none;
-    background-color: var(--rosa);
+    background-color: var(--laranja);
     color: #fff;
     cursor: pointer;
     font-size: 18px;
@@ -902,7 +901,7 @@ form {
         align-items: center;
     }
     .card-header.header-pago {
-        background-color: var(--rosa);
+        background-color: var(--laranja);
     }
 
     .date {
@@ -1469,7 +1468,7 @@ form {
         height: 48px; /* Ajuste conforme necessário */
         border-radius: 50%;
         border: none;
-        background-color: var(--rosa); /* Cor do botão */
+        background-color: var(--laranja); /* Cor do botão */
         color: white; /* Cor do ícone */
         font-size: 24px; /* Tamanho do ícone */
         display: flex;
@@ -1557,7 +1556,7 @@ form {
   }
   
   .zoom-controls button {
-      background-color: var(--rosa);
+      background-color: var(--laranja);
       color: #fff;
       border: none;
       border-radius: 50%;
