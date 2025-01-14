@@ -1086,12 +1086,12 @@ form {
 
 .card-title {
   color: #666;
-  font-size: 0.9em;
+  font-size: 0.7em;
   margin-bottom: 5px;
 }
 
 .card-value {
-  font-size: 1.8em;
+  font-size: 1.0em;
   font-weight: bold;
   color: #333;
 }
@@ -1169,7 +1169,7 @@ form {
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 1.2em;
+  font-size: 1.0em;
 }
 
 .activity-details h4 {
@@ -1179,7 +1179,7 @@ form {
 
 .activity-details p {
   color: #666;
-  font-size: 0.9em;
+  font-size: 0.7em;
 }
 
 @media (max-width: 768px) {
