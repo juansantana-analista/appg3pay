@@ -562,7 +562,7 @@ var app = new Framework7({
                     steps: [
                         {
                             element: '.wallet-card',
-                            intro: 'Aqui fica sua carteira Digital!',
+                            intro: 'Aqui fica sua carteira Digital. Visualize, adicione ou transfira seu saldo.',
                             position: 'bottom'
                         },
                         {
@@ -571,13 +571,18 @@ var app = new Framework7({
                             position: 'bottom'
                         },
                         {
-                            element: '.card-color.purple',
-                            intro: 'Indicados gerais são mostrados aqui.',
+                            element: '.vendas-mes',
+                            intro: 'Esse cartão mostra suas vendas do mês, e o seu desempenho.',
                             position: 'bottom'
                         },
                         {
-                            element: '.card-color.black',
-                            intro: 'Compartilhe seu link de indicação aqui!',
+                            element: '.afiliados-ativos',
+                            intro: 'Esse cartão mostra a quandidade  de afiliados',
+                            position: 'bottom'
+                        },
+                        {
+                            element: '.referral-card',
+                            intro: 'Para expandir sua rede, compartilhe seu link de afiliado aqui!',
                             position: 'bottom'
                         },
                         {
