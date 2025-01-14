@@ -562,7 +562,7 @@ var app = new Framework7({
                     steps: [
                         {
                             element: '.wallet-card',
-                            intro: 'Aqui fica sua carteira Digital. Visualize, adicione ou transfira seu saldo.',
+                            intro: 'Aqui fica sua carteira Digital. Veja seu extrato, adicione ou transfira seu saldo.',
                             position: 'bottom'
                         },
                         {
