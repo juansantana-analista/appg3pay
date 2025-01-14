@@ -1012,6 +1012,11 @@ form {
         color: #FF4B00;
       }
 
+      
+      .container-dash {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
 .construction-card {
     text-align: center;
     padding: 20px;
