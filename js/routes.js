@@ -561,13 +561,13 @@ var app = new Framework7({
                 .setOptions({
                     steps: [
                         {
-                            element: '.card-color.white',
-                            intro: 'Aqui você vê suas vendas mensais!',
+                            element: '.wallet-card',
+                            intro: 'Aqui fica sua carteira Digital!',
                             position: 'bottom'
                         },
                         {
-                            element: '.card-color.green',
-                            intro: 'Aqui você vê os indicados diretos.',
+                            element: '#toggleBalance',
+                            intro: 'Clique aqui para visualizar o saldo',
                             position: 'bottom'
                         },
                         {
