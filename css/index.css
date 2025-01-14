@@ -1041,15 +1041,30 @@ form {
 
 .balance-container {
   margin-top: 10px;
+  height: 42px; /* Altura fixa para manter consistência */
+  display: flex;
+  align-items: center;
 }
 
 .balance {
   font-size: 32px;
   font-weight: bold;
+  line-height: 1;
+  height: 38px; /* Altura fixa para o texto */
+  display: flex;
+  align-items: center;
 }
 
 .hidden-balance {
-  letter-spacing: 5px;
+  letter-spacing: 8px;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.actual-balance {
+  font-size: 32px;
+  font-weight: bold;
+  line-height: 1;
 }
 
 .grid-dash {
