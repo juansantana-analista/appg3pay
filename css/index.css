@@ -1137,6 +1137,15 @@ form {
   align-items: center;
 }
 
+.referral-link-text {
+  color: #666;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 120px); /* Ajuste conforme necessário */
+}
+
 .share-button {
   background: #6c5ce7;
   color: white;
@@ -1153,7 +1162,6 @@ form {
 .share-button:hover {
   background: #5f4dd0;
 }
-
 @media (max-width: 768px) {
   .grid-dash {
       grid-template-columns: 1fr;
