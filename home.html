@@ -51,99 +51,91 @@
             <div class="block">
               <h2 class="titulo-pagina">Início</h2>
               
-    <div class="container-dash">
-              <div class="cards-container">
-                <div class="card-dash">
-                    <div class="card-header">
+
+              <div class="container-dash">
+                <div class="wallet-card">
+                    <div class="wallet-header">
                         <div>
+                            <div style="opacity: 0.8;">Saldo disponível</div>
+                            <div class="balance-container">
+                                <div class="balance hidden-balance" id="balance">•••••••</div>
+                                <div class="actual-balance" id="actualBalance" style="display: none;">
+                                    R$ 12.458,90
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <i class="far fa-eye" id="toggleBalance" style="cursor: pointer; font-size: 20px;"></i>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 15px; margin-top: 20px;">
+                        <button class="share-button">
+                            <i class="fas fa-plus"></i>
+                            Adicionar
+                        </button>
+                        <button class="share-button">
+                            <i class="fas fa-arrow-right"></i>
+                            Transferir
+                        </button>
+                    </div>
+                </div>
+        
+                <div class="grid-dash">
+                    <div class="card-dash">
+                        <div class="card-header">
                             <div class="card-title">Vendas do Mês</div>
-                            <div class="card-value">R$ 45.789,00</div>
+                            <div class="card-icon" style="background: #00b894;">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
                         </div>
-                        <div class="card-icon sales-icon">
-                            <i class="fas fa-chart-line"></i>
+                        <div class="value">R$ 45.890,00</div>
+                        <div class="trend">
+                            <i class="fas fa-arrow-up"></i>
+                            12.5% este mês
                         </div>
                     </div>
-                    <div style="color: #4caf50; font-size: 0.9em;">
-                        <i class="fas fa-arrow-up"></i> +15% em relação ao mês anterior
-                    </div>
-                </div>
-    
-                <div class="card-dash">
-                    <div class="card-header">
-                        <div>
+        
+                    <div class="card-dash">
+                        <div class="card-header">
                             <div class="card-title">Afiliados Ativos</div>
-                            <div class="card-value">247</div>
+                            <div class="card-icon" style="background: #6c5ce7;">
+                                <i class="fas fa-users"></i>
+                            </div>
                         </div>
-                        <div class="card-icon affiliates-icon">
-                            <i class="fas fa-users"></i>
+                        <div class="value">284</div>
+                        <div class="trend">
+                            <i class="fas fa-arrow-up"></i>
+                            8 novos hoje
                         </div>
                     </div>
-                    <div style="color: #4caf50; font-size: 0.9em;">
-                        <i class="fas fa-arrow-up"></i> +8 novos esta semana
+        
+                    <div class="card-dash">
+                        <div class="card-header">
+                            <div class="card-title">Taxa de Conversão</div>
+                            <div class="card-icon" style="background: #00cec9;">
+                                <i class="fas fa-percentage"></i>
+                            </div>
+                        </div>
+                        <div class="value">68.5%</div>
+                        <div class="trend">
+                            <i class="fas fa-arrow-up"></i>
+                            2.3% este mês
+                        </div>
                     </div>
                 </div>
-    
-                <div class="card-dash">
+        
+                <div class="referral-card">
                     <div class="card-header">
-                        <div>
-                            <div class="card-title">Link de Indicação</div>
-                            <div style="font-size: 0.9em; color: #666;">ref.app.com/user123</div>
-                        </div>
-                        <div class="card-icon referral-icon">
-                            <i class="fas fa-link"></i>
-                        </div>
+                        <div class="card-title">Seu Link de Indicação</div>
                     </div>
-                    <button class="share-button">
-                        <i class="fas fa-share-alt"></i>
-                        Compartilhar
-                    </button>
-                </div>
-            </div>
-    
-            <div class="chart-container">
-                <div class="chart-header">
-                    <div class="chart-title">Desempenho de Vendas</div>
-                    <select style="padding: 8px; border-radius: 8px; border: 1px solid #ddd;">
-                        <option>Últimos 30 dias</option>
-                        <option>Últimos 3 meses</option>
-                        <option>Este ano</option>
-                    </select>
-                </div>
-                <div class="placeholder-chart">
-                    Área do Gráfico
-                </div>
-            </div>
-    
-            <div class="recent-activities">
-                <h3 style="margin-bottom: 20px;">Atividades Recentes</h3>
-                <div class="activity-item">
-                    <div class="activity-icon" style="background: linear-gradient(135deg, #43a047, #4caf50);">
-                        <i class="fas fa-shopping-cart"></i>
-                    </div>
-                    <div class="activity-details">
-                        <h4>Nova Venda</h4>
-                        <p>Produto Premium vendido por R$ 997,00</p>
+                    <div class="referral-link">
+                        <div style="color: #666; font-size: 14px;">https://app.exemplo.com/ref/joao123</div>
+                        <button class="share-button">
+                            <i class="fas fa-share-alt"></i>
+                            Compartilhar
+                        </button>
                     </div>
                 </div>
-                <div class="activity-item">
-                    <div class="activity-icon" style="background: linear-gradient(135deg, #1976d2, #2196f3);">
-                        <i class="fas fa-user-plus"></i>
-                    </div>
-                    <div class="activity-details">
-                        <h4>Novo Afiliado</h4>
-                        <p>João Silva se juntou ao programa</p>
-                    </div>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-icon" style="background: linear-gradient(135deg, #d81b60, #e91e63);">
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <div class="activity-details">
-                        <h4>Meta Alcançada</h4>
-                        <p>Meta mensal de vendas atingida</p>
-                    </div>
-                </div>
-            </div>
             </div>
               <div class="update-button-container">
                 <button id="updateData" class="update-button">
