@@ -1848,7 +1848,6 @@ function onDashboard() {
             if(responseJson.status == 'success' && responseJson.data.status == 'success'){
                 //Desenha o dashboard
                 $('#valorVenda').text(responseJson.data.dados.valor_venda_mes);
-                $('#qtdeDiretos').text(responseJson.data.dados.rede_direta);
                 $('#qtdeGeral').text(responseJson.data.dados.rede_geral);
             }
         })
