@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compartilhar Link</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        .container-link {
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #2d3436;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #636e72;
+            font-size: 16px;
+        }
+
+        .card-link {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.1);
+            text-align: center;
+        }
+
+        .qr-container {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px auto;
+            width: fit-content;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .share-info {
+            margin: 25px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .share-link {
+            font-size: 14px;
+            color: #2d3436;
+            word-break: break-all;
+            margin: 10px 0;
+            padding: 12px;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+
+        .share-description {
+            color: #636e72;
+            margin: 15px 0;
+            font-size: 15px;
+        }
+
+
+        .share-button {
+            background: #6c5ce7;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            transition: background 0.3s ease;
+        }
+
+        .share-button:hover {
+            background: #5f4dd0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-link">
+        <div class="card-link">
+            <div class="qr-container">
+                <div id="qrcode"></div>
+            </div>
+
+            <div class="share-info">
+                <div style="color: #2d3436; font-weight: 500; margin-bottom: 8px;">
+                    Seu link único
+                </div>
+                <div class="share-link">
+                    https://app.exemplo.com/ref/joao123
+                </div>                
+                <div class="subtitle">Divulgue esse link para ampliar a sua rede</div>
+            </div>
+            <button class="share-button">
+                <i class="fas fa-share-alt"></i>
+                Compartilhar
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Gerar QR Code
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            text: "https://app.exemplo.com/ref/joao123",
+            width: 200,
+            height: 200,
+            colorDark : "#2d3436",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
+
+    </script>
+</body>
+</html>
