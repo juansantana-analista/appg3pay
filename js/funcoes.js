@@ -486,6 +486,7 @@ function buscarLinkAfiliado() {
                 var linkUrl = resultado.data.data.link;
                 $('#qrcode').html('');
                 
+                $('#link-indicacao').text(linkUrl);
                 
                 $("#compartilharLink").on('click', function () {
                     // Pega o url do link clicado em share
