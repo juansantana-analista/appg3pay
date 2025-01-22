@@ -662,6 +662,9 @@ var app = new Framework7({
           // fazer algo quando a página for inicializada
           OneSignal.Notifications.requestPermission();
           // Após o usuário aceitar a permissão, associa o `external_id`
+          OneSignal.User.PushSubscription.optIn()
+          .then(() => console.log("Opt-in realizado com sucesso"))
+          .catch(error => console.error("Erro ao realizar opt-in:", error));
           var userIdForOne = localStorage.getItem('userId');
           if(userIdForOne){
              OneSignal.login(userIdForOne); // Aqui você associa o ID do seu sistema ao OneSignal
