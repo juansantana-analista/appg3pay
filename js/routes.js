@@ -42,6 +42,17 @@ var app = new Framework7({
           var userName = localStorage.getItem('userName');
           if(userName != '' && userName != null) {
             $("#nomeUsuario").html(userName);
+            // Defina uma função assíncrona para envolver o código com await
+            async function initializeOneSignal() {
+                            // Supondo que você tenha o ID do usuário
+              const userId = localStorage.getItem('userId'); // Exemplo: email ou ID do banco
+              await OneSignal.login(userId);
+
+              console.log("Usuário vinculado ao OneSignal com external_id:", userId);
+            }
+
+            // Chama a função para iniciar o OneSignal
+            initializeOneSignal();
           }
         },
         pageAfterIn: function (event, page) {
