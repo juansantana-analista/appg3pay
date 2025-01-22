@@ -652,6 +652,7 @@ var app = new Framework7({
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
           OneSignal.Notifications.requestPermission().then(function(permission) {
+            console.log(permission);
             // Verifica se a permissão foi concedida
             if (permission === 'granted') {
                var userIdForOne = localStorage.getItem('userId');
