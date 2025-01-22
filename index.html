@@ -24,10 +24,22 @@
                welcomeNotification: {
                disable: false, // Ativa a notificação de boas-vindas
                title: "Bem-vindo!",
-               message: "Obrigado por se inscrever! Você receberá nossas últimas atualizações.",
-               url: "https://seusite.com", // URL opcional que será aberta ao clicar na notificação
+               message: "Obrigado por se inscrever! Você receberá nossas últimas atualizações."
                },
             });
+         });
+
+         // Ouvir evento de mudança de inscrição
+         OneSignal.on('subscriptionChange', async function(isSubscribed) {
+            if (isSubscribed) {
+            // Obtém o Player ID (OneSignal ID) do usuário
+            const userId = await OneSignal.getUserId();
+            if (userId) {
+               // Salva o ID no localStorage
+               localStorage.setItem('onesignal_user_id', userId);
+               console.log('OneSignal User ID salvo:', userId);
+            }
+            }
          });
       </script>
       <!-- Path to Framework7 Library Bundle CSS -->
