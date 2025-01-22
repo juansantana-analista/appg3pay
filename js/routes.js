@@ -637,7 +637,17 @@ var app = new Framework7({
                 .start();
           }
 
+            /* Defina uma função assíncrona para envolver o código com await
+            async function initializeOneSignal() {
+                            // Supondo que você tenha o ID do usuário
+              const userId = "USER_UNICO_DO_SISTEMA"; // Exemplo: email ou ID do banco
+              await OneSignal.login(userId);
 
+              console.log("Usuário vinculado ao OneSignal com external_id:", userId);
+            }
+
+            // Chama a função para iniciar o OneSignal
+            initializeOneSignal();*/
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada

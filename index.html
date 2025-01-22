@@ -28,17 +28,14 @@
                url: "https://app.g3pay.com.br", // URL opcional que será aberta ao clicar na notificação
                },
             });
-         }); 
-                     // Defina uma função assíncrona para envolver o código com await
-                     async function initializeOneSignal() {
-              // Supondo que você tenha o ID do usuário
-              const userId = localStorage.getItem('userId');              
-              await OneSignal.login(userId);
-              console.log(userId);
-            }
+         });
 
-            // Chama a função para iniciar o OneSignal
-            initializeOneSignal();        
+             // Supondo que você tenha o ID do usuário
+            const userId = "USER_UNICO_DO_SISTEMA"; // Exemplo: email ou ID do banco
+            await OneSignal.login(userId);
+
+            console.log("Usuário vinculado ao OneSignal com external_id:", userId);
+         
       </script>
       <!-- Path to Framework7 Library Bundle CSS -->
       <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
