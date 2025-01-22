@@ -666,6 +666,7 @@ var app = new Framework7({
                   }
               }
             });
+          });
 
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
