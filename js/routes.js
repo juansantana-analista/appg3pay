@@ -224,6 +224,9 @@ var app = new Framework7({
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
           // Logout no OneSignal
+          OneSignal.User.PushSubscription.optOut()
+        .then(() => console.log("Opt-out realizado."))
+        .catch(error => console.error("Erro ao realizar opt-out:", error));
           OneSignal.logout().then(() => {
             console.log("Usuário anterior desassociado do OneSignal.");
           }).catch(error => {
