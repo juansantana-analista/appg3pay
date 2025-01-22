@@ -12,35 +12,36 @@
       <meta name="theme-color" content="#ff5500" />
       <!-- Your app title -->
       <title>G3 PAY</title>   
-      <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>    
+      <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
       <script>
-         if (typeof navigator.serviceWorker !== 'undefined') {
-           navigator.serviceWorker.register('OneSignalSDKWorker.js')
-         }
+        if (typeof navigator.serviceWorker !== 'undefined') {
+          navigator.serviceWorker.register('OneSignalSDKWorker.js');
+        }
+      
         window.OneSignalDeferred = window.OneSignalDeferred || [];
-         OneSignalDeferred.push(async function(OneSignal) {
-            await OneSignal.init({
-               appId: "7bfc9cb0-b251-4b3a-be5c-be82c1a143e2",
-               welcomeNotification: {
-               disable: false, // Ativa a notificação de boas-vindas
-               title: "Bem-vindo!",
-               message: "Obrigado por se inscrever! Você receberá nossas últimas atualizações."
-               },
-            });
-         });
-
-         // Ouvir evento de mudança de inscrição
-         OneSignal.on('subscriptionChange', async function(isSubscribed) {
+        OneSignalDeferred.push(async function(OneSignal) {
+          await OneSignal.init({
+            appId: "7bfc9cb0-b251-4b3a-be5c-be82c1a143e2",
+            welcomeNotification: {
+              disable: false, // Ativa a notificação de boas-vindas
+              title: "Bem-vindo!",
+              message: "Obrigado por se inscrever! Você receberá nossas últimas atualizações."
+            },
+          });
+      
+          // Ouvir evento de mudança de inscrição dentro do contexto correto
+          OneSignal.on('subscriptionChange', async function(isSubscribed) {
             if (isSubscribed) {
-            // Obtém o Player ID (OneSignal ID) do usuário
-            const userId = await OneSignal.getUserId();
-            if (userId) {
-               // Salva o ID no localStorage
-               localStorage.setItem('onesignal_user_id', userId);
-               console.log('OneSignal User ID salvo:', userId);
+              // Obtém o Player ID (OneSignal ID) do usuário
+              const userId = await OneSignal.getUserId();
+              if (userId) {
+                // Salva o ID no localStorage
+                localStorage.setItem('onesignal_user_id', userId);
+                console.log('OneSignal User ID salvo:', userId);
+              }
             }
-            }
-         });
+          });
+        });
       </script>
       <!-- Path to Framework7 Library Bundle CSS -->
       <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
