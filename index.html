@@ -17,15 +17,15 @@
          if (typeof navigator.serviceWorker !== 'undefined') {
            navigator.serviceWorker.register('OneSignalSDKWorker.js')
          }
-         window.OneSignalDeferred = window.OneSignalDeferred || [];
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
          OneSignalDeferred.push(async function(OneSignal) {
             await OneSignal.init({
-               appId: "SUA_APP_ID",
+               appId: "7bfc9cb0-b251-4b3a-be5c-be82c1a143e2",
                welcomeNotification: {
                disable: false, // Ativa a notificação de boas-vindas
                title: "Bem-vindo!",
                message: "Obrigado por se inscrever! Você receberá nossas últimas atualizações.",
-               url: "https://app.g3pay.com.br", // URL opcional que será aberta ao clicar na notificação
+               url: "https://seusite.com", // URL opcional que será aberta ao clicar na notificação
                },
             });
          });
