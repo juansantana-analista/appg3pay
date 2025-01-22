@@ -25,12 +25,12 @@
             welcomeNotification: {
               disable: false, // Ativa a notificação de boas-vindas
               title: "Bem-vindo!",
-              message: "Obrigado por se inscrever! Você receberá nossas últimas atualizações."
+              message: "Obrigado por se inscrever! Você receberá nossas últimas atualizações.",
             },
           });
       
-          // Ouvir evento de mudança de inscrição dentro do contexto correto
-          OneSignal.on('subscriptionChange', async function(isSubscribed) {
+          // Ouvir evento de mudança de inscrição com addEventListener
+          OneSignal.addEventListener('subscriptionChange', async (isSubscribed) => {
             if (isSubscribed) {
               // Obtém o Player ID (OneSignal ID) do usuário
               const userId = await OneSignal.getUserId();
@@ -43,6 +43,7 @@
           });
         });
       </script>
+      
       <!-- Path to Framework7 Library Bundle CSS -->
       <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
       <!-- CSS PERSONALIZADO PARA MENU-->
