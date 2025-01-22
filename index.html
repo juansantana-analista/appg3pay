@@ -13,6 +13,7 @@
       <!-- Your app title -->
       <title>G3 PAY</title>   
       <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+      <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
       <script>
         if (typeof navigator.serviceWorker !== 'undefined') {
           navigator.serviceWorker.register('OneSignalSDKWorker.js');
@@ -20,6 +21,7 @@
       
         window.OneSignalDeferred = window.OneSignalDeferred || [];
         OneSignalDeferred.push(async function(OneSignal) {
+          // Inicializar o OneSignal
           await OneSignal.init({
             appId: "7bfc9cb0-b251-4b3a-be5c-be82c1a143e2",
             welcomeNotification: {
@@ -29,8 +31,8 @@
             },
           });
       
-          // Ouvir evento de mudança de inscrição com addEventListener
-          OneSignal.addEventListener('subscriptionChange', async (isSubscribed) => {
+          // Listener para mudança de inscrição
+          await OneSignal.on('subscriptionChange', async (isSubscribed) => {
             if (isSubscribed) {
               // Obtém o Player ID (OneSignal ID) do usuário
               const userId = await OneSignal.getUserId();
