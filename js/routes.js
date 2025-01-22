@@ -223,6 +223,12 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
+          // Logout no OneSignal
+          OneSignal.logout().then(() => {
+            console.log("Usuário anterior desassociado do OneSignal.");
+          }).catch(error => {
+            console.error("Erro ao desassociar o usuário do OneSignal:", error);
+          });
 
           //START AÇÃO BOTÃO ENTRAR
           $("#signIn").on("click", function () {
