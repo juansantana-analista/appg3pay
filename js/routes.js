@@ -778,7 +778,6 @@ var app = new Framework7({
 
           $('#sairAgora').on('click', function () {
             app.dialog.confirm('Deseja sair do aplicativo?', function () {
-              OneSignal.logout();
               localStorage.clear();
               $("#menuPrincipal").hide("fast");
               $("#menuPrincipal").addClass("display-none");
