@@ -651,19 +651,13 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
-          OneSignal.Notifications.requestPermission().then(function(permission) {
-            console.log(permission);
-            // Verifica se a permissão foi concedida
-            if (permission === 'granted') {
-               var userIdForOne = localStorage.getItem('userId');
-               if (userIdForOne) {
-                  OneSignal.login(userIdForOne); // Aqui você associa o ID do seu sistema ao OneSignal
-                  console.log('External ID associado:', userIdForOne);
-               }
-            } else {
-               console.log('Permissão de notificação negada.');
-            }
-         });
+          OneSignal.Notifications.requestPermission();
+          // Após o usuário aceitar a permissão, associa o `external_id`
+          var userIdForOne = localStorage.getItem('userId');
+          if(userIdForOne){
+             OneSignal.login(userIdForOne); // Aqui você associa o ID do seu sistema ao OneSignal
+             console.log(userIdForOne);
+          }
 
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
