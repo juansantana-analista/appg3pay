@@ -637,16 +637,7 @@ var app = new Framework7({
                 .start();
           }
 
-            // Defina uma função assíncrona para envolver o código com await
-            async function initializeOneSignal() {
-              // Supondo que você tenha o ID do usuário
-              const userId = localStorage.getItem('userId');              
-              await OneSignal.login(userId);
-              console.log(userId);
-            }
 
-            // Chama a função para iniciar o OneSignal
-            initializeOneSignal();
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada

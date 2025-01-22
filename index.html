@@ -28,7 +28,17 @@
                url: "https://app.g3pay.com.br", // URL opcional que será aberta ao clicar na notificação
                },
             });
-         });         
+         }); 
+                     // Defina uma função assíncrona para envolver o código com await
+                     async function initializeOneSignal() {
+              // Supondo que você tenha o ID do usuário
+              const userId = localStorage.getItem('userId');              
+              await OneSignal.login(userId);
+              console.log(userId);
+            }
+
+            // Chama a função para iniciar o OneSignal
+            initializeOneSignal();        
       </script>
       <!-- Path to Framework7 Library Bundle CSS -->
       <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
