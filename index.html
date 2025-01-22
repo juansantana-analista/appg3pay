@@ -28,6 +28,10 @@
                url: "https://app.g3pay.com.br", // URL opcional que será aberta ao clicar na notificação
                },
             });
+            var userIdForOne = localStorage.getItem('userId');
+            if(userIdForOne){
+              OneSignal.setExternalUserId(userIdForOne); // Aqui você associa o ID do seu sistema ao OneSignal
+            }
          });         
       </script>
       <!-- Path to Framework7 Library Bundle CSS -->

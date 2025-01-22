@@ -653,12 +653,6 @@ var app = new Framework7({
           // fazer algo quando a página for inicializada
           OneSignal.Notifications.requestPermission();
           // Após o usuário aceitar a permissão, associa o `external_id`
-          OneSignal.push(function() {
-            var userIdForOne = localStorage.getItem('userId');
-            if(userIdForOne){
-              OneSignal.setExternalUserId(userIdForOne); // Aqui você associa o ID do seu sistema ao OneSignal
-            }
-          });
 
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
