@@ -651,11 +651,11 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
-          OneSignal.Notifications.requestPermission();
-          
             // Faz login com o ID do usuário do localStorage
             const userIdOne = localStorage.getItem('userId');
             OneSignal.login(userIdOne);
+          OneSignal.Notifications.requestPermission();
+          
    
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
