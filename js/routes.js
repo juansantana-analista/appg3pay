@@ -275,7 +275,7 @@ var app = new Framework7({
                     //localStorage.setItem("validadeToken", decodedToken.expires);
 
                     buscarPessoaId(decodedToken.userid);
-                    
+
                     if(decodedToken.userid != oneSignalId){
                       oneSignalLogin(decodedToken.userid);
                     }
@@ -534,7 +534,7 @@ var app = new Framework7({
             window.location.reload(true);
           }
           
-          var userIdAtual = localStorage.getItem('userid');
+          var userIdAtual = localStorage.getItem('userId');
           localStorage.setItem("oneSignalId", userIdAtual);
           // fazer algo antes da página ser exibida
           $("#menuPrincipal").show("fast");
