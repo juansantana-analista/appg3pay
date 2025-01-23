@@ -2492,12 +2492,12 @@ async function validarToken(userAuthToken) {
   }
   
   
-  function oneSignalLogin(userId, oneSignalId){          
-      if(userId != oneSignalId && oneSignalId != '' && oneSignalId != null){
-          OneSignal.logout();
-          OneSignal.Notifications.requestPermission();   
+  async function oneSignalLogin(userId, oneSignalId){          
+      if(userId != oneSignalId){
+          await OneSignal.logout();
+          await OneSignal.Notifications.requestPermission();   
           // Define o ID externo no OneSignal
-          OneSignal.login(userId)
+          await OneSignal.login(userId)
             .then(() => {
               console.log(`ID externo definido com sucesso: ${userId}`);
             })
@@ -2505,8 +2505,8 @@ async function validarToken(userAuthToken) {
               console.error(`Erro ao definir ID externo: ${error}`);
             });
         } else{
-          OneSignal.Notifications.requestPermission();   
-          OneSignal.login(userId)
+            await OneSignal.Notifications.requestPermission();   
+            await OneSignal.login(userId)
             .then(() => {
               console.log(`ID externo definido com sucesso: ${userId}`);
             })
