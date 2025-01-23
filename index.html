@@ -26,6 +26,10 @@
                title: "Bem-vindo!",
                message: "Obrigado por se inscrever! Você receberá nossas últimas atualizações.",
                },
+
+  getUserId().then(function(userId) {
+    console.log("Player ID:", userId); // Salve esse ID para notificações individuais
+  })
             });      
    });
       </script>
