@@ -660,11 +660,7 @@ var app = new Framework7({
                 const aliases = {
                     'id_g3pay': externalId
                 };
-                OneSignal.addAliases(aliases).then(function() {
-                    console.log("Aliases adicionados:", aliases);
-                }).catch(function(error) {
-                    console.error("Erro ao adicionar aliases:", error);
-                });
+            OneSignal.addAlias("g3pay_id", externalId);
             }).catch(function(error) {
                 console.error("Erro ao logar usuário no OneSignal:", error);
             });
