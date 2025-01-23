@@ -274,39 +274,26 @@ var app = new Framework7({
                     //localStorage.setItem("validadeToken", decodedToken.expires);
 
                     buscarPessoaId(decodedToken.userid);
-                    const userIdOne = decodedToken.userid;
+                  // Gerenciando OneSignal
+                  const userIdOne = decodedToken.userid;
 
-                    // Fazendo logout do OneSignal
-                    OneSignal.logout().then(() => {
-                      console.log("OneSignal logout concluído.");
-              
-                      // Fazer login do novo usuário no OneSignal
-                      OneSignal.login(userIdOne).then(() => {
-                        console.log("OneSignal login concluído com o ID:", userIdOne);
-              
-                        // Reativar notificações e verificar o status
-                        OneSignal.getUserId().then(deviceId => {
-                          if (deviceId) {
-                            console.log("Canal de notificações configurado para o dispositivo:", deviceId);
-                          } else {
-                            console.error("Erro: canal de notificações não foi configurado.");
-                          }
-                        });
-              
-                        // Solicitar permissões para notificações
-                        OneSignal.Notifications.requestPermission().then(permission => {
-                          if (permission === "granted") {
-                            console.log("Permissão para notificações concedida.");
-                          } else {
-                            console.warn("Permissão para notificações não concedida.");
-                          }
-                        });
-                      }).catch(err => {
-                        console.error("Erro ao fazer login no OneSignal:", err);
-                      });
+                  // Fazer logout do OneSignal antes de logar o novo usuário
+                  OneSignal.logout().then(() => {
+                    console.log("OneSignal logout concluído.");
+                    
+                    // Realizar login no OneSignal com o novo usuário
+                    OneSignal.login(userIdOne);
+                    console.log("OneSignal login realizado com o ID:", userIdOne);
+
+                    // Garantir que o dispositivo tenha permissão para notificações
+                    OneSignal.Notifications.requestPermission().then(() => {
+                      console.log("Permissão para notificações concedida.");
                     }).catch(err => {
-                      console.error("Erro ao fazer logout do OneSignal:", err);
+                      console.error("Erro ao solicitar permissão para notificações:", err);
                     });
+                  }).catch(err => {
+                    console.error("Erro ao realizar logout do OneSignal:", err);
+                  });
                     setTimeout(function () {
                       app.dialog.close();
                       OneSignal.Notifications.requestPermission();
