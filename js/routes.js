@@ -223,15 +223,6 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
-          // Logout no OneSignal
-          OneSignal.User.PushSubscription.optOut()
-        .then(() => console.log("Opt-out realizado."))
-        .catch(error => console.error("Erro ao realizar opt-out:", error));
-          OneSignal.logout().then(() => {
-            console.log("Usuário anterior desassociado do OneSignal.");
-          }).catch(error => {
-            console.error("Erro ao desassociar o usuário do OneSignal:", error);
-          });
 
           //START AÇÃO BOTÃO ENTRAR
           $("#signIn").on("click", function () {
@@ -660,16 +651,27 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
+          let externalId = localStorage.getItem('userId');
+          if (externalId) { // Verifica se o usuário está logado (tem um externalId)
+            OneSignal.login(externalId).then(function() {
+                console.log("Usuário logado no OneSignal com externalId:", externalId);
+
+                // 2. (Opcional) Adicione aliases personalizados
+                const aliases = {
+                    'id_g3pay': externalId
+                };
+                OneSignal.addAliases(aliases).then(function() {
+                    console.log("Aliases adicionados:", aliases);
+                }).catch(function(error) {
+                    console.error("Erro ao adicionar aliases:", error);
+                });
+            }).catch(function(error) {
+                console.error("Erro ao logar usuário no OneSignal:", error);
+            });
+        } else {
+            console.log("Usuário não logado, externalId não definido.");
+        }
           OneSignal.Notifications.requestPermission();
-          // Após o usuário aceitar a permissão, associa o `external_id`
-          OneSignal.User.PushSubscription.optIn()
-          .then(() => console.log("Opt-in realizado com sucesso"))
-          .catch(error => console.error("Erro ao realizar opt-in:", error));
-          var userIdForOne = localStorage.getItem('userId');
-          if(userIdForOne){
-             OneSignal.login(userIdForOne); // Aqui você associa o ID do seu sistema ao OneSignal
-             console.log(userIdForOne);
-          }
 
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
