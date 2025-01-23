@@ -224,7 +224,6 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
-        const oneSignalId = localStorage.getItem('oneSignalId');
           //START AÇÃO BOTÃO ENTRAR
           $("#signIn").on("click", function () {
             app.dialog.preloader("Carregando...");
@@ -276,9 +275,7 @@ var app = new Framework7({
 
                     buscarPessoaId(decodedToken.userid);
 
-                    if(decodedToken.userid != oneSignalId){
                       oneSignalLogin(decodedToken.userid);
-                    }
 
                     setTimeout(function () {
                       app.dialog.close();
