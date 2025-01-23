@@ -277,6 +277,7 @@ var app = new Framework7({
 
                     setTimeout(function () {
                       app.dialog.close();
+                      trocarUsuario();
                       app.views.main.router.navigate("/home/");
                     }, 300);
 
@@ -650,13 +651,6 @@ var app = new Framework7({
             initializeOneSignal();*/
         },
         pageInit: function (event, page) {
-          // fazer algo quando a página for inicializada
-          OneSignal.Notifications.requestPermission();
-          
-            // Faz login com o ID do usuário do localStorage
-            const userIdOne = localStorage.getItem('userId');
-            trocarUsuario(userIdOne);
-   
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
           onDashboard();
