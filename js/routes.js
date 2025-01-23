@@ -655,15 +655,11 @@ var app = new Framework7({
           if (externalId) { // Verifica se o usuário está logado (tem um externalId)
             OneSignal.login(externalId).then(function() {
                 console.log("Usuário logado no OneSignal com externalId:", externalId);
-
-                // 2. (Opcional) Adicione aliases personalizados
-                const aliases = {
-                    'id_g3pay': externalId
-                };
-            OneSignal.addAlias("g3pay_id", externalId);
             }).catch(function(error) {
                 console.error("Erro ao logar usuário no OneSignal:", error);
             });
+            const playerId = OneSignal.getUserId();
+            console.log(playerId);
         } else {
             console.log("Usuário não logado, externalId não definido.");
         }
