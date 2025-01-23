@@ -277,7 +277,7 @@ var app = new Framework7({
 
                     buscarPessoaId(decodedToken.userid);
 
-                      oneSignalLogin(decodedToken.userid, oneSignalId);
+                      //oneSignalLogin(decodedToken.userid, oneSignalId);
 
                     setTimeout(function () {
                       app.views.main.router.navigate("/home/");
