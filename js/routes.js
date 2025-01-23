@@ -638,9 +638,7 @@ var app = new Framework7({
           }
         },
         pageInit: function (event, page) {
-          // fazer algo quando a página for inicializada
-          userOneSignal();    
-   
+          // fazer algo quando a página for inicializada   
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
           onDashboard();
