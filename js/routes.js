@@ -274,37 +274,44 @@ var app = new Framework7({
                     //localStorage.setItem("validadeToken", decodedToken.expires);
 
                     buscarPessoaId(decodedToken.userid);
-                  // Gerenciando OneSignal
-                  const userIdOne = decodedToken.userid;
+                    const userIdOne = decodedToken.userid;
 
-                  // Fazer logout do OneSignal antes de logar o novo usuário
-                  OneSignal.logout().then(() => {
-                    console.log("OneSignal logout concluído.");
-                  
-                    // Realizar o login com o novo usuário
-                    OneSignal.login(userIdOne, (result) => {
-                      console.log("OneSignal login realizado com sucesso:", result);
-                  
-                      // Verificar e ativar inscrição para notificações
-                      OneSignal.getSubscription((isSubscribed) => {
-                        if (!isSubscribed) {
-                          OneSignal.setSubscription(true);
-                          console.log("Inscrição ativada para o novo usuário.");
-                        } else {
-                          console.log("Usuário já está inscrito.");
-                        }
+                    // Fazendo logout do OneSignal
+                    OneSignal.logout().then(() => {
+                      console.log("OneSignal logout concluído.");
+              
+                      // Reativando notificações (necessário para recriar o canal push)
+                      OneSignal.setSubscription(true);
+                      
+                      // Fazendo login do novo usuário no OneSignal
+                      OneSignal.login(userIdOne).then(() => {
+                        console.log("OneSignal login concluído com o ID:", userIdOne);
+              
+                        // Solicitando permissão para notificações push
+                        OneSignal.Notifications.requestPermission().then(permission => {
+                          if (permission === "granted") {
+                            console.log("Permissão para notificações concedida.");
+              
+                            // Verificando se o canal está ativo
+                            OneSignal.getSubscription((isSubscribed) => {
+                              if (!isSubscribed) {
+                                console.log("Ativando canal de notificações.");
+                                OneSignal.setSubscription(true);
+                              } else {
+                                console.log("Canal de notificações já ativo.");
+                              }
+                            });
+              
+                          } else {
+                            console.warn("Permissão para notificações não foi concedida.");
+                          }
+                        });
+                      }).catch(err => {
+                        console.error("Erro ao fazer login no OneSignal:", err);
                       });
-                  
-                      // Solicitar permissões de notificações
-                      OneSignal.Notifications.requestPermission().then(() => {
-                        console.log("Permissão para notificações concedida.");
-                      }).catch((err) => {
-                        console.error("Erro ao solicitar permissões:", err);
-                      });
+                    }).catch(err => {
+                      console.error("Erro ao fazer logout do OneSignal:", err);
                     });
-                  }).catch((err) => {
-                    console.error("Erro ao realizar logout do OneSignal:", err);
-                  });
                     setTimeout(function () {
                       app.dialog.close();
                       OneSignal.Notifications.requestPermission();
