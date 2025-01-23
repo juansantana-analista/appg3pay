@@ -29,17 +29,17 @@
             },
           });
       
-          // Adicionando o código para monitorar mudanças na inscrição
-          OneSignal.on('subscriptionChange', function(isSubscribed) {
-            if (isSubscribed) {
-              OneSignal.getUserId().then(function(userId) {
-                console.log("User is subscribed. OneSignal User ID:", userId);
-              });
-            } else {
-              console.log("User is not subscribed.");
-            }
-          });
+    // Adicionando o código para monitorar mudanças na inscrição usando addEventListener
+    OneSignal.addEventListener('subscriptionChange', function(isSubscribed) {
+      if (isSubscribed) {
+        OneSignal.getUserId().then(function(userId) {
+          console.log("User is subscribed. OneSignal User ID:", userId);
         });
+      } else {
+        console.log("User is not subscribed.");
+      }
+    });
+  });
       </script>
       <!-- Path to Framework7 Library Bundle CSS -->
       <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
