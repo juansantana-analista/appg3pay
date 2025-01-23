@@ -260,7 +260,6 @@ var app = new Framework7({
                 .then(response => response.json())
                 .then(data => {
                   if (data.status == 'success') {
-                    app.dialog.close();
                     const token = data.data;
                     localStorage.setItem('userAuthToken', token);
                     const decodedToken = jwt_decode(token);
@@ -277,9 +276,20 @@ var app = new Framework7({
 
                     buscarPessoaId(decodedToken.userid);
 
-                    oneSignalLogin(decodedToken.userid, oneSignalId);
+                    oneSignalLogin(userId, oneSignalId)
+                    .then(() => {
+                      app.dialog.close();
+                      app.dialog.alert("Login realizado com sucesso");
+                        console.log("Login realizado com sucesso");
+                    })
+                    .catch((error) => {
+                      app.dialog.close();
+                      app.dialog.alert("Erro ao realizar o login:", error);
+                        console.error("Erro ao realizar o login:", error);
+                    });
 
                     setTimeout(function () {
+                      app.dialog.close();
                       app.views.main.router.navigate("/home/");
                     }, 300);
 
