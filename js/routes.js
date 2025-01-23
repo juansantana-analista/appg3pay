@@ -274,9 +274,29 @@ var app = new Framework7({
                     //localStorage.setItem("validadeToken", decodedToken.expires);
 
                     buscarPessoaId(decodedToken.userid);
+                  // Gerenciando OneSignal
+                  const userIdOne = decodedToken.userid;
 
+                  // Fazer logout do OneSignal antes de logar o novo usuário
+                  OneSignal.logout().then(() => {
+                    console.log("OneSignal logout concluído.");
+                    
+                    // Realizar login no OneSignal com o novo usuário
+                    OneSignal.login(userIdOne);
+                    console.log("OneSignal login realizado com o ID:", userIdOne);
+
+                    // Garantir que o dispositivo tenha permissão para notificações
+                    OneSignal.Notifications.requestPermission().then(() => {
+                      console.log("Permissão para notificações concedida.");
+                    }).catch(err => {
+                      console.error("Erro ao solicitar permissão para notificações:", err);
+                    });
+                  }).catch(err => {
+                    console.error("Erro ao realizar logout do OneSignal:", err);
+                  });
                     setTimeout(function () {
                       app.dialog.close();
+                      OneSignal.Notifications.requestPermission();
                       app.views.main.router.navigate("/home/");
                     }, 300);
 
@@ -651,11 +671,7 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
-            // Faz login com o ID do usuário do localStorage
-            const userIdOne = localStorage.getItem('userId');
-            OneSignal.login(userIdOne);
-          OneSignal.Notifications.requestPermission();
-          
+            // Faz login com o ID do usuário do localStorage          
    
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
