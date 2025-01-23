@@ -2492,7 +2492,8 @@ function validarDataExpiracao(data) {
 }
 
 
-function oneSignalLogin(userId){     
+function oneSignalLogin(userId, oneSignalId){          
+    if(userId != oneSignalId){
         OneSignal.logout();
         OneSignal.Notifications.requestPermission();   
         // Define o ID externo no OneSignal
@@ -2502,5 +2503,16 @@ function oneSignalLogin(userId){
           })
           .catch((error) => {
             console.error(`Erro ao definir ID externo: ${error}`);
-          });         
+          });
+      } else{
+        OneSignal.Notifications.requestPermission();   
+        OneSignal.login(userId)
+          .then(() => {
+            console.log(`ID externo definido com sucesso: ${userId}`);
+          })
+          .catch((error) => {
+            console.error(`Erro ao definir ID externo: ${error}`);
+          });        
+      }
+         
 }
