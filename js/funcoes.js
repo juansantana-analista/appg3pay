@@ -2381,6 +2381,19 @@ function clearLocalStorage() {
 }
 // Fim Função para limpar o local storage
 
+// Função para limpar o local storage
+function fazerLogout() {
+    localStorage.removeItem("userAuthToken");
+    localStorage.removeItem("user");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("pessoaId");
+    localStorage.removeItem("codigo_indicador");
+    localStorage.removeItem("validadeToken");
+  }
+  // Fim Função para limpar o local storage
+
 // Início Função para formatar data e hora
 function formatarData(data) {
   // Converte a string de data para objeto Date
