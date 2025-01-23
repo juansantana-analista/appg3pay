@@ -26,7 +26,17 @@
                title: "Bem-vindo!",
                message: "Obrigado por se inscrever! Você receberá nossas últimas atualizações.",
                },
-            });     
+            });  
+ 
+ // Verifique se o usuário está inscrito nas notificações
+ const isSubscribed = await OneSignal.isPushNotificationsEnabled();
+ if (isSubscribed) {
+   // Obter o Player ID do OneSignal
+   const userId = await OneSignal.getUserId();
+   console.log("OneSignal User ID:", userId);
+ } else {
+   console.log("O usuário não está inscrito nas notificações.");
+ }
          });
       </script>
       <!-- Path to Framework7 Library Bundle CSS -->
