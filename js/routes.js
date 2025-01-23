@@ -217,14 +217,14 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida          
-          localStorage.removeItem("userId");
+          localStorage.removeItem("userId");     
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
-
+        const oneSignalId = localStorage.getItem('oneSignalId');
           //START AÇÃO BOTÃO ENTRAR
           $("#signIn").on("click", function () {
             app.dialog.preloader("Carregando...");
@@ -266,7 +266,7 @@ var app = new Framework7({
                     // Navegar para outra página ou realizar outras ações necessárias
 
                     localStorage.setItem("user", decodedToken.user);
-                    localStorage.setItem("userId", decodedToken.userid);
+                    localStorage.setItem("userId", decodedToken.userid);         
                     localStorage.setItem("userName", decodedToken.username);
                     localStorage.setItem("userEmail", decodedToken.usermail);
                     localStorage.setItem("pessoaId", decodedToken.pessoa_id);
@@ -275,8 +275,10 @@ var app = new Framework7({
                     //localStorage.setItem("validadeToken", decodedToken.expires);
 
                     buscarPessoaId(decodedToken.userid);
-
-                    oneSignalLogin(decodedToken.userid);
+                    
+                    if(decodedToken.userid != oneSignalId){
+                      oneSignalLogin(decodedToken.userid);
+                    }
 
                     setTimeout(function () {
                       app.dialog.close();
@@ -531,6 +533,9 @@ var app = new Framework7({
           if (!isValid) {
             window.location.reload(true);
           }
+          
+          var userIdAtual = localStorage.getItem('userid');
+          localStorage.setItem("oneSignalId", userIdAtual);
           // fazer algo antes da página ser exibida
           $("#menuPrincipal").show("fast");
           $("#menuPrincipal").removeClass("display-none");
