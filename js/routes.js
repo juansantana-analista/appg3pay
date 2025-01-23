@@ -283,6 +283,7 @@ var app = new Framework7({
                     
                     // Realizar login no OneSignal com o novo usuário
                     OneSignal.login(userIdOne);
+                    userOneSignal();
                     console.log("OneSignal login realizado com o ID:", userIdOne);
 
                     // Garantir que o dispositivo tenha permissão para notificações
