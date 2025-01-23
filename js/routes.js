@@ -1,3 +1,5 @@
+
+importScripts('https://cdn.onesignal.com/sdks/OneSignalSDKWorker.js');
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://escritorio.g3pay.com.br/rest.php";
 const versionApp = "1.0.5";
@@ -650,7 +652,6 @@ var app = new Framework7({
             initializeOneSignal();*/
         },
         pageInit: function (event, page) {
-          importScripts('https://cdn.onesignal.com/sdks/OneSignalSDKWorker.js');
           // fazer algo quando a página for inicializada
           let externalId = localStorage.getItem('userId');
           if (externalId) { // Verifica se o usuário está logado (tem um externalId)
