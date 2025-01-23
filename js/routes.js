@@ -280,18 +280,29 @@ var app = new Framework7({
                   // Fazer logout do OneSignal antes de logar o novo usuário
                   OneSignal.logout().then(() => {
                     console.log("OneSignal logout concluído.");
-                    
-                    // Realizar login no OneSignal com o novo usuário
-                    OneSignal.login(userIdOne);
-                    console.log("OneSignal login realizado com o ID:", userIdOne);
-
-                    // Garantir que o dispositivo tenha permissão para notificações
-                    OneSignal.Notifications.requestPermission().then(() => {
-                      console.log("Permissão para notificações concedida.");
-                    }).catch(err => {
-                      console.error("Erro ao solicitar permissão para notificações:", err);
+                  
+                    // Realizar o login com o novo usuário
+                    OneSignal.login(userIdOne, (result) => {
+                      console.log("OneSignal login realizado com sucesso:", result);
+                  
+                      // Verificar e ativar inscrição para notificações
+                      OneSignal.getSubscription((isSubscribed) => {
+                        if (!isSubscribed) {
+                          OneSignal.setSubscription(true);
+                          console.log("Inscrição ativada para o novo usuário.");
+                        } else {
+                          console.log("Usuário já está inscrito.");
+                        }
+                      });
+                  
+                      // Solicitar permissões de notificações
+                      OneSignal.Notifications.requestPermission().then(() => {
+                        console.log("Permissão para notificações concedida.");
+                      }).catch((err) => {
+                        console.error("Erro ao solicitar permissões:", err);
+                      });
                     });
-                  }).catch(err => {
+                  }).catch((err) => {
                     console.error("Erro ao realizar logout do OneSignal:", err);
                   });
                     setTimeout(function () {
