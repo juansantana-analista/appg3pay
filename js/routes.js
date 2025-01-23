@@ -655,9 +655,7 @@ var app = new Framework7({
           
             // Faz login com o ID do usuário do localStorage
             const userIdOne = localStorage.getItem('userId');
-            if (userIdOne) {
-                OneSignal.login(userIdOne);
-            }
+            trocarUsuario(userIdOne);
    
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
