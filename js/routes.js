@@ -260,6 +260,7 @@ var app = new Framework7({
                 .then(response => response.json())
                 .then(data => {
                   if (data.status == 'success') {
+                    app.dialog.close();
                     const token = data.data;
                     localStorage.setItem('userAuthToken', token);
                     const decodedToken = jwt_decode(token);
@@ -279,7 +280,6 @@ var app = new Framework7({
                       oneSignalLogin(decodedToken.userid, oneSignalId);
 
                     setTimeout(function () {
-                      app.dialog.close();
                       app.views.main.router.navigate("/home/");
                     }, 300);
 
