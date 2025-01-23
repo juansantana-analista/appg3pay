@@ -277,13 +277,10 @@ var app = new Framework7({
 
                     buscarPessoaId(decodedToken.userid);
 
-                    oneSignalLogin(userId, oneSignalId)
-                    .then(() => {
-                        console.log("Login realizado com sucesso");
-                    })
-                    .catch((error) => {
-                        console.error("Erro ao realizar o login:", error);
-                    });
+                    // Aguarda a execução da função oneSignalLogin
+                      (async () => {
+                        await oneSignalLogin(decodedToken.userid, oneSignalId);
+                    })();
 
                     setTimeout(function () {
                     app.dialog.close();
