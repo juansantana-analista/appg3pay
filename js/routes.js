@@ -650,6 +650,7 @@ var app = new Framework7({
             initializeOneSignal();*/
         },
         pageInit: function (event, page) {
+          importScripts('https://cdn.onesignal.com/sdks/OneSignalSDKWorker.js');
           // fazer algo quando a página for inicializada
           let externalId = localStorage.getItem('userId');
           if (externalId) { // Verifica se o usuário está logado (tem um externalId)
