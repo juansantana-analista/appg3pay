@@ -17,6 +17,17 @@
          if (typeof navigator.serviceWorker !== 'undefined') {
            navigator.serviceWorker.register('OneSignalSDKWorker.js')
          }
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+         OneSignalDeferred.push(async function(OneSignal) {
+            await OneSignal.init({
+               appId: "7bfc9cb0-b251-4b3a-be5c-be82c1a143e2",
+               welcomeNotification: {
+               disable: false, // Ativa a notificação de boas-vindas
+               title: "Bem-vindo!",
+               message: "Obrigado por se inscrever! Você receberá nossas últimas atualizações.",
+               },
+            });      
+       });
       </script>
       <!-- Path to Framework7 Library Bundle CSS -->
       <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
