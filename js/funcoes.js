@@ -2529,3 +2529,48 @@ function userOneSignal() {
     });
 }
 //Fim da Função que cadastra usuario no onesignal
+
+//Inicio da funçao que cria o dispositivo no onesignal
+function createDeviceOne(){
+    var userIdForOne = localStorage.getItem('userId');
+    const url = 'https://onesignal.com/api/v1/players';
+const options = {
+  method: 'POST',
+  headers: {
+    accept: 'application/json',
+    'Content-Type': 'application/json',
+    'Authorization': 'Basic os_v2_app_pp6jzmfskfftvps4x2bmdikd4l6un3yoc3kepsvykmyx6lwcma2bukuosuadxl4cvqquyztlfvukfgoy7tfgmvnvhsbqr64xhv7uk7i'  // Substitua pelo seu REST API Key
+  },
+  body: JSON.stringify({
+    app_id: '7bfc9cb0-b251-4b3a-be5c-be82c1a143e2',  // Substitua pelo seu app_id
+    external_user_id: userIdForOne,  // Substitua pelo seu external_user_id
+    device_type: 0,  // 0 para iOS, 1 para Android, 2 para Web Push, etc.
+    language: 'en',
+    timezone: '-28800',  // Ajuste para o fuso horário adequado
+    game_version: '1.1.1',
+    device_model: 'iPhone5,1',
+    device_os: '15.1.1',
+    session_count: 600,
+    tags: {
+      first_name: 'Jon',
+      last_name: 'Smith',
+      level: '99',
+      amount_spent: '6000',
+      account_type: 'VIP'
+    },
+    amount_spent: '100.99',
+    playtime: 600,
+    notification_types: 1,  // 1 para receber notificações push
+    lat: 37.563,
+    long: 122.3255,
+    country: 'US',
+    timezone_id: 'Europe/Warsaw'
+  })
+};
+
+fetch(url, options)
+  .then(res => res.json())
+  .then(json => console.log(json))
+  .catch(err => console.error(err));
+}
+//Fim da funçao que cria o dispositivo no onesignal
