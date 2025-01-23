@@ -29,10 +29,10 @@
             },
           });
       
-    // Verificando se o usuário já está inscrito
-    OneSignal.isPushNotificationsEnabled().then(function(isEnabled) {
-      if (isEnabled) {
-        // Se o usuário estiver inscrito, obtenha o User ID
+    // Escutando o evento de mudança de inscrição
+    OneSignal.addEventListener('subscriptionChange', function(isSubscribed) {
+      if (isSubscribed) {
+        // Se inscrito, obter o User ID
         OneSignal.getUserId().then(function(userId) {
           console.log("User is subscribed. OneSignal User ID:", userId);
         });
@@ -41,15 +41,9 @@
       }
     });
 
-    // Monitorando mudanças na inscrição através do método de callback
-    OneSignal.on('subscriptionChange', function(isSubscribed) {
-      if (isSubscribed) {
-        OneSignal.getUserId().then(function(userId) {
-          console.log("User subscribed. OneSignal User ID:", userId);
-        });
-      } else {
-        console.log("User unsubscribed.");
-      }
+    // Obtendo o User ID após a inicialização
+    OneSignal.getUserId().then(function(userId) {
+      console.log("OneSignal User ID:", userId);
     });
   });
       </script>
