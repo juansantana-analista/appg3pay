@@ -2492,15 +2492,27 @@ function validarDataExpiracao(data) {
 }
 
 
-async function oneSignalLogin(userId, oneSignalId) {
-    try {
-        if (userId != oneSignalId) {
-            await OneSignal.logout();
-        }
-        await OneSignal.Notifications.requestPermission();
-        await OneSignal.login(userId);
-        console.log(`ID externo definido com sucesso: ${userId}`);
-    } catch (error) {
-        console.error(`Erro no oneSignalLogin:`, error);
-    }
+function oneSignalLogin(userId, oneSignalId){          
+    if(userId != oneSignalId){
+        OneSignal.logout();
+        OneSignal.Notifications.requestPermission();   
+        // Define o ID externo no OneSignal
+        OneSignal.login(userId)
+          .then(() => {
+            console.log(`ID externo definido com sucesso: ${userId}`);
+          })
+          .catch((error) => {
+            console.error(`Erro ao definir ID externo: ${error}`);
+          });
+      } else{
+        OneSignal.Notifications.requestPermission();   
+        OneSignal.login(userId)
+          .then(() => {
+            console.log(`ID externo definido com sucesso: ${userId}`);
+          })
+          .catch((error) => {
+            console.error(`Erro ao definir ID externo: ${error}`);
+          });        
+      }
+         
 }
