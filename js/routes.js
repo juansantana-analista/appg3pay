@@ -641,7 +641,24 @@ var app = new Framework7({
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
           
-         OneSignal.Notifications.requestPermission();   
+         OneSignal.Notifications.requestPermission();
+         
+      
+          // Recupera o userId do localStorage
+          const userId = localStorage.getItem('userId');
+      
+          if (userId) {
+            // Define o ID externo no OneSignal
+            OneSignal.login(userId)
+              .then(() => {
+                console.log(`ID externo definido com sucesso: ${userId}`);
+              })
+              .catch((error) => {
+                console.error(`Erro ao definir ID externo: ${error}`);
+              });
+          } else {
+            console.warn("userId não encontrado no localStorage.");
+          }
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
           onDashboard();

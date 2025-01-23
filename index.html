@@ -29,22 +29,6 @@
               message: "Obrigado por se inscrever! Você receberá nossas últimas atualizações.",
             },
           });
-      
-          // Recupera o userId do localStorage
-          const userId = localStorage.getItem('userId');
-      
-          if (userId) {
-            // Define o ID externo no OneSignal
-            await OneSignal.login(userId)
-              .then(() => {
-                console.log(`ID externo definido com sucesso: ${userId}`);
-              })
-              .catch((error) => {
-                console.error(`Erro ao definir ID externo: ${error}`);
-              });
-          } else {
-            console.warn("userId não encontrado no localStorage.");
-          }
         });
       </script>      
       <!-- Path to Framework7 Library Bundle CSS -->
