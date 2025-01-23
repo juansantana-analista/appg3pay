@@ -216,7 +216,8 @@ var app = new Framework7({
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
-          // fazer algo antes da página ser exibida
+          // fazer algo antes da página ser exibida          
+          localStorage.removeItem("userId");
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
