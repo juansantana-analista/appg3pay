@@ -652,14 +652,6 @@ var app = new Framework7({
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
           OneSignal.Notifications.requestPermission();
-   // Recuperar o OneSignal User ID do localStorage
-   const oneSignalUserId = localStorage.getItem('oneSignalUserId');
-   if (oneSignalUserId) {
-      console.log('OneSignal User ID recuperado:', oneSignalUserId);
-      // Faça algo com o User ID, como enviá-lo para o servidor ou exibi-lo no app
-   } else {
-      console.warn('OneSignal User ID ainda não foi armazenado.');
-   }
    
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
