@@ -28,12 +28,13 @@
                },
             });         
             // Obter o OneSignal User ID e salvar no localStorage
-      const userId = await OneSignal.getUserId();
+      // Obter o User ID usando a nova API
+      const userId = await OneSignal.Notifications.getUserId();
       if (userId) {
          localStorage.setItem('oneSignalUserId', userId);
          console.log('OneSignal User ID armazenado:', userId);
       } else {
-         console.warn('OneSignal User ID não disponível ainda.');
+         console.warn('OneSignal User ID ainda não está disponível.');
       }
    });
       </script>
