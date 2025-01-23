@@ -27,20 +27,11 @@
                message: "Obrigado por se inscrever! Você receberá nossas últimas atualizações.",
                },
             });         
-            // Obter o OneSignal User ID e salvar no localStorage
-
-      // Inscrevendo para obter o estado do usuário
-      const subscriptionState = await OneSignal.Notifications.isSubscribed();
-      if (subscriptionState) {
-         // O usuário está inscrito, obtendo o User ID
-         const userId = await OneSignal.User.getId();
-         if (userId) {
-            localStorage.setItem('oneSignalUserId', userId);
-            console.log('OneSignal User ID armazenado:', userId);
-         }
-      } else {
-         console.warn('Usuário não está inscrito nas notificações.');
-      }
+            OneSignal.push(function() {
+            OneSignal.getUserId().then(function(userId) {
+               console.log("Player ID:", userId); // Salve esse ID para notificações individuais
+            });
+            });
    });
       </script>
       <!-- Path to Framework7 Library Bundle CSS -->
