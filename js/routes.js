@@ -277,13 +277,9 @@ var app = new Framework7({
 
                     buscarPessoaId(decodedToken.userid);
 
-                    // Aguarda a execução da função oneSignalLogin
-                      (async () => {
-                        await oneSignalLogin(decodedToken.userid, oneSignalId);
-                    })();
+                    oneSignalLogin(decodedToken.userid, oneSignalId);
 
                     setTimeout(function () {
-                    app.dialog.close();
                       app.views.main.router.navigate("/home/");
                     }, 300);
 
