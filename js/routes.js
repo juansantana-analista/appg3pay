@@ -658,8 +658,6 @@ var app = new Framework7({
             }).catch(function(error) {
                 console.error("Erro ao logar usuário no OneSignal:", error);
             });
-            const playerId = OneSignal.getUserId();
-            console.log(playerId);
         } else {
             console.log("Usuário não logado, externalId não definido.");
         }
