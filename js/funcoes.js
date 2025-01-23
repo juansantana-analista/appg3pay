@@ -2483,7 +2483,7 @@ function oneSignalLogin(userId){
     const oneSignalId = localStorage.getItem('oneSignalId');   
      
     if(userId != oneSignalId){
-        OneSignal.loggout();
+        OneSignal.logout();
         OneSignal.Notifications.requestPermission();   
         // Define o ID externo no OneSignal
         OneSignal.login(userId)
