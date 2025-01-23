@@ -29,10 +29,10 @@
             },
           });
       
-    // Escutando o evento de mudança de inscrição
-    OneSignal.addEventListener('subscriptionChange', function(isSubscribed) {
-      if (isSubscribed) {
-        // Se inscrito, obter o User ID
+    // Verificando a inscrição no momento da inicialização
+    OneSignal.isPushNotificationsEnabled().then(function(isEnabled) {
+      if (isEnabled) {
+        // Se o usuário já está inscrito, pegue o userId
         OneSignal.getUserId().then(function(userId) {
           console.log("User is subscribed. OneSignal User ID:", userId);
         });
@@ -41,9 +41,17 @@
       }
     });
 
-    // Obtendo o User ID após a inicialização
-    OneSignal.getUserId().then(function(userId) {
-      console.log("OneSignal User ID:", userId);
+    // Monitorando a mudança de inscrição
+    OneSignal.push(function() {
+      OneSignal.on('subscriptionChange', function(isSubscribed) {
+        if (isSubscribed) {
+          OneSignal.getUserId().then(function(userId) {
+            console.log("User is subscribed. OneSignal User ID:", userId);
+          });
+        } else {
+          console.log("User is not subscribed.");
+        }
+      });
     });
   });
       </script>
