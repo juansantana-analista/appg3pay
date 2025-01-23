@@ -651,18 +651,16 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
-          let externalId = localStorage.getItem('userId');
-          if (externalId) { // Verifica se o usuário está logado (tem um externalId)
-            OneSignal.login(externalId).then(function() {
-                console.log("Usuário logado no OneSignal com externalId:", externalId);
-            }).catch(function(error) {
-                console.error("Erro ao logar usuário no OneSignal:", error);
-            });
-        } else {
-            console.log("Usuário não logado, externalId não definido.");
-        }
           OneSignal.Notifications.requestPermission();
-
+   // Recuperar o OneSignal User ID do localStorage
+   const oneSignalUserId = localStorage.getItem('oneSignalUserId');
+   if (oneSignalUserId) {
+      console.log('OneSignal User ID recuperado:', oneSignalUserId);
+      // Faça algo com o User ID, como enviá-lo para o servidor ou exibi-lo no app
+   } else {
+      console.warn('OneSignal User ID ainda não foi armazenado.');
+   }
+   
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
           onDashboard();
@@ -675,32 +673,6 @@ var app = new Framework7({
           $('#updateData').on('click', function () {
             location.reload();
           });
-          /*
-                    var ctx = document.getElementById('revenueChart').getContext('2d');
-                    var revenueChart = new Chart(ctx, {
-                      type: 'line',
-                      data: {
-                        labels: ['Ago. 2021', 'Set. 2021', 'Out. 2021', 'Nov. 2021', 'Dez. 2021', 'Jan. 2022', 'Fev. 2022', 'Mar. 2022', 'Abr. 2022', 'Mai. 2022', 'Jun. 2022', 'Jul. 2022'],
-                        datasets: [{
-                          label: 'Receita',
-                          data: [0, 5000, 10000, 7500, 12500, 15000, 13000, 15000, 16000, 10000, 14000, 15000],
-                          borderColor: '#6b46c1',
-                          borderWidth: 2,
-                          fill: false
-                        }]
-                      },
-                      options: {
-                        scales: {
-                          x: {
-                            display: true
-                          },
-                          y: {
-                            display: true
-                          }
-                        }
-                      }
-                    });
-                    */
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM      
