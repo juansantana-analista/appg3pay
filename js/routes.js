@@ -274,30 +274,9 @@ var app = new Framework7({
                     //localStorage.setItem("validadeToken", decodedToken.expires);
 
                     buscarPessoaId(decodedToken.userid);
-                  // Gerenciando OneSignal
-                  const userIdOne = decodedToken.userid;
 
-                  // Fazer logout do OneSignal antes de logar o novo usuário
-                  OneSignal.logout().then(() => {
-                    console.log("OneSignal logout concluído.");
-                    
-                    // Realizar login no OneSignal com o novo usuário
-                    OneSignal.login(userIdOne);
-                    userOneSignal();
-                    console.log("OneSignal login realizado com o ID:", userIdOne);
-
-                    // Garantir que o dispositivo tenha permissão para notificações
-                    OneSignal.Notifications.requestPermission().then(() => {
-                      console.log("Permissão para notificações concedida.");
-                    }).catch(err => {
-                      console.error("Erro ao solicitar permissão para notificações:", err);
-                    });
-                  }).catch(err => {
-                    console.error("Erro ao realizar logout do OneSignal:", err);
-                  });
                     setTimeout(function () {
                       app.dialog.close();
-                      OneSignal.Notifications.requestPermission();
                       app.views.main.router.navigate("/home/");
                     }, 300);
 
@@ -657,18 +636,6 @@ var app = new Framework7({
                 })
                 .start();
           }
-
-            /* Defina uma função assíncrona para envolver o código com await
-            async function initializeOneSignal() {
-                            // Supondo que você tenha o ID do usuário
-              const userId = "USER_UNICO_DO_SISTEMA"; // Exemplo: email ou ID do banco
-              await OneSignal.login(userId);
-
-              console.log("Usuário vinculado ao OneSignal com external_id:", userId);
-            }
-
-            // Chama a função para iniciar o OneSignal
-            initializeOneSignal();*/
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
@@ -767,9 +734,6 @@ var app = new Framework7({
 
           $('#sairAgora').on('click', function () {
             app.dialog.confirm('Deseja sair do aplicativo?', function () {
-              OneSignalDeferred.push(async function(OneSignal) {
-                await OneSignal.logout();
-             });
               localStorage.clear();
               $("#menuPrincipal").hide("fast");
               $("#menuPrincipal").addClass("display-none");
