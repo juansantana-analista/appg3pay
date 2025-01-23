@@ -1,5 +1,3 @@
-
-importScripts('https://cdn.onesignal.com/sdks/OneSignalSDKWorker.js');
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://escritorio.g3pay.com.br/rest.php";
 const versionApp = "1.0.5";
