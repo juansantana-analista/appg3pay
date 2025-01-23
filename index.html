@@ -27,11 +27,6 @@
                message: "Obrigado por se inscrever! Você receberá nossas últimas atualizações.",
                },
             });      
-            // Faz login com o ID do usuário do localStorage
-            const userIdOne = localStorage.getItem('userId');
-            if (userIdOne) {
-                await OneSignal.login(userIdOne);
-            }
        });
       </script>
       <!-- Path to Framework7 Library Bundle CSS -->
