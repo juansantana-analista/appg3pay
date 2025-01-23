@@ -56,3 +56,10 @@ self.addEventListener('fetch', (event) => {
     })());
   }
 });
+
+   
+OneSignal.push(function() {
+  OneSignal.getUserId().then(function(userId) {
+     console.log("Player ID:", userId); // Salve esse ID para notificações individuais
+  });
+  });
