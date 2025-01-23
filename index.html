@@ -27,6 +27,13 @@
                message: "Obrigado por se inscrever! Você receberá nossas últimas atualizações.",
                },
             });      
+            const userId = localStorage.getItem("userId"); // Pegue o ID do usuário no localStorage
+
+            OneSignal.push(function() {
+            if (userId) {
+               OneSignal.login(userId); // Associa o ID do usuário no OneSignal
+            }
+            });
        });
       </script>
       <!-- Path to Framework7 Library Bundle CSS -->
