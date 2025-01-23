@@ -280,30 +280,25 @@ var app = new Framework7({
                     OneSignal.logout().then(() => {
                       console.log("OneSignal logout concluído.");
               
-                      // Reativando notificações (necessário para recriar o canal push)
-                      OneSignal.setSubscription(true);
-                      
-                      // Fazendo login do novo usuário no OneSignal
+                      // Fazer login do novo usuário no OneSignal
                       OneSignal.login(userIdOne).then(() => {
                         console.log("OneSignal login concluído com o ID:", userIdOne);
               
-                        // Solicitando permissão para notificações push
+                        // Reativar notificações e verificar o status
+                        OneSignal.getUserId().then(deviceId => {
+                          if (deviceId) {
+                            console.log("Canal de notificações configurado para o dispositivo:", deviceId);
+                          } else {
+                            console.error("Erro: canal de notificações não foi configurado.");
+                          }
+                        });
+              
+                        // Solicitar permissões para notificações
                         OneSignal.Notifications.requestPermission().then(permission => {
                           if (permission === "granted") {
                             console.log("Permissão para notificações concedida.");
-              
-                            // Verificando se o canal está ativo
-                            OneSignal.getSubscription((isSubscribed) => {
-                              if (!isSubscribed) {
-                                console.log("Ativando canal de notificações.");
-                                OneSignal.setSubscription(true);
-                              } else {
-                                console.log("Canal de notificações já ativo.");
-                              }
-                            });
-              
                           } else {
-                            console.warn("Permissão para notificações não foi concedida.");
+                            console.warn("Permissão para notificações não concedida.");
                           }
                         });
                       }).catch(err => {
