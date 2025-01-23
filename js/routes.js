@@ -277,27 +277,7 @@ var app = new Framework7({
 
                     buscarPessoaId(decodedToken.userid);
 
-                    if(decodedToken.userid != oneSignalId){
-                      OneSignal.logout();
-                      OneSignal.Notifications.requestPermission();   
-                      // Define o ID externo no OneSignal
-                      OneSignal.login(userId)
-                        .then(() => {
-                          console.log(`ID externo definido com sucesso: ${userId}`);
-                        })
-                        .catch((error) => {
-                          console.error(`Erro ao definir ID externo: ${error}`);
-                        });
-                    } else{
-                      OneSignal.Notifications.requestPermission();   
-                      OneSignal.login(userId)
-                        .then(() => {
-                          console.log(`ID externo definido com sucesso: ${userId}`);
-                        })
-                        .catch((error) => {
-                          console.error(`Erro ao definir ID externo: ${error}`);
-                        });        
-                    }
+                    oneSignalLogin(decodedToken.userid, oneSignalId);
 
                     setTimeout(function () {
                       app.views.main.router.navigate("/home/");

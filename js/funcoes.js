@@ -2493,7 +2493,7 @@ async function validarToken(userAuthToken) {
   
   
   function oneSignalLogin(userId, oneSignalId){          
-      if(userId != oneSignalId){
+      if(userId != oneSignalId && oneSignalId != '' && oneSignalId != null){
           OneSignal.logout();
           OneSignal.Notifications.requestPermission();   
           // Define o ID externo no OneSignal
