@@ -1930,6 +1930,7 @@ form {
 .notification-item {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   padding: 15px;
   border-bottom: 1px solid #eee;
   position: relative;
