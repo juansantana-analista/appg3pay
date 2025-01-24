@@ -1711,22 +1711,32 @@ app.on('routeChange', function (route) {
     targetEl.classList.add('active');
   }
 });
+document.addEventListener('DOMContentLoaded', function () {
+  // Verifica se o objeto OneSignal existe
+  if (typeof OneSignal !== "undefined") {
+    OneSignal.push(function () {
+      OneSignal.init({
+        appId: "SEU_APP_ID", // Substitua pelo ID do seu app no OneSignal
+        allowLocalhostAsSecureOrigin: true, // Necessário se estiver testando localmente
+      });
 
-function onDeviceReady() {  
-  // Inicialize o OneSignal
-  OneSignal.setAppId("7bfc9cb0-b251-4b3a-be5c-be82c1a143e2");
+      // Configurar o método para lidar com notificações abertas
+      OneSignal.setNotificationOpenedHandler(function (result) {
+        const appUrl = result.notification.additionalData.app_url;
 
-  // Configure o handler para quando uma notificação for aberta
-  OneSignal.setNotificationOpenedHandler(function (result) {
-    const appUrl = result.notification.additionalData?.app_url;
-
-    if (appUrl) {
-      // Redirecione usando o router do Framework7
-      app.views.main.router.navigate('/' + appUrl + '/');
-    } else {
-      console.warn('URL da notificação não definida.');
-    }
-  });
+        if (appUrl) {
+          // Navega para a URL especificada na notificação
+          app.views.main.router.navigate('/' + appUrl + '/');
+        } else {
+          console.warn('URL da notificação não definida.');
+        }
+      });
+    });
+  } else {
+    console.error("OneSignal não está carregado.");
+  }
+});
+function onDeviceReady() {
   //Quando estiver rodando no celular
   var mainView = app.views.create('.view-main', { url: '/index/' });
 
