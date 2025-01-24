@@ -1176,7 +1176,8 @@ async function validarToken(userAuthToken) {
           const notificacoes = responseJson.data.data; // Aqui acessa a lista de notificações
   
           notificacoes.forEach((notificacao) => {
-            const isVisto = notificacao.visto === "S";
+            const isVisto = notificacao.visto === "S"; // Verifica se a notificação foi vista
+          
             const notificacaoHTML = `            
               <div class="notification-item ${isVisto ? "visto" : "nao-visto"}">
                 <div class="notification-icon">
@@ -1186,16 +1187,17 @@ async function validarToken(userAuthToken) {
                   <h3>${notificacao.titulo}</h3>
                   <p>${truncarNome(notificacao.mensagem, 25)}</p>
                 </div>
-                <div class="notification-time">${timeAgo(notificacao.data_criacao)}</div>
                 <div class="notification-actions">
                   <button class="action-btn" 
-                  data-id="${notificacao.id}"
-                  data-icone="${notificacao.icone}"
-                  data-titulo="${notificacao.titulo}"
-                  data-mensagem="${notificacao.mensagem}"
-                  data-data="${formatarData(notificacao.data_criacao)}"
-                  >Detalhes</button>
+                    data-id="${notificacao.id}"
+                    data-icone="${notificacao.icone}"
+                    data-titulo="${notificacao.titulo}"
+                    data-mensagem="${notificacao.mensagem}"
+                    data-data="${formatarData(notificacao.data_criacao)}">
+                    Detalhes
+                  </button>
                 </div>
+                <div class="notification-time">${timeAgo(notificacao.data_criacao)}</div>
               </div>`;
             
             // Adiciona o HTML da notificação ao container
