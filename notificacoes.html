@@ -55,11 +55,28 @@
           <!-- INÍCIO POPUP NOTIFICAÇÃO -->
           <div class="popup popup-detalhes-notificacao">
             <div class="view popup-view">
-              <div class="popup-content">
-                <div class="popup-header">
-                    <h2>Detalhes da Notificação</h2>
-                    <button class="popup-close" onclick="closeNotificationDetails()">&times;</button>
+              
+              <div class="page">
+                <div class="toolbar toolbar-bottom" id="toolbar-next"></div>
+                <div class="top-nav">
+                  <div class="left">
+                    <a href="#" class="link btn-novo popup-close">
+                      <i class="mdi mdi-arrow-left"></i>
+                    </a>
+                  </div>
+                  <strong class="title-descricao">
+                    <i class="mdi mdi-account-plus-outline"></i> Endereço de
+                    Entrega</strong
+                  >
+                  <a
+                    href="#"
+                    data-popup=".popup-novo-endereco"
+                    class="btn-novo popup-open"
+                  >
+                    <i class="mdi mdi-plus"></i>
+                  </a>
                 </div>
+              <div class="popup-content">
                 <div class="popup-body">
                     <div class="notification-icon success">✅</div>
                     <div class="notification-details">
@@ -85,6 +102,7 @@
                     <button class="action-btn secondary" onclick="closeNotificationDetails()">Fechar</button>
                     <button class="action-btn">Mais Detalhes</button>
                 </div>
+            </div>
             </div>
             </div>
           </div>
