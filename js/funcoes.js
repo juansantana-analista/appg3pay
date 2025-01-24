@@ -1246,9 +1246,7 @@ async function validarToken(userAuthToken) {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        if (responseJson.status === "success") {
-          app.dialog.alert("Notificação marcada como lida!", "Sucesso");
-        } else {
+        if (responseJson.status !== "success") {
           app.dialog.alert("Erro ao marcar como lida: " + responseJson.message, "Erro");
         }
       })
