@@ -1319,6 +1319,7 @@ async function validarToken(userAuthToken) {
 
 // Inicio da Funçao que apaga a notificação
 function apagarNotificacao(notificacaoId) {
+  app.dialog.preloader("Apagando...");
   var userAuthToken = localStorage.getItem("userAuthToken");
   
   const headers = {
@@ -1342,8 +1343,11 @@ function apagarNotificacao(notificacaoId) {
     .then((response) => response.json())
     .then((responseJson) => {
       if (responseJson.status === "success") {
+        app.dialog.close();
         console.log("Notificação apagada com sucesso");
       } else {
+        app.dialog.close();
+        app.dialog.alert("Erro ao apagar notificação:", responseJson.data.message);
         console.error("Erro ao apagar notificação:", responseJson.data.message);
       }
     })
