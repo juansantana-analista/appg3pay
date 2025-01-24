@@ -1184,14 +1184,14 @@ async function validarToken(userAuthToken) {
                 </div>
                 <div class="notification-content">
                   <h3>${notificacao.titulo}</h3>
-                  <p>${notificacao.mensagem}</p>
+                  <p>${truncarNome(notificacao.mensagem, 25)}</p>
                 </div>
                 <div class="notification-time">${timeAgo(notificacao.data_criacao)}</div>
                 <div class="notification-actions">
                   <button class="action-btn" 
                   data-id="${notificacao.id}"
                   data-icone="${notificacao.icone}"
-                  data-titulo="${truncarNome(notificacao.titulo, 15)}"
+                  data-titulo="${notificacao.titulo}"
                   data-mensagem="${notificacao.mensagem}"
                   data-data="${formatarData(notificacao.data_criacao)}"
                   >Detalhes</button>
