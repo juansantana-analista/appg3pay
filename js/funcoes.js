@@ -1244,17 +1244,19 @@ async function validarToken(userAuthToken) {
   }
   //Fim Função Listar Notificações
 
-  // Detectando o gesto de arrasto para a direita
+// Detectando o gesto de arrasto para a direita
 function adicionarEventosSwipe() {
   $(".notification-item").each(function () {
     var touchStartX = 0;
     var touchEndX = 0;
     var notificacaoId = $(this).data("id");
 
+    // Detectando o início do toque
     $(this).on("touchstart", function (e) {
       touchStartX = e.changedTouches[0].screenX; // Salva a posição inicial
     });
 
+    // Detectando o final do toque
     $(this).on("touchend", function (e) {
       touchEndX = e.changedTouches[0].screenX; // Salva a posição final
 
