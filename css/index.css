@@ -1992,14 +1992,19 @@ form {
   color: #666;
 }
 
-.notification-time {
-  font-size: 12px;
-  color: #999;
+.notification-actions {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
 }
 
-.notification-actions {
-  display: flex;
-  flex-direction: column;
+.notification-time {
+  width: 100%;
+  font-size: 12px;
+  color: #999;
+  text-align: left;
+  margin-top: 10px;
 }
 
 .notification-actions .action-btn {
