@@ -1920,9 +1920,6 @@ form {
   padding: 15px;
   border-bottom: 1px solid #eee;
   transition: background-color 0.3s;
-}
-
-.notification-item:hover {
   background-color: #f9f9f9;
 }
 
