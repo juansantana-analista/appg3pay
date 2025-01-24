@@ -1187,7 +1187,13 @@ async function validarToken(userAuthToken) {
                 </div>
                 <div class="notification-time">${timeAgo(notificacao.data_criacao)}</div>
                 <div class="notification-actions">
-                  <button class="action-btn" data-id="${notificacao.id}">Detalhes</button>
+                  <button class="action-btn" 
+                  data-id="${notificacao.id}"
+                  data-icone="${notificacao.icone}"
+                  data-titulo="${notificacao.titulo}"
+                  data-mensagem="${notificacao.mensagem}"
+                  data-data="${formatarData(notificacao.data_criacao)}"
+                  >Detalhes</button>
                 </div>
               </div>`;
             
@@ -1196,7 +1202,17 @@ async function validarToken(userAuthToken) {
           });          
           // Adiciona o evento de clique ao botao detalhes notificação
           $(".action-btn").on("click", function () {
-            const notificacaoId = $(this).data("id"); // Obtém o ID da notificação            
+            const notificacaoId = $(this).data("id"); // Obtém o ID da notificação      
+            const iconeNot = $(this).data("icone") || '<i class="mdi mdi-bell"></i>';
+            const tituloNot = $(this).data("titulo");
+            const descricaoNot = $(this).data("mensagem");     
+            const dataNot = $(this).data("data");    
+             
+            // Atualiza o conteúdo do popup
+            $("#icone-pop").html(iconeNot); // Define o ícone
+            $("#title-pop").text(tituloNot); // Define o título
+            $("#descricao-pop").text(descricaoNot); // Define a descrição
+            $("#data-pop").text(timeAgo(dataNot));
             app.popup.open(".popup-detalhes-notificacao");
         
             // Aqui você pode executar outra ação, como marcar a notificação como lida
