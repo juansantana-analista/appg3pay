@@ -1279,7 +1279,8 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
-          // fazer algo quando a página for inicializada      
+          // fazer algo quando a página for inicializada   
+          listarNotificacoes();   
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM

@@ -1141,6 +1141,81 @@ async function validarToken(userAuthToken) {
   }
   //Fim Função CEP
   
+    
+  //Inicio Funçao Listar Notificações
+  function listarNotificacoes() {
+    var userAuthToken = localStorage.getItem("userAuthToken");
+    var userId = localStorage.getItem("userId");
+    app.dialog.preloader("Carregando...");
+    // Cabeçalhos da requisição
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + userAuthToken,
+    };
+  
+    const body = JSON.stringify({
+      class: "NotificacaoAppRest",
+      method: "ListarNotificacoes",
+      id_usuario: userId
+    });
+  
+    // Opções da requisição
+    const options = {
+      method: "POST",
+      headers: headers,
+      body: body,
+    };
+  
+    // Fazendo a requisição
+    fetch(apiServerUrl, options)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        // Verifica se o status é 'success' e se há dados de notificações
+        if (responseJson.status === "success" && responseJson.data.status === "success") {
+          const notificacoes = responseJson.data;
+  
+          notificacoes.forEach((notificacao, index) => {
+            var notificacaoHTML = `            
+                      <div class="notification-item">
+                        <div class="notification-icon">
+                          ${notificacao.icone}
+                        </div>
+                        <div class="notification-content">
+                          <h3>${notificacao.titulo}</h3>
+                          <p>${notificacao.mensagem}</p>
+                        </div>
+                        <div class="notification-time">${notificacao.data_criacao}</div>
+                        <div class="notification-actions">
+                          <button class="action-btn">Detalhes</button>
+                        </div>
+                      </div>
+                      `;
+  
+            $("#container-notificacao").append(notificacaoHTML);
+          });
+  
+          // Fechar o dialog ou outra ação necessária após preenchimento do select
+          app.dialog.close();
+        } else {
+          app.dialog.close();
+          // Tratar caso o status não seja "success"
+          console.error(
+            "Erro ao obter notificações:",
+            responseJson.message
+          );
+        }
+      })
+      .catch((error) => {
+        app.dialog.close();
+        console.error("Erro:", error);
+        app.dialog.alert(
+          "Erro ao carregar notificações: " + error.message,
+          "Falha na requisição!"
+        );
+      });
+  }
+  //Fim Função Listar Notificações
+
   //Inicio Funçao Listar Categorias
   function listarCategoriasCurso() {
     var userAuthToken = localStorage.getItem("userAuthToken");
