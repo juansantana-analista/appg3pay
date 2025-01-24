@@ -1203,6 +1203,9 @@ async function validarToken(userAuthToken) {
             // Adiciona o HTML da notificação ao container
             $("#container-notificacao").append(notificacaoHTML);
           });          
+          
+        // Adiciona evento de swipe para cada item
+        adicionarEventosSwipe();
           // Adiciona o evento de clique ao botao detalhes notificação
           $(".action-btn").on("click", function () {
             const notificacaoId = $(this).data("id"); // Obtém o ID da notificação      
@@ -1221,9 +1224,6 @@ async function validarToken(userAuthToken) {
             // Aqui você pode executar outra ação, como marcar a notificação como lida
             marcarComoLida(notificacaoId);
           });
-
-        // Adiciona evento de swipe para cada item
-        adicionarEventosSwipe();
   
           app.dialog.close(); // Fecha o dialog após sucesso
         } else {
