@@ -1869,3 +1869,123 @@ form {
   line-height: 1.5;
   color: #666;
 }
+
+/* NOTIFICAÇÕES STYLE */
+
+.notification-container {
+  width: 100%;
+  max-width: 400px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.notification-header {
+  background-color: #007bff;
+  color: white;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.notification-header .clear-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.notification-header .clear-btn:hover {
+  opacity: 1;
+}
+
+.notification-list {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.3s;
+}
+
+.notification-item:hover {
+  background-color: #f9f9f9;
+}
+
+.notification-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 15px;
+}
+
+.notification-icon.success {
+  background-color: rgba(0, 200, 81, 0.1);
+  color: #00c851;
+}
+
+.notification-icon.warning {
+  background-color: rgba(255, 193, 7, 0.1);
+  color: #ffc107;
+}
+
+.notification-icon.error {
+  background-color: rgba(255, 82, 82, 0.1);
+  color: #ff5252;
+}
+
+.notification-content {
+  flex-grow: 1;
+}
+
+.notification-content h3 {
+  font-size: 16px;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.notification-content p {
+  font-size: 14px;
+  color: #666;
+}
+
+.notification-time {
+  font-size: 12px;
+  color: #999;
+}
+
+.notification-actions {
+  display: flex;
+  flex-direction: column;
+}
+
+.notification-actions .action-btn {
+  background: none;
+  border: none;
+  color: #007bff;
+  font-size: 12px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  transition: color 0.3s;
+}
+
+.notification-actions .action-btn:hover {
+  color: #0056b3;
+}
