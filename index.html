@@ -29,6 +29,17 @@
               message: "Obrigado por se inscrever! Você receberá nossas últimas atualizações.",
             },
           });
+                  // Configurar o método para lidar com notificações abertas
+        OneSignal.setNotificationOpenedHandler(function (result) {
+          const appUrl = result.notification.additionalData.app_url;
+  
+          if (appUrl) {
+            // Navega para a URL especificada na notificação
+            app.views.main.router.navigate('/' + appUrl + '/');
+          } else {
+            console.warn('URL da notificação não definida.');
+          }
+        });
         });
       </script>      
       <!-- Path to Framework7 Library Bundle CSS -->

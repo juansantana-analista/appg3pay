@@ -1713,31 +1713,6 @@ app.on('routeChange', function (route) {
 });
 
 function onDeviceReady() {
-  document.addEventListener('DOMContentLoaded', function () {
-    // Verifica se o objeto OneSignal existe
-    if (typeof OneSignal !== "undefined") {
-      OneSignal.push(function () {
-        OneSignal.init({
-          appId: "SEU_APP_ID", // Substitua pelo ID do seu app no OneSignal
-          allowLocalhostAsSecureOrigin: true, // Necessário se estiver testando localmente
-        });
-  
-        // Configurar o método para lidar com notificações abertas
-        OneSignal.setNotificationOpenedHandler(function (result) {
-          const appUrl = result.notification.additionalData.app_url;
-  
-          if (appUrl) {
-            // Navega para a URL especificada na notificação
-            app.views.main.router.navigate('/' + appUrl + '/');
-          } else {
-            console.warn('URL da notificação não definida.');
-          }
-        });
-      });
-    } else {
-      console.error("OneSignal não está carregado.");
-    }
-  });
   //Quando estiver rodando no celular
   var mainView = app.views.create('.view-main', { url: '/index/' });
 
