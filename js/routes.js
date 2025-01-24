@@ -656,7 +656,7 @@ var app = new Framework7({
           $('#updateData').on('click', function () {
             location.reload();
           });
-          atualizarContadorNotificacoes() ;
+          atualizarContadorNotificacoes();
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM      
