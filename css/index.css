@@ -1931,7 +1931,7 @@ form {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  padding: 15px;
+  padding: 10px;
   border-bottom: 1px solid #eee;
   position: relative;
 }
