@@ -1712,29 +1712,21 @@ app.on('routeChange', function (route) {
   }
 });
 
-function onDeviceReady() {
-    // Configuração do OneSignal
-    window.plugins.OneSignal.setAppId("7bfc9cb0-b251-4b3a-be5c-be82c1a143e2");
+function onDeviceReady() {  
+  // Inicialize o OneSignal
+  OneSignal.setAppId("7bfc9cb0-b251-4b3a-be5c-be82c1a143e2");
 
-    // Listener para notificação aberta
-    window.plugins.OneSignal.setNotificationOpenedHandler(function (jsonData) {
-      console.log("Notificação aberta:", jsonData);
-  
-      // Verifica se existe a URL personalizada (app_url) na notificação
-      if (jsonData.notification.additionalData && jsonData.notification.additionalData.app_url) {
-        const targetRoute = jsonData.notification.additionalData.app_url;
-  
-        // Redireciona para a rota especificada
-        if (targetRoute === "notificacoes") {
-          app.views.main.router.navigate('/notificacoes/');
-        } else {
-          console.warn("Rota desconhecida:", targetRoute);
-        }
-      } else {
-        console.warn("Notificação aberta sem rota definida.");
-      }
-    });
+  // Configure o handler para quando uma notificação for aberta
+  OneSignal.setNotificationOpenedHandler(function (result) {
+    const appUrl = result.notification.additionalData?.app_url;
 
+    if (appUrl) {
+      // Redirecione usando o router do Framework7
+      app.views.main.router.navigate('/' + appUrl + '/');
+    } else {
+      console.warn('URL da notificação não definida.');
+    }
+  });
   //Quando estiver rodando no celular
   var mainView = app.views.create('.view-main', { url: '/index/' });
 
