@@ -1341,6 +1341,54 @@ async function validarToken(userAuthToken) {
   }
   //Fim Função Listar Categorias
   
+  //Inicio da funçao contagem Notificações
+  function atualizarContadorNotificacoes() {
+    var userAuthToken = localStorage.getItem("userAuthToken");
+    var userId = localStorage.getItem("userId");
+  
+    // Cabeçalhos da requisição
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + userAuthToken,
+    };
+  
+    const body = JSON.stringify({
+      class: "NotificacaoAppRest",
+      method: "QtdeNotificacoes",
+      id_usuario: userId,
+    });
+  
+    // Opções da requisição
+    const options = {
+      method: "POST",
+      headers: headers,
+      body: body,
+    };
+  
+    // Fazendo a requisição
+    fetch(apiServerUrl, options)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.status === "success" && responseJson.data.status === "success") {
+          const quantidadeNaoVistas = responseJson.data.quantidade_nao_vistas;
+  
+          // Atualizar o atributo data-count
+          const $btnCart = $(".btn-cart");
+          if (quantidadeNaoVistas > 0) {
+            $btnCart.attr("data-count", quantidadeNaoVistas);
+          } else {
+            $btnCart.attr("data-count", "0"); // Define como zero se não houver notificações
+          }
+        } else {
+          console.error("Erro ao contar notificações:", responseJson.message);
+        }
+      })
+      .catch((error) => {
+        console.error("Erro na requisição:", error);
+      });
+  }
+  //Fim da funçao contagem Notificações
+  
   //Inicio Funçao Listar Endereços
   function listarEnderecos() {
     var userAuthToken = localStorage.getItem("userAuthToken");
