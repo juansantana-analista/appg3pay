@@ -33,7 +33,7 @@ var app = new Framework7({
           const currentUrl = window.location.href;
 
           // Se a URL contiver "/notificacoes", redireciona
-          if (currentUrl.includes('https://app.g3pay.com.br/notificacoes')) {
+          if (currentUrl.includes('https://app.g3pay.com.br/#/notificacoes')) {
             app.views.main.router.navigate('/notificacoes/');
           }
 
