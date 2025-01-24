@@ -1936,6 +1936,17 @@ form {
   background-color: #ffffff;
 }
 
+.notification-item.nao-visto {
+  background-color: #f0f4ff; /* Light blue background */
+  font-weight: bold;
+  border-left: 4px solid #007bff; /* Blue accent border */
+}
+
+.notification-item.visto {
+  background-color: #f8f9fa; /* Lighter gray */
+  color: #6c757d; /* Subdued text color */
+}
+
 .notification-icon {
   width: 50px;
   height: 50px;

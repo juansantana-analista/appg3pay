@@ -1176,8 +1176,9 @@ async function validarToken(userAuthToken) {
           const notificacoes = responseJson.data.data; // Aqui acessa a lista de notificações
   
           notificacoes.forEach((notificacao) => {
+            const isVisto = notificacao.visto === "S";
             const notificacaoHTML = `            
-              <div class="notification-item">
+              <div class="notification-item ${isVisto ? "visto" : "nao-visto"}">
                 <div class="notification-icon">
                   ${notificacao.icone ? notificacao.icone : '<i class="mdi mdi-bell"></i>'}
                 </div>
@@ -1207,7 +1208,7 @@ async function validarToken(userAuthToken) {
             const tituloNot = $(this).data("titulo");
             const descricaoNot = $(this).data("mensagem");     
             const dataNot = $(this).data("data");    
-             
+
             // Atualiza o conteúdo do popup
             $("#icone-pop").html(iconeNot); // Define o ícone
             $("#title-pop").text(tituloNot); // Define o título
