@@ -29,6 +29,14 @@ var app = new Framework7({
       on: {
         pageBeforeIn: async function (event, page) {    
           clearLocalStorage();
+          // Obtém a URL atual do navegador
+          const currentUrl = window.location.href;
+
+          // Se a URL contiver "/notificacoes", redireciona
+          if (currentUrl.includes('https://app.g3pay.com.br/notificacoes')) {
+            app.views.main.router.navigate('/notificacoes/');
+          }
+
           // chama a função que verifica e valida o token
           var userAuthToken = localStorage.getItem('userAuthToken');
           // Início função validar login
