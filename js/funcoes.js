@@ -1191,7 +1191,7 @@ async function validarToken(userAuthToken) {
                   <button class="action-btn" 
                   data-id="${notificacao.id}"
                   data-icone="${notificacao.icone}"
-                  data-titulo="${notificacao.titulo}"
+                  data-titulo="${truncarNome(notificacao.titulo, 30)}"
                   data-mensagem="${notificacao.mensagem}"
                   data-data="${formatarData(notificacao.data_criacao)}"
                   >Detalhes</button>
