@@ -254,6 +254,7 @@ body {
   color: var(--preto);
 }
 
+
 .btn-cart::before {
   content: attr(data-count);
   background: var(--laranja);
@@ -273,6 +274,19 @@ body {
 
 .btn-cart[data-count="0"]::before {
   display: none;
+}
+
+.btn-notifi {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 3%;
+  border-radius: 50%;
+  border: 1px solid var(--gelo);
+  font-size: 24px;
+  color: var(--branco);
 }
 
 a {
