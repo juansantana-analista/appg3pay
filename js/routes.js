@@ -646,7 +646,8 @@ var app = new Framework7({
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
-          onDashboard();
+          onDashboard();          
+          buscarQtdeNotif();
 
           $('.abrir-popup').on('click', function (e) {
             e.preventDefault(); // Prevent default link behavior
@@ -656,7 +657,6 @@ var app = new Framework7({
           $('#updateData').on('click', function () {
             location.reload();
           });
-          atualizarContadorNotificacoes();
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM      

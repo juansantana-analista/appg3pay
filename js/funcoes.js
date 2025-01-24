@@ -1342,7 +1342,7 @@ async function validarToken(userAuthToken) {
   //Fim Função Listar Categorias
   
   //Inicio da funçao contagem Notificações
-  function atualizarContadorNotificacoes() {
+  function buscarQtdeNotif() {
     var userAuthToken = localStorage.getItem("userAuthToken");
     var userId = localStorage.getItem("userId");
   
