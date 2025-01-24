@@ -1179,7 +1179,8 @@ async function validarToken(userAuthToken) {
             const isVisto = notificacao.visto === "S"; // Verifica se a notificação foi vista
           
             const notificacaoHTML = `            
-              <div class="notification-item ${isVisto ? "visto" : "nao-visto"}">
+              <div class="notification-item swipeable ${isVisto ? "visto" : "nao-visto"}"
+                  data-notification-id="${notificacao.id}">
                 <div class="notification-icon">
                   ${notificacao.icone ? notificacao.icone : '<i class="mdi mdi-bell"></i>'}
                 </div>
@@ -1202,10 +1203,47 @@ async function validarToken(userAuthToken) {
             
             // Adiciona o HTML da notificação ao container
             $("#container-notificacao").append(notificacaoHTML);
-          });          
-          
-        // Adiciona evento de swipe para cada item
-        adicionarEventosSwipe();
+          });       
+            // Add swipe-to-delete functionality
+  $(".swipeable").on("touchstart", function(e) {
+    const startX = e.originalEvent.touches[0].pageX;
+    let element = $(this);
+    
+    $(this).on("touchmove", function(e) {
+      const moveX = e.originalEvent.touches[0].pageX;
+      const deltaX = moveX - startX;
+      
+      // Only allow swiping right
+      if (deltaX > 0) {
+        element.css('transform', `translateX(${deltaX}px)`);
+      }
+    });
+    
+    $(this).on("touchend", function(e) {
+      const moveX = e.originalEvent.changedTouches[0].pageX;
+      const deltaX = moveX - startX;
+      
+      // If swiped more than 100 pixels, delete the notification
+      if (deltaX > 100) {
+        const notificacaoId = element.data('notification-id');
+        
+        // Call your delete function
+        apagarNotificacao(notificacaoId);
+        
+        // Animate and remove the notification from DOM
+        element.css('transform', 'translateX(100%)');
+        element.fadeOut(300, function() {
+          $(this).remove();
+        });
+      } else {
+        // Snap back if not swiped far enough
+        element.css('transform', 'translateX(0)');
+      }
+      
+      // Remove event listeners
+      $(this).off('touchmove touchend');
+    });
+  });   
           // Adiciona o evento de clique ao botao detalhes notificação
           $(".action-btn").on("click", function () {
             const notificacaoId = $(this).data("id"); // Obtém o ID da notificação      
@@ -1243,31 +1281,6 @@ async function validarToken(userAuthToken) {
       });
   }
   //Fim Função Listar Notificações
-
-// Detectando o gesto de arrasto para a direita
-function adicionarEventosSwipe() {
-  $(".notification-item").each(function () {
-    var touchStartX = 0;
-    var touchEndX = 0;
-    var notificacaoId = $(this).data("id");
-
-    // Detectando o início do toque
-    $(this).on("touchstart", function (e) {
-      touchStartX = e.changedTouches[0].screenX; // Salva a posição inicial
-    });
-
-    // Detectando o final do toque
-    $(this).on("touchend", function (e) {
-      touchEndX = e.changedTouches[0].screenX; // Salva a posição final
-
-      // Verifica se o arrasto foi para a direita
-      if (touchEndX - touchStartX > 100) { // Ajuste esse valor conforme necessário
-        // Chama a função para apagar a notificação
-        apagarNotificacao(notificacaoId);
-      }
-    });
-  });
-}
 
   //Inicio Função Marcar como Lida a Notificação
   function marcarComoLida(notificacaoId) {
