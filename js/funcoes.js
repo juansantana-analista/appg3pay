@@ -1373,11 +1373,11 @@ async function validarToken(userAuthToken) {
           const quantidadeNaoVistas = responseJson.data.quantidade_nao_vistas;
   
           // Atualizar o atributo data-count
-          const $btnCart = $(".btn-cart");
+          const $btnNotificacao = $(".btn-notificacao");
           if (quantidadeNaoVistas > 0) {
-            $btnCart.attr("data-count", quantidadeNaoVistas);
+            $btnNotificacao.attr("data-count", quantidadeNaoVistas);
           } else {
-            $btnCart.attr("data-count", "0"); // Define como zero se não houver notificações
+            $btnNotificacao.attr("data-count", "0"); // Define como zero se não houver notificações
           }
         } else {
           console.error("Erro ao contar notificações:", responseJson.message);
