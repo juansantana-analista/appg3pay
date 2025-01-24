@@ -2125,6 +2125,22 @@ form {
 .action-btn:hover {
   opacity: 0.9;
 }
+.action-btn-pop {
+  flex-grow: 1;
+  margin: 0 5px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background-color: #007bff;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.action-btn-pop.secondary {
+  background-color: #6c757d;
+}
 
 @keyframes slideUp {
   from {
