@@ -1205,45 +1205,45 @@ async function validarToken(userAuthToken) {
             $("#container-notificacao").append(notificacaoHTML);
           });       
             // Add swipe-to-delete functionality
-  $(".swipeable").on("touchstart", function(e) {
-    const startX = e.originalEvent.touches[0].pageX;
-    let element = $(this);
-    
-    $(this).on("touchmove", function(e) {
-      const moveX = e.originalEvent.touches[0].pageX;
-      const deltaX = moveX - startX;
-      
-      // Only allow swiping right
-      if (deltaX > 0) {
-        element.css('transform', `translateX(${deltaX}px)`);
-      }
-    });
-    
-    $(this).on("touchend", function(e) {
-      const moveX = e.originalEvent.changedTouches[0].pageX;
-      const deltaX = moveX - startX;
-      
-      // If swiped more than 100 pixels, delete the notification
-      if (deltaX > 100) {
-        const notificacaoId = element.data('notification-id');
-        
-        // Call your delete function
-        apagarNotificacao(notificacaoId);
-        
-        // Animate and remove the notification from DOM
-        element.css('transform', 'translateX(100%)');
-        element.fadeOut(300, function() {
-          $(this).remove();
-        });
-      } else {
-        // Snap back if not swiped far enough
-        element.css('transform', 'translateX(0)');
-      }
-      
-      // Remove event listeners
-      $(this).off('touchmove touchend');
-    });
-  });   
+            $(".swipeable").on("touchstart", function(e) {
+              const startX = e.originalEvent.touches[0].pageX;
+              let element = $(this);
+              
+              $(this).on("touchmove", function(e) {
+                const moveX = e.originalEvent.touches[0].pageX;
+                const deltaX = moveX - startX;
+                
+                // Only allow swiping right
+                if (deltaX > 0) {
+                  element.css('transform', `translateX(${deltaX}px)`);
+                }
+              });
+              
+              $(this).on("touchend", function(e) {
+                const moveX = e.originalEvent.changedTouches[0].pageX;
+                const deltaX = moveX - startX;
+                
+                // If swiped more than 100 pixels, delete the notification
+                if (deltaX > 100) {
+                  const notificacaoId = element.data('notification-id');
+                  
+                  // Call your delete function
+                  apagarNotificacao(notificacaoId);
+                  
+                  // Animate and remove the notification from DOM
+                  element.css('transform', 'translateX(100%)');
+                  element.fadeOut(300, function() {
+                    $(this).remove();
+                  });
+                } else {
+                  // Snap back if not swiped far enough
+                  element.css('transform', 'translateX(0)');
+                }
+                
+                // Remove event listeners
+                $(this).off('touchmove touchend');
+              });
+            });   
           // Adiciona o evento de clique ao botao detalhes notificação
           $(".action-btn").on("click", function () {
             const notificacaoId = $(this).data("id"); // Obtém o ID da notificação      
@@ -1316,6 +1316,42 @@ async function validarToken(userAuthToken) {
       });
   }  
   //Fim Função Marcar como Lida a Notificação
+
+// Inicio da Funçao que apaga a notificação
+function apagarNotificacao(notificacaoId) {
+  var userAuthToken = localStorage.getItem("userAuthToken");
+  
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "NotificacaoAppRest",
+    method: "ApagarNotificacao",
+    id_notificacao: notificacaoId,
+  });
+
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      if (responseJson.status === "success") {
+        console.log("Notificação apagada com sucesso");
+      } else {
+        console.error("Erro ao apagar notificação:", responseJson.data.message);
+      }
+    })
+    .catch((error) => {
+      console.error("Erro:", error);
+    });
+}
+// Fim da Funçao que apaga a notificação
 
   //Inicio Funçao Listar Categorias
   function listarCategoriasCurso() {
