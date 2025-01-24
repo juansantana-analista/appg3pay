@@ -1185,7 +1185,7 @@ async function validarToken(userAuthToken) {
                 </div>
                 <div class="notification-content">
                   <h3>${notificacao.titulo}</h3>
-                  <p>${truncarNome(notificacao.mensagem, 25)}</p>
+                  <p>${truncarNome(notificacao.mensagem, 35)}</p>
                 </div>
                 <div class="notification-actions">
                   <button class="action-btn" 
