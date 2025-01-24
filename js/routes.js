@@ -1264,6 +1264,27 @@ var app = new Framework7({
       }
     },
     {
+      path: '/notificacoes/',
+      url: 'notificacoes.html?v=' + versionApp,
+      options: {
+        transition: 'f7-push',
+      },
+      on: {
+        pageBeforeIn: function (event, page) {
+          // fazer algo antes da página ser exibida
+        },
+        pageAfterIn: function (event, page) {
+          // fazer algo depois da página ser exibida
+        },
+        pageInit: function (event, page) {
+          // fazer algo quando a página for inicializada      
+        },
+        pageBeforeRemove: function (event, page) {
+          // fazer algo antes da página ser removida do DOM
+        },
+      }
+    },
+    {
       path: '/offline/',
       url: 'offline.html?v=' + versionApp,
       options: {
