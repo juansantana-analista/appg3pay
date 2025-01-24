@@ -32,11 +32,6 @@ var app = new Framework7({
           // Obtém a URL atual do navegador
           const currentUrl = window.location.href;
 
-          // Se a URL contiver "/notificacoes", redireciona
-          if (currentUrl.includes('https://app.g3pay.com.br/#/notificacoes')) {
-            app.views.main.router.navigate('/notificacoes/');
-          }
-
           // chama a função que verifica e valida o token
           var userAuthToken = localStorage.getItem('userAuthToken');
           // Início função validar login
@@ -44,8 +39,13 @@ var app = new Framework7({
           if (!isValid) {
             app.views.main.router.navigate("/login-view/");
           } else {
-            // Lógica para continuar usando o token
-            app.views.main.router.navigate("/home/");
+            // Se a URL contiver "/notificacoes", redireciona
+            if (currentUrl.includes('https://app.g3pay.com.br/#/notificacoes')) {
+              app.views.main.router.navigate('/notificacoes/');
+            } else {
+              // Lógica para continuar usando o token
+              app.views.main.router.navigate("/home/");              
+            }
           }
           var userName = localStorage.getItem('userName');
           if(userName != '' && userName != null) {
