@@ -1187,12 +1187,20 @@ async function validarToken(userAuthToken) {
                 </div>
                 <div class="notification-time">${timeAgo(notificacao.data_criacao)}</div>
                 <div class="notification-actions">
-                  <button class="action-btn">Detalhes</button>
+                  <button class="action-btn" data-id="${notificacao.id}">Detalhes</button>
                 </div>
               </div>`;
             
             // Adiciona o HTML da notificação ao container
             $("#container-notificacao").append(notificacaoHTML);
+          });          
+          // Adiciona o evento de clique ao botao detalhes notificação
+          $(".action-btn").on("click", function () {
+            const notificacaoId = $(this).data("id"); // Obtém o ID da notificação
+            console.log("ID da notificação clicada:", notificacaoId);
+        
+            // Aqui você pode executar outra ação, como marcar a notificação como lida
+            marcarComoLida(notificacaoId);
           });
   
           app.dialog.close(); // Fecha o dialog após sucesso
@@ -1212,8 +1220,44 @@ async function validarToken(userAuthToken) {
         );
       });
   }
-  
   //Fim Função Listar Notificações
+
+  //Inicio Função Marcar como Lida a Notificação
+  function marcarComoLida(notificacaoId) {
+    const userAuthToken = localStorage.getItem("userAuthToken");
+  
+    // Cabeçalhos da requisição
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + userAuthToken,
+    };
+  
+    const body = JSON.stringify({
+      class: "NotificacaoAppRest",
+      method: "NotificacaoLida",
+      id_notificacao: notificacaoId,
+    });
+  
+    // Fazendo a requisição
+    fetch(apiServerUrl, {
+      method: "POST",
+      headers: headers,
+      body: body,
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.status === "success") {
+          app.dialog.alert("Notificação marcada como lida!", "Sucesso");
+        } else {
+          app.dialog.alert("Erro ao marcar como lida: " + responseJson.message, "Erro");
+        }
+      })
+      .catch((error) => {
+        console.error("Erro:", error);
+        app.dialog.alert("Erro ao marcar como lida: " + error.message, "Erro");
+      });
+  }  
+  //Fim Função Marcar como Lida a Notificação
 
   //Inicio Funçao Listar Categorias
   function listarCategoriasCurso() {
