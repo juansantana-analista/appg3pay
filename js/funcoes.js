@@ -1196,8 +1196,8 @@ async function validarToken(userAuthToken) {
           });          
           // Adiciona o evento de clique ao botao detalhes notificação
           $(".action-btn").on("click", function () {
-            const notificacaoId = $(this).data("id"); // Obtém o ID da notificação
-            console.log("ID da notificação clicada:", notificacaoId);
+            const notificacaoId = $(this).data("id"); // Obtém o ID da notificação            
+            app.popup.open(".popup-detalhes-notificacao");
         
             // Aqui você pode executar outra ação, como marcar a notificação como lida
             marcarComoLida(notificacaoId);
