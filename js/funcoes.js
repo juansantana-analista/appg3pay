@@ -1221,6 +1221,9 @@ async function validarToken(userAuthToken) {
             // Aqui você pode executar outra ação, como marcar a notificação como lida
             marcarComoLida(notificacaoId);
           });
+
+        // Adiciona evento de swipe para cada item
+        adicionarEventosSwipe();
   
           app.dialog.close(); // Fecha o dialog após sucesso
         } else {
@@ -1240,6 +1243,29 @@ async function validarToken(userAuthToken) {
       });
   }
   //Fim Função Listar Notificações
+
+  // Detectando o gesto de arrasto para a direita
+function adicionarEventosSwipe() {
+  $(".notification-item").each(function () {
+    var touchStartX = 0;
+    var touchEndX = 0;
+    var notificacaoId = $(this).data("id");
+
+    $(this).on("touchstart", function (e) {
+      touchStartX = e.changedTouches[0].screenX; // Salva a posição inicial
+    });
+
+    $(this).on("touchend", function (e) {
+      touchEndX = e.changedTouches[0].screenX; // Salva a posição final
+
+      // Verifica se o arrasto foi para a direita
+      if (touchEndX - touchStartX > 100) { // Ajuste esse valor conforme necessário
+        // Chama a função para apagar a notificação
+        apagarNotificacao(notificacaoId);
+      }
+    });
+  });
+}
 
   //Inicio Função Marcar como Lida a Notificação
   function marcarComoLida(notificacaoId) {
