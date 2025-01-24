@@ -1370,7 +1370,7 @@ async function validarToken(userAuthToken) {
       .then((response) => response.json())
       .then((responseJson) => {
         if (responseJson.status === "success" && responseJson.data.status === "success") {
-          const quantidadeNaoVistas = responseJson.data.quantidade_nao_vistas;
+          const quantidadeNaoVistas = responseJson.data.data.quantidade;
   
           // Atualizar o atributo data-count
           const $btnNotificacao = $(".btn-notificacao");
