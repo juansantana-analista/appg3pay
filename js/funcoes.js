@@ -1180,7 +1180,7 @@ async function validarToken(userAuthToken) {
             // Exibe mensagem "Nada por enquanto..."
             $("#container-notificacao").html(`
               <div class="text-align-center">
-                <img width="300" src="img/bell.gif">
+                <img width="150" src="img/bell.gif">
                 <br><span class="color-gray">Nada por enquanto...</span>
               </div>
             `);
