@@ -1176,6 +1176,7 @@ async function validarToken(userAuthToken) {
           const notificacoes = responseJson.data.data; // Aqui acessa a lista de notificações
           // Verifica se a lista está vazia
           if (notificacoes.length === 0) {
+            app.dialog.close();
             // Exibe mensagem "Nada por enquanto..."
             $("#container-notificacao").html(`
               <div class="text-align-center">
