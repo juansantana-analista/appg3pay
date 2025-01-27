@@ -1174,21 +1174,21 @@ async function validarToken(userAuthToken) {
         // Verifica se o status é 'success' e se há dados de notificações
         if (responseJson.status === "success" && responseJson.data.status === "success") {
           const notificacoes = responseJson.data.data; // Aqui acessa a lista de notificações
+          // Verifica se a lista está vazia
+          if (notificacoes.length === 0) {
+            // Exibe mensagem "Nada por enquanto..."
+            $("#container-notificacao").html(`
+              <div class="text-align-center">
+                <img width="300" src="img/bell.gif">
+                <br><span class="color-gray">Nada por enquanto...</span>
+              </div>
+            `);
+            return;
+          }
   
           notificacoes.forEach((notificacao) => {
             const isVisto = notificacao.visto === "S"; // Verifica se a notificação foi vista
-              // Verifica se a lista está vazia
-              if (notificacoes.length === 0) {
-                // Exibe mensagem "Nada por enquanto..."
-                $("#container-notificacao").html(`
-                  <div class="text-align-center">
-                    <img width="300" src="img/bell.gif">
-                    <br><span class="color-gray">Nada por enquanto...</span>
-                  </div>
-                `);
-                return;
-              }
-              
+
             const notificacaoHTML = `            
               <div class="notification-item swipeable ${isVisto ? "visto" : "nao-visto"}"
                   data-notification-id="${notificacao.id}">
