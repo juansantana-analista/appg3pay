@@ -383,7 +383,6 @@ async function validarToken(userAuthToken) {
               linkCheckout = link.link_url;
               $("#checkoutLinkUrl").html(linkUrl);
             }
-            console.log(link);
           });
   
           $("#shareLanding").on("click", function () {
