@@ -394,6 +394,24 @@ async function validarToken(userAuthToken) {
               linkLandingPage + codigo_indicador
             );
           });
+          $("#linkPaginaUrl").on("click", function () {
+            // Pega o url do link clicado em share
+            //Abre opção compartilhamento
+            onCompartilhar(
+              "Link do Produto",
+              "Aproveite agora mesmo nosso produto",
+              linkLandingPage + codigo_indicador
+            );
+          });
+          $("#linkCheckoutUrl").on("click", function () {
+            // Pega o url do link clicado em share
+            //Abre opção compartilhamento
+            onCompartilhar(
+              "Link do Produto",
+              "Aproveite agora mesmo nosso produto",
+              linkCheckout + codigo_indicador
+            );
+          });
   
           $(".compartilhar-link").on("click", function () {
             // Pega o url do link clicado em share
