@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Produto</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #2C3E50;
+            --accent-color: #3498DB;
+            --background-color: #F8F9FA;
+            --text-color: #2C3E50;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-button {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .product-image-container {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 20px;
+            margin: 20px 0;
+            background: white;
+            box-shadow: var(--shadow);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .product-image:hover {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: -20px;
+            box-shadow: var(--shadow);
+        }
+
+        .product-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .product-category {
+            display: inline-block;
+            background: #E8F4FD;
+            color: var(--accent-color);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .product-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin: 15px 0;
+        }
+
+        .benefits-section {
+            margin: 20px 0;
+        }
+
+        .benefits-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .benefits-list {
+            list-style: none;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            background: white;
+            padding: 12px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .benefit-icon {
+            color: var(--accent-color);
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .dosage-section {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: var(--shadow);
+        }
+
+        .buy-button {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .buy-button:active {
+            transform: translateX(-50%) scale(0.98);
+        }
+
+        .nutrition-facts {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0 80px 0;
+            box-shadow: var(--shadow);
+        }
+
+        .nutrition-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .nutrition-table td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .product-name {
+                font-size: 1.5rem;
+            }
+
+            .product-image-container {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <i class="fas fa-arrow-left back-button"></i>
+        <span class="product-title">Detalhes do Produto</span>
+    </div>
+
+    <div class="container">
+        <div class="product-image-container">
+            <img src="https://www.vhita.com.br/cdn/shop/files/vitamina_c_vitamina_c_vhita_1_still_1x_ab10ca45-d01a-4431-ab5f-e68755af6659.webp?v=1733786542" alt="Produto" class="product-image">
+        </div>
+
+        <div class="product-info">
+            <span class="product-category">Vitaminas & Minerais</span>
+            <h1 class="product-name">Complexo Multivitamínico Premium</h1>
+            <p class="product-description">
+                Suplemento completo formulado com vitaminas essenciais e minerais para apoiar sua saúde e bem-estar diário.
+            </p>
+            <div class="product-price">R$ 89,90</div>
+        </div>
+
+        <div class="benefits-section">
+            <h2 class="benefits-title">Benefícios</h2>
+            <ul class="benefits-list">
+                <li class="benefit-item">
+                    <i class="fas fa-shield-alt benefit-icon"></i>
+                    <span>Fortalece o sistema imunológico</span>
+                </li>
+                <li class="benefit-item">
+                    <i class="fas fa-bolt benefit-icon"></i>
+                    <span>Aumenta a disposição e energia</span>
+                </li>
+                <li class="benefit-item">
+                    <i class="fas fa-heart benefit-icon"></i>
+                    <span>Promove saúde cardiovascular</span>
+                </li>
+                <li class="benefit-item">
+                    <i class="fas fa-brain benefit-icon"></i>
+                    <span>Melhora a função cognitiva</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="dosage-section">
+            <h2 class="benefits-title">Modo de Uso</h2>
+            <p>Tomar 2 cápsulas ao dia, preferencialmente junto com as refeições ou conforme orientação profissional.</p>
+        </div>
+
+        <div class="nutrition-facts">
+            <h2 class="benefits-title">Informação Nutricional</h2>
+            <table class="nutrition-table">
+                <tr>
+                    <td>Vitamina C</td>
+                    <td>1000mg</td>
+                </tr>
+                <tr>
+                    <td>Vitamina D3</td>
+                    <td>2000UI</td>
+                </tr>
+                <tr>
+                    <td>Vitamina B12</td>
+                    <td>4,8mcg</td>
+                </tr>
+                <tr>
+                    <td>Zinco</td>
+                    <td>15mg</td>
+                </tr>
+            </table>
+        </div>
+
+        <button class="buy-button">
+            Adicionar ao Carrinho
+        </button>
+    </div>
+
+    <script>
+        document.querySelector('.back-button').addEventListener('click', () => {
+            // Simular ação de voltar
+            console.log('Voltar para a página anterior');
+        });
+
+        document.querySelector('.buy-button').addEventListener('click', () => {
+            // Simular adição ao carrinho
+            const button = document.querySelector('.buy-button');
+            button.textContent = 'Produto Adicionado!';
+            button.style.background = '#27AE60';
+            
+            setTimeout(() => {
+                button.textContent = 'Adicionar ao Carrinho';
+                button.style.background = '#3498DB';
+            }, 2000);
+        });
+
+        // Animação suave ao rolar
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -42,145 +42,133 @@
               </div>
               <img id="imagem-detalhe" src="img/default.png" />
             </div>
-            <div class="prod-content">
-              <div class="block">
-                <!--
-                <div class="line padding-top">
-                  <b id="nome-detalhe" class="margin-left"></b>
-                  <button id="compartilharBtn" class="share-btn">Compartilhar <i class="ri-share-2-line"></i></button>
-                </div>
-                -->
-                            <!-- Product Info -->
-              <div class="product-info">
-                <div class="stats">
-                  <button class="margin-left btn-rates">
-                    <i class="mdi mdi-star"></i>
-                    <span id="rating-detalhe">4.8</span>
-                  </button>
-                  <button class="btn-rates">
-                    <i class="ri-thumb-up-fill"></i>
-                    <span id="like-detalhe"></span>
-                  </button>
-                </div>
-                <h2 id="product-name"></h2>
-                <p id="descricao-detalhe"></p>
-            </div>
+            <main class="pt-16 pb-20 px-4">
+              <div class="max-w-6xl mx-auto">
+                  <!-- Seção do Produto -->
+                  <div class="bg-white rounded-3xl p-6 mb-6 product-shadow">
+                      <div class="flex flex-col md:flex-row gap-8">
+                          <div class="md:w-1/2">
+                              <div class="bg-gray-50 rounded-2xl p-8 flex items-center justify-center">
+                                  <img src="https://www.vhita.com.br/cdn/shop/files/vitamina_c_vitamina_c_vhita_1_still_1x_ab10ca45-d01a-4431-ab5f-e68755af6659.webp?v=1733786542" alt="Produto" class="w-64 floating">
+                              </div>
+                          </div>
+                          
+                          <div class="md:w-1/2">
+                              <div class="flex items-center gap-2 mb-2">
+                                  <span class="pill-badge text-xs text-white px-3 py-1 rounded-full">Premium</span>
+                                  <span class="text-green-500 text-sm">Em estoque</span>
+                              </div>
+                              
+                              <h2 class="text-2xl font-bold text-gray-900 mb-2">Ômega 3 Premium Plus</h2>
+                              <div class="flex items-center gap-2 mb-4">
+                                  <div class="flex items-center">
+                                      <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                      </svg>
+                                      <span class="text-sm text-gray-600 ml-1">4.8 (256 avaliações)</span>
+                                  </div>
+                              </div>
+                              
+                              <div class="mb-6">
+                                  <p class="text-gray-600 mb-4">
+                                      Suplemento de alta qualidade com concentração premium de EPA e DHA, 
+                                      auxiliando na saúde cardiovascular e função cerebral.
+                                  </p>
+                                  
+                                  <div class="flex items-baseline gap-2 mb-4">
+                                      <span class="text-3xl font-bold text-gray-900">R$ 89,90</span>
+                                      <span class="text-sm text-gray-500 line-through">R$ 129,90</span>
+                                      <span class="text-sm text-green-500">31% OFF</span>
+                                  </div>
+                              </div>
+                              
+                              <button class="w-full bg-blue-600 text-white py-4 rounded-xl font-semibold hover:bg-blue-700 transition-colors">
+                                  Adicionar ao Carrinho
+                              </button>
+                          </div>
+                      </div>
+                  </div>
+      
+                  <!-- Seção de Benefícios -->
+                  <div class="bg-white rounded-3xl p-6 mb-6 product-shadow">
+                      <h3 class="text-xl font-semibold mb-4">Benefícios Principais</h3>
+                      <div class="benefits-grid">
+                          <div class="p-4 bg-gray-50 rounded-xl text-center">
+                              <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                  <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                  </svg>
+                              </div>
+                              <h4 class="font-semibold mb-1">Saúde Cardiovascular</h4>
+                              <p class="text-sm text-gray-600">Auxilia na saúde do coração</p>
+                          </div>
+                          
+                          <div class="p-4 bg-gray-50 rounded-xl text-center">
+                              <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                  <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                  </svg>
+                              </div>
+                              <h4 class="font-semibold mb-1">Função Cerebral</h4>
+                              <p class="text-sm text-gray-600">Melhora a memória e foco</p>
+                          </div>
+                          
+                          <div class="p-4 bg-gray-50 rounded-xl text-center">
+                              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                  <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                  </svg>
+                              </div>
+                              <h4 class="font-semibold mb-1">Anti-inflamatório</h4>
+                              <p class="text-sm text-gray-600">Reduz inflamações</p>
+                          </div>
+                      </div>
+                  </div>
+      
+                  <!-- Seção de Informações Nutricionais -->
+                  <div class="bg-white rounded-3xl p-6 mb-6 product-shadow">
+                      <h3 class="text-xl font-semibold mb-4">Informações Nutricionais</h3>
+                      <div class="space-y-4">
+                          <div>
+                              <div class="flex justify-between mb-1">
+                                  <span class="text-gray-700">EPA</span>
+                                  <span class="text-gray-900 font-medium">600mg</span>
+                              </div>
+                              <div class="progress-bar w-3/4"></div>
+                          </div>
+                          
+                          <div>
+                              <div class="flex justify-between mb-1">
+                                  <span class="text-gray-700">DHA</span>
+                                  <span class="text-gray-900 font-medium">400mg</span>
+                              </div>
+                              <div class="progress-bar w-1/2"></div>
+                          </div>
+                          
+                          <div>
+                              <div class="flex justify-between mb-1">
+                                  <span class="text-gray-700">Vitamina E</span>
+                                  <span class="text-gray-900 font-medium">10mg</span>
+                              </div>
+                              <div class="progress-bar w-1/4"></div>
+                          </div>
+                      </div>
+                  </div>
               </div>
-            </div>
+          </main>
             
-            <div class="bottom-nav">
-              <div class="detalhes-btn">
-                <button
-                    class="proximo-passo add-cart display-none" id="addCarrinho"
-                    style="margin: 10px; background-color: #8d9985"
-                >
-                    <span class="mdi mdi-cart-plus"></span>
-                    Comprar
-                </button>
-                <button
-                    class="proximo-passo display-none"
-                    id="compartilharBtn"
-                    style="margin: 10px; background-color: #6200ff"
-                >
-                    <i class="ri-share-2-line"></i>
-                    Compartilhar
-                </button>
-            </div>
-          </div>
-          </div>
-
-          <div
-            class="sheet-modal demo-sheet-swipe-to-close"
-            style="height: auto"
-          >
-            <div class="sheet-modal-inner">
-              <div class="swipe-handler"></div>
-              <div class="list">
-                <ul>
-                  <!-- Item 1 -->
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media">
-                        <img
-                          src="img/produto-1.jpg"
-                          width="80"
-                          height="80"
-                          alt="Combo de 3 itens"
-                        />
-                      </div>
-                      <div class="item-inner">
-                        <div class="item-title-row">
-                          <div class="item-title">Combo de 3 itens</div>
-                          <div class="item-subtitle">
-                            <span class="original-price">R$ 30,00</span>
-                            <span class="discounted-price">R$ 25,00</span>
-                          </div>
-                        </div>
-                        <div class="item-after">
-                          <button class="button add-to-cart-button">
-                            <span class="mdi mdi-cart-check"></span> Selecionar
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <!-- Item 2 -->
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media">
-                        <img
-                          src="img/produto-2.jpg"
-                          width="80"
-                          height="80"
-                          alt="Combo de 2 itens"
-                        />
-                      </div>
-                      <div class="item-inner">
-                        <div class="item-title-row">
-                          <div class="item-title">Combo de 2 itens</div>
-                          <div class="item-subtitle">
-                            <span class="original-price">R$ 20,00</span>
-                            <span class="discounted-price">R$ 18,00</span>
-                          </div>
-                        </div>
-                        <div class="item-after">
-                          <button class="button add-to-cart-button">
-                            <span class="mdi mdi-cart-check"></span> Selecionar
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <!-- Item 3 -->
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media">
-                        <img
-                          src="img/produto-3.jpg"
-                          width="80"
-                          height="80"
-                          alt="Combo de 5 itens"
-                        />
-                      </div>
-                      <div class="item-inner">
-                        <div class="item-title-row">
-                          <div class="item-title">Combo de 5 itens</div>
-                          <div class="item-subtitle">
-                            <span class="original-price">R$ 50,00</span>
-                            <span class="discounted-price">R$ 40,00</span>
-                          </div>
-                        </div>
-                        <div class="item-after">
-                          <button class="button add-to-cart-button">
-                            <span class="mdi mdi-cart-check"></span> Selecionar
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
+        <!-- Bottom Navigation -->
+          <div class="fixed bottom-0 left-0 right-0 glass-effect">
+              <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+                  <div>
+                      <p class="text-sm text-gray-600">Preço Total</p>
+                      <p class="text-xl font-bold text-gray-900">R$ 89,90</p>
+                  </div>
+                  <button class="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors">
+                      Comprar Agora
+                  </button>
               </div>
-            </div>
+          </div>
           </div>
 
           <!-- INÍCIO POPUP COMPARTILHAR PRODUTO -->

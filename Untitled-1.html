@@ -3,125 +3,346 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compartilhar Link</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <title>Detalhes do Suplemento</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        .container-link {
-            max-width: 500px;
-            width: 100%;
+        :root {
+            --primary-color: #2ECC71;
+            --secondary-color: #27AE60;
+            --background-color: #F9FAF9;
+            --card-color: #FFFFFF;
+            --text-primary: #2D3436;
+            --text-secondary: #636E72;
+            --accent-color: #E8F6EF;
         }
 
-        .title {
-            font-size: 24px;
-            font-weight: 600;
-            color: #2d3436;
-            margin-bottom: 10px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
-        .subtitle {
-            color: #636e72;
-            font-size: 16px;
+        body {
+            background-color: var(--background-color);
+            color: var(--text-primary);
         }
 
-        .card-link {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.1);
+        .app-container {
+            max-width: 100%;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .product-hero {
+            padding-top: 80px;
+            padding-bottom: 20px;
             text-align: center;
+            background: linear-gradient(to bottom, var(--accent-color), var(--background-color));
         }
 
-        .qr-container {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px auto;
-            width: fit-content;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        .product-image {
+            width: 200px;
+            height: 300px;
+            object-fit: contain;
+            margin: 0 auto;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
         }
 
-        .share-info {
-            margin: 25px 0;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
+        .product-info {
+            padding: 24px 20px;
         }
 
-        .share-link {
+        .brand-tag {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--accent-color);
+            color: var(--primary-color);
+            border-radius: 20px;
             font-size: 14px;
-            color: #2d3436;
-            word-break: break-all;
-            margin: 10px 0;
-            padding: 12px;
-            background: #fff;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
+            font-weight: 600;
+            margin-bottom: 12px;
         }
 
-        .share-description {
-            color: #636e72;
-            margin: 15px 0;
-            font-size: 15px;
+        .product-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
         }
 
+        .product-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
 
-        .share-button {
-            background: #6c5ce7;
-            color: white;
-            border: none;
-            padding: 15px 30px;
+        .price-tag {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title i {
+            color: var(--primary-color);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .benefit-card {
+            background: var(--card-color);
+            padding: 16px;
             border-radius: 12px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .benefit-card i {
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .benefit-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .nutrition-table {
+            background: var(--card-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .nutrition-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #EEE;
+        }
+
+        .nutrition-row:last-child {
+            border-bottom: none;
+        }
+
+        .usage-info {
+            background: var(--accent-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .usage-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .step-number {
+            width: 24px;
+            height: 24px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            width: 100%;
-            transition: background 0.3s ease;
+            font-size: 14px;
+            font-weight: 600;
         }
 
-        .share-button:hover {
-            background: #5f4dd0;
+        .action-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 16px 20px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            gap: 16px;
+            box-shadow: 0 -1px 10px rgba(0,0,0,0.1);
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            background: var(--card-color);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #EEE;
+        }
+
+        .quantity-btn {
+            width: 48px;
+            height: 48px;
+            border: none;
+            background: var(--background-color);
+            color: var(--text-primary);
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .quantity-display {
+            width: 48px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .buy-btn {
+            flex: 1;
+            height: 48px;
+            border-radius: 12px;
+            border: none;
+            background: var(--primary-color);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .disclaimer {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-align: center;
+            margin: 16px 0 80px;
+            padding: 0 20px;
         }
     </style>
 </head>
 <body>
-    <div class="container-link">
-        <div class="card-link">
-            <div class="qr-container">
-                <div id="qrcode"></div>
+    <div class="app-container">
+
+        <div class="product-hero">
+            <img src="https://www.vhita.com.br/cdn/shop/files/vitamina_c_vitamina_c_vhita_1_still_1x_ab10ca45-d01a-4431-ab5f-e68755af6659.webp?v=1733786542" alt="Vitamina C" class="product-image">
+        </div>
+
+        <div class="product-info">
+            <span class="brand-tag">Nature's Best</span>
+            <h1 class="product-title">Vitamina C 1000mg</h1>
+            <p class="product-subtitle">60 cápsulas • Suporte Imunológico</p>
+            <p class="price-tag">R$ 89,90</p>
+
+            <h2 class="section-title">
+                <i class="fas fa-shield-alt"></i>
+                Benefícios
+            </h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <i class="fas fa-heart"></i>
+                    <p>Fortalece o sistema imunológico</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-bolt"></i>
+                    <p>Aumenta a energia e disposição</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-sun"></i>
+                    <p>Antioxidante natural</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-smile"></i>
+                    <p>Melhora o humor e bem-estar</p>
+                </div>
             </div>
 
-            <div class="share-info">
-                <div style="color: #2d3436; font-weight: 500; margin-bottom: 8px;">
-                    Seu link único
+            <h2 class="section-title">
+                <i class="fas fa-flask"></i>
+                Informação Nutricional
+            </h2>
+            <div class="nutrition-table">
+                <div class="nutrition-row">
+                    <span>Vitamina C</span>
+                    <strong>1000mg</strong>
                 </div>
-                <div class="share-link">
-                    https://app.exemplo.com/ref/joao123
-                </div>                
-                <div class="subtitle">Divulgue esse link para ampliar a sua rede</div>
+                <div class="nutrition-row">
+                    <span>Zinco</span>
+                    <strong>15mg</strong>
+                </div>
+                <div class="nutrition-row">
+                    <span>Rosa Mosqueta</span>
+                    <strong>50mg</strong>
+                </div>
+                <div class="nutrition-row">
+                    <span>Bioflavonoides</span>
+                    <strong>25mg</strong>
+                </div>
             </div>
-            <button class="share-button">
-                <i class="fas fa-share-alt"></i>
-                Compartilhar
-            </button>
+
+            <h2 class="section-title">
+                <i class="fas fa-clock"></i>
+                Modo de Uso
+            </h2>
+            <div class="usage-info">
+                <div class="usage-step">
+                    <div class="step-number">1</div>
+                    <p>Tome 1 cápsula por dia</p>
+                </div>
+                <div class="usage-step">
+                    <div class="step-number">2</div>
+                    <p>Preferencialmente junto com uma refeição</p>
+                </div>
+                <div class="usage-step">
+                    <div class="step-number">3</div>
+                    <p>Mantenha o uso contínuo para melhores resultados</p>
+                </div>
+            </div>
+        </div>
+
+        <p class="disclaimer">
+            Este produto não se destina a diagnosticar, tratar, curar ou prevenir qualquer doença. 
+            Consulte seu médico antes de usar.
+        </p>
+
+        <div class="action-bar">
+            <div class="quantity-selector">
+                <button class="quantity-btn" id="decrease">-</button>
+                <span class="quantity-display">1</span>
+                <button class="quantity-btn" id="increase">+</button>
+            </div>
+            <button class="buy-btn">Adicionar ao Carrinho</button>
         </div>
     </div>
 
     <script>
-        // Gerar QR Code
-        var qrcode = new QRCode(document.getElementById("qrcode"), {
-            text: "https://app.exemplo.com/ref/joao123",
-            width: 200,
-            height: 200,
-            colorDark : "#2d3436",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
+        // Controle de quantidade
+        const quantityDisplay = document.querySelector('.quantity-display');
+        const decreaseBtn = document.getElementById('decrease');
+        const increaseBtn = document.getElementById('increase');
+        let quantity = 1;
+
+        decreaseBtn.addEventListener('click', () => {
+            if (quantity > 1) {
+                quantity--;
+                quantityDisplay.textContent = quantity;
+            }
         });
 
+        increaseBtn.addEventListener('click', () => {
+            if (quantity < 10) {
+                quantity++;
+                quantityDisplay.textContent = quantity;
+            }
+        });
+
+        // Botão de compra
+        document.querySelector('.buy-btn').addEventListener('click', () => {
+            alert(`Produto adicionado ao carrinho! Quantidade: ${quantity}`);
+        });
     </script>
 </body>
 </html>
