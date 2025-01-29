@@ -394,6 +394,7 @@ async function validarToken(userAuthToken) {
             } else {
               linkCheckout = link.link_url;
             }
+            console.log(link);
           });
   
           $("#shareLanding").on("click", function () {
