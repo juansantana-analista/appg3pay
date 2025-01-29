@@ -373,7 +373,7 @@ async function validarToken(userAuthToken) {
           $("#ul-links").html("");
   
           links.forEach((link) => {
-            const linkUrl = truncarNome(link.link_url, 60);
+            const linkUrl = truncarNome(link.link_url, 100);
   
             // Verifica se o tipo_link é igual a 1 e armazena o link_url
             if (link.tipo_link == "1") {
