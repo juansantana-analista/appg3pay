@@ -10,7 +10,7 @@ if (produto) {
     //$("#reviews-detalhe").html(produto.reviews + ' reviews');
     $("#descricao-detalhe").html(produto.descricao);
     $("#preco-detalhe").html(formatarMoeda(produto.preco));
-    $("#precopromo-detalhe").html(formatarMoeda(produto.preco_promocional));
+    $("#precopromo-detalhe").html(formatarMoeda(produto.preco));
     // Selecione a div onde você quer adicionar o link
     const $container = $('#containerBtnCarrinho');
     // Crie o link e configure os atributos
