@@ -1066,10 +1066,14 @@ var app = new Framework7({
           var operacao = localStorage.getItem('operacao');
           if (operacao == 'venda'){            
             $('#addCarrinho').addClass('display-none');
+            $('#comprarAgora').addClass('display-none');
             $('#compartilharBtn').removeClass('display-none');
+            $('#compartilharProduto').removeClass('display-none');
           } else {            
             $('#compartilharBtn').addClass('display-none');
+            $('#compartilharProduto').addClass('display-none');
             $('#addCarrinho').removeClass('display-none');
+            $('#comprarAgora').removeClass('display-none');
           }
 
         },
