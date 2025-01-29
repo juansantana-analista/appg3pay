@@ -366,6 +366,7 @@ async function validarToken(userAuthToken) {
         if (responseJson.status === "success") {
           const links = responseJson.data;
           let linkLandingPage = "";
+          let linkCheckout = "";
   
           //Limpa o container antes de copular
           $("#qrcode").html("");
@@ -388,8 +389,10 @@ async function validarToken(userAuthToken) {
             $("#ul-links").append(linkHTML);
   
             // Verifica se o tipo_link é igual a 1 e armazena o link_url
-            if (link.tipo_link === "1") {
+            if (link.tipo_link == "1") {
               linkLandingPage = link.link_url;
+            } else {
+              linkCheckout = link.link_url;
             }
           });
   
@@ -411,7 +414,7 @@ async function validarToken(userAuthToken) {
             onCompartilhar(
               "Link do Produto",
               "Aproveite agora mesmo nosso produto",
-              linkUrl
+              linkCheckout + codigo_indicador
             );
           });
   
