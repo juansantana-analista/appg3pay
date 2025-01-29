@@ -374,25 +374,14 @@ async function validarToken(userAuthToken) {
   
           links.forEach((link) => {
             const linkUrl = truncarNome(link.link_url, 50);
-            var linkHTML = `
-                      <li class="link-list-item">
-                        <div class="col-85">
-                          <h3>${link.nome}</h3>
-                          <p>${linkUrl}</p>
-                        </div>
-                        <span class="mdi mdi-share compartilhar-link col-15" data-link="${
-                          link.link_url + codigo_indicador
-                        }"></span>
-                      </li>
-                      `;
-  
-            $("#ul-links").append(linkHTML);
   
             // Verifica se o tipo_link é igual a 1 e armazena o link_url
             if (link.tipo_link == "1") {
               linkLandingPage = link.link_url;
+              $("#paginaLinkUrl").html(linkUrl);
             } else {
               linkCheckout = link.link_url;
+              $("#checkoutLinkUrl").html(linkUrl);
             }
             console.log(link);
           });
