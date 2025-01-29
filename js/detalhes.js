@@ -28,7 +28,7 @@ if (produto) {
 
 
 //CLICOU NO ADICIONAR CARRINHO
-$(".add-cart").on('click', function () {
+$(".addCarrinho").on('click', function () {
     //ADICIONAR AO CARRINHO
     adicionarItemCarrinho(produtoId);
 });
