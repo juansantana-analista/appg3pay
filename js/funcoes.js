@@ -1526,7 +1526,9 @@ function listarEnderecos() {
         const enderecos = responseJson.data.data.enderecos;
         $("#listaDeEnderecos").html("");  // Limpa a lista de endereços
 
-        // Gera a lista de endereços
+        let enderecoPrincipal = null;
+
+        // Gera a lista de endereços e identifica o principal
         enderecos.forEach((endereco, index) => {
           var complemento = endereco.complemento
             ? `<span>${endereco.complemento}</span>`
@@ -1559,8 +1561,37 @@ function listarEnderecos() {
             </div>
           `;
 
+          // Verifica se o endereço é o principal
+          if (endereco.tipo === "Principal") {
+            enderecoPrincipal = endereco;
+          }
+
           $("#listaDeEnderecos").append(enderecoHTML);
         });
+
+        // Se houver um endereço principal, exibe ele na seção de Endereço de Entrega
+        if (enderecoPrincipal) {
+          $("#selectedAddress").html(`
+            <div class="flex items-start space-x-3">
+              <svg class="w-5 h-5 text-gray-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              <div>
+                <div class="flex items-center space-x-2">
+                  <h3 class="font-medium">${enderecoPrincipal.tipo || "Residencial"}</h3>
+                  <span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39">Principal</span>
+                </div>
+                <p class="text-gray-600 text-sm mt-1">
+                  ${enderecoPrincipal.rua}, ${enderecoPrincipal.numero} - ${enderecoPrincipal.bairro}
+                </p>
+                <p class="text-gray-600 text-sm">
+                  ${enderecoPrincipal.municipio.nome}, ${enderecoPrincipal.estado.sigla} - CEP: ${enderecoPrincipal.cep}
+                </p>
+              </div>
+            </div>
+          `);
+        }
 
         // Fechar o dialog ou outra ação necessária após preenchimento do select
         app.dialog.close();
@@ -1576,6 +1607,7 @@ function listarEnderecos() {
       app.dialog.alert("Erro ao carregar endereços: " + error.message, "Falha na requisição!");
     });
 }
+
 // Fim Função Listar Endereços
 
   //Fim Função Listar Endereços
