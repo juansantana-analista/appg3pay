@@ -446,14 +446,6 @@ form {
   display: none; /* Remove a divisória para o último item */
 }
 
-.header-carrinho {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px;
-  border-bottom: 1px solid #ddd;
-}
-
 .img-container {
   display: flex;
   align-items: center;
