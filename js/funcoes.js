@@ -1497,6 +1497,7 @@ function apagarNotificacao(notificacaoId) {
     var userAuthToken = localStorage.getItem("userAuthToken");
     app.dialog.preloader("Carregando...");
     const pessoaId = localStorage.getItem("pessoaId");
+  
     // Cabeçalhos da requisição
     const headers = {
       "Content-Type": "application/json",
@@ -1520,50 +1521,42 @@ function apagarNotificacao(notificacaoId) {
     fetch(apiServerUrl, options)
       .then((response) => response.json())
       .then((responseJson) => {
-        // Verifica se o status é 'success' e se há dados de pedidos
         if (responseJson.data.status === "success") {
           const enderecos = responseJson.data.data.enderecos;
-          $("#listaDeEnderecos").html("");
+          $("#selectedAddress").html(""); // Limpar o endereço selecionado
   
-          // Gera a lista de endereços
-          enderecos.forEach((endereco, index) => {
-            var complemento = endereco.complemento
-              ? `<span>${endereco.complemento}</span>`
-              : "";
+          // Verifica se há endereços para exibir
+          if (enderecos.length > 0) {
+            const endereco = enderecos[0]; // Pegando o primeiro endereço como exemplo
+            var complemento = endereco.complemento ? `<span>${endereco.complemento}</span>` : "";
+            
+            // Atualizando a seção de endereço selecionado
             var enderecoHTML = `
-                          <div class="card-content card-content-padding" style="background:#fff; border-radius: 10px;"> 
-                              <div class="row" style="display: flex; margin-bottom:8px;">
-                                  <div class="col-80">
-                                      <span>${endereco.rua}</span>, <span>${endereco.numero}</span><br>
-                                      <span>${complemento}</span> Bairro: <span>${endereco.bairro}</span><br>
-                                      <span>${endereco.municipio.nome}</span> - <span>${endereco.estado.sigla}</span><br>
-                                      CEP: <span>${endereco.cep}</span><br>
-                                  </div>
-                                  <div class="col-20"><br>
-                                      <a href="#" 
-                                      data-entrega-id="${endereco.id}"
-                                      data-entrega-rua="${endereco.rua}"
-                                      data-entrega-numero="${endereco.numero}"
-                                      data-entrega-complemento="${complemento}"
-                                      data-entrega-bairro="${endereco.bairro}"
-                                      data-entrega-cidade="${endereco.municipio.nome}"
-                                      data-entrega-estado="${endereco.estado.sigla}"
-                                      data-entrega-cep="${endereco.cep}"
-                                       class="link click-endereco"><b class="text-skin">Selecionar</b></a>
-                                  </div>
-                              </div>
-                          </div>
-                      `;
+              <div class="flex items-start space-x-3">
+                <svg class="w-5 h-5 text-gray-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <div>
+                  <div class="flex items-center space-x-2">
+                    <h3 class="font-medium">Casa</h3>
+                    <span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39">Principal</span>
+                  </div>
+                  <p class="text-gray-600 text-sm mt-1">${endereco.rua}, ${endereco.numero}</p>
+                  <p class="text-gray-600 text-sm">${complemento} Bairro: ${endereco.bairro}</p>
+                  <p class="text-gray-600 text-sm">${endereco.municipio.nome} - ${endereco.estado.sigla}</p>
+                  <p class="text-gray-600 text-sm">CEP: ${endereco.cep}</p>
+                </div>
+              </div>
+            `;
+            $("#selectedAddress").append(enderecoHTML);
+          }
   
-            $("#listaDeEnderecos").append(enderecoHTML);
-          });
-  
-          // Adiciona o evento de clique para atualizar o endereço selecionado
+          // Adiciona o evento de clique para selecionar o endereço
           $(".click-endereco").on("click", function (e) {
             e.preventDefault();
             const enderecoId = $(this).data("entrega-id");
   
-            // Atualiza o localStorage com o ID do endereço selecionado
             var enderecoDetalhes = {
               enderecoId: $(this).data("entrega-id"),
               endEntregaRua: $(this).data("entrega-rua"),
@@ -1574,13 +1567,9 @@ function apagarNotificacao(notificacaoId) {
               endEntregaEstado: $(this).data("entrega-estado"),
               endEntregaCep: $(this).data("entrega-cep"),
             };
-            localStorage.setItem(
-              "enderecoDetalhes",
-              JSON.stringify(enderecoDetalhes)
-            );
+            localStorage.setItem("enderecoDetalhes", JSON.stringify(enderecoDetalhes));
   
             selecionarEndereco(enderecoId);
-            // Fechar o dialog ou outra ação necessária após seleção do endereço
             app.popup.close();
   
             var toastCenter = app.toast.create({
@@ -1592,26 +1581,19 @@ function apagarNotificacao(notificacaoId) {
             toastCenter.open();
           });
   
-          // Fechar o dialog ou outra ação necessária após preenchimento do select
           app.dialog.close();
         } else {
           app.dialog.close();
-          // Tratar caso o status não seja "success"
-          console.error(
-            "Erro ao obter dados de endereços:",
-            responseJson.message
-          );
+          console.error("Erro ao obter dados de endereços:", responseJson.message);
         }
       })
       .catch((error) => {
         app.dialog.close();
         console.error("Erro:", error);
-        app.dialog.alert(
-          "Erro ao carregar endereços: " + error.message,
-          "Falha na requisição!"
-        );
+        app.dialog.alert("Erro ao carregar endereços: " + error.message, "Falha na requisição!");
       });
   }
+  
   //Fim Função Listar Endereços
   
   //Inicio Funçao Selecionar Endereço
