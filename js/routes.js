@@ -1123,6 +1123,10 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada    
+          // Funções para gerenciamento de modais
+        $("#openAddressModal").on('click', function () {
+          document.getElementById('addressModal').classList.remove('hidden');
+        });
           listarCarrinho();
 
           $("#btnSelecionarEndereco").on('click', function () {
