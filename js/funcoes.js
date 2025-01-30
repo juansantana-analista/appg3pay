@@ -1910,46 +1910,84 @@ function apagarNotificacao(notificacaoId) {
             //PERCORRER O NOSSO CARRINHO E ALIMENTAR A ÁREA
             responseJson.data.data.itens.forEach((item) => {
               var itemDiv = `
-                          <!-- ITEM DO CARRINHO-->
-                          <div class="item-carrinho">
-                              <div class="area-img">
-                                  <img src="https://escritorio.g3pay.com.br/${
+              
+                  <div class="flex space-x-4">
+                    <img
+                      src="https://escritorio.g3pay.com.br/${
                                     item.foto
-                                  }">
-                              </div>
-                              <div class="area-details">
-                                  <div class="sup">
-                                      <span class="name-prod">
-                                      ${item.nome}
-                                      </span>
-                                      <a data-produto-id="${
+                                  }"
+                      alt="${item.nome}"
+                      class="w-20 h-20 rounded-lg object-cover"
+                    />
+                    <div class="flex-1">
+                      <div class="flex justify-between">
+                        <h3 class="font-medium">${item.nome}</h3>
+                        <button class="text-red-500 delete-item" style="width: 30px;"
+                        data-produto-id="${
                                         item.produto_id
-                                      }" class="delete-item" href="#">
-                                          <i class="mdi mdi-close"></i>
-                                      </a>
-                                  </div>
-                                  <div class="preco-quantidade">
-                                      <span>${formatarMoeda(
-                                        item.preco_unitario
-                                      )}</span>
-                                      <div class="count">
-                                          <a class="minus" data-produto-id="${
-                                            item.produto_id
-                                          }" data-produto-qtde="${
-                item.quantidade
-              }" href="#">-</a>
-                                          <input readonly class="qtd-item" type="text" value="${
-                                            item.quantidade
-                                          }">
-                                          <a class="plus" data-produto-id="${
-                                            item.produto_id
-                                          }" data-produto-qtde="${
-                item.quantidade
-              }" href="#">+</a>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
+                                      }">
+                          <svg
+                            class="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            ></path>
+                          </svg>
+                        </button>
+                      </div>
+                      <p class="text-gray-500 text-sm mb-2">Premium</p>
+                      <div class="flex justify-between items-center">
+                        <div class="flex items-center space-x-2">
+                          <button
+                            onclick="updateQuantity(1, -1)"
+                            class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                          >
+                            <svg
+                              class="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M20 12H4"
+                              ></path>
+                            </svg>
+                          </button>
+                          <span class="w-8 text-center">1</span>
+                          <button
+                            onclick="updateQuantity(1, 1)"
+                            class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                          >
+                            <svg
+                              class="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 4v16m8-8H4"
+                              ></path>
+                            </svg>
+                          </button>
+                        </div>
+                        <span class="font-semibold">${formatarMoeda(
+                          item.preco_unitario
+                        )}</span>
+                      </div>
+                    </div>
+                  </div>
                           `;
   
               $("#listaCarrinho").append(itemDiv);
