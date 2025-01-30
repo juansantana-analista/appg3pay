@@ -1968,7 +1968,7 @@ function apagarNotificacao(notificacaoId) {
                           </button>
                           <span class="w-8 text-center">${
                             item.quantidade
-                          }"</span>
+                          }</span>
                           <button
                             class="plus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
                             data-produto-id="${
