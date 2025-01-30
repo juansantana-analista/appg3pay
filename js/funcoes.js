@@ -1539,7 +1539,7 @@ function listarEnderecos() {
                 <div class="flex-1">
                   <div class="flex items-center space-x-2 mb-2">
                     <span class="font-medium">${endereco.tipo || "Residencial"}</span>
-                    ${endereco.tipo == "1" ? 
+                    ${endereco.tipo === "Principal" ? 
                     `<span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39">Principal</span>` : ""}
                   </div>
                   <p class="text-gray-600 text-sm">
@@ -1562,7 +1562,7 @@ function listarEnderecos() {
           `;
 
           // Verifica se o endereço é o principal
-          if (endereco.tipo === "Principal") {
+          if (endereco.tipo == "1") {
             enderecoPrincipal = endereco;
           }
 
