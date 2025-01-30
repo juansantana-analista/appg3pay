@@ -1004,7 +1004,7 @@ var app = new Framework7({
             });
             // Alterar estilos para o botão "Compra"
             $('#btn-compra').css({
-              'background-color': '#f4f4f4',
+              'background-color': '#f7f9fa',
               color: '#333',
             });
 
@@ -1031,7 +1031,7 @@ var app = new Framework7({
             });
             // Alterar estilos para o botão "Venda"
             $('#btn-venda').css({
-              'background-color': '#f4f4f4',
+              'background-color': '#f7f9fa',
               color: '#333',
             });
             $(document).on("input", "#search", function () {

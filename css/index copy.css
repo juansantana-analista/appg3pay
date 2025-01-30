@@ -830,7 +830,7 @@ form {
 
       /* Estilos personalizados para a página */
       .equipe-page {
-        background-color: #f4f4f4;
+        background-color: #f7f9fa;
         padding-bottom: 160px;
       }
       .equipe-block {
@@ -985,7 +985,7 @@ form {
         display: flex;
         justify-content: space-between;
         padding: 5px 0;
-        border-bottom: 1px solid #f4f4f4;
+        border-bottom: 1px solid #f7f9fa;
       }
       
       .order-items .item-name {
