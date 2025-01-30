@@ -1911,7 +1911,7 @@ function apagarNotificacao(notificacaoId) {
             responseJson.data.data.itens.forEach((item) => {
               var itemDiv = `
               
-                  <div class="flex space-x-4" style="margin-bottom: 14px;">
+                  <div class="flex space-x-4" style="margin-bottom: 18px;">
                     <img
                       src="https://escritorio.g3pay.com.br/${
                                     item.foto
@@ -1945,8 +1945,12 @@ function apagarNotificacao(notificacaoId) {
                       <div class="flex justify-between items-center">
                         <div class="flex items-center space-x-2">
                           <button
-                            onclick="updateQuantity(1, -1)"
-                            class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                            class="minus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                            data-produto-id="${
+                                            item.produto_id
+                                          }" data-produto-qtde="${
+                                            item.quantidade
+                                          }"
                           >
                             <svg
                               class="w-4 h-4"
@@ -1962,10 +1966,16 @@ function apagarNotificacao(notificacaoId) {
                               ></path>
                             </svg>
                           </button>
-                          <span class="w-8 text-center">1</span>
+                          <span class="w-8 text-center">${
+                            item.quantidade
+                          }"</span>
                           <button
-                            onclick="updateQuantity(1, 1)"
-                            class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                            class="plus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                            data-produto-id="${
+                                            item.produto_id
+                                          }" data-produto-qtde="${
+                                            item.quantidade
+                                          }"
                           >
                             <svg
                               class="w-4 h-4"
