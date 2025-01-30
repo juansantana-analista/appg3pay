@@ -2208,13 +2208,13 @@ form {
   }
 }
 
-input {
+.input-style {
   border: 1px solid #ccc; /* Borda fina */
   border-radius: 8px; /* Arredondamento */
   padding: 8px; /* Espaçamento interno */
   outline: none; /* Remove a borda azul ao focar */
 }
 
-input:focus {
+.input-style:focus {
   border-color: #007bff; /* Muda a cor da borda ao focar */
 }
