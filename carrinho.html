@@ -354,7 +354,7 @@
                 <!-- Modal Header -->
                 <div class="p-4 border-b flex justify-between items-center">
                   <h3 class="text-lg font-semibold">Endereços</h3>
-                  <button onclick="closeAddressModal()" class="text-gray-500">
+                  <button id="closeAddressModal" class="text-gray-500">
                     <svg
                       class="w-6 h-6"
                       fill="none"
@@ -456,7 +456,7 @@
 
                   <!-- Botão Adicionar Novo Endereço -->
                   <button
-                    onclick="showNewAddressForm()"
+                    id="showNewAddressForm"
                     class="mt-4 w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-500 transition duration-200 flex items-center justify-center space-x-2"
                   >
                     <svg
@@ -487,8 +487,7 @@
                 <div class="p-4 border-b flex justify-between items-center">
                   <h3 class="text-lg font-semibold">Novo Endereço</h3>
                   <button
-                    onclick="closeNewAddressModal()"
-                    class="text-gray-500"
+                    class="closeNewAddressModal text-gray-500"
                   >
                     <svg
                       class="w-6 h-6"
@@ -625,8 +624,7 @@
                   <div class="flex space-x-3 pt-4">
                     <button
                       type="button"
-                      onclick="closeNewAddressModal()"
-                      class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-200"
+                      class="closeNewAddressModal flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-200"
                     >
                       Cancelar
                     </button>

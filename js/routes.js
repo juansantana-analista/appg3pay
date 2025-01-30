@@ -1127,6 +1127,18 @@ var app = new Framework7({
         $("#openAddressModal").on('click', function () {
           document.getElementById('addressModal').classList.remove('hidden');
         });
+        $("#closeAddressModal").on('click', function () {
+          document.getElementById('addressModal').classList.add('hidden');
+        });
+        $("#showNewAddressForm").on('click', function () {
+          document.getElementById('addressModal').classList.add('hidden');
+          document.getElementById('newAddressModal').classList.remove('hidden');
+        });
+        $(".closeNewAddressModal").on('click', function () {
+          document.getElementById('newAddressModal').classList.add('hidden');
+          document.getElementById('addressModal').classList.remove('hidden');
+        });
+        
           listarCarrinho();
 
           $("#btnSelecionarEndereco").on('click', function () {
