@@ -1145,6 +1145,7 @@ var app = new Framework7({
             listarEnderecos();
             app.popup.open(".popup-enderecos");
           });
+          listarEnderecos();
 
           $("#esvaziar").on('click', function () {
             app.dialog.confirm('Tem certeza que quer esvaziar o carrinho?', '<strong>ESVAZIAR</strong>', function () {
