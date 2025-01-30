@@ -453,6 +453,14 @@ form {
   padding: 16px;
   border-bottom: 1px solid #ddd;
 }
+.button-carrinho {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #2563eb; /* Azul similar ao Tailwind */
+  background: none;
+  border: none;
+  cursor: pointer;
+}
 
 .img-container {
   display: flex;
