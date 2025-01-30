@@ -1539,7 +1539,7 @@ function listarEnderecos() {
                 <div class="flex-1">
                   <div class="flex items-center space-x-2 mb-2">
                     <span class="font-medium">${endereco.tipo || "Residencial"}</span>
-                    ${endereco.tipo === "Principal" ? 
+                    ${endereco.tipo == "1" ? 
                     `<span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39">Principal</span>` : ""}
                   </div>
                   <p class="text-gray-600 text-sm">
@@ -1607,7 +1607,6 @@ function listarEnderecos() {
       app.dialog.alert("Erro ao carregar endereços: " + error.message, "Falha na requisição!");
     });
 }
-
 // Fim Função Listar Endereços
 
   //Fim Função Listar Endereços
