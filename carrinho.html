@@ -55,175 +55,157 @@
           <!-- Scrollable page content -->
           <div class="page-content">
             <!-- TAB BAR-->
-            <div class="bottom-info display-none" id="toolbar-carrinho">
-              <div class="info-row">
-                <span class="label">Subtotal</span>
-                <span id="subtotal" class="value bold"></span>
+          <!-- Footer fixo com botão de finalizar -->
+          <footer class="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-40">
+              <div class="container mx-auto px-4 py-3">
+                  <button class="w-full text-white py-3 px-4 rounded-xl font-semibold hover:bg-blue-700 transition duration-200 flex items-center justify-center space-x-2" style="background-color: #ff5500;">
+                      <span>Finalizar Compra</span>
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                      </svg>
+                  </button>
               </div>
-              <div class="info-row">
-                <span class="label">Frete</span>
-                <a href="#" id="btnSelecionarEndereco"
-                  ><span id="freteCarrinho" class="value bold"
-                    >Selecionar Endereço</span
-                  ></a
-                >
+          </footer>
+              <!-- Conteúdo principal -->
+    <main class="container mx-auto px-4 pt-16 pb-32">
+      <!-- Seção de Endereço -->
+      <div class="bg-white rounded-2xl shadow-sm mb-4">
+          <div class="p-4 border-b flex justify-between items-center">
+              <h2 class="text-lg font-semibold">Endereço de Entrega</h2>
+              <button onclick="openAddressModal()" class="text-blue-600 text-sm font-medium">
+                  Gerenciar
+              </button>
+          </div>
+          <div class="p-4" id="selectedAddress">
+              <!-- Endereço selecionado -->
+              <div class="flex items-start space-x-3">
+                  <svg class="w-5 h-5 text-gray-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                  <div>
+                      <div class="flex items-center space-x-2">
+                          <h3 class="font-medium">Casa</h3>
+                          <span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39;">Principal</span>
+                      </div>
+                      <p class="text-gray-600 text-sm mt-1">Rua das Flores, 123 - Jardim Europa</p>
+                      <p class="text-gray-600 text-sm">São Paulo, SP - CEP 01234-567</p>
+                  </div>
               </div>
-              <button id="irCheckout" class="buy-button" style="margin-bottom: 8px;">Comprar 😎</button>
-            </div>
-            <div id="listaCarrinho">
-              <!-- ITEM DO CARRINHO-->
-            </div>
+          </div>
+      </div>
+
+      <!-- Lista de Produtos -->
+      <div class="bg-white rounded-2xl shadow-sm mb-4">
+          <div class="p-4 border-b">
+              <h2 class="text-lg font-semibold">Seus Produtos</h2>
+          </div>
+          
+          <!-- Item do carrinho -->
+          <div class="p-4 border-b">
+              <div class="flex space-x-4">
+                  <img src="https://via.placeholder.com/80" alt="Própolis" class="w-20 h-20 rounded-lg object-cover">
+                  <div class="flex-1">
+                      <div class="flex justify-between">
+                          <h3 class="font-medium">EXTRATO de PRÓPOLIS 30ML</h3>
+                          <button class="text-red-500" onclick="removeItem(1)">
+                              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                              </svg>
+                          </button>
+                      </div>
+                      <p class="text-gray-500 text-sm mb-2">Premium</p>
+                      <div class="flex justify-between items-center">
+                          <div class="flex items-center space-x-2">
+                              <button onclick="updateQuantity(1, -1)" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                  </svg>
+                              </button>
+                              <span class="w-8 text-center">1</span>
+                              <button onclick="updateQuantity(1, 1)" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                  </svg>
+                              </button>
+                          </div>
+                          <span class="font-semibold">R$ 28,20</span>
+                      </div>
+                  </div>
+              </div>
           </div>
 
-          <!-- INÍCIO POPUP ENDEREÇOS -->
-          <div class="popup popup-enderecos">
-            <div class="view popup-view">
-              <div class="page">
-                <div class="toolbar toolbar-bottom" id="toolbar-next"></div>
-                <div class="top-nav">
-                  <div class="left">
-                    <a href="#" class="link btn-novo popup-close">
-                      <i class="mdi mdi-arrow-left"></i>
-                    </a>
-                  </div>
-                  <strong class="title-descricao">
-                    <i class="mdi mdi-account-plus-outline"></i> Endereço de
-                    Entrega</strong
-                  >
-                  <a
-                    href="#"
-                    data-popup=".popup-novo-endereco"
-                    class="btn-novo popup-open"
-                  >
-                    <i class="mdi mdi-plus"></i>
-                  </a>
-                </div>
-                <div
-                  class="page-content input-cliente"
-                  style="background: #f0f0f0"
-                >
-                  <div id="listaDeEnderecos" style="margin: 12px"></div>
-                </div>
+          <!-- Cupom de desconto -->
+          <div class="p-4">
+              <div class="flex space-x-2">
+                  <input type="text" placeholder="Cupom de desconto" class="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <button class="px-6 py-2 text-white rounded-lg font-medium hover:bg-blue-700 transition duration-200" style="background-color: #ff7b39;">
+                      Aplicar
+                  </button>
               </div>
-            </div>
           </div>
-          <!-- FIM POPUP ENDEREÇOS -->
-          <!-- INÍCIO NOVO ENDEREÇO -->
-          <div class="popup popup-novo-endereco">
-            <div class="view popup-view">
-              <div class="page">
-                <div class="toolbar toolbar-bottom" id="toolbar-next">
-                  <div
-                    class="toolbar-inner display-flex align-items-center justify-content-center"
-                  >
-                    <button
-                      class="btn-primary"
-                      id="salvarEndereco"
-                      style="margin: 10px"
-                    >
-                      Salvar Endereço
-                      <span class="mdi mdi-content-save"></span>
-                    </button>
-                  </div>
-                </div>
-                <div class="top-nav">
-                  <div class="left">
-                    <a href="#" class="link btn-novo popup-close">
-                      <i class="mdi mdi-arrow-left"></i>
-                    </a>
-                  </div>
-                  <strong class="title-descricao">
-                    <i class="mdi mdi-account-plus-outline"></i> Adicionar
-                    Endereço</strong
-                  >
-                  <a href="#">
-                    <!--<i class="mdi mdi-information"></i>-->
-                  </a>
-                </div>
-                <div
-                  class="page-content input-cliente"
-                  style="background: #f0f0f0"
-                >
-                  <div class="block-title label-color">CEP<sup>*</sup></div>
-                  <div class="block">
-                    <input
-                      type="text"
-                      id="cepCliente"
-                      placeholder="00000-000"
-                    />
-                  </div>
-                  <div id="divLogradouroCliente" class="display-none">
-                    <div class="block-title label-color">
-                      Logradouro<sup>*</sup>
-                    </div>
-                    <div class="block">
-                      <input
-                        type="text"
-                        id="logradouroEndCliente"
-                        placeholder="Logradouro"
-                      />
-                    </div>
-                  </div>
-                  <div id="divNumeroCliente" class="display-none">
-                    <div class="block-title label-color">
-                      Número<sup>*</sup>
-                    </div>
-                    <div class="block">
-                      <input
-                        type="text"
-                        id="numeroEndCliente"
-                        placeholder="Número"
-                      />
-                    </div>
-                  </div>
-                  <div id="divComplementoCliente" class="display-none">
-                    <div class="block-title label-color">Complemento</div>
-                    <div class="block">
-                      <input
-                        type="text"
-                        id="complementoEndCliente"
-                        placeholder="Ex: Apt 400"
-                      />
-                    </div>
-                  </div>
-                  <div id="divBairroCliente" class="display-none">
-                    <div class="block-title label-color">
-                      Bairro<sup>*</sup>
-                    </div>
-                    <div class="block">
-                      <input
-                        type="text"
-                        id="bairroEndCliente"
-                        placeholder="Bairro"
-                      />
-                    </div>
-                  </div>
-                  <div id="divCidadeCliente" class="display-none">
-                    <div class="block-title label-color">
-                      Cidade<sup>*</sup>
-                    </div>
-                    <div class="block">
-                      <input
-                        type="text"
-                        id="cidadeEndCliente"
-                        placeholder="Cidade"
-                        readonly
-                      />
-                    </div>
-                  </div>
-                  <div id="divEstadoCliente" class="display-none">
-                    <div class="block-title label-color">
-                      Estado<sup>*</sup>
-                    </div>
-                    <div class="block">
-                      <input type="text" id="estadoEndCliente" readonly />
-                    </div>
-                  </div>
-                </div>
+      </div>
+
+      <!-- Métodos de pagamento -->
+      <div class="bg-white rounded-2xl shadow-sm mb-4">
+          <div class="p-4 border-b">
+              <h2 class="text-lg font-semibold">Forma de Pagamento</h2>
+          </div>
+          <div class="p-4">
+              <div class="space-y-3">
+                  <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                      <input type="radio" name="payment" class="form-radio text-blue-600" checked>
+                      <span class="ml-2">Pix</span>
+                      <svg class="w-6 h-6 ml-auto text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      </svg>
+                  </label>
+                  
+                  <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                      <input type="radio" name="payment" class="form-radio text-blue-600">
+                      <span class="ml-2">Cartão de Crédito</span>
+                      <svg class="w-6 h-6 ml-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                      </svg>
+                  </label>
+
+                  <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                      <input type="radio" name="payment" class="form-radio text-blue-600">
+                      <span class="ml-2">Boleto Bancário</span>
+                      <svg class="w-6 h-6 ml-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                      </svg>
+                  </label>
               </div>
-            </div>
           </div>
-          <!-- FIM POPUP NOVO ENDEREÇO -->
+      </div>
+      
+      <!-- Resumo do pedido -->
+      <div class="bg-white rounded-2xl shadow-sm mb-4">
+          <div class="p-4 border-b">
+              <h2 class="text-lg font-semibold">Resumo do Pedido</h2>
+          </div>
+          <div class="p-4 space-y-3">
+              <div class="flex justify-between">
+                  <span class="text-gray-600">Subtotal</span>
+                  <span>R$ 28,20</span>
+              </div>
+              <div class="flex justify-between">
+                  <span class="text-gray-600">Frete</span>
+                  <span class="text-green-600">Grátis</span>
+              </div>
+              <div class="flex justify-between">
+                  <span class="text-gray-600">Desconto</span>
+                  <span class="text-red-600">- R$ 0,00</span>
+              </div>
+              <div class="pt-3 border-t flex justify-between font-semibold">
+                  <span>Total</span>
+                  <span class="text-lg">R$ 28,20</span>
+              </div>
+          </div>
+      </div>
+  </main>
+          </div>
         </div>
       </div>
     </div>
