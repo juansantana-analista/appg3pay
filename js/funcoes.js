@@ -1911,7 +1911,7 @@ function apagarNotificacao(notificacaoId) {
             responseJson.data.data.itens.forEach((item) => {
               var itemDiv = `
               
-                  <div class="flex space-x-4" style="margin-botom: 14px;">
+                  <div class="flex space-x-4" style="margin-bottom: 14px;">
                     <img
                       src="https://escritorio.g3pay.com.br/${
                                     item.foto
