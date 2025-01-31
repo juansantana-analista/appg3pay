@@ -231,6 +231,7 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+          const oneSignalId = localStorage.getItem('oneSignalId');   
           // fazer algo quando a página for inicializada
           //START AÇÃO BOTÃO ENTRAR
           $("#signIn").on("click", function () {
@@ -283,6 +284,9 @@ var app = new Framework7({
                     //localStorage.setItem("validadeToken", decodedToken.expires);
 
                     buscarPessoaId(decodedToken.userid);
+                    setTimeout(() => {
+                      oneSignalLogin(decodedToken.userid, oneSignalId);
+                  }, 500); // Atraso de 500ms
 
                     setTimeout(function () {
                       app.views.main.router.navigate("/home/");
@@ -648,11 +652,10 @@ var app = new Framework7({
                 .start();
           }
         },
-        pageInit: function (event, page) {          
-          const oneSignalId = localStorage.getItem('oneSignalId');  
-          const userId = localStorage.getItem('userId');   
-          oneSignalLogin(userId, oneSignalId);
-
+        pageInit: function (event, page) {
+          setTimeout(() => {
+            oneSignalLogin(decodedToken.userid, oneSignalId);
+        }, 1500); // Atraso de 1.5 segundos
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
           onDashboard();          
