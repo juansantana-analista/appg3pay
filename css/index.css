@@ -2207,3 +2207,10 @@ form {
       opacity: 1;
   }
 }
+
+input, select {
+    position: relative;
+    z-index: 1000;
+    -webkit-user-select: text;
+    user-select: text;
+}
