@@ -649,9 +649,10 @@ var app = new Framework7({
           }
         },
         pageInit: function (event, page) {          
-          const oneSignalId = localStorage.getItem('oneSignalId');   
-          oneSignalLogin(decodedToken.userid, oneSignalId);
-          
+          const oneSignalId = localStorage.getItem('oneSignalId');  
+          const userId = localStorage.getItem('userId');   
+          oneSignalLogin(userId, oneSignalId);
+
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
           onDashboard();          
