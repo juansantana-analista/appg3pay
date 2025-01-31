@@ -284,11 +284,9 @@ var app = new Framework7({
                     //localStorage.setItem("validadeToken", decodedToken.expires);
 
                     buscarPessoaId(decodedToken.userid);
-                    setTimeout(() => {
-                        oneSignalLogin(decodedToken.userid, oneSignalId);
-                    }, 500); // Atraso de 500ms
 
                     setTimeout(function () {
+                      oneSignalLogin(decodedToken.userid, oneSignalId);
                       app.views.main.router.navigate("/home/");
                     }, 300);
 
