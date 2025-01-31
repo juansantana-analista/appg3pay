@@ -285,8 +285,8 @@ var app = new Framework7({
 
                     buscarPessoaId(decodedToken.userid);
                     setTimeout(() => {
-                      oneSignalLogin(decodedToken.userid, oneSignalId);
-                  }, 500); // Atraso de 500ms
+                        oneSignalLogin(decodedToken.userid, oneSignalId);
+                    }, 500); // Atraso de 500ms
 
                     setTimeout(function () {
                       app.views.main.router.navigate("/home/");
@@ -653,9 +653,6 @@ var app = new Framework7({
           }
         },
         pageInit: function (event, page) {
-          setTimeout(() => {
-            oneSignalLogin(decodedToken.userid, oneSignalId);
-        }, 1500); // Atraso de 1.5 segundos
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
           onDashboard();          
