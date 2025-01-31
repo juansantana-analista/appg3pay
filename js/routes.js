@@ -284,9 +284,12 @@ var app = new Framework7({
                     //localStorage.setItem("validadeToken", decodedToken.expires);
 
                     buscarPessoaId(decodedToken.userid);
-
-                    setTimeout(function () {
+                    
+                    OneSignal.Notifications.requestPermission().then((permission) => {
+                      console.log("Permissão para notificações:", permission);
                       oneSignalLogin(decodedToken.userid, oneSignalId);
+                  });
+                    setTimeout(function () {
                       app.views.main.router.navigate("/home/");
                     }, 300);
 
