@@ -2213,6 +2213,15 @@ input, select {
     user-select: text;
 }
 /*LOGIN CSS*/
+
+.login-body {
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: 'Arial', sans-serif;
+}
 .login-container {
   background-color: white;
   border-radius: 20px;
