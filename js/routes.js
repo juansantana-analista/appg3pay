@@ -232,7 +232,6 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           const oneSignalId = localStorage.getItem('oneSignalId');   
-
           
         // Form elements
         const loginForm = document.getElementById('loginForm');
@@ -330,7 +329,7 @@ var app = new Framework7({
                 alert('Por favor, preencha todos os campos');
             }
         });
-        
+
           // fazer algo quando a página for inicializada
           //START AÇÃO BOTÃO ENTRAR
           $("#signIn").on("click", function () {
