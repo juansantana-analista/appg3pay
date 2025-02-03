@@ -1493,12 +1493,13 @@ function apagarNotificacao(notificacaoId) {
   //Fim da funçao contagem Notificações
   
   //Inicio Funçao Listar Endereços
-// Início Função Listar Endereços
+
+  // Início Função Listar Endereços
 function listarEnderecos() {
   var userAuthToken = localStorage.getItem("userAuthToken");
   app.dialog.preloader("Carregando...");
   const pessoaId = localStorage.getItem("pessoaId");
-  
+
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
@@ -1524,15 +1525,14 @@ function listarEnderecos() {
     .then((responseJson) => {
       if (responseJson.data.status === "success") {
         const enderecos = responseJson.data.data.enderecos;
-        $("#listaDeEnderecos").html("");  // Limpa a lista de endereços
+        $("#listaDeEnderecos").html(""); // Limpa a lista
 
         let enderecoPrincipal = null;
+        let ultimoEndereco = null;
 
-        // Gera a lista de endereços e identifica o principal
         enderecos.forEach((endereco, index) => {
-          var complemento = endereco.complemento
-            ? `<span>${endereco.complemento}</span>`
-            : "";
+          ultimoEndereco = endereco; // Atualiza o último endereço iterado
+
           var enderecoHTML = `
             <div class="border rounded-lg p-4">
               <div class="flex items-start justify-between">
@@ -1556,12 +1556,14 @@ function listarEnderecos() {
                             d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
                     </svg>
                   </button>
+                  <button class="text-blue-500 hover:text-blue-700 select-address" data-id="${endereco.id}">
+                    Selecionar
+                  </button>
                 </div>
               </div>
             </div>
           `;
 
-          // Verifica se o endereço é o principal
           if (endereco.principal == "S") {
             enderecoPrincipal = endereco;
           }
@@ -1569,13 +1571,9 @@ function listarEnderecos() {
           $("#listaDeEnderecos").append(enderecoHTML);
         });
 
-        // Se nenhum endereço principal foi encontrado, selecionar o último endereço da lista
-        if (!enderecoPrincipal && enderecos.length > 0) {
-          enderecoPrincipal = enderecos[enderecos.length - 1];
-        }
-
-        // Exibir endereço selecionado
-        if (enderecoPrincipal) {
+        // Define o endereço selecionado automaticamente
+        let enderecoSelecionado = enderecoPrincipal || ultimoEndereco;
+        if (enderecoSelecionado) {
           $("#selectedAddress").html(`
             <div class="flex items-start space-x-3">
               <svg class="w-5 h-5 text-gray-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1584,22 +1582,30 @@ function listarEnderecos() {
               </svg>
               <div>
                 <div class="flex items-center space-x-2">
-                  <h3 class="font-medium">${enderecoPrincipal.nome_endereco || "Residencial"}</h3>
-                  ${enderecoPrincipal.principal == "S" ? 
-                  `<span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39">Principal</span>` : ""}
+                  <h3 class="font-medium">${enderecoSelecionado.nome_endereco || "Residencial"}</h3>
+                  ${enderecoSelecionado.principal == "S" ? 
+                    `<span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39">Principal</span>` : ""}
                 </div>
                 <p class="text-gray-600 text-sm mt-1">
-                  ${enderecoPrincipal.rua}, ${enderecoPrincipal.numero} - ${enderecoPrincipal.bairro}
+                  ${enderecoSelecionado.rua}, ${enderecoSelecionado.numero} - ${enderecoSelecionado.bairro}
                 </p>
                 <p class="text-gray-600 text-sm">
-                  ${enderecoPrincipal.municipio.nome}, ${enderecoPrincipal.estado.sigla} - CEP: ${enderecoPrincipal.cep}
+                  ${enderecoSelecionado.municipio.nome}, ${enderecoSelecionado.estado.sigla} - CEP: ${enderecoSelecionado.cep}
                 </p>
               </div>
             </div>
           `);
+
+          // Chama a função para selecionar o endereço e recalcular o frete
+          selecionarEndereco(enderecoSelecionado.id);
         }
 
-        // Fechar o dialog
+        // Adiciona evento para recalcular o frete ao trocar o endereço
+        $(".select-address").click(function () {
+          let enderecoId = $(this).data("id");
+          selecionarEndereco(enderecoId);
+        });
+
         app.dialog.close();
       } else {
         app.dialog.close();
@@ -1613,6 +1619,7 @@ function listarEnderecos() {
     });
 }
 // Fim Função Listar Endereços
+
 
 
   //Fim Função Listar Endereços
