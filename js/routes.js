@@ -321,9 +321,54 @@ var app = new Framework7({
             const code = Array.from(codeInputs).map(input => input.value).join('');
             
             // Simulated code validation
-            if(code.length === 6) {
+            if(code.length === 6) {          
+                var emailRecuperacao = localStorage.getItem("emailRecuperacao");
+                  // Prepara a requisição
+                  const headers = {
+                    "Content-Type": "application/json",
+                  };
+    
+                  const body = JSON.stringify({
+                    email: emailRecuperacao,
+                    code: code,
+                  });
+    
+                  const options = {
+                    method: "POST",
+                    headers: headers,
+                    body: body,
+                  };
+    
+                  // Faz a requisição ao servidor
+                  fetch("https://escritorio.g3pay.com.br/api/validate_code.php", options)
+                    .then((response) => response.json())
+                    .then((data) => {
+                      app.dialog.close();
+                      if (data.status === "success" && data.data.status === "success") {
+                        localStorage.setItem("codigoRecuperacao", code);
+                        app.popup.open(".popup-redefinir-senha");
+                      } else {
+                        app.dialog.alert(
+                          "Erro, Código informado inválido ou expirado.",
+                          '<i class="mdi mdi-alert"></i> Código Inválido'
+                        );
+                      }
+                    })
+                    .catch((error) => {
+                      console.error("Erro:", error);
+                      app.dialog.close();
+                      app.dialog.alert(
+                        "Erro, Código informado inválido ou expirado.",
+                        '<i class="mdi mdi-alert"></i> Código Inválido'
+                      );
+                    });
                 verificationCodeForm.classList.add('hidden');
                 newPasswordForm.classList.remove('hidden');
+            } else {              
+              return app.dialog.alert(
+                "Por favor, insira todos os 6 dígitos do código.",
+                '<i class="mdi mdi-alert"></i> Código Incompleto'
+              );
             }
         });
 
