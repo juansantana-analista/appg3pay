@@ -1562,7 +1562,7 @@ function listarEnderecos() {
           `;
 
           // Verifica se o endereço é o principal
-          if (endereco.tipo == "1") {
+          if (endereco.principal == "S") {
             enderecoPrincipal = endereco;
           }
 
