@@ -1666,7 +1666,7 @@ function listarEnderecos() {
           console.log(valorFrete);
   
           //MOSTRAR O VALOR FRETE
-          $("#freteCarrinho").html(
+          $("#fretePedido").html(
             "Alterar " +
               valorFrete.toLocaleString("pt-BR", {
                 style: "currency",
