@@ -232,6 +232,105 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           const oneSignalId = localStorage.getItem('oneSignalId');   
+
+          
+        // Form elements
+        const loginForm = document.getElementById('loginForm');
+        const recoveryEmailForm = document.getElementById('recoveryEmailForm');
+        const verificationCodeForm = document.getElementById('verificationCodeForm');
+        const newPasswordForm = document.getElementById('newPasswordForm');
+        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+        
+        // Back to login buttons
+        const backToLoginButtons = document.querySelectorAll('.back-to-login');
+
+        // Forgot Password Link
+        forgotPasswordLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            loginForm.classList.add('hidden');
+            recoveryEmailForm.classList.remove('hidden');
+        });
+
+        // Back to Login Handlers
+        backToLoginButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                loginForm.classList.remove('hidden');
+                recoveryEmailForm.classList.add('hidden');
+                verificationCodeForm.classList.add('hidden');
+                newPasswordForm.classList.add('hidden');
+            });
+        });
+
+        // Recovery Email Form Submission
+        recoveryEmailForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[type="email"]').value;
+            
+            // Simulated email validation and code sending
+            if(email) {
+                recoveryEmailForm.classList.add('hidden');
+                verificationCodeForm.classList.remove('hidden');
+            }
+        });
+
+        // Verification Code Input Handling
+        const codeInputs = document.querySelectorAll('.code-inputs input');
+        codeInputs.forEach((input, index) => {
+            input.addEventListener('input', function() {
+                if(this.value.length === 1 && index < codeInputs.length - 1) {
+                    codeInputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('keydown', function(e) {
+                if(e.key === 'Backspace' && this.value.length === 0 && index > 0) {
+                    codeInputs[index - 1].focus();
+                }
+            });
+        });
+
+        // Verification Code Form Submission
+        verificationCodeForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const code = Array.from(codeInputs).map(input => input.value).join('');
+            
+            // Simulated code validation
+            if(code.length === 6) {
+                verificationCodeForm.classList.add('hidden');
+                newPasswordForm.classList.remove('hidden');
+            }
+        });
+
+        // New Password Form Submission
+        newPasswordForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const newPassword = this.querySelectorAll('input[type="password"]')[0].value;
+            const confirmPassword = this.querySelectorAll('input[type="password"]')[1].value;
+            
+            if(newPassword === confirmPassword) {
+                alert('Senha redefinida com sucesso!');
+                // Reset all forms
+                newPasswordForm.classList.add('hidden');
+                loginForm.classList.remove('hidden');
+            } else {
+                alert('As senhas não coincidem');
+            }
+        });
+
+        // Login Form Submission
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[type="email"]').value;
+            const password = this.querySelector('input[type="password"]').value;
+            
+            if(email && password) {
+                alert('Login em processamento...');
+                // Substituir por chamada de API real
+            } else {
+                alert('Por favor, preencha todos os campos');
+            }
+        });
+        
           // fazer algo quando a página for inicializada
           //START AÇÃO BOTÃO ENTRAR
           $("#signIn").on("click", function () {

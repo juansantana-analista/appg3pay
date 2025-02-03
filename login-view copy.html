@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Required meta tags-->
+  <meta charset="utf-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!-- Color theme for statusbar (Android only) -->
+  <meta name="theme-color" content="#8D51FF">
+  <!-- Your app title -->
+    <title>G3 PAY</title>
+  <!-- Path to Framework7 Library Bundle CSS -->
+  <link rel="stylesheet" href="lib/framework7-bundle.min.css">
+  <!-- CSS PERSONALIZADO PARA MENU-->
+  <link rel="stylesheet" href="css/index.css">
+  <!--Ícones Material Design-->
+  <link rel="stylesheet" href="css/materialdesignicons.min.css">
+  <!-- Icones do Remix icon-->
+  <link rel="stylesheet" href="css/remixicon/remixicon.css">
+</head>
+
+<body>
+  <!-- App root element -->
+  <div id="app">
+    <!-- Your main view, should have "view-main" class -->
+    <div class="view view-main">
+      <!-- Initial Page, "data-name" contains page name -->
+      <div data-name="login-view" class="page color-theme-blue">
+        <!-- Navbar -->
+        <!-- Scrollable page content -->
+        <div class="page-content">
+          <center>
+            <img src="img/logo.png" style="max-width:40%; padding:20px; margin-top: 80px;">
+            <center>
+              <h3 class="title-logo"> PDV</h3>
+            </center>
+          </center>
+          <div class="list no-hairlines">
+            <form>
+            <ul>
+              <li class="item-content item-input">
+                <div class="item-inner">
+                  <div class="item-title item-label">Usuário (Email)</div>
+                  <div class="item-input-wrap">
+                    <input type="text" id="userName" name="userName" placeholder="Email" autocomplete="username">
+                  </div>
+                </div>
+              </li>
+              <li class="item-content item-input">
+                <div class="item-inner">
+                  <div class="item-title item-label">Senha</div>
+                  <div class="item-input-wrap">
+                    <input type="password" id="userPassword" name="userPassword" placeholder="Senha" autocomplete="current-password">
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </form>
+          </div>
+          <div class="flex-100">                          
+              <button class="btn-large" id="signIn" style="margin: 10px;">
+                  ENTRAR
+                  <span class="mdi mdi-login"></span>
+              </button>
+          </div>
+          <p>
+            <center><a href="#" id="forgotPassword" class="link text-title">Esqueceu sua senha?</a></center>
+          </p>
+          <br>
+
+          <div class="popup popup-recuperar-senha">
+            <div class="view popup-view">
+              <div class="page">
+                <div class="navbar tema no-shadow" style="margin-bottom: 0px">
+                  <div class="navbar-inner">
+                    <div class="left">
+                      <a class="link popup-close">
+                        <i class="mdi mdi-arrow-left"></i>
+                      </a>
+                    </div>
+                    <div class="title" style="text-align: center; width: 100%">
+                      Redefinir Senha
+                    </div>
+                    <div class="right">
+                      <a class="link" style="font-size: 14px; color: #6d0ad6">
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="page-content">
+                  <div class="block-title" style="color: #6d0ad6">
+                    Código
+                  </div>
+                  <div class="block">
+                    <input type="text" id="codigoRecebido" placeholder="Digite aqui o código recebido" style="
+                           background: #fafafa;
+                           border: none;
+                           border: solid 1px #e0dede;
+                           border-radius: 5px;
+                           padding: 8px 16px;
+                           height: 50px;
+                           width: 100%;
+                         " />
+                  </div>
+
+                  <div class="block">
+                    <a href="#" id="redefinirSenha"
+                      class="col button button-big button-round button-fill btnskin animated fadeInBig">Avançar
+                      ></a><br />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Path to Framework7 Library Bundle JS-->
+  <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
+  <!-- jQuery -->
+  <script type="text/javascript" src="lib/jquery-3.7.0.min.js"></script>
+  <!-- Roteamento do app-->
+  <script type="text/javascript" src="js/routes.js"></script>
+  <script src="cordova.js"></script>
+</body>
+
+</html>
