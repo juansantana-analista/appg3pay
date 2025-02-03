@@ -1538,8 +1538,8 @@ function listarEnderecos() {
               <div class="flex items-start justify-between">
                 <div class="flex-1">
                   <div class="flex items-center space-x-2 mb-2">
-                    <span class="font-medium">${endereco.tipo || "Residencial"}</span>
-                    ${endereco.tipo === "Principal" ? 
+                    <span class="font-medium">${endereco.nome_endereco || "Residencial"}</span>
+                    ${endereco.principal == "S" ? 
                     `<span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39">Principal</span>` : ""}
                   </div>
                   <p class="text-gray-600 text-sm">
