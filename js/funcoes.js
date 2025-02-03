@@ -1580,7 +1580,7 @@ function listarEnderecos() {
               </svg>
               <div>
                 <div class="flex items-center space-x-2">
-                  <h3 class="font-medium">Residencial</h3>
+                  <h3 class="font-medium">${endereco.nome_endereco || "Residencial"}</h3>
                   <span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39">Principal</span>
                 </div>
                 <p class="text-gray-600 text-sm mt-1">
