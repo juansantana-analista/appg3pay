@@ -1498,6 +1498,7 @@ function listarEnderecos() {
   var userAuthToken = localStorage.getItem("userAuthToken");
   app.dialog.preloader("Carregando...");
   const pessoaId = localStorage.getItem("pessoaId");
+  
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
@@ -1521,7 +1522,6 @@ function listarEnderecos() {
   fetch(apiServerUrl, options)
     .then((response) => response.json())
     .then((responseJson) => {
-      // Verifica se o status é 'success' e se há dados de pedidos
       if (responseJson.data.status === "success") {
         const enderecos = responseJson.data.data.enderecos;
         $("#listaDeEnderecos").html("");  // Limpa a lista de endereços
@@ -1569,8 +1569,12 @@ function listarEnderecos() {
           $("#listaDeEnderecos").append(enderecoHTML);
         });
 
-        // Se houver um endereço principal, exibe ele na seção de Endereço de Entrega 
-        //<h3 class="font-medium">${enderecoPrincipal.tipo || "Residencial"}</h3>
+        // Se nenhum endereço principal foi encontrado, selecionar o último endereço da lista
+        if (!enderecoPrincipal && enderecos.length > 0) {
+          enderecoPrincipal = enderecos[enderecos.length - 1];
+        }
+
+        // Exibir endereço selecionado
         if (enderecoPrincipal) {
           $("#selectedAddress").html(`
             <div class="flex items-start space-x-3">
@@ -1581,7 +1585,8 @@ function listarEnderecos() {
               <div>
                 <div class="flex items-center space-x-2">
                   <h3 class="font-medium">${enderecoPrincipal.nome_endereco || "Residencial"}</h3>
-                  <span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39">Principal</span>
+                  ${enderecoPrincipal.principal == "S" ? 
+                  `<span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39">Principal</span>` : ""}
                 </div>
                 <p class="text-gray-600 text-sm mt-1">
                   ${enderecoPrincipal.rua}, ${enderecoPrincipal.numero} - ${enderecoPrincipal.bairro}
@@ -1594,11 +1599,10 @@ function listarEnderecos() {
           `);
         }
 
-        // Fechar o dialog ou outra ação necessária após preenchimento do select
+        // Fechar o dialog
         app.dialog.close();
       } else {
         app.dialog.close();
-        // Tratar caso o status não seja "success"
         console.error("Erro ao obter dados de endereços:", responseJson.message);
       }
     })
@@ -1609,6 +1613,7 @@ function listarEnderecos() {
     });
 }
 // Fim Função Listar Endereços
+
 
   //Fim Função Listar Endereços
   
