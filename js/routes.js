@@ -263,13 +263,40 @@ var app = new Framework7({
         // Recovery Email Form Submission
         recoveryEmailForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            const email = this.querySelector('input[type="email"]').value;
+            const emailRecuperacao = this.querySelector('input[type="email"]').value;
             
-            // Simulated email validation and code sending
-            if(email) {
-                recoveryEmailForm.classList.add('hidden');
-                verificationCodeForm.classList.remove('hidden');
-            }
+            //START BOTÃO RECUPERAR SENHA     
+                app.dialog.preloader("Carregando...");
+
+              //START Fazendo a requisição
+                fetch('https://escritorio.g3pay.com.br/api/request_reset.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: emailRecuperacao
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                  if (data.status == 'success' && data.data.status == 'success') {
+                    localStorage.setItem("emailRecuperacao", emailRecuperacao);
+                      app.dialog.close();
+                      recoveryEmailForm.classList.add('hidden');
+                      verificationCodeForm.classList.remove('hidden');
+                  } else {
+                    app.dialog.close();
+                    app.dialog.alert("Erro na requisição: " + (data.message || "Dados inválidos"), "Falha");
+                  }
+                })
+                .catch(error => {
+                  app.dialog.close();
+                  app.dialog.alert("Erro na requisição: " + (error || "Dados inválidos"), "Falha");
+                    console.error('Error:', error);
+                })              
+              //END Fazendo a requisição
+          //END BOTÃO RECUPERAR SENHA
         });
 
         // Verification Code Input Handling
@@ -402,46 +429,6 @@ var app = new Framework7({
             }
           });
           //END AÇÃO BOTÃO ENTRAR
-
-          //START BOTÃO RECUPERAR SENHA
-          $("#forgotPassword").on("click", function () {
-            app.dialog.prompt(
-              "Informe o e-mail de login",
-              "<b>SEU EMAIL DE LOGIN</b>",
-              function (email) {
-                app.dialog.preloader("Carregando...");
-
-              //START Fazendo a requisição
-                fetch('https://escritorio.g3pay.com.br/api/request_reset.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        email: email
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                  if (data.status == 'success' && data.data.status == 'success') {
-                    localStorage.setItem("emailRecuperacao", email);
-                      app.dialog.close();
-                      app.views.main.router.navigate("/validar-codigo/");
-                  } else {
-                    app.dialog.close();
-                    app.dialog.alert("Erro na requisição: " + (data.message || "Dados inválidos"), "Falha");
-                  }
-                })
-                .catch(error => {
-                  app.dialog.close();
-                  app.dialog.alert("Erro na requisição: " + (error || "Dados inválidos"), "Falha");
-                    console.error('Error:', error);
-                })              
-              //END Fazendo a requisição
-              }
-            );
-          });
-          //END BOTÃO RECUPERAR SENHA
 
           //START AÇÃO BOTÃO REGISTER
           $("#register").on("click", function () {
