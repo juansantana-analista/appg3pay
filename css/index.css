@@ -2262,7 +2262,7 @@ input, select {
 .login-btn, .recovery-btn {
   width: 100%;
   padding: 15px;
-  background-color: var(--laranja);
+  background-color: #e64400;
   color: white;
   border: none;
   border-radius: 10px;
