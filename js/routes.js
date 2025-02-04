@@ -318,6 +318,7 @@ var app = new Framework7({
         // Verification Code Form Submission
         verificationCodeForm.addEventListener('submit', function(e) {
             e.preventDefault();
+            app.dialog.preloader("Carregando...");
             const code = Array.from(codeInputs).map(input => input.value).join('');
             
             // Simulated code validation
@@ -346,7 +347,8 @@ var app = new Framework7({
                       app.dialog.close();
                       if (data.status === "success" && data.data.status === "success") {
                         localStorage.setItem("codigoRecuperacao", code);
-                        app.popup.open(".popup-redefinir-senha");
+                        verificationCodeForm.classList.add('hidden');
+                        newPasswordForm.classList.remove('hidden');
                       } else {
                         app.dialog.alert(
                           "Erro, Código informado inválido ou expirado.",
@@ -362,9 +364,8 @@ var app = new Framework7({
                         '<i class="mdi mdi-alert"></i> Código Inválido'
                       );
                     });
-                verificationCodeForm.classList.add('hidden');
-                newPasswordForm.classList.remove('hidden');
-            } else {              
+            } else {           
+              app.dialog.close();   
               return app.dialog.alert(
                 "Por favor, insira todos os 6 dígitos do código.",
                 '<i class="mdi mdi-alert"></i> Código Incompleto'
@@ -375,30 +376,63 @@ var app = new Framework7({
         // New Password Form Submission
         newPasswordForm.addEventListener('submit', function(e) {
             e.preventDefault();
+            app.dialog.preloader("Carregando...");
+            var emailRecuperacao = localStorage.getItem("emailRecuperacao");
+            var codigoRecuperacao = localStorage.getItem("codigoRecuperacao");
             const newPassword = this.querySelectorAll('input[type="password"]')[0].value;
             const confirmPassword = this.querySelectorAll('input[type="password"]')[1].value;
             
-            if(newPassword === confirmPassword) {
-                alert('Senha redefinida com sucesso!');
-                // Reset all forms
-                newPasswordForm.classList.add('hidden');
-                loginForm.classList.remove('hidden');
+            if(newPassword && newPassword === confirmPassword) {            
+                const headers = {
+                  "Content-Type": "application/json"
+                };
+    
+                const body = JSON.stringify({
+                  email: emailRecuperacao,
+                  code: codigoRecuperacao,
+                  password: newPassword
+                });
+    
+                const options = {
+                  method: "POST",
+                  headers: headers,
+                  body: body,
+                };
+    
+                fetch('https://escritorio.g3pay.com.br/api/reset_password.php', options)
+                  .then((response) => response.json())
+                  .then((data) => {
+                    app.dialog.close();
+                    if (data.status == 'success' && data.data.status == 'success') {
+                      // Reset all forms
+                      newPasswordForm.classList.add('hidden');
+                      loginForm.classList.remove('hidden');
+                      app.dialog.alert(
+                        "Sucesso, Senha alterada.",
+                        '<i class="mdi mdi-alert"></i> Sucesso'
+                      );                    
+                    } else {
+                      app.dialog.close();
+                      app.dialog.alert(
+                        "Erro, Código informado invalido ou expirado.",
+                        '<i class="mdi mdi-alert"></i> Código Inválido'
+                      );
+                    }
+                  })
+                  .catch((error) => {
+                    console.error("Erro:", error);
+                    app.dialog.close();
+                    app.dialog.alert(
+                      "Erro, Código informado invalido ou expirado.",
+                      '<i class="mdi mdi-alert"></i> Código Inválido'
+                    );
+                  });
             } else {
-                alert('As senhas não coincidem');
-            }
-        });
-
-        // Login Form Submission
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = this.querySelector('input[type="email"]').value;
-            const password = this.querySelector('input[type="password"]').value;
-            
-            if(email && password) {
-                alert('Login em processamento...');
-                // Substituir por chamada de API real
-            } else {
-                alert('Por favor, preencha todos os campos');
+              app.dialog.close();
+              app.dialog.alert(
+                "As senhas não coincidem. Por favor, tente novamente",
+                '<i class="mdi mdi-alert"></i> Erro'
+              );
             }
         });
 
@@ -485,177 +519,6 @@ var app = new Framework7({
           // fazer algo antes da página ser removida do DOM
         },
       },
-    },
-    {
-      path: '/validar-codigo/',
-      url: 'validar-codigo.html?v=' + versionApp,
-      animate: false,
-      on: {
-        pageBeforeIn: async function (event, page) {
-        },
-        pageAfterIn: function (event, page) {
-          // fazer algo depois da página ser exibida
-        },
-        pageInit: function (event, page) {
-          // fazer algo quando a página for inicializada 
-          // Função para limpar inputs e focar no primeiro+
-          function resetInputs() {
-            $(".code").each(function () {
-              console.log("Limpando input:", $(this).data("index")); // Verifica quais inputs estão sendo limpos
-              $(this).val(""); // Limpa o valor de cada input
-            });
-            $(".code[data-index='0']").focus(); // Foca no primeiro input
-          }
-          resetInputs();   
-
-          // START BOTÃO VALIDAR CÓDIGO
-          $("#confirmarCodigo").on("click", function () {
-            var emailRecuperacao = localStorage.getItem("emailRecuperacao");
-
-            // Captura os valores dos inputs e concatena
-            const code = $(".code")
-              .map(function () {
-                return $(this).val();
-              })
-              .get()
-              .join("");
-
-            if (code.length === 6) {
-              // Prepara a requisição
-              const headers = {
-                "Content-Type": "application/json",
-              };
-
-              const body = JSON.stringify({
-                email: emailRecuperacao,
-                code: code,
-              });
-
-              const options = {
-                method: "POST",
-                headers: headers,
-                body: body,
-              };
-
-              // Faz a requisição ao servidor
-              fetch("https://escritorio.g3pay.com.br/api/validate_code.php", options)
-                .then((response) => response.json())
-                .then((data) => {
-                  app.dialog.close();
-                  if (data.status === "success" && data.data.status === "success") {
-                    localStorage.setItem("codigoRecuperacao", code);
-                    app.popup.open(".popup-redefinir-senha");
-                  } else {
-                    app.dialog.alert(
-                      "Erro, Código informado inválido ou expirado.",
-                      '<i class="mdi mdi-alert"></i> Código Inválido'
-                    );
-                  }
-                })
-                .catch((error) => {
-                  console.error("Erro:", error);
-                  app.dialog.close();
-                  app.dialog.alert(
-                    "Erro, Código informado inválido ou expirado.",
-                    '<i class="mdi mdi-alert"></i> Código Inválido'
-                  );
-                });
-            } else {
-              return app.dialog.alert(
-                "Por favor, insira todos os 6 dígitos do código.",
-                '<i class="mdi mdi-alert"></i> Código Incompleto'
-              );
-            }
-          });
-
-          // Evento para mover o foco entre os inputs
-          $(".code").on("input", function () {
-            const $this = $(this);
-            const index = parseInt($this.data("index"), 10);
-            if ($this.val().length === 1 && index < 5) {
-              // Move para o próximo input
-              $(`.code[data-index="${index + 1}"]`).focus();
-            }
-          });
-
-          $(".code").on("keydown", function (e) {
-            const $this = $(this);
-            const index = parseInt($this.data("index"), 10);
-            if (e.key === "Backspace" && $this.val() === "" && index > 0) {
-              // Volta para o input anterior
-              $(`.code[data-index="${index - 1}"]`).focus();
-            }
-          });
-          // END BOTÃO VALIDAR CÓDIGO
-
-
-             
-          //START BOTÃO SALVAR NOVA SENHA
-          $("#submit-password").on("click", function () {
-            var emailRecuperacao = localStorage.getItem("emailRecuperacao");
-            var codigoRecuperacao = localStorage.getItem("codigoRecuperacao");
-            const newPassword = document.getElementById('new-password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-      
-            if (newPassword && confirmPassword && newPassword === confirmPassword) {
-              const headers = {
-                  "Content-Type": "application/json"
-                };
-    
-                const body = JSON.stringify({
-                  email: emailRecuperacao,
-                  code: codigoRecuperacao,
-                  password: newPassword
-                });
-    
-                const options = {
-                  method: "POST",
-                  headers: headers,
-                  body: body,
-                };
-    
-                fetch('https://escritorio.g3pay.com.br/api/reset_password.php', options)
-                  .then((response) => response.json())
-                  .then((data) => {
-                    app.dialog.close();
-                    if (data.status == 'success' && data.data.status == 'success') {
-                      app.dialog.alert(
-                        "Sucesso, Senha alterada.",
-                        '<i class="mdi mdi-alert"></i> Sucesso'
-                      );
-                      app.popup.close(".popup-redefinir-senha");                      
-                      app.views.main.router.navigate("/login-view/");    
-                    } else {
-                      app.dialog.close();
-                      app.dialog.alert(
-                        "Erro, Código informado invalido ou expirado.",
-                        '<i class="mdi mdi-alert"></i> Código Inválido'
-                      );
-                    }
-                  })
-                  .catch((error) => {
-                    console.error("Erro:", error);
-                    app.dialog.close();
-                    app.dialog.alert(
-                      "Erro, Código informado invalido ou expirado.",
-                      '<i class="mdi mdi-alert"></i> Código Inválido'
-                    );
-                  });
-            } else {
-              app.dialog.close();
-              app.dialog.alert(
-                "As senhas não coincidem. Por favor, tente novamente",
-                '<i class="mdi mdi-alert"></i> Erro'
-              );
-            }
-            
-          });
-          //END BOTÃO SALVAR NOVA SENHA
-        },
-        pageBeforeRemove: function (event, page) {
-          // fazer algo antes da página ser removida do DOM      
-        },
-      }
     },
     {
       path: '/home/',
