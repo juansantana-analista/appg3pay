@@ -1612,6 +1612,7 @@ function listarEnderecos() {
           // Definir o estado do checkbox baseado no valor de is_principal
           console.log(editarEndereco.is_principal);
           if (editarEndereco.is_principal == 'S') {
+            console.log(editarEndereco);
               $("#defaultAddressEdit").prop("checked", true); // Marca o checkbox
           } else {
               $("#defaultAddressEdit").prop("checked", false); // Desmarca o checkbox
