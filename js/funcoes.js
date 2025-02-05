@@ -1634,6 +1634,9 @@ function listarEnderecos() {
       endereco_id: enderecoId,
     };
   
+    // Armazena o endereço selecionado no localStorage
+    localStorage.setItem("enderecoSelecionado", enderecoId);
+  
     // Cabeçalhos da requisição
     const headers = {
       "Content-Type": "application/json",
@@ -1645,6 +1648,7 @@ function listarEnderecos() {
       method: "AlterarEndereco",
       dados: dados,
     });
+  
     // Opções da requisição
     const options = {
       method: "POST",
@@ -1656,28 +1660,30 @@ function listarEnderecos() {
     fetch(apiServerUrl, options)
       .then((response) => response.json())
       .then((responseJson) => {
-        // Verifica se o status é 'success'
         if (
           responseJson.status == "success" &&
           responseJson.data.status == "success"
         ) {
-          // Dados a serem armazenados
           var valorFrete = responseJson.data.data.frete;
-          console.log(valorFrete);
+          console.log("Frete atualizado:", valorFrete);
   
-          //MOSTRAR O VALOR FRETE
+          // Atualiza o valor do frete na interface
           $("#fretePedido").html(
-              valorFrete.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })
+            valorFrete.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })
           );
+  
+          // Destacar o endereço selecionado na interface
+          $(".select-address").removeClass("text-blue-700 font-bold"); // Remove destaque dos outros botões
+          $(`.select-address[data-id='${enderecoId}']`).addClass("text-blue-700 font-bold");
         }
       })
       .catch((error) => {
         console.error("Erro:", error);
       });
-  }
+  }  
   //Fim Função Selecionar Endereço
   
   //Inicio Funçao Listar Categorias
