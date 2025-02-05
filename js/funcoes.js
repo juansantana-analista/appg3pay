@@ -1556,7 +1556,7 @@ function listarEnderecos() {
                             d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
                     </svg>
                   </button>
-                  <button class="text-blue-500 hover:text-blue-700 select-address" data-id="${endereco.id}">
+                  <button class="text-blue-500 hover:text-blue-700 select-address" data-endereco="${endereco}">
                     Selecionar
                   </button>
                 </div>
@@ -1580,8 +1580,8 @@ function listarEnderecos() {
 
         // Adiciona evento para recalcular o frete ao trocar o endereço
         $(".select-address").click(function () {
-          let enderecoId = $(this).data("id");
-          selecionarEndereco(enderecoId);
+          let endereco = $(this).data("endereco");
+          selecionarEndereco(endereco);
         });
 
         app.dialog.close();
