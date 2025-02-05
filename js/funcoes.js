@@ -2203,7 +2203,7 @@ function listarEnderecos() {
           responseJson.data.status == "sucess"
         ) {
           // Sucesso na alteração
-          app.views.main.router.refreshPage();
+          //app.views.main.router.refreshPage();
           app.dialog.close();
         }
       })
