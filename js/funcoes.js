@@ -1676,14 +1676,39 @@ function listarEnderecos() {
           );
   
           // Destacar o endereço selecionado na interface
-          $(".select-address").removeClass("text-blue-700 font-bold"); // Remove destaque dos outros botões
+          $(".select-address").removeClass("text-blue-700 font-bold");
           $(`.select-address[data-id='${enderecoId}']`).addClass("text-blue-700 font-bold");
+  
+          // Buscar os detalhes do endereço selecionado
+          let enderecoSelecionado = null;
+          $(".select-address").each(function () {
+            if ($(this).data("id") == enderecoId) {
+              enderecoSelecionado = $(this).closest(".border.rounded-lg.p-4");
+            }
+          });
+  
+          if (enderecoSelecionado) {
+            let enderecoTexto = enderecoSelecionado.find("p").map(function () {
+              return $(this).html();
+            }).get().join("<br>");
+  
+            $("#selectedAddress").html(`
+              <div class="flex items-start space-x-3">
+                <svg class="w-5 h-5 text-gray-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <div>${enderecoTexto}</div>
+              </div>
+            `);
+          }
         }
       })
       .catch((error) => {
         console.error("Erro:", error);
       });
-  }  
+  }
+  
   //Fim Função Selecionar Endereço
   
   //Inicio Funçao Listar Categorias
