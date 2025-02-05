@@ -1581,6 +1581,7 @@ function listarEnderecos() {
         // Adiciona evento para recalcular o frete ao trocar o endereço
         $(".select-address").click(function () {
           let endereco = $(this).data("endereco");
+          console.log(endereco);
           selecionarEndereco(endereco);
         });
 
