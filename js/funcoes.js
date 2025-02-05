@@ -2152,6 +2152,7 @@ function listarEnderecos() {
     var userAuthToken = localStorage.getItem("userAuthToken");
     const pessoaId = localStorage.getItem("pessoaId");
     // Captura os valores dos inputs
+    var nomeEndereco = $("#nomeEndereco").val();
     var cep = $("#cepCliente").val();
     var logradouro = $("#logradouroEndCliente").val();
     var numero = $("#numeroEndCliente").val();
@@ -2162,6 +2163,7 @@ function listarEnderecos() {
   
     const dados = {
       pessoa_id: pessoaId,
+      nome_endereco: nomeEndereco,
       cep: cep,
       endereco: logradouro,
       numero: numero,
@@ -2209,7 +2211,8 @@ function listarEnderecos() {
           listarEnderecos();
           toastCenter.open();
           app.dialog.close();
-          app.popup.close(".popup-novo-endereco");
+          $("#newAddressModal").addClass("hidden");
+          $("#addressModal").addClass("hidden");
         }
       })
       .catch((error) => {
@@ -2219,7 +2222,8 @@ function listarEnderecos() {
           "Erro ao alterar carrinho: " + error.message,
           "Falha na requisição!"
         );
-        app.popup.close(".popup-novo-endereco");
+        $("#newAddressModal").addClass("hidden");
+        $("#addressModal").addClass("hidden");
       });
   }
   //Fim Função Adicionar Endereço
