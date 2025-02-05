@@ -1129,11 +1129,6 @@ var app = new Framework7({
         });
         
           listarCarrinho();
-
-          $("#btnSelecionarEndereco").on('click', function () {
-            listarEnderecos();
-            app.popup.open(".popup-enderecos");
-          });
           listarEnderecos();
 
           $("#esvaziar").on('click', function () {
