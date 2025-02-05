@@ -1609,7 +1609,7 @@ function listarEnderecos() {
           $("#complementoEndEdit").val(editarEndereco.complemento);
           $("#bairroEndEdit").val(editarEndereco.bairro);
           $("#cidadeEndEdit").val(editarEndereco.cidade);
-          $("#estadoEndEdit").val(editarEndereco.estado.nome);
+          $("#estadoEndEdit").val(editarEndereco.estado.sigla);
           // Definir o estado do checkbox baseado no valor de is_principal
           if (editarEndereco.principal == 'S') {
               $("#defaultAddressEdit").prop("checked", true); // Marca o checkbox
