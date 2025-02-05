@@ -1519,6 +1519,7 @@ function apagarNotificacao(notificacaoId) {
   
   //Inicio Funçao Selecionar Endereço
   function selecionarEndereco(enderecoSelecionado) {
+    console.log('teste')
     var userAuthToken = localStorage.getItem("userAuthToken");
     const pessoaId = localStorage.getItem("pessoaId");
   
