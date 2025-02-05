@@ -1116,26 +1116,6 @@ async function validarToken(userAuthToken) {
           $("#bairroEndCliente").val(dadosEndereco.bairro);
           $("#cidadeEndCliente").val(dadosEndereco.cidade);
           $("#estadoEndCliente").val(dadosEndereco.uf);
-  
-          // Remover a classe display-none para exibir os campos preenchidos
-          document
-            .getElementById("divLogradouroCliente")
-            .classList.remove("display-none");
-          document
-            .getElementById("divNumeroCliente")
-            .classList.remove("display-none");
-          document
-            .getElementById("divComplementoCliente")
-            .classList.remove("display-none");
-          document
-            .getElementById("divBairroCliente")
-            .classList.remove("display-none");
-          document
-            .getElementById("divCidadeCliente")
-            .classList.remove("display-none");
-          document
-            .getElementById("divEstadoCliente")
-            .classList.remove("display-none");
         } else {
           console.error("Erro ao obter dados do endereço:", responseJson.message);
         }
