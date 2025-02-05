@@ -1519,7 +1519,6 @@ function apagarNotificacao(notificacaoId) {
   
   //Inicio Funçao Selecionar Endereço
   function selecionarEndereco(enderecoSelecionado) {
-    console.log("Endereço recebido na seleção:", enderecoSelecionado);
     var userAuthToken = localStorage.getItem("userAuthToken");
     const pessoaId = localStorage.getItem("pessoaId");
   
@@ -1709,6 +1708,7 @@ function listarEnderecos() {
           document.getElementById('editAddressModal').classList.remove('hidden');
 
         });
+        
         $(".closeEditAddressModal").on('click', function () {
           document.getElementById('editAddressModal').classList.add('hidden');
           document.getElementById('addressModal').classList.remove('hidden');
