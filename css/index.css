@@ -1066,12 +1066,6 @@ form {
 .construction-card p {
   color: #555555;
 }
-
-.container-dash {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
 .wallet-card {
   background: linear-gradient(135deg, #6c5ce7 0%, #8e44ad 100%);
   border-radius: 20px;

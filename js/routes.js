@@ -435,16 +435,13 @@ var app = new Framework7({
               );
             }
         });
-
-          // fazer algo quando a página for inicializada
-          //START AÇÃO BOTÃO ENTRAR
-          $("#signIn").on("click", function () {
+        // Login Form Submission
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
             app.dialog.preloader("Carregando...");
-            //START OBTER VALORES DO LOGIN
-            var userName = $("#userName").val();
-            var userPassword = $("#userPassword").val();
-            //END OBTER VALORES DO LOGIN
-
+            const userName = this.querySelector('input[type="email"]').value;
+            const userPassword = this.querySelector('input[type="password"]').value;            
+            
             // Função para validar o e-mail usando regex
             function validarEmail(email) {
               var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -506,9 +503,7 @@ var app = new Framework7({
                 })              
               //END Fazendo a requisição
             }
-          });
-          //END AÇÃO BOTÃO ENTRAR
-
+        });
           //START AÇÃO BOTÃO REGISTER
           $("#register").on("click", function () {
             app.views.main.router.navigate("/registerView/");
