@@ -2305,7 +2305,6 @@ function listarEnderecos() {
   
   //Inicio Editar Endereço
   function editarEndereco() {
-    console.log('teste');
     app.dialog.preloader("Carregando...");
   
     var userAuthToken = localStorage.getItem("userAuthToken");
@@ -2360,6 +2359,7 @@ function listarEnderecos() {
     fetch(apiServerUrl, options)
       .then((response) => response.json())
       .then((responseJson) => {
+        console.log('responseJson');
         // Verifica se o status é 'success'
         if (
           responseJson.status == "success" &&
