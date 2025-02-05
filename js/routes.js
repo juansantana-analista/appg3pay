@@ -1167,7 +1167,7 @@ var app = new Framework7({
           //FIM API CEP PARA ENDEREÇO DE NOVO CLIENTE
 
           //INICIO API CEP PARA EDITAR ENDEREÇO
-          $('#cepCliente').mask('00000-000');
+          $('#cepEdit').mask('00000-000');
           const cepEdit = document.getElementById('cepEdit');
           const logradouroEndEdit = document.getElementById('logradouroEndEdit');
           const bairroEndEdit = document.getElementById('bairroEndEdit');
