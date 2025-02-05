@@ -1128,13 +1128,8 @@ var app = new Framework7({
           document.getElementById('addressModal').classList.remove('hidden');
         });
         
-        async function carregarDados() {
-            await listarCarrinho(); // Espera a finalização de listarCarrinho()
-            listarEnderecos(); // Só executa após listarCarrinho() terminar
-        }
-        
-        carregarDados();
-      
+          listarCarrinho();
+          listarEnderecos();
 
           $("#esvaziar").on('click', function () {
             app.dialog.confirm('Tem certeza que quer esvaziar o carrinho?', '<strong>ESVAZIAR</strong>', function () {
