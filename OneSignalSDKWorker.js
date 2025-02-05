@@ -1,29 +1,30 @@
 importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
-// This is the "Offline page" service worker
-
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
 
-const CACHE = "pwabuilder-cache-v3";
+const CACHE = "pwabuilder-cache-v4"; // Alterado para forçar atualização
+const ASSETS = [
+  "/",
+  "/img/logo.png",
+  "offline.html"
+];
 
-// TODO: replace the following with the correct offline fallback page i.e.: const offlineFallbackPage = "offline.html";
-const offlineFallbackPage = "offline.html";
-
-self.addEventListener("message", (event) => {
-  if (event.data && event.data.type === "SKIP_WAITING") {
-    self.skipWaiting();
-  }
+self.addEventListener("install", async (event) => {
+  self.skipWaiting(); // Ativa a nova versão do SW imediatamente
+  event.waitUntil(
+    caches.open(CACHE).then((cache) => {
+      return cache.addAll(ASSETS);
+    })
+  );
 });
 
-self.addEventListener('install', async (event) => {
-  self.skipWaiting();
-});
-self.addEventListener('activate', (event) => {
+// Limpa caches antigos ao ativar um novo SW
+self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE) {
-            return caches.delete(cacheName); // Remove caches antigos
+            return caches.delete(cacheName);
           }
         })
       );
@@ -35,24 +36,35 @@ if (workbox.navigationPreload.isSupported()) {
   workbox.navigationPreload.enable();
 }
 
-self.addEventListener('fetch', (event) => {
-  if (event.request.mode === 'navigate') {
-    event.respondWith((async () => {
-      try {
-        const preloadResp = await event.preloadResponse;
+// Intercepta requisições para servir do cache sempre que possível
+self.addEventListener("fetch", (event) => {
+  if (event.request.destination === "image") {
+    event.respondWith(
+      caches.match(event.request).then((cachedResponse) => {
+        return cachedResponse || fetch(event.request).then((response) => {
+          return caches.open(CACHE).then((cache) => {
+            cache.put(event.request, response.clone()); // Salva a nova versão no cache
+            return response;
+          });
+        });
+      })
+    );
+    return;
+  }
 
-        if (preloadResp) {
-          return preloadResp;
+  // Mantém o fallback para páginas offline
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      (async () => {
+        try {
+          const preloadResp = await event.preloadResponse;
+          if (preloadResp) return preloadResp;
+          return await fetch(event.request);
+        } catch (error) {
+          const cache = await caches.open(CACHE);
+          return await cache.match("offline.html");
         }
-
-        const networkResp = await fetch(event.request);
-        return networkResp;
-      } catch (error) {
-
-        const cache = await caches.open(CACHE);
-        const cachedResp = await cache.match(offlineFallbackPage);
-        return cachedResp;
-      }
-    })());
+      })()
+    );
   }
 });
