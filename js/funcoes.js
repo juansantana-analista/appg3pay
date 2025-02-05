@@ -1615,7 +1615,7 @@ function listarEnderecos() {
     };
   
     // Armazena o endereço selecionado no localStorage
-    localStorage.setItem("enderecoSelecionado", enderecoId);
+    localStorage.setItem("enderecoSelecionado", endereco.id);
   
     // Cabeçalhos da requisição
     const headers = {
