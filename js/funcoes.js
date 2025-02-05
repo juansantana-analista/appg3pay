@@ -1517,7 +1517,93 @@ function apagarNotificacao(notificacaoId) {
   }
   //Fim da funçao contagem Notificações
   
-  //Inicio Funçao Listar Endereços
+  //Inicio Funçao Selecionar Endereço
+  function selecionarEndereco(enderecoSelecionado) {
+    var userAuthToken = localStorage.getItem("userAuthToken");
+    const pessoaId = localStorage.getItem("pessoaId");
+  
+    const endereco = enderecoSelecionado;
+
+    const dados = {
+      pessoa_id: pessoaId,
+      endereco_id: endereco.id,
+    };
+  
+    // Armazena o endereço selecionado no localStorage
+    localStorage.setItem("enderecoSelecionado", endereco.id);
+  
+    // Cabeçalhos da requisição
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + userAuthToken,
+    };
+  
+    const body = JSON.stringify({
+      class: "PagamentoSafe2payRest",
+      method: "AlterarEndereco",
+      dados: dados,
+    });
+  
+    // Opções da requisição
+    const options = {
+      method: "POST",
+      headers: headers,
+      body: body,
+    };
+  
+    // Fazendo a requisição
+    fetch(apiServerUrl, options)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (
+          responseJson.status == "success" &&
+          responseJson.data.status == "success"
+        ) {
+          var valorFrete = responseJson.data.data.frete;
+          console.log("Frete atualizado:", valorFrete);
+  
+          // Atualiza o valor do frete na interface
+          $("#fretePedido").html(
+            valorFrete.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })
+          );
+  
+          // Destacar o endereço selecionado na interface
+          $(".select-address").removeClass("text-blue-700 font-bold");
+          $(`.select-address[data-id='${endereco.id}']`).addClass("text-blue-700 font-bold");
+    
+          if (endereco) {           
+          $("#selectedAddress").html(`
+            <div class="flex items-start space-x-3">
+              <svg class="w-5 h-5 text-gray-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              <div>
+                <div class="flex items-center space-x-2">
+                  <h3 class="font-medium">${endereco.nome_endereco || "Residencial"}</h3>
+                  ${endereco.principal == "S" ? 
+                    `<span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39">Principal</span>` : ""}
+                </div>
+                <p class="text-gray-600 text-sm mt-1">
+                  ${endereco.rua}, ${endereco.numero} - ${endereco.bairro}
+                </p>
+                <p class="text-gray-600 text-sm">
+                  ${endereco.municipio.nome}, ${endereco.estado.sigla} - CEP: ${endereco.cep}
+                </p>
+              </div>
+            </div>
+          `);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error("Erro:", error);
+      });
+  }  
+  //Fim Função Selecionar Endereço
 
   // Início Função Listar Endereços
 function listarEnderecos() {
@@ -1626,14 +1712,12 @@ function listarEnderecos() {
           document.getElementById('addressModal').classList.remove('hidden');
         });
 
-        // Define o endereço selecionado automaticamente       
-          setTimeout(() => {
-            let enderecoSelecionado = enderecoPrincipal || ultimoEndereco;
-            if (enderecoSelecionado) {
-              // Chama a função para selecionar o endereço e recalcular o frete   
-                selecionarEndereco(enderecoSelecionado);
-            }
-          }, 500); // Atraso de 500ms
+        // Define o endereço selecionado automaticamente
+        let enderecoSelecionado = enderecoPrincipal || ultimoEndereco;
+        if (enderecoSelecionado) {
+          // Chama a função para selecionar o endereço e recalcular o frete
+          selecionarEndereco(enderecoSelecionado);
+        }
 
         // Adiciona evento para recalcular o frete ao trocar o endereço
         $(".select-address").click(function () {
@@ -1657,97 +1741,6 @@ function listarEnderecos() {
 }
 // Fim Função Listar Endereços
 
-
-
-  //Fim Função Listar Endereços
-  
-  //Inicio Funçao Selecionar Endereço
-  function selecionarEndereco(enderecoSelecionado) {
-    var userAuthToken = localStorage.getItem("userAuthToken");
-    const pessoaId = localStorage.getItem("pessoaId");
-  
-    const endereco = enderecoSelecionado;
-
-    const dados = {
-      pessoa_id: pessoaId,
-      endereco_id: endereco.id,
-    };
-  
-    // Armazena o endereço selecionado no localStorage
-    localStorage.setItem("enderecoSelecionado", endereco.id);
-  
-    // Cabeçalhos da requisição
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + userAuthToken,
-    };
-  
-    const body = JSON.stringify({
-      class: "PagamentoSafe2payRest",
-      method: "AlterarEndereco",
-      dados: dados,
-    });
-  
-    // Opções da requisição
-    const options = {
-      method: "POST",
-      headers: headers,
-      body: body,
-    };
-  
-    // Fazendo a requisição
-    fetch(apiServerUrl, options)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (
-          responseJson.status == "success" &&
-          responseJson.data.status == "success"
-        ) {
-          var valorFrete = responseJson.data.data.frete;
-          console.log("Frete atualizado:", valorFrete);
-  
-          // Atualiza o valor do frete na interface
-          $("#fretePedido").html(
-            valorFrete.toLocaleString("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            })
-          );
-  
-          // Destacar o endereço selecionado na interface
-          $(".select-address").removeClass("text-blue-700 font-bold");
-          $(`.select-address[data-id='${endereco.id}']`).addClass("text-blue-700 font-bold");
-    
-          if (endereco) {           
-          $("#selectedAddress").html(`
-            <div class="flex items-start space-x-3">
-              <svg class="w-5 h-5 text-gray-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-              </svg>
-              <div>
-                <div class="flex items-center space-x-2">
-                  <h3 class="font-medium">${endereco.nome_endereco || "Residencial"}</h3>
-                  ${endereco.principal == "S" ? 
-                    `<span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39">Principal</span>` : ""}
-                </div>
-                <p class="text-gray-600 text-sm mt-1">
-                  ${endereco.rua}, ${endereco.numero} - ${endereco.bairro}
-                </p>
-                <p class="text-gray-600 text-sm">
-                  ${endereco.municipio.nome}, ${endereco.estado.sigla} - CEP: ${endereco.cep}
-                </p>
-              </div>
-            </div>
-          `);
-          }
-        }
-      })
-      .catch((error) => {
-        console.error("Erro:", error);
-      });
-  }  
-  //Fim Função Selecionar Endereço
   
   //Inicio Funçao Listar Categorias
   function finalizarCompra(
