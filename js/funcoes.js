@@ -1611,9 +1611,9 @@ function listarEnderecos() {
           $("#estadoEndEdit").val(editarEndereco.estado.nome);
           // Definir o estado do checkbox baseado no valor de is_principal
           if (editarEndereco.is_principal === 'S') {
-              $("#defaultAddress").prop("checked", true); // Marca o checkbox
+              $("#defaultAddressEdit").prop("checked", true); // Marca o checkbox
           } else {
-              $("#defaultAddress").prop("checked", false); // Desmarca o checkbox
+              $("#defaultAddressEdit").prop("checked", false); // Desmarca o checkbox
           }
 
           document.getElementById('addressModal').classList.add('hidden');
