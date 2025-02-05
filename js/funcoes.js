@@ -1556,9 +1556,18 @@ function listarEnderecos() {
 
         $(".edit-address").on('click', function () {
           let editarEndereco = $(this).data("editarEndereco");
-          console.log(editarEndereco);
+          $("#nomeEnderecoEdit").val(editarEndereco.nome_endereco);
+          $("#cepEdit").val(editarEndereco.cep);
+          $("#logradouroEndEdit").val(editarEndereco.rua);
+          $("#complementoEndEdit").val(editarEndereco.complemento);
+          $("#bairroEndEdit").val(editarEndereco.bairro);
+          $("#cidadeEndEdit").val(editarEndereco.cidade);
+          $("#estadoEndEdit").val(editarEndereco.estado);
+          $("#defaultAddress").prop("checked") ? "S" : "N";
+
           document.getElementById('addressModal').classList.add('hidden');
           document.getElementById('editAddressModal').classList.remove('hidden');
+
         });
         $(".closeEditAddressModal").on('click', function () {
           document.getElementById('editAddressModal').classList.add('hidden');
