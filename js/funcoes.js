@@ -2202,6 +2202,7 @@ function listarEnderecos() {
           responseJson.status == "success" &&
           responseJson.data.status == "sucess"
         ) {
+          console.log(responseJson)
           // Sucesso na alteração
           //app.views.main.router.refreshPage();
           app.dialog.close();
