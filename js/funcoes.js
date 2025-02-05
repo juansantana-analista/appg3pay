@@ -1519,7 +1519,6 @@ function apagarNotificacao(notificacaoId) {
   
   //Inicio Funçao Selecionar Endereço
   function selecionarEndereco(enderecoSelecionado) {
-    console.log('teste')
     var userAuthToken = localStorage.getItem("userAuthToken");
     const pessoaId = localStorage.getItem("pessoaId");
   
@@ -1556,6 +1555,7 @@ function apagarNotificacao(notificacaoId) {
     fetch(apiServerUrl, options)
       .then((response) => response.json())
       .then((responseJson) => {
+        console.log(responseJson)
         if (
           responseJson.status == "success" &&
           responseJson.data.status == "success"
