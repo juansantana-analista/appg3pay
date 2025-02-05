@@ -1574,30 +1574,9 @@ function listarEnderecos() {
         // Define o endereço selecionado automaticamente
         let enderecoSelecionado = enderecoPrincipal || ultimoEndereco;
         if (enderecoSelecionado) {
-          $("#selectedAddress").html(`
-            <div class="flex items-start space-x-3">
-              <svg class="w-5 h-5 text-gray-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-              </svg>
-              <div>
-                <div class="flex items-center space-x-2">
-                  <h3 class="font-medium">${enderecoSelecionado.nome_endereco || "Residencial"}</h3>
-                  ${enderecoSelecionado.principal == "S" ? 
-                    `<span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39">Principal</span>` : ""}
-                </div>
-                <p class="text-gray-600 text-sm mt-1">
-                  ${enderecoSelecionado.rua}, ${enderecoSelecionado.numero} - ${enderecoSelecionado.bairro}
-                </p>
-                <p class="text-gray-600 text-sm">
-                  ${enderecoSelecionado.municipio.nome}, ${enderecoSelecionado.estado.sigla} - CEP: ${enderecoSelecionado.cep}
-                </p>
-              </div>
-            </div>
-          `);
-
+          console.log(enderecoSelecionado);
           // Chama a função para selecionar o endereço e recalcular o frete
-          selecionarEndereco(enderecoSelecionado.id);
+          selecionarEndereco(enderecoSelecionado);
         }
 
         // Adiciona evento para recalcular o frete ao trocar o endereço
@@ -1625,7 +1604,7 @@ function listarEnderecos() {
   //Fim Função Listar Endereços
   
   //Inicio Funçao Selecionar Endereço
-  function selecionarEndereco(enderecoId, isPrincipal) {
+  function selecionarEndereco(enderecoSelecionado) {
     var userAuthToken = localStorage.getItem("userAuthToken");
     const pessoaId = localStorage.getItem("pessoaId");
   
@@ -1692,15 +1671,28 @@ function listarEnderecos() {
               return $(this).html();
             }).get().join("<br>");
   
-            $("#selectedAddress").html(`
-              <div class="flex items-start space-x-3">
-                <svg class="w-5 h-5 text-gray-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                </svg>
-                <div>${enderecoTexto}</div>
+            
+          $("#selectedAddress").html(`
+            <div class="flex items-start space-x-3">
+              <svg class="w-5 h-5 text-gray-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              <div>
+                <div class="flex items-center space-x-2">
+                  <h3 class="font-medium">${enderecoSelecionado.nome_endereco || "Residencial"}</h3>
+                  ${enderecoSelecionado.principal == "S" ? 
+                    `<span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39">Principal</span>` : ""}
+                </div>
+                <p class="text-gray-600 text-sm mt-1">
+                  ${enderecoSelecionado.rua}, ${enderecoSelecionado.numero} - ${enderecoSelecionado.bairro}
+                </p>
+                <p class="text-gray-600 text-sm">
+                  ${enderecoSelecionado.municipio.nome}, ${enderecoSelecionado.estado.sigla} - CEP: ${enderecoSelecionado.cep}
+                </p>
               </div>
-            `);
+            </div>
+          `);
           }
         }
       })
