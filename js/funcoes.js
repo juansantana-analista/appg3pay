@@ -2364,15 +2364,15 @@ function listarEnderecos() {
           responseJson.status == "success" &&
           responseJson.data.status == "success"
         ) {
+          app.dialog.close();
           // Sucesso na alteração
           var toastCenter = app.toast.create({
-            text: `Endereço adicionado com sucesso`,
+            text: `Endereço editado com sucesso`,
             position: "center",
             closeTimeout: 2000,
           });
           listarEnderecos();
           toastCenter.open();
-          app.dialog.close();
           $("#newAddressModal").addClass("hidden");
           $("#addressModal").addClass("hidden");
         }
