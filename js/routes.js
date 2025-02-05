@@ -1181,7 +1181,7 @@ var app = new Framework7({
               const validacep = /^[0-9]{8}$/;
 
               if (validacep.test(cep)) {
-                cepEndereco(cep)
+                cepEnderecoEdit(cep)
               } else {
                 // Não faz nada se o CEP não estiver completo ou for inválido
               }

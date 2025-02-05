@@ -1131,6 +1131,51 @@ async function validarToken(userAuthToken) {
   }
   //Fim Função CEP
   
+    //Inicio Funçao CEP Editar
+    function cepEnderecoEdit(cep) {
+      var userAuthToken = localStorage.getItem("userAuthToken");
+      app.dialog.preloader("Carregando...");
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + userAuthToken,
+      };
+      const dados = {
+        cep: cep,
+      };
+      const body = JSON.stringify({
+        class: "PessoaRestService",
+        method: "ConsultaCEP",
+        dados: dados,
+      });
+      const options = {
+        method: "POST",
+        headers: headers,
+        body: body,
+      };
+      fetch(apiServerUrl, options)
+        .then((response) => response.json())
+        .then((responseJson) => {
+          app.dialog.close();
+          if (responseJson.status === "success") {
+            var dadosEndereco = responseJson.data;
+            $("#logradouroEndEdit").val(dadosEndereco.rua);
+            $("#bairroEndEdit").val(dadosEndereco.bairro);
+            $("#cidadeEndEdit").val(dadosEndereco.cidade);
+            $("#estadoEndEdit").val(dadosEndereco.uf);
+          } else {
+            console.error("Erro ao obter dados do endereço:", responseJson.message);
+          }
+        })
+        .catch((error) => {
+          app.dialog.close();
+          console.error("Erro:", error);
+          app.dialog.alert(
+            "Erro ao buscar endereço: " + error.message,
+            "Falha na requisição!"
+          );
+        });
+    }
+    //Fim Função CEP Editar
     
   //Inicio Funçao Listar Notificações
   function listarNotificacoes() {
