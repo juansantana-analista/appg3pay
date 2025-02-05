@@ -1555,13 +1555,12 @@ function apagarNotificacao(notificacaoId) {
     fetch(apiServerUrl, options)
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson)
         if (
           responseJson.status == "success" &&
           responseJson.data.status == "success"
         ) {
+          app.dialog.close();
           var valorFrete = responseJson.data.data.frete;
-          console.log("Frete atualizado:", valorFrete);
   
           // Atualiza o valor do frete na interface
           $("#fretePedido").html(
