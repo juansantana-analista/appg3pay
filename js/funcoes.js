@@ -1554,7 +1554,7 @@ function listarEnderecos() {
           $(".select-address").last().data("endereco", endereco);
         });
 
-        $(".editAddress").on('click', function () {
+        $(".edit-address").on('click', function () {
           let editarEndereco = $(this).data("editarEndereco");
           console.log(editarEndereco);
           document.getElementById('addressModal').classList.add('hidden');
