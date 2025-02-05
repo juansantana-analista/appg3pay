@@ -2149,9 +2149,7 @@ function listarEnderecos() {
                       `);
           }
   
-          app.dialog.close();
-          
-          listarEnderecos();
+          app.dialog.close();          
         }
       })
       .catch((error) => {
