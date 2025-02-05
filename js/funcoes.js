@@ -1519,6 +1519,7 @@ function apagarNotificacao(notificacaoId) {
   
   //Inicio Funçao Selecionar Endereço
   function selecionarEndereco(enderecoSelecionado) {
+    app.dialog.preloader("Carregando...");
     var userAuthToken = localStorage.getItem("userAuthToken");
     const pessoaId = localStorage.getItem("pessoaId");
   
@@ -1597,9 +1598,12 @@ function apagarNotificacao(notificacaoId) {
             </div>
           `);
           }
+        } else {          
+          app.dialog.close();
         }
       })
       .catch((error) => {
+        app.dialog.close();
         console.error("Erro:", error);
       });
   }  
