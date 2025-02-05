@@ -1127,14 +1127,6 @@ var app = new Framework7({
           document.getElementById('newAddressModal').classList.add('hidden');
           document.getElementById('addressModal').classList.remove('hidden');
         });
-        $("#editAddress").on('click', function () {
-          document.getElementById('addressModal').classList.add('hidden');
-          document.getElementById('editAddressModal').classList.remove('hidden');
-        });
-        $(".closeEditAddressModal").on('click', function () {
-          document.getElementById('editAddressModal').classList.add('hidden');
-          document.getElementById('addressModal').classList.remove('hidden');
-        });
         
           listarCarrinho();
 
