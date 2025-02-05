@@ -1601,6 +1601,7 @@ function listarEnderecos() {
 
         $(".edit-address").on('click', function () {
           let editarEndereco = $(this).data("editarEndereco");
+          $("#idEnderecoEdit").val(editarEndereco.id);
           $("#nomeEnderecoEdit").val(editarEndereco.nome_endereco);
           $("#cepEdit").val(editarEndereco.cep);
           $("#logradouroEndEdit").val(editarEndereco.rua);
@@ -2309,6 +2310,7 @@ function listarEnderecos() {
     var userAuthToken = localStorage.getItem("userAuthToken");
     const pessoaId = localStorage.getItem("pessoaId");
     // Captura os valores dos inputs
+    var enderecoId = $("#idEnderecoEdit").val();
     var nomeEndereco = $("#nomeEnderecoEdit").val();
     var cep = $("#cepEdit").val();
     var logradouro = $("#logradouroEndEdit").val();
@@ -2320,6 +2322,7 @@ function listarEnderecos() {
     var isPrincipal = $("#defaultAddressEdit").prop("checked") ? "S" : "N";
   
     const dados = {
+      endereco_id: enderecoId,
       pessoa_id: pessoaId,
       nome_endereco: nomeEndereco,
       cep: cep,
