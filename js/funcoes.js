@@ -1574,7 +1574,6 @@ function listarEnderecos() {
         // Define o endereço selecionado automaticamente
         let enderecoSelecionado = enderecoPrincipal || ultimoEndereco;
         if (enderecoSelecionado) {
-          console.log(enderecoSelecionado);
           // Chama a função para selecionar o endereço e recalcular o frete
           selecionarEndereco(enderecoSelecionado);
         }
@@ -1608,9 +1607,11 @@ function listarEnderecos() {
     var userAuthToken = localStorage.getItem("userAuthToken");
     const pessoaId = localStorage.getItem("pessoaId");
   
+    const endereco = enderecoSelecionado;
+
     const dados = {
       pessoa_id: pessoaId,
-      endereco_id: enderecoId,
+      endereco_id: endereco.id,
     };
   
     // Armazena o endereço selecionado no localStorage
@@ -1656,22 +1657,9 @@ function listarEnderecos() {
   
           // Destacar o endereço selecionado na interface
           $(".select-address").removeClass("text-blue-700 font-bold");
-          $(`.select-address[data-id='${enderecoId}']`).addClass("text-blue-700 font-bold");
-  
-          // Buscar os detalhes do endereço selecionado
-          let enderecoSelecionado = null;
-          $(".select-address").each(function () {
-            if ($(this).data("id") == enderecoId) {
-              enderecoSelecionado = $(this).closest(".border.rounded-lg.p-4");
-            }
-          });
-  
-          if (enderecoSelecionado) {
-            let enderecoTexto = enderecoSelecionado.find("p").map(function () {
-              return $(this).html();
-            }).get().join("<br>");
-  
-            
+          $(`.select-address[data-id='${endereco.id}']`).addClass("text-blue-700 font-bold");
+    
+          if (endereco) {           
           $("#selectedAddress").html(`
             <div class="flex items-start space-x-3">
               <svg class="w-5 h-5 text-gray-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1680,15 +1668,15 @@ function listarEnderecos() {
               </svg>
               <div>
                 <div class="flex items-center space-x-2">
-                  <h3 class="font-medium">${enderecoSelecionado.nome_endereco || "Residencial"}</h3>
-                  ${enderecoSelecionado.principal == "S" ? 
+                  <h3 class="font-medium">${endereco.nome_endereco || "Residencial"}</h3>
+                  ${endereco.principal == "S" ? 
                     `<span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39">Principal</span>` : ""}
                 </div>
                 <p class="text-gray-600 text-sm mt-1">
-                  ${enderecoSelecionado.rua}, ${enderecoSelecionado.numero} - ${enderecoSelecionado.bairro}
+                  ${endereco.rua}, ${endereco.numero} - ${endereco.bairro}
                 </p>
                 <p class="text-gray-600 text-sm">
-                  ${enderecoSelecionado.municipio.nome}, ${enderecoSelecionado.estado.sigla} - CEP: ${enderecoSelecionado.cep}
+                  ${endereco.municipio.nome}, ${endereco.estado.sigla} - CEP: ${endereco.cep}
                 </p>
               </div>
             </div>
