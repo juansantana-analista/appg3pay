@@ -1626,14 +1626,14 @@ function listarEnderecos() {
           document.getElementById('addressModal').classList.remove('hidden');
         });
 
-        // Define o endereço selecionado automaticamente
-        let enderecoSelecionado = enderecoPrincipal || ultimoEndereco;
-        if (enderecoSelecionado) {
-          // Chama a função para selecionar o endereço e recalcular o frete          
+        // Define o endereço selecionado automaticamente       
           setTimeout(() => {
-            selecionarEndereco(enderecoSelecionado);
-        }, 500); // Atraso de 500ms
-        }
+            let enderecoSelecionado = enderecoPrincipal || ultimoEndereco;
+            if (enderecoSelecionado) {
+              // Chama a função para selecionar o endereço e recalcular o frete   
+                selecionarEndereco(enderecoSelecionado);
+            }
+          }, 500); // Atraso de 500ms
 
         // Adiciona evento para recalcular o frete ao trocar o endereço
         $(".select-address").click(function () {
