@@ -2359,7 +2359,6 @@ function listarEnderecos() {
     fetch(apiServerUrl, options)
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson);
         // Verifica se o status é 'success'
         if (
           responseJson.status == "success" &&
@@ -2374,7 +2373,7 @@ function listarEnderecos() {
           });
           listarEnderecos();
           toastCenter.open();
-          $("#newAddressModal").addClass("hidden");
+          $("#editAddressModal").addClass("hidden");
           $("#addressModal").addClass("hidden");
         }
       })
@@ -2385,7 +2384,7 @@ function listarEnderecos() {
           "Erro ao alterar carrinho: " + error.message,
           "Falha na requisição!"
         );
-        $("#newAddressModal").addClass("hidden");
+        $("#editAddressModal").addClass("hidden");
         $("#addressModal").addClass("hidden");
       });
   }
