@@ -1192,6 +1192,9 @@ var app = new Framework7({
           $('#salvarEndereco').on('click', function () {
             adicionarEndereco();
           });
+          $('#salvarEnderecoEdit').on('click', function () {
+            editarEndereco();
+          });
 
           $('#irCheckout').on('click', function () {
             var enderecoSelecionado = localStorage.getItem('enderecoDetalhes');

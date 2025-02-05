@@ -2302,6 +2302,91 @@ function listarEnderecos() {
   }
   //Fim Função Adicionar Endereço
   
+  //Inicio Editar Endereço
+  function editarEndereco() {
+    app.dialog.preloader("Carregando...");
+  
+    var userAuthToken = localStorage.getItem("userAuthToken");
+    const pessoaId = localStorage.getItem("pessoaId");
+    // Captura os valores dos inputs
+    var nomeEndereco = $("#nomeEnderecoEdit").val();
+    var cep = $("#cepEdit").val();
+    var logradouro = $("#logradouroEndEdit").val();
+    var numero = $("#numeroEndEdit").val();
+    var complemento = $("#complementoEndEdit").val();
+    var bairro = $("#bairroEndEdit").val();
+    var cidade = $("#cidadeEndEdit").val();
+    var estado = $("#estadoEndEdit").val();
+    var isPrincipal = $("#defaultAddressEdit").prop("checked") ? "S" : "N";
+  
+    const dados = {
+      pessoa_id: pessoaId,
+      nome_endereco: nomeEndereco,
+      cep: cep,
+      endereco: logradouro,
+      numero: numero,
+      complemento: complemento,
+      bairro: bairro,
+      cidade: cidade,
+      estado: estado,
+      tipo: 1,
+      is_principal: isPrincipal
+    };
+  
+    // Cabeçalhos da requisição
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + userAuthToken,
+    };
+  
+    const body = JSON.stringify({
+      class: "EnderecoRest",
+      method: "salvarEnderecoEntrega",
+      dados: dados,
+    });
+  
+    // Opções da requisição
+    const options = {
+      method: "POST",
+      headers: headers,
+      body: body,
+    };
+  
+    // Fazendo a requisição
+    fetch(apiServerUrl, options)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        // Verifica se o status é 'success'
+        if (
+          responseJson.status == "success" &&
+          responseJson.data.status == "success"
+        ) {
+          // Sucesso na alteração
+          var toastCenter = app.toast.create({
+            text: `Endereço adicionado com sucesso`,
+            position: "center",
+            closeTimeout: 2000,
+          });
+          listarEnderecos();
+          toastCenter.open();
+          app.dialog.close();
+          $("#newAddressModal").addClass("hidden");
+          $("#addressModal").addClass("hidden");
+        }
+      })
+      .catch((error) => {
+        app.dialog.close();
+        console.error("Erro:", error);
+        app.dialog.alert(
+          "Erro ao alterar carrinho: " + error.message,
+          "Falha na requisição!"
+        );
+        $("#newAddressModal").addClass("hidden");
+        $("#addressModal").addClass("hidden");
+      });
+  }
+  //Fim Função Editar Endereço
+
   //Inicio Adicionar Item Carrinho
   function adicionarItemCarrinho(produtoId) {
     var userAuthToken = localStorage.getItem("userAuthToken");
