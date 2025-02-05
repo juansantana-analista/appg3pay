@@ -1625,7 +1625,7 @@ function listarEnderecos() {
   //Fim Função Listar Endereços
   
   //Inicio Funçao Selecionar Endereço
-  function selecionarEndereco(enderecoId, isPrincipal) {
+  function selecionarEndereco(enderecoId) {
     var userAuthToken = localStorage.getItem("userAuthToken");
     const pessoaId = localStorage.getItem("pessoaId");
   
@@ -1688,22 +1688,33 @@ function listarEnderecos() {
           });
   
           if (enderecoSelecionado) {
-            let enderecoTexto = enderecoSelecionado.find("p").map(function () {
-              return $(this).html();
-            }).get().join("<br>");
+            let nomeEndereco = enderecoSelecionado.find(".nome-endereco").text().trim() || "Residencial";
+            let rua = enderecoSelecionado.find(".rua").text().trim();
+            let numero = enderecoSelecionado.find(".numero").text().trim();
+            let bairro = enderecoSelecionado.find(".bairro").text().trim();
+            let cidade = enderecoSelecionado.find(".cidade").text().trim();
+            let estado = enderecoSelecionado.find(".estado").text().trim();
+            let cep = enderecoSelecionado.find(".cep").text().trim();
+            let isPrincipal = enderecoSelecionado.find(".tag-principal").length > 0;
   
             $("#selectedAddress").html(`
               <div class="flex items-start space-x-3">
-                <div class="flex items-center space-x-2">
-                  <h3 class="font-medium">${enderecoSelecionado.nome_endereco || "Residencial"}</h3>
-                  ${enderecoSelecionado.principal == "S" ? 
-                    `<span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39">Principal</span>` : ""}
-                </div>
                 <svg class="w-5 h-5 text-gray-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                 </svg>
-                <div>${enderecoTexto}</div>
+                <div>
+                  <div class="flex items-center space-x-2">
+                    <h3 class="font-medium">${nomeEndereco}</h3>
+                    ${isPrincipal ? `<span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39">Principal</span>` : ""}
+                  </div>
+                  <p class="text-gray-600 text-sm mt-1">
+                    ${rua}, ${numero} - ${bairro}
+                  </p>
+                  <p class="text-gray-600 text-sm">
+                    ${cidade}, ${estado} - CEP: ${cep}
+                  </p>
+                </div>
               </div>
             `);
           }
@@ -1712,7 +1723,8 @@ function listarEnderecos() {
       .catch((error) => {
         console.error("Erro:", error);
       });
-  }  
+  }
+  
   //Fim Função Selecionar Endereço
   
   //Inicio Funçao Listar Categorias
