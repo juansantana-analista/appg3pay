@@ -1166,6 +1166,29 @@ var app = new Framework7({
           });
           //FIM API CEP PARA ENDEREÇO DE NOVO CLIENTE
 
+          //INICIO API CEP PARA EDITAR ENDEREÇO
+          $('#cepCliente').mask('00000-000');
+          const cepEdit = document.getElementById('cepEdit');
+          const logradouroEndEdit = document.getElementById('logradouroEndEdit');
+          const bairroEndEdit = document.getElementById('bairroEndEdit');
+          const cidadeEndEdit = document.getElementById('cidadeEndEdit');
+          const estadoEndEdit = document.getElementById('estadoEndEdit');
+
+          cepEdit.addEventListener('input', function () {
+            const cep = cepEdit.value.replace(/\D/g, '');
+
+            if (cep.length === 8) {
+              const validacep = /^[0-9]{8}$/;
+
+              if (validacep.test(cep)) {
+                cepEndereco(cep)
+              } else {
+                // Não faz nada se o CEP não estiver completo ou for inválido
+              }
+            }
+          });
+          //FIM API CEP PARA EDITAR ENDEREÇO
+
           $('#salvarEndereco').on('click', function () {
             adicionarEndereco();
           });
