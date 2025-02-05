@@ -2160,6 +2160,7 @@ function listarEnderecos() {
     var bairro = $("#bairroEndCliente").val();
     var cidade = $("#cidadeEndCliente").val();
     var estado = $("#estadoEndCliente").val();
+    var isPrincipal = $("#defaultAddress").prop("checked") ? "S" : "N";
   
     const dados = {
       pessoa_id: pessoaId,
@@ -2172,6 +2173,7 @@ function listarEnderecos() {
       cidade: cidade,
       estado: estado,
       tipo: 1,
+      is_principal: isPrincipal
     };
   
     // Cabeçalhos da requisição
