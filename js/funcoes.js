@@ -2885,6 +2885,7 @@ function listarEnderecos() {
   // Função para limpar o local storage
   function clearLocalStorage() {
     localStorage.removeItem("produtoId");
+    localStorage.removeItem("enderecoSelecionado");
     localStorage.removeItem("produto");
     localStorage.removeItem("enderecoDetalhes");
     localStorage.removeItem("emailRecuperacao");
