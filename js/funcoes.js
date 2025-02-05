@@ -1578,13 +1578,14 @@ function listarEnderecos() {
         if (enderecoSelecionado) {
           // Chama a função para selecionar o endereço e recalcular o frete
           selecionarEndereco(enderecoSelecionado);
+          document.getElementById('addressModal').classList.add('hidden');
         }
 
         // Adiciona evento para recalcular o frete ao trocar o endereço
         $(".select-address").click(function () {
           let endereco = $(this).data("endereco");
-          console.log(endereco);
           selecionarEndereco(endereco);
+          document.getElementById('addressModal').classList.add('hidden');
         });
         
 
