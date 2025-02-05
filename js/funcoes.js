@@ -2305,6 +2305,7 @@ function listarEnderecos() {
   
   //Inicio Editar Endereço
   function editarEndereco() {
+    console.log('teste');
     app.dialog.preloader("Carregando...");
   
     var userAuthToken = localStorage.getItem("userAuthToken");
