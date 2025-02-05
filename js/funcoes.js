@@ -1559,11 +1559,17 @@ function listarEnderecos() {
           $("#nomeEnderecoEdit").val(editarEndereco.nome_endereco);
           $("#cepEdit").val(editarEndereco.cep);
           $("#logradouroEndEdit").val(editarEndereco.rua);
+          $("#numeroEndEdit").val(editarEndereco.numero);
           $("#complementoEndEdit").val(editarEndereco.complemento);
           $("#bairroEndEdit").val(editarEndereco.bairro);
           $("#cidadeEndEdit").val(editarEndereco.cidade);
           $("#estadoEndEdit").val(editarEndereco.estado);
-          $("#defaultAddress").prop("checked") ? "S" : "N";
+          // Definir o estado do checkbox baseado no valor de is_principal
+          if (editarEndereco.is_principal === 'S') {
+              $("#defaultAddress").prop("checked", true); // Marca o checkbox
+          } else {
+              $("#defaultAddress").prop("checked", false); // Desmarca o checkbox
+          }
 
           document.getElementById('addressModal').classList.add('hidden');
           document.getElementById('editAddressModal').classList.remove('hidden');
