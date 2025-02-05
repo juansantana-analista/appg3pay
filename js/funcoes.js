@@ -2072,6 +2072,13 @@ function listarEnderecos() {
                 currency: "BRL",
               })
             );
+            //MOSTRAR O SUBTOTAL
+            $("#totalCarrinho").html(
+              total.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              })
+            );
           } else {
             //MOSTRAR CARRINHO VAZIO
             //ESVAZIAR LISTA DO CARRINHO
