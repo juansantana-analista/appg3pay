@@ -2146,6 +2146,8 @@ function listarEnderecos() {
           }
   
           app.dialog.close();
+          
+          listarEnderecos();
         }
       })
       .catch((error) => {

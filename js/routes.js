@@ -1129,7 +1129,6 @@ var app = new Framework7({
         });
         
           listarCarrinho();
-          listarEnderecos();
 
           $("#esvaziar").on('click', function () {
             app.dialog.confirm('Tem certeza que quer esvaziar o carrinho?', '<strong>ESVAZIAR</strong>', function () {
