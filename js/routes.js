@@ -1127,7 +1127,7 @@ var app = new Framework7({
           document.getElementById('newAddressModal').classList.add('hidden');
           document.getElementById('addressModal').classList.remove('hidden');
         });
-        $("#showEditAddressForm").on('click', function () {
+        $("#editAddress").on('click', function () {
           document.getElementById('addressModal').classList.add('hidden');
           document.getElementById('editAddressModal').classList.remove('hidden');
         });
