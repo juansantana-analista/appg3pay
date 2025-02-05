@@ -1628,8 +1628,12 @@ function listarEnderecos() {
 
         // Define o endereço selecionado automaticamente
         let enderecoSelecionado = enderecoPrincipal || ultimoEndereco;
-          // Chama a função para selecionar o endereço e recalcular o frete
-          selecionarEndereco(enderecoSelecionado);
+        if (enderecoSelecionado) {
+          // Chama a função para selecionar o endereço e recalcular o frete          
+          setTimeout(() => {
+            selecionarEndereco(enderecoSelecionado);
+        }, 500); // Atraso de 500ms
+        }
 
         // Adiciona evento para recalcular o frete ao trocar o endereço
         $(".select-address").click(function () {
