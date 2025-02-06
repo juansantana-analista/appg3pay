@@ -2321,3 +2321,69 @@ input, select {
       padding: 30px 20px;
   }
 }
+
+
+.header-pagamento {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #e0e0e0;
+}
+.header-pagamento i {
+  margin-right: 15px;
+  color: #333;
+  cursor: pointer;
+}
+.header-title {
+  font-weight: bold;
+  font-size: 18px;
+}
+.payment-details {
+  padding: 20px;
+  text-align: center;
+}
+.payment-icon {
+  font-size: 80px;
+  color: #ff6b00;
+  margin-bottom: 20px;
+}
+.payment-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+.payment-description {
+  color: #666;
+  margin-bottom: 20px;
+}
+.copy-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #ff6b00;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.payment-code {
+  word-break: break-all;
+  margin-bottom: 15px;
+  font-size: 14px;
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 5px;
+}
+.credit-form {
+  text-align: left;
+}
+.form-group {
+  margin-bottom: 15px;
+}
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
