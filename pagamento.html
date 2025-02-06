@@ -39,11 +39,7 @@
             <!-- Conteúdo principal -->
             <main class="container mx-auto px-4 pb-32">
               <!-- Pix Payment Screen -->
-              <div class="container" id="pixScreen" style="display: none">
-                <div class="header-pagamento">
-                  <span class="header-title">Pagamento Pix</span>
-                </div>
-
+              <div class="container" id="pixScreen">
                 <div class="payment-details">
                   <i class="fas fa-qrcode payment-icon"></i>
                   <div class="payment-title">Pague com Pix</div>
@@ -72,10 +68,6 @@
 
               <!-- Boleto Payment Screen -->
               <div class="container" id="boletoScreen" style="display: none">
-                <div class="header-pagamento">
-                  <span class="header-title">Boleto Bancário</span>
-                </div>
-
                 <div class="payment-details">
                   <i class="fas fa-barcode payment-icon"></i>
                   <div class="payment-title">Boleto Bancário</div>
@@ -95,13 +87,9 @@
 
               <!-- Credit Card Payment Screen -->
               <div
-                class="container"
+                class="container display-none"
                 id="creditCardScreen"
               >
-                <div class="header-pagamento">
-                  <span class="header-title">Cartão de Crédito</span>
-                </div>
-
                 <div class="payment-details">
                   <i class="fas fa-credit-card payment-icon"></i>
                   <div class="payment-title">Pagamento com Cartão</div>
@@ -140,10 +128,6 @@
                       />
                     </div>
                   </form>
-
-                  <button class="copy-button" id="processCreditCardButton">
-                    Processar Pagamento
-                  </button>
                 </div>
               </div>
             </main>
