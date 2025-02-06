@@ -1140,14 +1140,10 @@ var app = new Framework7({
           $("#btnDesconto").on('click', function () {
             var cupomDesconto = $("#cupomDesconto").val();
             if(cupomDesconto) {
-              console.log(cupomDesconto);
+              app.dialog.alert("Cupom inválido ou expirado", "Cupom");
             } else {
-              app.dialog.alert("Digite um cupom de Desconto", "Desconto");
+              app.dialog.alert("Digite um cupom de Desconto", "Cupom");
             }
-            app.dialog.confirm('Tem certeza que quer esvaziar o carrinho?', '<strong>ESVAZIAR</strong>', function () {
-              //Chamar a funçao que limpa o carrinho
-              limparCarrinho();
-            });
           });
 
           //INICIO API CEP PARA ENDEREÇO DE NOVO CLIENTE
