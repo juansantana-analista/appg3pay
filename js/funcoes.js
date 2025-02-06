@@ -2149,6 +2149,8 @@ function listarEnderecos() {
                       `);
           }
   
+          
+          listarEnderecos(); 
           app.dialog.close();          
         }
       })
