@@ -1199,6 +1199,18 @@ var app = new Framework7({
             editarEndereco();
           });
 
+          function obterFormaPagamentoSelecionada() {
+            var formaPagamento = $("input[name='payment']:checked").next("span").text();
+            console.log("Forma de pagamento selecionada:", formaPagamento);
+            return formaPagamento;
+          }
+
+          // Exemplo de uso ao clicar em um botão
+          $("#finalizarCompra").on("click", function () {
+            var pagamentoSelecionado = obterFormaPagamentoSelecionada();
+            alert("Você selecionou: " + pagamentoSelecionado);
+          });
+
           $('#irCheckout').on('click', function () {
             var enderecoSelecionado = localStorage.getItem('enderecoDetalhes');
             if (enderecoSelecionado && enderecoSelecionado != null) {
