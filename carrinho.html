@@ -58,13 +58,16 @@
             <!-- Conteúdo principal -->
             <main class="container mx-auto px-4 pb-32">
               <!-- Seção de Endereço -->
-              <div class="bg-white rounded-2xl shadow-sm mb-4" style="margin-top: 20px;">
+              <div
+                class="bg-white rounded-2xl shadow-sm mb-4"
+                style="margin-top: 20px"
+              >
                 <div class="p-4 border-b flex justify-between items-center">
                   <h2 class="text-lg font-semibold">Endereço de Entrega</h2>
                   <button
                     id="openAddressModal"
                     class="text-blue-600 text-sm font-medium"
-                    style="width: 84px;"
+                    style="width: 84px"
                   >
                     Gerenciar
                   </button>
@@ -81,8 +84,7 @@
                 </div>
 
                 <!-- Item do carrinho -->
-                <div id="listaCarrinho" class="p-4 border-b">
-                </div>
+                <div id="listaCarrinho" class="p-4 border-b"></div>
 
                 <!-- Cupom de desconto -->
                 <div class="p-4">
@@ -92,13 +94,12 @@
                       placeholder="Cupom de desconto"
                       id="cupomDesconto"
                       class="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      style="border: 1px solid #ccc;
-                      border-radius: 8px;"
+                      style="border: 1px solid #ccc; border-radius: 8px"
                     />
                     <button
-                    id="btnDesconto"
+                      id="btnDesconto"
                       class="px-6 py-2 text-white rounded-lg font-medium hover:bg-blue-700 transition duration-200"
-                      style="background-color: #ff7b39; width: 100px;"
+                      style="background-color: #ff7b39; width: 100px"
                     >
                       Aplicar
                     </button>
@@ -206,9 +207,14 @@
                     <span class="text-gray-600">Frete</span>
                     <span class="text-green-600" id="fretePedido">Grátis</span>
                   </div>
-                  <div id="descontoContainer" class="flex justify-between display-none">
+                  <div
+                    id="descontoContainer"
+                    class="flex justify-between display-none"
+                  >
                     <span class="text-gray-600">Desconto</span>
-                    <span class="text-red-600" id="descontoPedido">- R$ 0,00</span>
+                    <span class="text-red-600" id="descontoPedido"
+                      >- R$ 0,00</span
+                    >
                   </div>
                   <div class="pt-3 border-t flex justify-between font-semibold">
                     <span>Total</span>
@@ -217,7 +223,7 @@
                 </div>
               </div>
             </main>
-            
+
             <!-- Footer fixo com botão de finalizar -->
             <footer
               class="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-40"
@@ -254,8 +260,11 @@
                 <!-- Modal Header -->
                 <div class="p-4 border-b flex justify-between items-center">
                   <h3 class="text-lg font-semibold">Endereços</h3>
-                  <button id="closeAddressModal" class="text-gray-500" 
-                  style="width: 30px;">
+                  <button
+                    id="closeAddressModal"
+                    class="text-gray-500"
+                    style="width: 30px"
+                  >
                     <svg
                       class="w-6 h-6"
                       fill="none"
@@ -273,7 +282,10 @@
                 </div>
 
                 <!-- Lista de Endereços -->
-                <div class="p-4 max-h-[60vh] overflow-y-auto" style="max-height: calc(6 * 75px + 1rem);">
+                <div
+                  class="p-4 max-h-[60vh] overflow-y-auto"
+                  style="max-height: calc(6 * 75px + 1rem)"
+                >
                   <div class="space-y-4" id="listaDeEnderecos">
                     <!-- Endereço 1 -->
                   </div>
@@ -312,7 +324,7 @@
                   <h3 class="text-lg font-semibold">Novo Endereço</h3>
                   <button
                     class="closeNewAddressModal text-gray-500"
-                    style="width: 30px;"
+                    style="width: 30px"
                   >
                     <svg
                       class="w-6 h-6"
@@ -334,8 +346,7 @@
                   <div class="space-y-4">
                     <div class="flex space-x-4">
                       <div class="flex-1">
-                        <label
-                          class="text-sm font-medium text-gray-700 mb-1"
+                        <label class="text-sm font-medium text-gray-700 mb-1"
                           >Nome do Endereço</label
                         >
                         <input
@@ -343,14 +354,15 @@
                           id="nomeEndereco"
                           placeholder="Ex: Casa, Trabalho"
                           class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="border: 1px solid #ccc;
-                          border-radius: 8px;
-                          padding: 10px;"
+                          style="
+                            border: 1px solid #ccc;
+                            border-radius: 8px;
+                            padding: 10px;
+                          "
                         />
                       </div>
                       <div class="w-1/3">
-                        <label
-                          class="text-sm font-medium text-gray-700 mb-1"
+                        <label class="text-sm font-medium text-gray-700 mb-1"
                           >CEP</label
                         >
                         <input
@@ -358,16 +370,17 @@
                           id="cepCliente"
                           placeholder="00000-000"
                           class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="border: 1px solid #ccc;
-                          border-radius: 8px;
-                          padding: 10px;"
+                          style="
+                            border: 1px solid #ccc;
+                            border-radius: 8px;
+                            padding: 10px;
+                          "
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label
-                        class="text-sm font-medium text-gray-700 mb-1"
+                      <label class="text-sm font-medium text-gray-700 mb-1"
                         >Rua</label
                       >
                       <input
@@ -375,16 +388,17 @@
                         id="logradouroEndCliente"
                         placeholder="Nome da rua"
                         class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        style="border: 1px solid #ccc;
-                        border-radius: 8px;
-                        padding: 10px;"
+                        style="
+                          border: 1px solid #ccc;
+                          border-radius: 8px;
+                          padding: 10px;
+                        "
                       />
                     </div>
 
                     <div class="flex space-x-4">
                       <div class="w-1/3">
-                        <label
-                          class="text-sm font-medium text-gray-700 mb-1"
+                        <label class="text-sm font-medium text-gray-700 mb-1"
                           >Número</label
                         >
                         <input
@@ -392,14 +406,15 @@
                           id="numeroEndCliente"
                           placeholder="123"
                           class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="border: 1px solid #ccc;
-                          border-radius: 8px;
-                          padding: 10px;"
+                          style="
+                            border: 1px solid #ccc;
+                            border-radius: 8px;
+                            padding: 10px;
+                          "
                         />
                       </div>
                       <div class="flex-1">
-                        <label
-                          class="text-sm font-medium text-gray-700 mb-1"
+                        <label class="text-sm font-medium text-gray-700 mb-1"
                           >Complemento</label
                         >
                         <input
@@ -407,16 +422,17 @@
                           id="complementoEndCliente"
                           placeholder="Apto, Bloco, etc"
                           class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="border: 1px solid #ccc;
-                          border-radius: 8px;
-                          padding: 10px;"
+                          style="
+                            border: 1px solid #ccc;
+                            border-radius: 8px;
+                            padding: 10px;
+                          "
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label
-                        class="text-sm font-medium text-gray-700 mb-1"
+                      <label class="text-sm font-medium text-gray-700 mb-1"
                         >Bairro</label
                       >
                       <input
@@ -424,16 +440,17 @@
                         id="bairroEndCliente"
                         placeholder="Nome do bairro"
                         class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        style="border: 1px solid #ccc;
-                        border-radius: 8px;
-                        padding: 10px;"
+                        style="
+                          border: 1px solid #ccc;
+                          border-radius: 8px;
+                          padding: 10px;
+                        "
                       />
                     </div>
 
                     <div class="flex space-x-4">
                       <div class="flex-1">
-                        <label
-                          class="text-sm font-medium text-gray-700 mb-1"
+                        <label class="text-sm font-medium text-gray-700 mb-1"
                           >Cidade</label
                         >
                         <input
@@ -441,14 +458,15 @@
                           id="cidadeEndCliente"
                           placeholder="Cidade"
                           class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="border: 1px solid #ccc;
-                          border-radius: 8px;
-                          padding: 10px;"
+                          style="
+                            border: 1px solid #ccc;
+                            border-radius: 8px;
+                            padding: 10px;
+                          "
                         />
                       </div>
                       <div class="w-1/4">
-                        <label
-                          class="text-sm font-medium text-gray-700 mb-1"
+                        <label class="text-sm font-medium text-gray-700 mb-1"
                           >Estado</label
                         >
                         <input
@@ -456,9 +474,11 @@
                           id="estadoEndCliente"
                           placeholder="Estado"
                           class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="border: 1px solid #ccc;
-                          border-radius: 8px;
-                          padding: 10px;"
+                          style="
+                            border: 1px solid #ccc;
+                            border-radius: 8px;
+                            padding: 10px;
+                          "
                           readonly
                         />
                       </div>
@@ -505,7 +525,7 @@
                   <h3 class="text-lg font-semibold">Editar Endereço</h3>
                   <button
                     class="closeEditAddressModal text-gray-500"
-                    style="width: 30px;"
+                    style="width: 30px"
                   >
                     <svg
                       class="w-6 h-6"
@@ -527,27 +547,24 @@
                   <div class="space-y-4">
                     <div class="flex space-x-4">
                       <div class="flex-1">
-                        <label
-                          class="text-sm font-medium text-gray-700 mb-1"
+                        <label class="text-sm font-medium text-gray-700 mb-1"
                           >Nome do Endereço</label
                         >
-                        <input
-                          type="hidden"
-                          id="idEnderecoEdit"
-                        />
+                        <input type="hidden" id="idEnderecoEdit" />
                         <input
                           type="text"
                           id="nomeEnderecoEdit"
                           placeholder="Ex: Casa, Trabalho"
                           class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="border: 1px solid #ccc;
-                          border-radius: 8px;
-                          padding: 10px;"
+                          style="
+                            border: 1px solid #ccc;
+                            border-radius: 8px;
+                            padding: 10px;
+                          "
                         />
                       </div>
                       <div class="w-1/3">
-                        <label
-                          class="text-sm font-medium text-gray-700 mb-1"
+                        <label class="text-sm font-medium text-gray-700 mb-1"
                           >CEP</label
                         >
                         <input
@@ -555,16 +572,17 @@
                           id="cepEdit"
                           placeholder="00000-000"
                           class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="border: 1px solid #ccc;
-                          border-radius: 8px;
-                          padding: 10px;"
+                          style="
+                            border: 1px solid #ccc;
+                            border-radius: 8px;
+                            padding: 10px;
+                          "
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label
-                        class="text-sm font-medium text-gray-700 mb-1"
+                      <label class="text-sm font-medium text-gray-700 mb-1"
                         >Rua</label
                       >
                       <input
@@ -572,16 +590,17 @@
                         id="logradouroEndEdit"
                         placeholder="Nome da rua"
                         class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        style="border: 1px solid #ccc;
-                        border-radius: 8px;
-                        padding: 10px;"
+                        style="
+                          border: 1px solid #ccc;
+                          border-radius: 8px;
+                          padding: 10px;
+                        "
                       />
                     </div>
 
                     <div class="flex space-x-4">
                       <div class="w-1/3">
-                        <label
-                          class="text-sm font-medium text-gray-700 mb-1"
+                        <label class="text-sm font-medium text-gray-700 mb-1"
                           >Número</label
                         >
                         <input
@@ -589,14 +608,15 @@
                           id="numeroEndEdit"
                           placeholder="123"
                           class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="border: 1px solid #ccc;
-                          border-radius: 8px;
-                          padding: 10px;"
+                          style="
+                            border: 1px solid #ccc;
+                            border-radius: 8px;
+                            padding: 10px;
+                          "
                         />
                       </div>
                       <div class="flex-1">
-                        <label
-                          class="text-sm font-medium text-gray-700 mb-1"
+                        <label class="text-sm font-medium text-gray-700 mb-1"
                           >Complemento</label
                         >
                         <input
@@ -604,16 +624,17 @@
                           id="complementoEndEdit"
                           placeholder="Apto, Bloco, etc"
                           class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="border: 1px solid #ccc;
-                          border-radius: 8px;
-                          padding: 10px;"
+                          style="
+                            border: 1px solid #ccc;
+                            border-radius: 8px;
+                            padding: 10px;
+                          "
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label
-                        class="text-sm font-medium text-gray-700 mb-1"
+                      <label class="text-sm font-medium text-gray-700 mb-1"
                         >Bairro</label
                       >
                       <input
@@ -621,16 +642,17 @@
                         id="bairroEndEdit"
                         placeholder="Nome do bairro"
                         class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        style="border: 1px solid #ccc;
-                        border-radius: 8px;
-                        padding: 10px;"
+                        style="
+                          border: 1px solid #ccc;
+                          border-radius: 8px;
+                          padding: 10px;
+                        "
                       />
                     </div>
 
                     <div class="flex space-x-4">
                       <div class="flex-1">
-                        <label
-                          class="text-sm font-medium text-gray-700 mb-1"
+                        <label class="text-sm font-medium text-gray-700 mb-1"
                           >Cidade</label
                         >
                         <input
@@ -638,14 +660,15 @@
                           id="cidadeEndEdit"
                           placeholder="Cidade"
                           class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="border: 1px solid #ccc;
-                          border-radius: 8px;
-                          padding: 10px;"
+                          style="
+                            border: 1px solid #ccc;
+                            border-radius: 8px;
+                            padding: 10px;
+                          "
                         />
                       </div>
                       <div class="w-1/4">
-                        <label
-                          class="text-sm font-medium text-gray-700 mb-1"
+                        <label class="text-sm font-medium text-gray-700 mb-1"
                           >Estado</label
                         >
                         <input
@@ -653,9 +676,11 @@
                           id="estadoEndEdit"
                           placeholder="Estado"
                           class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="border: 1px solid #ccc;
-                          border-radius: 8px;
-                          padding: 10px;"
+                          style="
+                            border: 1px solid #ccc;
+                            border-radius: 8px;
+                            padding: 10px;
+                          "
                           readonly
                         />
                       </div>
@@ -667,7 +692,9 @@
                         id="defaultAddressEdit"
                         class="form-checkbox text-blue-600"
                       />
-                      <label for="defaultAddressEdit" class="text-sm text-gray-700"
+                      <label
+                        for="defaultAddressEdit"
+                        class="text-sm text-gray-700"
                         >Definir como endereço principal</label
                       >
                     </div>
@@ -693,7 +720,6 @@
               </div>
             </div>
 
-            
             <!-- Modal Cartão de Crédito -->
             <div
               id="cartaoModal"
@@ -703,8 +729,11 @@
                 <!-- Modal Header -->
                 <div class="p-4 border-b flex justify-between items-center">
                   <h3 class="text-lg font-semibold">Cartão de Crédito</h3>
-                  <button id="closeCartaoModal" class="text-gray-500" 
-                  style="width: 30px;">
+                  <button
+                    id="closeCartaoModal"
+                    class="text-gray-500"
+                    style="width: 30px"
+                  >
                     <svg
                       class="w-6 h-6"
                       fill="none"
@@ -720,70 +749,119 @@
                     </svg>
                   </button>
                 </div>
-                <div class="p-4 max-h-[60vh] overflow-y-auto" style="max-height: calc(6 * 75px + 1rem);">
+                <div
+                  class="p-4 max-h-[60vh] overflow-y-auto"
+                  style="max-height: calc(6 * 75px + 1rem)"
+                >
                   <div class="space-y-4">
                     <div>
-                      <label class="text-sm font-medium text-gray-700 mb-1">Nome do Titular</label>
+                      <label class="text-sm font-medium text-gray-700 mb-1"
+                        >Nome do Titular</label
+                      >
                       <input
                         type="text"
                         id="nomeTitular"
                         placeholder="Ex.: Maria Aparecida"
                         class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        style="border: 1px solid #ccc; border-radius: 8px; padding: 10px;"
+                        style="
+                          border: 1px solid #ccc;
+                          border-radius: 8px;
+                          padding: 10px;
+                        "
                       />
                     </div>
-                  
+
                     <div>
-                      <label class="text-sm font-medium text-gray-700 mb-1">Número do Cartão</label>
+                      <label class="text-sm font-medium text-gray-700 mb-1"
+                        >Número do Cartão</label
+                      >
                       <input
                         type="text"
                         id="numeroCartao"
                         placeholder="0000 0000 0000 0000"
                         maxlength="19"
                         class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        style="border: 1px solid #ccc; border-radius: 8px; padding: 10px;"
+                        style="
+                          border: 1px solid #ccc;
+                          border-radius: 8px;
+                          padding: 10px;
+                        "
                       />
                     </div>
-                  
+
                     <div class="flex space-x-4">
                       <div class="w-1/2">
-                        <label class="text-sm font-medium text-gray-700 mb-1">Validade</label>
+                        <label class="text-sm font-medium text-gray-700 mb-1"
+                          >Validade</label
+                        >
                         <input
                           type="text"
                           id="dataExpiracao"
                           placeholder="MM/AA"
                           maxlength="5"
                           class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="border: 1px solid #ccc; border-radius: 8px; padding: 10px;"
+                          style="
+                            border: 1px solid #ccc;
+                            border-radius: 8px;
+                            padding: 10px;
+                          "
                         />
                       </div>
                       <div class="w-1/2">
-                        <label class="text-sm font-medium text-gray-700 mb-1">CVV</label>
+                        <label class="text-sm font-medium text-gray-700 mb-1"
+                          >CVV</label
+                        >
                         <input
                           type="password"
                           id="cvc"
                           placeholder="123"
                           maxlength="4"
                           class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="border: 1px solid #ccc; border-radius: 8px; padding: 10px;"
+                          style="
+                            border: 1px solid #ccc;
+                            border-radius: 8px;
+                            padding: 10px;
+                          "
                         />
                       </div>
                     </div>
-                  
+
                     <div class="flex items-center space-x-2">
                       <input
                         type="checkbox"
                         id="salvarCartao"
                         class="form-checkbox text-blue-600"
                       />
-                      <label for="salvarCartao" class="text-sm text-gray-700">Salvar cartão para futuras compras</label>
+                      <label for="salvarCartao" class="text-sm text-gray-700"
+                        >Salvar cartão para futuras compras</label
+                      >
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <button
+                        id="finalizarCompraCartao"
+                        class="w-full text-white py-3 px-4 rounded-xl font-semibold hover:bg-blue-700 transition duration-200 flex items-center justify-center space-x-2"
+                        style="background-color: #ff5500"
+                      >
+                        <span>Finalizar Compra</span>
+                        <svg
+                          class="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3"
+                          ></path>
+                        </svg>
+                      </button>
                     </div>
                   </div>
-                  
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
