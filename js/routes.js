@@ -1200,15 +1200,51 @@ var app = new Framework7({
           });
 
           function obterFormaPagamentoSelecionada() {
-            var formaPagamento = $("input[name='payment']:checked").next("span").text();
+            var formaPagamento = $("input[name='payment']:checked").val();
             console.log("Forma de pagamento selecionada:", formaPagamento);
             return formaPagamento;
           }
 
           // Exemplo de uso ao clicar em um botão
           $("#finalizarCompra").on("click", function () {
-            var pagamentoSelecionado = obterFormaPagamentoSelecionada();
-            alert("Você selecionou: " + pagamentoSelecionado);
+            var formaPagamento = obterFormaPagamentoSelecionada();
+            
+            if (formaPagamento == 1) {
+              document.getElementById('cartaoModal').classList.remove('hidden');
+              var nomeTitular = $("#nomeTitular").val();
+              var numeroCartao = $("#numeroCartao").val();
+              var dataExpiracao = $("#dataExpiracao").val();
+              var cvc = $("#cvc").val();
+
+              // Validações dos campos
+              if (!nomeTitular) {
+                app.dialog.alert("Por favor, preencha o nome do titular.", "Erro!");
+                return;
+              }
+              if (!numeroCartao || numeroCartao.length < 16) {
+                app.dialog.alert("Por favor, insira um número de cartão válido com 16 dígitos.", "Erro!");
+                return;
+              }
+              if (!dataExpiracao || !validarDataExpiracao(dataExpiracao)) {
+                app.dialog.alert("Por favor, insira a data de expiração no formato MM/YYYY.", "Erro!");
+                return;
+              }
+              if (!cvc || cvc.length < 3) {
+                app.dialog.alert("Por favor, insira um código CVC válido de 3 dígitos.", "Erro!");
+                return;
+              }
+            } else if (formaPagamento == 2) {
+              formaPagamento = 2;
+            } else if (method == 3) {
+              formaPagamento = 3;
+            } else {
+              app.dialog.alert("Forma de pagamento não selecionada.", "Erro!");
+              return;
+            }
+
+            if (formaPagamento) {
+              finalizarCompra(formaPagamento, nomeTitular, numeroCartao, dataExpiracao, cvc);
+            }
           });
 
           $('#irCheckout').on('click', function () {
