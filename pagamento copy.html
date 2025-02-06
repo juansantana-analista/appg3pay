@@ -43,8 +43,8 @@
               </a>
             </div>
             <img src="img/logo-nav.png" class="title-logo" width="110px" />
-            <a href="" class="btn-header">
-              <i class="mdi mdi-information-variant"></i>
+            <a href="/informacoes/">
+              <!--<i class="mdi mdi-information-variant"></i>-->
             </a>
           </div>
           <!-- Scrollable page content -->
@@ -58,61 +58,60 @@
           
             <div class="pagamento-info">
               <div class="pagamento-card">
-                <div class="pagamento-header">
-                  <h3 id="formaSelecionada"></h3>
-                </div>
-                <div class="pagamento-body" id="pagamentoBody">
-                  <!-- O conteúdo dinâmico será inserido aqui -->
-                </div>
-              </div>
-          
-              <div id="pagamentoButtons">
-                <!-- Botões dinâmicos serão inseridos aqui -->
-              </div>
-            </div>
-          </div>
 
-          
-          <!-- INÍCIO POPUP COMPARTILHAR LINK -->
-          <div class="popup popup-compartilhar">
-            <div class="view popup-view">
-              <div class="page">
-                <div class="top-nav">
-                  <div class="left">
-                    <a href="#" class="link btn-novo popup-close">
-                      <i class="mdi mdi-arrow-left"></i>
-                    </a>
+                <div class="pagamento-body">
+                  <div class="payment-title">Pagamento Total</div>
+                  <div class="total-amount" id="totalCompra"></div>
+                  
+                  <div id="payment-method-section">
+                    <!-- Seção de pagamento por Cartão (oculta inicialmente) -->
+                    <div class="payment-method-a display-none" id="cartao-section">
+                      <h4>Pagamento com Cartão</h4>
+                      <div class="pix-code" id="cartao-detalhes"></div>
+                    </div>
+      
+                    <!-- Seção de pagamento por Pix -->
+                    <div class="payment-method-a display-none" id="pix-section">
+                      <h4>Pagamento com Pix</h4>
+                      <div class="pix-code" id="pix-qrcode"></div>
+                      <div class="pix-code" id="pix-code"></div>
+                      <button class="copy-button" id="copiarPix">Copiar Código Pix</button>
+                    </div>
+              
+                    <!-- Seção de pagamento por Boleto (oculta inicialmente) -->
+                    <div class="payment-method-a display-none" id="boleto-section">
+                      <h4>Pagamento com Boleto</h4>
+                      <div class="pix-code" id="boleto-code"></div>
+                      <button class="copy-button" id="copiarLinha">Copiar Código do Boleto</button>
+                      <button class="copy-button" id="baixarBoleto">Baixar Boleto</button>
+                    </div>
+              
                   </div>
-                  <strong class="title-descricao">
-                    <i class="ri-share-2-line"></i> Compartilhar</strong
-                  >
-                  <a href="/informacoes/" class="btn-header">
-                    <i class="mdi mdi-information-variant"></i>
-                  </a>
-                </div>
-                <div
-                  class="page-content container-principal"
-                  style="padding-bottom: 180px"
-                >
-                <div class="container-share">
-                    <div class="header">
-                        <h2>Link de Indicação</h2>
-                    </div>
-                    <div class="qr-section">
-                        <span id="qrcode"></span>
-                        <p>Escaneie o QRCode</p>
-                    </div>
-                    <div class="transaction-history">
-                        <button>Compartilhar link</button>
-                        <span>Divulgue esse link para ampliar a sua rede!!!</span>
-                    </div>
-                </div>
+              
+                  <button class="change-button display-none" id="btnAlterarPagamento">Alterar Forma de Pagamento</button>
+                  <button class="change-button display-none" id="meusPedidos">Ir para Meus Pedidos</button>
+              
+                  <ul class="instructions display-none" id="instrucao-pix">
+                    <li>1. Copie o código Pix acima.</li>
+                    <li>2. Acesse o app do seu banco ou internet banking de preferência.</li>
+                    <li>3. Escolha pagar com o Pix, cole o código e finalize o pagamento.</li>
+                  </ul>
+                  <ul class="instructions display-none" id="instrucao-boleto">
+                    <li>1. Copie o código do Boleto acima.</li>
+                    <li>2. Acesse o app do seu banco ou internet banking de preferência.</li>
+                    <li>3. Escolha pagar Boleto, cole o código e finalize o pagamento.</li>
+                  </ul>
+                  <ul class="instructions display-none" id="instrucao-cartao">
+                    <li>1. Clique em "Alterar Forma de Pagamento".</li>
+                    <li>2. Selecione novamente a forma de pagamento desejada.</li>
+                    <li>3. Clique em "Finalizar Compra"</li>
+                  </ul>
                 </div>
               </div>
             </div>
           </div>
-          <!-- FIM POPUP COMPARTILHAR LINK -->
 
+          
         </div>
       </div>
     </div>

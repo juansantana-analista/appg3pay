@@ -3,307 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Plataforma de Afiliados</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Métodos de Pagamento</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root {
-            --laranja: #ff5500;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
         body {
             background-color: #f4f4f4;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            padding: 20px;
         }
-        .login-container {
-            background-color: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        .container {
             width: 100%;
-            max-width: 380px;
-            padding: 40px 30px;
+            max-width: 400px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: #f8f8f8;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .header i {
+            margin-right: 15px;
+            color: #333;
+            cursor: pointer;
+        }
+        .header-title {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .payment-details {
+            padding: 20px;
             text-align: center;
-            transition: all 0.3s ease;
         }
-        .logo {
-            width: 120px;
-            margin-bottom: 30px;
-        }
-        .input-group {
-            position: relative;
+        .payment-icon {
+            font-size: 80px;
+            color: #ff6b00;
             margin-bottom: 20px;
         }
-        .input-group input {
-            width: 100%;
-            padding: 15px 15px 15px 40px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            transition: all 0.3s ease;
+        .payment-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
         }
-        .input-group input:focus {
-            border-color: var(--laranja);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(255,85,0,0.1);
+        .payment-description {
+            color: #666;
+            margin-bottom: 20px;
         }
-        .input-group i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #888;
-        }
-        .login-btn, .recovery-btn {
+        .copy-button {
             width: 100%;
             padding: 15px;
-            background-color: var(--laranja);
+            background-color: #ff6b00;
             color: white;
             border: none;
             border-radius: 10px;
             font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-        .login-btn:hover, .recovery-btn:hover {
-            background-color: #e64400;
-        }
-        .social-login {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-        .social-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f0f0f0;
-            transition: background-color 0.3s ease;
-        }
-        .social-btn:hover {
-            background-color: #e0e0e0;
-        }
-        .forgot-password {
-            margin-top: 15px;
-            color: var(--laranja);
-            text-decoration: none;
-            font-size: 0.9em;
-        }
-        .hidden {
-            display: none;
-        }
-        .code-inputs {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .code-inputs input {
-            width: 40px;
-            height: 40px;
-            text-align: center;
-            font-size: 1.2em;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-        }
-        .back-to-login {
-            color: var(--laranja);
             cursor: pointer;
-            margin-top: 15px;
         }
-        @media (max-width: 480px) {
-            .login-container {
-                width: 90%;
-                padding: 30px 20px;
-            }
+        .payment-code {
+            word-break: break-all;
+            margin-bottom: 15px;
+            font-size: 14px;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .credit-form {
+            text-align: left;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="login-container">
-        <img src="img/logo.png" alt="Logo" class="logo mx-auto">
+    <!-- Pix Payment Screen -->
+    <div class="container" id="pixScreen" style="display: none">
+        <div class="header">
+            <i class="fas fa-arrow-left" id="pixBackButton"></i>
+            <span class="header-title">Pagamento Pix</span>
+        </div>
         
-        <!-- Login Form -->
-        <form id="loginForm">
-            <div class="input-group">
-                <i class="fas fa-user"></i>
-                <input type="email" placeholder="E-mail" required>
+        <div class="payment-details">
+            <i class="fas fa-qrcode payment-icon"></i>
+            <div class="payment-title">Pague com Pix</div>
+            <div class="payment-description">Escaneie o QR Code ou copie o código</div>
+            
+            <div class="qr-code">
+                <img src="/api/placeholder/200/200" alt="QR Code" style="max-width: 200px;">
             </div>
             
-            <div class="input-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" placeholder="Senha" required>
+            <div class="payment-code" id="pixCode">
+                00020101021226880014BR.GOV.BCB.PIX2558pay.Stone.com.br/pix/v2/42fb5e29-xxx-xxxx-xxxx5262540515BR$ 352,80
             </div>
             
-            <button type="submit" class="login-btn">Entrar</button>
-            
-            <a href="#" id="forgotPasswordLink" class="forgot-password">Esqueceu a senha?</a>
-            
-            <div class="social-login">
-                <a href="#" class="social-btn">
-                    <i class="fab fa-google"></i>
-                </a>
-                <a href="#" class="social-btn">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="#" class="social-btn">
-                    <i class="fab fa-apple"></i>
-                </a>
-            </div>
-        </form>
-
-        <!-- Password Recovery Email Form -->
-        <form id="recoveryEmailForm" class="hidden">
-            <h2 class="text-xl font-bold mb-4">Recuperar Senha</h2>
-            <p class="text-sm text-gray-600 mb-4">Digite seu e-mail para recuperar sua senha</p>
-            
-            <div class="input-group">
-                <i class="fas fa-envelope"></i>
-                <input type="email" placeholder="E-mail" required>
-            </div>
-            
-            <button type="submit" class="recovery-btn">Enviar Código</button>
-            
-            <div class="back-to-login" id="backToLogin">Voltar para o login</div>
-        </form>
-
-        <!-- Verification Code Form -->
-        <form id="verificationCodeForm" class="hidden">
-            <h2 class="text-xl font-bold mb-4">Verificação</h2>
-            <p class="text-sm text-gray-600 mb-4">Digite o código de 6 dígitos enviado para seu e-mail</p>
-            
-            <div class="code-inputs">
-                <input type="text" maxlength="1" pattern="[0-9A-Za-z]" required>
-                <input type="text" maxlength="1" pattern="[0-9A-Za-z]" required>
-                <input type="text" maxlength="1" pattern="[0-9A-Za-z]" required>
-                <input type="text" maxlength="1" pattern="[0-9A-Za-z]" required>
-                <input type="text" maxlength="1" pattern="[0-9A-Za-z]" required>
-                <input type="text" maxlength="1" pattern="[0-9A-Za-z]" required>
-            </div>
-            
-            <button type="submit" class="recovery-btn">Verificar Código</button>
-            
-            <div class="back-to-login" id="backToLogin2">Voltar para o login</div>
-        </form>
-
-        <!-- New Password Form -->
-        <form id="newPasswordForm" class="hidden">
-            <h2 class="text-xl font-bold mb-4">Nova Senha</h2>
-            <p class="text-sm text-gray-600 mb-4">Digite sua nova senha</p>
-            
-            <div class="input-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" placeholder="Nova Senha" required>
-            </div>
-            
-            <div class="input-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" placeholder="Confirmar Nova Senha" required>
-            </div>
-            
-            <button type="submit" class="recovery-btn">Redefinir Senha</button>
-        </form>
+            <button class="copy-button" id="copyPixButton">Copiar Código Pix</button>
+        </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
-    <script>
-        // Form elements
-        const loginForm = document.getElementById('loginForm');
-        const recoveryEmailForm = document.getElementById('recoveryEmailForm');
-        const verificationCodeForm = document.getElementById('verificationCodeForm');
-        const newPasswordForm = document.getElementById('newPasswordForm');
-        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+    <!-- Boleto Payment Screen -->
+    <div class="container" id="boletoScreen" style="display:none;">
+        <div class="header">
+            <i class="fas fa-arrow-left" id="boletoBackButton"></i>
+            <span class="header-title">Boleto Bancário</span>
+        </div>
         
-        // Back to login buttons
-        const backToLoginButtons = document.querySelectorAll('.back-to-login');
+        <div class="payment-details">
+            <i class="fas fa-barcode payment-icon"></i>
+            <div class="payment-title">Boleto Bancário</div>
+            <div class="payment-description">Copie o código de barras para pagamento</div>
+            
+            <div class="payment-code" id="boletoCode">
+                23793.81460 60000.052305 54091.520908 1 87260000352800
+            </div>
+            
+            <button class="copy-button" id="copyBoletoButton">Copiar Código de Barras</button>
+        </div>
+    </div>
 
-        // Forgot Password Link
-        forgotPasswordLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            loginForm.classList.add('hidden');
-            recoveryEmailForm.classList.remove('hidden');
-        });
+    <!-- Credit Card Payment Screen -->
+    <div class="container" id="creditCardScreen" >
+        <div class="header">
+            <i class="fas fa-arrow-left" id="creditCardBackButton"></i>
+            <span class="header-title">Cartão de Crédito</span>
+        </div>
+        
+        <div class="payment-details">
+            <i class="fas fa-credit-card payment-icon"></i>
+            <div class="payment-title">Pagamento com Cartão</div>
+            
+            <form class="credit-form">
+                <div class="form-group">
+                    <label>Número do Cartão</label>
+                    <input type="text" class="form-control" placeholder="0000 0000 0000 0000">
+                </div>
+                <div class="form-group">
+                    <label>Nome no Cartão</label>
+                    <input type="text" class="form-control" placeholder="Nome completo">
+                </div>
+                <div class="form-group">
+                    <label>Validade</label>
+                    <input type="text" class="form-control" placeholder="MM/AA">
+                </div>
+                <div class="form-group">
+                    <label>CVV</label>
+                    <input type="text" class="form-control" placeholder="000">
+                </div>
+            </form>
+            
+            <button class="copy-button" id="processCreditCardButton">Processar Pagamento</button>
+        </div>
+    </div>
 
-        // Back to Login Handlers
-        backToLoginButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                loginForm.classList.remove('hidden');
-                recoveryEmailForm.classList.add('hidden');
-                verificationCodeForm.classList.add('hidden');
-                newPasswordForm.classList.add('hidden');
+    <script>
+        // Pix Screen
+        document.getElementById('copyPixButton').addEventListener('click', function() {
+            const pixCode = document.getElementById('pixCode');
+            navigator.clipboard.writeText(pixCode.textContent).then(() => {
+                alert('Código Pix copiado!');
             });
         });
 
-        // Recovery Email Form Submission
-        recoveryEmailForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = this.querySelector('input[type="email"]').value;
-            
-            // Simulated email validation and code sending
-            if(email) {
-                recoveryEmailForm.classList.add('hidden');
-                verificationCodeForm.classList.remove('hidden');
-            }
-        });
-
-        // Verification Code Input Handling
-        const codeInputs = document.querySelectorAll('.code-inputs input');
-        codeInputs.forEach((input, index) => {
-            input.addEventListener('input', function() {
-                if(this.value.length === 1 && index < codeInputs.length - 1) {
-                    codeInputs[index + 1].focus();
-                }
-            });
-
-            input.addEventListener('keydown', function(e) {
-                if(e.key === 'Backspace' && this.value.length === 0 && index > 0) {
-                    codeInputs[index - 1].focus();
-                }
+        // Boleto Screen
+        document.getElementById('copyBoletoButton').addEventListener('click', function() {
+            const boletoCode = document.getElementById('boletoCode');
+            navigator.clipboard.writeText(boletoCode.textContent).then(() => {
+                alert('Código de Barras copiado!');
             });
         });
 
-        // Verification Code Form Submission
-        verificationCodeForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const code = Array.from(codeInputs).map(input => input.value).join('');
-            
-            // Simulated code validation
-            if(code.length === 6) {
-                verificationCodeForm.classList.add('hidden');
-                newPasswordForm.classList.remove('hidden');
-            }
-        });
+        // Function to switch between screens (placeholder)
+        function switchScreen(fromScreen, toScreen) {
+            document.getElementById(fromScreen).style.display = 'none';
+            document.getElementById(toScreen).style.display = 'block';
+        }
 
-        // New Password Form Submission
-        newPasswordForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const newPassword = this.querySelectorAll('input[type="password"]')[0].value;
-            const confirmPassword = this.querySelectorAll('input[type="password"]')[1].value;
-            
-            if(newPassword === confirmPassword) {
-                alert('Senha redefinida com sucesso!');
-                // Reset all forms
-                newPasswordForm.classList.add('hidden');
-                loginForm.classList.remove('hidden');
-            } else {
-                alert('As senhas não coincidem');
-            }
-        });
+        // Back button events
+        document.getElementById('pixBackButton').addEventListener('click', () => switchScreen('pixScreen', 'previousScreen'));
+        document.getElementById('boletoBackButton').addEventListener('click', () => switchScreen('boletoScreen', 'previousScreen'));
+        document.getElementById('creditCardBackButton').addEventListener('click', () => switchScreen('creditCardScreen', 'previousScreen'));
 
-        // Login Form Submission
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = this.querySelector('input[type="email"]').value;
-            const password = this.querySelector('input[type="password"]').value;
+        // Credit Card Processing
+        document.getElementById('processCreditCardButton').addEventListener('click', function() {
+            // Simple validation (you'd want more robust validation)
+            const inputs = document.querySelectorAll('#creditCardScreen .form-control');
+            const allFilled = Array.from(inputs).every(input => input.value.trim() !== '');
             
-            if(email && password) {
-                alert('Login em processamento...');
-                // Substituir por chamada de API real
+            if (allFilled) {
+                alert('Processando pagamento...');
             } else {
                 alert('Por favor, preencha todos os campos');
             }

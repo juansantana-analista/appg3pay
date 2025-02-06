@@ -8,7 +8,7 @@
       content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover"
     />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <!-- Color theme for statusbar (Android only) -->
+    <!-- Color theme for statusbar (Android apenas) -->
     <meta name="theme-color" content="#FF4B00" />
     <!-- Your app title -->
     <title>G3 PAY</title>
@@ -16,9 +16,6 @@
     <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
     <!-- CSS PERSONALIZADO PARA MENU-->
     <link rel="stylesheet" href="css/index.css" />
-    <link rel="stylesheet" href="css/detalhes.css" />
-    <link rel="stylesheet" href="css/carrinho.css" />
-    <link rel="stylesheet" href="css/dashboard.css" />
     <!--Ícones Material Design-->
     <link rel="stylesheet" href="css/materialdesignicons.min.css" />
     <!-- Icones do Remix icon-->
@@ -32,86 +29,153 @@
       <div class="view view-main">
         <!-- Initial Page, "data-name" contains page name -->
         <div data-name="pagamento" class="page color-theme-blue">
-          <!-- NAV TOPO-->
-          <div class="top-nav">
-            <div class="left">
-              <a
-                href="/pedidos/"
-                class="link btn-novo"
-              >
-                <i class="mdi mdi-arrow-left"></i>
-              </a>
-            </div>
-            <img src="img/logo-nav.png" class="title-logo" width="110px" />
-            <a href="/informacoes/">
-              <!--<i class="mdi mdi-information-variant"></i>-->
-            </a>
+          <div class="nav-top cart">
+            <a href="/pedidos/"><i class="ri-arrow-left-s-line"></i></a>
+            <strong> <i class="mdi mdi-cart-outline"></i> Pagamento</strong>
+            <a href="#" class="link"><i class="mdi mdi-delete"></i></a>
           </div>
           <!-- Scrollable page content -->
+          <div class="page-content">
+            <!-- Conteúdo principal -->
+            <main class="container mx-auto px-4 pb-32">
+              <!-- Pix Payment Screen -->
+              <div class="container" id="pixScreen" style="display: none">
+                <div class="header">
+                  <span class="header-title">Pagamento Pix</span>
+                </div>
 
-          <div
-            class="page-content"
-            style="background-color: #f7f9fa; padding-bottom: 160px"
-          >
-          <div class="block">            
-            <h2 class="titulo-pagina">Pagamento</h2>
-          
-            <div class="pagamento-info">
-              <div class="pagamento-card">
-
-                <div class="pagamento-body">
-                  <div class="payment-title">Pagamento Total</div>
-                  <div class="total-amount" id="totalCompra"></div>
-                  
-                  <div id="payment-method-section">
-                    <!-- Seção de pagamento por Cartão (oculta inicialmente) -->
-                    <div class="payment-method-a display-none" id="cartao-section">
-                      <h4>Pagamento com Cartão</h4>
-                      <div class="pix-code" id="cartao-detalhes"></div>
-                    </div>
-      
-                    <!-- Seção de pagamento por Pix -->
-                    <div class="payment-method-a display-none" id="pix-section">
-                      <h4>Pagamento com Pix</h4>
-                      <div class="pix-code" id="pix-qrcode"></div>
-                      <div class="pix-code" id="pix-code"></div>
-                      <button class="copy-button" id="copiarPix">Copiar Código Pix</button>
-                    </div>
-              
-                    <!-- Seção de pagamento por Boleto (oculta inicialmente) -->
-                    <div class="payment-method-a display-none" id="boleto-section">
-                      <h4>Pagamento com Boleto</h4>
-                      <div class="pix-code" id="boleto-code"></div>
-                      <button class="copy-button" id="copiarLinha">Copiar Código do Boleto</button>
-                      <button class="copy-button" id="baixarBoleto">Baixar Boleto</button>
-                    </div>
-              
+                <div class="payment-details">
+                  <i class="fas fa-qrcode payment-icon"></i>
+                  <div class="payment-title">Pague com Pix</div>
+                  <div class="payment-description">
+                    Escaneie o QR Code ou copie o código
                   </div>
-              
-                  <button class="change-button display-none" id="btnAlterarPagamento">Alterar Forma de Pagamento</button>
-                  <button class="change-button display-none" id="meusPedidos">Ir para Meus Pedidos</button>
-              
-                  <ul class="instructions display-none" id="instrucao-pix">
-                    <li>1. Copie o código Pix acima.</li>
-                    <li>2. Acesse o app do seu banco ou internet banking de preferência.</li>
-                    <li>3. Escolha pagar com o Pix, cole o código e finalize o pagamento.</li>
-                  </ul>
-                  <ul class="instructions display-none" id="instrucao-boleto">
-                    <li>1. Copie o código do Boleto acima.</li>
-                    <li>2. Acesse o app do seu banco ou internet banking de preferência.</li>
-                    <li>3. Escolha pagar Boleto, cole o código e finalize o pagamento.</li>
-                  </ul>
-                  <ul class="instructions display-none" id="instrucao-cartao">
-                    <li>1. Clique em "Alterar Forma de Pagamento".</li>
-                    <li>2. Selecione novamente a forma de pagamento desejada.</li>
-                    <li>3. Clique em "Finalizar Compra"</li>
-                  </ul>
+
+                  <div class="qr-code">
+                    <img
+                      src="/api/placeholder/200/200"
+                      alt="QR Code"
+                      style="max-width: 200px"
+                    />
+                  </div>
+
+                  <div class="payment-code" id="pixCode">
+                    00020101021226880014BR.GOV.BCB.PIX2558pay.Stone.com.br/pix/v2/42fb5e29-xxx-xxxx-xxxx5262540515BR$
+                    352,80
+                  </div>
+
+                  <button class="copy-button" id="copyPixButton">
+                    Copiar Código Pix
+                  </button>
                 </div>
               </div>
-            </div>
-          </div>
 
-          
+              <!-- Boleto Payment Screen -->
+              <div class="container" id="boletoScreen" style="display: none">
+                <div class="header">
+                  <span class="header-title">Boleto Bancário</span>
+                </div>
+
+                <div class="payment-details">
+                  <i class="fas fa-barcode payment-icon"></i>
+                  <div class="payment-title">Boleto Bancário</div>
+                  <div class="payment-description">
+                    Copie o código de barras para pagamento
+                  </div>
+
+                  <div class="payment-code" id="boletoCode">
+                    23793.81460 60000.052305 54091.520908 1 87260000352800
+                  </div>
+
+                  <button class="copy-button" id="copyBoletoButton">
+                    Copiar Código de Barras
+                  </button>
+                </div>
+              </div>
+
+              <!-- Credit Card Payment Screen -->
+              <div
+                class="container"
+                id="creditCardScreen"
+              >
+                <div class="header">
+                  <span class="header-title">Cartão de Crédito</span>
+                </div>
+
+                <div class="payment-details">
+                  <i class="fas fa-credit-card payment-icon"></i>
+                  <div class="payment-title">Pagamento com Cartão</div>
+
+                  <form class="credit-form">
+                    <div class="form-group">
+                      <label>Número do Cartão</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="0000 0000 0000 0000"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label>Nome no Cartão</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Nome completo"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label>Validade</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="MM/AA"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label>CVV</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="000"
+                      />
+                    </div>
+                  </form>
+
+                  <button class="copy-button" id="processCreditCardButton">
+                    Processar Pagamento
+                  </button>
+                </div>
+              </div>
+            </main>
+
+            <!-- Footer fixo com botão de finalizar -->
+            <footer
+              class="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-40"
+            >
+              <div class="container mx-auto px-4 py-3">
+                <button
+                  id="finalizarCompra"
+                  class="w-full text-white py-3 px-4 rounded-xl font-semibold hover:bg-blue-700 transition duration-200 flex items-center justify-center space-x-2"
+                  style="background-color: #ff5500"
+                >
+                  <span>Finalizar Compra</span>
+                  <svg
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M14 5l7 7m0 0l-7 7m7-7H3"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+            </footer>
+          </div>
         </div>
       </div>
     </div>
@@ -119,7 +183,6 @@
     <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
     <!-- jQuery -->
     <script type="text/javascript" src="lib/jquery-3.7.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <!-- Roteamento do app-->
     <script type="text/javascript" src="js/routes.js"></script>
     <script src="cordova.js"></script>

@@ -1342,28 +1342,6 @@ var app = new Framework7({
           $('#enderecoEstado').html(enderecoDetalhes.endEntregaEstado);
           $('#enderecoCep').html(enderecoDetalhes.endEntregaCep);
 
-          // Recupera o valor do localStorage com a chave 'carrinho'
-          // Converte o JSON para um objeto JavaScript
-          var ulElemento = document.getElementById("listaItensConfirmation");
-          /*
-          carrinho.forEach((item, index) => {
-            const itensHTML = `            
-                          <li>
-                              <a href="#" class="item-link item-content">
-                                 <div class="item-media"><img src="${item.item.imagem}" width="40px" ></i></div>
-                                 <div class="item-inner">
-                                    <div class="item-title">
-                                       <div class="item-header"><b>${item.item.nome}</b></div>
-                                       <small>${item.quantidade} x ${formatarMoeda(item.item.preco)}</small>
-                                    </div>
-                                    <div class="item-after"><b>${formatarMoeda(item.total_item)}</b></div>
-                                 </div>
-                              </a>
-                           </li>
-                          `;
-            ulElemento.innerHTML += itensHTML;
-          });*/
-
           // Preselecionar o método de pagamento PIX
           var pixElement = $('.payment-method[data-method="pix"]');
           pixElement.addClass('active');
