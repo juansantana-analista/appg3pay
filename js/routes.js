@@ -1205,6 +1205,10 @@ var app = new Framework7({
             return formaPagamento;
           }
 
+          $('#numeroCartao').mask('0000 0000 0000 0000');
+          $('#dataExpiracao').mask('00/0000');
+          $('#cvc').mask('000');
+          
           // Exemplo de uso ao clicar em um botão
           $("#finalizarCompra").on("click", function () {
             var formaPagamento = obterFormaPagamentoSelecionada();
