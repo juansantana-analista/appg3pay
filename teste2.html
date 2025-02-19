@@ -3,216 +3,355 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Métodos de Pagamento</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Detalhes do Pagamento</title>
     <style>
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        :root {
+            --primary-color: #007bff;
+            --background-color: #f4f4f4;
+            --card-background: white;
+            --text-color: #333;
+            --muted-text: #666;
         }
         body {
-            background-color: #f4f4f4;
+            background-color: var(--background-color);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            color: var(--text-color);
         }
-        .container {
+        .payment-container {
+            background-color: var(--card-background);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
             width: 100%;
-            max-width: 400px;
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            overflow: hidden;
+            max-width: 380px;
+            padding: 25px;
+            animation: slideUp 0.5s ease;
+            position: relative;
         }
-        .header {
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .payment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .payment-header h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--muted-text);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .close-btn:hover {
+            color: var(--primary-color);
+        }
+        .payment-method-selector {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            background-color: #f0f0f0;
+            border-radius: 15px;
+            padding: 5px;
+        }
+        .method-tab {
+            flex-grow: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .method-tab.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .payment-method {
             display: flex;
             align-items: center;
+            background-color: #f0f0f0;
             padding: 15px;
-            background-color: #f8f8f8;
-            border-bottom: 1px solid #e0e0e0;
+            border-radius: 12px;
+            margin-bottom: 20px;
         }
-        .header i {
+        .payment-method img {
+            width: 40px;
+            height: 40px;
             margin-right: 15px;
-            color: #333;
-            cursor: pointer;
-        }
-        .header-title {
-            font-weight: bold;
-            font-size: 18px;
+            border-radius: 8px;
         }
         .payment-details {
-            padding: 20px;
+            flex-grow: 1;
+        }
+        .payment-details h2 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .payment-details p {
+            font-size: 14px;
+            color: var(--muted-text);
+        }
+        .qr-code, .barcode {
             text-align: center;
+            margin-bottom: 20px;
+            position: relative;
         }
-        .payment-icon {
-            font-size: 80px;
-            color: #ff6b00;
+        .qr-code img, .barcode img {
+            max-width: 250px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .copy-code {
+            display: flex;
+            align-items: center;
+            background-color: #f0f0f0;
+            padding: 12px;
+            border-radius: 10px;
             margin-bottom: 20px;
         }
-        .payment-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 15px;
+        .copy-code input {
+            flex-grow: 1;
+            border: none;
+            background: none;
+            font-size: 16px;
+            color: var(--text-color);
         }
-        .payment-description {
-            color: #666;
-            margin-bottom: 20px;
-        }
-        .copy-button {
-            width: 100%;
-            padding: 15px;
-            background-color: #ff6b00;
+        .copy-code button {
+            background-color: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 10px;
-            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 6px;
+            margin-left: 10px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
-        .payment-code {
-            word-break: break-all;
-            margin-bottom: 15px;
-            font-size: 14px;
+        .copy-code button:hover {
+            background-color: #0056b3;
+        }
+        .status-section {
             background-color: #f0f0f0;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        .credit-form {
-            text-align: left;
-        }
-        .form-group {
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
             margin-bottom: 15px;
         }
-        .form-control {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+        .status-icon {
+            font-size: 30px;
+            margin-right: 15px;
+        }
+        .status-text h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .status-text p {
+            font-size: 14px;
+            color: var(--muted-text);
+        }
+        .hidden { display: none; }
+        .pending { color: #ffc107; }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .timer {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0,0,0,0.5);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
-    <!-- Pix Payment Screen -->
-    <div class="container" id="pixScreen" style="display: none">
-        <div class="header">
-            <i class="fas fa-arrow-left" id="pixBackButton"></i>
-            <span class="header-title">Pagamento Pix</span>
+    <div class="payment-container" id="paymentContainer">
+        <div class="payment-header">
+            <h1>Detalhes do Pagamento</h1>
+            <button class="close-btn" onclick="closePaymentDetails()">&times;</button>
         </div>
-        
-        <div class="payment-details">
-            <i class="fas fa-qrcode payment-icon"></i>
-            <div class="payment-title">Pague com Pix</div>
-            <div class="payment-description">Escaneie o QR Code ou copie o código</div>
-            
+
+        <div class="payment-method-selector">
+            <div class="method-tab active" onclick="switchPaymentMethod('pixPayment')">Pix</div>
+            <div class="method-tab" onclick="switchPaymentMethod('boletoPayment')">Boleto</div>
+            <div class="method-tab" onclick="switchPaymentMethod('creditCardPayment')">Cartão</div>
+        </div>
+
+        <div id="pixPayment" class="payment-method-container">
+            <div class="payment-method">
+                <img src="/api/placeholder/40/40" alt="Pix">
+                <div class="payment-details">
+                    <h2>Pix</h2>
+                    <p>Pagamento instantâneo</p>
+                </div>
+            </div>
+
             <div class="qr-code">
-                <img src="/api/placeholder/200/200" alt="QR Code" style="max-width: 200px;">
+                <div class="timer" id="pixTimer">29:59</div>
+                <img src="/api/placeholder/200/200" alt="QR Code Pix">
             </div>
-            
-            <div class="payment-code" id="pixCode">
-                00020101021226880014BR.GOV.BCB.PIX2558pay.Stone.com.br/pix/v2/42fb5e29-xxx-xxxx-xxxx5262540515BR$ 352,80
-            </div>
-            
-            <button class="copy-button" id="copyPixButton">Copiar Código Pix</button>
-        </div>
-    </div>
 
-    <!-- Boleto Payment Screen -->
-    <div class="container" id="boletoScreen" style="display:none;">
-        <div class="header">
-            <i class="fas fa-arrow-left" id="boletoBackButton"></i>
-            <span class="header-title">Boleto Bancário</span>
-        </div>
-        
-        <div class="payment-details">
-            <i class="fas fa-barcode payment-icon"></i>
-            <div class="payment-title">Boleto Bancário</div>
-            <div class="payment-description">Copie o código de barras para pagamento</div>
-            
-            <div class="payment-code" id="boletoCode">
-                23793.81460 60000.052305 54091.520908 1 87260000352800
+            <div class="copy-code">
+                <input type="text" value="00020126360014BR.GOV.BCB.PIX0114123456789" id="pixCode" readonly>
+                <button onclick="copyCode('pixCode')">Copiar</button>
             </div>
-            
-            <button class="copy-button" id="copyBoletoButton">Copiar Código de Barras</button>
-        </div>
-    </div>
 
-    <!-- Credit Card Payment Screen -->
-    <div class="container" id="creditCardScreen" >
-        <div class="header">
-            <i class="fas fa-arrow-left" id="creditCardBackButton"></i>
-            <span class="header-title">Cartão de Crédito</span>
+            <div class="status-section">
+                <div class="status-icon pending fas fa-clock"></div>
+                <div class="status-text">
+                    <h3>Aguardando Pagamento</h3>
+                    <p>Código PIX válido por 30 minutos</p>
+                </div>
+            </div>
         </div>
-        
-        <div class="payment-details">
-            <i class="fas fa-credit-card payment-icon"></i>
-            <div class="payment-title">Pagamento com Cartão</div>
-            
-            <form class="credit-form">
-                <div class="form-group">
-                    <label>Número do Cartão</label>
-                    <input type="text" class="form-control" placeholder="0000 0000 0000 0000">
+
+        <div id="boletoPayment" class="payment-method-container hidden">
+            <div class="payment-method">
+                <img src="/api/placeholder/40/40" alt="Boleto">
+                <div class="payment-details">
+                    <h2>Boleto Bancário</h2>
+                    <p>Pagamento por boleto</p>
                 </div>
-                <div class="form-group">
-                    <label>Nome no Cartão</label>
-                    <input type="text" class="form-control" placeholder="Nome completo">
+            </div>
+
+            <div class="barcode">
+                <div class="timer" id="boletoTimer">23:45</div>
+                <img src="/api/placeholder/250/100" alt="Código de Barras">
+            </div>
+
+            <div class="copy-code">
+                <input type="text" value="12345678901234567890123456789012345678901234" id="boletoCode" readonly>
+                <button onclick="copyCode('boletoCode')">Copiar Código</button>
+            </div>
+
+            <div class="status-section">
+                <div class="status-icon pending fas fa-file-invoice-dollar"></div>
+                <div class="status-text">
+                    <h3>Boleto Gerado</h3>
+                    <p>Válido até 03/03/2024</p>
                 </div>
-                <div class="form-group">
-                    <label>Validade</label>
-                    <input type="text" class="form-control" placeholder="MM/AA">
+            </div>
+        </div>
+
+        <div id="creditCardPayment" class="payment-method-container hidden">
+            <div class="payment-method">
+                <img src="/api/placeholder/40/40" alt="Cartão de Crédito">
+                <div class="payment-details">
+                    <h2>Cartão de Crédito</h2>
+                    <p>**** **** **** 1234</p>
                 </div>
-                <div class="form-group">
-                    <label>CVV</label>
-                    <input type="text" class="form-control" placeholder="000">
+            </div>
+
+            <div class="status-section">
+                <div class="status-icon pending fas fa-credit-card"></div>
+                <div class="status-text">
+                    <h3>Processando Pagamento</h3>
+                    <p>Autorização em andamento</p>
                 </div>
-            </form>
-            
-            <button class="copy-button" id="processCreditCardButton">Processar Pagamento</button>
+            </div>
+
+            <div class="status-section">
+                <div class="status-icon success fas fa-check-circle"></div>
+                <div class="status-text">
+                    <h3>Pagamento Aprovado</h3>
+                    <p>Parcelas: 3x de R$ 100,00</p>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Pix Screen
-        document.getElementById('copyPixButton').addEventListener('click', function() {
-            const pixCode = document.getElementById('pixCode');
-            navigator.clipboard.writeText(pixCode.textContent).then(() => {
-                alert('Código Pix copiado!');
-            });
-        });
-
-        // Boleto Screen
-        document.getElementById('copyBoletoButton').addEventListener('click', function() {
-            const boletoCode = document.getElementById('boletoCode');
-            navigator.clipboard.writeText(boletoCode.textContent).then(() => {
-                alert('Código de Barras copiado!');
-            });
-        });
-
-        // Function to switch between screens (placeholder)
-        function switchScreen(fromScreen, toScreen) {
-            document.getElementById(fromScreen).style.display = 'none';
-            document.getElementById(toScreen).style.display = 'block';
+        function copyCode(codeId) {
+            const codeInput = document.getElementById(codeId);
+            codeInput.select();
+            document.execCommand('copy');
+            
+            const copyButton = event.target;
+            copyButton.textContent = 'Copiado!';
+            setTimeout(() => {
+                copyButton.textContent = codeId === 'pixCode' ? 'Copiar' : 'Copiar Código';
+            }, 2000);
         }
 
-        // Back button events
-        document.getElementById('pixBackButton').addEventListener('click', () => switchScreen('pixScreen', 'previousScreen'));
-        document.getElementById('boletoBackButton').addEventListener('click', () => switchScreen('boletoScreen', 'previousScreen'));
-        document.getElementById('creditCardBackButton').addEventListener('click', () => switchScreen('creditCardScreen', 'previousScreen'));
+        function closePaymentDetails() {
+            const container = document.getElementById('paymentContainer');
+            container.style.animation = 'slideDown 0.5s ease';
+            setTimeout(() => {
+                window.close(); // Simula fechamento da janela
+            }, 500);
+        }
 
-        // Credit Card Processing
-        document.getElementById('processCreditCardButton').addEventListener('click', function() {
-            // Simple validation (you'd want more robust validation)
-            const inputs = document.querySelectorAll('#creditCardScreen .form-control');
-            const allFilled = Array.from(inputs).every(input => input.value.trim() !== '');
+        function switchPaymentMethod(method) {
+            const containers = ['pixPayment', 'boletoPayment', 'creditCardPayment'];
+            const tabs = document.querySelectorAll('.method-tab');
             
-            if (allFilled) {
-                alert('Processando pagamento...');
-            } else {
-                alert('Por favor, preencha todos os campos');
-            }
-        });
+            // Hide all containers and remove active state
+            containers.forEach(container => {
+                document.getElementById(container).classList.add('hidden');
+            });
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected container and add active state
+            document.getElementById(method).classList.remove('hidden');
+            event.target.classList.add('active');
+        }
+
+        // Countdown timer for Pix and Boleto
+        function startTimer(timerId, duration) {
+            const timerEl = document.getElementById(timerId);
+            let timer = duration, minutes, seconds;
+            
+            const intervalId = setInterval(() => {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                timerEl.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    clearInterval(intervalId);
+                    timerEl.textContent = "Expirado";
+                }
+            }, 1000);
+        }
+
+        // Start timers
+        startTimer('pixTimer', 30 * 60);
+        startTimer('boletoTimer', 24 * 60 * 60);
+
+        // Slide down animation
+        document.head.insertAdjacentHTML('beforeend', `
+            <style>
+                @keyframes slideDown {
+                    from { transform: translateY(0); opacity: 1; }
+                    to { transform: translateY(20px); opacity: 0; }
+                }
+            </style>
+        `);
     </script>
 </body>
 </html>

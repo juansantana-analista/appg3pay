@@ -1235,7 +1235,7 @@ var app = new Framework7({
               }
             } else if (formaPagamento == 2) {
               formaPagamento = 2;
-            } else if (method == 3) {
+            } else if (formaPagamento == 3) {
               formaPagamento = 3;
             } else {
               app.dialog.alert("Forma de pagamento não selecionada.", "Erro!");
