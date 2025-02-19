@@ -1215,7 +1215,7 @@ var app = new Framework7({
             
             if (formaPagamento == 1) {
               document.getElementById('cartaoModal').classList.remove('hidden');
-              $("#finalizarCompraCartao").on("click", function () {
+              $("#finalizarCompraCartao").on("click", function () { 
               var nomeTitular = $("#nomeTitular").val();
               var numeroCartao = $("#numeroCartao").val();
               var dataExpiracao = $("#dataExpiracao").val();
