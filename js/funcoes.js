@@ -1758,8 +1758,7 @@ function listarEnderecos() {
     var userAuthToken = localStorage.getItem("userAuthToken");
     app.dialog.preloader("Carregando...");
     const pessoaId = localStorage.getItem("pessoaId");
-    var enderecoDetalhes = JSON.parse(localStorage.getItem("enderecoDetalhes"));
-    const enderecoEntregaId = enderecoDetalhes.enderecoId;
+    const enderecoEntregaId = localStorage.getItem("enderecoSelecionado");
   
     const data = {
       class: "PagamentoSafe2payRest",
