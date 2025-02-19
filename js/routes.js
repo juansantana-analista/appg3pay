@@ -1215,7 +1215,6 @@ var app = new Framework7({
             
             if (formaPagamento == 1) {
               document.getElementById('cartaoModal').classList.remove('hidden');
-              $("#finalizarCompraCartao").on("click", function () { 
               var nomeTitular = $("#nomeTitular").val();
               var numeroCartao = $("#numeroCartao").val();
               var dataExpiracao = $("#dataExpiracao").val();
@@ -1238,7 +1237,6 @@ var app = new Framework7({
                 app.dialog.alert("Por favor, insira um código CVC válido de 3 dígitos.", "Erro!");
                 return;
               }
-            });
             } else if (formaPagamento == 2) {
               formaPagamento = 2;
             } else if (formaPagamento == 3) {
