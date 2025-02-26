@@ -303,8 +303,45 @@ async function validarToken(userAuthToken) {
       .then((responseJson) => {
         // Verifica se o status é 'success' e se há dados de pedidos
         if (responseJson.status === "success" && responseJson.data.status === "success") {
-          const detalhes = responseJson.data.data;
+          const detalhes = responseJson.data.data;   
+              //ALIMENTAR COM OS VALORES DO ITEM
+              $("#imagem-detalhe").attr('src', detalhes.foto);
+              $("#imagemShare").attr('src', detalhes.foto);
+              $("#nome-detalhe").html(detalhes.nome);
+              $("#nomeShare").html(detalhes.nome);
+              //$("#rating-detalhe").html(produto.rating);
+              //$("#like-detalhe").html(produto.likes);
+              //$("#reviews-detalhe").html(produto.reviews + ' reviews');
+              $("#descricao-detalhe").html(detalhes.descricao_app);
+              $("#preco-detalhe").html(formatarMoeda(detalhes.preco));
+              $("#precoTotal").html(formatarMoeda(detalhes.preco));
+              $("#precoShare").html(formatarMoeda(detalhes.preco));
+              $("#precopromo-detalhe").html(formatarMoeda(detalhes.preco));
+              // Selecione a div onde você quer adicionar o link
+              const $container = $('#containerBtnCarrinho');
+              // Crie o link e configure os atributos
+              const $btnAddCarrinho = $('<button></button>')
+                  .text('Adicionar Carrinho')
+                  .attr('data-produto-id', '123')
+                  .attr('id', 'botaoCarrinho')
+                  .addClass('add-cart');
           
+              // Anexe o link ao container
+              $container.append($btnAddCarrinho);
+              produtoId = detalhes.id;
+          
+          //CLICOU NO ADICIONAR CARRINHO
+          $("#addCarrinho").on('click', function () {
+              //ADICIONAR AO CARRINHO
+              adicionarItemCarrinho(produtoId);
+          });
+          
+          //CLICOU NO ADICIONAR CARRINHO
+          $("#comprarAgora").on('click', function () {
+              //ADICIONAR AO CARRINHO
+              adicionarItemCarrinho(produtoId);
+          });
+
           localStorage.setItem('produtoDetalhes', JSON.stringify({detalhes}));
           app.dialog.close();
         } else {
