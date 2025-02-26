@@ -1210,7 +1210,7 @@ var app = new Framework7({
           $('#cvc').mask('000');
 
           // Exemplo de uso ao clicar em um botão
-          $("#finalizarCompra").on("click", function () {
+          $(".finalizarCompra").on("click", function () {
             var formaPagamento = obterFormaPagamentoSelecionada();
             
             if (formaPagamento == 1) {
