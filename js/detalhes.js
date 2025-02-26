@@ -4,7 +4,7 @@ var produtoId = '';
 if (produto) {
     //ALIMENTAR COM OS VALORES DO ITEM
     $("#imagem-detalhe").attr('src', produto.imagem);
-    $("#imagemShare").attr('src', 'https://escritorio.g3pay.com.br/' + produto.imagem);
+    $("#imagemShare").attr('src', produto.imagem);
     $("#nome-detalhe").html(produto.nome);
     $("#nomeShare").html(produto.nome);
     $("#rating-detalhe").html(produto.rating);

@@ -305,8 +305,8 @@ async function validarToken(userAuthToken) {
         if (responseJson.status === "success" && responseJson.data.status === "success") {
           const detalhes = responseJson.data.data;   
               //ALIMENTAR COM OS VALORES DO ITEM
-              $("#imagem-detalhe").attr('src', detalhes.foto);
-              $("#imagemShare").attr('src', detalhes.foto);
+              $("#imagem-detalhe").attr('src', 'https://escritorio.g3pay.com.br/' + detalhes.foto);
+              $("#imagemShare").attr('src', 'https://escritorio.g3pay.com.br/' + detalhes.foto);
               $("#nome-detalhe").html(detalhes.nome);
               $("#nomeShare").html(detalhes.nome);
               //$("#rating-detalhe").html(produto.rating);
