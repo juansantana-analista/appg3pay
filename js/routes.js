@@ -1209,12 +1209,14 @@ var app = new Framework7({
           $('#dataExpiracao').mask('00/0000');
           $('#cvc').mask('000');
 
+          $("#opcaoCartao").on("click", function () {
+            document.getElementById('cartaoModal').classList.remove('hidden');
+          });
           // Exemplo de uso ao clicar em um botão
-          $(".finalizarCompra").on("click", function () {
+          $(".finalizar-compra").on("click", function () {
             var formaPagamento = obterFormaPagamentoSelecionada();
             
             if (formaPagamento == 1) {
-              document.getElementById('cartaoModal').classList.remove('hidden');
               var nomeTitular = $("#nomeTitular").val();
               var numeroCartao = $("#numeroCartao").val();
               var dataExpiracao = $("#dataExpiracao").val();
