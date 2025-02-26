@@ -304,7 +304,8 @@ async function validarToken(userAuthToken) {
         // Verifica se o status é 'success' e se há dados de pedidos
         if (responseJson.status === "success" && responseJson.data.status === "success") {
           const detalhes = responseJson.data.data;
-          localStorage.setItem('produtoTeste', detalhes);
+          
+          localStorage.setItem('produtoTeste', JSON.stringify({detalhes}));
           app.dialog.close();
         } else {
           app.dialog.close();
