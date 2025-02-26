@@ -1017,16 +1017,21 @@ var app = new Framework7({
 
           
 
+          let searchTimeout; // Variável para armazenar o temporizador
+
           $(document).on("input", "#search", function () {
+            clearTimeout(searchTimeout); // Cancela o temporizador anterior
+          
             var tipoOperacao = localStorage.getItem('operacao');
             const searchQuery = $(this).val();
-            if (searchQuery.length >= 3) {
-              listarProdutos(searchQuery, null, tipoOperacao);
-            }
-            if (searchQuery.length < 1) {
-              listarProdutos(searchQuery, null, tipoOperacao);
-            }
+          
+            searchTimeout = setTimeout(() => {
+              if (searchQuery.length >= 3 || searchQuery.length < 1) {
+                listarProdutos(searchQuery, null, tipoOperacao);
+              }
+            }, 1000); // Espera 1 segundo após a última digitação
           });
+          
 
           listarProdutos();
 
