@@ -341,6 +341,37 @@ async function validarToken(userAuthToken) {
               //ADICIONAR AO CARRINHO
               adicionarItemCarrinho(produtoId);
           });
+          // Limpa os benefícios antes de adicionar novos
+$(".benefits-grid").empty();
+
+// Percorre a lista de benefícios e adiciona ao HTML
+detalhes.beneficios.forEach((beneficio) => {
+    $(".benefits-grid").append(`
+        <div class="p-4 bg-gray-50 rounded-xl text-center">
+            <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3" style="background-color: ${beneficio.cor_icone};">
+                <i class="${beneficio.icone} text-white text-lg"></i>
+            </div>
+            <h4 class="font-semibold mb-1">${beneficio.nome}</h4>
+            <p class="text-sm text-gray-600">${beneficio.descricao}</p>
+        </div>
+    `);
+});
+// Limpa os dados nutricionais antes de adicionar novos
+$(".space-y-4").empty();
+
+// Percorre a lista da tabela nutricional e adiciona ao HTML
+detalhes.tabela_nutricional.forEach((item) => {
+    $(".space-y-4").append(`
+        <div>
+            <div class="flex justify-between mb-1">
+                <span class="text-gray-700">${item.nome}</span>
+                <span class="text-gray-900 font-medium">${item.quantidade}</span>
+            </div>
+            <div class="progress-bar" style="width: ${parseInt(item.quantidade) || 50}%;"></div>
+        </div>
+    `);
+});
+
 
           localStorage.setItem('produtoDetalhes', JSON.stringify({detalhes}));
           app.dialog.close();
