@@ -286,8 +286,8 @@ async function validarToken(userAuthToken) {
   
     const body = JSON.stringify({
       class: "ProdutoVariacaoRest",
-      method: "load",
-      id: produtoId,
+      method: "obterProdutoCompleto",
+      produto_id: produtoId,
     });
   
     // Opções da requisição
@@ -302,12 +302,9 @@ async function validarToken(userAuthToken) {
       .then((response) => response.json())
       .then((responseJson) => {
         // Verifica se o status é 'success' e se há dados de pedidos
-        if (responseJson.status === "success") {
-          const detalhes = responseJson.data;
-  
-          $("#product-name").html(detalhes.nome);
-          $("#descricao-detalhe").html(detalhes.descricao_app);
-  
+        if (responseJson.status === "success" && responseJson.data.status === "success") {
+          const detalhes = responseJson.data.data;
+          localStorage.setItem('produtoTeste', detalhes);
           app.dialog.close();
         } else {
           app.dialog.close();
