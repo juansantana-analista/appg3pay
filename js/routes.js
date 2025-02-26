@@ -1023,7 +1023,7 @@ var app = new Framework7({
               'background-color': '#f7f9fa',
               color: '#333',
             });
-            $(document).on("input", "#search", function () {
+            $(document).on("input", "#pesquisarProdutos", function () {
               const searchQuery = $(this).val();
               if (searchQuery.length >= 3) {
                 listarProdutos(searchQuery, null, 'compra');
