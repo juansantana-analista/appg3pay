@@ -532,6 +532,12 @@ form {
   }
 }
 
+@media (min-width: 1025px) {
+  #installBanner {
+      display: none;
+  }
+}
+
 @media (min-width: 1200px) {
   .item-card {
     flex: 20%;
