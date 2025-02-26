@@ -1212,6 +1212,11 @@ var app = new Framework7({
           $("#opcaoCartao").on("click", function () {
             document.getElementById('cartaoModal').classList.remove('hidden');
           });
+
+          $("#closeCartaoModal").on("click", function () {
+            document.getElementById('cartaoModal').classList.add('hidden');
+            $("input[name='payment'][value='3']").prop("checked", true);
+          });
           // Exemplo de uso ao clicar em um botão
           $(".finalizar-compra").on("click", function () {
             var formaPagamento = obterFormaPagamentoSelecionada();
