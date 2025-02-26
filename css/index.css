@@ -1187,7 +1187,7 @@ form {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: calc(100% - 100px); /* Ajuste conforme necessário */
+  max-width: calc(100% - 80px); /* Ajuste conforme necessário */
 }
 
 .share-button {
