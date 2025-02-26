@@ -996,18 +996,7 @@ var app = new Framework7({
               'background-color': '#f7f9fa',
               color: '#333',
             });
-
-            $(document).on("input", "#search", function () {
-              const searchQuery = $(this).val();
-              if (searchQuery.length >= 3) {
-                listarProdutos(searchQuery);
-              }
-              if (searchQuery.length < 1) {
-                listarProdutos(searchQuery);
-              }
-            });
             listarProdutos();
-
           });
 
           // Manipular clique no botão "Compra"
@@ -1023,17 +1012,20 @@ var app = new Framework7({
               'background-color': '#f7f9fa',
               color: '#333',
             });
-            $(document).on("input", "#search", function () {
-              const searchQuery = $(this).val();
-              if (searchQuery.length >= 3) {
-                console.log(searchQuery);
-                listarProdutos(searchQuery, null, 'compra');
-              }
-              if (searchQuery.length < 1) {
-                listarProdutos(searchQuery, null, 'compra');
-              }
-            });
             listarProdutos(null, null, 'compra');
+          });
+
+          
+
+          $(document).on("input", "#search", function () {
+            var tipoOperacao = localStorage.getItem('operacao');
+            const searchQuery = $(this).val();
+            if (searchQuery.length >= 3) {
+              listarProdutos(searchQuery, null, tipoOperacao);
+            }
+            if (searchQuery.length < 1) {
+              listarProdutos(searchQuery, null, tipoOperacao);
+            }
           });
 
           listarProdutos();
