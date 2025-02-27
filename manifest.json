@@ -5,7 +5,7 @@
   "name": "G3 Pay",
   "scope": "/",
   "short_name": "G3 Pay",
-  "start_url": "https://app.g3pay.com.br/",
+  "start_url": "https://apphomologa.g3pay.com.br/",
   "id": "br.com.g3pay",
   "display": "fullscreen",
   "display_override": ["standalone", "window-controls-overlay"],
@@ -16,7 +16,7 @@
       "name": "G3 Pay",
       "short_name": "G3 Pay",
       "description": "Gerencie suas vendas e maximize seus ganhos com a G3 Pay na palma da mão.",
-      "url": "https://app.g3pay.com.br/"
+      "url": "https://apphomologa.g3pay.com.br/"
     }
   ],
   "icons": [
