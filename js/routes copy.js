@@ -1,5 +1,5 @@
 //DADOS BACKEND SERVER
-const apiServerUrl = "https://escritorio.g3pay.com.br/rest.php";
+const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
 const versionApp = "1.0.6";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -255,7 +255,7 @@ var app = new Framework7({
               );
             } else {
               //START Fazendo a requisição
-              fetch('https://escritorio.g3pay.com.br/api/auth_app.php', {
+              fetch('https://vitatop.tecskill.com.br/api/auth_app.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -313,7 +313,7 @@ var app = new Framework7({
                 app.dialog.preloader("Carregando...");
 
               //START Fazendo a requisição
-                fetch('https://escritorio.g3pay.com.br/api/request_reset.php', {
+                fetch('https://vitatop.tecskill.com.br/api/request_reset.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -407,7 +407,7 @@ var app = new Framework7({
               };
 
               // Faz a requisição ao servidor
-              fetch("https://escritorio.g3pay.com.br/api/validate_code.php", options)
+              fetch("https://vitatop.tecskill.com.br/api/validate_code.php", options)
                 .then((response) => response.json())
                 .then((data) => {
                   app.dialog.close();
@@ -483,7 +483,7 @@ var app = new Framework7({
                   body: body,
                 };
     
-                fetch('https://escritorio.g3pay.com.br/api/reset_password.php', options)
+                fetch('https://vitatop.tecskill.com.br/api/reset_password.php', options)
                   .then((response) => response.json())
                   .then((data) => {
                     app.dialog.close();

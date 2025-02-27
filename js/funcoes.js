@@ -2,7 +2,7 @@
 async function validarToken(userAuthToken) {
     var userAuthToken = localStorage.getItem("userAuthToken");
     if (userAuthToken) {
-      const apiServerUrl = "https://escritorio.g3pay.com.br/rest.php";
+      const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
   
       const headers = {
         "Content-Type": "application/json",
@@ -136,7 +136,7 @@ async function validarToken(userAuthToken) {
     var userAuthToken = localStorage.getItem("userAuthToken");
     app.dialog.preloader("Carregando...");
   
-    var imgUrl = "https://escritorio.g3pay.com.br/";
+    var imgUrl = "https://vitatop.tecskill.com.br/";
   
     // Cabeçalhos da requisição
     const headers = {
@@ -179,7 +179,7 @@ async function validarToken(userAuthToken) {
             } else {
               produtoPreco = formatarMoeda(produto.preco_lojavirtual);
             }
-            var imgUrl = "https://escritorio.g3pay.com.br/";
+            var imgUrl = "https://vitatop.tecskill.com.br/";
             const imagemProduto = produto.foto
               ? imgUrl + produto.foto
               : "img/default.png";
@@ -276,7 +276,7 @@ async function validarToken(userAuthToken) {
     var userAuthToken = localStorage.getItem("userAuthToken");
     app.dialog.preloader("Carregando...");
   
-    var imgUrl = "https://escritorio.g3pay.com.br/";
+    var imgUrl = "https://vitatop.tecskill.com.br/";
   
     // Cabeçalhos da requisição
     const headers = {
@@ -305,8 +305,8 @@ async function validarToken(userAuthToken) {
         if (responseJson.status === "success" && responseJson.data.status === "success") {
           const detalhes = responseJson.data.data;   
               //ALIMENTAR COM OS VALORES DO ITEM
-              $("#imagem-detalhe").attr('src', 'https://escritorio.g3pay.com.br/' + detalhes.foto);
-              $("#imagemShare").attr('src', 'https://escritorio.g3pay.com.br/' + detalhes.foto);
+              $("#imagem-detalhe").attr('src', 'https://vitatop.tecskill.com.br/' + detalhes.foto);
+              $("#imagemShare").attr('src', 'https://vitatop.tecskill.com.br/' + detalhes.foto);
               $("#nome-detalhe").html(detalhes.nome);
               $("#nomeShare").html(detalhes.nome);
               //$("#rating-detalhe").html(produto.rating);
@@ -403,7 +403,7 @@ detalhes.tabela_nutricional.forEach((item) => {
     var codigo_indicador = localStorage.getItem("codigo_indicador");
     app.dialog.preloader("Carregando...");
   
-    var imgUrl = "https://escritorio.g3pay.com.br/";
+    var imgUrl = "https://vitatop.tecskill.com.br/";
   
     // Cabeçalhos da requisição
     const headers = {
@@ -584,7 +584,7 @@ detalhes.tabela_nutricional.forEach((item) => {
     const pessoaId = localStorage.getItem("pessoaId");
     app.dialog.preloader("Carregando...");
   
-    var imgUrl = "https://escritorio.g3pay.com.br/";
+    var imgUrl = "https://vitatop.tecskill.com.br/";
   
     // Cabeçalhos da requisição
     const headers = {
@@ -947,7 +947,7 @@ detalhes.tabela_nutricional.forEach((item) => {
             .map(
               (item) => `
                       <li>
-                          <img src="https://escritorio.g3pay.com.br/${
+                          <img src="https://vitatop.tecskill.com.br/${
                             item.foto
                           }" alt="${
                 item.descricao
@@ -986,7 +986,7 @@ detalhes.tabela_nutricional.forEach((item) => {
                               <!-- Seção de pagamento -->
                               <div class="payment-method-a display-none" id="pagamentoPix">
                                   <div class="payment-center">
-                                      <img src="https://escritorio.g3pay.com.br/${
+                                      <img src="https://vitatop.tecskill.com.br/${
                                         detalhes.pix_qrcode
                                       }" width="250px" alt="QR Code">
                                       <span class="pix-key" id="pixKey">${
@@ -2054,7 +2054,7 @@ function listarEnderecos() {
               
                   <div class="flex space-x-4" style="margin-bottom: 18px;">
                     <img
-                      src="https://escritorio.g3pay.com.br/${
+                      src="https://vitatop.tecskill.com.br/${
                                     item.foto
                                   }"
                       alt="${item.nome}"
@@ -2803,7 +2803,7 @@ function listarEnderecos() {
               var itemLi = `
                           <!-- ITEM DO CARRINHO-->
                           <li class="item-carrinho">
-                                  <img src="https://escritorio.g3pay.com.br/${
+                                  <img src="https://vitatop.tecskill.com.br/${
                                     item.foto
                                   }" width="40px">
                               <div class="area-details">
