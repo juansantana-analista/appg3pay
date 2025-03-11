@@ -2500,7 +2500,7 @@ function listarEnderecos() {
         ) {
           // Sucesso na alteração
           var toastCenter = app.toast.create({
-            text: `${produto.nome} adicionado ao carrinho`,
+            text: `Produto adicionado ao carrinho`,
             position: "center",
             closeTimeout: 2000,
           });
