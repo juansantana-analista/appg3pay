@@ -818,9 +818,10 @@ detalhes.tabela_nutricional.forEach((item) => {
           const vendas = responseJson.data.data;
           const vendasContainer = document.getElementById("container-vendas");
           vendasContainer.innerHTML = "";
-          const totalItens = vendas.itens.reduce((soma, item) => soma + parseInt(item.qtde), 0);
-
+  
           vendas.forEach((venda) => {
+            const totalItens = (venda.itens || []).reduce((soma, item) => soma + parseInt(item.qtde), 0);
+
             const vendasHTML = `                    
                           <div class="card-list" 
                           data-id-venda="${venda.pedido_id}">
