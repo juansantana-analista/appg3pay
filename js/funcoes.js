@@ -819,21 +819,23 @@ detalhes.tabela_nutricional.forEach((item) => {
           const vendasContainer = document.getElementById("container-vendas");
           vendasContainer.innerHTML = "";
 
-          const itensHTML = vendas.itens
-          .map((item) => {
-            return `
-              <div class="item-produto">
-                <img src="${item.foto}" alt="${item.descricao}" class="item-foto"/>
-                <div class="item-info">
-                  <div class="item-desc">${item.descricao}</div>
-                  <div class="item-qtde">Qtd: ${item.qtde}</div>
-                  <div class="item-preco">Preço: ${formatarMoeda(item.preco)}</div>
-                  <div class="item-total">Total: ${formatarMoeda(item.total)}</div>
-                </div>
-              </div>
-            `;
-          })
-          .join(""); // para juntar todos os itens num único HTML
+          const itensHTML = Array.isArray(vendas.itens)
+          ? vendas.itens
+              .map((item) => {
+                return `
+                  <div class="item-produto">
+                    <img src="${item.foto}" alt="${item.descricao}" class="item-foto"/>
+                    <div class="item-info">
+                      <div class="item-desc">${item.descricao}</div>
+                      <div class="item-qtde">Qtd: ${item.qtde}</div>
+                      <div class="item-preco">Preço: ${formatarMoeda(item.preco)}</div>
+                      <div class="item-total">Total: ${formatarMoeda(item.total)}</div>
+                    </div>
+                  </div>
+                `;
+              })
+              .join("")
+          : "<div class='sem-itens'>Sem itens encontrados</div>";
   
           vendas.forEach((venda) => {
             const vendasHTML = `                    
