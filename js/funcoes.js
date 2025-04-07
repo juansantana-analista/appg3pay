@@ -972,9 +972,9 @@ detalhes.tabela_nutricional.forEach((item) => {
           const detalhesHTML = `
                       <div class="order-summary">
                           <div class="order-details">
-                              <p><h3>Número do Pedido: #${detalhes.id}</h3></p>
+                              <p><h3>Número do Pedido: #${detalhes.venda_id}</h3></p>
                               <p><strong>Data do Pedido:</strong> ${formatarData(
-                                detalhes.data_emissao
+                                detalhes.data_criacao
                               )}</p>
                           </div>
                           <div class="order-items">
@@ -984,19 +984,19 @@ detalhes.tabela_nutricional.forEach((item) => {
                           <div class="order-payment">
                               <h3>Forma de Pagamento</h3>
                               <p><strong>Método:</strong> ${
-                                detalhes.forma_pagamento
+                                detalhes.forma_pagamento.forma
                               } <a href="#" class="pagamento-display display-none">Alterar</a></p>
                               <p><strong>Status:</strong> ${
-                                detalhes.mensagem_compra
+                                detalhes.forma_pagamento.transacao_mensagem
                               }</p>
                               <!-- Seção de pagamento -->
                               <div class="payment-method-a display-none" id="pagamentoPix">
                                   <div class="payment-center">
                                       <img src="https://escritorio.g3pay.com.br/${
-                                        detalhes.pix_qrcode
+                                        detalhes.forma_pagamento.pix_qrcode
                                       }" width="250px" alt="QR Code">
                                       <span class="pix-key" id="pixKey">${
-                                        detalhes.pix_key
+                                        detalhes.forma_pagamento.pix_key
                                       }</span>
                                       <button class="copy-button" id="copiarPix">Copiar Código Pix</button>
                                   </div>
@@ -1005,7 +1005,7 @@ detalhes.tabela_nutricional.forEach((item) => {
                               <div class="payment-method-a display-none" id="pagamentoBoleto">
                                   <div class="payment-center">
                                       <span class="pix-key" id="linhaBoleto">${
-                                        detalhes.boleto_linhadigitavel
+                                        detalhes.forma_pagamento.boleto_linhadigitavel
                                       }</span>
                                       <button class="copy-button" id="copiarBoleto">Copiar Linha Digitável</button>
                                       <button class="copy-button" id="baixarBoleto">Baixar Boleto PDF</button>
