@@ -872,7 +872,7 @@ detalhes.tabela_nutricional.forEach((item) => {
           $(".card-list").click(function () {
             // Atualiza o ícone de seleção
             var vendaId = $(this).data("id-venda");
-            localStorage.setItem("pedidoId", vendaId);
+            localStorage.setItem("vendaId", vendaId);
             app.views.main.router.navigate("/resumo-venda/");
           });
   
