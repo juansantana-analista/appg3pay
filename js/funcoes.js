@@ -961,7 +961,7 @@ detalhes.tabela_nutricional.forEach((item) => {
                           <span class="item-name">${item.descricao}</span>
                           <span class="item-quantity">${item.qtde}x</span>
                           <span class="item-price">${formatarMoeda(
-                            item.total
+                            item.preco
                           )}</span>
                       </li>
                   `
@@ -985,7 +985,7 @@ detalhes.tabela_nutricional.forEach((item) => {
                               <h3>Forma de Pagamento</h3>
                               <p><strong>Método:</strong> ${
                                 detalhes.forma_pagamento.forma
-                              } <a href="#" class="pagamento-display display-none">Alterar</a></p>
+                              }</p>
                               <p><strong>Status:</strong> ${
                                 detalhes.forma_pagamento.transacao_mensagem
                               }</p>
