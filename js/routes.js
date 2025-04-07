@@ -803,7 +803,7 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada          
-          detalhesPedido();
+          detalhesVenda();
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
