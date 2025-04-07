@@ -818,6 +818,22 @@ detalhes.tabela_nutricional.forEach((item) => {
           const vendas = responseJson.data.data;
           const vendasContainer = document.getElementById("container-vendas");
           vendasContainer.innerHTML = "";
+
+          const itensHTML = vendas.itens
+          .map((item) => {
+            return `
+              <div class="item-produto">
+                <img src="${item.foto}" alt="${item.descricao}" class="item-foto"/>
+                <div class="item-info">
+                  <div class="item-desc">${item.descricao}</div>
+                  <div class="item-qtde">Qtd: ${item.qtde}</div>
+                  <div class="item-preco">Preço: ${formatarMoeda(item.preco)}</div>
+                  <div class="item-total">Total: ${formatarMoeda(item.total)}</div>
+                </div>
+              </div>
+            `;
+          })
+          .join(""); // para juntar todos os itens num único HTML
   
           vendas.forEach((venda) => {
             const vendasHTML = `                    
@@ -859,7 +875,7 @@ detalhes.tabela_nutricional.forEach((item) => {
                                            venda.cliente.valor_total
                                          )}</span>
                                       </div>
-                                      <div class="items">${venda.pedido_id}</div>
+                                      <div class="items">${itensHTML}</div>
                                    </div>
                                 </div>
                              </div>
