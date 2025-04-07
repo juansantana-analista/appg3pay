@@ -899,6 +899,202 @@ detalhes.tabela_nutricional.forEach((item) => {
   }
   //Fim Função Lista Vendas
   
+  // Início da função detalhesVendas
+  function detalhesVenda() {
+    var userAuthToken = localStorage.getItem("userAuthToken");
+    var vendaId = localStorage.getItem("vendaId");
+    app.dialog.preloader("Carregando...");
+  
+    // Cabeçalhos da requisição
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + userAuthToken,
+    };
+  
+    const body = JSON.stringify({
+      class: "PedidoVendaRest",
+      method: "ListarPedidos",
+      venda_id: vendaId,
+    });
+  
+    // Opções da requisição
+    const options = {
+      method: "POST",
+      headers: headers,
+      body: body,
+    };
+  
+    // Fazendo a requisição
+    fetch(apiServerUrl, options)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        // Verifica se o status é 'success' e se há dados de pedidos
+        if (
+          responseJson.status === "success" &&
+          responseJson.data &&
+          responseJson.data.data
+        ) {
+          const detalhes = responseJson.data.data[0];
+          const detalhesContainer = document.getElementById("detalhesVenda");
+          detalhesContainer.innerHTML = "";
+  
+          // Formata a data e moeda
+          const formatarData = (data) => new Date(data).toLocaleString();
+          const formatarMoeda = (valor) =>
+            `R$ ${parseFloat(valor).toFixed(2).replace(".", ",")}`;
+  
+          // Monta o HTML dos itens do pedido
+          const itensHTML = detalhes.itens
+            .map(
+              (item) => `
+                      <li>
+                          <img src="https://escritorio.g3pay.com.br/${
+                            item.foto
+                          }" alt="${
+                item.descricao
+              }" style="width: 50px; height: 50px;"/>
+                          <span class="item-name">${item.descricao}</span>
+                          <span class="item-quantity">${item.quantidade}x</span>
+                          <span class="item-price">${formatarMoeda(
+                            item.preco_total
+                          )}</span>
+                      </li>
+                  `
+            )
+            .join("");
+  
+          // Monta o HTML completo
+          const detalhesHTML = `
+                      <div class="order-summary">
+                          <div class="order-details">
+                              <p><h3>Número do Pedido: #${detalhes.id}</h3></p>
+                              <p><strong>Data do Pedido:</strong> ${formatarData(
+                                detalhes.data_emissao
+                              )}</p>
+                          </div>
+                          <div class="order-items">
+                              <h3>Itens do Pedido</h3>
+                              <ul>${itensHTML}</ul>
+                          </div>
+                          <div class="order-payment">
+                              <h3>Forma de Pagamento</h3>
+                              <p><strong>Método:</strong> ${
+                                detalhes.forma_pagamento
+                              } <a href="#" class="pagamento-display display-none">Alterar</a></p>
+                              <p><strong>Status:</strong> ${
+                                detalhes.mensagem_compra
+                              }</p>
+                              <!-- Seção de pagamento -->
+                              <div class="payment-method-a display-none" id="pagamentoPix">
+                                  <div class="payment-center">
+                                      <img src="https://escritorio.g3pay.com.br/${
+                                        detalhes.pix_qrcode
+                                      }" width="250px" alt="QR Code">
+                                      <span class="pix-key" id="pixKey">${
+                                        detalhes.pix_key
+                                      }</span>
+                                      <button class="copy-button" id="copiarPix">Copiar Código Pix</button>
+                                  </div>
+                              </div>
+                              <!-- Seção de pagamento -->
+                              <div class="payment-method-a display-none" id="pagamentoBoleto">
+                                  <div class="payment-center">
+                                      <span class="pix-key" id="linhaBoleto">${
+                                        detalhes.boleto_linhadigitavel
+                                      }</span>
+                                      <button class="copy-button" id="copiarBoleto">Copiar Linha Digitável</button>
+                                      <button class="copy-button" id="baixarBoleto">Baixar Boleto PDF</button>
+                                  </div>
+                              </div>
+                              <!-- Seção de pagamento -->
+                              <div class="payment-method-a display-none" id="pagamentoCartao">
+                                  <div class="payment-center">
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="order-address">
+                              <h3>Endereço de Entrega</h3>
+                              <p>${detalhes.endereco_entrega.rua}, ${
+            detalhes.endereco_entrega.numero
+          }</p>
+                              <p>${detalhes.endereco_entrega.bairro}, ${
+            detalhes.endereco_entrega.cidade
+          } - ${detalhes.endereco_entrega.estado}</p>
+                              <p>${detalhes.endereco_entrega.cep}</p>
+                          </div>
+                          <div class="order-total">
+                              <h3>Resumo</h3>
+                              <p><strong>Total dos Itens:</strong> ${formatarMoeda(
+                                detalhes.valor_total
+                              )}</p>
+                              <p><strong>Frete:</strong></p>
+                              <p><strong>Total:</strong> ${formatarMoeda(
+                                detalhes.valor_total
+                              )}</p>
+                          </div>
+                      </div>
+                  `;
+  
+          detalhesContainer.innerHTML = detalhesHTML;
+          if (detalhes.status_compra != 3) {
+            $(".pagamento-display").removeClass("display-none");
+          }
+          if (detalhes.forma_pagamento == "PIX") {
+            $("#pagamentoPix").removeClass("display-none");
+          } else if (detalhes.forma_pagamento == "BOLETO") {
+            $("#pagamentoBoleto").removeClass("display-none");
+          } else {
+            $("#pagamentoCartao").removeClass("display-none");
+          }
+  
+          $("#copiarPix").on("click", function () {
+            copiarParaAreaDeTransferencia(detalhes.pix_key);
+          });
+  
+          $("#copiarBoleto").on("click", function () {
+            copiarParaAreaDeTransferencia(detalhes.boleto_linhadigitavel);
+          });
+  
+          // Baixar boleto
+          $("#baixarBoleto").on("click", function () {
+            app.dialog.confirm(
+              "Deseja baixar o boleto no navegador?",
+              function () {
+                var ref = cordova.InAppBrowser.open(
+                  detalhes.boleto_impressao,
+                  "_system",
+                  "location=no,zoom=no"
+                );
+                ref.show();
+              }
+            );
+          });
+  
+          app.dialog.close();
+        } else {
+          app.dialog.close();
+          // Verifica se há uma mensagem de erro definida
+          const errorMessage =
+            responseJson.message || "Formato de dados inválido";
+          app.dialog.alert(
+            "Erro ao carregar pedidos: " + errorMessage,
+            "Falha na requisição!"
+          );
+        }
+      })
+      .catch((error) => {
+        app.dialog.close();
+        console.error("Erro:", error);
+        app.dialog.alert(
+          "Erro ao carregar pedidos: " + error.message,
+          "Falha na requisição!"
+        );
+      });
+  
+    localStorage.removeItem("pedidoId");
+  }
+  // Fim da função detalhesVendas
+
   // Início da função detalhesPedido
   function detalhesPedido() {
     var userAuthToken = localStorage.getItem("userAuthToken");
