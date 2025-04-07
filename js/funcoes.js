@@ -1017,16 +1017,6 @@ detalhes.tabela_nutricional.forEach((item) => {
                                   </div>
                               </div>
                           </div>
-                          <div class="order-address">
-                              <h3>Endereço de Entrega</h3>
-                              <p>${detalhes.endereco_entrega.rua}, ${
-            detalhes.endereco_entrega.numero
-          }</p>
-                              <p>${detalhes.endereco_entrega.bairro}, ${
-            detalhes.endereco_entrega.cidade
-          } - ${detalhes.endereco_entrega.estado}</p>
-                              <p>${detalhes.endereco_entrega.cep}</p>
-                          </div>
                           <div class="order-total">
                               <h3>Resumo</h3>
                               <p><strong>Total dos Itens:</strong> ${formatarMoeda(
