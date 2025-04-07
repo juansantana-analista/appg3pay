@@ -910,13 +910,14 @@ detalhes.tabela_nutricional.forEach((item) => {
       "Content-Type": "application/json",
       Authorization: "Bearer " + userAuthToken,
     };
+    const dados = {
+      venda_id: vendaId,
+    };
   
     const body = JSON.stringify({
       class: "PedidoDigitalRest",
       method: "MinhasVendasDigitais",
-      dados:{
-        venda_id: vendaId,
-      }
+      dados: dados
     });
   
     // Opções da requisição
