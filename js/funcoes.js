@@ -823,7 +823,7 @@ detalhes.tabela_nutricional.forEach((item) => {
 
             const vendasHTML = `                    
                           <div class="card-list" 
-                          data-id-venda="${venda.pedido_id}">
+                          data-id-venda="${venda.venda_id}">
                              <div class="card-principal">
                                 <div class="card-header open header-pago">
                                    <div class="date">${formatarData(
@@ -835,12 +835,12 @@ detalhes.tabela_nutricional.forEach((item) => {
                                 </div>
                                 <div class="card-body">
                                    <div class="name">PEDIDO #${
-                                     venda.pedido_id
+                                     venda.venda_id
                                    }</div>
                                    <div class="details">
                                       <div class="detail">
                                          <span>Nº</span>
-                                         <span>${venda.pedido_id}</span>
+                                         <span>${venda.venda_id}</span>
                                       </div>
                                       <div class="detail">
                                          <span class="mdi mdi-cash-multiple"></span>
