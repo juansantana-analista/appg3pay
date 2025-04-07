@@ -914,7 +914,9 @@ detalhes.tabela_nutricional.forEach((item) => {
     const body = JSON.stringify({
       class: "PedidoDigitalRest",
       method: "MinhasVendasDigitais",
-      venda_id: vendaId,
+      dados:{
+        venda_id: vendaId,
+      }
     });
   
     // Opções da requisição
@@ -935,7 +937,6 @@ detalhes.tabela_nutricional.forEach((item) => {
           responseJson.data.data
         ) {
           const detalhes = responseJson.data.data[0];
-          console.log(detalhes);
           const detalhesContainer = document.getElementById("detalhesVenda");
           detalhesContainer.innerHTML = "";
   
