@@ -903,6 +903,7 @@ detalhes.tabela_nutricional.forEach((item) => {
   function detalhesVenda() {
     var userAuthToken = localStorage.getItem("userAuthToken");
     var vendaId = localStorage.getItem("vendaId");
+    var pessoaId = localStorage.getItem("pessoaId");
     app.dialog.preloader("Carregando...");
   
     // Cabeçalhos da requisição
@@ -911,6 +912,7 @@ detalhes.tabela_nutricional.forEach((item) => {
       Authorization: "Bearer " + userAuthToken,
     };
     const dados = {
+      vendedor: pessoaId,
       venda_id: vendaId,
     };
   
