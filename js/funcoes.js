@@ -820,7 +820,6 @@ detalhes.tabela_nutricional.forEach((item) => {
           vendasContainer.innerHTML = "";
   
           vendas.forEach((venda) => {
-            const totalItens = (venda.itens || []).reduce((soma, item) => soma + parseInt(item.qtde), 0);
 
             const vendasHTML = `                    
                           <div class="card-list" 
@@ -861,7 +860,7 @@ detalhes.tabela_nutricional.forEach((item) => {
                                            venda.cliente.valor_total
                                          )}</span>
                                       </div>
-                                      <div class="items">${totalItens}</div>
+                                      <div class="items">${venda.quantidade_itens}</div>
                                    </div>
                                 </div>
                              </div>
