@@ -912,8 +912,8 @@ detalhes.tabela_nutricional.forEach((item) => {
     };
   
     const body = JSON.stringify({
-      class: "PedidoVendaRest",
-      method: "ListarPedidos",
+      class: "PedidoDigitalRest",
+      method: "MinhasVendasDigitais",
       venda_id: vendaId,
     });
   
