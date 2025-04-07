@@ -830,7 +830,7 @@ detalhes.tabela_nutricional.forEach((item) => {
                                      venda.data_criacao
                                    )}</div>
                                    <div class="status">${
-                                     venda.cliente.status_compra
+                                     venda.status_compra
                                    }</div>
                                 </div>
                                 <div class="card-body">
@@ -851,13 +851,13 @@ detalhes.tabela_nutricional.forEach((item) => {
                                       <div class="detail">
                                          <span>Total</span>
                                          <span>${formatarMoeda(
-                                           venda.cliente.valor_total
+                                           venda.valor_total
                                          )}</span>
                                       </div>
                                       <div class="detail">
                                          <span>A pagar</span>
                                          <span>${formatarMoeda(
-                                           venda.cliente.valor_total
+                                           venda.valor_total
                                          )}</span>
                                       </div>
                                       <div class="items">${venda.quantidade_itens}</div>
@@ -1030,13 +1030,13 @@ detalhes.tabela_nutricional.forEach((item) => {
                           <div class="order-total">
                               <h3>Resumo</h3>
                               <p><strong>Total dos Itens:</strong> ${formatarMoeda(
-                                detalhes.total
+                                detalhes.valor_produto
                               )}</p>
-                              <p><strong>Frete:</strong>${formatarMoeda(
+                              <p><strong>Frete:</strong> ${formatarMoeda(
                                 detalhes.frete
                               )}</p>
                               <p><strong>Total:</strong> ${formatarMoeda(
-                                detalhes.total
+                                detalhes.valor_total
                               )}</p>
                           </div>
                       </div>
