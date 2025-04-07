@@ -1030,11 +1030,13 @@ detalhes.tabela_nutricional.forEach((item) => {
                           <div class="order-total">
                               <h3>Resumo</h3>
                               <p><strong>Total dos Itens:</strong> ${formatarMoeda(
-                                detalhes.valor_total
+                                detalhes.total
                               )}</p>
-                              <p><strong>Frete:</strong></p>
+                              <p><strong>Frete:</strong>${formatarMoeda(
+                                detalhes.frete
+                              )}</p>
                               <p><strong>Total:</strong> ${formatarMoeda(
-                                detalhes.valor_total
+                                detalhes.total
                               )}</p>
                           </div>
                       </div>
