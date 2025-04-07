@@ -959,9 +959,9 @@ detalhes.tabela_nutricional.forEach((item) => {
                 item.descricao
               }" style="width: 50px; height: 50px;"/>
                           <span class="item-name">${item.descricao}</span>
-                          <span class="item-quantity">${item.quantidade}x</span>
+                          <span class="item-quantity">${item.qtde}x</span>
                           <span class="item-price">${formatarMoeda(
-                            item.preco_total
+                            item.total
                           )}</span>
                       </li>
                   `
