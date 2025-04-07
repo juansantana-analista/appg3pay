@@ -721,7 +721,7 @@ detalhes.tabela_nutricional.forEach((item) => {
                                       </div>
                                       <div class="detail">
                                          <span class="mdi mdi-cash-multiple"></span>
-                                         <span>${pedido.forma_pagamento}</span>
+                                         <span>${pedido.forma_pagamento.opcao}</span>
                                       </div>
                                       <div class="detail">
                                          <span>Total</span>
