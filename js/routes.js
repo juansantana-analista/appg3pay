@@ -988,7 +988,7 @@ var app = new Framework7({
             // Alterar estilos para o botão "Venda"
             localStorage.setItem('operacao', 'venda');
             $(this).css({
-              'background-color': '#ff5500',
+              'background-color': '#00591F',
               color: '#ffffff',
             });
             // Alterar estilos para o botão "Compra"
@@ -1004,7 +1004,7 @@ var app = new Framework7({
             // Alterar estilos para o botão "Compra"
             localStorage.setItem('operacao', 'compra');
             $(this).css({
-              'background-color': '#ff5500',
+              'background-color': '#00591F',
               color: '#ffffff',
             });
             // Alterar estilos para o botão "Venda"
