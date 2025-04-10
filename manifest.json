@@ -2,9 +2,9 @@
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
   "background_color": "#ffffff",
   "dir": "ltr",
-  "name": "G3 Pay",
+  "name": "Vitatop",
   "scope": "/",
-  "short_name": "G3 Pay",
+  "short_name": "Vitatop",
   "start_url": "https://app.g3pay.com.br/",
   "id": "br.com.g3pay",
   "display": "fullscreen",
@@ -13,9 +13,9 @@
   "orientation": "portrait",
   "shortcuts": [
     {
-      "name": "G3 Pay",
-      "short_name": "G3 Pay",
-      "description": "Gerencie suas vendas e maximize seus ganhos com a G3 Pay na palma da mão.",
+      "name": "Vitatop",
+      "short_name": "Vitatop",
+      "description": "Gerencie suas vendas e maximize seus ganhos com a Vitatop na palma da mão.",
       "url": "https://app.g3pay.com.br/"
     }
   ],
@@ -740,7 +740,7 @@
       "url": "/handle-protocol?url=%s"
     }
   ],
-  "description": "Gerencie suas vendas e maximize seus ganhos com a G3 Pay na palma da mão.",
+  "description": "Gerencie suas vendas e maximize seus ganhos com a Vitatop na palma da mão.",
   "lang": "pt",
   "categories": ["business", "finance"]
 }
