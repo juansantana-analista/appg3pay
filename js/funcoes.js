@@ -350,35 +350,57 @@ async function validarToken(userAuthToken) {
               adicionarItemCarrinho(produtoId);
           });
           // Limpa os benefícios antes de adicionar novos
-$(".benefits-grid").empty();
+          $(".benefits-grid").empty();
 
-// Percorre a lista de benefícios e adiciona ao HTML
-detalhes.beneficios.forEach((beneficio) => {
-    $(".benefits-grid").append(`
-        <div class="p-4 bg-gray-50 rounded-xl text-center">
-            <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3" style="background-color: ${beneficio.cor_icone};">
-                <i class="${beneficio.icone} text-white text-lg"></i>
-            </div>
-            <h4 class="font-semibold mb-1">${beneficio.nome}</h4>
-            <p class="text-sm text-gray-600">${beneficio.descricao}</p>
-        </div>
-    `);
-});
-// Limpa os dados nutricionais antes de adicionar novos
-$(".space-y-4").empty();
+          // Percorre a lista de benefícios e adiciona ao HTML
+          detalhes.beneficios.forEach((beneficio) => {
+              $(".benefits-grid").append(`
+                  <div class="p-4 bg-gray-50 rounded-xl text-center">
+                      <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3" style="background-color: ${beneficio.cor_icone};">
+                          <i class="${beneficio.icone} text-white text-lg"></i>
+                      </div>
+                      <h4 class="font-semibold mb-1">${beneficio.nome}</h4>
+                      <p class="text-sm text-gray-600">${beneficio.descricao}</p>
+                  </div>
+              `);
+          });
+          // Limpa os dados nutricionais antes de adicionar novos
+          $(".space-y-4").empty();
 
-// Percorre a lista da tabela nutricional e adiciona ao HTML
-detalhes.tabela_nutricional.forEach((item) => {
-    $(".space-y-4").append(`
-        <div>
-            <div class="flex justify-between mb-1">
-                <span class="text-gray-700">${item.nome}</span>
-                <span class="text-gray-900 font-medium">${item.quantidade}</span>
-            </div>
-            <div class="progress-bar" style="width: ${parseInt(item.quantidade) || 50}%;"></div>
-        </div>
-    `);
-});
+          // Função para extrair apenas o valor numérico
+          function extrairNumero(texto) {
+              // Extrai apenas os dígitos do texto (incluindo decimais)
+              const match = texto.match(/(\d+[.,]?\d*)/);
+              return match ? parseFloat(match[0].replace(',', '.')) : 0;
+          }
+
+          // Encontrar o valor máximo na tabela para usar como referência
+          let valorMaximo = 1; // Valor padrão mínimo
+          detalhes.tabela_nutricional.forEach((item) => {
+              const valor = extrairNumero(item.quantidade);
+              if (valor > valorMaximo) {
+                  valorMaximo = valor;
+              }
+          });
+
+          // Percorre a lista da tabela nutricional e adiciona ao HTML
+          detalhes.tabela_nutricional.forEach((item) => {
+              // Extrair o valor numérico
+              const valorNumerico = extrairNumero(item.quantidade);
+              
+              // Calcular a largura proporcional (máximo 85% para manter visual)
+              const larguraBarra = Math.min(85, (valorNumerico / valorMaximo) * 85);
+              
+              $(".space-y-4").append(`
+                  <div>
+                      <div class="flex justify-between mb-1">
+                          <span class="text-gray-700">${item.nome}</span>
+                          <span class="text-gray-900 font-medium">${item.quantidade}</span>
+                      </div>
+                      <div class="progress-bar" style="width: ${larguraBarra}%;"></div>
+                  </div>
+              `);
+          });
 
 
           localStorage.setItem('produtoDetalhes', JSON.stringify({detalhes}));
