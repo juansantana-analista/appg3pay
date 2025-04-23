@@ -274,6 +274,7 @@ async function validarToken(userAuthToken) {
   //Inicio Função Detalhes Produto
   function buscarProduto(produtoId) {
     var userAuthToken = localStorage.getItem("userAuthToken");
+    var operacao = localStorage.getItem("operacao");
     app.dialog.preloader("Carregando...");
   
     var imgUrl = "https://vitatop.tecskill.com.br/";
@@ -304,6 +305,13 @@ async function validarToken(userAuthToken) {
         // Verifica se o status é 'success' e se há dados de pedidos
         if (responseJson.status === "success" && responseJson.data.status === "success") {
           const detalhes = responseJson.data.data;   
+          
+          var produtoPreco = "";
+          if (operacao == "compra") {
+            produtoPreco = formatarMoeda(detalhes.preco);
+          } else {
+            produtoPreco = formatarMoeda(detalhes.preco_lojavirtual);
+          }
               //ALIMENTAR COM OS VALORES DO ITEM
               $("#imagem-detalhe").attr('src', 'https://vitatop.tecskill.com.br/' + detalhes.foto);
               $("#imagemShare").attr('src', 'https://vitatop.tecskill.com.br/' + detalhes.foto);
@@ -313,10 +321,10 @@ async function validarToken(userAuthToken) {
               //$("#like-detalhe").html(produto.likes);
               //$("#reviews-detalhe").html(produto.reviews + ' reviews');
               $("#descricao-detalhe").html(detalhes.descricao_app);
-              $("#preco-detalhe").html(formatarMoeda(detalhes.preco));
-              $("#precoTotal").html(formatarMoeda(detalhes.preco));
-              $("#precoShare").html(formatarMoeda(detalhes.preco));
-              $("#precopromo-detalhe").html(formatarMoeda(detalhes.preco));
+              $("#preco-detalhe").html(produtoPreco);
+              $("#precoTotal").html(produtoPreco);
+              $("#precoShare").html(produtoPreco);
+              $("#precopromo-detalhe").html(produtoPreco);
               // Selecione a div onde você quer adicionar o link
               const $container = $('#containerBtnCarrinho');
               // Crie o link e configure os atributos
