@@ -304,19 +304,18 @@ async function validarToken(userAuthToken) {
       .then((responseJson) => {
         // Verifica se o status é 'success' e se há dados de pedidos
         if (responseJson.status === "success" && responseJson.data.status === "success") {
-          const detalhes = responseJson.data.data;   
-          
-          var produtoPreco = "";
-          if (operacao == "compra") {
-            produtoPreco = formatarMoeda(detalhes.preco);
-          } else {
-            produtoPreco = formatarMoeda(detalhes.preco_lojavirtual);
-          }
+              const detalhes = responseJson.data.data;             
+              var produtoPreco = "";
+              if (operacao == "compra") {
+                produtoPreco = formatarMoeda(detalhes.preco);
+              } else {
+                produtoPreco = formatarMoeda(detalhes.preco_lojavirtual);
+              }
               //ALIMENTAR COM OS VALORES DO ITEM
               $("#imagem-detalhe").attr('src', 'https://vitatop.tecskill.com.br/' + detalhes.foto);
               $("#imagemShare").attr('src', 'https://vitatop.tecskill.com.br/' + detalhes.foto);
-              $("#nome-detalhe").html(detalhes.nome);
-              $("#nomeShare").html(detalhes.nome);
+              $("#nome-detalhe").html(detalhes.nome.toUpperCase());
+              $("#nomeShare").html(detalhes.nome.toUpperCase());
               //$("#rating-detalhe").html(produto.rating);
               //$("#like-detalhe").html(produto.likes);
               //$("#reviews-detalhe").html(produto.reviews + ' reviews');
