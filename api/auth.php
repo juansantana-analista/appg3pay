@@ -21,8 +21,22 @@ if (!$data || !isset($data->userName) || !isset($data->userPassword)) {
 }
 
 // Dados de login
-$userName = $data->userName;
-$userPassword = $data->userPassword;
+$userName = trim($data->userName ?? '');
+$userPassword = trim($data->userPassword ?? '');
+
+// Validações mínimas
+if (empty($userName) || empty($userPassword)) {
+    http_response_code(400);
+    echo json_encode(["error" => "Usuário e senha são obrigatórios"]);
+    exit();
+}
+
+// Opcional: limitar tamanho
+if (strlen($userName) > 100 || strlen($userPassword) > 100) {
+    http_response_code(400);
+    echo json_encode(["error" => "Usuário ou senha muito longos"]);
+    exit();
+}
 
 // Cabeçalhos da requisição para o backend
 $headers = array(
