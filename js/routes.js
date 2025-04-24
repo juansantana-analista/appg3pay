@@ -640,6 +640,9 @@ var app = new Framework7({
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
+          var nomeUsuario = localStorage.getItem('userName');
+          $("#nomeUsuarioHome").html(nomeUsuario);
+          
           onDashboard();          
           buscarQtdeNotif();
 
