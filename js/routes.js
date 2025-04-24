@@ -641,7 +641,11 @@ var app = new Framework7({
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
           var nomeUsuario = localStorage.getItem('userName');
-          $("#nomeUsuarioHome").html(nomeUsuario);
+          if (nomeUsuario) {
+            var nomes = nomeUsuario.trim().split(" ");
+            var doisPrimeirosNomes = nomes.slice(0, 2).join(" ");
+            $("#nomeUsuarioHome").html(doisPrimeirosNomes);
+          }
           
           onDashboard();          
           buscarQtdeNotif();
