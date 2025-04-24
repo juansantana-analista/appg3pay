@@ -1129,7 +1129,7 @@ form {
 
 .grid-dash {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Mantém 2 colunas */
+  grid-template-columns: repeat(2, 1fr); /* força 2 colunas */
   gap: 20px;
   margin-bottom: 30px;
 }
@@ -1137,28 +1137,50 @@ form {
 .card-dash {
   background: white;
   border-radius: 15px;
-  padding: 15px; /* Reduzi o padding para economizar espaço */
+  padding: 20px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-  max-width: 100%; /* Garante que não ultrapasse o espaço disponível */
+  aspect-ratio: 1 / 1; /* força o card a ser quadrado */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-/* Torna os elementos internos um pouco menores */
+
+.card-header-dash {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
 .card-title {
-  font-size: 14px; /* Reduzido de 16px */
-}
-
-.value-dash {
-  font-size: 20px; /* Reduzido de 24px */
+  color: #2d3436;
+  font-size: 16px;
+  font-weight: 600;
 }
 
 .card-icon {
-  width: 30px; /* Reduzido de 40px */
-  height: 30px; /* Reduzido de 40px */
-  border-radius: 15px;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.value-dash {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2d3436;
 }
 
 .trend {
-  font-size: 12px; /* Reduzido de 14px */
+  color: #00b894;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .referral-card {
