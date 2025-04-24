@@ -1129,27 +1129,17 @@ form {
 
 .grid-dash {
   display: grid;
-  grid-template-columns: repeat(2, 150px); /* dois quadrados pequenos */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
   margin-bottom: 30px;
-  justify-content: center; /* centraliza no container */
-  width: 100%; /* garante que ocupe espaço horizontal */
-  max-width: 100%; /* evita overflow */
 }
-
 
 .card-dash {
   background: white;
   border-radius: 15px;
   padding: 20px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-  width: 150px;
-  height: 150px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 }
-
 
 .card-header-dash {
   display: flex;
