@@ -570,40 +570,50 @@ function buscarProduto(produtoId) {
         // Limpa os dados nutricionais antes de adicionar novos
         $(".space-y-4").empty();
 
-        // Função para extrair apenas o valor numérico
-        function extrairNumero(texto) {
-            // Extrai apenas os dígitos do texto (incluindo decimais)
-            const match = texto.match(/(\d+[.,]?\d*)/);
-            return match ? parseFloat(match[0].replace(',', '.')) : 0;
-        }
-
-        // Encontrar o valor máximo na tabela para usar como referência
-        let valorMaximo = 1; // Valor padrão mínimo
-        detalhes.tabela_nutricional.forEach((item) => {
-            const valor = extrairNumero(item.quantidade);
-            if (valor > valorMaximo) {
-                valorMaximo = valor;
+        // Verificar se a tabela nutricional existe e tem conteúdo
+        if (detalhes.tabela_nutricional && detalhes.tabela_nutricional.length > 0) {
+            // Função para extrair apenas o valor numérico
+            function extrairNumero(texto) {
+                // Extrai apenas os dígitos do texto (incluindo decimais)
+                const match = texto.match(/(\d+[.,]?\d*)/);
+                return match ? parseFloat(match[0].replace(',', '.')) : 0;
             }
-        });
 
-        // Percorre a lista da tabela nutricional e adiciona ao HTML
-        detalhes.tabela_nutricional.forEach((item) => {
-            // Extrair o valor numérico
-            const valorNumerico = extrairNumero(item.quantidade);
-            
-            // Calcular a largura proporcional (máximo 85% para manter visual)
-            const larguraBarra = Math.min(85, (valorNumerico / valorMaximo) * 85);
-            
-            $(".space-y-4").append(`
-                <div>
-                    <div class="flex justify-between mb-1">
-                        <span class="text-gray-700">${item.nome}</span>
-                        <span class="text-gray-900 font-medium">${item.quantidade}</span>
+            // Encontrar o valor máximo na tabela para usar como referência
+            let valorMaximo = 1; // Valor padrão mínimo
+            detalhes.tabela_nutricional.forEach((item) => {
+                const valor = extrairNumero(item.quantidade);
+                if (valor > valorMaximo) {
+                    valorMaximo = valor;
+                }
+            });
+
+            // Percorre a lista da tabela nutricional e adiciona ao HTML
+            detalhes.tabela_nutricional.forEach((item) => {
+                // Extrair o valor numérico
+                const valorNumerico = extrairNumero(item.quantidade);
+                
+                // Calcular a largura proporcional (máximo 85% para manter visual)
+                const larguraBarra = Math.min(85, (valorNumerico / valorMaximo) * 85);
+                
+                $(".space-y-4").append(`
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-gray-700">${item.nome}</span>
+                            <span class="text-gray-900 font-medium">${item.quantidade}</span>
+                        </div>
+                        <div class="progress-bar" style="width: ${larguraBarra}%;"></div>
                     </div>
-                    <div class="progress-bar" style="width: ${larguraBarra}%;"></div>
+                `);
+            });
+        } else {
+            // Se não houver tabela nutricional, adicione uma mensagem informativa (opcional)
+            $(".space-y-4").append(`
+                <div class="text-center text-gray-500 py-4">
+                    Informações nutricionais não disponíveis para este produto.
                 </div>
             `);
-        });
+        }
 
         localStorage.setItem('produtoDetalhes', JSON.stringify({detalhes}));
         app.dialog.close();
