@@ -1050,6 +1050,20 @@ form {
   color: #ff4b00;
 }
 
+.welcome-section {
+  margin-bottom: 20px;
+}
+
+.welcome-section h1 {
+  font-size: 1.5rem;
+  color: var(--text-color);
+}
+
+.welcome-section p {
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
 .container-dash {
   max-width: 1200px;
   margin: 0 auto;
