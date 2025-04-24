@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-const versionApp = "1.0.7";
+const versionApp = "1.0.8";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
 document.addEventListener('deviceready', onDeviceReady, false);
@@ -32,10 +32,8 @@ var app = new Framework7({
           // Obtém a URL atual do navegador
           const currentUrl = window.location.href;
 
-          // chama a função que verifica e valida o token
-          var userAuthToken = localStorage.getItem('userAuthToken');
           // Início função validar login
-          const isValid = await validarToken(userAuthToken);
+          const isValid = await validarToken();
           if (!isValid) {
             app.views.main.router.navigate("/login-view/");
           } else {
@@ -522,9 +520,8 @@ var app = new Framework7({
       on: {
         pageBeforeIn: async function (event, page) {
           clearLocalStorage();
-          var userAuthToken = localStorage.getItem('userAuthToken');
           // Início função validar login
-          const isValid = await validarToken(userAuthToken);
+          const isValid = await validarToken();
           if (!isValid) {
             window.location.reload(true);
           }
@@ -913,9 +910,8 @@ var app = new Framework7({
       on: {
         pageBeforeIn: async function (event, page) {
           clearLocalStorage();
-          var userAuthToken = localStorage.getItem('userAuthToken');
           // Início função validar login
-          const isValid = await validarToken(userAuthToken);
+          const isValid = await validarToken();
           if (!isValid) {
             window.location.reload(true);
           }

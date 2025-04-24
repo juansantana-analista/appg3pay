@@ -1,5 +1,5 @@
 // Início função validar login
-async function validarToken(userAuthToken) {
+async function validarToken() {
     var userAuthToken = localStorage.getItem("userAuthToken");
     if (userAuthToken) {
       const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
