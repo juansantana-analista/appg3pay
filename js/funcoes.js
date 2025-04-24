@@ -572,6 +572,7 @@ function buscarProduto(produtoId) {
 
         // Verificar se a tabela nutricional existe e tem conteúdo
         if (detalhes.tabela_nutricional && detalhes.tabela_nutricional.length > 0) {
+          console.log(detalhes);
             // Função para extrair apenas o valor numérico
             function extrairNumero(texto) {
                 // Extrai apenas os dígitos do texto (incluindo decimais)
