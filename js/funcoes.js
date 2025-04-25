@@ -311,12 +311,9 @@ function buscarProduto(produtoId) {
         } else {
           produtoPreco = formatarMoeda(detalhes.preco_lojavirtual);
         }
-        
-        // Inicializar o carrossel de imagens
-        initProductCarousel(detalhes, imgUrl);
-        
-        // Resto do código existente
-        $("#imagemShare").attr('src', imgUrl + detalhes.foto);
+        //ALIMENTAR COM OS VALORES DO ITEM
+        $("#imagem-detalhe").attr('src', 'https://vitatop.tecskill.com.br/' + detalhes.foto);
+        $("#imagemShare").attr('src', 'https://vitatop.tecskill.com.br/' + detalhes.foto);
         $("#nome-detalhe").html(detalhes.nome.toUpperCase());
         $("#nomeShare").html(detalhes.nome.toUpperCase());
         //$("#rating-detalhe").html(produto.rating);
@@ -327,7 +324,6 @@ function buscarProduto(produtoId) {
         $("#precoTotal").html(produtoPreco);
         $("#precoShare").html(produtoPreco);
         $("#precopromo-detalhe").html(produtoPreco);
-        
         // Selecione a div onde você quer adicionar o link
         const $container = $('#containerBtnCarrinho');
         // Crie o link e configure os atributos
@@ -578,12 +574,6 @@ function buscarProduto(produtoId) {
         if (detalhes.tabela_nutricional && detalhes.tabela_nutricional.length > 0) {
             // Função para extrair apenas o valor numérico
             function extrairNumero(texto) {
-                // Verifica se o texto é null ou undefined
-                if (texto === null || texto === undefined) {
-                    return 0;
-                }
-                // Converte para string para garantir que match funcione
-                texto = String(texto);
                 // Extrai apenas os dígitos do texto (incluindo decimais)
                 const match = texto.match(/(\d+[.,]?\d*)/);
                 return match ? parseFloat(match[0].replace(',', '.')) : 0;
@@ -600,30 +590,17 @@ function buscarProduto(produtoId) {
 
             // Percorre a lista da tabela nutricional e adiciona ao HTML
             detalhes.tabela_nutricional.forEach((item) => {
-                // Verifica se o item ou item.quantidade é null
-                if (!item || item.quantidade === null || item.quantidade === undefined) {
-                    return; // Pula este item
-                }
-                
                 // Extrair o valor numérico
                 const valorNumerico = extrairNumero(item.quantidade);
                 
                 // Calcular a largura proporcional (máximo 85% para manter visual)
                 const larguraBarra = Math.min(85, (valorNumerico / valorMaximo) * 85);
                 
-                // Nome do item com verificação
-                const nomeItem = item.nome || "Informação nutricional";
-                
-                // Quantidade com verificação (mostra "Não disponível" se for null)
-                const quantidadeDisplay = (item.quantidade === null || item.quantidade === undefined) 
-                    ? "Não disponível" 
-                    : item.quantidade;
-                
                 $(".space-y-4").append(`
                     <div>
                         <div class="flex justify-between mb-1">
-                            <span class="text-gray-700">${nomeItem}</span>
-                            <span class="text-gray-900 font-medium">${quantidadeDisplay}</span>
+                            <span class="text-gray-700">${item.nome}</span>
+                            <span class="text-gray-900 font-medium">${item.quantidade}</span>
                         </div>
                         <div class="progress-bar" style="width: ${larguraBarra}%;"></div>
                     </div>
@@ -659,379 +636,6 @@ function buscarProduto(produtoId) {
         "Falha na requisição!"
       );
     });
-}
-
-// Função para inicializar o carrossel de imagens
-function initProductCarousel(detalhes, imgUrl) {
-    // Verificar se já existem os elementos do carrossel, caso contrário, criar
-    if ($('.product-carousel').length === 0) {
-        // Substituir a div da imagem única pelo código do carrossel
-        const carouselHTML = `
-            <div class="swiper-container product-carousel">
-                <div class="swiper-wrapper"></div>
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-pagination"></div>
-            </div>
-            <div class="swiper-container product-thumbs mt-3">
-                <div class="swiper-wrapper"></div>
-            </div>
-        `;
-        
-        // Substituir a imagem única pelo carrossel
-        const $imagemContainer = $('#imagem-detalhe').parent().parent();
-        $imagemContainer.html(carouselHTML);
-        
-        // Adicionar o modal de zoom se ainda não existir
-        if ($('#zoom-modal').length === 0) {
-            const zoomModalHTML = `
-                <div class="zoom-modal" id="zoom-modal">
-                    <div class="zoom-content">
-                        <span class="zoom-close">&times;</span>
-                        <div class="zoom-container">
-                            <img id="zoom-image" src="" alt="Produto Ampliado">
-                        </div>
-                    </div>
-                </div>
-            `;
-            $('body').append(zoomModalHTML);
-        }
-        
-        // Adicionar os estilos CSS se ainda não existirem
-        if ($('#carousel-style').length === 0) {
-            const carouselCSS = `
-                <style id="carousel-style">
-                    /* Estilos para o carrossel */
-                    .product-carousel {
-                        width: 100%;
-                        border-radius: 1rem;
-                        background-color: #f9fafb;
-                        overflow: hidden;
-                    }
-                    
-                    .product-carousel .swiper-slide {
-                        height: 300px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        cursor: zoom-in;
-                    }
-                    
-                    .product-carousel .swiper-slide img {
-                        max-width: 100%;
-                        max-height: 100%;
-                        object-fit: contain;
-                        transition: transform 0.3s ease;
-                    }
-                    
-                    .product-thumbs {
-                        height: 80px;
-                        margin-top: 10px;
-                    }
-                    
-                    .product-thumbs .swiper-slide {
-                        width: 80px;
-                        height: 80px;
-                        cursor: pointer;
-                        opacity: 0.5;
-                        border-radius: 0.5rem;
-                        overflow: hidden;
-                        border: 2px solid transparent;
-                        transition: all 0.3s ease;
-                    }
-                    
-                    .product-thumbs .swiper-slide img {
-                        width: 100%;
-                        height: 100%;
-                        object-fit: cover;
-                    }
-                    
-                    .product-thumbs .swiper-slide-thumb-active {
-                        opacity: 1;
-                        border-color: #3B82F6;
-                    }
-                    
-                    /* Estilos para o modal de zoom */
-                    .zoom-modal {
-                        display: none;
-                        position: fixed;
-                        z-index: 9999;
-                        left: 0;
-                        top: 0;
-                        width: 100%;
-                        height: 100%;
-                        overflow: auto;
-                        background-color: rgba(0, 0, 0, 0.9);
-                        transition: all 0.3s ease;
-                    }
-                    
-                    .zoom-content {
-                        position: relative;
-                        margin: auto;
-                        padding: 20px;
-                        width: 90%;
-                        height: 90%;
-                        max-width: 1200px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                    }
-                    
-                    .zoom-container {
-                        width: 100%;
-                        height: 100%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        overflow: hidden;
-                    }
-                    
-                    #zoom-image {
-                        max-width: 100%;
-                        max-height: 100%;
-                        object-fit: contain;
-                    }
-                    
-                    .zoom-close {
-                        position: absolute;
-                        top: 15px;
-                        right: 20px;
-                        color: white;
-                        font-size: 32px;
-                        font-weight: bold;
-                        cursor: pointer;
-                        z-index: 1000;
-                    }
-                    
-                    /* Estilos para os controles de navegação */
-                    .swiper-button-next, .swiper-button-prev {
-                        color: #3B82F6;
-                    }
-                    
-                    .swiper-pagination-bullet-active {
-                        background-color: #3B82F6;
-                    }
-                    
-                    /* Animação de carregamento para as imagens */
-                    @keyframes shimmer {
-                        0% { background-position: -468px 0 }
-                        100% { background-position: 468px 0 }
-                    }
-                    
-                    .image-loading {
-                        background: #f6f7f8;
-                        background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
-                        background-repeat: no-repeat;
-                        background-size: 800px 100%;
-                        animation-duration: 1.5s;
-                        animation-fill-mode: forwards;
-                        animation-iteration-count: infinite;
-                        animation-name: shimmer;
-                        animation-timing-function: linear;
-                    }
-                </style>
-            `;
-            $('head').append(carouselCSS);
-        }
-    }
-    
-    // Limpar os slides existentes
-    $('.product-carousel .swiper-wrapper').empty();
-    $('.product-thumbs .swiper-wrapper').empty();
-    
-    // Verificar se há imagens extras, se não, usar apenas a imagem principal
-    let imagens = [];
-    
-    // Adicionar a imagem principal primeiro
-    if (detalhes.foto) {
-        imagens.push(detalhes.foto);
-    }
-    
-    // Verificar se há outras imagens no objeto detalhes
-    // Isso depende de como a API retorna as imagens extras (por exemplo, pode ser detalhes.imagens ou outro campo)
-    if (detalhes.imagens && Array.isArray(detalhes.imagens)) {
-        // Se houver um array de imagens, adicionar todas elas
-        imagens = imagens.concat(detalhes.imagens.map(img => img.caminho || img.url || img));
-    } else if (detalhes.galeria && Array.isArray(detalhes.galeria)) {
-        // Alternativa se o nome da propriedade for galeria
-        imagens = imagens.concat(detalhes.galeria.map(img => img.caminho || img.url || img));
-    } else {
-        // Se não houver imagens extras, adicionar algumas imagens de exemplo (remover em produção)
-        // Descomentar se quiser adicionar mais imagens de exemplo para testes
-        /*
-        if (imagens.length === 1) {
-            for (let i = 0; i < 3; i++) {
-                imagens.push(detalhes.foto);
-            }
-        }
-        */
-    }
-    
-    // Se não houver nenhuma imagem, usar uma imagem padrão
-    if (imagens.length === 0) {
-        imagens.push('img/default.png');
-    }
-    
-    // Adicionar os slides ao carrossel principal
-    imagens.forEach((imagem, index) => {
-        // Determinar o src da imagem (URL completa ou relativa)
-        const src = imagem.startsWith('http') ? imagem : 
-                 (imagem.startsWith('img/') ? imagem : imgUrl + imagem);
-        
-        // Adicionar ao carrossel principal
-        $('.product-carousel .swiper-wrapper').append(`
-            <div class="swiper-slide">
-                <img src="${src}" alt="Produto ${index + 1}" class="product-image" loading="lazy">
-            </div>
-        `);
-        
-        // Adicionar à galeria de miniaturas
-        $('.product-thumbs .swiper-wrapper').append(`
-            <div class="swiper-slide">
-                <img src="${src}" alt="Miniatura ${index + 1}" loading="lazy">
-            </div>
-        `);
-    });
-    
-    // Inicializar a galeria de miniaturas primeiro
-    const thumbsSwiper = new Swiper('.product-thumbs', {
-        spaceBetween: 10,
-        slidesPerView: 4,
-        freeMode: true,
-        watchSlidesProgress: true,
-    });
-    
-    // Inicializar o carrossel principal
-    const mainSwiper = new Swiper('.product-carousel', {
-        spaceBetween: 10,
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-        },
-        thumbs: {
-            swiper: thumbsSwiper,
-        },
-    });
-    
-    // Adicionar funcionalidade de zoom ao clicar nas imagens
-    $('.product-carousel .swiper-slide img').on('click', function() {
-        const imgSrc = $(this).attr('src');
-        $('#zoom-image').attr('src', imgSrc);
-        $('#zoom-modal').css('display', 'block');
-    });
-    
-    // Fechar o modal de zoom quando clicar no X
-    $('.zoom-close').on('click', function() {
-        $('#zoom-modal').css('display', 'none');
-    });
-    
-    // Fechar o modal de zoom quando clicar fora da imagem
-    $('#zoom-modal').on('click', function(e) {
-        if (e.target === this) {
-            $(this).css('display', 'none');
-        }
-    });
-    
-    // Implementar zoom com pinch-to-zoom para dispositivos móveis
-    const zoomImage = document.getElementById('zoom-image');
-    
-    // Variáveis para controle de zoom com gestos
-    let currentScale = 1;
-    let posX = 0;
-    let posY = 0;
-    let startX = 0;
-    let startY = 0;
-    
-    // Adicionar evento de roda do mouse para zoom (desktops)
-    zoomImage.addEventListener('wheel', function(e) {
-        e.preventDefault();
-        
-        const delta = e.deltaY > 0 ? -0.1 : 0.1;
-        const newScale = Math.max(1, Math.min(3, currentScale + delta));
-        
-        if (newScale !== currentScale) {
-            const rect = zoomImage.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left;
-            const mouseY = e.clientY - rect.top;
-            
-            // Calcular novas coordenadas
-            posX += mouseX * (1 - newScale / currentScale);
-            posY += mouseY * (1 - newScale / currentScale);
-            
-            currentScale = newScale;
-            
-            // Aplicar transformação
-            zoomImage.style.transform = `translate(${posX}px, ${posY}px) scale(${currentScale})`;
-        }
-    });
-    
-    // Eventos para arrastar a imagem quando ampliada
-    zoomImage.addEventListener('mousedown', function(e) {
-        e.preventDefault();
-        startX = e.clientX - posX;
-        startY = e.clientY - posY;
-        
-        // Adicionar eventos de movimento e soltar
-        document.addEventListener('mousemove', dragImage);
-        document.addEventListener('mouseup', stopDragging);
-    });
-    
-    // Função para arrastar a imagem
-    function dragImage(e) {
-        e.preventDefault();
-        if (currentScale > 1) {
-            posX = e.clientX - startX;
-            posY = e.clientY - startY;
-            zoomImage.style.transform = `translate(${posX}px, ${posY}px) scale(${currentScale})`;
-        }
-    }
-    
-    // Função para parar de arrastar
-    function stopDragging() {
-        document.removeEventListener('mousemove', dragImage);
-        document.removeEventListener('mouseup', stopDragging);
-    }
-    
-    // Resetar zoom quando fechar o modal
-    $('.zoom-close, #zoom-modal').on('click', function(e) {
-        if (e.target === this || $(e.target).hasClass('zoom-close')) {
-            currentScale = 1;
-            posX = 0;
-            posY = 0;
-            zoomImage.style.transform = 'translate(0, 0) scale(1)';
-        }
-    });
-    
-    // Inicializar eventos de toque para dispositivos móveis (pinch-to-zoom)
-    if (typeof app !== 'undefined' && app.gestures) {
-        const zoomGestures = app.gestures.createGesture({
-            el: '.zoom-container',
-            touchEvents: true,
-            disableContextMenu: true,
-            touchStartPreventDefault: true,
-            touchMovePreventDefault: true,
-            touchReleasePreventDefault: true,
-            
-            // Tratamento de gestos
-            onGestureStart: function(e) {
-                if (e.type === 'pinchstart') {
-                    startScale = currentScale || 1;
-                }
-            },
-            onGestureChange: function(e) {
-                if (e.type === 'pinchmove') {
-                    const newScale = Math.max(1, Math.min(5, startScale * e.scale));
-                    zoomImage.style.transform = `scale(${newScale})`;
-                    currentScale = newScale;
-                }
-            },
-            passive: false
-        });
-    }
 }
 //Fim Função Detalhes Produto
   
