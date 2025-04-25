@@ -588,24 +588,37 @@ function buscarProduto(produtoId) {
                 }
             });
 
-            // Percorre a lista da tabela nutricional e adiciona ao HTML
-            detalhes.tabela_nutricional.forEach((item) => {
-                // Extrair o valor numérico
-                const valorNumerico = extrairNumero(item.quantidade);
-                
-                // Calcular a largura proporcional (máximo 85% para manter visual)
-                const larguraBarra = Math.min(85, (valorNumerico / valorMaximo) * 85);
-                
-                $(".space-y-4").append(`
-                    <div>
-                        <div class="flex justify-between mb-1">
-                            <span class="text-gray-700">${item.nome}</span>
-                            <span class="text-gray-900 font-medium">${item.quantidade}</span>
-                        </div>
-                        <div class="progress-bar" style="width: ${larguraBarra}%;"></div>
-                    </div>
-                `);
-            });
+                // Percorre a lista da tabela nutricional e adiciona ao HTML
+                detalhes.tabela_nutricional.forEach((item) => {
+                  // Verifica se o item ou item.quantidade é null
+                  if (!item || item.quantidade === null || item.quantidade === undefined) {
+                      return; // Pula este item
+                  }
+                  
+                  // Extrair o valor numérico
+                  const valorNumerico = extrairNumero(item.quantidade);
+                  
+                  // Calcular a largura proporcional (máximo 85% para manter visual)
+                  const larguraBarra = Math.min(85, (valorNumerico / valorMaximo) * 85);
+                  
+                  // Nome do item com verificação
+                  const nomeItem = item.nome || "Informação nutricional";
+                  
+                  // Quantidade com verificação (mostra "Não disponível" se for null)
+                  const quantidadeDisplay = (item.quantidade === null || item.quantidade === undefined) 
+                      ? "Não disponível" 
+                      : item.quantidade;
+                  
+                  $(".space-y-4").append(`
+                      <div>
+                          <div class="flex justify-between mb-1">
+                              <span class="text-gray-700">${nomeItem}</span>
+                              <span class="text-gray-900 font-medium">${quantidadeDisplay}</span>
+                          </div>
+                          <div class="progress-bar" style="width: ${larguraBarra}%;"></div>
+                      </div>
+                  `);
+              });
         } else {
             // Se não houver tabela nutricional, adicione uma mensagem informativa (opcional)
             $(".space-y-4").append(`
