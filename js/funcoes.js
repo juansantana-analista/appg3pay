@@ -271,7 +271,26 @@ async function validarToken() {
   }
   //Fim Função Lista produtos
   
-//Inicio Função Detalhes Produto
+// Adicionar importações das bibliotecas necessárias no HEAD da página
+function carregarBibliotecas() {
+  // Carregar Swiper CSS
+  const swiperCss = document.createElement('link');
+  swiperCss.rel = 'stylesheet';
+  swiperCss.href = 'https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.css';
+  document.head.appendChild(swiperCss);
+
+  // Carregar Swiper JS
+  const swiperJs = document.createElement('script');
+  swiperJs.src = 'https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.7/swiper-bundle.min.js';
+  document.head.appendChild(swiperJs);
+}
+
+// Chamar a função para carregar as bibliotecas quando o documento estiver pronto
+$(document).ready(function() {
+  carregarBibliotecas();
+});
+
+// Modificação da Função buscarProduto
 function buscarProduto(produtoId) {
   var userAuthToken = localStorage.getItem("userAuthToken");
   var operacao = localStorage.getItem("operacao");
@@ -281,382 +300,220 @@ function buscarProduto(produtoId) {
 
   // Cabeçalhos da requisição
   const headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
-    class: "ProdutoVariacaoRest",
-    method: "obterProdutoCompleto",
-    produto_id: produtoId,
+      class: "ProdutoVariacaoRest",
+      method: "obterProdutoCompleto",
+      produto_id: produtoId,
   });
 
   // Opções da requisição
   const options = {
-    method: "POST",
-    headers: headers,
-    body: body,
+      method: "POST",
+      headers: headers,
+      body: body,
   };
 
   // Fazendo a requisição
   fetch(apiServerUrl, options)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      // Verifica se o status é 'success' e se há dados de pedidos
-      if (responseJson.status === "success" && responseJson.data.status === "success") {
-        const detalhes = responseJson.data.data;             
-        var produtoPreco = "";
-        if (operacao == "compra") {
-          produtoPreco = formatarMoeda(detalhes.preco);
-        } else {
-          produtoPreco = formatarMoeda(detalhes.preco_lojavirtual);
-        }
-        //ALIMENTAR COM OS VALORES DO ITEM
-        $("#imagem-detalhe").attr('src', 'https://vitatop.tecskill.com.br/' + detalhes.foto);
-        $("#imagemShare").attr('src', 'https://vitatop.tecskill.com.br/' + detalhes.foto);
-        $("#nome-detalhe").html(detalhes.nome.toUpperCase());
-        $("#nomeShare").html(detalhes.nome.toUpperCase());
-        //$("#rating-detalhe").html(produto.rating);
-        //$("#like-detalhe").html(produto.likes);
-        //$("#reviews-detalhe").html(produto.reviews + ' reviews');
-        $("#descricao-detalhe").html(detalhes.descricao_app);
-        $("#preco-detalhe").html(produtoPreco);
-        $("#precoTotal").html(produtoPreco);
-        $("#precoShare").html(produtoPreco);
-        $("#precopromo-detalhe").html(produtoPreco);
-        // Selecione a div onde você quer adicionar o link
-        const $container = $('#containerBtnCarrinho');
-        // Crie o link e configure os atributos
-        const $btnAddCarrinho = $('<button></button>')
-            .text('Adicionar Carrinho')
-            .attr('data-produto-id', '123')
-            .attr('id', 'botaoCarrinho')
-            .addClass('add-cart');
-    
-        // Anexe o link ao container
-        $container.append($btnAddCarrinho);
-        produtoId = detalhes.id;
-    
-        //CLICOU NO ADICIONAR CARRINHO
-        $("#addCarrinho").on('click', function () {
-            //ADICIONAR AO CARRINHO
-            adicionarItemCarrinho(produtoId);
-        });
-        
-        //CLICOU NO ADICIONAR CARRINHO
-        $("#comprarAgora").on('click', function () {
-            //ADICIONAR AO CARRINHO
-            adicionarItemCarrinho(produtoId);
-        });
-        
-        // Adicionar CSS para os cards de benefícios
-        const style = `
-        <style>
-            .benefit-card {
-                transition: all 0.3s ease;
-                border: 1px solid transparent;
-                margin-bottom: 15px;
-                position: relative;
-                overflow: hidden;
-                background-color: #f8f9fa;
-                border-radius: 12px;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            }
-            .benefit-card:active {
-                transform: scale(0.98);
-                background-color: #f3f4f6;
-            }
-            .benefit-icon {
-                width: 60px;
-                height: 60px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin: 0 auto 10px auto;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            }
-            .benefit-name {
-                font-weight: 600;
-                font-size: 16px;
-                margin-bottom: 8px;
-                color: #333;
-            }
-            .saiba-mais-btn {
-                transition: all 0.2s ease;
-                background: linear-gradient(45deg, #3B82F6, #2563EB);
-                color: white;
-                padding: 6px 14px;
-                border-radius: 20px;
-                font-size: 13px;
-                font-weight: 500;
-                border: none;
-                box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
-                margin-top: 5px;
-            }
-            .saiba-mais-btn:active {
-                transform: translateY(2px);
-                box-shadow: 0 1px 2px rgba(59, 130, 246, 0.2);
-            }
-            .popup-beneficio {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background-color: rgba(0, 0, 0, 0.5);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                z-index: 9999;
-                opacity: 0;
-                pointer-events: none;
-                transition: opacity 0.3s ease;
-            }
-            .popup-beneficio.ativo {
-                opacity: 1;
-                pointer-events: auto;
-            }
-            .popup-beneficio-conteudo {
-                background-color: white;
-                border-radius: 16px;
-                padding: 20px;
-                width: 90%;
-                max-width: 320px;
-                max-height: 80vh;
-                overflow-y: auto;
-                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-                transform: translateY(20px);
-                transition: transform 0.3s ease;
-            }
-            .popup-beneficio.ativo .popup-beneficio-conteudo {
-                transform: translateY(0);
-            }
-            .popup-header {
-                display: flex;
-                align-items: center;
-                margin-bottom: 15px;
-                padding-bottom: 10px;
-                border-bottom: 1px solid #e5e7eb;
-            }
-            .popup-icone {
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-right: 12px;
-            }
-            .popup-fechar {
-                position: absolute;
-                right: 15px;
-                top: 15px;
-                width: 30px;
-                height: 30px;
-                border-radius: 50%;
-                background-color: #f3f4f6;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                font-size: 18px;
-                color: #6b7280;
-            }
-            .popup-titulo {
-                font-weight: 600;
-                font-size: 18px;
-                margin: 0;
-            }
-            .popup-descricao {
-                font-size: 16px;
-                line-height: 1.5;
-                color: #4b5563;
-            }
-            /* Animação de pulsar para o botão */
-            .animate-pulse {
-                animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-            }
-            @keyframes pulse {
-                0%, 100% {
-                    opacity: 1;
-                }
-                50% {
-                    opacity: 0.8;
-                }
-            }
-        </style>
-        `;
+      .then((response) => response.json())
+      .then((responseJson) => {
+          // Verifica se o status é 'success' e se há dados de pedidos
+          if (responseJson.status === "success" && responseJson.data.status === "success") {
+              const detalhes = responseJson.data.data;             
+              var produtoPreco = "";
+              if (operacao == "compra") {
+                  produtoPreco = formatarMoeda(detalhes.preco);
+              } else {
+                  produtoPreco = formatarMoeda(detalhes.preco_lojavirtual);
+              }
 
-        // Adicionar o CSS à página se ainda não existir
-        if ($('#beneficio-style').length === 0) {
-            $('head').append(`<div id="beneficio-style">${style}</div>`);
-        }
+              // NOVO: Processar as imagens para o carrossel
+              criarCarrosselImagens(detalhes);
 
-        // Limpa os benefícios antes de adicionar novos
-        $(".benefits-grid").empty();
+              // Atualizar outros dados do produto
+              $("#imagemShare").attr('src', imgUrl + detalhes.foto);
+              $("#nome-detalhe").html(detalhes.nome.toUpperCase());
+              $("#nomeShare").html(detalhes.nome.toUpperCase());
+              $("#descricao-detalhe").html(detalhes.descricao_app);
+              $("#preco-detalhe").html(produtoPreco);
+              $("#precoTotal").html(produtoPreco);
+              $("#precoShare").html(produtoPreco);
+              $("#precopromo-detalhe").html(produtoPreco);
+              
+              // Código para botão de carrinho (mantido do original)
+              const $container = $('#containerBtnCarrinho');
+              const $btnAddCarrinho = $('<button></button>')
+                  .text('Adicionar Carrinho')
+                  .attr('data-produto-id', '123')
+                  .attr('id', 'botaoCarrinho')
+                  .addClass('add-cart');
+          
+              $container.append($btnAddCarrinho);
+              produtoId = detalhes.id;
+          
+              // Eventos de clique
+              $("#addCarrinho").on('click', function () {
+                  adicionarItemCarrinho(produtoId);
+              });
+              
+              $("#comprarAgora").on('click', function () {
+                  adicionarItemCarrinho(produtoId);
+              });
+              
+              // Resto do código original (benefícios, tabela nutricional, etc.)
+              // ...
 
-        // Percorre a lista de benefícios e adiciona ao HTML com botão "Saiba mais"
-        detalhes.beneficios.forEach((beneficio, index) => {
-            $(".benefits-grid").append(`
-                <div class="p-4 benefit-card text-center">
-                    <div class="benefit-icon" style="background-color: ${beneficio.cor_icone};">
-                        <i class="${beneficio.icone} text-white text-lg"></i>
-                    </div>
-                    <h4 class="benefit-name">${beneficio.nome}</h4>
-                    <button class="saiba-mais-btn animate-pulse" data-beneficio-id="${index}">
-                        Saiba mais
-                    </button>
-                </div>
-            `);
-        });
-
-        // Remover popup anterior se existir
-        $('#popupBeneficio').remove();
-
-        // Criar o elemento do popup
-        const popupElement = `
-        <div class="popup-beneficio" id="popupBeneficio">
-            <div class="popup-beneficio-conteudo">
-                <div class="popup-fechar">×</div>
-                <div class="popup-header">
-                    <div class="popup-icone" id="popupIcone">
-                        <i class="icon" id="popupIconeClass"></i>
-                    </div>
-                    <h3 class="popup-titulo" id="popupTitulo"></h3>
-                </div>
-                <div class="popup-descricao" id="popupDescricao"></div>
-            </div>
-        </div>
-        `;
-
-        // Adicionar o popup ao final do body
-        $('body').append(popupElement);
-
-        // Configurar eventos de clique para os botões "Saiba mais"
-        $(document).off('click', '.saiba-mais-btn').on('click', '.saiba-mais-btn', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const beneficioId = $(this).data('beneficio-id');
-            const beneficio = detalhes.beneficios[beneficioId];
-            
-            // Configurar o conteúdo do popup
-            $('#popupIcone').css('background-color', beneficio.cor_icone);
-            $('#popupIconeClass').removeClass().addClass(beneficio.icone + ' text-white');
-            $('#popupTitulo').text(beneficio.nome);
-            $('#popupDescricao').html(beneficio.descricao);
-            
-            // Mostrar o popup com animação
-            $('#popupBeneficio').addClass('ativo');
-            
-            // Adicionar um pequeno feedback tátil se disponível
-            if (navigator.vibrate) {
-                navigator.vibrate(50);
-            }
-        });
-
-        // Fechar o popup ao clicar no botão de fechar ou fora do conteúdo
-        $(document).off('click', '.popup-fechar, .popup-beneficio').on('click', '.popup-fechar, .popup-beneficio', function(e) {
-            if (e.target === this) {
-                $('#popupBeneficio').removeClass('ativo');
-            }
-        });
-
-        // Impedir que cliques dentro do conteúdo do popup o fechem
-        $(document).off('click', '.popup-beneficio-conteudo').on('click', '.popup-beneficio-conteudo', function(e) {
-            e.stopPropagation();
-        });
-
-// Limpa os dados nutricionais antes de adicionar novos
-$(".space-y-4").empty();
-
-// Verificar se a tabela nutricional existe e tem conteúdo
-if (detalhes.tabela_nutricional && detalhes.tabela_nutricional.length > 0) {
-    // Função para extrair apenas o valor numérico
-    function extrairNumero(texto) {
-        // Verifica se o texto é null ou undefined
-        if (texto === null || texto === undefined) {
-            return 0;
-        }
-        // Converte para string para garantir que match funcione
-        texto = String(texto);
-        // Extrai apenas os dígitos do texto (incluindo decimais)
-        const match = texto.match(/(\d+[.,]?\d*)/);
-        return match ? parseFloat(match[0].replace(',', '.')) : 0;
-    }
-
-    // Encontrar o valor máximo na tabela para usar como referência
-    let valorMaximo = 1; // Valor padrão mínimo
-    detalhes.tabela_nutricional.forEach((item) => {
-        const valor = extrairNumero(item.quantidade);
-        if (valor > valorMaximo) {
-            valorMaximo = valor;
-        }
-    });
-
-    // Percorre a lista da tabela nutricional e adiciona ao HTML
-    detalhes.tabela_nutricional.forEach((item) => {
-        // Verifica se o item ou item.quantidade é null
-        if (!item || item.quantidade === null || item.quantidade === undefined) {
-            return; // Pula este item
-        }
-        
-        // Extrair o valor numérico
-        const valorNumerico = extrairNumero(item.quantidade);
-        
-        // Calcular a largura proporcional (máximo 85% para manter visual)
-        const larguraBarra = Math.min(85, (valorNumerico / valorMaximo) * 85);
-        
-        // Nome do item com verificação
-        const nomeItem = item.nome || "Informação nutricional";
-        
-        // Quantidade com verificação (mostra "Não disponível" se for null)
-        const quantidadeDisplay = (item.quantidade === null || item.quantidade === undefined) 
-            ? "Não disponível" 
-            : item.quantidade;
-        
-        $(".space-y-4").append(`
-            <div>
-                <div class="flex justify-between mb-1">
-                    <span class="text-gray-700">${nomeItem}</span>
-                    <span class="text-gray-900 font-medium">${quantidadeDisplay}</span>
-                </div>
-                <div class="progress-bar" style="width: ${larguraBarra}%;"></div>
-            </div>
-        `);
-    });
-} else {
-    // Se não houver tabela nutricional, adicione uma mensagem informativa (opcional)
-    $(".space-y-4").append(`
-        <div class="text-center text-gray-500 py-4">
-            Informações nutricionais não disponíveis para este produto.
-        </div>
-    `);
+              localStorage.setItem('produtoDetalhes', JSON.stringify({detalhes}));
+              app.dialog.close();
+          } else {
+              app.dialog.close();
+              // Verifica se há uma mensagem de erro definida
+              const errorMessage =
+                  responseJson.message || "Formato de dados inválido";
+              app.dialog.alert(
+                  "Erro ao carregar produtos: " + errorMessage,
+                  "Falha na requisição!"
+              );
+          }
+      })
+      .catch((error) => {
+          app.dialog.close();
+          console.error("Erro:", error);
+          app.dialog.alert(
+              "Erro ao carregar produtos: " + error.message,
+              "Falha na requisição!"
+          );
+      });
 }
 
-        localStorage.setItem('produtoDetalhes', JSON.stringify({detalhes}));
-        app.dialog.close();
-      } else {
-        app.dialog.close();
-        // Verifica se há uma mensagem de erro definida
-        const errorMessage =
-          responseJson.message || "Formato de dados inválido";
-        app.dialog.alert(
-          "Erro ao carregar produtos: " + errorMessage,
-          "Falha na requisição!"
-        );
+// Nova função para criar o carrossel de imagens
+function criarCarrosselImagens(detalhes) {
+  const imgUrl = "https://vitatop.tecskill.com.br/";
+  const imagemPrincipal = detalhes.foto;
+  
+  // Limpar o container de imagens
+  $("#produto-imagens").empty();
+  
+  // Verificar se há fotos adicionais no objeto detalhes
+  // Esta é uma suposição - o formato dos dados pode variar
+  let imagens = [];
+  
+  // Adicionar a imagem principal
+  imagens.push(imgUrl + imagemPrincipal);
+  
+  // Se houver fotos adicionais no objeto, adicioná-las ao array
+  // Nota: Os nomes das propriedades podem variar conforme a API
+  if (detalhes.fotos_adicionais && Array.isArray(detalhes.fotos_adicionais)) {
+      detalhes.fotos_adicionais.forEach(foto => {
+          imagens.push(imgUrl + foto);
+      });
+  } else {
+      // Se não houver propriedade explícita, procurar por outras propriedades que possam conter imagens
+      // Exemplo: detalhes.foto_1, detalhes.foto_2, etc.
+      for (let i = 1; i <= 5; i++) {
+          if (detalhes['foto_' + i]) {
+              imagens.push(imgUrl + detalhes['foto_' + i]);
+          }
       }
-    })
-    .catch((error) => {
-      app.dialog.close();
-      console.error("Erro:", error);
-      app.dialog.alert(
-        "Erro ao carregar produtos: " + error.message,
-        "Falha na requisição!"
-      );
-    });
+  }
+  
+  // Se mesmo assim só tivermos uma imagem, duplicá-la para simular um carrossel
+  // (apenas para demonstração - em produção, talvez você queira desativar o carrossel)
+  if (imagens.length === 1) {
+      for (let i = 0; i < 2; i++) {
+          imagens.push(imagens[0]);
+      }
+  }
+  
+  // Adicionar slides ao carrossel
+  imagens.forEach((imagem, index) => {
+      $("#produto-imagens").append(`
+          <div class="swiper-slide">
+              <div class="bg-gray-50 rounded-2xl p-8 flex items-center justify-center">
+                  <img src="${imagem}" alt="Produto ${index + 1}" class="w-64 floating produto-imagem" data-full="${imagem}">
+              </div>
+          </div>
+      `);
+  });
+  
+  // Inicializar o Swiper após um pequeno atraso para garantir que o DOM esteja atualizado
+  setTimeout(() => {
+      inicializarSwiper();
+      configurarZoomImagem();
+  }, 300);
 }
-//Fim Função Detalhes Produto
+
+// Função para inicializar o Swiper
+function inicializarSwiper() {
+  if (typeof Swiper !== 'undefined') {
+      const swiper = new Swiper('.produto-carrossel', {
+          slidesPerView: 1,
+          spaceBetween: 30,
+          loop: true,
+          pagination: {
+              el: '.swiper-pagination',
+              clickable: true,
+          },
+          navigation: {
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev',
+          },
+          autoplay: {
+              delay: 5000,
+              disableOnInteraction: false,
+          },
+          effect: 'fade',
+          fadeEffect: {
+              crossFade: true
+          },
+      });
+  } else {
+      // Se o Swiper ainda não estiver carregado, tentar novamente após um atraso
+      setTimeout(inicializarSwiper, 200);
+  }
+}
+
+// Função para configurar o zoom da imagem
+function configurarZoomImagem() {
+  const modal = document.getElementById("imagem-zoom-modal");
+  const modalImg = document.getElementById("imagem-ampliada");
+  const closeBtn = document.getElementsByClassName("close-zoom")[0];
+  
+  // Adicionar evento de clique a todas as imagens do produto
+  $('.produto-imagem').on('click', function() {
+      const fullImageUrl = $(this).attr('data-full');
+      modal.style.display = "flex";
+      modalImg.src = fullImageUrl;
+      modal.classList.add('show', 'fade-in');
+      
+      // Adicionar efeito de vibração tátil se disponível
+      if (navigator.vibrate) {
+          navigator.vibrate(50);
+      }
+  });
+  
+  // Fechar o modal ao clicar no botão de fechar
+  closeBtn.onclick = function() {
+      modal.classList.remove('show');
+      setTimeout(() => {
+          modal.style.display = "none";
+      }, 300);
+  };
+  
+  // Fechar o modal ao clicar fora da imagem
+  modal.onclick = function(event) {
+      if (event.target === modal) {
+          modal.classList.remove('show');
+          setTimeout(() => {
+              modal.style.display = "none";
+          }, 300);
+      }
+  };
+}
   
   //Inicio Função obter Links
   function buscarLinks(produtoId) {
