@@ -46,22 +46,27 @@
                   <!-- Seção do Produto -->
                   <div class="bg-white rounded-3xl p-6 mb-6 product-shadow">
                       <div class="flex flex-col md:flex-row gap-8">
-                          <div class="md:w-1/2">
-                            <div class="md:w-1/2">
-                                <div class="product-gallery-container">
-                                    <!-- Carrossel de imagens do produto -->
-                                    <div id="product-gallery" class="swiper">
-                                        <div class="swiper-wrapper">
-                                            <!-- Os slides serão adicionados dinamicamente via JavaScript -->
-                                        </div>
-                                        <!-- Adicione a paginação e navegação -->
-                                        <div class="swiper-pagination"></div>
-                                        <div class="swiper-button-next"></div>
-                                        <div class="swiper-button-prev"></div>
+                        <div class="md:w-1/2">
+                            <div class="product-gallery-container">
+                                <!-- Carrossel de imagens principal -->
+                                <div id="product-gallery-main" class="swiper gallery-main">
+                                    <div class="swiper-wrapper">
+                                        <!-- Os slides serão adicionados dinamicamente via JavaScript -->
+                                    </div>
+                                    <!-- Adicione a paginação e navegação -->
+                                    <div class="swiper-pagination"></div>
+                                    <div class="swiper-button-next"></div>
+                                    <div class="swiper-button-prev"></div>
+                                </div>
+                                
+                                <!-- Carrossel de miniaturas -->
+                                <div id="product-gallery-thumbs" class="swiper gallery-thumbs mt-3">
+                                    <div class="swiper-wrapper">
+                                        <!-- As miniaturas serão adicionadas dinamicamente via JavaScript -->
                                     </div>
                                 </div>
-                            </div>                            
-                          </div>
+                            </div>
+                        </div>
                           
                           <div class="md:w-1/2">
                               <div class="flex items-center gap-2 mb-2">

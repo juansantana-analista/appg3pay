@@ -335,23 +335,63 @@ function buscarProduto(produtoId) {
           fotos.push("img/default.png");
         }
         
-        // Atualizar HTML para o carrossel
-        const swiperWrapper = document.querySelector("#product-gallery .swiper-wrapper");
-        if (swiperWrapper) {
+        // Atualizar HTML para o carrossel principal
+        const swiperWrapper = document.querySelector("#product-gallery-main .swiper-wrapper");
+        const thumbsWrapper = document.querySelector("#product-gallery-thumbs .swiper-wrapper");
+        
+        if (swiperWrapper && thumbsWrapper) {
           swiperWrapper.innerHTML = "";
+          thumbsWrapper.innerHTML = "";
           
           fotos.forEach((foto, index) => {
+            // Slides principais
             const slide = document.createElement("div");
             slide.className = "swiper-slide";
             slide.innerHTML = `<img src="${foto}" alt="${detalhes.nome} - Imagem ${index+1}" class="product-image">`;
             swiperWrapper.appendChild(slide);
+            
+            // Miniaturas
+            const thumbSlide = document.createElement("div");
+            thumbSlide.className = "swiper-slide";
+            thumbSlide.innerHTML = `<img src="${foto}" alt="Miniatura ${index+1}" class="thumb-image">`;
+            thumbsWrapper.appendChild(thumbSlide);
           });
           
-          // Inicializar o swiper após adicionar os slides
-          const productSwiper = new Swiper("#product-gallery", {
+          // Inicializar o swiper de miniaturas
+          const thumbsSwiper = new Swiper("#product-gallery-thumbs", {
+            slidesPerView: 4,
+            spaceBetween: 10,
+            freeMode: true,
+            watchSlidesProgress: true,
+            breakpoints: {
+              // quando a largura da janela é >= 320px
+              320: {
+                slidesPerView: 3,
+                spaceBetween: 5
+              },
+              // quando a largura da janela é >= 480px
+              480: {
+                slidesPerView: 4,
+                spaceBetween: 8
+              },
+              // quando a largura da janela é >= 768px
+              768: {
+                slidesPerView: 5,
+                spaceBetween: 10
+              }
+            }
+          });
+          
+          // Inicializar o swiper principal
+          const mainSwiper = new Swiper("#product-gallery-main", {
             slidesPerView: 1,
             spaceBetween: 10,
             loop: fotos.length > 1,
+            autoplay: {
+              delay: 5000, // Auto-play a cada 5 segundos
+              disableOnInteraction: false, // Continua o autoplay mesmo após interação
+              pauseOnMouseEnter: true // Pausa ao passar o mouse
+            },
             pagination: {
               el: ".swiper-pagination",
               clickable: true,
@@ -360,6 +400,9 @@ function buscarProduto(produtoId) {
               nextEl: ".swiper-button-next",
               prevEl: ".swiper-button-prev",
             },
+            thumbs: {
+              swiper: thumbsSwiper,
+            }
           });
           
           // Adicionar evento de clique para o zoom
@@ -506,7 +549,8 @@ function buscarProduto(produtoId) {
       );
     });
 }
-// 2. Função para abrir o zoom da imagem
+
+// Função para abrir o zoom da imagem
 function openImageZoom(imageSrc) {
   // Remover qualquer zoom anterior se existir
   $('#imageZoomPopup').remove();

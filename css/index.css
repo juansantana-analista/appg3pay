@@ -2396,13 +2396,14 @@ input, select {
   margin-bottom: 20px;
 }
 
-#product-gallery {
+/* Carrossel principal */
+#product-gallery-main {
   width: 100%;
   border-radius: 10px;
   overflow: hidden;
 }
 
-#product-gallery .swiper-slide {
+#product-gallery-main .swiper-slide {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2410,7 +2411,7 @@ input, select {
   height: 300px;
 }
 
-#product-gallery .swiper-slide img {
+#product-gallery-main .swiper-slide img {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
@@ -2418,16 +2419,53 @@ input, select {
   transition: transform 0.3s ease;
 }
 
-#product-gallery .swiper-slide img:hover {
+#product-gallery-main .swiper-slide img:hover {
   transform: scale(1.05);
 }
 
+/* Miniaturas */
+#product-gallery-thumbs {
+  width: 100%;
+  height: 80px;
+  margin-top: 10px;
+}
+
+#product-gallery-thumbs .swiper-slide {
+  width: 80px;
+  height: 80px;
+  opacity: 0.6;
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  border: 2px solid transparent;
+}
+
+#product-gallery-thumbs .swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#product-gallery-thumbs .swiper-slide-thumb-active {
+  opacity: 1;
+  border-color: #3B82F6;
+}
+
+/* Paginação e navegação */
 .swiper-pagination-bullet-active {
   background-color: #3B82F6;
 }
 
 .swiper-button-next, .swiper-button-prev {
   color: #3B82F6;
+  width: 30px;
+  height: 30px;
+}
+
+.swiper-button-next:after, .swiper-button-prev:after {
+  font-size: 18px;
+  font-weight: bold;
 }
 
 /* Estilos para o popup de zoom */
@@ -2493,4 +2531,20 @@ input, select {
   object-fit: contain;
   transform-origin: center;
   transition: transform 0.1s ease;
+}
+
+/* Responsividade */
+@media (max-width: 640px) {
+  #product-gallery-main .swiper-slide {
+    height: 250px;
+  }
+  
+  #product-gallery-thumbs {
+    height: 60px;
+  }
+  
+  #product-gallery-thumbs .swiper-slide {
+    width: 60px;
+    height: 60px;
+  }
 }
