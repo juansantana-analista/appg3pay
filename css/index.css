@@ -1230,6 +1230,123 @@ form {
   color: #333;
   margin-bottom: 20px;
 }
+.categories-container {
+  margin: 15px 0;
+  padding: 15px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.categories-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.categories-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.categories-view-all {
+  font-size: 13px;
+  color: var(--verde-escuro);
+  text-decoration: none;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  overflow-x: auto;
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  min-width: 70px;
+}
+
+.category-item.active {
+  background-color: var(--verde-escuro);
+  color: white;
+}
+
+.category-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.category-item.active .category-icon {
+  background-color: rgba(255,255,255,0.2);
+  box-shadow: none;
+}
+
+.category-icon i {
+  font-size: 18px;
+  color: var(--verde-escuro);
+}
+
+.category-item.active .category-icon i {
+  color: #ffffff;
+}
+
+.category-name {
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Make the grid scrollable on mobile */
+@media (max-width: 480px) {
+  .categories-grid {
+    grid-template-columns: repeat(4, 80px);
+    overflow-x: auto;
+    padding-bottom: 5px;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+  }
+  
+  .category-item {
+    scroll-snap-align: start;
+  }
+}
+
+/* Add spacing for tablet */
+@media (min-width: 481px) and (max-width: 768px) {
+  .categories-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* Add spacing for desktop */
+@media (min-width: 769px) {
+  .categories-grid {
+    grid-template-columns: repeat(8, 1fr);
+  }
+}
 .categorias{
   margin-top: 16px;
 }

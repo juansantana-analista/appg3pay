@@ -43,92 +43,137 @@ async function validarToken() {
   // Função para verificar se o token JWT expirou
   
   //Inicio Funçao listar categorias
-  function listarCategorias() {
-    var userAuthToken = localStorage.getItem("userAuthToken");
-    app.dialog.preloader("Carregando...");
-  
-    // Cabeçalhos da requisição
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + userAuthToken,
-    };
-  
-    const body = JSON.stringify({
-      class: "ProdutoCategoriaRest",
-      method: "listarCategorias",
-      limit: 10,
-    });
-  
-    // Opções da requisição
-    const options = {
-      method: "POST",
-      headers: headers,
-      body: body,
-    };
-  
-    // Fazendo a requisição
-    fetch(apiServerUrl, options)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        // Verifica se o status é 'success' e se há dados de categorias
-        if (
-          responseJson.status === "success" &&
-          responseJson.data &&
-          responseJson.data.data
-        ) {
-          const categorias = responseJson.data.data;
-  
-          // Adiciona a opção Todas ao inicio
-          var opcaoTodasHTML =
-            '<div class="swiper-slide"><button class="filter-btn active">TODAS</button></div>';
-          $("#container-categorias").append(opcaoTodasHTML);
-  
-          categorias.forEach((categoria) => {
-            var categoriaHTML = `
-                      <!-- CATEGORIA ITEM-->
-                      <div class="swiper-slide">
-                          <button class="filter-btn" data-id="${categoria.id}">${categoria.nome}</button>
-                      </div>
-                      `;
-  
-            $("#container-categorias").append(categoriaHTML);
-          });
-          // Adiciona o swiper-pagination ao final
-          var swiperPaginationHTML = '<div class="swiper-pagination"></div>';
-          $("#container-categorias").append(swiperPaginationHTML);
-  
-          $(".filter-btn").on("click", function () {
-            // Remove a classe active de todos os botões
-            $(".filter-btn").removeClass("active");
-            // Adiciona a classe active ao botão clicado
-            $(this).addClass("active");
-            // Pega o id da categoria clicada
-            var categoriaId = $(this).data("id");
-            // Chama a função listarProdutos com o id da categoria
-            listarProdutos("", categoriaId);
-          });
-  
-          app.dialog.close();
-        } else {
-          app.dialog.close();
-          // Verifica se há uma mensagem de erro definida
-          const errorMessage =
-            responseJson.message || "Formato de dados inválido";
-          app.dialog.alert(
-            "Erro ao carregar categorias: " + errorMessage,
-            "Falha na requisição!"
-          );
-        }
-      })
-      .catch((error) => {
+// Updated listarCategorias function
+function listarCategorias() {
+  var userAuthToken = localStorage.getItem("userAuthToken");
+  app.dialog.preloader("Carregando...");
+
+  // Cabeçalhos da requisição
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "ProdutoCategoriaRest",
+    method: "listarCategorias",
+    limit: 10,
+  });
+
+  // Opções da requisição
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  // Fazendo a requisição
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // Verifica se o status é 'success' e se há dados de categorias
+      if (
+        responseJson.status === "success" &&
+        responseJson.data &&
+        responseJson.data.data
+      ) {
+        const categorias = responseJson.data.data;
+        
+        // Limpar o container de categorias
+        $("#container-categorias").empty();
+
+        // Adiciona a opção Todas ao inicio
+        var opcaoTodasHTML = `
+          <div class="category-item active" data-id="todas">
+            <div class="category-icon">
+              <i class="mdi mdi-apps"></i>
+            </div>
+            <div class="category-name">TODAS</div>
+          </div>
+        `;
+        $("#container-categorias").append(opcaoTodasHTML);
+
+        // Ícones predefinidos para categorias (você pode personalizar)
+        const icones = [
+          "mdi-pill", "mdi-bottle-tonic-plus", "mdi-food-apple", 
+          "mdi-spa", "mdi-tea", "mdi-leaf", "mdi-nature", 
+          "mdi-heart-pulse", "mdi-dumbbell", "mdi-fruit-citrus"
+        ];
+
+        // Adicione cada categoria
+        categorias.forEach((categoria, index) => {
+          // Use um ícone do array de ícones, com rotação para variedade
+          const iconeIndex = index % icones.length;
+          
+          var categoriaHTML = `
+            <div class="category-item" data-id="${categoria.id}">
+              <div class="category-icon">
+                <i class="mdi ${icones[iconeIndex]}"></i>
+              </div>
+              <div class="category-name">${categoria.nome}</div>
+            </div>
+          `;
+
+          $("#container-categorias").append(categoriaHTML);
+        });
+
+        // Adicione manipuladores de eventos para os itens de categoria
+        $(".category-item").on("click", function() {
+          // Remove a classe ativa de todos os itens
+          $(".category-item").removeClass("active");
+          
+          // Adiciona a classe ativa ao item clicado
+          $(this).addClass("active");
+          
+          // Pega o id da categoria clicada
+          var categoriaId = $(this).data("id");
+          
+          // Se for "todas", define como undefined para listar todos os produtos
+          if(categoriaId === "todas") {
+            categoriaId = undefined;
+          }
+          
+          // Chama a função listarProdutos com o id da categoria
+          listarProdutos("", categoriaId);
+          
+          // Adicione um efeito de rolagem suave se necessário
+          const container = document.getElementById("container-categorias");
+          const item = this;
+          
+          // Calcule a posição para centralizar o item, se possível
+          if(container.scrollWidth > container.clientWidth) {
+            const itemOffset = item.offsetLeft;
+            const containerWidth = container.clientWidth;
+            const scrollLeft = itemOffset - (containerWidth / 2) + (item.offsetWidth / 2);
+            
+            container.scrollTo({
+              left: scrollLeft,
+              behavior: 'smooth'
+            });
+          }
+        });
+
         app.dialog.close();
-        console.error("Erro:", error);
+      } else {
+        app.dialog.close();
+        // Verifica se há uma mensagem de erro definida
+        const errorMessage =
+          responseJson.message || "Formato de dados inválido";
         app.dialog.alert(
-          "Erro ao carregar categorias: " + error.message,
+          "Erro ao carregar categorias: " + errorMessage,
           "Falha na requisição!"
         );
-      });
-  }
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+      app.dialog.alert(
+        "Erro ao carregar categorias: " + error.message,
+        "Falha na requisição!"
+      );
+    });
+}
   //Fim Função Lista categorias
   
   //Inicio Funçao listar produtos tela Home
