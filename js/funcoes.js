@@ -136,22 +136,21 @@ function listarCategorias() {
           // Chama a função listarProdutos com o id da categoria
           listarProdutos("", categoriaId);
           
-          // Adicione um efeito de rolagem suave se necessário
-          const container = document.getElementById("container-categorias");
-          const item = this;
+          // Centraliza o item selecionado
+          scrollToCategory(this);
           
-          // Calcule a posição para centralizar o item, se possível
-          if(container.scrollWidth > container.clientWidth) {
-            const itemOffset = item.offsetLeft;
-            const containerWidth = container.clientWidth;
-            const scrollLeft = itemOffset - (containerWidth / 2) + (item.offsetWidth / 2);
-            
-            container.scrollTo({
-              left: scrollLeft,
-              behavior: 'smooth'
-            });
-          }
+          // Atualiza os indicadores de rolagem
+          updateScrollIndicators();
         });
+        
+        // Configurar os indicadores de rolagem
+        setupScrollIndicators();
+        
+        // Configurar botões de rolagem
+        setupScrollButtons();
+        
+        // Mostrar dica de rolagem na primeira vez
+        showSwipeHint();
 
         app.dialog.close();
       } else {
@@ -173,6 +172,199 @@ function listarCategorias() {
         "Falha na requisição!"
       );
     });
+}
+
+// Função para rolar até a categoria selecionada
+function scrollToCategory(categoryElement) {
+  const container = document.querySelector('.categories-scroll-wrapper');
+  const item = categoryElement;
+  
+  if(container && container.scrollWidth > container.clientWidth) {
+    const itemOffset = item.offsetLeft;
+    const containerWidth = container.clientWidth;
+    const scrollLeft = itemOffset - (containerWidth / 2) + (item.offsetWidth / 2);
+    
+    container.scrollTo({
+      left: scrollLeft,
+      behavior: 'smooth'
+    });
+  }
+}
+
+// Função para configurar os indicadores de rolagem
+function setupScrollIndicators() {
+  const container = document.querySelector('.categories-scroll-wrapper');
+  const dotsContainer = document.querySelector('.scroll-dots');
+  
+  if(!container || !dotsContainer) return;
+  
+  // Limpar indicadores existentes
+  dotsContainer.innerHTML = '';
+  
+  // Determinar quantos indicadores são necessários
+  const containerWidth = container.clientWidth;
+  const scrollWidth = container.scrollWidth;
+  
+  if(scrollWidth <= containerWidth) {
+    // Não há necessidade de rolagem, esconde os indicadores
+    document.querySelector('.scroll-indicator').style.display = 'none';
+    document.querySelector('.scroll-arrow.scroll-left').style.display = 'none';
+    document.querySelector('.scroll-arrow.scroll-right').style.display = 'none';
+    return;
+  }
+  
+  // Mostra os indicadores e botões de rolagem
+  document.querySelector('.scroll-indicator').style.display = 'flex';
+  document.querySelector('.scroll-arrow.scroll-left').style.display = 'flex';
+  document.querySelector('.scroll-arrow.scroll-right').style.display = 'flex';
+  
+  // Calcular o número de "páginas" de rolagem
+  const numDots = Math.ceil(scrollWidth / containerWidth);
+  
+  // Criar os indicadores
+  for(let i = 0; i < numDots; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('data-index', i);
+    dotsContainer.appendChild(dot);
+    
+    // Adicionar evento de clique para cada indicador
+    dot.addEventListener('click', function() {
+      const index = parseInt(this.getAttribute('data-index'));
+      container.scrollTo({
+        left: index * containerWidth,
+        behavior: 'smooth'
+      });
+    });
+  }
+  
+  // Atualizar indicadores ao rolar
+  container.addEventListener('scroll', function() {
+    updateScrollIndicators();
+  });
+}
+
+// Função para atualizar os indicadores de rolagem
+function updateScrollIndicators() {
+  const container = document.querySelector('.categories-scroll-wrapper');
+  const dots = document.querySelectorAll('.scroll-dots .dot');
+  const leftArrow = document.querySelector('.scroll-arrow.scroll-left');
+  const rightArrow = document.querySelector('.scroll-arrow.scroll-right');
+  
+  if(!container || !dots.length) return;
+  
+  const scrollPosition = container.scrollLeft;
+  const containerWidth = container.clientWidth;
+  const scrollWidth = container.scrollWidth;
+  
+  // Atualizar visibilidade dos botões de seta
+  if(scrollPosition <= 10) {
+    leftArrow.style.opacity = '0.5';
+    leftArrow.style.pointerEvents = 'none';
+  } else {
+    leftArrow.style.opacity = '1';
+    leftArrow.style.pointerEvents = 'auto';
+  }
+  
+  if(scrollPosition + containerWidth >= scrollWidth - 10) {
+    rightArrow.style.opacity = '0.5';
+    rightArrow.style.pointerEvents = 'none';
+  } else {
+    rightArrow.style.opacity = '1';
+    rightArrow.style.pointerEvents = 'auto';
+  }
+  
+  // Calcular o índice do indicador ativo
+  const activeIndex = Math.round(scrollPosition / containerWidth);
+  
+  // Atualizar a classe ativa dos indicadores
+  dots.forEach((dot, index) => {
+    if(index === activeIndex) {
+      dot.classList.add('active');
+    } else {
+      dot.classList.remove('active');
+    }
+  });
+}
+
+// Função para configurar botões de rolagem
+function setupScrollButtons() {
+  const container = document.querySelector('.categories-scroll-wrapper');
+  const leftButton = document.querySelector('.scroll-arrow.scroll-left');
+  const rightButton = document.querySelector('.scroll-arrow.scroll-right');
+  
+  if(!container || !leftButton || !rightButton) return;
+  
+  // Configurar botão de rolagem para esquerda
+  leftButton.addEventListener('click', function() {
+    const scrollAmount = container.clientWidth * 0.8;
+    container.scrollBy({
+      left: -scrollAmount,
+      behavior: 'smooth'
+    });
+  });
+  
+  // Configurar botão de rolagem para direita
+  rightButton.addEventListener('click', function() {
+    const scrollAmount = container.clientWidth * 0.8;
+    container.scrollBy({
+      left: scrollAmount,
+      behavior: 'smooth'
+    });
+  });
+}
+
+// Função para mostrar dica de rolagem
+function showSwipeHint() {
+  // Verificar se já mostrou a dica antes
+  if(localStorage.getItem('swipeHintShown')) return;
+  
+  const container = document.querySelector('.categories-scroll-container');
+  
+  if(!container) return;
+  
+  // Criar elemento de dica
+  const hint = document.createElement('div');
+  hint.className = 'swipe-hint';
+  hint.innerHTML = `
+    <i class="mdi mdi-gesture-swipe-horizontal"></i>
+    <span>Deslize para ver mais</span>
+  `;
+  
+  container.appendChild(hint);
+  
+  // Mostrar a dica após um curto atraso
+  setTimeout(() => {
+    hint.classList.add('show');
+  }, 1000);
+  
+  // Esconder a dica após alguns segundos
+  setTimeout(() => {
+    hint.classList.remove('show');
+    // Remover a dica depois da animação de fade-out
+    setTimeout(() => {
+      hint.remove();
+    }, 300);
+  }, 4000);
+  
+  // Marcar como mostrada
+  localStorage.setItem('swipeHintShown', 'true');
+  
+  // Também esconder se o usuário interagir com o container
+  const scrollContainer = document.querySelector('.categories-scroll-wrapper');
+  if(scrollContainer) {
+    const hideHint = () => {
+      hint.classList.remove('show');
+      setTimeout(() => hint.remove(), 300);
+      scrollContainer.removeEventListener('scroll', hideHint);
+      scrollContainer.removeEventListener('click', hideHint);
+      scrollContainer.removeEventListener('touchstart', hideHint);
+    };
+    
+    scrollContainer.addEventListener('scroll', hideHint);
+    scrollContainer.addEventListener('click', hideHint);
+    scrollContainer.addEventListener('touchstart', hideHint);
+  }
 }
   //Fim Função Lista categorias
   
