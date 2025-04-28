@@ -311,9 +311,68 @@ function buscarProduto(produtoId) {
         } else {
           produtoPreco = formatarMoeda(detalhes.preco_lojavirtual);
         }
+        
+        // Preparar as imagens para o carrossel
+        const fotoPrincipal = detalhes.foto ? imgUrl + detalhes.foto : "img/default.png";
+        
+        // Array para armazenar todas as fotos do produto
+        let fotos = [];
+        
+        // Adiciona a foto principal
+        if (detalhes.foto) {
+          fotos.push(imgUrl + detalhes.foto);
+        }
+        
+        // Verificar e adicionar fotos adicionais
+        if (detalhes.foto2) fotos.push(imgUrl + detalhes.foto2);
+        if (detalhes.foto3) fotos.push(imgUrl + detalhes.foto3);
+        if (detalhes.foto4) fotos.push(imgUrl + detalhes.foto4);
+        if (detalhes.foto5) fotos.push(imgUrl + detalhes.foto5);
+        if (detalhes.foto6) fotos.push(imgUrl + detalhes.foto6);
+        
+        // Se não houver fotos, adiciona a imagem padrão
+        if (fotos.length === 0) {
+          fotos.push("img/default.png");
+        }
+        
+        // Atualizar HTML para o carrossel
+        const swiperWrapper = document.querySelector("#product-gallery .swiper-wrapper");
+        if (swiperWrapper) {
+          swiperWrapper.innerHTML = "";
+          
+          fotos.forEach((foto, index) => {
+            const slide = document.createElement("div");
+            slide.className = "swiper-slide";
+            slide.innerHTML = `<img src="${foto}" alt="${detalhes.nome} - Imagem ${index+1}" class="product-image">`;
+            swiperWrapper.appendChild(slide);
+          });
+          
+          // Inicializar o swiper após adicionar os slides
+          const productSwiper = new Swiper("#product-gallery", {
+            slidesPerView: 1,
+            spaceBetween: 10,
+            loop: fotos.length > 1,
+            pagination: {
+              el: ".swiper-pagination",
+              clickable: true,
+            },
+            navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            },
+          });
+          
+          // Adicionar evento de clique para o zoom
+          document.querySelectorAll(".product-image").forEach((img) => {
+            img.addEventListener("click", function() {
+              openImageZoom(this.src);
+            });
+          });
+        }
+        
         //ALIMENTAR COM OS VALORES DO ITEM
-        $("#imagem-detalhe").attr('src', 'https://vitatop.tecskill.com.br/' + detalhes.foto);
-        $("#imagemShare").attr('src', 'https://vitatop.tecskill.com.br/' + detalhes.foto);
+        $("#imagem-detalhe").attr('src', fotoPrincipal);
+        $("#imagemShare").attr('src', fotoPrincipal);
         $("#nome-detalhe").html(detalhes.nome.toUpperCase());
         $("#nomeShare").html(detalhes.nome.toUpperCase());
         //$("#rating-detalhe").html(produto.rating);
@@ -446,6 +505,86 @@ function buscarProduto(produtoId) {
         "Falha na requisição!"
       );
     });
+}
+// 2. Função para abrir o zoom da imagem
+function openImageZoom(imageSrc) {
+  // Remover qualquer zoom anterior se existir
+  $('#imageZoomPopup').remove();
+  
+  // Criar elemento para o popup de zoom
+  const zoomPopup = `
+    <div id="imageZoomPopup" class="image-zoom-popup">
+      <div class="image-zoom-container">
+        <div class="image-zoom-close">×</div>
+        <div class="image-zoom-content">
+          <img src="${imageSrc}" alt="Zoom da imagem" class="zoom-image">
+        </div>
+      </div>
+    </div>
+  `;
+  
+  // Adicionar o popup ao final do body
+  $('body').append(zoomPopup);
+  
+  // Mostrar o popup com animação
+  setTimeout(() => {
+    $('#imageZoomPopup').addClass('active');
+  }, 10);
+  
+  // Fechar o popup ao clicar no botão de fechar ou fora da imagem
+  $('#imageZoomPopup, .image-zoom-close').on('click', function(e) {
+    if (e.target === this || $(e.target).hasClass('image-zoom-close')) {
+      $('#imageZoomPopup').removeClass('active');
+      setTimeout(() => {
+        $('#imageZoomPopup').remove();
+      }, 300);
+    }
+  });
+  
+  // Implementar gestos de pinch zoom se estiver em um dispositivo móvel
+  const zoomImage = document.querySelector('.zoom-image');
+  if (zoomImage && window.Hammer) {
+    const hammer = new Hammer(zoomImage);
+    let scale = 1;
+    let posX = 0;
+    let posY = 0;
+    let lastScale = 1;
+    let lastPosX = 0;
+    let lastPosY = 0;
+    
+    hammer.get('pinch').set({ enable: true });
+    hammer.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+    
+    hammer.on('pinch pan', function(ev) {
+      if (ev.type === 'pinch') {
+        scale = Math.max(1, Math.min(lastScale * ev.scale, 4));
+      }
+      
+      if (ev.type === 'pan' && scale !== 1) {
+        posX = lastPosX + ev.deltaX;
+        posY = lastPosY + ev.deltaY;
+      }
+      
+      zoomImage.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+    });
+    
+    hammer.on('pinchend panend', function() {
+      lastScale = scale;
+      lastPosX = posX;
+      lastPosY = posY;
+    });
+    
+    // Duplo toque para resetar zoom
+    hammer.on('doubletap', function() {
+      scale = 1;
+      posX = 0;
+      posY = 0;
+      lastScale = 1;
+      lastPosX = 0;
+      lastPosY = 0;
+      zoomImage.style.transform = `translate(0, 0) scale(1)`;
+    });
+  }
 }
 //Fim Função Detalhes Produto
   
