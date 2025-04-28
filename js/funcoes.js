@@ -421,10 +421,10 @@ function buscarProduto(produtoId) {
         //$("#rating-detalhe").html(produto.rating);
         //$("#like-detalhe").html(produto.likes);
         //$("#reviews-detalhe").html(produto.reviews + ' reviews');
-        $("#preco-detalhe").html(produtoPreco);
+        //$("#preco-detalhe").html(produtoPreco);
         $("#precoTotal").html(produtoPreco);
         $("#precoShare").html(produtoPreco);
-        $("#precopromo-detalhe").html(produtoPreco);
+        //$("#precopromo-detalhe").html(produtoPreco);
 
         if (detalhes.descricao_app && detalhes.descricao_app.trim() !== "") {
           // Formata a descrição
