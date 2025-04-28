@@ -421,11 +421,64 @@ function buscarProduto(produtoId) {
         //$("#rating-detalhe").html(produto.rating);
         //$("#like-detalhe").html(produto.likes);
         //$("#reviews-detalhe").html(produto.reviews + ' reviews');
-        $("#descricao-detalhe").html(detalhes.descricao_app);
         $("#preco-detalhe").html(produtoPreco);
         $("#precoTotal").html(produtoPreco);
         $("#precoShare").html(produtoPreco);
         $("#precopromo-detalhe").html(produtoPreco);
+
+        if (detalhes.descricao_app && detalhes.descricao_app.trim() !== "") {
+          // Formata a descrição
+          let formattedDescription = formatProductDescription(detalhes.descricao_app);
+          
+          // Cria o container de descrição com estilo melhorado
+          const descriptionHTML = `
+            <div class="product-description-container">
+              <div class="description-content">
+                ${formattedDescription}
+              </div>
+              <div class="show-more-container" id="showMoreContainer">
+                <button class="show-more-btn" id="showMoreBtn">
+                  <span>Ver mais</span>
+                  <i class="ri-arrow-down-s-line"></i>
+                </button>
+              </div>
+            </div>
+          `;
+          
+          // Atualiza o conteúdo
+          $("#descricao-detalhe").html(descriptionHTML);
+          
+          // Adiciona o evento para expandir/recolher a descrição
+          const descriptionContent = document.querySelector('.description-content');
+          const showMoreBtn = document.getElementById('showMoreBtn');
+          const showMoreContainer = document.getElementById('showMoreContainer');
+          
+          // Verifica se a descrição é longa o suficiente para precisar do botão "Ver mais"
+          if (descriptionContent && descriptionContent.scrollHeight > 120) {
+            descriptionContent.classList.add('collapsed');
+            
+            showMoreBtn.addEventListener('click', function() {
+              if (descriptionContent.classList.contains('collapsed')) {
+                descriptionContent.classList.remove('collapsed');
+                this.querySelector('span').textContent = 'Ver menos';
+                this.querySelector('i').classList.remove('ri-arrow-down-s-line');
+                this.querySelector('i').classList.add('ri-arrow-up-s-line');
+              } else {
+                descriptionContent.classList.add('collapsed');
+                this.querySelector('span').textContent = 'Ver mais';
+                this.querySelector('i').classList.remove('ri-arrow-up-s-line');
+                this.querySelector('i').classList.add('ri-arrow-down-s-line');
+              }
+            });
+          } else {
+            // Se a descrição for curta, esconde o botão "Ver mais"
+            showMoreContainer.style.display = 'none';
+          }
+        } else {
+          // Caso não haja descrição
+          $("#descricao-detalhe").html('<p class="text-gray-500">Descrição não disponível</p>');
+        }
+
         // Selecione a div onde você quer adicionar o link
         const $container = $('#containerBtnCarrinho');
         // Crie o link e configure os atributos
@@ -548,6 +601,49 @@ function buscarProduto(produtoId) {
         "Falha na requisição!"
       );
     });
+}
+
+// 2. Adicione esta função para formatar a descrição do produto
+function formatProductDescription(description) {
+  if (!description) return '';
+  
+  // Limpa a string, removendo espaços extras e quebras de linha desnecessárias
+  let cleanDescription = description.trim().replace(/\s+/g, ' ');
+  
+  // Verifica se a descrição já tem marcação HTML
+  if (cleanDescription.indexOf('<') !== -1 && cleanDescription.indexOf('>') !== -1) {
+    // Já tem HTML, apenas retorna com algumas melhorias
+    return cleanDescription
+      // Garante que parágrafos tenham classe de estilo
+      .replace(/<p>/g, '<p class="description-paragraph">')
+      // Garante que títulos tenham classe de estilo
+      .replace(/<h([1-6])>/g, '<h$1 class="description-heading">')
+      // Garante que listas tenham classe de estilo
+      .replace(/<ul>/g, '<ul class="description-list">');
+  }
+  
+  // Se não tiver HTML, processa para adicionar formatação
+  
+  // Detecta e formata possíveis listas com marcadores
+  cleanDescription = cleanDescription.replace(/•\s*(.*?)(?=•|$)/g, '<li>$1</li>');
+  if (cleanDescription.includes('<li>')) {
+    cleanDescription = '<ul class="description-list">' + cleanDescription + '</ul>';
+  }
+  
+  // Detecta e formata possíveis títulos (textos curtos seguidos de ponto)
+  cleanDescription = cleanDescription.replace(/([^.!?]+[.!?])\s+/g, '<p class="description-paragraph">$1</p>');
+  
+  // Se não encontrou parágrafos, envolve tudo em um parágrafo
+  if (!cleanDescription.includes('<p')) {
+    cleanDescription = '<p class="description-paragraph">' + cleanDescription + '</p>';
+  }
+  
+  // Destaca características importantes (textos entre parênteses, asteriscos, etc.)
+  cleanDescription = cleanDescription
+    .replace(/\*([^*]+)\*/g, '<strong>$1</strong>')
+    .replace(/\(([^)]+)\)/g, '<span class="text-emphasis">($1)</span>');
+  
+  return cleanDescription;
 }
 
 // Função para abrir o zoom da imagem
