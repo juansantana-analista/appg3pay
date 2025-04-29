@@ -1778,3 +1778,21 @@ document.querySelectorAll('img, a').forEach(function (element) {
 });
 //Fim dos bloqueios do menu contexto
 
+// Bloqueia Ctrl + Scroll
+window.addEventListener('wheel', function(e) {
+  if (e.ctrlKey) {
+    e.preventDefault();
+  }
+}, { passive: false });
+
+// Bloqueia Ctrl + '+' ou '-'
+window.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '-' || e.key === '=')) {
+    e.preventDefault();
+  }
+
+  // Também bloqueia Ctrl + 0 (reset zoom)
+  if ((e.ctrlKey || e.metaKey) && e.key === '0') {
+    e.preventDefault();
+  }
+});
