@@ -686,6 +686,17 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
@@ -740,6 +751,17 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
@@ -774,6 +796,17 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
           $("#menuPrincipal").show("fast");
         },
         pageAfterIn: function (event, page) {
@@ -795,6 +828,17 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
           $("#menuPrincipal").show("fast");
         },
         pageAfterIn: function (event, page) {
@@ -816,6 +860,17 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
@@ -836,6 +891,17 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
@@ -868,6 +934,17 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
           $("#menuPrincipal").show("fast");
         },
         pageAfterIn: function (event, page) {
@@ -889,6 +966,17 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
           $("#menuPrincipal").hide("fast");
         },
         pageAfterIn: function (event, page) {
@@ -912,6 +1000,17 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
@@ -932,10 +1031,16 @@ var app = new Framework7({
       on: {
         pageBeforeIn: async function (event, page) {
           clearLocalStorage();
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
-          const isValid = await validarToken();
+          const isValid = validarToken();
           if (!isValid) {
-            window.location.reload(true);
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
           }
           // fazer algo antes da página ser exibida
           $("#menuPrincipal").show("fast");
@@ -1066,6 +1171,17 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
           $("#menuPrincipal").hide("fast");
           
           var operacao = localStorage.getItem('operacao');
@@ -1126,6 +1242,17 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
           $("#menuPrincipal").hide("fast");
           localStorage.removeItem('enderecoDetalhes');
         },
@@ -1304,6 +1431,17 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
           $("#menuPrincipal").hide("fast");
           $("#menuPrincipal").addClass("display-none");
         },
@@ -1350,6 +1488,17 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
           $("#menuPrincipal").hide("fast");
         },
         pageAfterIn: function (event, page) {
@@ -1471,6 +1620,17 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
           $("#menuPrincipal").hide("fast");
         },
         pageAfterIn: function (event, page) {
@@ -1616,6 +1776,17 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
           $("#menuPrincipal").hide("fast");
         },
         pageAfterIn: function (event, page) {
