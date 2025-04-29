@@ -99,6 +99,31 @@ body {
   font-size: 12px; /* Tamanho do texto */
 }
 
+.bottom-nav .cart-link {
+  position: relative;
+}
+
+.bottom-nav .cart-badge::before {
+  content: attr(data-count);
+  position: absolute;
+  top: 0;
+  right: 50%;
+  transform: translateX(8px);
+  background: #7CBE42;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--branco);
+}
+
+.bottom-nav .cart-badge[data-count="0"]::before {
+  display: none;
+}
+
 .bottom-info {
   position: fixed;
   bottom: 0;

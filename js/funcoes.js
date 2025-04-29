@@ -3392,58 +3392,58 @@ function listarEnderecos() {
   }
   //Fim Função Esvaziar Carrinho
   
-  //Inicio Funçao contar Carrinho
-  function contarCarrinho() {
-    var userAuthToken = localStorage.getItem("userAuthToken");
-    const pessoaId = localStorage.getItem("pessoaId");
-  
-    const dados = {
-      pessoa_id: pessoaId,
-    };
-  
-    // Cabeçalhos da requisição
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + userAuthToken,
-    };
-  
-    const body = JSON.stringify({
-      class: "PagamentoSafe2payRest",
-      method: "ListarCarrinho",
-      dados: dados,
+//Inicio Funçao contar Carrinho
+function contarCarrinho() {
+  var userAuthToken = localStorage.getItem("userAuthToken");
+  const pessoaId = localStorage.getItem("pessoaId");
+
+  const dados = {
+    pessoa_id: pessoaId,
+  };
+
+  // Cabeçalhos da requisição
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "PagamentoSafe2payRest",
+    method: "ListarCarrinho",
+    dados: dados,
+  });
+
+  // Opções da requisição
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  // Fazendo a requisição
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // Verifica se o status é 'success'
+      if (
+        responseJson.status == "success" &&
+        responseJson.data.status == "sucess"
+      ) {
+        // Supondo que responseJson seja o objeto que você obteve no console.log
+        const quantidadeItens = responseJson.data.data.itens.length;
+        
+        // Atualizar o contador no cabeçalho
+        $(".btn-cart").attr("data-count", quantidadeItens);
+        
+        // Atualizar o contador na barra inferior
+        $(".cart-badge").attr("data-count", quantidadeItens);
+      }
+    })
+    .catch((error) => {
+      console.error("Erro:", error);
     });
-  
-    // Opções da requisição
-    const options = {
-      method: "POST",
-      headers: headers,
-      body: body,
-    };
-  
-    // Fazendo a requisição
-    fetch(apiServerUrl, options)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        // Verifica se o status é 'success'
-        if (
-          responseJson.status == "success" &&
-          responseJson.data.status == "sucess"
-        ) {
-          // Supondo que responseJson seja o objeto que você obteve no console.log
-          const quantidadeItens = responseJson.data.data.itens.length;
-          $(".btn-cart").attr("data-count", quantidadeItens);
-        }
-      })
-      .catch((error) => {
-        app.dialog.close();
-        console.error("Erro:", error);
-        app.dialog.alert(
-          "Erro ao listar carrinho: " + error.message,
-          "Falha na requisição!"
-        );
-      });
-  }
-  //Fim Função contar Carrinho
+}
+//Fim Função contar Carrinho
   
   //Inicio Funçao Dados Dashboard
   function onDashboard() {
