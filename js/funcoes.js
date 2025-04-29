@@ -87,7 +87,7 @@ function listarCategorias() {
             <div class="category-icon">
               <i class="mdi mdi-apps"></i>
             </div>
-            <div class="category-name">TODAS</div>
+            <div class="category-name">Todas</div>
           </div>
         `;
         $("#container-categorias").append(opcaoTodasHTML);
