@@ -1353,8 +1353,6 @@ form {
 }
 
 .category-item.active:after {
-  background-color: #f0f6f2;
-  color: var(--verde-escuro);
   width: 60%;
 }
 
@@ -1379,7 +1377,7 @@ form {
 
 .category-icon i {
   font-size: 22px;
-  color: var(--verde-escuro);
+  background-color: var(--verde-escuro);
   transition: all 0.3s ease;
 }
 
