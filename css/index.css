@@ -1353,6 +1353,8 @@ form {
 }
 
 .category-item.active:after {
+  background-color: #f0f6f2;
+  color: var(--verde-escuro);
   width: 60%;
 }
 
