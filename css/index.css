@@ -2847,3 +2847,181 @@ input, select {
     height: 70px;
   }
 }
+
+/*CAMPANHAS*/
+/* Estilos para a página de campanhas */
+
+/* Cabeçalho de campanhas */
+.campaigns-header {
+  background-color: var(--verde-escuro);
+  color: white;
+  padding: 20px 15px;
+  text-align: center;
+}
+
+.campaigns-header h1 {
+  font-size: 22px;
+  margin: 0 0 5px 0;
+  font-weight: 600;
+}
+
+.campaigns-header p {
+  font-size: 14px;
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* Categorias/filtros */
+.campaign-categories {
+  display: flex;
+  overflow-x: auto;
+  padding: 15px 10px;
+  background-color: white;
+  margin-bottom: 15px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+}
+
+.campaign-categories::-webkit-scrollbar {
+  display: none; /* Esconde scrollbar para Chrome/Safari/Opera */
+}
+
+.category-pill {
+  flex-shrink: 0;
+  padding: 8px 15px;
+  background-color: #f1f1f1;
+  border-radius: 20px;
+  margin-right: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--preto);
+  white-space: nowrap;
+}
+
+.category-pill.active {
+  background-color: var(--verde-escuro);
+  color: white;
+  box-shadow: 0 2px 5px rgba(0, 89, 31, 0.3);
+}
+
+/* Container de campanhas */
+.campaigns-container {
+  padding: 0 15px;
+}
+
+/* Card de campanha */
+.campaign-card {
+  margin-bottom: 20px;
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.campaign-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.campaign-image {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  background-color: #f1f1f1;
+}
+
+.campaign-content {
+  padding: 15px;
+}
+
+.campaign-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 5px 0;
+  color: var(--preto);
+}
+
+.campaign-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 10px 0;
+}
+
+.campaign-period {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: #888;
+}
+
+.campaign-period i {
+  margin-right: 5px;
+  font-size: 16px;
+}
+
+.campaign-tag {
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  margin-top: 10px;
+  color: white;
+  background-color: var(--verde-claro);
+}
+
+.campaign-tag.promocao {
+  background-color: #ff5500;
+}
+
+.campaign-tag.saude {
+  background-color: #4285f4;
+}
+
+.campaign-tag.data-especial {
+  background-color: #fbbc05;
+}
+
+.campaign-tag.lancamento {
+  background-color: #34a853;
+}
+
+/* Estilos para skeleton (carregamento) */
+.skeleton-card .campaign-image {
+  height: 140px;
+  background-color: #f1f1f1;
+}
+
+.skeleton-card .campaign-title {
+  height: 20px;
+  width: 70%;
+  background-color: #f1f1f1;
+  margin-bottom: 10px;
+}
+
+.skeleton-card .campaign-subtitle {
+  height: 16px;
+  width: 90%;
+  background-color: #f1f1f1;
+  margin-bottom: 10px;
+}
+
+.skeleton-card .campaign-period {
+  height: 14px;
+  width: 40%;
+  background-color: #f1f1f1;
+}
+
+/* Indicador de sem campanhas */
+.no-campaigns {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+}
+
+.no-campaigns i {
+  font-size: 48px;
+  margin-bottom: 10px;
+  color: #ccc;
+}

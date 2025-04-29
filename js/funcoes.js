@@ -3694,6 +3694,275 @@ function contarCarrinho() {
   }
   //Fim Função Listar Equipe
   
+  // Funções para a página de campanhas
+
+// Listar campanhas
+function listarCampanhas(categoria = "all") {
+  var userAuthToken = localStorage.getItem("userAuthToken");
+  app.dialog.preloader("Carregando...");
+
+  // Cabeçalhos da requisição
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "CampanhaRest",
+    method: "ListarCampanhas",
+    categoria: categoria !== "all" ? categoria : null,
+  });
+
+  // Opções da requisição
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  // Simulação de resposta da API (em produção, substituir pelo fetch real)
+  // Esta simulação é apenas para demonstrar a estrutura
+  const mockResponse = {
+    status: "success",
+    data: {
+      status: "success",
+      data: [
+        {
+          id: 1,
+          titulo: "Novembro Azul",
+          subtitulo: "Cuidados para a saúde do homem",
+          descricao: "Aproveite descontos especiais em produtos para a saúde masculina",
+          imagem: "img/campanhas/novembro-azul.jpg",
+          data_inicio: "2023-11-01",
+          data_fim: "2023-11-30",
+          link: "/produtos/?campanha=1",
+          categoria: "saude",
+          tag: "Saúde"
+        },
+        {
+          id: 2,
+          titulo: "Preparação para o Verão",
+          subtitulo: "Produtos especiais para o verão",
+          descricao: "Conheça nossa linha de produtos para o verão com descontos especiais",
+          imagem: "img/campanhas/verao.jpg",
+          data_inicio: "2023-11-15",
+          data_fim: "2023-12-31",
+          link: "/produtos/?campanha=2",
+          categoria: "promocoes",
+          tag: "Promoção"
+        },
+        {
+          id: 3,
+          titulo: "Dia das Mães",
+          subtitulo: "Presentes especiais para sua mãe",
+          descricao: "Confira nossas sugestões de presentes para o Dia das Mães",
+          imagem: "img/campanhas/dia-maes.jpg",
+          data_inicio: "2023-04-15",
+          data_fim: "2023-05-14",
+          link: "/produtos/?campanha=3",
+          categoria: "datas",
+          tag: "Data Especial"
+        },
+        {
+          id: 4,
+          titulo: "Lançamento Linha Premium",
+          subtitulo: "Nova linha de produtos premium",
+          descricao: "Conheça em primeira mão nossa nova linha de produtos premium",
+          imagem: "img/campanhas/lancamento.jpg",
+          data_inicio: "2023-11-01",
+          data_fim: "2023-12-31",
+          link: "/produtos/?campanha=4",
+          categoria: "lancamentos",
+          tag: "Lançamento"
+        },
+        {
+          id: 5,
+          titulo: "Black Friday 2023",
+          subtitulo: "Descontos imperdíveis em toda loja",
+          descricao: "Aproveite nossos descontos especiais de até 70% para a Black Friday",
+          imagem: "img/campanhas/black-friday.jpg",
+          data_inicio: "2023-11-20",
+          data_fim: "2023-11-27",
+          link: "/produtos/?campanha=5",
+          categoria: "promocoes",
+          tag: "Promoção"
+        },
+        {
+          id: 6,
+          titulo: "Natal 2023",
+          subtitulo: "Presentes especiais para o Natal",
+          descricao: "Confira nossa seleção de produtos para presentear no Natal",
+          imagem: "img/campanhas/natal.jpg",
+          data_inicio: "2023-12-01",
+          data_fim: "2023-12-25",
+          link: "/produtos/?campanha=6",
+          categoria: "datas",
+          tag: "Data Especial"
+        },
+        {
+          id: 7,
+          titulo: "Janeiro Branco",
+          subtitulo: "Cuidando da saúde mental",
+          descricao: "Produtos e dicas para cuidar da sua saúde mental",
+          imagem: "img/campanhas/janeiro-branco.jpg",
+          data_inicio: "2024-01-01",
+          data_fim: "2024-01-31",
+          link: "/produtos/?campanha=7",
+          categoria: "saude",
+          tag: "Saúde"
+        }
+      ]
+    }
+  };
+
+  // Na implementação real, usar o fetch abaixo em vez da simulação
+  /* 
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // O código abaixo permaneceria o mesmo, mas usando responseJson em vez de mockResponse
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+      app.dialog.alert(
+        "Erro ao carregar campanhas: " + error.message,
+        "Falha na requisição!"
+      );
+    });
+  */
+
+  // Usando a resposta simulada para demonstração
+  setTimeout(() => {
+    // Simula o tempo de resposta do servidor
+    const responseJson = mockResponse;
+    
+    // Verifica se o status é 'success' e se há dados de campanhas
+    if (
+      responseJson.status === "success" &&
+      responseJson.data.status === "success" &&
+      responseJson.data.data.length > 0
+    ) {
+      const campanhas = responseJson.data.data;
+      
+      // Filtra campanhas por categoria se necessário
+      const campanhasFiltradas = categoria !== "all" 
+        ? campanhas.filter(campanha => campanha.categoria === categoria)
+        : campanhas;
+        
+      // Limpa o container antes de adicionar novas campanhas
+      $("#container-campanhas").empty();
+      
+      if (campanhasFiltradas.length === 0) {
+        // Se não houver campanhas na categoria selecionada
+        $("#container-campanhas").html(`
+          <div class="no-campaigns">
+            <i class="mdi mdi-calendar-blank"></i>
+            <p>Nenhuma campanha encontrada nesta categoria</p>
+          </div>
+        `);
+      } else {
+        // Para cada campanha, cria um card
+        campanhasFiltradas.forEach((campanha) => {
+          const dataInicio = new Date(campanha.data_inicio);
+          const dataFim = new Date(campanha.data_fim);
+          
+          // Formata as datas para exibição
+          const dataInicioFormatada = formatarData(dataInicio);
+          const dataFimFormatada = formatarData(dataFim);
+          
+          // Define a classe da tag conforme a categoria
+          let tagClass = "";
+          switch (campanha.categoria) {
+            case "promocoes":
+              tagClass = "promocao";
+              break;
+            case "saude":
+              tagClass = "saude";
+              break;
+            case "datas":
+              tagClass = "data-especial";
+              break;
+            case "lancamentos":
+              tagClass = "lancamento";
+              break;
+            default:
+              tagClass = "";
+          }
+          
+          // HTML do card da campanha
+          const campanhaHTML = `
+            <div class="campaign-card" data-id="${campanha.id}" data-link="${campanha.link}">
+              <img src="${campanha.imagem}" alt="${campanha.titulo}" class="campaign-image">
+              <div class="campaign-content">
+                <h3 class="campaign-title">${campanha.titulo}</h3>
+                <p class="campaign-subtitle">${campanha.subtitulo}</p>
+                <div class="campaign-period">
+                  <i class="mdi mdi-calendar"></i>
+                  ${dataInicioFormatada} até ${dataFimFormatada}
+                </div>
+                <div class="campaign-tag ${tagClass}">${campanha.tag}</div>
+              </div>
+            </div>
+          `;
+          
+          // Adiciona o card ao container
+          $("#container-campanhas").append(campanhaHTML);
+        });
+        
+        // Adiciona evento de clique aos cards
+        $(".campaign-card").on("click", function () {
+          const link = $(this).attr("data-link");
+          app.views.main.router.navigate(link);
+        });
+      }
+      
+      app.dialog.close();
+    } else {
+      app.dialog.close();
+      
+      // Se não há campanhas disponíveis
+      $("#container-campanhas").html(`
+        <div class="no-campaigns">
+          <i class="mdi mdi-calendar-blank"></i>
+          <p>Nenhuma campanha disponível no momento</p>
+        </div>
+      `);
+      
+      console.error("Erro ao carregar campanhas ou nenhuma campanha disponível");
+    }
+  }, 1000);
+}
+
+// Função para formatar data
+function formatarData(data) {
+  const dia = data.getDate().toString().padStart(2, '0');
+  const mes = (data.getMonth() + 1).toString().padStart(2, '0');
+  const ano = data.getFullYear();
+  
+  return `${dia}/${mes}/${ano}`;
+}
+
+// Event listeners quando a página é inicializada
+document.addEventListener('page:init', function (e) {
+  if (e.detail.name === 'campanhas') {
+    // Carrega todas as campanhas na inicialização
+    listarCampanhas();
+    
+    // Adiciona eventos aos filtros de categoria
+    $('.category-pill').on('click', function() {
+      $('.category-pill').removeClass('active');
+      $(this).addClass('active');
+      
+      const categoria = $(this).attr('data-category');
+      listarCampanhas(categoria);
+    });
+    
+    // Adiciona função para atualizar contador do carrinho
+    contarCarrinho();
+  }
+});
+
   //Inicio da Funçao formatar Moeda
   function formatarMoeda(valor) {
     var precoFormatado = parseFloat(valor).toLocaleString("pt-BR", {

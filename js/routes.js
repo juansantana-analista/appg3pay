@@ -1768,6 +1768,44 @@ var app = new Framework7({
       }
     },    
     {
+      path: '/campanhas/',
+      url: 'campanhas.html?v=' + versionApp,
+      animate: false,
+      on: {
+        pageBeforeIn: async function (event, page) {
+          clearLocalStorage();
+          // Início função validar login
+          const isValid = await validarToken();
+          if (!isValid) {
+            window.location.reload(true);
+          }
+          // fazer algo antes da página ser exibida
+          $("#menuPrincipal").show("fast");
+          $("#menuPrincipal").removeClass("display-none");
+        },
+        pageAfterIn: function (event, page) {
+          // fazer algo depois da página ser exibida
+        },
+        pageInit: function (event, page) {
+          // fazer algo quando a página for inicializada
+          contarCarrinho();
+          listarCampanhas();
+
+          // Adiciona eventos aos filtros de categoria
+          $('.category-pill').on('click', function() {
+            $('.category-pill').removeClass('active');
+            $(this).addClass('active');
+            
+            const categoria = $(this).attr('data-category');
+            listarCampanhas(categoria);
+          });
+        },
+        pageBeforeRemove: function (event, page) {
+          // fazer algo antes da página ser removida do DOM
+        },
+      }
+    },
+    {
       path: '/refazer-pagamento/',
       url: 'refazer-pagamento.html?v=' + versionApp,
       options: {
