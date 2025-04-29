@@ -9,7 +9,7 @@
   "id": "br.com.g3pay",
   "display": "fullscreen",
   "display_override": ["standalone", "window-controls-overlay"],
-  "theme_color": "#ff7700",
+  "theme_color": "#00591F",
   "orientation": "portrait",
   "shortcuts": [
     {
