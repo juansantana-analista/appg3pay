@@ -99,24 +99,18 @@ body {
   font-size: 12px; /* Tamanho do texto */
 }
 
-/* CSS para posicionar o badge precisamente acima do ícone do carrinho */
+
+/* CSS para o badge do carrinho na barra inferior usando o mesmo estilo da barra superior */
 .bottom-nav .cart-link {
   position: relative;
-  display: inline-block; /* Garante que o link tenha o tamanho exato do conteúdo */
 }
 
-.bottom-nav .cart-link i {
+.bottom-nav .cart-badge {
   position: relative;
-  display: block;
-  margin: 0 auto;
 }
 
 .bottom-nav .cart-badge::before {
   content: attr(data-count);
-  position: absolute;
-  top: -4px; /* Posiciona bem no topo do ícone */
-  left: 50%; /* Centraliza horizontalmente */
-  transform: translateX(-50%); /* Ajusta o centro exato */
   background: #7CBE42;
   width: 17px;
   height: 17px;
@@ -125,9 +119,11 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 12px;
-  font-weight: bold;
-  color: #ffffff;
-  z-index: 1;
+  color: var(--branco);
+  position: absolute;
+  top: -15px; /* Ajuste para ficar logo acima do texto "Carrinho" */
+  right: 50%;
+  transform: translateX(10px); /* Ajuste fino do posicionamento horizontal */
 }
 
 .bottom-nav .cart-badge[data-count="0"]::before {
