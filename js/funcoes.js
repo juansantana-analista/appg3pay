@@ -3910,15 +3910,6 @@ function listarCampanhas(categoria = "all") {
   }, 1000);
 }
 
-// Função para formatar data
-function formatarData(data) {
-  const dia = data.getDate().toString().padStart(2, '0');
-  const mes = (data.getMonth() + 1).toString().padStart(2, '0');
-  const ano = data.getFullYear();
-  
-  return `${dia}/${mes}/${ano}`;
-}
-
 // Event listeners quando a página é inicializada
 document.addEventListener('page:init', function (e) {
   if (e.detail.name === 'campanhas') {
