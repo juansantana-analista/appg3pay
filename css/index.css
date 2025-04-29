@@ -1348,8 +1348,8 @@ form {
 }
 
 .category-item.active {
-  background-color: #f0f6f2;
-  color: var(--verde-escuro);
+  background-color: var(--verde-escuro);
+  color: #f0f6f2;
 }
 
 .category-item.active:after {
