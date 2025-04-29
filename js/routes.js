@@ -1,6 +1,7 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
 const versionApp = "1.1.4";
+var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
 document.addEventListener('deviceready', onDeviceReady, false);
@@ -29,13 +30,18 @@ var app = new Framework7({
       on: {
         pageBeforeIn: async function (event, page) {    
           clearLocalStorage();
+          
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Obtém a URL atual do navegador
           const currentUrl = window.location.href;
 
           // Início função validar login
-          const isValid = await validarToken();
+          const isValid = validarToken();
           if (!isValid) {
             app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500);
           } else {
             // Se a URL contiver "/notificacoes", redireciona
             if (currentUrl.includes('https://appvitatop.tecskill.com.br/#/notificacoes')) {
@@ -469,7 +475,9 @@ var app = new Framework7({
                   if (data.status == 'success') {
                     app.dialog.close();
                     const token = data.data;
-                    localStorage.setItem('userAuthToken', token);
+                    setCookie('userAuthToken', token, 5);
+                    appId = "Bearer " +  getCookie('userAuthToken');
+                    userAuthToken = token;
                     const decodedToken = jwt_decode(token);
                     // Navegar para outra página ou realizar outras ações necessárias
 

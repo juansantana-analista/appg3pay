@@ -1,46 +1,55 @@
+var appId = "Bearer " + getCookie("userAuthToken");
+
 // Início função validar login
-async function validarToken() {
-    var userAuthToken = localStorage.getItem("userAuthToken");
-    if (userAuthToken) {
-      const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-  
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + userAuthToken,
-      };
-  
-      const body = JSON.stringify({
-        class: "ProdutoCategoriaRest",
-        method: "loadAll",
-        limit: "1",
-      });
-  
-      const options = {
-        method: "POST",
-        headers: headers,
-        body: body,
-      };
-  
-      try {
-        const response = await fetch(apiServerUrl, options);
-        const data = await response.json();
-        if (data.status == "success") {
-          // Token válido, continua na página atual
-          return true;
-        } else {
-          // Token inválido, redireciona para a página de login
-          return false;
-        }
-      } catch (error) {
-        console.error("Erro ao verificar token:", error);
-        return false;
-      }
-    } else {
-      // Token não existe, redireciona para a página de login
-      return false;
-    }
+function validarToken() {
+  const userAuthToken = getCookie("userAuthToken"); // Lê o token do cookie
+
+  if (!userAuthToken) {
+    return false;
   }
-  // Função para verificar se o token JWT expirou
+
+  try {
+    // Dividir o token e pegar o payload (segunda parte do JWT)
+    const base64Url = userAuthToken.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const payload = JSON.parse(atob(base64));
+
+    // Verificar se há um campo expires e se ele ainda é válido
+    const currentTime = Math.floor(Date.now() / 1000); // Tempo atual em segundos
+    return payload.expires && payload.expires > currentTime;
+  } catch (error) {
+    console.error("Erro ao decodificar o token:", error);
+    return false;
+  }
+}
+
+// Função para definir cookie
+function setCookie(name, value, hours) {
+  let expires = "";
+  if (hours) {
+    const date = new Date();
+    date.setTime(date.getTime() + hours * 60 * 60 * 1000);
+    expires = "; expires=" + date.toUTCString();
+  }
+  document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
+
+// Função para obter cookie
+function getCookie(name) {
+  const nameEQ = name + "=";
+  const ca = document.cookie.split(";");
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) === " ") c = c.substring(1, c.length);
+    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+  }
+  return null;
+}
+// Função para remover um cookie
+function deleteCookie(name) {
+  document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+}
+// Fim função validar login
   
   //Inicio Funçao listar categorias
 // Updated listarCategorias function
