@@ -528,10 +528,16 @@ var app = new Framework7({
       on: {
         pageBeforeIn: async function (event, page) {
           clearLocalStorage();
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
-          const isValid = await validarToken();
+          const isValid = validarToken();
           if (!isValid) {
-            window.location.reload(true);
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
           }
           
           var userIdAtual = localStorage.getItem('userId');
