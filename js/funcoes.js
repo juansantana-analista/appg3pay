@@ -57,7 +57,6 @@ function listarCategorias() {
   const body = JSON.stringify({
     class: "ProdutoCategoriaRest",
     method: "listarCategorias",
-    limit: 10,
   });
 
   // Opções da requisição
