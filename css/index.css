@@ -1327,7 +1327,7 @@ form {
   justify-content: center;
   padding: 12px 8px;
   border-radius: 10px;
-  background-color: var(--verde-escuro);
+  background-color: #f9f9f9;
   transition: all 0.3s ease;
   cursor: pointer;
   min-width: 80px;
@@ -1342,7 +1342,7 @@ form {
   transform: translateX(-50%);
   width: 0;
   height: 3px;
-  background-color: #f9f9f9;
+  background-color: var(--verde-escuro);
   transition: width 0.3s ease;
   border-radius: 3px;
 }
