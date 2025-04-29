@@ -54,7 +54,7 @@ function deleteCookie(name) {
   //Inicio Funçao listar categorias
 // Updated listarCategorias function
 function listarCategorias() {
-  var userAuthToken = localStorage.getItem("userAuthToken");
+  
   app.dialog.preloader("Carregando...");
 
   // Cabeçalhos da requisição
@@ -368,7 +368,7 @@ function showSwipeHint() {
   
   //Inicio Funçao listar produtos tela Home
   function listarProdutos(searchQuery = "", categoriaId, compra) {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     app.dialog.preloader("Carregando...");
   
     var imgUrl = "https://vitatop.tecskill.com.br/";
@@ -508,7 +508,7 @@ function showSwipeHint() {
   
 //Inicio Função Detalhes Produto
 function buscarProduto(produtoId) {
-  var userAuthToken = localStorage.getItem("userAuthToken");
+  
   var operacao = localStorage.getItem("operacao");
   app.dialog.preloader("Carregando...");
 
@@ -965,7 +965,7 @@ function openImageZoom(imageSrc) {
   
   //Inicio Função obter Links
   function buscarLinks(produtoId) {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     var codigo_indicador = localStorage.getItem("codigo_indicador");
     app.dialog.preloader("Carregando...");
   
@@ -1091,7 +1091,7 @@ function openImageZoom(imageSrc) {
   
   //Inicio Função obter id da Pessoa
   function buscarPessoaId(userId) {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     app.dialog.preloader("Carregando...");
   
     // Cabeçalhos da requisição
@@ -1146,7 +1146,7 @@ function openImageZoom(imageSrc) {
   
   //Inicio Função obter Link Afiliado
   function buscarLinkAfiliado() {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     const pessoaId = localStorage.getItem("pessoaId");
     app.dialog.preloader("Carregando...");
   
@@ -1227,7 +1227,7 @@ function openImageZoom(imageSrc) {
   
   //Inicio Funçao listar pedidos tela Pedidos
   function listarPedidos(searchQuery = "") {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     var pessoaId = localStorage.getItem("pessoaId");
     app.dialog.preloader("Carregando...");
   
@@ -1344,7 +1344,7 @@ function openImageZoom(imageSrc) {
   
   //Inicio Funçao listar Vendas
   function listarVendas(searchQuery = "") {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     var pessoaId = localStorage.getItem("pessoaId");
     app.dialog.preloader("Carregando...");
   
@@ -1467,7 +1467,7 @@ function openImageZoom(imageSrc) {
   
   // Início da função detalhesVendas
   function detalhesVenda() {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     var vendaId = localStorage.getItem("vendaId");
     var pessoaId = localStorage.getItem("pessoaId");
     app.dialog.preloader("Carregando...");
@@ -1660,7 +1660,7 @@ function openImageZoom(imageSrc) {
 
   // Início da função detalhesPedido
   function detalhesPedido() {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     var pedidoId = localStorage.getItem("pedidoId");
     app.dialog.preloader("Carregando...");
   
@@ -1856,7 +1856,7 @@ function openImageZoom(imageSrc) {
   
   //Inicio Funçao Listar Banners
   function listarBanners() {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     app.dialog.preloader("Carregando...");
     const headers = {
       "Content-Type": "application/json",
@@ -1913,7 +1913,7 @@ function openImageZoom(imageSrc) {
   
   //Inicio Funçao CEP
   function cepEndereco(cep) {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     app.dialog.preloader("Carregando...");
     const headers = {
       "Content-Type": "application/json",
@@ -1959,7 +1959,7 @@ function openImageZoom(imageSrc) {
   
     //Inicio Funçao CEP Editar
     function cepEnderecoEdit(cep) {
-      var userAuthToken = localStorage.getItem("userAuthToken");
+      
       app.dialog.preloader("Carregando...");
       const headers = {
         "Content-Type": "application/json",
@@ -2005,7 +2005,7 @@ function openImageZoom(imageSrc) {
     
   //Inicio Funçao Listar Notificações
   function listarNotificacoes() {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     var userId = localStorage.getItem("userId");
     app.dialog.preloader("Carregando...");
     
@@ -2193,7 +2193,7 @@ function openImageZoom(imageSrc) {
 // Inicio da Funçao que apaga a notificação
 function apagarNotificacao(notificacaoId) {
   app.dialog.preloader("Apagando...");
-  var userAuthToken = localStorage.getItem("userAuthToken");
+  
   
   const headers = {
     "Content-Type": "application/json",
@@ -2232,7 +2232,7 @@ function apagarNotificacao(notificacaoId) {
 
   //Inicio Funçao Listar Categorias
   function listarCategoriasCurso() {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     app.dialog.preloader("Carregando...");
     // Cabeçalhos da requisição
     const headers = {
@@ -2297,7 +2297,7 @@ function apagarNotificacao(notificacaoId) {
   
   //Inicio da funçao contagem Notificações
   function buscarQtdeNotif() {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     var userId = localStorage.getItem("userId");
   
     // Cabeçalhos da requisição
@@ -2346,7 +2346,7 @@ function apagarNotificacao(notificacaoId) {
   //Inicio Funçao Selecionar Endereço
   function selecionarEndereco(enderecoSelecionado) {
     app.dialog.preloader("Carregando...");
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     const pessoaId = localStorage.getItem("pessoaId");
   
     const endereco = enderecoSelecionado;
@@ -2437,7 +2437,7 @@ function apagarNotificacao(notificacaoId) {
 
   // Início Função Listar Endereços
 function listarEnderecos() {
-  var userAuthToken = localStorage.getItem("userAuthToken");
+  
   app.dialog.preloader("Carregando...");
   const pessoaId = localStorage.getItem("pessoaId");
 
@@ -2581,7 +2581,7 @@ function listarEnderecos() {
     data_expiracao,
     cvc
   ) {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     app.dialog.preloader("Carregando...");
     const pessoaId = localStorage.getItem("pessoaId");
     const enderecoEntregaId = localStorage.getItem("enderecoSelecionado");
@@ -2679,7 +2679,7 @@ function listarEnderecos() {
     data_expiracao,
     cvc
   ) {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     app.dialog.preloader("Carregando...");
     const pedidoId = localStorage.getItem("pedidoIdPagamento");
   
@@ -2761,7 +2761,7 @@ function listarEnderecos() {
   
   //Inicio Funçao Listar Carrinho
   function listarCarrinho() {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     app.dialog.preloader("Carregando...");
     const pessoaId = localStorage.getItem("pessoaId");
   
@@ -2992,7 +2992,7 @@ function listarEnderecos() {
   
   //Inicio Funçao Alterar Carrinho
   function alterarCarrinho(pessoaId, produtoId, quantidade) {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     app.dialog.preloader("Carregando...");
   
     const dados = {
@@ -3050,7 +3050,7 @@ function listarEnderecos() {
   function adicionarEndereco() {
     app.dialog.preloader("Carregando...");
   
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     const pessoaId = localStorage.getItem("pessoaId");
     // Captura os valores dos inputs
     var nomeEndereco = $("#nomeEndereco").val();
@@ -3135,7 +3135,7 @@ function listarEnderecos() {
   function editarEndereco() {
     app.dialog.preloader("Carregando...");
   
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     const pessoaId = localStorage.getItem("pessoaId");
     // Captura os valores dos inputs
     var enderecoId = $("#idEnderecoEdit").val();
@@ -3220,7 +3220,7 @@ function listarEnderecos() {
 
   //Inicio Adicionar Item Carrinho
   function adicionarItemCarrinho(produtoId) {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     const pessoaId = localStorage.getItem("pessoaId");
     app.dialog.preloader("Carregando...");
   
@@ -3289,7 +3289,7 @@ function listarEnderecos() {
   
   //Inicio Remover Item do Carrinho
   function removerItemCarrinho(pessoaId, produtoId) {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     app.dialog.preloader("Carregando...");
     console.log(pessoaId);
     console.log(produtoId);
@@ -3349,7 +3349,7 @@ function listarEnderecos() {
   
   //Inicio Funçao Esvaziar Carrinho
   function limparCarrinho() {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     const pessoaId = localStorage.getItem("pessoaId");
     app.dialog.preloader("Carregando...");
   
@@ -3403,7 +3403,7 @@ function listarEnderecos() {
   
 //Inicio Funçao contar Carrinho
 function contarCarrinho() {
-  var userAuthToken = localStorage.getItem("userAuthToken");
+  
   const pessoaId = localStorage.getItem("pessoaId");
 
   const dados = {
@@ -3456,7 +3456,7 @@ function contarCarrinho() {
   
   //Inicio Funçao Dados Dashboard
   function onDashboard() {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     const pessoaId = localStorage.getItem("pessoaId");
   
     const dados = {
@@ -3509,7 +3509,7 @@ function contarCarrinho() {
   
   //Inicio Funçao Listar Carrinho Checkout
   function listarCarrinhoCheckout() {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     app.dialog.preloader("Carregando...");
     const pessoaId = localStorage.getItem("pessoaId");
   
@@ -3615,7 +3615,7 @@ function contarCarrinho() {
   
   //Inicio Funçao Listar Equipe
   function listarEquipe() {
-    var userAuthToken = localStorage.getItem("userAuthToken");
+    
     app.dialog.preloader("Carregando...");
     const pessoaId = localStorage.getItem("pessoaId");
   
