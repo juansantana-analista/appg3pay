@@ -259,7 +259,7 @@ body {
 
 .btn-cart::before {
   content: attr(data-count);
-  background: var(--verde-escuro);
+  background: #7CBE42;
   width: 17px;
   height: 17px;
   border-radius: 50%;
