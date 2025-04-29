@@ -649,6 +649,7 @@ var app = new Framework7({
           
           onDashboard();          
           buscarQtdeNotif();
+          contarCarrinho();
 
           $('.abrir-popup').on('click', function (e) {
             e.preventDefault(); // Prevent default link behavior
