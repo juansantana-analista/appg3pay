@@ -93,27 +93,17 @@ function listarCategorias() {
         `;
         $("#container-categorias").append(opcaoTodasHTML);
 
-        // Ícones predefinidos para categorias (você pode personalizar)
-        const icones = [
-          "mdi-pill", "mdi-bottle-tonic-plus", "mdi-food-apple", 
-          "mdi-spa", "mdi-tea", "mdi-leaf", "mdi-nature", 
-          "mdi-heart-pulse", "mdi-dumbbell", "mdi-fruit-citrus"
-        ];
-
         // Adicione cada categoria
-        categorias.forEach((categoria, index) => {
-          // Use um ícone do array de ícones, com rotação para variedade
-          const iconeIndex = index % icones.length;
-          
+        categorias.forEach((categoria) => {
           var categoriaHTML = `
             <div class="category-item" data-id="${categoria.id}">
               <div class="category-icon">
-                <i class="mdi ${icones[iconeIndex]}"></i>
+                <i class="${categoria.icone}"></i>
               </div>
               <div class="category-name">${categoria.nome}</div>
             </div>
           `;
-
+        
           $("#container-categorias").append(categoriaHTML);
         });
 
