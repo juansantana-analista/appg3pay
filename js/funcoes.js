@@ -541,11 +541,6 @@ function buscarProduto(produtoId) {
       if (responseJson.status === "success" && responseJson.data.status === "success") {
         const detalhes = responseJson.data.data;             
         var produtoPreco = "";
-        if (operacao == "compra") {
-          produtoPreco = formatarMoeda(detalhes.preco);
-        } else {
-          produtoPreco = formatarMoeda(detalhes.preco_lojavirtual);
-        }
         
         // Preparar as imagens para o carrossel
         const fotoPrincipal = detalhes.foto ? imgUrl + detalhes.foto : "img/default.png";
@@ -653,12 +648,17 @@ function buscarProduto(produtoId) {
         $("#imagemShare").attr('src', fotoPrincipal);
         $("#nome-detalhe").html(detalhes.nome.toUpperCase());
         $("#nomeShare").html(detalhes.nome.toUpperCase());
-        //$("#rating-detalhe").html(produto.rating);
-        //$("#like-detalhe").html(produto.likes);
-        //$("#reviews-detalhe").html(produto.reviews + ' reviews');
-        //$("#preco-detalhe").html(produtoPreco);
-        $("#precoTotal").html(produtoPreco);
-        $("#precoShare").html(produtoPreco);
+        
+        if (operacao == "compra") {
+          produtoPreco = formatarMoeda(detalhes.preco);
+        } else {
+          produtoPreco = formatarMoeda(detalhes.preco_lojavirtual);
+        }
+        var precoLucro = detalhes.preco_lojavirtual - detalhes.preco;
+        $("#precoOriginal").html(formatarMoeda(detalhes.preco_lojavirtual));
+        $("#precoDesconto").html(formatarMoeda(detalhes.preco));
+        $("#precoRevenda").html(detalhes.preco_lojavirtual);
+        $("#precoLucro").html(formatarMoeda(precoLucro));
         //$("#precopromo-detalhe").html(produtoPreco);
 
         // Selecione a div onde você quer adicionar o link
