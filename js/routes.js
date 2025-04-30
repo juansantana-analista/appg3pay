@@ -1213,7 +1213,7 @@ var app = new Framework7({
           $.getScript('js/qrcode.min.js');
           $.getScript('js/detalhes.js');
           var produtoId = localStorage.getItem('produtoId');
-          buscarProduto(produtoId);
+          //buscarProduto(produtoId);
 
           // JavaScript to open popup
           document.querySelector('.abrir-popup').addEventListener('click', function (e) {
