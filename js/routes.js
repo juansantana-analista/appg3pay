@@ -1202,9 +1202,14 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+            // Adiciona o CSS dinamicamente
+          var link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = 'css/detalhes.css?v=' + versionApp;
+          document.head.appendChild(link);
           // fazer algo quando a página for inicializada
           $.getScript('js/qrcode.min.js');
-          //$.getScript('js/detalhes.js');
+          $.getScript('js/detalhes.js');
           var produtoId = localStorage.getItem('produtoId');
           buscarProduto(produtoId);
 
