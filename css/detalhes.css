@@ -227,6 +227,18 @@ body {
   color: var(--accent-color);
 }
 
+.share-button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #fff !important;
+  font-weight: 500 !important;
+  padding: 15px !important;
+  gap: 10px !important;
+  cursor: pointer !important;
+  max-width: 300px;
+}
+
 .cart-button {
   position: fixed;
   bottom: 0;
