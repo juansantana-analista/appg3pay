@@ -1226,13 +1226,13 @@ var app = new Framework7({
             app.popup.open('.popup-compartilhar');
             buscarLinks(produtoId);
           });
-          $(document).on('click', '#compartilharProduto', function() {
+          $('.compartilharProduto').on('click', function() {
             app.popup.open('.popup-compartilhar');
             buscarLinks(produtoId);
           });
 
           
-          $("#voltarProdutos").on('click', function () {
+          $(".back-button").on('click', function () {
             app.views.main.router.navigate("/produtos/");
           });
           
