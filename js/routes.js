@@ -1226,8 +1226,7 @@ var app = new Framework7({
             app.popup.open('.popup-compartilhar');
             buscarLinks(produtoId);
           });
-          $('#compartilharProduto').on('click', function(e) {
-            e.preventDefault(); // Prevent default link behavior
+          $('#compartilharProduto').on('click', function() {
             app.popup.open('.popup-compartilhar');
             buscarLinks(produtoId);
           });
