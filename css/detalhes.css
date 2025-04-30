@@ -315,21 +315,52 @@ body {
   }
 }
 
-/* Estilos para o popup de benefícios */
-.popup-benefit-details .navbar-inner .title {
-  font-weight: 600;
-  color: #FF4B00;
+.benefit-balloon {
+  position: absolute;
+  z-index: 9999;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  padding: 0;
+  font-size: 14px;
+  transition: opacity 0.3s ease;
 }
 
-.popup-benefit-details .card {
-  margin: 0;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+.benefit-balloon:after {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 20px;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid white;
 }
 
-.popup-benefit-details .card-content {
-  padding: 20px;
-  font-size: 16px;
-  line-height: 1.6;
-  color: #444;
+.balloon-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  border-bottom: 1px solid #eee;
+  background-color: #f8f9fa;
+  border-radius: 8px 8px 0 0;
+}
+
+.balloon-title {
+  font-weight: bold;
+  color: #333;
+}
+
+.balloon-close {
+  cursor: pointer;
+  color: #999;
+}
+
+.balloon-close:hover {
+  color: #333;
+}
+
+.balloon-content {
+  padding: 15px;
+  line-height: 1.5;
 }

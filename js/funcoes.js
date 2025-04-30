@@ -507,6 +507,8 @@ function showSwipeHint() {
   //Fim Função Lista produtos
   
 //Inicio Função Detalhes Produto
+
+// Modificação da função buscarProduto para incluir benefícios dinâmicos
 function buscarProduto(produtoId) {
   
   var operacao = localStorage.getItem("operacao");
@@ -542,48 +544,8 @@ function buscarProduto(produtoId) {
         const detalhes = responseJson.data.data;      
         var produtoPreco = "";
         
-        // Preparar as imagens para o carrossel
-        const fotoPrincipal = detalhes.foto ? imgUrl + detalhes.foto : "img/default.png";
+        // Código existente do carrossel e outras exibições...
         
-        // Array para armazenar todas as fotos do produto
-        let fotos = [];
-        
-        // Adiciona a foto principal
-        if (detalhes.foto) {
-          fotos.push(imgUrl + detalhes.foto);
-        }
-        
-        // Verificar e adicionar fotos adicionais
-        if (detalhes.foto2) fotos.push(imgUrl + detalhes.foto2);
-        if (detalhes.foto3) fotos.push(imgUrl + detalhes.foto3);
-        if (detalhes.foto4) fotos.push(imgUrl + detalhes.foto4);
-        if (detalhes.foto5) fotos.push(imgUrl + detalhes.foto5);
-        if (detalhes.foto6) fotos.push(imgUrl + detalhes.foto6);
-        
-        // Se não houver fotos, adiciona a imagem padrão
-        if (fotos.length === 0) {
-          fotos.push("img/default.png");
-        }
-        
-        // Código do carrossel (mantido como estava)...
-        
-        //ALIMENTAR COM OS VALORES DO ITEM
-        $("#imagem-detalhe").attr('src', fotoPrincipal);
-        $("#imagemShare").attr('src', fotoPrincipal);
-        $("#nome-detalhe").html(detalhes.nome.toUpperCase());
-        $("#nomeShare").html(detalhes.nome.toUpperCase());
-        
-        if (operacao == "compra") {
-          produtoPreco = formatarMoeda(detalhes.preco);
-        } else {
-          produtoPreco = formatarMoeda(detalhes.preco_lojavirtual);
-        }
-        var precoLucro = detalhes.preco_lojavirtual - detalhes.preco;
-        $("#precoOriginal").html(formatarMoeda(detalhes.preco_lojavirtual));
-        $("#precoDesconto").html(formatarMoeda(detalhes.preco));
-        $("#precoRevenda").html(formatarMoeda(detalhes.preco_lojavirtual));
-        $("#precoLucro").html(formatarMoeda(precoLucro));
-
         // NOVO CÓDIGO: Exibir benefícios dinamicamente
         renderizarBeneficios(detalhes.beneficios);
         
@@ -608,6 +570,103 @@ function buscarProduto(produtoId) {
         "Falha na requisição!"
       );
     });
+}
+
+// Nova função para renderizar os benefícios dinamicamente
+function renderizarBeneficios(beneficios) {
+  // Seleciona o container de benefícios
+  const benefitsContainer = document.querySelector('.benefits');
+  
+  // Mantém apenas o título dos benefícios
+  benefitsContainer.innerHTML = `
+    <div class="benefits-title">
+      Benefícios dos Encapsulados
+      <i class="fas fa-capsules"></i>
+    </div>
+  `;
+  
+  // Se não houver benefícios, não faz nada
+  if (!beneficios || beneficios.length === 0) return;
+  
+  // Para cada benefício, cria um elemento e adiciona ao container
+  beneficios.forEach(beneficio => {
+    const benefitItem = document.createElement('div');
+    benefitItem.className = 'benefit-item';
+    benefitItem.setAttribute('data-benefit-id', beneficio.id);
+    
+    benefitItem.innerHTML = `
+      <div class="benefit-icon">
+        <i class="${beneficio.icone}" style="color: ${beneficio.cor_icone.replace(/`/g, '')}"></i>
+      </div>
+      <div class="benefit-content">
+        <div class="benefit-title">${beneficio.nome}</div>
+        <div class="view-more">Ver mais <i class="fas fa-chevron-right"></i></div>
+      </div>
+    `;
+    
+    // Adiciona o evento de clique para mostrar o balão com detalhes
+    benefitItem.addEventListener('click', function(event) {
+      event.preventDefault();
+      mostrarBalao(beneficio, event);
+    });
+    
+    benefitsContainer.appendChild(benefitItem);
+  });
+  
+  // Adiciona o elemento de balão ao DOM se ainda não existir
+  if (!document.getElementById('benefit-balloon')) {
+    const balloon = document.createElement('div');
+    balloon.id = 'benefit-balloon';
+    balloon.className = 'benefit-balloon';
+    balloon.style.display = 'none';
+    document.body.appendChild(balloon);
+    
+    // Adiciona evento para fechar o balão quando clicar fora dele
+    document.addEventListener('click', function(event) {
+      const balloon = document.getElementById('benefit-balloon');
+      if (balloon && balloon.style.display === 'block' && 
+          !balloon.contains(event.target) && 
+          !event.target.closest('.benefit-item')) {
+        balloon.style.display = 'none';
+      }
+    });
+  }
+}
+
+// Função para mostrar o balão com detalhes do benefício
+function mostrarBalao(beneficio, event) {
+  const balloon = document.getElementById('benefit-balloon');
+  
+  // Define o conteúdo do balão
+  balloon.innerHTML = `
+    <div class="balloon-header">
+      <div class="balloon-title">${beneficio.nome}</div>
+      <div class="balloon-close"><i class="fas fa-times"></i></div>
+    </div>
+    <div class="balloon-content">
+      ${beneficio.descricao}
+    </div>
+  `;
+  
+  // Posiciona o balão próximo ao item clicado
+  const clickedItem = event.currentTarget;
+  const itemRect = clickedItem.getBoundingClientRect();
+  
+  // Posiciona o balão abaixo do item clicado
+  balloon.style.top = (itemRect.bottom + window.scrollY + 10) + 'px';
+  balloon.style.left = (itemRect.left + window.scrollX) + 'px';
+  balloon.style.maxWidth = '300px'; // Define largura máxima do balão
+  
+  // Mostra o balão
+  balloon.style.display = 'block';
+  
+  // Adiciona evento para fechar o balão ao clicar no X
+  balloon.querySelector('.balloon-close').addEventListener('click', function() {
+    balloon.style.display = 'none';
+  });
+  
+  // Impede que o evento de clique se propague para o documento
+  event.stopPropagation();
 }
 
 // Nova função para renderizar os benefícios dinamicamente
