@@ -852,15 +852,6 @@ function showBenefitDetails(beneficio) {
   // Se não estiver usando framework7, pode usar esta abordagem alternativa
   // modal.style.display = 'block';
 }
-
-// Adicionar evento para fechar o modal clicando no X
-document.querySelector('.close-modal').addEventListener('click', function() {
-  // Fecha o modal - com framework7
-  app.popup.close('.popup-benefit-details');
-  
-  // Se não estiver usando framework7, pode usar esta abordagem alternativa
-  // document.getElementById('benefitModal').style.display = 'none';
-});
 //Fim Função Detalhes Produto
   
   //Inicio Função obter Links
