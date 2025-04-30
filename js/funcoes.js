@@ -661,59 +661,6 @@ function buscarProduto(produtoId) {
         $("#precoShare").html(produtoPreco);
         //$("#precopromo-detalhe").html(produtoPreco);
 
-        if (detalhes.descricao_app && detalhes.descricao_app.trim() !== "") {
-          // Formata a descrição
-          let formattedDescription = formatProductDescription(detalhes.descricao_app);
-          
-          // Cria o container de descrição com estilo melhorado
-          const descriptionHTML = `
-            <div class="product-description-container">
-              <div class="description-content">
-                ${formattedDescription}
-              </div>
-              <div class="show-more-container" id="showMoreContainer">
-                <button class="show-more-btn" id="showMoreBtn">
-                  <span>Ver mais</span>
-                  <i class="ri-arrow-down-s-line"></i>
-                </button>
-              </div>
-            </div>
-          `;
-          
-          // Atualiza o conteúdo
-          $("#descricao-detalhe").html(descriptionHTML);
-          
-          // Adiciona o evento para expandir/recolher a descrição
-          const descriptionContent = document.querySelector('.description-content');
-          const showMoreBtn = document.getElementById('showMoreBtn');
-          const showMoreContainer = document.getElementById('showMoreContainer');
-          
-          // Verifica se a descrição é longa o suficiente para precisar do botão "Ver mais"
-          if (descriptionContent && descriptionContent.scrollHeight > 120) {
-            descriptionContent.classList.add('collapsed');
-            
-            showMoreBtn.addEventListener('click', function() {
-              if (descriptionContent.classList.contains('collapsed')) {
-                descriptionContent.classList.remove('collapsed');
-                this.querySelector('span').textContent = 'Ver menos';
-                this.querySelector('i').classList.remove('ri-arrow-down-s-line');
-                this.querySelector('i').classList.add('ri-arrow-up-s-line');
-              } else {
-                descriptionContent.classList.add('collapsed');
-                this.querySelector('span').textContent = 'Ver mais';
-                this.querySelector('i').classList.remove('ri-arrow-up-s-line');
-                this.querySelector('i').classList.add('ri-arrow-down-s-line');
-              }
-            });
-          } else {
-            // Se a descrição for curta, esconde o botão "Ver mais"
-            showMoreContainer.style.display = 'none';
-          }
-        } else {
-          // Caso não haja descrição
-          $("#descricao-detalhe").html('<p class="text-gray-500">Descrição não disponível</p>');
-        }
-
         // Selecione a div onde você quer adicionar o link
         const $container = $('#containerBtnCarrinho');
         // Crie o link e configure os atributos
