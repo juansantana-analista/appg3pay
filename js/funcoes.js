@@ -539,8 +539,7 @@ function buscarProduto(produtoId) {
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de pedidos
       if (responseJson.status === "success" && responseJson.data.status === "success") {
-        const detalhes = responseJson.data.data;        
-        console.log(detalhes);     
+        const detalhes = responseJson.data.data;      
         var produtoPreco = "";
         
         // Preparar as imagens para o carrossel
@@ -661,7 +660,24 @@ function buscarProduto(produtoId) {
         $("#precoRevenda").html(formatarMoeda(detalhes.preco_lojavirtual));
         $("#precoLucro").html(formatarMoeda(precoLucro));
         //$("#precopromo-detalhe").html(produtoPreco);
-        renderizarBeneficios(detalhes.beneficios);
+
+        // Modal functionality
+        const modal = document.getElementById("benefitModal");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalDescription = document.getElementById("modalDescription");
+        const closeModal = document.querySelector(".close-modal");
+        const benefitItems = document.querySelectorAll(".benefit-item");
+
+        detalhes.beneficios.forEach(item => {
+          item.addEventListener("click", function() {
+              const benefitType = item.nome;
+              
+              modalTitle.textContent = item.nome;
+              modalDescription.textContent = item.descricao;
+              modal.style.display = "flex";
+          });
+      });
+
         // Selecione a div onde você quer adicionar o link
         const $container = $('#containerBtnCarrinho');
         // Crie o link e configure os atributos
@@ -789,68 +805,6 @@ function openImageZoom(imageSrc) {
       zoomImage.style.transform = `translate(0, 0) scale(1)`;
     });
   }
-}
-// Função para renderizar os benefícios dinamicamente
-function renderizarBeneficios(beneficios) {
-  // Seleciona o container de benefícios
-  const benefitsContainer = document.querySelector(".benefits");
-  
-  // Limpa o título existente e mantém apenas o título principal
-  benefitsContainer.innerHTML = `
-    <div class="benefits-title">
-      Benefícios do Produto
-      <i class="fas fa-capsules"></i>
-    </div>
-  `;
-  
-  // Se não houver benefícios, exibe uma mensagem
-  if (!beneficios || beneficios.length === 0) {
-    const emptyMsg = document.createElement('div');
-    emptyMsg.className = 'benefit-empty';
-    emptyMsg.textContent = 'Nenhum benefício cadastrado para este produto.';
-    benefitsContainer.appendChild(emptyMsg);
-    return;
-  }
-  
-  // Adiciona cada benefício dinamicamente
-  beneficios.forEach(beneficio => {
-    const benefitItem = document.createElement('div');
-    benefitItem.className = 'benefit-item';
-    benefitItem.setAttribute('data-benefit', beneficio.id);
-    
-    benefitItem.innerHTML = `
-      <div class="benefit-icon" style="color: ${beneficio.cor_icone || '#000000'}">
-        <i class="${beneficio.icone || 'fas fa-check'}"></i>
-      </div>
-      <div class="benefit-content">
-        <div class="benefit-title">${beneficio.nome}</div>
-        <div class="view-more">Ver mais <i class="fas fa-chevron-right"></i></div>
-      </div>
-    `;
-    
-    // Adiciona evento de clique para mostrar o modal
-    benefitItem.addEventListener('click', function() {
-      showBenefitDetails(beneficio);
-    });
-    
-    benefitsContainer.appendChild(benefitItem);
-  });
-}
-
-// Função para mostrar detalhes do benefício no modal
-function showBenefitDetails(beneficio) {
-  const modal = document.getElementById('benefitModal');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalDescription = document.getElementById('modalDescription');
-  
-  modalTitle.textContent = beneficio.nome;
-  modalDescription.textContent = beneficio.descricao;
-  
-  // Exibe o modal - com framework7
-  app.popup.open('.popup-benefit-details');
-  
-  // Se não estiver usando framework7, pode usar esta abordagem alternativa
-  // modal.style.display = 'block';
 }
 //Fim Função Detalhes Produto
   
