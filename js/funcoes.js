@@ -661,23 +661,6 @@ function buscarProduto(produtoId) {
         $("#precoLucro").html(formatarMoeda(precoLucro));
         //$("#precopromo-detalhe").html(produtoPreco);
 
-        // Modal functionality
-        const modal = document.getElementById("benefitModal");
-        const modalTitle = document.getElementById("modalTitle");
-        const modalDescription = document.getElementById("modalDescription");
-        const closeModal = document.querySelector(".close-modal");
-        const benefitItems = document.querySelectorAll(".benefit-item");
-
-        detalhes.beneficios.forEach(item => {
-          item.addEventListener("click", function() {
-              const benefitType = item.nome;
-              
-              modalTitle.textContent = item.nome;
-              modalDescription.textContent = item.descricao;
-              modal.style.display = "flex";
-          });
-      });
-
         // Selecione a div onde você quer adicionar o link
         const $container = $('#containerBtnCarrinho');
         // Crie o link e configure os atributos
