@@ -553,10 +553,30 @@ function initializeBenefits(benefits) {
                   document.getElementById("modalDescription").textContent = benefit.descricao;
                   
                   // Exibe o modal
-                  app.popup.open(".popup-benefit-details");
+                  const modal = document.getElementById("benefitModal");
+                  modal.style.display = "flex";
               }
           });
       });
+      
+      // Configurar o fechamento do modal
+      const closeModal = document.querySelector(".close-modal");
+      if (closeModal) {
+          closeModal.addEventListener("click", function() {
+              const modal = document.getElementById("benefitModal");
+              modal.style.display = "none";
+          });
+      }
+      
+      // Permitir fechar o modal clicando fora dele
+      const modal = document.getElementById("benefitModal");
+      if (modal) {
+          window.addEventListener("click", function(event) {
+              if (event.target === modal) {
+                  modal.style.display = "none";
+              }
+          });
+      }
   } else {
       // Caso não haja benefícios, exibe uma mensagem
       const noBenefitsItem = document.createElement('div');
