@@ -1226,7 +1226,7 @@ var app = new Framework7({
             app.popup.open('.popup-compartilhar');
             buscarLinks(produtoId);
           });
-          document.querySelector('#compartilharProduto').addEventListener('click', function (e) {
+          $('#compartilharProduto').on('click', function(e) {
             e.preventDefault(); // Prevent default link behavior
             app.popup.open('.popup-compartilhar');
             buscarLinks(produtoId);
