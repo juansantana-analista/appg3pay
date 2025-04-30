@@ -9,20 +9,29 @@ if (produto) {
     $("#nomeShare").html(produto.nome);
     $("#rating-detalhe").html(produto.rating);
     $("#like-detalhe").html(produto.likes);
-    //$("#reviews-detalhe").html(produto.reviews + ' reviews');
     $("#descricao-detalhe").html(produto.descricao);
+    
+    // Preços e valores
     $("#preco-detalhe").html(formatarMoeda(produto.preco));
     $("#precoTotal").html(formatarMoeda(produto.preco));
+    $("#precoTotalRodape").html(formatarMoeda(produto.preco));
     $("#precoShare").html(formatarMoeda(produto.preco));
-    $("#precopromo-detalhe").html(formatarMoeda(produto.preco));
+    
+    // Calcular preço de revenda e lucro (30% em cima do preço)
+    const precoRevenda = produto.preco * 1.25; // 25% de margem
+    const lucro = precoRevenda - produto.preco;
+    
+    $("#precoRevenda").html(formatarMoeda(precoRevenda));
+    $("#precoLucro").html(formatarMoeda(lucro));
+    
     // Selecione a div onde você quer adicionar o link
     const $container = $('#containerBtnCarrinho');
     // Crie o link e configure os atributos
     const $btnAddCarrinho = $('<button></button>')
-        .text('Adicionar Carrinho')
-        .attr('data-produto-id', '123')
-        .attr('id', 'botaoCarrinho')
-        .addClass('add-cart');
+        .text('Adicionar ao Carrinho')
+        .attr('data-produto-id', produto.id)
+        .attr('id', 'addCarrinho')
+        .addClass('w-full bg-blue-600 text-white py-4 rounded-xl font-semibold hover:bg-blue-700 transition-colors');
 
     // Anexe o link ao container
     $container.append($btnAddCarrinho);
@@ -32,13 +41,20 @@ if (produto) {
 
 
 //CLICOU NO ADICIONAR CARRINHO
-$("#addCarrinho").on('click', function () {
+$(document).on('click', "#addCarrinho", function () {
     //ADICIONAR AO CARRINHO
     adicionarItemCarrinho(produtoId);
 });
 
-//CLICOU NO ADICIONAR CARRINHO
+//CLICOU NO COMPRAR AGORA
 $("#comprarAgora").on('click', function () {
-    //ADICIONAR AO CARRINHO
+    //ADICIONAR AO CARRINHO E IR PARA CHECKOUT
     adicionarItemCarrinho(produtoId);
+});
+
+//CLICOU EM DIVULGAR PRODUTO
+$("#divulgarProduto, #compartilharBtn").on('click', function () {
+    //ABRIR POPUP COMPARTILHAR
+    app.popup.open('.popup-compartilhar');
+    buscarLinks(produtoId);
 });

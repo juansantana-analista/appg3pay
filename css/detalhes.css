@@ -682,3 +682,133 @@ button:focus {
     font-weight: 500;
     color: #4F46E5;
   }
+
+  /* Estilos adicionais para a tela de detalhes */
+
+/* Estilização da área de preços */
+.price-info-container {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.order-summary {
+  width: 100%;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-row .label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 16px;
+}
+
+.info-row .value {
+  font-weight: 500;
+  color: #4b5563;
+  font-size: 16px;
+}
+
+.riscado {
+  text-decoration: line-through;
+  color: #9ca3af;
+  margin-right: 10px;
+  font-size: 14px;
+}
+
+.princing {
+  color: #19c463;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+#precoRevenda {
+  color: #3b82f6;
+  font-weight: 600;
+}
+
+#precoLucro {
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+/* Estilização dos botões */
+.action-buttons {
+  margin-top: 20px;
+}
+
+#divulgarProduto, #compartilharBtn {
+  background-color: #19c463;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+#divulgarProduto:hover, #compartilharBtn:hover {
+  background-color: #15a052;
+  transform: translateY(-2px);
+}
+
+#divulgarProduto:active, #compartilharBtn:active {
+  transform: translateY(1px);
+}
+
+#addCarrinho {
+  background-color: #3b82f6;
+  transition: all 0.2s ease;
+}
+
+#addCarrinho:hover {
+  background-color: #2563eb;
+  transform: translateY(-2px);
+}
+
+#addCarrinho:active {
+  transform: translateY(1px);
+}
+
+/* Bottom bar styles */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(229, 231, 235, 0.5);
+  box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* QR code area styling */
+#qrcode {
+  background-color: white;
+  padding: 15px;
+  border-radius: 10px;
+  display: inline-block;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .info-row .label {
+      font-size: 14px;
+  }
+  
+  .info-row .value {
+      font-size: 14px;
+  }
+  
+  .princing {
+      font-size: 18px;
+  }
+}

@@ -74,32 +74,38 @@
                               </div>
                               
                               <h2 class="text-lg font-bold text-gray-900 mb-2" id="nome-detalhe"></h2>
-                              <!--<div class="flex items-center gap-2 mb-4">
-                                  <div class="flex items-center">
-                                      <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                      </svg>
-                                      <span class="text-sm text-gray-600 ml-1" id="rating-detalhe"></span>
-                                  </div>
-                              </div>-->
                               
                               <div class="mb-6">
                                   <p class="text-gray-600 mb-4" id="descricao-detalhe">
                                   </p>
-                                  <!--
-                                  <div class="flex items-baseline gap-2 mb-4">
-                                      <span class="text-3xl font-bold text-gray-900" id="precopromo-detalhe"></span>
-                                      <span class="text-sm text-gray-500 line-through" id="preco-detalhe"></span>
-                                      <span class="text-sm text-green-500">31% OFF</span>
-                                  </div>-->
                               </div>
                               
-                              <button class="w-full bg-blue-600 text-white py-4 rounded-xl font-semibold hover:bg-blue-700 transition-colors" id="addCarrinho">
-                                  Adicionar ao Carrinho
-                              </button>
-                              <button class="w-full bg-blue-600 text-white py-4 rounded-xl font-semibold hover:bg-blue-700 transition-colors" id="compartilharProduto">
-                                  Vender Agora
-                              </button>
+                              <!-- Área de preços baseada na imagem -->
+                              <div class="price-info-container mb-4">
+                                  <div class="order-summary">
+                                      <div class="info-row">
+                                          <div class="label">Pague</div>
+                                          <div class="value riscado" id="preco-detalhe"></div>
+                                          <div class="value princing" id="precoTotal"></div>
+                                      </div>
+                                      <div class="info-row">
+                                          <div class="label">Revenda</div>
+                                          <div class="value" id="precoRevenda">R$ 159,89</div>
+                                      </div>
+                                      <div class="info-row">
+                                          <div class="label">Lucre</div>
+                                          <div class="value" id="precoLucro">R$ 31,98</div>
+                                      </div>
+                                  </div>
+                              </div>
+                              
+                              <div class="action-buttons flex flex-col gap-4">
+                                  <button class="w-full bg-green-600 text-white py-4 rounded-xl font-semibold hover:bg-green-700 transition-colors" id="divulgarProduto">
+                                      Divulgar produto <i class="ri-share-forward-line ml-2"></i>
+                                  </button>
+                                  
+                                  <div id="containerBtnCarrinho" class="w-full"></div>
+                              </div>
                           </div>
                       </div>
                   </div>
@@ -147,13 +153,13 @@
               <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
                   <div>
                       <p class="text-sm text-gray-600">Preço Total</p>
-                      <p class="text-xl font-bold text-gray-900" id="precoTotal"></p>
+                      <p class="text-xl font-bold text-gray-900" id="precoTotalRodape"></p>
                   </div>
                   <button class="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors w-auto" id="comprarAgora">
                       Comprar Agora
                   </button>
-                  <button class="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors w-auto" id="compartilharBtn">
-                      Vender Agora
+                  <button class="bg-green-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors w-auto" id="compartilharBtn">
+                      Divulgar Produto
                   </button>
               </div>
           </div>
