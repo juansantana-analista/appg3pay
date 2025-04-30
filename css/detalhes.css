@@ -227,7 +227,7 @@ body {
   color: var(--accent-color);
 }
 
-.share-button {
+.share-button-produto {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
