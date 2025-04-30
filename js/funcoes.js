@@ -507,7 +507,6 @@ function showSwipeHint() {
   //Fim Função Lista produtos
   
 //Inicio Função Detalhes Produto
-// Função Detalhes Produto Modificada
 function buscarProduto(produtoId) {
   
   var operacao = localStorage.getItem("operacao");
@@ -663,9 +662,6 @@ function buscarProduto(produtoId) {
         $("#precoLucro").html(formatarMoeda(precoLucro));
         //$("#precopromo-detalhe").html(produtoPreco);
 
-        // NOVA FUNCIONALIDADE: Gerar benefícios dinamicamente
-        renderizarBeneficios(detalhes.beneficios);
-
         // Selecione a div onde você quer adicionar o link
         const $container = $('#containerBtnCarrinho');
         // Crie o link e configure os atributos
@@ -713,78 +709,6 @@ function buscarProduto(produtoId) {
       );
     });
 }
-
-// Função para renderizar os benefícios dinamicamente
-function renderizarBeneficios(beneficios) {
-  // Seleciona o container de benefícios
-  const benefitsContainer = document.querySelector(".benefits");
-  
-  // Limpa o título existente e mantém apenas o título principal
-  benefitsContainer.innerHTML = `
-    <div class="benefits-title">
-      Benefícios do Produto
-      <i class="fas fa-capsules"></i>
-    </div>
-  `;
-  
-  // Se não houver benefícios, exibe uma mensagem
-  if (!beneficios || beneficios.length === 0) {
-    const emptyMsg = document.createElement('div');
-    emptyMsg.className = 'benefit-empty';
-    emptyMsg.textContent = 'Nenhum benefício cadastrado para este produto.';
-    benefitsContainer.appendChild(emptyMsg);
-    return;
-  }
-  
-  // Adiciona cada benefício dinamicamente
-  beneficios.forEach(beneficio => {
-    const benefitItem = document.createElement('div');
-    benefitItem.className = 'benefit-item';
-    benefitItem.setAttribute('data-benefit', beneficio.id);
-    
-    benefitItem.innerHTML = `
-      <div class="benefit-icon" style="color: ${beneficio.cor_icone || '#000000'}">
-        <i class="${beneficio.icone || 'fas fa-check'}"></i>
-      </div>
-      <div class="benefit-content">
-        <div class="benefit-title">${beneficio.nome}</div>
-        <div class="view-more">Ver mais <i class="fas fa-chevron-right"></i></div>
-      </div>
-    `;
-    
-    // Adiciona evento de clique para mostrar o modal
-    benefitItem.addEventListener('click', function() {
-      showBenefitDetails(beneficio);
-    });
-    
-    benefitsContainer.appendChild(benefitItem);
-  });
-}
-
-// Função para mostrar detalhes do benefício no modal
-function showBenefitDetails(beneficio) {
-  const modal = document.getElementById('benefitModal');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalDescription = document.getElementById('modalDescription');
-  
-  modalTitle.textContent = beneficio.nome;
-  modalDescription.textContent = beneficio.descricao;
-  
-  // Exibe o modal - com framework7
-  app.popup.open('.popup-benefit-details');
-  
-  // Se não estiver usando framework7, pode usar esta abordagem alternativa
-  // modal.style.display = 'block';
-}
-
-// Adicionar evento para fechar o modal clicando no X
-document.querySelector('.close-modal').addEventListener('click', function() {
-  // Fecha o modal - com framework7
-  app.popup.close('.popup-benefit-details');
-  
-  // Se não estiver usando framework7, pode usar esta abordagem alternativa
-  // document.getElementById('benefitModal').style.display = 'none';
-});
 
 // Função para abrir o zoom da imagem
 function openImageZoom(imageSrc) {
