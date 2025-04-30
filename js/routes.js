@@ -1170,6 +1170,13 @@ var app = new Framework7({
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
+          
+            // Adiciona o CSS dinamicamente
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'css/detalhes.css?v=' + versionApp;
+            document.head.appendChild(link);
+            
           // fazer algo antes da página ser exibida
           userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
