@@ -77,49 +77,10 @@
                 
                 <div class="benefits">
                     <div class="benefits-title">
-                        Benefícios do Produto
-                        <i class="fas fa-capsules"></i>
+                      Benefícios do Produto
+                      <i class="fas fa-capsules"></i>
                     </div>
-                    
-                    <div class="benefit-item" data-benefit="imunidade">
-                        <div class="benefit-icon">
-                            <i class="fas fa-shield-virus"></i>
-                        </div>
-                        <div class="benefit-content">
-                            <div class="benefit-title">Fortalece a Imunidade</div>
-                            <div class="view-more">Ver mais <i class="fas fa-chevron-right"></i></div>
-                        </div>
-                    </div>
-                    
-                    <div class="benefit-item" data-benefit="pele">
-                        <div class="benefit-icon">
-                            <i class="fas fa-smile"></i>
-                        </div>
-                        <div class="benefit-content">
-                            <div class="benefit-title">Benefícios para Pele</div>
-                            <div class="view-more">Ver mais <i class="fas fa-chevron-right"></i></div>
-                        </div>
-                    </div>
-                    
-                    <div class="benefit-item" data-benefit="cardio">
-                        <div class="benefit-icon">
-                            <i class="fas fa-heartbeat"></i>
-                        </div>
-                        <div class="benefit-content">
-                            <div class="benefit-title">Saúde Cardiovascular</div>
-                            <div class="view-more">Ver mais <i class="fas fa-chevron-right"></i></div>
-                        </div>
-                    </div>
-                    
-                    <div class="benefit-item" data-benefit="energia">
-                        <div class="benefit-icon">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                        <div class="benefit-content">
-                            <div class="benefit-title">Mais Energia Diária</div>
-                            <div class="view-more">Ver mais <i class="fas fa-chevron-right"></i></div>
-                        </div>
-                    </div>
+                    <!-- Benefícios dinâmicos serão carregados aqui via JavaScript -->
                 </div>
                 
                 <div class="pricing">
@@ -241,6 +202,39 @@
             </div>
           </div>
           <!-- FIM POPUP COMPARTILHAR PRODUTO -->
+
+          <!-- Modal para detalhes do benefício - Adicione ao final, antes do fechamento da page-content -->
+<div class="popup popup-benefit-details">
+    <div class="view">
+      <div class="page">
+        <div class="navbar">
+          <div class="navbar-bg"></div>
+          <div class="navbar-inner">
+            <div class="left">
+              <a href="#" class="link popup-close">
+                <i class="mdi mdi-arrow-left"></i>
+              </a>
+            </div>
+            <div class="title" id="modalTitle">Benefício</div>
+            <div class="right">
+              <a href="#" class="link popup-close">
+                <i class="mdi mdi-close"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="page-content">
+          <div class="block">
+            <div class="card">
+              <div class="card-content card-content-padding">
+                <div id="modalDescription"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
         </div>
       </div>
     </div>

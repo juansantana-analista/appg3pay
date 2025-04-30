@@ -314,3 +314,22 @@ body {
       max-height: 400px;
   }
 }
+
+/* Estilos para o popup de benefícios */
+.popup-benefit-details .navbar-inner .title {
+  font-weight: 600;
+  color: #FF4B00;
+}
+
+.popup-benefit-details .card {
+  margin: 0;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.popup-benefit-details .card-content {
+  padding: 20px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #444;
+}
