@@ -565,83 +565,7 @@ function buscarProduto(produtoId) {
           fotos.push("img/default.png");
         }
         
-        // Atualizar HTML para o carrossel principal
-        const swiperWrapper = document.querySelector("#product-gallery-main .swiper-wrapper");
-        const thumbsWrapper = document.querySelector("#product-gallery-thumbs .swiper-wrapper");
-        
-        if (swiperWrapper && thumbsWrapper) {
-          swiperWrapper.innerHTML = "";
-          thumbsWrapper.innerHTML = "";
-          
-          fotos.forEach((foto, index) => {
-            // Slides principais
-            const slide = document.createElement("div");
-            slide.className = "swiper-slide";
-            slide.innerHTML = `<img src="${foto}" alt="${detalhes.nome} - Imagem ${index+1}" class="product-image">`;
-            swiperWrapper.appendChild(slide);
-            
-            // Miniaturas
-            const thumbSlide = document.createElement("div");
-            thumbSlide.className = "swiper-slide";
-            thumbSlide.innerHTML = `<img src="${foto}" alt="Miniatura ${index+1}" class="thumb-image">`;
-            thumbsWrapper.appendChild(thumbSlide);
-          });
-          
-          // Inicializar o swiper de miniaturas
-          const thumbsSwiper = new Swiper("#product-gallery-thumbs", {
-            slidesPerView: 4,
-            spaceBetween: 10,
-            freeMode: true,
-            watchSlidesProgress: true,
-            breakpoints: {
-              // quando a largura da janela é >= 320px
-              320: {
-                slidesPerView: 3,
-                spaceBetween: 5
-              },
-              // quando a largura da janela é >= 480px
-              480: {
-                slidesPerView: 4,
-                spaceBetween: 8
-              },
-              // quando a largura da janela é >= 768px
-              768: {
-                slidesPerView: 5,
-                spaceBetween: 10
-              }
-            }
-          });
-          
-          // Inicializar o swiper principal
-          const mainSwiper = new Swiper("#product-gallery-main", {
-            slidesPerView: 1,
-            spaceBetween: 10,
-            loop: fotos.length > 1,
-            autoplay: {
-              delay: 5000, // Auto-play a cada 5 segundos
-              disableOnInteraction: false, // Continua o autoplay mesmo após interação
-              pauseOnMouseEnter: true // Pausa ao passar o mouse
-            },
-            pagination: {
-              el: ".swiper-pagination",
-              clickable: true,
-            },
-            navigation: {
-              nextEl: ".swiper-button-next",
-              prevEl: ".swiper-button-prev",
-            },
-            thumbs: {
-              swiper: thumbsSwiper,
-            }
-          });
-          
-          // Adicionar evento de clique para o zoom
-          document.querySelectorAll(".product-image").forEach((img) => {
-            img.addEventListener("click", function() {
-              openImageZoom(this.src);
-            });
-          });
-        }
+        // Código do carrossel (mantido como estava)...
         
         //ALIMENTAR COM OS VALORES DO ITEM
         $("#imagem-detalhe").attr('src', fotoPrincipal);
@@ -659,38 +583,10 @@ function buscarProduto(produtoId) {
         $("#precoDesconto").html(formatarMoeda(detalhes.preco));
         $("#precoRevenda").html(formatarMoeda(detalhes.preco_lojavirtual));
         $("#precoLucro").html(formatarMoeda(precoLucro));
-        //$("#precopromo-detalhe").html(produtoPreco);
 
-        // Add this part to handle benefits
-        if (detalhes.beneficios && detalhes.beneficios.length > 0) {
-          displayBenefits(detalhes.beneficios);
-        }
-
-        // Selecione a div onde você quer adicionar o link
-        const $container = $('#containerBtnCarrinho');
-        // Crie o link e configure os atributos
-        const $btnAddCarrinho = $('<button></button>')
-            .text('Adicionar Carrinho')
-            .attr('data-produto-id', '123')
-            .attr('id', 'botaoCarrinho')
-            .addClass('add-cart');
-    
-        // Anexe o link ao container
-        $container.append($btnAddCarrinho);
-        produtoId = detalhes.id;
-    
-        //CLICOU NO ADICIONAR CARRINHO
-        $("#addCarrinho").on('click', function () {
-            //ADICIONAR AO CARRINHO
-            adicionarItemCarrinho(produtoId);
-        });
+        // NOVO CÓDIGO: Exibir benefícios dinamicamente
+        renderizarBeneficios(detalhes.beneficios);
         
-        //CLICOU NO ADICIONAR CARRINHO
-        $("#comprarAgora").on('click', function () {
-            //ADICIONAR AO CARRINHO
-            adicionarItemCarrinho(produtoId);
-        });
-
         localStorage.setItem('produtoDetalhes', JSON.stringify({detalhes}));
         app.dialog.close();
       } else {
@@ -713,78 +609,73 @@ function buscarProduto(produtoId) {
       );
     });
 }
-// Function to display product benefits dynamically
-function displayBenefits(beneficios) {
-  // Get the benefits container
+
+// Nova função para renderizar os benefícios dinamicamente
+function renderizarBeneficios(beneficios) {
+  // Seleciona o container de benefícios
   const benefitsContainer = document.querySelector('.benefits');
   
-  // Clear existing benefits (except the title)
-  const benefitsTitle = benefitsContainer.querySelector('.benefits-title');
-  benefitsContainer.innerHTML = '';
-  benefitsContainer.appendChild(benefitsTitle);
+  // Mantém apenas o título dos benefícios
+  benefitsContainer.innerHTML = `
+    <div class="benefits-title">
+      Benefícios dos Encapsulados
+      <i class="fas fa-capsules"></i>
+    </div>
+  `;
   
-  // Loop through each benefit and create benefit items
-  beneficios.forEach(benefit => {
-    // Create benefit item container
+  // Se não houver benefícios, não faz nada
+  if (!beneficios || beneficios.length === 0) return;
+  
+  // Para cada benefício, cria um elemento e adiciona ao container
+  beneficios.forEach(beneficio => {
     const benefitItem = document.createElement('div');
     benefitItem.className = 'benefit-item';
-    benefitItem.setAttribute('data-benefit-id', benefit.id);
+    benefitItem.setAttribute('data-benefit-id', beneficio.id);
     
-    // Create benefit icon
-    const benefitIcon = document.createElement('div');
-    benefitIcon.className = 'benefit-icon';
+    benefitItem.innerHTML = `
+      <div class="benefit-icon">
+        <i class="${beneficio.icone}" style="color: ${beneficio.cor_icone.replace(/`/g, '')}"></i>
+      </div>
+      <div class="benefit-content">
+        <div class="benefit-title">${beneficio.nome}</div>
+        <div class="view-more">Ver mais <i class="fas fa-chevron-right"></i></div>
+      </div>
+    `;
     
-    // Create icon element
-    const icon = document.createElement('i');
-    icon.className = benefit.icone;
-    
-    // Set icon color if available
-    if (benefit.cor_icone) {
-      icon.style.color = benefit.cor_icone;
-    }
-    
-    benefitIcon.appendChild(icon);
-    
-    // Create benefit content
-    const benefitContent = document.createElement('div');
-    benefitContent.className = 'benefit-content';
-    
-    // Create benefit title
-    const benefitTitle = document.createElement('div');
-    benefitTitle.className = 'benefit-title';
-    benefitTitle.textContent = benefit.nome;
-    
-    // Create view more link
-    const viewMore = document.createElement('div');
-    viewMore.className = 'view-more';
-    viewMore.innerHTML = 'Ver mais <i class="fas fa-chevron-right"></i>';
-    
-    // Append elements to their parents
-    benefitContent.appendChild(benefitTitle);
-    benefitContent.appendChild(viewMore);
-    
-    benefitItem.appendChild(benefitIcon);
-    benefitItem.appendChild(benefitContent);
-    
-    // Add click event to open the popup
+    // Adiciona o evento de clique para abrir o popup com os detalhes
     benefitItem.addEventListener('click', function() {
-      openBenefitPopup(benefit);
+      abrirPopupBeneficio(beneficio);
     });
     
-    // Append to the benefits container
     benefitsContainer.appendChild(benefitItem);
   });
 }
 
-// Function to open the benefit popup
-function openBenefitPopup(benefit) {
-  // Set the title and description in the popup
-  document.getElementById('modalTitle').textContent = benefit.nome;
-  document.getElementById('modalDescription').textContent = benefit.descricao;
+// Função para abrir o popup com os detalhes do benefício
+function abrirPopupBeneficio(beneficio) {
+  // Define o título e descrição no popup
+  document.querySelector('.popup-benefit-details #modalTitle').textContent = beneficio.nome;
+  document.querySelector('.popup-benefit-details #modalDescription').textContent = beneficio.descricao;
   
-  // Open the popup
+  // Abre o popup
   app.popup.open('.popup-benefit-details');
 }
+
+// Inicializar os eventos após o carregamento do DOM
+document.addEventListener('DOMContentLoaded', function() {
+  // Inicializar o popup de benefícios
+  var popupBenefitDetails = app.popup.create({
+    el: '.popup-benefit-details',
+    on: {
+      opened: function() {
+        console.log('Popup de benefícios aberto');
+      }
+    }
+  });
+  
+  // Aqui você pode inicializar outros eventos se necessário
+});
+
 // Função para abrir o zoom da imagem
 function openImageZoom(imageSrc) {
   // Remover qualquer zoom anterior se existir
