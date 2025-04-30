@@ -1211,7 +1211,7 @@ var app = new Framework7({
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
           $.getScript('js/qrcode.min.js');
-          $.getScript('js/detalhes.js');
+          //$.getScript('js/detalhes.js');
           var produtoId = localStorage.getItem('produtoId');
           buscarProduto(produtoId);
 

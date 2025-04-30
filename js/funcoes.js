@@ -507,206 +507,359 @@ function showSwipeHint() {
   //Fim Função Lista produtos
   
 //Inicio Função Detalhes Produto
-function buscarProduto(produtoId) {
+// Função para inicializar a exibição dos benefícios do produto
+function initializeBenefits(benefits) {
+  // Container onde os benefícios serão inseridos
+  const benefitsContainer = document.querySelector('.benefits');
   
-  var operacao = localStorage.getItem("operacao");
-  app.dialog.preloader("Carregando...");
-
-  var imgUrl = "https://vitatop.tecskill.com.br/";
-
-  // Cabeçalhos da requisição
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
-  };
-
-  const body = JSON.stringify({
-    class: "ProdutoVariacaoRest",
-    method: "obterProdutoCompleto",
-    produto_id: produtoId,
-  });
-
-  // Opções da requisição
-  const options = {
-    method: "POST",
-    headers: headers,
-    body: body,
-  };
-
-  // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      // Verifica se o status é 'success' e se há dados de pedidos
-      if (responseJson.status === "success" && responseJson.data.status === "success") {
-        const detalhes = responseJson.data.data;      
-        var produtoPreco = "";
-        
-        // Preparar as imagens para o carrossel
-        const fotoPrincipal = detalhes.foto ? imgUrl + detalhes.foto : "img/default.png";
-        
-        // Array para armazenar todas as fotos do produto
-        let fotos = [];
-        
-        // Adiciona a foto principal
-        if (detalhes.foto) {
-          fotos.push(imgUrl + detalhes.foto);
-        }
-        
-        // Verificar e adicionar fotos adicionais
-        if (detalhes.foto2) fotos.push(imgUrl + detalhes.foto2);
-        if (detalhes.foto3) fotos.push(imgUrl + detalhes.foto3);
-        if (detalhes.foto4) fotos.push(imgUrl + detalhes.foto4);
-        if (detalhes.foto5) fotos.push(imgUrl + detalhes.foto5);
-        if (detalhes.foto6) fotos.push(imgUrl + detalhes.foto6);
-        
-        // Se não houver fotos, adiciona a imagem padrão
-        if (fotos.length === 0) {
-          fotos.push("img/default.png");
-        }
-        
-        // Atualizar HTML para o carrossel principal
-        const swiperWrapper = document.querySelector("#product-gallery-main .swiper-wrapper");
-        const thumbsWrapper = document.querySelector("#product-gallery-thumbs .swiper-wrapper");
-        
-        if (swiperWrapper && thumbsWrapper) {
-          swiperWrapper.innerHTML = "";
-          thumbsWrapper.innerHTML = "";
+  // Manter apenas o título dos benefícios
+  benefitsContainer.innerHTML = `
+      <div class="benefits-title">
+          Benefícios dos Encapsulados
+          <i class="fas fa-capsules"></i>
+      </div>
+  `;
+  
+  // Verifica se há benefícios para exibir
+  if (benefits && benefits.length > 0) {
+      // Adiciona cada benefício dinamicamente
+      benefits.forEach(benefit => {
+          const benefitItem = document.createElement('div');
+          benefitItem.className = 'benefit-item';
+          benefitItem.setAttribute('data-benefit', benefit.id);
           
-          fotos.forEach((foto, index) => {
-            // Slides principais
-            const slide = document.createElement("div");
-            slide.className = "swiper-slide";
-            slide.innerHTML = `<img src="${foto}" alt="${detalhes.nome} - Imagem ${index+1}" class="product-image">`;
-            swiperWrapper.appendChild(slide);
-            
-            // Miniaturas
-            const thumbSlide = document.createElement("div");
-            thumbSlide.className = "swiper-slide";
-            thumbSlide.innerHTML = `<img src="${foto}" alt="Miniatura ${index+1}" class="thumb-image">`;
-            thumbsWrapper.appendChild(thumbSlide);
-          });
+          benefitItem.innerHTML = `
+              <div class="benefit-icon" style="background-color: ${benefit.cor_icone || '#00a676'}">
+                  <i class="${benefit.icone || 'fas fa-check'}"></i>
+              </div>
+              <div class="benefit-content">
+                  <div class="benefit-title">${benefit.nome}</div>
+                  <div class="view-more">Ver mais <i class="fas fa-chevron-right"></i></div>
+              </div>
+          `;
           
-          // Inicializar o swiper de miniaturas
-          const thumbsSwiper = new Swiper("#product-gallery-thumbs", {
-            slidesPerView: 4,
-            spaceBetween: 10,
-            freeMode: true,
-            watchSlidesProgress: true,
-            breakpoints: {
-              // quando a largura da janela é >= 320px
-              320: {
-                slidesPerView: 3,
-                spaceBetween: 5
-              },
-              // quando a largura da janela é >= 480px
-              480: {
-                slidesPerView: 4,
-                spaceBetween: 8
-              },
-              // quando a largura da janela é >= 768px
-              768: {
-                slidesPerView: 5,
-                spaceBetween: 10
+          benefitsContainer.appendChild(benefitItem);
+      });
+      
+      // Adiciona o evento de clique para cada benefício
+      document.querySelectorAll('.benefit-item').forEach(item => {
+          item.addEventListener("click", function() {
+              const benefitId = this.getAttribute("data-benefit");
+              const benefit = benefits.find(b => b.id === benefitId);
+              
+              if (benefit) {
+                  // Atualiza o conteúdo do modal
+                  document.getElementById("modalTitle").textContent = benefit.nome;
+                  document.getElementById("modalDescription").textContent = benefit.descricao;
+                  
+                  // Exibe o modal
+                  app.popup.open(".popup-benefit-details");
               }
-            }
           });
-          
-          // Inicializar o swiper principal
-          const mainSwiper = new Swiper("#product-gallery-main", {
-            slidesPerView: 1,
-            spaceBetween: 10,
-            loop: fotos.length > 1,
-            autoplay: {
-              delay: 5000, // Auto-play a cada 5 segundos
-              disableOnInteraction: false, // Continua o autoplay mesmo após interação
-              pauseOnMouseEnter: true // Pausa ao passar o mouse
-            },
-            pagination: {
-              el: ".swiper-pagination",
-              clickable: true,
-            },
-            navigation: {
-              nextEl: ".swiper-button-next",
-              prevEl: ".swiper-button-prev",
-            },
-            thumbs: {
-              swiper: thumbsSwiper,
-            }
-          });
-          
-          // Adicionar evento de clique para o zoom
-          document.querySelectorAll(".product-image").forEach((img) => {
-            img.addEventListener("click", function() {
-              openImageZoom(this.src);
-            });
-          });
-        }
-        
-        //ALIMENTAR COM OS VALORES DO ITEM
-        $("#imagem-detalhe").attr('src', fotoPrincipal);
-        $("#imagemShare").attr('src', fotoPrincipal);
-        $("#nome-detalhe").html(detalhes.nome.toUpperCase());
-        $("#nomeShare").html(detalhes.nome.toUpperCase());
-        
-        if (operacao == "compra") {
-          produtoPreco = formatarMoeda(detalhes.preco);
-        } else {
-          produtoPreco = formatarMoeda(detalhes.preco_lojavirtual);
-        }
-        var precoLucro = detalhes.preco_lojavirtual - detalhes.preco;
-        $("#precoOriginal").html(formatarMoeda(detalhes.preco_lojavirtual));
-        $("#precoDesconto").html(formatarMoeda(detalhes.preco));
-        $("#precoRevenda").html(formatarMoeda(detalhes.preco_lojavirtual));
-        $("#precoLucro").html(formatarMoeda(precoLucro));
-        //$("#precopromo-detalhe").html(produtoPreco);
+      });
+  } else {
+      // Caso não haja benefícios, exibe uma mensagem
+      const noBenefitsItem = document.createElement('div');
+      noBenefitsItem.className = 'benefit-item';
+      noBenefitsItem.innerHTML = `
+          <div class="benefit-icon">
+              <i class="fas fa-info"></i>
+          </div>
+          <div class="benefit-content">
+              <div class="benefit-title">Informações Indisponíveis</div>
+              <div>Nenhum benefício cadastrado para este produto.</div>
+          </div>
+      `;
+      
+      benefitsContainer.appendChild(noBenefitsItem);
+  }
+}
 
-        // Selecione a div onde você quer adicionar o link
-        const $container = $('#containerBtnCarrinho');
-        // Crie o link e configure os atributos
-        const $btnAddCarrinho = $('<button></button>')
-            .text('Adicionar Carrinho')
-            .attr('data-produto-id', '123')
-            .attr('id', 'botaoCarrinho')
-            .addClass('add-cart');
-    
-        // Anexe o link ao container
-        $container.append($btnAddCarrinho);
-        produtoId = detalhes.id;
-    
-        //CLICOU NO ADICIONAR CARRINHO
-        $("#addCarrinho").on('click', function () {
-            //ADICIONAR AO CARRINHO
-            adicionarItemCarrinho(produtoId);
-        });
-        
-        //CLICOU NO ADICIONAR CARRINHO
-        $("#comprarAgora").on('click', function () {
-            //ADICIONAR AO CARRINHO
-            adicionarItemCarrinho(produtoId);
-        });
+// Modifica a função buscarProduto para usar os benefícios dinâmicos
+function buscarProduto(produtoId) {
 
-        localStorage.setItem('produtoDetalhes', JSON.stringify({detalhes}));
-        app.dialog.close();
-      } else {
-        app.dialog.close();
-        // Verifica se há uma mensagem de erro definida
-        const errorMessage =
-          responseJson.message || "Formato de dados inválido";
-        app.dialog.alert(
-          "Erro ao carregar produtos: " + errorMessage,
-          "Falha na requisição!"
-        );
+var operacao = localStorage.getItem("operacao");
+app.dialog.preloader("Carregando...");
+
+var imgUrl = "https://vitatop.tecskill.com.br/";
+
+// Cabeçalhos da requisição
+const headers = {
+  "Content-Type": "application/json",
+  Authorization: "Bearer " + userAuthToken,
+};
+
+const body = JSON.stringify({
+  class: "ProdutoVariacaoRest",
+  method: "obterProdutoCompleto",
+  produto_id: produtoId,
+});
+
+// Opções da requisição
+const options = {
+  method: "POST",
+  headers: headers,
+  body: body,
+};
+
+// Fazendo a requisição
+fetch(apiServerUrl, options)
+  .then((response) => response.json())
+  .then((responseJson) => {
+    // Verifica se o status é 'success' e se há dados de pedidos
+    if (responseJson.status === "success" && responseJson.data.status === "success") {
+      const detalhes = responseJson.data.data;      
+      var produtoPreco = "";
+      
+      // Preparar as imagens para o carrossel
+      const fotoPrincipal = detalhes.foto ? imgUrl + detalhes.foto : "img/default.png";
+      
+      // Array para armazenar todas as fotos do produto
+      let fotos = [];
+      
+      // Adiciona a foto principal
+      if (detalhes.foto) {
+        fotos.push(imgUrl + detalhes.foto);
       }
-    })
-    .catch((error) => {
+      
+      // Verificar e adicionar fotos adicionais
+      if (detalhes.foto2) fotos.push(imgUrl + detalhes.foto2);
+      if (detalhes.foto3) fotos.push(imgUrl + detalhes.foto3);
+      if (detalhes.foto4) fotos.push(imgUrl + detalhes.foto4);
+      if (detalhes.foto5) fotos.push(imgUrl + detalhes.foto5);
+      if (detalhes.foto6) fotos.push(imgUrl + detalhes.foto6);
+      
+      // Se não houver fotos, adiciona a imagem padrão
+      if (fotos.length === 0) {
+        fotos.push("img/default.png");
+      }
+      
+      // Atualizar HTML para o carrossel principal
+      const swiperWrapper = document.querySelector("#product-gallery-main .swiper-wrapper");
+      const thumbsWrapper = document.querySelector("#product-gallery-thumbs .swiper-wrapper");
+      
+      if (swiperWrapper && thumbsWrapper) {
+        swiperWrapper.innerHTML = "";
+        thumbsWrapper.innerHTML = "";
+        
+        fotos.forEach((foto, index) => {
+          // Slides principais
+          const slide = document.createElement("div");
+          slide.className = "swiper-slide";
+          slide.innerHTML = `<img src="${foto}" alt="${detalhes.nome} - Imagem ${index+1}" class="product-image">`;
+          swiperWrapper.appendChild(slide);
+          
+          // Miniaturas
+          const thumbSlide = document.createElement("div");
+          thumbSlide.className = "swiper-slide";
+          thumbSlide.innerHTML = `<img src="${foto}" alt="Miniatura ${index+1}" class="thumb-image">`;
+          thumbsWrapper.appendChild(thumbSlide);
+        });
+        
+        // Inicializar o swiper de miniaturas
+        const thumbsSwiper = new Swiper("#product-gallery-thumbs", {
+          slidesPerView: 4,
+          spaceBetween: 10,
+          freeMode: true,
+          watchSlidesProgress: true,
+          breakpoints: {
+            // quando a largura da janela é >= 320px
+            320: {
+              slidesPerView: 3,
+              spaceBetween: 5
+            },
+            // quando a largura da janela é >= 480px
+            480: {
+              slidesPerView: 4,
+              spaceBetween: 8
+            },
+            // quando a largura da janela é >= 768px
+            768: {
+              slidesPerView: 5,
+              spaceBetween: 10
+            }
+          }
+        });
+        
+        // Inicializar o swiper principal
+        const mainSwiper = new Swiper("#product-gallery-main", {
+          slidesPerView: 1,
+          spaceBetween: 10,
+          loop: fotos.length > 1,
+          autoplay: {
+            delay: 5000, // Auto-play a cada 5 segundos
+            disableOnInteraction: false, // Continua o autoplay mesmo após interação
+            pauseOnMouseEnter: true // Pausa ao passar o mouse
+          },
+          pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+          },
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+          thumbs: {
+            swiper: thumbsSwiper,
+          }
+        });
+        
+        // Adicionar evento de clique para o zoom
+        document.querySelectorAll(".product-image").forEach((img) => {
+          img.addEventListener("click", function() {
+            openImageZoom(this.src);
+          });
+        });
+      }
+      
+      //ALIMENTAR COM OS VALORES DO ITEM
+      $("#imagem-detalhe").attr('src', fotoPrincipal);
+      $("#imagemShare").attr('src', fotoPrincipal);
+      $("#nome-detalhe").html(detalhes.nome.toUpperCase());
+      $("#nomeShare").html(detalhes.nome.toUpperCase());
+      
+      if (operacao == "compra") {
+        produtoPreco = formatarMoeda(detalhes.preco);
+      } else {
+        produtoPreco = formatarMoeda(detalhes.preco_lojavirtual);
+      }
+      var precoLucro = detalhes.preco_lojavirtual - detalhes.preco;
+      $("#precoOriginal").html(formatarMoeda(detalhes.preco_lojavirtual));
+      $("#precoDesconto").html(formatarMoeda(detalhes.preco));
+      $("#precoRevenda").html(formatarMoeda(detalhes.preco_lojavirtual));
+      $("#precoLucro").html(formatarMoeda(precoLucro));
+      //$("#precopromo-detalhe").html(produtoPreco);
+
+      // Selecione a div onde você quer adicionar o link
+      const $container = $('#containerBtnCarrinho');
+      // Crie o link e configure os atributos
+      const $btnAddCarrinho = $('<button></button>')
+          .text('Adicionar Carrinho')
+          .attr('data-produto-id', '123')
+          .attr('id', 'botaoCarrinho')
+          .addClass('add-cart');
+  
+      // Anexe o link ao container
+      $container.append($btnAddCarrinho);
+      produtoId = detalhes.id;
+  
+      //CLICOU NO ADICIONAR CARRINHO
+      $("#addCarrinho").on('click', function () {
+          //ADICIONAR AO CARRINHO
+          adicionarItemCarrinho(produtoId);
+      });
+      
+      //CLICOU NO ADICIONAR CARRINHO
+      $("#comprarAgora").on('click', function () {
+          //ADICIONAR AO CARRINHO
+          adicionarItemCarrinho(produtoId);
+      });
+
+      // Inicializa os benefícios do produto
+      initializeBenefits(detalhes.beneficios);
+
+      localStorage.setItem('produtoDetalhes', JSON.stringify({detalhes}));
       app.dialog.close();
-      console.error("Erro:", error);
+    } else {
+      app.dialog.close();
+      // Verifica se há uma mensagem de erro definida
+      const errorMessage =
+        responseJson.message || "Formato de dados inválido";
       app.dialog.alert(
-        "Erro ao carregar produtos: " + error.message,
+        "Erro ao carregar produtos: " + errorMessage,
         "Falha na requisição!"
       );
-    });
+    }
+  })
+  .catch((error) => {
+    app.dialog.close();
+    console.error("Erro:", error);
+    app.dialog.alert(
+      "Erro ao carregar produtos: " + error.message,
+      "Falha na requisição!"
+    );
+  });
+}
+
+// Função para abrir o zoom da imagem
+function openImageZoom(imageSrc) {
+// Remover qualquer zoom anterior se existir
+$('#imageZoomPopup').remove();
+
+// Criar elemento para o popup de zoom
+const zoomPopup = `
+  <div id="imageZoomPopup" class="image-zoom-popup">
+    <div class="image-zoom-container">
+      <div class="image-zoom-close">×</div>
+      <div class="image-zoom-content">
+        <img src="${imageSrc}" alt="Zoom da imagem" class="zoom-image">
+      </div>
+    </div>
+  </div>
+`;
+
+// Adicionar o popup ao final do body
+$('body').append(zoomPopup);
+
+// Mostrar o popup com animação
+setTimeout(() => {
+  $('#imageZoomPopup').addClass('active');
+}, 10);
+
+// Fechar o popup ao clicar no botão de fechar ou fora da imagem
+$('#imageZoomPopup, .image-zoom-close').on('click', function(e) {
+  if (e.target === this || $(e.target).hasClass('image-zoom-close')) {
+    $('#imageZoomPopup').removeClass('active');
+    setTimeout(() => {
+      $('#imageZoomPopup').remove();
+    }, 300);
+  }
+});
+
+// Implementar gestos de pinch zoom se estiver em um dispositivo móvel
+const zoomImage = document.querySelector('.zoom-image');
+if (zoomImage && window.Hammer) {
+  const hammer = new Hammer(zoomImage);
+  let scale = 1;
+  let posX = 0;
+  let posY = 0;
+  let lastScale = 1;
+  let lastPosX = 0;
+  let lastPosY = 0;
+  
+  hammer.get('pinch').set({ enable: true });
+  hammer.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+  
+  hammer.on('pinch pan', function(ev) {
+    if (ev.type === 'pinch') {
+      scale = Math.max(1, Math.min(lastScale * ev.scale, 4));
+    }
+    
+    if (ev.type === 'pan' && scale !== 1) {
+      posX = lastPosX + ev.deltaX;
+      posY = lastPosY + ev.deltaY;
+    }
+    
+    zoomImage.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+  });
+  
+  hammer.on('pinchend panend', function() {
+    lastScale = scale;
+    lastPosX = posX;
+    lastPosY = posY;
+  });
+  
+  // Duplo toque para resetar zoom
+  hammer.on('doubletap', function() {
+    scale = 1;
+    posX = 0;
+    posY = 0;
+    lastScale = 1;
+    lastPosX = 0;
+    lastPosY = 0;
+    zoomImage.style.transform = `translate(0, 0) scale(1)`;
+  });
+}
 }
 
 // Função para abrir o zoom da imagem
