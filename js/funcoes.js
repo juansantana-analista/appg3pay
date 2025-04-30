@@ -661,6 +661,11 @@ function buscarProduto(produtoId) {
         $("#precoLucro").html(formatarMoeda(precoLucro));
         //$("#precopromo-detalhe").html(produtoPreco);
 
+        // Add this part to handle benefits
+        if (detalhes.beneficios && detalhes.beneficios.length > 0) {
+          displayBenefits(detalhes.beneficios);
+        }
+
         // Selecione a div onde você quer adicionar o link
         const $container = $('#containerBtnCarrinho');
         // Crie o link e configure os atributos
@@ -708,7 +713,78 @@ function buscarProduto(produtoId) {
       );
     });
 }
+// Function to display product benefits dynamically
+function displayBenefits(beneficios) {
+  // Get the benefits container
+  const benefitsContainer = document.querySelector('.benefits');
+  
+  // Clear existing benefits (except the title)
+  const benefitsTitle = benefitsContainer.querySelector('.benefits-title');
+  benefitsContainer.innerHTML = '';
+  benefitsContainer.appendChild(benefitsTitle);
+  
+  // Loop through each benefit and create benefit items
+  beneficios.forEach(benefit => {
+    // Create benefit item container
+    const benefitItem = document.createElement('div');
+    benefitItem.className = 'benefit-item';
+    benefitItem.setAttribute('data-benefit-id', benefit.id);
+    
+    // Create benefit icon
+    const benefitIcon = document.createElement('div');
+    benefitIcon.className = 'benefit-icon';
+    
+    // Create icon element
+    const icon = document.createElement('i');
+    icon.className = benefit.icone;
+    
+    // Set icon color if available
+    if (benefit.cor_icone) {
+      icon.style.color = benefit.cor_icone;
+    }
+    
+    benefitIcon.appendChild(icon);
+    
+    // Create benefit content
+    const benefitContent = document.createElement('div');
+    benefitContent.className = 'benefit-content';
+    
+    // Create benefit title
+    const benefitTitle = document.createElement('div');
+    benefitTitle.className = 'benefit-title';
+    benefitTitle.textContent = benefit.nome;
+    
+    // Create view more link
+    const viewMore = document.createElement('div');
+    viewMore.className = 'view-more';
+    viewMore.innerHTML = 'Ver mais <i class="fas fa-chevron-right"></i>';
+    
+    // Append elements to their parents
+    benefitContent.appendChild(benefitTitle);
+    benefitContent.appendChild(viewMore);
+    
+    benefitItem.appendChild(benefitIcon);
+    benefitItem.appendChild(benefitContent);
+    
+    // Add click event to open the popup
+    benefitItem.addEventListener('click', function() {
+      openBenefitPopup(benefit);
+    });
+    
+    // Append to the benefits container
+    benefitsContainer.appendChild(benefitItem);
+  });
+}
 
+// Function to open the benefit popup
+function openBenefitPopup(benefit) {
+  // Set the title and description in the popup
+  document.getElementById('modalTitle').textContent = benefit.nome;
+  document.getElementById('modalDescription').textContent = benefit.descricao;
+  
+  // Open the popup
+  app.popup.open('.popup-benefit-details');
+}
 // Função para abrir o zoom da imagem
 function openImageZoom(imageSrc) {
   // Remover qualquer zoom anterior se existir
