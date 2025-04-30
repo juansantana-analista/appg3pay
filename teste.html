@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combo Trio Encapsulados Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #006241;
+            --accent-color: #00a676;
+            --light-gray: #f5f5f5;
+            --medium-gray: #e0e0e0;
+            --dark-gray: #333;
+            --price-color: #006241;
+            --discount-color: #d32f2f;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #fff;
+            color: var(--dark-gray);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--medium-gray);
+            background-color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header .back-button {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .header .product-code {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+        
+        .header .icons {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .header .icons i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            cursor: pointer;
+        }
+        
+        .product-image {
+            width: 100%;
+            padding: 15px;
+            background-color: #fff;
+            text-align: center;
+        }
+        
+        .product-image img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .dots {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+            gap: 8px;
+        }
+        
+        .dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--medium-gray);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .dot.active {
+            background-color: var(--primary-color);
+            width: 20px;
+            border-radius: 5px;
+        }
+        
+        .badges {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+        }
+        
+        .badge {
+            padding: 6px 12px;
+            background-color: var(--light-gray);
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .badge.promotion {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .product-title {
+            padding: 15px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+        
+        .stock-status {
+            padding: 0 15px 15px;
+            color: var(--discount-color);
+            font-size: 0.9rem;
+        }
+        
+        .progress-bar {
+            margin: 0 15px;
+            height: 8px;
+            background-color: var(--light-gray);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-bar .fill {
+            width: 35%;
+            height: 100%;
+            background: linear-gradient(to right, var(--discount-color), #ff6659);
+            border-radius: 4px;
+        }
+        
+        .benefits {
+            margin: 25px 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--medium-gray);
+        }
+        
+        .benefits-title {
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            background-color: var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-top: 1px solid var(--medium-gray);
+            cursor: pointer;
+        }
+        
+        .benefit-icon {
+            background-color: var(--accent-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .benefit-content {
+            flex-grow: 1;
+        }
+        
+        .benefit-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .view-more {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+        
+        .view-more i {
+            margin-left: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .pricing {
+            margin: 25px 15px;
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+        }
+        
+        .price-label {
+            font-weight: 500;
+        }
+        
+        .original-price {
+            text-decoration: line-through;
+            color: #777;
+        }
+        
+        .current-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--price-color);
+        }
+        
+        .profit {
+            color: var(--accent-color);
+        }
+        
+        .share-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-weight: 500;
+            padding: 15px;
+            gap: 10px;
+            cursor: pointer;
+        }
+        
+        .cart-button {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px;
+            background-color: #000;
+            color: white;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
+            padding: 20px;
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark-gray);
+        }
+        
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--medium-gray);
+            color: var(--primary-color);
+        }
+        
+        .modal-description {
+            line-height: 1.6;
+        }
+        
+        /* Responsive design */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 768px;
+                margin: 0 auto;
+            }
+            
+            .product-image img {
+                max-height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="back-button">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+            <div class="product-code">Código 75432</div>
+            <div class="icons">
+                <i class="fas fa-search"></i>
+                <i class="fas fa-shopping-cart"></i>
+            </div>
+        </div>
+        
+        <div class="product-image">
+            <img src="/api/placeholder/600/400" alt="Combo de Encapsulados Premium">
+        </div>
+        
+        <div class="dots">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+        
+        <div class="badges">
+            <div class="badge">Lançamento</div>
+            <div class="badge promotion">Promoção</div>
+        </div>
+        
+        <h1 class="product-title">Combo Trio Encapsulados Premium: Vitamina C + Colágeno + Ômega 3</h1>
+        
+        <div class="stock-status">Últimas unidades</div>
+        <div class="progress-bar">
+            <div class="fill"></div>
+        </div>
+        
+        <div class="benefits">
+            <div class="benefits-title">
+                Benefícios dos Encapsulados
+                <i class="fas fa-capsules"></i>
+            </div>
+            
+            <div class="benefit-item" data-benefit="imunidade">
+                <div class="benefit-icon">
+                    <i class="fas fa-shield-virus"></i>
+                </div>
+                <div class="benefit-content">
+                    <div class="benefit-title">Fortalece a Imunidade</div>
+                    <div class="view-more">Ver mais <i class="fas fa-chevron-right"></i></div>
+                </div>
+            </div>
+            
+            <div class="benefit-item" data-benefit="pele">
+                <div class="benefit-icon">
+                    <i class="fas fa-smile"></i>
+                </div>
+                <div class="benefit-content">
+                    <div class="benefit-title">Benefícios para Pele</div>
+                    <div class="view-more">Ver mais <i class="fas fa-chevron-right"></i></div>
+                </div>
+            </div>
+            
+            <div class="benefit-item" data-benefit="cardio">
+                <div class="benefit-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <div class="benefit-content">
+                    <div class="benefit-title">Saúde Cardiovascular</div>
+                    <div class="view-more">Ver mais <i class="fas fa-chevron-right"></i></div>
+                </div>
+            </div>
+            
+            <div class="benefit-item" data-benefit="energia">
+                <div class="benefit-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div class="benefit-content">
+                    <div class="benefit-title">Mais Energia Diária</div>
+                    <div class="view-more">Ver mais <i class="fas fa-chevron-right"></i></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pricing">
+            <div class="price-row">
+                <div class="price-label">Pague</div>
+                <div>
+                    <span class="original-price">R$ 289,90</span>
+                    <span class="current-price">R$ 179,90</span>
+                </div>
+            </div>
+            
+            <div class="price-row">
+                <div class="price-label">Revenda</div>
+                <div>R$ 229,90</div>
+            </div>
+            
+            <div class="price-row">
+                <div class="price-label">Lucre</div>
+                <div class="profit">R$ 50,00</div>
+            </div>
+        </div>
+        
+        <div class="share-button">
+            <i class="fas fa-share-alt"></i> Divulgar produto
+        </div>
+        
+        <div style="height: 70px;"></div> <!-- Spacer for fixed button -->
+        
+        <div class="cart-button">
+            <i class="fas fa-shopping-cart"></i> Adicionar ao carrinho
+        </div>
+    </div>
+    
+    <!-- Modal for benefit details -->
+    <div class="modal" id="benefitModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 class="modal-title" id="modalTitle">Benefício</h2>
+            <div class="modal-description" id="modalDescription"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Benefit descriptions
+        const benefitDetails = {
+            imunidade: {
+                title: "Fortalece a Imunidade",
+                description: "A Vitamina C presente neste combo é essencial para fortalecer o sistema imunológico. Ela auxilia na produção de glóbulos brancos, que são fundamentais para combater infecções. Estudos mostram que a suplementação regular de Vitamina C pode reduzir a duração e a gravidade de resfriados comuns, além de acelerar o processo de recuperação. Nossa fórmula de alta absorção garante que seu corpo utilize ao máximo os benefícios deste nutriente essencial."
+            },
+            pele: {
+                title: "Benefícios para Pele",
+                description: "O Colágeno Hidrolisado presente no combo é um aliado poderoso para a saúde da pele. Ele ajuda a melhorar a elasticidade e hidratação da pele, reduzindo o aparecimento de rugas e linhas finas. O colágeno também fortalece unhas e cabelos, proporcionando mais brilho e resistência. Nossa fórmula de colágeno tipo I e III foi desenvolvida especificamente para maximizar os benefícios estéticos, com resultados visíveis após 30 dias de uso contínuo."
+            },
+            cardio: {
+                title: "Saúde Cardiovascular",
+                description: "O Ômega 3 presente neste combo é rico em EPA e DHA, ácidos graxos essenciais que contribuem significativamente para a saúde do coração. Eles ajudam a reduzir os níveis de triglicerídeos no sangue e a pressão arterial, além de prevenir o acúmulo de placas nas artérias. A suplementação regular de Ômega 3 está associada à redução do risco de doenças cardiovasculares e melhoria da circulação sanguínea. Nossa fórmula concentrada e livre de metais pesados garante eficácia e segurança."
+            },
+            energia: {
+                title: "Mais Energia Diária",
+                description: "A combinação dos três suplementos neste combo trabalha sinergicamente para aumentar seus níveis de energia durante o dia. A Vitamina C melhora a absorção de ferro, contribuindo para reduzir a fadiga. O Colágeno auxilia na recuperação muscular após exercícios físicos. O Ômega 3 otimiza o metabolismo energético celular e a função cognitiva, ajudando você a manter o foco e disposição ao longo do dia. Nossos clientes relatam melhora significativa nos níveis de energia após 2 semanas de uso contínuo."
+            }
+        };
+        
+        // Modal functionality
+        const modal = document.getElementById("benefitModal");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalDescription = document.getElementById("modalDescription");
+        const closeModal = document.querySelector(".close-modal");
+        const benefitItems = document.querySelectorAll(".benefit-item");
+        
+        benefitItems.forEach(item => {
+            item.addEventListener("click", function() {
+                const benefitType = this.getAttribute("data-benefit");
+                const benefitInfo = benefitDetails[benefitType];
+                
+                modalTitle.textContent = benefitInfo.title;
+                modalDescription.textContent = benefitInfo.description;
+                modal.style.display = "flex";
+            });
+        });
+        
+        closeModal.addEventListener("click", function() {
+            modal.style.display = "none";
+        });
+        
+        window.addEventListener("click", function(event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>
