@@ -762,49 +762,6 @@ function buscarProduto(produtoId) {
     });
 }
 
-// 2. Adicione esta função para formatar a descrição do produto
-function formatProductDescription(description) {
-  if (!description) return '';
-  
-  // Limpa a string, removendo espaços extras e quebras de linha desnecessárias
-  let cleanDescription = description.trim().replace(/\s+/g, ' ');
-  
-  // Verifica se a descrição já tem marcação HTML
-  if (cleanDescription.indexOf('<') !== -1 && cleanDescription.indexOf('>') !== -1) {
-    // Já tem HTML, apenas retorna com algumas melhorias
-    return cleanDescription
-      // Garante que parágrafos tenham classe de estilo
-      .replace(/<p>/g, '<p class="description-paragraph">')
-      // Garante que títulos tenham classe de estilo
-      .replace(/<h([1-6])>/g, '<h$1 class="description-heading">')
-      // Garante que listas tenham classe de estilo
-      .replace(/<ul>/g, '<ul class="description-list">');
-  }
-  
-  // Se não tiver HTML, processa para adicionar formatação
-  
-  // Detecta e formata possíveis listas com marcadores
-  cleanDescription = cleanDescription.replace(/•\s*(.*?)(?=•|$)/g, '<li>$1</li>');
-  if (cleanDescription.includes('<li>')) {
-    cleanDescription = '<ul class="description-list">' + cleanDescription + '</ul>';
-  }
-  
-  // Detecta e formata possíveis títulos (textos curtos seguidos de ponto)
-  cleanDescription = cleanDescription.replace(/([^.!?]+[.!?])\s+/g, '<p class="description-paragraph">$1</p>');
-  
-  // Se não encontrou parágrafos, envolve tudo em um parágrafo
-  if (!cleanDescription.includes('<p')) {
-    cleanDescription = '<p class="description-paragraph">' + cleanDescription + '</p>';
-  }
-  
-  // Destaca características importantes (textos entre parênteses, asteriscos, etc.)
-  cleanDescription = cleanDescription
-    .replace(/\*([^*]+)\*/g, '<strong>$1</strong>')
-    .replace(/\(([^)]+)\)/g, '<span class="text-emphasis">($1)</span>');
-  
-  return cleanDescription;
-}
-
 // Função para abrir o zoom da imagem
 function openImageZoom(imageSrc) {
   // Remover qualquer zoom anterior se existir
