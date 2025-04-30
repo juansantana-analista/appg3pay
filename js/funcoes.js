@@ -657,7 +657,7 @@ function buscarProduto(produtoId) {
         var precoLucro = detalhes.preco_lojavirtual - detalhes.preco;
         $("#precoOriginal").html(formatarMoeda(detalhes.preco_lojavirtual));
         $("#precoDesconto").html(formatarMoeda(detalhes.preco));
-        $("#precoRevenda").html(detalhes.preco_lojavirtual);
+        $("#precoRevenda").html(formatarMoeda(detalhes.preco_lojavirtual));
         $("#precoLucro").html(formatarMoeda(precoLucro));
         //$("#precopromo-detalhe").html(produtoPreco);
 
