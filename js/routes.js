@@ -1233,6 +1233,9 @@ var app = new Framework7({
           });
 
           
+          $("#voltarProdutos").on('click', function () {
+            app.views.main.router.navigate("/produtos/");
+          });
           
         },
         pageBeforeRemove: function (event, page) {
