@@ -539,7 +539,8 @@ function buscarProduto(produtoId) {
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de pedidos
       if (responseJson.status === "success" && responseJson.data.status === "success") {
-        const detalhes = responseJson.data.data;             
+        const detalhes = responseJson.data.data;        
+        console.log(detalhes);     
         var produtoPreco = "";
         
         // Preparar as imagens para o carrossel
