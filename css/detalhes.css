@@ -228,14 +228,14 @@ body {
 }
 
 .share-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--primary-color);
-  font-weight: 500;
-  padding: 15px;
-  gap: 10px;
-  cursor: pointer;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: var(--primary-color) !important;
+  font-weight: 500 !important;
+  padding: 15px !important;
+  gap: 10px !important;
+  cursor: pointer !important;
 }
 
 .cart-button {
