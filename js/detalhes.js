@@ -3,32 +3,33 @@ var produto = JSON.parse(localStorage.getItem('produto'));
 var produtoId = '';
 if (produto) {
     //ALIMENTAR COM OS VALORES DO ITEM
-    $("#nome-detalhe").html(produto.nome.toUpperCase());
-    $("#nomeShare").html(produto.nome.toUpperCase());
+    $("#imagem-detalhe").attr('src', produto.imagem);
     $("#imagemShare").attr('src', produto.imagem);
-    
-    // Configurar os preços no estilo da imagem referência
+    $("#nome-detalhe").html(produto.nome);
+    $("#nomeShare").html(produto.nome);
+    $("#rating-detalhe").html(produto.rating);
+    $("#like-detalhe").html(produto.likes);
+    //$("#reviews-detalhe").html(produto.reviews + ' reviews');
+    $("#descricao-detalhe").html(produto.descricao);
+    $("#preco-detalhe").html(formatarMoeda(produto.preco));
     $("#precoTotal").html(formatarMoeda(produto.preco));
-    $("#precoRevenda").html(formatarMoeda(produto.preco_lojavirtual));
-    
-    // Calcular o lucro
-    var lucro = produto.preco_lojavirtual - produto.preco;
-    $("#precoLucro").html(formatarMoeda(lucro));
-    $("#precoShare").html(formatarMoeda(produto.preco_lojavirtual));
-    
+    $("#precoShare").html(formatarMoeda(produto.preco));
+    $("#precopromo-detalhe").html(formatarMoeda(produto.preco));
+    // Selecione a div onde você quer adicionar o link
+    const $container = $('#containerBtnCarrinho');
+    // Crie o link e configure os atributos
+    const $btnAddCarrinho = $('<button></button>')
+        .text('Adicionar Carrinho')
+        .attr('data-produto-id', '123')
+        .attr('id', 'botaoCarrinho')
+        .addClass('add-cart');
+
+    // Anexe o link ao container
+    $container.append($btnAddCarrinho);
     produtoId = produto.id;
     buscarProduto(produto.id);
 }
 
-// Verificar operação (venda ou compra)
-var operacao = localStorage.getItem('operacao');
-if (operacao == 'venda') {
-    $('#addCarrinho').addClass('display-none');
-    $('#compartilharProduto').removeClass('display-none');
-} else {
-    $('#compartilharProduto').addClass('display-none');
-    $('#addCarrinho').removeClass('display-none');
-}
 
 //CLICOU NO ADICIONAR CARRINHO
 $("#addCarrinho").on('click', function () {
@@ -36,9 +37,8 @@ $("#addCarrinho").on('click', function () {
     adicionarItemCarrinho(produtoId);
 });
 
-//CLICOU NO COMPARTILHAR PRODUTO
-$("#compartilharProduto").on('click', function () {
-    //ABRIR POPUP COMPARTILHAR
-    app.popup.open('.popup-compartilhar');
-    buscarLinks(produtoId);
+//CLICOU NO ADICIONAR CARRINHO
+$("#comprarAgora").on('click', function () {
+    //ADICIONAR AO CARRINHO
+    adicionarItemCarrinho(produtoId);
 });
