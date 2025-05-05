@@ -515,7 +515,7 @@ function initializeBenefits(benefits) {
   // Manter apenas o título dos benefícios
   benefitsContainer.innerHTML = `
       <div class="benefits-title">
-          Benefícios dos Encapsulados
+          Benefícios do Produto
           <i class="fas fa-capsules"></i>
       </div>
   `;
