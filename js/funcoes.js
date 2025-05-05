@@ -368,7 +368,7 @@ function showSwipeHint() {
   
   //Inicio Funçao listar produtos tela Home
 // Updated listarProdutos function to match the new single-line layout
-function listarProdutos(searchQuery = "", categoriaId, compra) {
+function listarProdutos(searchQuery = "", categoriaId) {
   
   app.dialog.preloader("Carregando...");
 
@@ -409,12 +409,8 @@ function listarProdutos(searchQuery = "", categoriaId, compra) {
         $("#container-produtos").empty();
 
         produtos.forEach((produto) => {
-          var produtoPreco = "";
-          if (compra == "compra") {
-            produtoPreco = formatarMoeda(produto.preco);
-          } else {
-            produtoPreco = formatarMoeda(produto.preco_lojavirtual);
-          }
+          var produtoPreco = formatarMoeda(produto.preco_lojavirtual);
+
           var imgUrl = "https://vitatop.tecskill.com.br/";
           const imagemProduto = produto.foto
             ? imgUrl + produto.foto
@@ -601,8 +597,6 @@ function initializeBenefits(benefits) {
 
 // Modifica a função buscarProduto para usar os benefícios dinâmicos
 function buscarProduto(produtoId) {
-
-var operacao = localStorage.getItem("operacao");
 app.dialog.preloader("Carregando...");
 
 var imgUrl = "https://vitatop.tecskill.com.br/";
@@ -742,11 +736,6 @@ fetch(apiServerUrl, options)
       $("#nome-detalhe").html(detalhes.nome.toUpperCase());
       $("#nomeShare").html(detalhes.nome.toUpperCase());
       
-      if (operacao == "compra") {
-        produtoPreco = formatarMoeda(detalhes.preco);
-      } else {
-        produtoPreco = formatarMoeda(detalhes.preco_lojavirtual);
-      }
       var precoLucro = detalhes.preco_lojavirtual - detalhes.preco;
       $("#precoOriginal").html(formatarMoeda(detalhes.preco_lojavirtual));
       $("#precoDesconto").html(formatarMoeda(detalhes.preco));

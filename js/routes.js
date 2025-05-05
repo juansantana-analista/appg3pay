@@ -1045,7 +1045,6 @@ var app = new Framework7({
           // fazer algo antes da página ser exibida
           $("#menuPrincipal").show("fast");
           $("#menuPrincipal").removeClass("display-none");
-          localStorage.setItem('operacao', 'venda');
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
@@ -1104,53 +1103,17 @@ var app = new Framework7({
                 spaceBetween: 10
               },
             }
-          });
-
-          // Manipular clique no botão "Venda"
-          $('#btn-venda').click(function () {
-            // Alterar estilos para o botão "Venda"
-            localStorage.setItem('operacao', 'venda');
-            $(this).css({
-              'background-color': '#00591F',
-              color: '#ffffff',
-            });
-            // Alterar estilos para o botão "Compra"
-            $('#btn-compra').css({
-              'background-color': '#f7f9fa',
-              color: '#333',
-            });
-            listarProdutos();
-          });
-
-          // Manipular clique no botão "Compra"
-          $('#btn-compra').click(function () {
-            // Alterar estilos para o botão "Compra"
-            localStorage.setItem('operacao', 'compra');
-            $(this).css({
-              'background-color': '#00591F',
-              color: '#ffffff',
-            });
-            // Alterar estilos para o botão "Venda"
-            $('#btn-venda').css({
-              'background-color': '#f7f9fa',
-              color: '#333',
-            });
-            listarProdutos(null, null, 'compra');
-          });
-
-          
+          });      
 
           let searchTimeout; // Variável para armazenar o temporizador
 
           $(document).on("input", "#search", function () {
-            clearTimeout(searchTimeout); // Cancela o temporizador anterior
-          
-            var tipoOperacao = localStorage.getItem('operacao');
+            clearTimeout(searchTimeout); 
             const searchQuery = $(this).val();
           
             searchTimeout = setTimeout(() => {
               if (searchQuery.length >= 3 || searchQuery.length < 1) {
-                listarProdutos(searchQuery, null, tipoOperacao);
+                listarProdutos(searchQuery, null);
               }
             }, 1000); // Espera 1 segundo após a última digitação
           });
