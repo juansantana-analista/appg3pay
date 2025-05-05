@@ -1199,6 +1199,7 @@ var app = new Framework7({
           $.getScript('js/qrcode.min.js');
           //$.getScript('js/detalhes.js');
           var produtoId = localStorage.getItem('produtoId');
+          $("#idProduto").html(produtoId);
           buscarProduto(produtoId);
 
           $("#compartilharProduto").on('click', function () {
