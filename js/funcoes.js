@@ -367,143 +367,147 @@ function showSwipeHint() {
   //Fim Função Lista categorias
   
   //Inicio Funçao listar produtos tela Home
-  function listarProdutos(searchQuery = "", categoriaId, compra) {
-    
-    app.dialog.preloader("Carregando...");
+// Updated listarProdutos function to match the new single-line layout
+function listarProdutos(searchQuery = "", categoriaId, compra) {
   
-    var imgUrl = "https://vitatop.tecskill.com.br/";
-  
-    // Cabeçalhos da requisição
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + userAuthToken,
-    };
-  
-    const body = JSON.stringify({
-      class: "ProdutoVariacaoRest",
-      method: "listarProdutos",
-      categoria_id: categoriaId,
-      search: searchQuery,
-      limit: 30,
-    });
-  
-    // Opções da requisição
-    const options = {
-      method: "POST",
-      headers: headers,
-      body: body,
-    };
-  
-    // Fazendo a requisição
-    fetch(apiServerUrl, options)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        // Verifica se o status é 'success' e se há dados de pedidos
-        if (
-          responseJson.status === "success" &&
-          responseJson.data &&
-          responseJson.data.data
-        ) {
-          const produtos = responseJson.data.data;
-          $("#container-produtos").empty();
-  
-          produtos.forEach((produto) => {
-            var produtoPreco = "";
-            if (compra == "compra") {
-              produtoPreco = formatarMoeda(produto.preco);
-            } else {
-              produtoPreco = formatarMoeda(produto.preco_lojavirtual);
-            }
-            var imgUrl = "https://vitatop.tecskill.com.br/";
-            const imagemProduto = produto.foto
-              ? imgUrl + produto.foto
-              : "img/default.png";
-            const nomeProduto = truncarNome(produto.nome, 18);
-            const rating = 5;
-  
-            var produtoHTML = `
-                      <!-- ITEM CARD-->
-                      <div class="item-card">
-                          <a data-id="${produto.id}" 
-                          data-nome="${produto.nome}" 
-                          data-preco="${produto.preco}"
-                          data-preco2="${produto.preco2}"
-                          data-preco_lojavirtual="${produto.preco_lojavirtual}"
-                          data-imagem="${imagemProduto}"
-                          href="#" class="item">
-                              <div class="img-container">
-                                  <img src="${imagemProduto}">
+  app.dialog.preloader("Carregando...");
+
+  var imgUrl = "https://vitatop.tecskill.com.br/";
+
+  // Cabeçalhos da requisição
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "ProdutoVariacaoRest",
+    method: "listarProdutos",
+    categoria_id: categoriaId,
+    search: searchQuery,
+    limit: 30,
+  });
+
+  // Opções da requisição
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  // Fazendo a requisição
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // Verifica se o status é 'success' e se há dados de pedidos
+      if (
+        responseJson.status === "success" &&
+        responseJson.data &&
+        responseJson.data.data
+      ) {
+        const produtos = responseJson.data.data;
+        $("#container-produtos").empty();
+
+        produtos.forEach((produto) => {
+          var produtoPreco = "";
+          if (compra == "compra") {
+            produtoPreco = formatarMoeda(produto.preco);
+          } else {
+            produtoPreco = formatarMoeda(produto.preco_lojavirtual);
+          }
+          var imgUrl = "https://vitatop.tecskill.com.br/";
+          const imagemProduto = produto.foto
+            ? imgUrl + produto.foto
+            : "img/default.png";
+          const nomeProduto = truncarNome(produto.nome, 40); // Increased character limit
+          const rating = 5;
+
+          var produtoHTML = `
+                  <!-- ITEM CARD-->
+                  <div class="item-card">
+                      <a data-id="${produto.id}" 
+                      data-nome="${produto.nome}" 
+                      data-preco="${produto.preco}"
+                      data-preco2="${produto.preco2}"
+                      data-preco_lojavirtual="${produto.preco_lojavirtual}"
+                      data-imagem="${imagemProduto}"
+                      href="#" class="item">
+                          <div class="img-container">
+                              <img src="${imagemProduto}" alt="${nomeProduto}">
+                          </div>
+                          <div class="nome-rating">
+                                  <span class="color-gray product-name">${nomeProduto.toLocaleUpperCase()}</span>                     
+                              <div class="star-rating">
+                                  <span class="star"></span>
+                                  <span class="star"></span>
+                                  <span class="star"></span>
+                                  <span class="star"></span>
+                                  <span class="star"></span>
                               </div>
-                              <div class="nome-rating">
-                                      <span class="color-gray">${nomeProduto.toLocaleUpperCase()}</span>                     
-                                  <div class="star-rating">
-                                      <span class="star"></span>
-                                      <span class="star"></span>
-                                      <span class="star"></span>
-                                      <span class="star"></span>
-                                      <span class="star"></span>
-                                  </div>
-                                  <div class="price">${produtoPreco}</div>
-                              </div> 
-                          </a>
-                      </div>
-                      `;
-            $("#container-produtos").append(produtoHTML);
-            // Selecionar as estrelas apenas do produto atual
-            const stars = $("#container-produtos")
-              .children()
-              .last()
-              .find(".star-rating .star");
-  
-            // Preencher as estrelas conforme o rating do produto atual
-            for (let i = 0; i < rating; i++) {
-              stars[i].classList.add("filled");
-            }
-          });
-          $(".item").on("click", function () {
-            var id = $(this).attr("data-id");
-            var nomeProduto = $(this).attr("data-nome");
-            var preco = $(this).attr("data-preco");
-            var preco2 = $(this).attr("data-preco2");
-            var preco_lojavirtual = $(this).attr("data-preco_lojavirtual");
-            var imagem = $(this).attr("data-imagem");
-            localStorage.setItem("produtoId", id);
-            const produto = {
-              id: id,
-              imagem: imagem,
-              nome: nomeProduto,
-              rating: 5,
-              likes: 5,
-              reviews: 5,
-              preco: preco,
-              preco2: preco2,
-              preco_lojavirtual: preco_lojavirtual,
-            };
-            localStorage.setItem("produto", JSON.stringify(produto));
-            app.views.main.router.navigate("/detalhes/");
-          });
-  
-          app.dialog.close();
-        } else {
-          app.dialog.close();
-          // Verifica se há uma mensagem de erro definida
-          const errorMessage =
-            responseJson.message || "Formato de dados inválido";
-          app.dialog.alert(
-            "Erro ao carregar pedidos: " + errorMessage,
-            "Falha na requisição!"
-          );
-        }
-      })
-      .catch((error) => {
+                              <div class="price">${produtoPreco}</div>
+                          </div> 
+                      </a>
+                  </div>
+                  `;
+          $("#container-produtos").append(produtoHTML);
+          
+          // Selecionar as estrelas apenas do produto atual
+          const stars = $("#container-produtos")
+            .children()
+            .last()
+            .find(".star-rating .star");
+
+          // Preencher as estrelas conforme o rating do produto atual
+          for (let i = 0; i < rating; i++) {
+            stars[i].classList.add("filled");
+          }
+        });
+        
+        // Adicionar evento de clique
+        $(".item").on("click", function () {
+          var id = $(this).attr("data-id");
+          var nomeProduto = $(this).attr("data-nome");
+          var preco = $(this).attr("data-preco");
+          var preco2 = $(this).attr("data-preco2");
+          var preco_lojavirtual = $(this).attr("data-preco_lojavirtual");
+          var imagem = $(this).attr("data-imagem");
+          localStorage.setItem("produtoId", id);
+          const produto = {
+            id: id,
+            imagem: imagem,
+            nome: nomeProduto,
+            rating: 5,
+            likes: 5,
+            reviews: 5,
+            preco: preco,
+            preco2: preco2,
+            preco_lojavirtual: preco_lojavirtual,
+          };
+          localStorage.setItem("produto", JSON.stringify(produto));
+          app.views.main.router.navigate("/detalhes/");
+        });
+
         app.dialog.close();
-        console.error("Erro:", error);
+      } else {
+        app.dialog.close();
+        // Verifica se há uma mensagem de erro definida
+        const errorMessage =
+          responseJson.message || "Formato de dados inválido";
         app.dialog.alert(
-          "Erro ao carregar pedidos: " + error.message,
+          "Erro ao carregar produtos: " + errorMessage,
           "Falha na requisição!"
         );
-      });
-  }
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+      app.dialog.alert(
+        "Erro ao carregar produtos: " + error.message,
+        "Falha na requisição!"
+      );
+    });
+}
   //Fim Função Lista produtos
   
 //Inicio Função Detalhes Produto

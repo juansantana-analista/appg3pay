@@ -452,13 +452,29 @@ form {
 
 .item-card {
   display: flex;
-  flex-wrap: nowrap;
-  flex-direction: column;
-  background-color: #ffffffb4;
-  height: 270px;
-  flex: 45%;
-  margin-bottom: 5px;
+  flex-direction: row; /* Change from column to row */
+  background-color: #ffffff;
+  flex: 100%; /* Take full width instead of 45% */
+  margin-bottom: 10px; /* Increased from 5px */
   position: relative;
+  border-radius: 10px; /* Added border radius */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Added subtle shadow */
+  padding: 10px; /* Added padding */
+  height: auto; /* Remove fixed height */
+  min-height: 130px; /* Minimum height */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth hover effect */
+}
+
+.item-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.item-card .item {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
 }
 
 .item-card:not(:nth-child(2n)) {
@@ -480,36 +496,43 @@ form {
 }
 
 .img-container {
+  width: 120px; /* Fixed width */
+  min-width: 120px; /* Prevent shrinking */
+  height: 120px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: --gelo;
-  width: 100%;
-  height: 180px;
+  overflow: hidden;
+  margin-right: 15px; /* Space between image and content */
 }
 
 .img-container img {
-  background-color: --gelo;
-  max-width: 140px;
-  max-height: 94%;
-  object-fit: cover;
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: contain;
 }
 
 .nome-rating {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  text-align: center;
+  text-align: left; /* Left aligned text */
   font-size: 14px;
+  flex: 1;
 }
+
 .nome-rating span {
-  color: #000;
+  margin-bottom: 5px;
+  font-weight: 500;
 }
 
 .star-rating {
-  font-size: 0;
-  text-align: center;
+  margin: 5px 0;
+  text-align: left; /* Left aligned stars */
 }
+
 
 .star {
   display: inline-block;
@@ -538,10 +561,13 @@ form {
 }
 
 .price {
-  font-size: 16px;
-
-  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--verde-escuro);
+  margin-top: 5px;
+  text-align: left;
 }
+
 
 .gelo {
   background: var(--gelo) !important;
@@ -2618,6 +2644,28 @@ input, select {
   .login-container {
       width: 90%;
       padding: 30px 20px;
+  }
+  .item-card {
+    padding: 8px;
+  }
+  
+  .img-container {
+    width: 100px;
+    min-width: 100px;
+    height: 100px;
+  }
+  
+  .img-container img {
+    max-width: 85px;
+    max-height: 85px;
+  }
+  
+  .nome-rating {
+    font-size: 13px;
+  }
+  
+  .price {
+    font-size: 16px;
   }
 }
 
