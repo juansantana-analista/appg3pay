@@ -1171,6 +1171,11 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {          
           // Adiciona o CSS dinamicamente
+          var link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = 'css/detalhes.css?v=' + versionApp;
+          document.head.appendChild(link);
+            
           // fazer algo antes da página ser exibida
           userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
@@ -1207,7 +1212,13 @@ var app = new Framework7({
           $.getScript('js/qrcode.min.js');
           //$.getScript('js/detalhes.js');
           var produtoId = localStorage.getItem('produtoId');
+          buscarProduto(produtoId);
 
+          $("#compartilharProduto").on('click', function () {
+            console.log('teste');
+            app.popup.open('.popup-compartilhar');
+            buscarLinks(produtoId);
+          });
           // JavaScript to open popup
           document.querySelector('.abrir-popup').addEventListener('click', function (e) {
             e.preventDefault(); // Prevent default link behavior
@@ -1220,18 +1231,12 @@ var app = new Framework7({
             buscarLinks(produtoId);
           });
 
-          $("#compartilharProduto").on('click', function () {
-            console.log('teste');
-            app.popup.open('.popup-compartilhar');
-            buscarLinks(produtoId);
-          });
 
           
           $("#back-button").on('click', function () {
             app.views.main.router.navigate("/produtos/");
           });
           
-          buscarProduto(produtoId);
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
