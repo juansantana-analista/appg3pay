@@ -1189,19 +1189,6 @@ var app = new Framework7({
             }, 500); // Adiciona um fallback com pequeno delay
           }
           $("#menuPrincipal").hide("fast");
-          
-          var operacao = localStorage.getItem('operacao');
-          if (operacao == 'venda'){            
-            $('#addCarrinho').addClass('display-none');
-            $('#comprarAgora').addClass('display-none');
-            $('#compartilharBtn').removeClass('display-none');
-            $('#compartilharProduto').removeClass('display-none');
-          } else {            
-            $('#compartilharBtn').addClass('display-none');
-            $('#compartilharProduto').addClass('display-none');
-            $('#addCarrinho').removeClass('display-none');
-            $('#comprarAgora').removeClass('display-none');
-          }
 
         },
         pageAfterIn: function (event, page) {
@@ -1219,19 +1206,6 @@ var app = new Framework7({
             app.popup.open('.popup-compartilhar');
             buscarLinks(produtoId);
           });
-          // JavaScript to open popup
-          document.querySelector('.abrir-popup').addEventListener('click', function (e) {
-            e.preventDefault(); // Prevent default link behavior
-            app.popup.open('.popup-compartilhar');
-            buscarLinks(produtoId);
-          });
-          document.querySelector('#compartilharBtn').addEventListener('click', function (e) {
-            e.preventDefault(); // Prevent default link behavior
-            app.popup.open('.popup-compartilhar');
-            buscarLinks(produtoId);
-          });
-
-
           
           $("#back-button").on('click', function () {
             app.views.main.router.navigate("/produtos/");
