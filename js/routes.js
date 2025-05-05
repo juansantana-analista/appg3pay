@@ -1206,11 +1206,7 @@ var app = new Framework7({
             app.popup.open('.popup-compartilhar');
             buscarLinks(produtoId);
           });
-                //CLICOU NO ADICIONAR CARRINHO
-          $("#addCarrinho").on('click', function () {
-              //ADICIONAR AO CARRINHO
-              adicionarItemCarrinho(produtoId);
-          });
+
 
           $("#back-button").on('click', function () {
             app.views.main.router.navigate("/produtos/");
