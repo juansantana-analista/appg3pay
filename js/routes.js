@@ -1738,6 +1738,7 @@ var app = new Framework7({
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
           contarCarrinho();
+          carregarCategoriasCampanha();
           listarCampanhas();
 
           // Adiciona eventos aos filtros de categoria
