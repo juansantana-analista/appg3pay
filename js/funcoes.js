@@ -3693,7 +3693,7 @@ function contarCarrinho() {
 // Listar campanhas
 // Função para carregar as categorias de campanha do servidor
 function carregarCategoriasCampanha() {
-  app.dialog.preloader("Carregando categorias...");
+  app.dialog.preloader("Carregando...");
 
   // Cabeçalhos da requisição
   const headers = {
@@ -3775,7 +3775,7 @@ function carregarCategoriasCampanha() {
 
 // Função para listar campanhas, opcionalmente filtradas por categoria
 function listarCampanhas(categoriaId = "all") {
-  app.dialog.preloader("Carregando campanhas...");
+  app.dialog.preloader("Carregando...");
 
   // Cabeçalhos da requisição
   const headers = {
