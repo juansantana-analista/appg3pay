@@ -3,16 +3,22 @@
   <head>
     <!-- Required meta tags-->
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <!-- Color theme for statusbar (Android only) -->
-    <meta name="theme-color" content="#00591F" />
+    <meta name="theme-color" content="#FF4B00" />
     <!-- Your app title -->
     <title>VITATOP</title>
     <!-- Path to Framework7 Library Bundle CSS -->
     <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
     <!-- CSS PERSONALIZADO PARA MENU-->
     <link rel="stylesheet" href="css/index.css" />
+    
+    <link rel="stylesheet" href="css/carrinho.css" />
+    <link rel="stylesheet" href="css/campanhas.css" />
     <!--Ícones Material Design-->
     <link rel="stylesheet" href="css/materialdesignicons.min.css" />
     <!-- Icones do Remix icon-->
@@ -25,7 +31,7 @@
       <!-- Your main view, should have "view-main" class -->
       <div class="view view-main">
         <!-- Initial Page, "data-name" contains page name -->
-        <div data-name="home" class="page color-theme-blue">
+        <div data-name="campanhas" class="page color-theme-blue">
           <!-- NAV TOPO-->
           <div class="top-nav">
             <div class="left">
@@ -37,165 +43,67 @@
                 <i class="mdi mdi-menu"></i>
               </a>
             </div>
-            <img src="img/logo-nav.png" class="title-logo" width="130px" />
-            <a href="/notificacoes/" class="btn-notificacao" data-count="0">
-              <i class="mdi mdi-bell"></i>
+            <img src="img/logo-nav.png" class="title-logo" width="110px" />
+            <a href="/carrinho/" class="btn-cart" data-count="0">
+              <i class="mdi mdi-cart-outline"></i>
             </a>
           </div>
+
+          <!-- Cabeçalho com título da página -->
+          <div class="campaigns-header">
+            <h1>Campanhas e Promoções</h1>
+            <p>Confira nossas campanhas especiais e ofertas exclusivas</p>
+          </div>
+
           <!-- Scrollable page content -->
-
-          <div
-            class="page-content"
-            style="background-color: #f7f9fa; padding-bottom: 160px"
-          >
-            <div class="block">
-              <section class="welcome-section">
-                  <h1>Olá, <span id="nomeUsuarioHome"></span>!</h1>
-                  <p>Bem-vindo ao seu dashboard VitaTop</p>
-              </section>
-              <div class="container-dash">
-                <div class="wallet-card">
-                    <div class="wallet-header">
-                        <div>
-                            <div style="opacity: 0.8;">Saldo disponível</div>
-                            <div class="balance-container">
-                                <div class="balance hidden-balance" id="balance">•••••••</div>
-                                <div class="actual-balance" id="actualBalance" style="display: none;">
-                                    R$ 0
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <i class="far fa-eye" id="toggleBalance" style="cursor: pointer; font-size: 20px;"></i>
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 15px; margin-top: 20px;">
-                        <button class="share-button">
-                            <i class="fas fa-receipt"></i>
-                            Extrato
-                        </button>
-                        <button class="share-button">
-                            <i class="fas fa-arrow-right"></i>
-                            Transferir
-                        </button>
-                    </div>
-                </div>
-        
-                <div class="grid-dash">
-                    <div class="card-dash vendas-mes">
-                        <div class="card-header-dash">
-                            <div class="card-title">Vendas do Mês</div>
-                            <div class="card-icon" style="background: #00b894;">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
-                        </div>
-                        <div class="value-dash" id="valorVenda"></div>
-                        <div class="trend">
-                            <i class="fas fa-arrow-up"></i>
-                            0% este mês
-                        </div>
-                    </div>
-        
-                    <div class="card-dash afiliados-ativos">
-                        <div class="card-header-dash">
-                            <div class="card-title">Afiliados Ativos</div>
-                            <div class="card-icon" style="background: #6c5ce7;">
-                                <i class="fas fa-users"></i>
-                            </div>
-                        </div>
-                        <div class="value-dash" id="qtdeGeral">284</div>
-                        <div class="trend">
-                            <i class="fas fa-arrow-up"></i>
-                            Nenhum novo hoje
-                        </div>
-                    </div>
-                    <!--
-                    <div class="card-dash">
-                        <div class="card-header-dash">
-                            <div class="card-title">Taxa de Conversão</div>
-                            <div class="card-icon" style="background: #00cec9;">
-                                <i class="fas fa-percentage"></i>
-                            </div>
-                        </div>
-                        <div class="value-dash">68.5%</div>
-                        <div class="trend">
-                            <i class="fas fa-arrow-up"></i>
-                            2.3% este mês
-                        </div>
-                    </div>
-                    -->
-                </div>
-                <div class="referral-card">
-                    <div class="card-header">
-                        <div class="card-title">Seu Link de Indicação</div>
-                    </div>
-                    <div class="referral-link">
-                        <div class="referral-link-text" title="https://app.exemplo.com/ref/joao123">
-                            https://cadastrovitatop.tecskill.com.br/index.php
-                        </div>                        
-                        <button class="share-button abrir-popup" style="width: 24px; align-items: center; justify-content: center;">
-                            <i class="fas fa-share-alt"></i>
-                        </button>
-                    </div>
-                </div>
+          <div class="page-content" style="background-color: #f7f9fa">
+            <div class="block no-margin-top">
               
-            </div>
-              <div class="update-button-container">
-                <button id="updateData" class="update-button">
-                  <i class="mdi mdi-refresh"></i>
-                </button>
+              <!-- Área de filtro de categorias -->
+              <div class="campaign-categories">
+                <div class="category-pill active" data-category="all">Todas</div>
+                <div class="category-pill" data-category="promocoes">Promoções</div>
+                <div class="category-pill" data-category="saude">Saúde</div>
+                <div class="category-pill" data-category="datas">Datas Especiais</div>
+                <div class="category-pill" data-category="lancamentos">Lançamentos</div>
               </div>
-          </div>
+              
+              <!-- Container de campanhas -->
+              <div id="container-campanhas" class="campaigns-container">
+                <!-- Campanhas serão inseridas aqui pelo JavaScript -->
 
-          
-          <!-- INÍCIO POPUP COMPARTILHAR LINK -->
-          <div class="popup popup-compartilhar">
-            <div class="view popup-view">
-              <div class="page">
-                <div class="top-nav">
-                  <div class="left">
-                    <a href="#" class="link btn-novo popup-close">
-                      <i class="mdi mdi-arrow-left"></i>
-                    </a>
+                <!-- Skeleton para carregamento -->
+                <div class="campaign-card skeleton-card">
+                  <div class="campaign-image skeleton-effect-wave"></div>
+                  <div class="campaign-content">
+                    <div class="campaign-title skeleton-effect-wave"></div>
+                    <div class="campaign-subtitle skeleton-effect-wave"></div>
+                    <div class="campaign-period skeleton-effect-wave"></div>
                   </div>
-                  <strong class="title-descricao">
-                    <i class="ri-share-2-line"></i> Compartilhar</strong
-                  >
-                  <a href="/informacoes/" class="btn-header">
-                    <i class="mdi mdi-information-variant"></i>
-                  </a>
                 </div>
-                <div
-                  class="page-content container-principal"
-                  style="padding-bottom: 180px"
-                >
-                <div class="container-link">
-                  <div class="card-link">
-                      <div class="qr-container">
-                          <div id="qrcode"></div>
-                      </div>
-          
-                      <div class="share-info">
-                          <div style="color: #2d3436; font-weight: 500; margin-bottom: 8px;">
-                              Seu link único
-                          </div>
-                          <div class="share-link" id="link-indicacao">
-                          </div>                
-                          <span>Divulgue esse link para ampliar a sua rede!!!</span>
-                      </div>
-                      <button class="share-button-link" id="compartilharLink">
-                          <i class="fas fa-share-alt"></i>
-                          Compartilhar
-                      </button>
+
+                <div class="campaign-card skeleton-card">
+                  <div class="campaign-image skeleton-effect-wave"></div>
+                  <div class="campaign-content">
+                    <div class="campaign-title skeleton-effect-wave"></div>
+                    <div class="campaign-subtitle skeleton-effect-wave"></div>
+                    <div class="campaign-period skeleton-effect-wave"></div>
                   </div>
-              </div>
+                </div>
+
+                <div class="campaign-card skeleton-card">
+                  <div class="campaign-image skeleton-effect-wave"></div>
+                  <div class="campaign-content">
+                    <div class="campaign-title skeleton-effect-wave"></div>
+                    <div class="campaign-subtitle skeleton-effect-wave"></div>
+                    <div class="campaign-period skeleton-effect-wave"></div>
+                  </div>
                 </div>
               </div>
+              
+              <br /><br /><br /><br /><br /><br /><br /><br />
             </div>
           </div>
-          <!-- FIM POPUP COMPARTILHAR LINK -->
-
-
         </div>
       </div>
     </div>
@@ -203,7 +111,6 @@
     <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
     <!-- jQuery -->
     <script type="text/javascript" src="lib/jquery-3.7.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <!-- Roteamento do app-->
     <script type="text/javascript" src="js/routes.js"></script>
     <script src="cordova.js"></script>
