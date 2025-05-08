@@ -1129,12 +1129,12 @@ form {
   color: #555555;
 }
 .wallet-card {
-  background: linear-gradient(135deg, #6c5ce7 0%, #8e44ad 100%);
+  background: linear-gradient(135deg, #4fbf31 0%, #3a8f24 100%);
   border-radius: 20px;
   padding: 25px;
   color: white;
   margin-bottom: 30px;
-  box-shadow: 0 10px 20px rgba(108, 92, 231, 0.2);
+  box-shadow: 0 10px 20px rgba(79, 191, 49, 0.2);
 }
 
 .wallet-header {
