@@ -3691,9 +3691,9 @@ function contarCarrinho() {
   // Funções para a página de campanhas
 
 // Listar campanhas
-function listarCampanhas(categoria = "all") {
-  var userAuthToken = localStorage.getItem("userAuthToken");
-  app.dialog.preloader("Carregando...");
+// Função para carregar as categorias de campanha do servidor
+function carregarCategoriasCampanha() {
+  app.dialog.preloader("Carregando categorias...");
 
   // Cabeçalhos da requisição
   const headers = {
@@ -3702,9 +3702,8 @@ function listarCampanhas(categoria = "all") {
   };
 
   const body = JSON.stringify({
-    class: "CampanhaRest",
-    method: "ListarCampanhas",
-    categoria: categoria !== "all" ? categoria : null,
+    class: "CampanhaRestService",
+    method: "listarCategoriasCampanha",
   });
 
   // Opções da requisição
@@ -3714,215 +3713,224 @@ function listarCampanhas(categoria = "all") {
     body: body,
   };
 
-  // Simulação de resposta da API (em produção, substituir pelo fetch real)
-  // Esta simulação é apenas para demonstrar a estrutura
-  const mockResponse = {
-    status: "success",
-    data: {
-      status: "success",
-      data: [
-        {
-          id: 1,
-          titulo: "Novembro Azul",
-          subtitulo: "Cuidados para a saúde do homem",
-          descricao: "Aproveite descontos especiais em produtos para a saúde masculina",
-          imagem: "https://img.cdndsgni.com/preview/12011515.jpg",
-          data_inicio: "2023-11-01",
-          data_fim: "2023-11-30",
-          link: "/produtos/?campanha=1",
-          categoria: "saude",
-          tag: "Saúde"
-        },
-        {
-          id: 3,
-          titulo: "Dia das Mães",
-          subtitulo: "Presentes especiais para sua mãe",
-          descricao: "Confira nossas sugestões de presentes para o Dia das Mães",
-          imagem: "https://img.cdndsgni.com/preview/11048441.jpg",
-          data_inicio: "2023-04-15",
-          data_fim: "2023-05-14",
-          link: "/produtos/?campanha=3",
-          categoria: "datas",
-          tag: "Data Especial"
-        },
-        {
-          id: 5,
-          titulo: "Black Friday 2025",
-          subtitulo: "Descontos imperdíveis em toda loja",
-          descricao: "Aproveite nossos descontos especiais de até 70% para a Black Friday",
-          imagem: "https://marketplace.canva.com/EAFQERkhyA0/1/0/1600w/canva-banner-para-mercado-shops-grande-black-friday-moderno-vermelho-e-preto-OTBW2SeoGCE.jpg",
-          data_inicio: "2023-11-20",
-          data_fim: "2023-11-27",
-          link: "/produtos/?campanha=5",
-          categoria: "promocoes",
-          tag: "Promoção"
-        },
-        {
-          id: 6,
-          titulo: "Natal 2023",
-          subtitulo: "Presentes especiais para o Natal",
-          descricao: "Confira nossa seleção de produtos para presentear no Natal",
-          imagem: "img/campanhas/natal.jpg",
-          data_inicio: "2023-12-01",
-          data_fim: "2023-12-25",
-          link: "/produtos/?campanha=6",
-          categoria: "datas",
-          tag: "Data Especial"
-        },
-        {
-          id: 7,
-          titulo: "Janeiro Branco",
-          subtitulo: "Cuidando da saúde mental",
-          descricao: "Produtos e dicas para cuidar da sua saúde mental",
-          imagem: "img/campanhas/janeiro-branco.jpg",
-          data_inicio: "2024-01-01",
-          data_fim: "2024-01-31",
-          link: "/produtos/?campanha=7",
-          categoria: "saude",
-          tag: "Saúde"
-        }
-      ]
-    }
-  };
-
-  // Na implementação real, usar o fetch abaixo em vez da simulação
-  /* 
+  // Fazendo a requisição
   fetch(apiServerUrl, options)
     .then((response) => response.json())
     .then((responseJson) => {
-      // O código abaixo permaneceria o mesmo, mas usando responseJson em vez de mockResponse
+      // Verifica se o status é 'success' e se há dados de categorias
+      if (
+        responseJson.status === "success" &&
+        responseJson.data &&
+        responseJson.data.status === "success"
+      ) {
+        const categorias = responseJson.data.data;
+        
+        // Limpa o container de categorias
+        $(".campaign-categories").empty();
+
+        // Adiciona a opção "Todas" ao início
+        var opcaoTodasHTML = `
+          <div class="category-pill active" data-category="all">Todas</div>
+        `;
+        $(".campaign-categories").append(opcaoTodasHTML);
+
+        // Adiciona cada categoria
+        categorias.forEach((categoria) => {
+          var categoriaHTML = `
+            <div class="category-pill" data-category="${categoria.id}">${categoria.nome}</div>
+          `;
+          $(".campaign-categories").append(categoriaHTML);
+        });
+
+        // Adiciona o evento de clique às categorias
+        $(".category-pill").on("click", function() {
+          $(".category-pill").removeClass("active");
+          $(this).addClass("active");
+          
+          const categoriaId = $(this).data("category");
+          listarCampanhas(categoriaId);
+        });
+
+        app.dialog.close();
+      } else {
+        app.dialog.close();
+        // Verifica se há uma mensagem de erro definida
+        const errorMessage =
+          responseJson.message || "Formato de dados inválido";
+        app.dialog.alert(
+          "Erro ao carregar categorias: " + errorMessage,
+          "Falha na requisição!"
+        );
+      }
     })
     .catch((error) => {
       app.dialog.close();
       console.error("Erro:", error);
       app.dialog.alert(
-        "Erro ao carregar campanhas: " + error.message,
+        "Erro ao carregar categorias: " + error.message,
         "Falha na requisição!"
       );
     });
-  */
+}
 
-  // Usando a resposta simulada para demonstração
-  setTimeout(() => {
-    // Simula o tempo de resposta do servidor
-    const responseJson = mockResponse;
-    
-    // Verifica se o status é 'success' e se há dados de campanhas
-    if (
-      responseJson.status === "success" &&
-      responseJson.data.status === "success" &&
-      responseJson.data.data.length > 0
-    ) {
-      const campanhas = responseJson.data.data;
-      
-      // Filtra campanhas por categoria se necessário
-      const campanhasFiltradas = categoria !== "all" 
-        ? campanhas.filter(campanha => campanha.categoria === categoria)
-        : campanhas;
+// Função para listar campanhas, opcionalmente filtradas por categoria
+function listarCampanhas(categoriaId = "all") {
+  app.dialog.preloader("Carregando campanhas...");
+
+  // Cabeçalhos da requisição
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  // Prepara o body da requisição, incluindo categoria_id se for necessário
+  const bodyData = {
+    class: "CampanhaRestService",
+    method: "listarCampanhas"
+  };
+  
+  // Adiciona o filtro por categoria se não for "all"
+  if (categoriaId !== "all") {
+    bodyData.categoria_id = categoriaId;
+  }
+
+  const body = JSON.stringify(bodyData);
+
+  // Opções da requisição
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  // Fazendo a requisição
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // Verifica se o status é 'success' e se há dados de campanhas
+      if (
+        responseJson.status === "success" &&
+        responseJson.data &&
+        responseJson.data.status === "success"
+      ) {
+        const campanhas = responseJson.data.data;
         
-      // Limpa o container antes de adicionar novas campanhas
-      $("#container-campanhas").empty();
-      
-      if (campanhasFiltradas.length === 0) {
-        // Se não houver campanhas na categoria selecionada
+        // Limpa o container das campanhas e remove os skeletons
+        $("#container-campanhas").empty();
+        $(".skeleton-card").remove();
+
+        // Verifica se há campanhas para exibir
+        if (campanhas.length === 0) {
+          $("#container-campanhas").html(`
+            <div class="no-campaigns">
+              <i class="mdi mdi-calendar-blank"></i>
+              <p>Nenhuma campanha encontrada nesta categoria</p>
+            </div>
+          `);
+        } else {
+          // Para cada campanha, cria um card
+          campanhas.forEach((campanha) => {
+            const dataInicio = new Date(campanha.data_inicio);
+            const dataFim = campanha.data_fim ? new Date(campanha.data_fim) : null;
+            
+            // Formata as datas para exibição
+            const dataInicioFormatada = formatarData(dataInicio);
+            const dataFimFormatada = dataFim ? formatarData(dataFim) : "Sem data de término";
+            
+            // Define a tag da campanha ou usa a categoria como fallback
+            let tagTexto = campanha.tag || getCategoriaLabel(campanha.categoria_id);
+            
+            // Define uma imagem padrão caso não tenha
+            const imagemCampanha = campanha.imagem 
+              ? "https://vitatop.tecskill.com.br/" + campanha.imagem 
+              : "img/default-campaign.jpg";
+            
+            // HTML do card da campanha
+            const campanhaHTML = `
+              <div class="campaign-card" data-id="${campanha.id}" data-link="${campanha.link || '/produtos/?campanha=' + campanha.id}">
+                <img src="${imagemCampanha}" alt="${campanha.titulo}" class="campaign-image">
+                <div class="campaign-content">
+                  <h3 class="campaign-title">${campanha.titulo}</h3>
+                  <p class="campaign-subtitle">${campanha.subtitulo || ""}</p>
+                  <div class="campaign-period">
+                    <i class="mdi mdi-calendar"></i>
+                    ${dataInicioFormatada} ${dataFim ? " até " + dataFimFormatada : ""}
+                  </div>
+                  <div class="campaign-tag ${getCategoriaClass(campanha.categoria_id)}">${tagTexto}</div>
+                </div>
+              </div>
+            `;
+            
+            $("#container-campanhas").append(campanhaHTML);
+          });
+          
+          // Adiciona evento de clique aos cards
+          $(".campaign-card").on("click", function () {
+            const link = $(this).attr("data-link");
+            if (link) {
+              app.views.main.router.navigate(link);
+            }
+          });
+        }
+
+        app.dialog.close();
+      } else {
+        app.dialog.close();
+        
+        // Exibe uma mensagem se não há campanhas ou ocorreu um erro
         $("#container-campanhas").html(`
           <div class="no-campaigns">
             <i class="mdi mdi-calendar-blank"></i>
-            <p>Nenhuma campanha encontrada nesta categoria</p>
+            <p>Nenhuma campanha disponível no momento</p>
           </div>
         `);
-      } else {
-        // Para cada campanha, cria um card
-        campanhasFiltradas.forEach((campanha) => {
-          const dataInicio = new Date(campanha.data_inicio);
-          const dataFim = new Date(campanha.data_fim);
-          
-          // Formata as datas para exibição
-          const dataInicioFormatada = formatarData(dataInicio);
-          const dataFimFormatada = formatarData(dataFim);
-          
-          // Define a classe da tag conforme a categoria
-          let tagClass = "";
-          switch (campanha.categoria) {
-            case "promocoes":
-              tagClass = "promocao";
-              break;
-            case "saude":
-              tagClass = "saude";
-              break;
-            case "datas":
-              tagClass = "data-especial";
-              break;
-            case "lancamentos":
-              tagClass = "lancamento";
-              break;
-            default:
-              tagClass = "";
-          }
-          
-          // HTML do card da campanha
-          const campanhaHTML = `
-            <div class="campaign-card" data-id="${campanha.id}" data-link="${campanha.link}">
-              <img src="${campanha.imagem}" alt="${campanha.titulo}" class="campaign-image">
-              <div class="campaign-content">
-                <h3 class="campaign-title">${campanha.titulo}</h3>
-                <p class="campaign-subtitle">${campanha.subtitulo}</p>
-                <div class="campaign-period">
-                  <i class="mdi mdi-calendar"></i>
-                  ${dataInicioFormatada} até ${dataFimFormatada}
-                </div>
-                <div class="campaign-tag ${tagClass}">${campanha.tag}</div>
-              </div>
-            </div>
-          `;
-          
-          // Adiciona o card ao container
-          $("#container-campanhas").append(campanhaHTML);
-        });
         
-        // Adiciona evento de clique aos cards
-        $(".campaign-card").on("click", function () {
-          const link = $(this).attr("data-link");
-          app.views.main.router.navigate(link);
-        });
+        console.error("Erro ao carregar campanhas ou nenhuma campanha disponível");
       }
-      
+    })
+    .catch((error) => {
       app.dialog.close();
-    } else {
-      app.dialog.close();
-      
-      // Se não há campanhas disponíveis
+      console.error("Erro:", error);
       $("#container-campanhas").html(`
         <div class="no-campaigns">
-          <i class="mdi mdi-calendar-blank"></i>
-          <p>Nenhuma campanha disponível no momento</p>
+          <i class="mdi mdi-alert-circle-outline"></i>
+          <p>Erro ao carregar campanhas. Tente novamente mais tarde.</p>
         </div>
       `);
-      
-      console.error("Erro ao carregar campanhas ou nenhuma campanha disponível");
-    }
-  }, 1000);
+    });
 }
 
-// Event listeners quando a página é inicializada
-document.addEventListener('page:init', function (e) {
-  if (e.detail.name === 'campanhas') {
-    // Carrega todas as campanhas na inicialização
-    listarCampanhas();
-    
-    // Adiciona eventos aos filtros de categoria
-    $('.category-pill').on('click', function() {
-      $('.category-pill').removeClass('active');
-      $(this).addClass('active');
-      
-      const categoria = $(this).attr('data-category');
-      listarCampanhas(categoria);
-    });
-    
-    // Adiciona função para atualizar contador do carrinho
-    contarCarrinho();
+// Função auxiliar para obter a classe CSS baseada na categoria
+function getCategoriaClass(categoriaId) {
+  switch (categoriaId) {
+    case "1":
+      return "promocao";
+    case "2":
+      return "saude";
+    case "3":
+      return "data-especial";
+    case "4":
+      return "lancamento";
+    default:
+      return "";
   }
-});
+}
+
+// Função auxiliar para obter o nome da categoria pelo ID
+function getCategoriaLabel(categoriaId) {
+  switch (categoriaId) {
+    case "1":
+      return "Promoção";
+    case "2":
+      return "Saúde";
+    case "3":
+      return "Data Especial";
+    case "4":
+      return "Lançamento";
+    default:
+      return "Campanha";
+  }
+}
 
   //Inicio da Funçao formatar Moeda
   function formatarMoeda(valor) {
