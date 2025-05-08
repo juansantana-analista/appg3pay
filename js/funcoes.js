@@ -3699,7 +3699,7 @@ function carregarCategoriasCampanha() {
   };
 
   const body = JSON.stringify({
-    class: "CampanhaRest",
+    class: "CampanhaRestService",
     method: "listarCategoriasCampanha"
   });
 
@@ -3741,7 +3741,7 @@ function listarCampanhas(categoria = "all") {
   };
 
   const body = JSON.stringify({
-    class: "CampanhaRest",
+    class: "CampanhaRestService",
     method: "listarCampanhas",
     categoria_id: categoria !== "all" ? categoria : null
   });
