@@ -232,6 +232,10 @@ body {
   color: var(--accent-color);
 }
 
+#precoLucro {
+  font-weight: bold;
+}
+
 .share-button-produto {
   display: flex !important;
   align-items: center !important;
