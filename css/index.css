@@ -2955,7 +2955,7 @@ input, select {
 
 /* Container de campanhas */
 .campaigns-container {
-  padding: 0 15px;
+  padding: 0 5px;
 }
 
 /* Card de campanha */
@@ -3021,7 +3021,7 @@ input, select {
 }
 
 .campaign-tag.promocao {
-  background-color: #ff5500;
+  background-color: #004d00;
 }
 
 .campaign-tag.saude {
