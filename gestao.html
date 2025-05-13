@@ -149,50 +149,47 @@
 
           
           <!-- INÍCIO POPUP COMPARTILHAR LINK -->
-          <div class="popup popup-compartilhar">
-            <div class="view popup-view">
-              <div class="page">
-                <div class="top-nav">
-                  <div class="left">
-                    <a href="#" class="link btn-novo popup-close">
-                      <i class="mdi mdi-arrow-left"></i>
-                    </a>
-                  </div>
-                  <strong class="title-descricao">
-                    <i class="ri-share-2-line"></i> Compartilhar</strong
-                  >
-                  <a href="/informacoes/" class="btn-header">
-                    <i class="mdi mdi-information-variant"></i>
-                  </a>
-                </div>
-                <div
-                  class="page-content container-principal"
-                  style="padding-bottom: 180px"
-                >
-                <div class="container-link">
-                  <div class="card-link">
-                      <div class="qr-container">
-                          <div id="qrcode"></div>
-                      </div>
-          
-                      <div class="share-info">
-                          <div style="color: #2d3436; font-weight: 500; margin-bottom: 8px;">
-                              Seu link único
-                          </div>
-                          <div class="share-link" id="link-indicacao">
-                          </div>                
-                          <span>Divulgue esse link para ampliar a sua rede!!!</span>
-                      </div>
-                      <button class="share-button-link" id="compartilharLink">
-                          <i class="fas fa-share-alt"></i>
-                          Compartilhar
-                      </button>
-                  </div>
-              </div>
-                </div>
-              </div>
+<div class="popup popup-compartilhar">
+  <div class="view popup-view">
+    <div class="page">
+      <div class="top-nav">
+        <div class="left">
+          <a href="#" class="link btn-novo popup-close">
+            <i class="mdi mdi-arrow-left"></i>
+          </a>
+        </div>
+        <strong class="title-descricao">
+          <i class="ri-share-2-line"></i> Compartilhar Link
+        </strong>
+        <div style="width: 30px;"></div> <!-- Espaço em branco para balancear o cabeçalho -->
+      </div>
+      <div class="page-content">
+        <div class="container-link">
+          <div class="card-link">
+            <div class="qr-container">
+              <div id="qrcode"></div>
             </div>
+            
+            <div class="share-info">
+              <div style="color: #2d3436; font-weight: 600; margin-bottom: 12px;">
+                Seu link de afiliado
+              </div>
+              <div class="share-link" id="link-indicacao">
+                <!-- Conteúdo preenchido dinamicamente pelo JavaScript -->
+              </div>                
+              <span>Compartilhe este link para expandir sua rede de afiliados e aumentar suas comissões!</span>
+            </div>
+            
+            <button class="share-button-link" id="compartilharLink">
+              <i class="ri-share-forward-line"></i>
+              Compartilhar
+            </button>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
           <!-- FIM POPUP COMPARTILHAR LINK -->
 
 

@@ -3074,3 +3074,130 @@ input, select {
   margin-bottom: 10px;
   color: #ccc;
 }
+
+/* Estilos para o popup de compartilhamento */
+.popup-compartilhar .top-nav {
+  background-color: var(--verde-escuro);
+  height: 60px;
+  border-bottom: none;
+}
+
+.popup-view {
+  background-color: #f7f9fa;
+  height: 100%;
+}
+
+.container-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 20px;
+}
+
+.card-link {
+  background-color: white;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 350px;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.qr-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 25px;
+}
+
+#qrcode {
+  padding: 15px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.share-info {
+  margin-bottom: 25px;
+}
+
+.share-link {
+  background-color: #f0f2f5;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 10px 0;
+  font-size: 14px;
+  color: var(--preto);
+  word-break: break-all;
+  border: 1px solid #e0e0e0;
+}
+
+.share-info span {
+  display: block;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.share-button-link {
+  background-color: var(--verde-claro);
+  color: white;
+  border: none;
+  padding: 12px 15px;
+  border-radius: 10px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.share-button-link:hover {
+  background-color: #6aad39;
+}
+
+.share-button-link i {
+  font-size: 18px;
+}
+
+/* Animação de entrada do popup */
+.popup-compartilhar.modal-in {
+  animation: popup-fade-in 0.3s forwards;
+}
+
+@keyframes popup-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Estilos para quando o QR code é gerado */
+#qrcode img {
+  margin: 0 auto;
+}
+
+/* Responsividade */
+@media (max-height: 600px) {
+  .card-link {
+    padding: 15px;
+  }
+  
+  .qr-container {
+    margin-bottom: 15px;
+  }
+  
+  #qrcode {
+    transform: scale(0.9);
+  }
+}
