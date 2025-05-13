@@ -2956,6 +2956,7 @@ input, select {
 /* Container de campanhas */
 .campaigns-container {
   padding: 0 6px;
+  padding-bottom: 160px;
 }
 
 /* Card de campanha */
