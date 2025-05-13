@@ -3249,17 +3249,6 @@ input, select {
   display: inline-block;
 }
 
-.welcome-section #nomeUsuarioHome::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-  width: 100%;
-  height: 2px;
-  background-color: #7CBE42;
-  border-radius: 2px;
-}
-
 .welcome-section p {
   font-size: 14px;
   margin: 10px 0 0 0;
