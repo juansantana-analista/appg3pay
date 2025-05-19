@@ -742,7 +742,7 @@ fetch(apiServerUrl, options)
       $("#precoDesconto").html(formatarMoeda(detalhes.preco));
       $("#precoRevenda").html(formatarMoeda(detalhes.preco_lojavirtual));
       $("#precoLucro").html(formatarMoeda(precoLucro));
-      //$("#precopromo-detalhe").html(produtoPreco);
+      $("#precoShare").html(formatarMoeda(detalhes.preco_lojavirtual));
 
       // Selecione a div onde você quer adicionar o link
       const $container = $('#containerBtnCarrinho');
@@ -772,6 +772,7 @@ fetch(apiServerUrl, options)
       // Inicializa os benefícios do produto
       initializeBenefits(detalhes.beneficios);
 
+      // IMPORTANTE: Armazena os detalhes do produto para uso no popup
       localStorage.setItem('produtoDetalhes', JSON.stringify({detalhes}));
       app.dialog.close();
     } else {
