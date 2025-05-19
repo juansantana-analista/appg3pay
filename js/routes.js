@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-const versionApp = "1.3.8";
+const versionApp = "1.4.0";
 var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -1164,12 +1164,11 @@ var app = new Framework7({
           //$.getScript('js/detalhes.js');
           var produtoId = localStorage.getItem('produtoId');
           $("#idProduto").html(produtoId);
-          buscarProduto(produtoId);
+          buscarProduto();
 
           $("#compartilharProduto").on('click', function () {
-            console.log('teste');
             app.popup.open('.popup-compartilhar');
-            buscarLinks(produtoId);
+            buscarLinks();
           });
 
 

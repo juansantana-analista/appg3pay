@@ -596,7 +596,8 @@ function initializeBenefits(benefits) {
 }
 
 // Modifica a função buscarProduto para usar os benefícios dinâmicos
-function buscarProduto(produtoId) {
+function buscarProduto() {  
+var produtoId = localStorage.getItem('produtoId');
 app.dialog.preloader("Carregando...");
 
 var imgUrl = "https://vitatop.tecskill.com.br/";
@@ -958,7 +959,8 @@ function openImageZoom(imageSrc) {
 //Fim Função Detalhes Produto
   
   //Inicio Função obter Links
-  function buscarLinks(produtoId) {
+  function buscarLinks() {
+    var produtoId = localStorage.getItem('produtoId');
     
     var codigo_indicador = localStorage.getItem("codigo_indicador");
     app.dialog.preloader("Carregando...");
