@@ -599,20 +599,6 @@ function initializeBenefits(benefits) {
 function buscarProduto() {  
 var produtoId = localStorage.getItem('produtoId');
 app.dialog.preloader("Carregando...");
-    // LIMPAR DADOS ANTIGOS ANTES DE CARREGAR NOVOS
-    $("#imagemShare").attr('src', 'img/default.png');
-    $("#nomeShare").html('');
-    $("#precoShare").html('');
-    $("#qrcode").html('');
-    $("#checkoutLinkUrl").html('');
-    $("#paginaLinkUrl").html('');
-    
-    // Remove event listeners antigos
-    $("#btnCheckoutShare").off('click');
-    $("#shareLanding").off('click');
-    $("#linkPaginaUrl").off('click');
-    $("#linkCheckoutUrl").off('click');
-    $(".compartilhar-link").off('click');
 
 var imgUrl = "https://vitatop.tecskill.com.br/";
 
@@ -972,35 +958,12 @@ function openImageZoom(imageSrc) {
 }
 //Fim Função Detalhes Produto
   
-  //Inicio Função obter Links  
-  function atualizarDadosPopupShare() {
-    var produtoDetalhes = localStorage.getItem('produtoDetalhes');
-    if (produtoDetalhes) {
-        var detalhes = JSON.parse(produtoDetalhes).detalhes;
-        var imgUrl = "https://vitatop.tecskill.com.br/";
-        
-        $("#imagemShare").attr('src', detalhes.foto ? imgUrl + detalhes.foto : 'img/default.png');
-        $("#nomeShare").html(detalhes.nome.toUpperCase());
-        $("#precoShare").html(formatarMoeda(detalhes.preco));
-    }
-}
+  //Inicio Função obter Links
   function buscarLinks() {
-    atualizarDadosPopupShare();
     var produtoId = localStorage.getItem('produtoId');
+    
     var codigo_indicador = localStorage.getItem("codigo_indicador");
     app.dialog.preloader("Carregando...");
-
-    // LIMPAR DADOS ANTIGOS
-    $("#qrcode").html("");
-    $("#checkoutLinkUrl").html("");
-    $("#paginaLinkUrl").html("");
-    
-    // Remove todos os event listeners antigos
-    $("#shareLanding").off('click');
-    $("#linkPaginaUrl").off('click');
-    $("#linkCheckoutUrl").off('click');
-    $("#btnCheckoutShare").off('click');
-    $(".compartilhar-link").off('click');
   
     var imgUrl = "https://vitatop.tecskill.com.br/";
   

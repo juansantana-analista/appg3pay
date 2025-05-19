@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-const versionApp = "1.4.3";
+const versionApp = "1.4.2";
 var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -1164,27 +1164,14 @@ var app = new Framework7({
           //$.getScript('js/detalhes.js');
           var produtoId = localStorage.getItem('produtoId');
           $("#idProduto").html(produtoId);
-          buscarProduto();
 
-          
           document.querySelector('#compartilharProduto').addEventListener('click', function (e) {
-    e.preventDefault();
-    
-    // LIMPAR DADOS ANTIGOS ANTES DE ABRIR O POPUP
-    $("#imagemShare").attr('src', 'img/default.png');
-    $("#nomeShare").html('Carregando...');
-    $("#precoShare").html('');
-    $("#qrcode").html('');
-    $("#checkoutLinkUrl").html('');
-    $("#paginaLinkUrl").html('');
-    
-    // Remove todos os event listeners antigos
-    $("#btnCheckoutShare, #shareLanding, #linkPaginaUrl, #linkCheckoutUrl, .compartilhar-link").off('click');
-    
-    app.popup.open('.popup-compartilhar');
-    buscarLinks();
-});;
-
+            e.preventDefault(); // Prevent default link behavior
+            app.popup.open('.popup-compartilhar');
+            buscarLinks(produtoId);
+          });
+          
+          buscarProduto();
 
           $("#back-button").on('click', function () {
             app.views.main.router.navigate("/home/");
