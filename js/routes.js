@@ -1168,6 +1168,7 @@ var app = new Framework7({
 
           $("#compartilharProduto").on('click', function () {
             app.popup.open('.popup-compartilhar');
+            buscarProduto();
             buscarLinks();
           });
 
