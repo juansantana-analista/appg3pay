@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-const versionApp = "1.4.9";
+const versionApp = "1.4.8";
 var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -1129,97 +1129,54 @@ var app = new Framework7({
       }
     },
     {
-  path: '/detalhes/',
-  url: 'detalhes.html?v=' + versionApp,
-  animate: false,
-  on: {
-    pageBeforeIn: function (event, page) {          
-        
-      // fazer algo antes da página ser exibida
-      userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
-      // Início função validar login
-      const isValid = validarToken();
-      if (!isValid) {
-        console.warn("Token inválido. Redirecionando para login via fallback.");
-        deleteCookie('userAuthToken');
-        app.views.main.router.navigate("/login-view/");
-        setTimeout(() => {
-          app.views.main.router.navigate("/login-view/");
-        }, 500); // Adiciona um fallback com pequeno delay
+      path: '/detalhes/',
+      url: 'detalhes.html?v=' + versionApp,
+      animate: false,
+      on: {
+        pageBeforeIn: function (event, page) {          
+            
+          // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
+          $("#menuPrincipal").hide("fast");
+
+        },
+        pageAfterIn: function (event, page) {
+          // fazer algo depois da página ser exibida          
+        },
+        pageInit: function (event, page) {   
+          // fazer algo quando a página for inicializada
+          $.getScript('js/qrcode.min.js');
+          //$.getScript('js/detalhes.js');
+          var produtoId = localStorage.getItem('produtoId');
+          $("#idProduto").html(produtoId);
+
+          buscarProduto();
+          document.querySelector('#compartilharProduto').addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent default link behavior
+            app.popup.open('.popup-compartilhar');
+            buscarLinks();
+          });
+
+          $("#back-button").on('click', function () {
+            app.views.main.router.navigate("/home/");
+          });
+          
+        },
+        pageBeforeRemove: function (event, page) {
+          // fazer algo antes da página ser removida do DOM
+        },
       }
-      $("#menuPrincipal").hide("fast");
-
-      // *** LIMPAR DADOS DO POPUP ANTES DE ENTRAR NA PÁGINA ***
-      // Isso garante que não existam dados antigos
-      $("#qrcode").empty();
-      $("#checkoutLinkUrl").html("");
-      $("#paginaLinkUrl").html("");
-      $("#imagemShare").attr('src', 'img/default.png');
-      $("#nomeShare").html('');
-      $("#precoShare").html('');
-
     },
-    pageAfterIn: function (event, page) {
-      // fazer algo depois da página ser exibida          
-    },
-    pageInit: function (event, page) {
-  // fazer algo quando a página for inicializada
-  $.getScript('js/qrcode.min.js');
-  
-  var produtoId = localStorage.getItem('produtoId');
-  $("#idProduto").html(produtoId);
-  
-  console.log("🔍 DEBUG: Produto ID:", produtoId);
-  
-  // PRIMEIRO: Limpar dados anteriores
-  localStorage.removeItem('produtoDetalhes');
-  
-  // SEGUNDO: Desabilitar o botão de compartilhar
-  $("#compartilharProduto").prop('disabled', true).css('opacity', '0.5');
-  
-  // TERCEIRO: Buscar os dados do produto (que habilitará o botão quando terminar)
-  buscarProduto();
-
-  // QUARTO: Configurar o event listener (mas o botão estará desabilitado até buscarProduto() terminar)
-  document.querySelector('#compartilharProduto').addEventListener('click', function (e) {
-    e.preventDefault();
-    
-    // Debug: Verificar os dados antes de abrir o popup
-    const produtoAtual = localStorage.getItem('produtoDetalhes');
-    console.log("🔍 DEBUG: Dados do produto ao abrir popup:", produtoAtual);
-    
-    // Verificar se o botão está habilitado antes de prosseguir
-    if ($(this).prop('disabled')) {
-      console.log("🔍 DEBUG: Botão ainda desabilitado");
-      return;
-    }
-    
-    app.popup.open('.popup-compartilhar');
-    buscarLinks();
-  });
-
-  $("#back-button").on('click', function () {
-    app.views.main.router.navigate("/home/");
-  });
-},
-    pageBeforeRemove: function (event, page) {
-      // fazer algo antes da página ser removida do DOM
-      // *** LIMPEZA COMPLETA AO SAIR DA PÁGINA ***
-      $('#compartilharProduto').off('click');
-      
-      // Limpar também os dados do popup
-      $("#qrcode").empty();
-      $("#checkoutLinkUrl").html("");
-      $("#paginaLinkUrl").html("");
-      
-      // Remover todos os event listeners dos links do popup
-      $("#shareLanding").off("click");
-      $("#linkPaginaUrl").off("click");
-      $("#linkCheckoutUrl").off("click");
-      $(".compartilhar-link").off("click");
-    },
-  }
-},
     {
       path: '/carrinho/',
       url: 'carrinho.html?v=' + versionApp,
