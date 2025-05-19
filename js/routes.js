@@ -1162,35 +1162,46 @@ var app = new Framework7({
     pageAfterIn: function (event, page) {
       // fazer algo depois da página ser exibida          
     },
-    pageInit: function (event, page) {   
-      console.log('detalhes');       
-      // fazer algo quando a página for inicializada
-      $.getScript('js/qrcode.min.js');
-      
-      var produtoId = localStorage.getItem('produtoId');
-      $("#idProduto").html(produtoId);
+    pageInit: function (event, page) {
+  // fazer algo quando a página for inicializada
+  $.getScript('js/qrcode.min.js');
+  
+  var produtoId = localStorage.getItem('produtoId');
+  $("#idProduto").html(produtoId);
+  
+  console.log("🔍 DEBUG: Produto ID:", produtoId);
+  
+  // PRIMEIRO: Limpar dados anteriores
+  localStorage.removeItem('produtoDetalhes');
+  
+  // SEGUNDO: Desabilitar o botão de compartilhar
+  $("#compartilharProduto").prop('disabled', true).css('opacity', '0.5');
+  
+  // TERCEIRO: Buscar os dados do produto (que habilitará o botão quando terminar)
+  buscarProduto();
 
-      // *** SEMPRE RECARREGAR OS DADOS DO PRODUTO ***
-      buscarProduto();
-      
-      // *** CONFIGURAR O EVENT LISTENER DO POPUP DE FORMA CORRETA ***
-      // Remove qualquer listener anterior
-      $('#compartilharProduto').off('click');
-      
-      // Adiciona o novo listener
-      $('#compartilharProduto').on('click', function(e) {
-        e.preventDefault();
-        // Sempre buscar os links quando abrir o popup
-        // Isso garante que os dados estejam atualizados
-        buscarLinks();
-        app.popup.open('.popup-compartilhar');
-      });
+  // QUARTO: Configurar o event listener (mas o botão estará desabilitado até buscarProduto() terminar)
+  document.querySelector('#compartilharProduto').addEventListener('click', function (e) {
+    e.preventDefault();
+    
+    // Debug: Verificar os dados antes de abrir o popup
+    const produtoAtual = localStorage.getItem('produtoDetalhes');
+    console.log("🔍 DEBUG: Dados do produto ao abrir popup:", produtoAtual);
+    
+    // Verificar se o botão está habilitado antes de prosseguir
+    if ($(this).prop('disabled')) {
+      console.log("🔍 DEBUG: Botão ainda desabilitado");
+      return;
+    }
+    
+    app.popup.open('.popup-compartilhar');
+    buscarLinks();
+  });
 
-      $("#back-button").on('click', function () {
-        app.views.main.router.navigate("/home/");
-      });
-      
-    },
+  $("#back-button").on('click', function () {
+    app.views.main.router.navigate("/home/");
+  });
+},
     pageBeforeRemove: function (event, page) {
       // fazer algo antes da página ser removida do DOM
       // *** LIMPEZA COMPLETA AO SAIR DA PÁGINA ***
