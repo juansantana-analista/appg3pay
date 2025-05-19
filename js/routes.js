@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-const versionApp = "1.3.9";
+const versionApp = "1.3.8";
 var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -1885,84 +1885,60 @@ function onDeviceReady() {
   //Quando estiver rodando no celular
   var mainView = app.views.create('.view-main', { url: '/index/' });
 
-  // Controle do botão voltar para Cordova (app nativo)
+  //COMANDO PARA "OUVIR" O BOTAO VOLTAR NATIVO DO ANDROID 	
   document.addEventListener("backbutton", function (e) {
-    handleBackButton(e, mainView);
+
+    if (mainView.router.currentRoute.path === '/index/') {
+      e.preventDefault();
+      app.dialog.confirm('Deseja sair do aplicativo?', function () {
+        navigator.app.exitApp();
+      });
+    } else {
+      e.preventDefault();
+      mainView.router.back({ force: true });
+    }
   }, false);
 
   let deferredPrompt;
-  // Resto do código da função...
-}
 
-// Função para detectar se é PWA
-function isPWA() {
-  return window.matchMedia('(display-mode: standalone)').matches || 
-         window.navigator.standalone === true || 
-         document.referrer.includes('android-app://');
-}
+  /* Capturar o evento beforeinstallprompt
+  window.addEventListener('beforeinstallprompt', (event) => {
+      // Prevenir o comportamento padrão
+      event.preventDefault();
+      deferredPrompt = event;
 
-// Função unificada para tratar o botão voltar
-function handleBackButton(e, mainView) {
-  // Previne o comportamento padrão
-  if (e && e.preventDefault) {
-    e.preventDefault();
-  }
-
-  const currentRoute = mainView.router.currentRoute.path;
-  
-  // Se estiver na página inicial, confirma saída
-  if (currentRoute === '/index/' || currentRoute === '/home/') {
-    app.dialog.confirm('Deseja sair do aplicativo?', function () {
-      if (window.navigator && window.navigator.app) {
-        // Cordova
-        navigator.app.exitApp();
-      } else {
-        // PWA - volta para o sistema
-        window.history.back();
-      }
-    });
-  } else {
-    // Volta uma página
-    mainView.router.back({ force: true });
-  }
-}
-
-// Controle do botão voltar para PWA
-if (isPWA()) {
-  // Aguarda o DOM estar pronto
-  document.addEventListener('DOMContentLoaded', function() {
-    var mainView = app.views.create('.view-main', { url: '/index/' });
+      
+      $("#instalation-app").removeClass("display-none");
     
-    // Intercepta o evento popstate (botão voltar do navegador/sistema)
-    window.addEventListener('popstate', function(e) {
-      // Só intercepta se não há estado ou se o estado indica que devemos controlar
-      if (!e.state || e.state.framework7) {
-        e.preventDefault();
-        e.stopPropagation();
-        handleBackButton(null, mainView);
-        return false;
-      }
-    });
-
-    // Adiciona estados ao histórico para cada navegação
-    app.on('routeChange', function (route) {
-      // Adiciona um estado personalizado
-      if (route.url !== '/index/' && route.url !== '/home/') {
-        window.history.pushState(
-          { framework7: true, route: route.url }, 
-          '', 
-          window.location.pathname + window.location.search + '#' + route.url
-        );
-      }
-    });
+      //AÇÃO DOS BOTÕES
+      $("#btnNaoInstalar").on("click", function () {
+        $("#instalation-app").addClass("display-none");
+        console.log('Usuário cancelou a instalação.');
+      });
+      $("#btnInstalar").on("click", function () {
+        $("#instalation-app").addClass("display-none");
+        // Usuário clicou em "Confirmar"
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('Usuário aceitou a instalação.');
+                } else {
+                    console.log('Usuário rejeitou a instalação.');
+                }
+                deferredPrompt = null;
+            });
+        }
+      });
   });
-}
 
-// Para navegadores que não suportam Cordova, inicializa diretamente
-if (!window.cordova && !isPWA()) {
-  document.addEventListener('DOMContentLoaded', function() {
-    var mainView = app.views.create('.view-main', { url: '/index/' });
+  // Verificar se o PWA já está instalado
+  window.addEventListener('appinstalled', () => {
+      console.log('PWA instalado.');
+      // Esconder a mensagem se o PWA estiver instalado
+      $('#installPrompt').hide();
   });
+  */
 }
 
 // Bloquear o menu de contexto no clique com o botão direito
