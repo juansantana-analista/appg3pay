@@ -58,16 +58,26 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  event.respondWith(
-    caches.open(CACHE).then(async (cache) => {
-      try {
-        const response = await fetch(event.request);
-        cache.put(event.request, response.clone()); // Atualiza o cache
-        return response;
-      } catch (error) {
-        return cache.match(event.request) || fetch(event.request);
+event.respondWith(
+  caches.open(CACHE).then(async (cache) => {
+    try {
+      const response = await fetch(event.request);
+
+      // Só faz cache de requisições GET
+      if (event.request.method === 'GET') {
+        cache.put(event.request, response.clone());
       }
-    })
-  );
+
+      return response;
+    } catch (error) {
+      if (event.request.method === 'GET') {
+        return cache.match(event.request) || fetch(event.request);
+      } else {
+        throw error;
+      }
+    }
+  })
+);
+
 });
 
