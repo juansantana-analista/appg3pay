@@ -90,7 +90,7 @@
                   <div class="card-icon">
                     <i class="mdi mdi-account-group"></i>
                   </div>
-                  <div class="card-title">Afiliados Ativos</div>
+                  <div class="card-title">Indicados Ativos</div>
                   <div class="card-value" id="qtdeGeral">32</div>
                   <div class="trend up">
                     <i class="mdi mdi-arrow-up"></i>
@@ -218,9 +218,9 @@
 
             <!-- Referral link card section -->
             <div class="dashboard-section">
-              <h2 class="section-title">Link de Afiliado</h2>
+              <h2 class="section-title">Link de Indicação</h2>
               <div class="referral-card">
-                <p style="font-size: 14px; color: #666; margin-bottom: 10px;">Compartilhe seu link para ganhar comissões:</p>                
+                <p style="font-size: 14px; color: #666; margin-bottom: 10px;">Quem Indica Amigo é, faça parte do Clube:</p>                
                     <div class="referral-link">
                         <div class="referral-link-text" title="https://app.exemplo.com/ref/joao123">
                             https://cadastrovitatop.tecskill.com.br/index.php
@@ -236,6 +236,49 @@
             <button class="refresh-button" id="updateData">
               <i class="mdi mdi-refresh"></i>
             </button>
+                      <!-- INÍCIO POPUP COMPARTILHAR LINK -->
+<div class="popup popup-compartilhar">
+  <div class="view popup-view">
+    <div class="page">
+      <div class="top-nav">
+        <div class="left">
+          <a href="#" class="link btn-novo popup-close">
+            <i class="mdi mdi-arrow-left"></i>
+          </a>
+        </div>
+        <strong class="title-descricao">
+          <i class="ri-share-2-line"></i> Compartilhar Link
+        </strong>
+        <div style="width: 30px;"></div> <!-- Espaço em branco para balancear o cabeçalho -->
+      </div>
+      <div class="page-content">
+        <div class="container-link">
+          <div class="card-link">
+            <div class="qr-container">
+              <div id="qrcode"></div>
+            </div>
+            
+            <div class="share-info">
+              <div style="color: #2d3436; font-weight: 600; margin-bottom: 12px;">
+                Seu link de Indicação
+              </div>
+              <div class="share-link" id="link-indicacao">
+                <!-- Conteúdo preenchido dinamicamente pelo JavaScript -->
+              </div>                
+              <span>Compartilhe este link para expandir sua rede de indicados e aumentar suas comissões!</span>
+            </div>
+            
+            <button class="share-button-link" id="compartilharLink">
+              <i class="ri-share-forward-line"></i>
+              Compartilhar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          <!-- FIM POPUP COMPARTILHAR LINK -->
         </div>
       </div>
     </div>
