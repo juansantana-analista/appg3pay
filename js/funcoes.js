@@ -1337,7 +1337,6 @@ function openImageZoom(imageSrc) {
   //Fim Função Lista tela Pedidos
   
   //Inicio Funçao listar Vendas
-//Inicio Funçao listar Vendas (atualizada)
   function listarVendas(searchQuery = "") {
     
     var pessoaId = localStorage.getItem("pessoaId");
@@ -1380,111 +1379,59 @@ function openImageZoom(imageSrc) {
           const vendasContainer = document.getElementById("container-vendas");
           vendasContainer.innerHTML = "";
   
-          // Se não há vendas, mostra estado vazio
-          if (vendas.length === 0) {
-            $("#empty-vendas").removeClass("display-none");
-            $("#container-vendas").addClass("display-none");
-            app.dialog.close();
-            return;
-          }
-
-          // Remove estado vazio e mostra container
-          $("#empty-vendas").addClass("display-none");
-          $("#container-vendas").removeClass("display-none");
-
-          // Calcula resumo das vendas
-          let totalVendas = 0;
-          let totalComissoes = 0;
-          let numeroVendas = vendas.length;
-
           vendas.forEach((venda) => {
-            totalVendas += parseFloat(venda.valor_total || 0);
-            // Calcula comissão (assumindo 20% do valor total como exemplo)
-            totalComissoes += parseFloat(venda.valor_total || 0) * 0.2;
 
-            // Determina o status da venda
-            let statusClass = 'status-pendente';
-            let statusTexto = venda.status_compra || 'Pendente';
-            
-            if (venda.status_compra && (venda.status_compra.toLowerCase().includes('pago') || 
-                venda.status_compra.toLowerCase().includes('aprovado'))) {
-              statusClass = 'status-paga';
-            } else if (venda.status_compra && venda.status_compra.toLowerCase().includes('cancelado')) {
-              statusClass = 'status-cancelada';
-            }
-
-            const vendaHTML = `
-              <div class="venda-item" data-venda-id="${venda.venda_id}">
-                <div class="venda-header">
-                  <div class="venda-id">Venda #${venda.venda_id}</div>
-                  <div class="venda-status ${statusClass}">${statusTexto}</div>
-                </div>
-                
-                <div class="venda-details">
-                  <div class="venda-detail">
-                    <span class="label">Nº Pedido:</span>
-                    <span class="value">${venda.venda_id}</span>
-                  </div>
-                  <div class="venda-detail">
-                    <span class="label">Pagamento:</span>
-                    <span class="value">${venda.forma_pagamento?.forma || 'N/A'}</span>
-                  </div>
-                  <div class="venda-detail">
-                    <span class="label">Total:</span>
-                    <span class="value money">${formatarMoeda(venda.valor_total)}</span>
-                  </div>
-                  <div class="venda-detail">
-                    <span class="label">Itens:</span>
-                    <span class="value">${venda.quantidade_itens || 1}</span>
-                  </div>
-                </div>
-                
-                <div class="venda-footer">
-                  <div class="venda-data">
-                    <i class="mdi mdi-calendar"></i>
-                    ${formatarData(venda.data_criacao)}
-                  </div>
-                  <div class="venda-actions">
-                    <button class="btn-venda btn-detalhes" data-action="detalhes" data-venda-id="${venda.venda_id}">
-                      <i class="mdi mdi-eye"></i> Detalhes
-                    </button>
-                    <button class="btn-venda btn-compartilhar" data-action="compartilhar" data-venda-id="${venda.venda_id}">
-                      <i class="mdi mdi-share"></i> Compartilhar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            `;
-            vendasContainer.innerHTML += vendaHTML;
+            const vendasHTML = `                    
+                          <div class="card-list" 
+                          data-id-venda="${venda.venda_id}">
+                             <div class="card-principal">
+                                <div class="card-header open header-pago">
+                                   <div class="date">${formatarData(
+                                     venda.data_criacao
+                                   )}</div>
+                                   <div class="status">${
+                                     venda.status_compra
+                                   }</div>
+                                </div>
+                                <div class="card-body">
+                                   <div class="name">PEDIDO #${
+                                     venda.venda_id
+                                   }</div>
+                                   <div class="details">
+                                      <div class="detail">
+                                         <span>Nº</span>
+                                         <span>${venda.venda_id}</span>
+                                      </div>
+                                      <div class="detail">
+                                         <span class="mdi mdi-cash-multiple"></span>
+                                         <span>${
+                                           venda.forma_pagamento.forma
+                                         }</span>
+                                      </div>
+                                      <div class="detail">
+                                         <span>Total</span>
+                                         <span>${formatarMoeda(
+                                           venda.valor_total
+                                         )}</span>
+                                      </div>
+                                      <div class="detail">
+                                         <span>A pagar</span>
+                                         <span>${formatarMoeda(
+                                           venda.valor_total
+                                         )}</span>
+                                      </div>
+                                      <div class="items">${venda.quantidade_itens}</div>
+                                   </div>
+                                </div>
+                             </div>
+                          </div>
+                      `;
+            vendasContainer.innerHTML += vendasHTML;
           });
-
-          // Atualiza os cards de resumo
-          $("#totalVendas").text(formatarMoeda(totalVendas));
-          $("#totalComissoes").text(formatarMoeda(totalComissoes));
-          $("#numeroVendas").text(numeroVendas);
-          
-          // Calcula taxa de conversão (exemplo: 15% fixo, você pode implementar lógica específica)
-          let taxaConversao = 15;
-          $("#taxaConversao").text(taxaConversao + "%");
-
-          // Eventos para os botões
-          $(".btn-detalhes").on('click', function(e) {
-            e.stopPropagation();
-            var vendaId = $(this).data("venda-id");
-            localStorage.setItem("vendaId", vendaId);
-            app.views.main.router.navigate("/resumo-venda/");
-          });
-
-          $(".btn-compartilhar").on('click', function(e) {
-            e.stopPropagation();
-            var vendaId = $(this).data("venda-id");
-            // Implementar função de compartilhamento
-            compartilharVenda(vendaId);
-          });
-
-          // Evento para clicar no item inteiro
-          $(".venda-item").on('click', function() {
-            var vendaId = $(this).data("venda-id");
+  
+          $(".card-list").click(function () {
+            // Atualiza o ícone de seleção
+            var vendaId = $(this).data("id-venda");
             localStorage.setItem("vendaId", vendaId);
             app.views.main.router.navigate("/resumo-venda/");
           });
@@ -1495,11 +1442,6 @@ function openImageZoom(imageSrc) {
           // Verifica se há uma mensagem de erro definida
           const errorMessage =
             responseJson.message || "Formato de dados inválido";
-          
-          // Mostra estado vazio em caso de erro
-          $("#empty-vendas").removeClass("display-none");
-          $("#container-vendas").addClass("display-none");
-          
           app.dialog.alert(
             "Erro ao carregar vendas: " + errorMessage,
             "Falha na requisição!"
@@ -1509,29 +1451,11 @@ function openImageZoom(imageSrc) {
       .catch((error) => {
         app.dialog.close();
         console.error("Erro:", error);
-        
-        // Mostra estado vazio em caso de erro
-        $("#empty-vendas").removeClass("display-none");
-        $("#container-vendas").addClass("display-none");
-        
         app.dialog.alert(
           "Erro ao carregar vendas: " + error.message,
           "Falha na requisição!"
         );
       });
-  }
-  //Fim Função Lista Vendas
-
-  // Função auxiliar para compartilhar venda
-  function compartilharVenda(vendaId) {
-    const codigoIndicador = localStorage.getItem("codigo_indicador");
-    const linkVenda = `https://vitatop.tecskill.com.br/venda/${vendaId}${codigoIndicador}`;
-    
-    onCompartilhar(
-      "Venda VitaTop",
-      "Confira esta venda realizada através da VitaTop",
-      linkVenda
-    );
   }
   //Fim Função Lista Vendas
   
