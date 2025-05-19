@@ -3261,7 +3261,7 @@ function listarEnderecos() {
   
           toastCenter.open();
           app.dialog.close();
-          app.views.main.router.navigate("/produtos/");
+          app.views.main.router.navigate("/home/");
         } else {
           app.dialog.close();
           app.dialog.alert(

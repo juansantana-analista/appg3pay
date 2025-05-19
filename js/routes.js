@@ -1173,7 +1173,7 @@ var app = new Framework7({
 
 
           $("#back-button").on('click', function () {
-            app.views.main.router.navigate("/produtos/");
+            app.views.main.router.navigate("/home/");
           });
           
         },
