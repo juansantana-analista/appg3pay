@@ -1154,6 +1154,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida          
         },
         pageInit: function (event, page) {
+          
+            
+            app.popup.close('.popup-compartilhar');
           // fazer algo quando a página for inicializada
           $.getScript('js/qrcode.min.js');
           //$.getScript('js/detalhes.js');
