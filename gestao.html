@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <!-- Color theme for statusbar (Android only) -->
-    <meta name="theme-color" content="#00591F" />
+    <meta name="theme-color" content="#1d4f91" />
     <!-- Your app title -->
-    <title>VITATOP</title>
+    <title>VitaTop</title>
     <!-- Path to Framework7 Library Bundle CSS -->
     <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
     <!-- CSS PERSONALIZADO PARA MENU-->
@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="css/materialdesignicons.min.css" />
     <!-- Icones do Remix icon-->
     <link rel="stylesheet" href="css/remixicon/remixicon.css" />
+
   </head>
 
   <body>
@@ -48,151 +49,194 @@
             class="page-content"
             style="background-color: #f7f9fa; padding-bottom: 160px"
           >
-            <div class="block">
-              <section class="welcome-section">
-                  <h1>Olá, <span id="nomeUsuarioHome"></span></h1>
-                  <p>Bem-vindo ao seu dashboard VitaTop</p>
-              </section>
-              <div class="container-dash">
-                <div class="wallet-card">
-                    <div class="wallet-header">
-                        <div>
-                            <div style="opacity: 0.8;">Saldo disponível</div>
-                            <div class="balance-container">
-                                <div class="balance hidden-balance" id="balance">•••••••</div>
-                                <div class="actual-balance" id="actualBalance" style="display: none;">
-                                    R$ 0,00
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <i class="far fa-eye" id="toggleBalance" style="cursor: pointer; font-size: 20px;"></i>
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 15px; margin-top: 20px;">
-                        <button class="share-button" style="background-color: #fff; color: #004d00;">
-                            <i class="fas fa-receipt"></i>
-                            Extrato
-                        </button>
-                        <button class="share-button" style="background-color: #fff; color: #004d00;">
-                            <i class="fas fa-arrow-right"></i>
-                            Transferir
-                        </button>
-                    </div>
-                </div>
-        
-                <div class="grid-dash">
-                    <div class="card-dash vendas-mes">
-                        <div class="card-header-dash">
-                            <div class="card-title">Vendas do Mês</div>
-                            <div class="card-icon" style="background: #004d00;">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
-                        </div>
-                        <div class="value-dash" id="valorVenda"></div>
-                        <div class="trend">
-                            <i class="fas fa-arrow-up"></i>
-                            0% este mês
-                        </div>
-                    </div>
-        
-                    <div class="card-dash afiliados-ativos">
-                        <div class="card-header-dash">
-                            <div class="card-title">Afiliados Ativos</div>
-                            <div class="card-icon" style="background: #004d00;">
-                                <i class="fas fa-users"></i>
-                            </div>
-                        </div>
-                        <div class="value-dash" id="qtdeGeral">284</div>
-                        <div class="trend">
-                            <i class="fas fa-arrow-up"></i>
-                            Nenhum novo hoje
-                        </div>
-                    </div>
-                    <!--
-                    <div class="card-dash">
-                        <div class="card-header-dash">
-                            <div class="card-title">Taxa de Conversão</div>
-                            <div class="card-icon" style="background: #00cec9;">
-                                <i class="fas fa-percentage"></i>
-                            </div>
-                        </div>
-                        <div class="value-dash">68.5%</div>
-                        <div class="trend">
-                            <i class="fas fa-arrow-up"></i>
-                            2.3% este mês
-                        </div>
-                    </div>
-                    -->
-                </div>
-                <div class="referral-card">
-                    <div class="card-header">
-                        <div class="card-title">Seu Link de Indicação</div>
-                    </div>
-                    <div class="referral-link">
-                        <div class="referral-link-text" title="https://app.exemplo.com/ref/joao123">
-                            https://cadastrovitatop.tecskill.com.br/index.php
-                        </div>                        
-                        <button class="share-button abrir-popup" style="background-color: #7CBE42; color: #fff; width: 24px; align-items: center; justify-content: center;">
-                            <i class="fas fa-share-alt"></i>
-                        </button>
-                    </div>
-                </div>
-              
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+              <h1>Gestão de Parceiro</h1>
+              <p>Acompanhe sua performance e comissões</p>
             </div>
-              <div class="update-button-container">
-                <button id="updateData" class="update-button">
-                  <i class="mdi mdi-refresh"></i>
-                </button>
-              </div>
-          </div>
 
-          
-          <!-- INÍCIO POPUP COMPARTILHAR LINK -->
-<div class="popup popup-compartilhar">
-  <div class="view popup-view">
-    <div class="page">
-      <div class="top-nav">
-        <div class="left">
-          <a href="#" class="link btn-novo popup-close">
-            <i class="mdi mdi-arrow-left"></i>
-          </a>
-        </div>
-        <strong class="title-descricao">
-          <i class="ri-share-2-line"></i> Compartilhar Link
-        </strong>
-        <div style="width: 30px;"></div> <!-- Espaço em branco para balancear o cabeçalho -->
-      </div>
-      <div class="page-content">
-        <div class="container-link">
-          <div class="card-link">
-            <div class="qr-container">
-              <div id="qrcode"></div>
-            </div>
-            
-            <div class="share-info">
-              <div style="color: #2d3436; font-weight: 600; margin-bottom: 12px;">
-                Seu link de afiliado
+            <!-- Dashboard Summary Cards -->
+            <div class="dashboard-section">
+              <h2 class="section-title">Resumo</h2>
+              <div class="summary-cards">
+                <!-- Comissões Acumuladas -->
+                <div class="summary-card">
+                  <div class="card-icon">
+                    <i class="mdi mdi-cash-multiple"></i>
+                  </div>
+                  <div class="card-title">Comissões</div>
+                  <div class="card-value">R$ 3.459,75</div>
+                  <div class="trend up">
+                    <i class="mdi mdi-arrow-up"></i>
+                    <span>12.5% esse mês</span>
+                  </div>
+                </div>
+
+                <!-- Vendas no Mês -->
+                <div class="summary-card vendas-mes">
+                  <div class="card-icon">
+                    <i class="mdi mdi-cart"></i>
+                  </div>
+                  <div class="card-title">Vendas no Mês</div>
+                  <div class="card-value" id="valorVenda">R$ 12.350,00</div>
+                  <div class="trend up">
+                    <i class="mdi mdi-arrow-up"></i>
+                    <span>8.3% vs. anterior</span>
+                  </div>
+                </div>
+
+                <!-- Clientes Indicados -->
+                <div class="summary-card afiliados-ativos">
+                  <div class="card-icon">
+                    <i class="mdi mdi-account-group"></i>
+                  </div>
+                  <div class="card-title">Afiliados Ativos</div>
+                  <div class="card-value" id="qtdeGeral">32</div>
+                  <div class="trend up">
+                    <i class="mdi mdi-arrow-up"></i>
+                    <span>4 novos</span>
+                  </div>
+                </div>
+
+                <!-- Nível do Parceiro -->
+                <div class="summary-card">
+                  <div class="card-icon">
+                    <i class="mdi mdi-trophy"></i>
+                  </div>
+                  <div class="card-title">Nível</div>
+                  <div class="card-value">Parceiro <span class="level-badge gold">Ouro</span></div>
+                  <div class="trend">
+                    <span>75% até Diamante</span>
+                  </div>
+                </div>
               </div>
-              <div class="share-link" id="link-indicacao">
-                <!-- Conteúdo preenchido dinamicamente pelo JavaScript -->
-              </div>                
-              <span>Compartilhe este link para expandir sua rede de afiliados e aumentar suas comissões!</span>
             </div>
-            
-            <button class="share-button-link" id="compartilharLink">
-              <i class="ri-share-forward-line"></i>
-              Compartilhar
+
+            <!-- Dashboard Chart Section -->
+            <div class="dashboard-section">
+              <h2 class="section-title">Ganhos Mensais</h2>
+              <div class="chart-container">
+                <canvas id="earningsChart"></canvas>
+              </div>
+            </div>
+
+            <!-- Dashboard Transactions Section -->
+            <div class="dashboard-section">
+              <h2 class="section-title">Últimas Transações</h2>
+              <div class="transaction-list">
+                <!-- Transaction Item 1 -->
+                <div class="transaction-item">
+                  <div class="transaction-icon serasa">
+                    <i class="ri-bank-line"></i>
+                  </div>
+                  <div class="transaction-info">
+                    <div class="transaction-product">Serasa Premium</div>
+                    <div class="transaction-detail">
+                      <span>15 Mai 2025</span>
+                      <span class="status-badge paid">Pago</span>
+                    </div>
+                  </div>
+                  <div class="transaction-amount">
+                    <div>R$ 29,90</div>
+                    <div class="transaction-commission">+ R$ 5,98</div>
+                  </div>
+                </div>
+
+                <!-- Transaction Item 2 -->
+                <div class="transaction-item">
+                  <div class="transaction-icon certificate">
+                    <i class="ri-shield-check-line"></i>
+                  </div>
+                  <div class="transaction-info">
+                    <div class="transaction-product">Certificado Digital A1</div>
+                    <div class="transaction-detail">
+                      <span>12 Mai 2025</span>
+                      <span class="status-badge paid">Pago</span>
+                    </div>
+                  </div>
+                  <div class="transaction-amount">
+                    <div>R$ 89,90</div>
+                    <div class="transaction-commission">+ R$ 17,98</div>
+                  </div>
+                </div>
+
+                <!-- Transaction Item 3 -->
+                <div class="transaction-item">
+                  <div class="transaction-icon invoice">
+                    <i class="ri-computer-line"></i>
+                  </div>
+                  <div class="transaction-info">
+                    <div class="transaction-product">Emissor NF-e</div>
+                    <div class="transaction-detail">
+                      <span>10 Mai 2025</span>
+                      <span class="status-badge pending">Pendente</span>
+                    </div>
+                  </div>
+                  <div class="transaction-amount">
+                    <div>R$ 199,90</div>
+                    <div class="transaction-commission">+ R$ 39,98</div>
+                  </div>
+                </div>
+
+                <!-- Transaction Item 4 -->
+                <div class="transaction-item">
+                  <div class="transaction-icon serasa">
+                    <i class="ri-bank-line"></i>
+                  </div>
+                  <div class="transaction-info">
+                    <div class="transaction-product">Serasa Standard</div>
+                    <div class="transaction-detail">
+                      <span>08 Mai 2025</span>
+                      <span class="status-badge paid">Pago</span>
+                    </div>
+                  </div>
+                  <div class="transaction-amount">
+                    <div>R$ 29,90</div>
+                    <div class="transaction-commission">+ R$ 5,98</div>
+                  </div>
+                </div>
+
+                <!-- Transaction Item 5 -->
+                <div class="transaction-item">
+                  <div class="transaction-icon certificate">
+                    <i class="ri-shield-check-line"></i>
+                  </div>
+                  <div class="transaction-info">
+                    <div class="transaction-product">Certificado Digital A3</div>
+                    <div class="transaction-detail">
+                      <span>05 Mai 2025</span>
+                      <span class="status-badge paid">Pago</span>
+                    </div>
+                  </div>
+                  <div class="transaction-amount">
+                    <div>R$ 119,90</div>
+                    <div class="transaction-commission">+ R$ 23,98</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Referral link card section -->
+            <div class="dashboard-section">
+              <h2 class="section-title">Link de Afiliado</h2>
+              <div class="referral-card">
+                <p style="font-size: 14px; color: #666; margin-bottom: 10px;">Compartilhe seu link para ganhar comissões:</p>
+                <div class="referral-link">
+                  <div class="referral-link-text" id="link-indicacao">Carregando seu link personalizado...</div>
+                  <button class="share-button" id="compartilharLink">
+                    <i class="mdi mdi-share-variant"></i> Compartilhar
+                  </button>
+                </div>
+                <div style="display: flex; justify-content: center; margin-top: 15px;">
+                  <div id="qrcode"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Refresh Button -->
+            <button class="refresh-button" id="updateData">
+              <i class="mdi mdi-refresh"></i>
             </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-          <!-- FIM POPUP COMPARTILHAR LINK -->
-
-
         </div>
       </div>
     </div>
@@ -204,5 +248,7 @@
     <!-- Roteamento do app-->
     <script type="text/javascript" src="js/routes.js"></script>
     <script src="cordova.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   </body>
 </html>
