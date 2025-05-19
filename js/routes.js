@@ -814,7 +814,8 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
-          listarVendasPorDistribuidor();
+              // Carrega as vendas inicialmente
+    listarVendas();
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
