@@ -1156,9 +1156,7 @@ var app = new Framework7({
 
         },
         pageAfterIn: function (event, page) {
-          // fazer algo depois da página ser exibida
-          
-          buscarProduto();
+          // fazer algo depois da página ser exibida          
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
@@ -1167,6 +1165,7 @@ var app = new Framework7({
           var produtoId = localStorage.getItem('produtoId');
           $("#idProduto").html(produtoId);
 
+          buscarProduto();
           document.querySelector('#compartilharProduto').addEventListener('click', function (e) {
             e.preventDefault(); // Prevent default link behavior
             app.popup.open('.popup-compartilhar');
