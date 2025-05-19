@@ -958,7 +958,31 @@ function openImageZoom(imageSrc) {
   }
 }
 //Fim Função Detalhes Produto
+  //Inicio Função atualizar dados do popup de compartilhamento
+function atualizarDadosPopupCompartilhar() {
+  // Recupera os dados do produto do localStorage
+  const produtoDetalhes = JSON.parse(localStorage.getItem('produtoDetalhes'));
   
+  if (produtoDetalhes && produtoDetalhes.detalhes) {
+    const detalhes = produtoDetalhes.detalhes;
+    const imgUrl = "https://vitatop.tecskill.com.br/";
+    
+    // Atualiza a imagem do produto no popup
+    const imagemProduto = detalhes.foto ? imgUrl + detalhes.foto : "img/default.png";
+    $("#imagemShare").attr('src', imagemProduto);
+    
+    // Atualiza o nome do produto no popup
+    $("#nomeShare").html(detalhes.nome.toUpperCase());
+    
+    // Atualiza o preço do produto no popup
+    $("#precoShare").html(formatarMoeda(detalhes.preco));
+    
+    // Limpa o QR code anterior
+    $("#qrcode").html("");
+  }
+}
+//Fim Função atualizar dados do popup de compartilhamento
+
   //Inicio Função obter Links
   function buscarLinks() {
     var produtoId = localStorage.getItem('produtoId');

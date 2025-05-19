@@ -1167,8 +1167,9 @@ var app = new Framework7({
           buscarProduto();
 
           $("#compartilharProduto").on('click', function () {
+            // Atualizar dados do produto no popup antes de abrir
+            atualizarDadosPopupCompartilhar();
             app.popup.open('.popup-compartilhar');
-            buscarProduto();
             buscarLinks();
           });
 
