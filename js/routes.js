@@ -1206,13 +1206,21 @@ var app = new Framework7({
           $.getScript('js/qrcode.min.js');
           //$.getScript('js/detalhes.js');
           var produtoId = localStorage.getItem('produtoId');
-          var produtoDetalhes = localStorage.getItem('produtoDetalhes');
-          var nomeProduto = produtoDetalhes.detalhes.nome;
-          var urlBaseImagem = "https://vitatop.tecskill.com.br/";
-          var imagemProduto = urlBaseImagem + produtoDetalhes.detalhes.foto;
+          // Recupera e faz o parse do objeto salvo no localStorage
+          var produtoDetalhes = JSON.parse(localStorage.getItem('produtoDetalhes'));
 
-          $("#nomeShare").text(nomeProduto);
-          $("#imagemShare").attr("src", imagemProduto);
+          // Verifica se o objeto foi carregado corretamente
+          if (produtoDetalhes && produtoDetalhes.detalhes) {
+            var nomeProduto = produtoDetalhes.detalhes.nome;
+            var urlBaseImagem = "https://vitatop.tecskill.com.br/";
+            var imagemProduto = urlBaseImagem + produtoDetalhes.detalhes.foto;
+
+            // Atribui os valores com jQuery
+            $("#imagemShare").attr("src", imagemProduto);
+            $("#nomeShare").text(nomeProduto);
+          } else {
+            console.warn("Produto não encontrado no localStorage.");
+          }
 
           $("#idProduto").html(produtoId);
 
