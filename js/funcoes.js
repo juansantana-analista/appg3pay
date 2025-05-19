@@ -597,202 +597,222 @@ function initializeBenefits(benefits) {
 
 // Modifica a função buscarProduto para usar os benefícios dinâmicos
 function buscarProduto() {  
-var produtoId = localStorage.getItem('produtoId');
-app.dialog.preloader("Carregando...");
+  var produtoId = localStorage.getItem('produtoId');
+  
+  // Verificação adicional para garantir que temos um ID válido
+  if (!produtoId) {
+    console.error('ID do produto não encontrado');
+    app.dialog.alert('Erro: ID do produto não encontrado', 'Erro');
+    app.views.main.router.navigate('/home/');
+    return;
+  }
+  
+  app.dialog.preloader("Carregando...");
 
-var imgUrl = "https://vitatop.tecskill.com.br/";
+  var imgUrl = "https://vitatop.tecskill.com.br/";
 
-// Cabeçalhos da requisição
-const headers = {
-  "Content-Type": "application/json",
-  Authorization: "Bearer " + userAuthToken,
-};
+  // Cabeçalhos da requisição
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
 
-const body = JSON.stringify({
-  class: "ProdutoVariacaoRest",
-  method: "obterProdutoCompleto",
-  produto_id: produtoId,
-});
+  const body = JSON.stringify({
+    class: "ProdutoVariacaoRest",
+    method: "obterProdutoCompleto",
+    produto_id: produtoId,
+  });
 
-// Opções da requisição
-const options = {
-  method: "POST",
-  headers: headers,
-  body: body,
-};
+  // Opções da requisição
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
 
-// Fazendo a requisição
-fetch(apiServerUrl, options)
-  .then((response) => response.json())
-  .then((responseJson) => {
-    // Verifica se o status é 'success' e se há dados de pedidos
-    if (responseJson.status === "success" && responseJson.data.status === "success") {
-      const detalhes = responseJson.data.data;      
-      var produtoPreco = "";
+  // Fazendo a requisição
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log('Produto ID usado na requisição:', produtoId);
+      console.log('Resposta da API:', responseJson);
       
-      // Preparar as imagens para o carrossel
-      const fotoPrincipal = detalhes.foto ? imgUrl + detalhes.foto : "img/default.png";
-      
-      // Array para armazenar todas as fotos do produto
-      let fotos = [];
-      
-      // Adiciona a foto principal
-      if (detalhes.foto) {
-        fotos.push(imgUrl + detalhes.foto);
-      }
-      
-      // Verificar e adicionar fotos adicionais
-      if (detalhes.foto2) fotos.push(imgUrl + detalhes.foto2);
-      if (detalhes.foto3) fotos.push(imgUrl + detalhes.foto3);
-      if (detalhes.foto4) fotos.push(imgUrl + detalhes.foto4);
-      if (detalhes.foto5) fotos.push(imgUrl + detalhes.foto5);
-      if (detalhes.foto6) fotos.push(imgUrl + detalhes.foto6);
-      
-      // Se não houver fotos, adiciona a imagem padrão
-      if (fotos.length === 0) {
-        fotos.push("img/default.png");
-      }
-      
-      // Atualizar HTML para o carrossel principal
-      const swiperWrapper = document.querySelector("#product-gallery-main .swiper-wrapper");
-      const thumbsWrapper = document.querySelector("#product-gallery-thumbs .swiper-wrapper");
-      
-      if (swiperWrapper && thumbsWrapper) {
-        swiperWrapper.innerHTML = "";
-        thumbsWrapper.innerHTML = "";
+      // Verifica se o status é 'success' e se há dados de pedidos
+      if (responseJson.status === "success" && responseJson.data.status === "success") {
+        const detalhes = responseJson.data.data;      
+        var produtoPreco = "";
         
-        fotos.forEach((foto, index) => {
-          // Slides principais
-          const slide = document.createElement("div");
-          slide.className = "swiper-slide";
-          slide.innerHTML = `<img src="${foto}" alt="${detalhes.nome} - Imagem ${index+1}" class="product-image">`;
-          swiperWrapper.appendChild(slide);
+        // Verificação adicional para garantir que os dados do produto estão corretos
+        if (detalhes.id != produtoId) {
+          console.warn('ID do produto retornado não confere com o solicitado');
+          console.log('ID solicitado:', produtoId, 'ID retornado:', detalhes.id);
+        }
+        
+        // Preparar as imagens para o carrossel
+        const fotoPrincipal = detalhes.foto ? imgUrl + detalhes.foto : "img/default.png";
+        
+        // Array para armazenar todas as fotos do produto
+        let fotos = [];
+        
+        // Adiciona a foto principal
+        if (detalhes.foto) {
+          fotos.push(imgUrl + detalhes.foto);
+        }
+        
+        // Verificar e adicionar fotos adicionais
+        if (detalhes.foto2) fotos.push(imgUrl + detalhes.foto2);
+        if (detalhes.foto3) fotos.push(imgUrl + detalhes.foto3);
+        if (detalhes.foto4) fotos.push(imgUrl + detalhes.foto4);
+        if (detalhes.foto5) fotos.push(imgUrl + detalhes.foto5);
+        if (detalhes.foto6) fotos.push(imgUrl + detalhes.foto6);
+        
+        // Se não houver fotos, adiciona a imagem padrão
+        if (fotos.length === 0) {
+          fotos.push("img/default.png");
+        }
+        
+        // Atualizar HTML para o carrossel principal
+        const swiperWrapper = document.querySelector("#product-gallery-main .swiper-wrapper");
+        const thumbsWrapper = document.querySelector("#product-gallery-thumbs .swiper-wrapper");
+        
+        if (swiperWrapper && thumbsWrapper) {
+          swiperWrapper.innerHTML = "";
+          thumbsWrapper.innerHTML = "";
           
-          // Miniaturas
-          const thumbSlide = document.createElement("div");
-          thumbSlide.className = "swiper-slide";
-          thumbSlide.innerHTML = `<img src="${foto}" alt="Miniatura ${index+1}" class="thumb-image">`;
-          thumbsWrapper.appendChild(thumbSlide);
-        });
-        
-        // Inicializar o swiper de miniaturas
-        const thumbsSwiper = new Swiper("#product-gallery-thumbs", {
-          slidesPerView: 4,
-          spaceBetween: 10,
-          freeMode: true,
-          watchSlidesProgress: true,
-          breakpoints: {
-            // quando a largura da janela é >= 320px
-            320: {
-              slidesPerView: 3,
-              spaceBetween: 5
-            },
-            // quando a largura da janela é >= 480px
-            480: {
-              slidesPerView: 4,
-              spaceBetween: 8
-            },
-            // quando a largura da janela é >= 768px
-            768: {
-              slidesPerView: 5,
-              spaceBetween: 10
-            }
-          }
-        });
-        
-        // Inicializar o swiper principal
-        const mainSwiper = new Swiper("#product-gallery-main", {
-          slidesPerView: 1,
-          spaceBetween: 10,
-          loop: fotos.length > 1,
-          autoplay: {
-            delay: 5000, // Auto-play a cada 5 segundos
-            disableOnInteraction: false, // Continua o autoplay mesmo após interação
-            pauseOnMouseEnter: true // Pausa ao passar o mouse
-          },
-          pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-          },
-          navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-          },
-          thumbs: {
-            swiper: thumbsSwiper,
-          }
-        });
-        
-        // Adicionar evento de clique para o zoom
-        document.querySelectorAll(".product-image").forEach((img) => {
-          img.addEventListener("click", function() {
-            openImageZoom(this.src);
+          fotos.forEach((foto, index) => {
+            // Slides principais
+            const slide = document.createElement("div");
+            slide.className = "swiper-slide";
+            slide.innerHTML = `<img src="${foto}" alt="${detalhes.nome} - Imagem ${index+1}" class="product-image">`;
+            swiperWrapper.appendChild(slide);
+            
+            // Miniaturas
+            const thumbSlide = document.createElement("div");
+            thumbSlide.className = "swiper-slide";
+            thumbSlide.innerHTML = `<img src="${foto}" alt="Miniatura ${index+1}" class="thumb-image">`;
+            thumbsWrapper.appendChild(thumbSlide);
           });
+          
+          // Inicializar o swiper de miniaturas
+          const thumbsSwiper = new Swiper("#product-gallery-thumbs", {
+            slidesPerView: 4,
+            spaceBetween: 10,
+            freeMode: true,
+            watchSlidesProgress: true,
+            breakpoints: {
+              // quando a largura da janela é >= 320px
+              320: {
+                slidesPerView: 3,
+                spaceBetween: 5
+              },
+              // quando a largura da janela é >= 480px
+              480: {
+                slidesPerView: 4,
+                spaceBetween: 8
+              },
+              // quando a largura da janela é >= 768px
+              768: {
+                slidesPerView: 5,
+                spaceBetween: 10
+              }
+            }
+          });
+          
+          // Inicializar o swiper principal
+          const mainSwiper = new Swiper("#product-gallery-main", {
+            slidesPerView: 1,
+            spaceBetween: 10,
+            loop: fotos.length > 1,
+            autoplay: {
+              delay: 5000, // Auto-play a cada 5 segundos
+              disableOnInteraction: false, // Continua o autoplay mesmo após interação
+              pauseOnMouseEnter: true // Pausa ao passar o mouse
+            },
+            pagination: {
+              el: ".swiper-pagination",
+              clickable: true,
+            },
+            navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            },
+            thumbs: {
+              swiper: thumbsSwiper,
+            }
+          });
+          
+          // Adicionar evento de clique para o zoom
+          document.querySelectorAll(".product-image").forEach((img) => {
+            img.addEventListener("click", function() {
+              openImageZoom(this.src);
+            });
+          });
+        }
+        
+        //ALIMENTAR COM OS VALORES DO ITEM
+        $("#imagem-detalhe").attr('src', fotoPrincipal);
+        $("#imagemShare").attr('src', fotoPrincipal);
+        $("#nome-detalhe").html(detalhes.nome.toUpperCase());
+        $("#nomeShare").html(detalhes.nome.toUpperCase());
+        
+        var precoLucro = detalhes.preco_lojavirtual - detalhes.preco;
+        $("#precoOriginal").html(formatarMoeda(detalhes.preco_lojavirtual));
+        $("#precoDesconto").html(formatarMoeda(detalhes.preco));
+        $("#precoRevenda").html(formatarMoeda(detalhes.preco_lojavirtual));
+        $("#precoLucro").html(formatarMoeda(precoLucro));
+        $("#precoShare").html(formatarMoeda(detalhes.preco_lojavirtual));
+
+        // Selecione a div onde você quer adicionar o link
+        const $container = $('#containerBtnCarrinho');
+        // Crie o link e configure os atributos
+        const $btnAddCarrinho = $('<button></button>')
+            .text('Adicionar Carrinho')
+            .attr('data-produto-id', detalhes.id) // Use o ID dos detalhes retornados
+            .attr('id', 'botaoCarrinho')
+            .addClass('add-cart');
+
+        // Anexe o link ao container
+        $container.append($btnAddCarrinho);
+        
+        // Use o ID dos detalhes retornados para garantir consistência
+        produtoId = detalhes.id;
+
+        //CLICOU NO ADICIONAR CARRINHO
+        $("#addCarrinho").on('click', function () {
+            //ADICIONAR AO CARRINHO
+            adicionarItemCarrinho(produtoId);
         });
+        
+        //CLICOU NO ADICIONAR CARRINHO
+        $("#comprarAgora").on('click', function () {
+            //ADICIONAR AO CARRINHO
+            adicionarItemCarrinho(produtoId);
+        });
+
+        // Inicializa os benefícios do produto
+        initializeBenefits(detalhes.beneficios);
+
+        localStorage.setItem('produtoDetalhes', JSON.stringify({detalhes}));
+        app.dialog.close();
+      } else {
+        app.dialog.close();
+        // Verifica se há uma mensagem de erro definida
+        const errorMessage =
+          responseJson.message || "Formato de dados inválido";
+        app.dialog.alert(
+          "Erro ao carregar produtos: " + errorMessage,
+          "Falha na requisição!"
+        );
       }
-      
-      //ALIMENTAR COM OS VALORES DO ITEM
-      $("#imagem-detalhe").attr('src', fotoPrincipal);
-      $("#imagemShare").attr('src', fotoPrincipal);
-      $("#nome-detalhe").html(detalhes.nome.toUpperCase());
-      $("#nomeShare").html(detalhes.nome.toUpperCase());
-      
-      var precoLucro = detalhes.preco_lojavirtual - detalhes.preco;
-      $("#precoOriginal").html(formatarMoeda(detalhes.preco_lojavirtual));
-      $("#precoDesconto").html(formatarMoeda(detalhes.preco));
-      $("#precoRevenda").html(formatarMoeda(detalhes.preco_lojavirtual));
-      $("#precoLucro").html(formatarMoeda(precoLucro));
-      //$("#precopromo-detalhe").html(produtoPreco);
-
-      // Selecione a div onde você quer adicionar o link
-      const $container = $('#containerBtnCarrinho');
-      // Crie o link e configure os atributos
-      const $btnAddCarrinho = $('<button></button>')
-          .text('Adicionar Carrinho')
-          .attr('data-produto-id', '123')
-          .attr('id', 'botaoCarrinho')
-          .addClass('add-cart');
-  
-      // Anexe o link ao container
-      $container.append($btnAddCarrinho);
-      produtoId = detalhes.id;
-  
-      //CLICOU NO ADICIONAR CARRINHO
-      $("#addCarrinho").on('click', function () {
-          //ADICIONAR AO CARRINHO
-          adicionarItemCarrinho(produtoId);
-      });
-      
-      //CLICOU NO ADICIONAR CARRINHO
-      $("#comprarAgora").on('click', function () {
-          //ADICIONAR AO CARRINHO
-          adicionarItemCarrinho(produtoId);
-      });
-
-      // Inicializa os benefícios do produto
-      initializeBenefits(detalhes.beneficios);
-
-      localStorage.setItem('produtoDetalhes', JSON.stringify({detalhes}));
+    })
+    .catch((error) => {
       app.dialog.close();
-    } else {
-      app.dialog.close();
-      // Verifica se há uma mensagem de erro definida
-      const errorMessage =
-        responseJson.message || "Formato de dados inválido";
+      console.error("Erro:", error);
       app.dialog.alert(
-        "Erro ao carregar produtos: " + errorMessage,
+        "Erro ao carregar produtos: " + error.message,
         "Falha na requisição!"
       );
-    }
-  })
-  .catch((error) => {
-    app.dialog.close();
-    console.error("Erro:", error);
-    app.dialog.alert(
-      "Erro ao carregar produtos: " + error.message,
-      "Falha na requisição!"
-    );
-  });
+    });
 }
 
 // Função para abrir o zoom da imagem
