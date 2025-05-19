@@ -1162,13 +1162,56 @@ var app = new Framework7({
 
           buscarProduto();
           document.querySelector('#compartilharProduto').addEventListener('click', function (e) {
-            e.preventDefault(); // Prevent default link behavior
-            app.popup.open('.popup-compartilhar');
-            buscarLinks();
+            e.preventDefault(); // Prevent default link behavior       
+            app.views.main.router.navigate("/detalhes-share/");
           });
 
           $("#back-button").on('click', function () {
             app.views.main.router.navigate("/home/");
+          });
+          
+        },
+        pageBeforeRemove: function (event, page) {
+          // fazer algo antes da página ser removida do DOM
+        },
+      }
+    },
+    {
+      path: '/detalhes-share/',
+      url: 'detalhes-share.html?v=' + versionApp,
+      animate: false,
+      on: {
+        pageBeforeIn: function (event, page) {          
+            
+          // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
+          $("#menuPrincipal").hide("fast");
+
+        },
+        pageAfterIn: function (event, page) {
+          // fazer algo depois da página ser exibida          
+        },
+        pageInit: function (event, page) {   
+          // fazer algo quando a página for inicializada
+          $.getScript('js/qrcode.min.js');
+          //$.getScript('js/detalhes.js');
+          var produtoId = localStorage.getItem('produtoId');
+          $("#idProduto").html(produtoId);
+
+          buscarLinks();
+
+          $("#back-button").on('click', function () {
+            app.views.main.router.navigate("/detalhes/");
           });
           
         },
