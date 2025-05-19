@@ -2961,11 +2961,11 @@ function listarEnderecos() {
   
             //MOSTRAR SACOLINHA VAZIA
             $("#containerCarrinho").html(`
-                          <div class="text-align-center">
-                              <img width="300" src="img/empty.gif">
-                              <br><span class="color-gray">Nada por enquanto...</span>
-                          </div>
-                      `);
+              <div class="display-flex flex-direction-column align-items-center justify-content-center" style="height: 100%;">
+                <img width="300" src="img/empty.gif">
+                <br><span class="color-gray">Nada por enquanto...</span>
+              </div>
+            `);
           }
   
           
