@@ -7,7 +7,7 @@
   "short_name": "Vitatop",
   "start_url": "https://appvitatop.tecskill.com.br/",
   "id": "br.com.g3pay",
-  "display": "fullscreen",
+  "display": "standalone",
   "display_override": ["standalone", "window-controls-overlay"],
   "theme_color": "#00591F",
   "orientation": "portrait",
@@ -504,6 +504,7 @@
       "platform": "wide"
     }
   ],
+  "prefer_related_applications": false,
   "handle_links": {
     "action": "/handle-link",
     "accept": {
