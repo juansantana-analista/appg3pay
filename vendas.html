@@ -91,10 +91,18 @@
               </div>
             </div>
 
-            <!-- Filtros -->
+            <!-- Filtros e Pesquisa -->
             <div class="vendas-section">
               <div class="vendas-filters">
-                <h2 class="section-title">Filtrar Vendas</h2>
+                <h2 class="section-title">Filtrar e Pesquisar</h2>
+                
+                <!-- Campo de pesquisa -->
+                <div class="search-container">
+                  <input type="text" id="searchVendas" class="search-input" placeholder="Pesquisar por cliente, ID da venda...">
+                  <i class="mdi mdi-magnify search-icon"></i>
+                </div>
+                
+                <!-- Botões de filtro por status -->
                 <div class="filter-buttons">
                   <button class="filter-btn active" data-filter="todas">Todas</button>
                   <button class="filter-btn" data-filter="pagas">Pagas</button>
@@ -102,12 +110,24 @@
                   <button class="filter-btn" data-filter="canceladas">Canceladas</button>
                 </div>
                 
-                <div class="date-filter">
-                  <input type="date" id="dataInicio" class="date-input" placeholder="Data início">
-                  <input type="date" id="dataFim" class="date-input" placeholder="Data fim">
-                  <button class="btn-filter" id="filtrarPorData">
-                    <i class="mdi mdi-filter"></i> Filtrar
-                  </button>
+                <!-- Filtros de data e ações -->
+                <div class="filter-actions">
+                  <div class="date-filter">
+                    <input type="date" id="dataInicio" class="date-input" placeholder="Data início">
+                    <input type="date" id="dataFim" class="date-input" placeholder="Data fim">
+                    <button class="btn-filter" id="filtrarPorData">
+                      <i class="mdi mdi-filter"></i> Filtrar
+                    </button>
+                  </div>
+                  
+                  <div class="action-buttons">
+                    <button class="btn-action" id="limparFiltros">
+                      <i class="mdi mdi-close"></i> Limpar
+                    </button>
+                    <button class="btn-action btn-export" id="exportarVendas">
+                      <i class="mdi mdi-download"></i> Exportar
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

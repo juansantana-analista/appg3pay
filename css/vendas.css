@@ -95,12 +95,81 @@
   color: #999;
 }
 
-/* Filtros */
-.vendas-filters {
+/* Campo de pesquisa */
+.search-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 45px 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  font-size: 14px;
   background-color: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #00591F;
+  box-shadow: 0 0 0 3px rgba(0, 89, 31, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 18px;
+}
+
+/* Filtros e ações */
+.filter-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-action {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #666;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-action:hover {
+  background-color: #f8f9fa;
+  border-color: #00591F;
+  color: #00591F;
+}
+
+.btn-export {
+  background-color: #28a745;
+  color: white;
+  border-color: #28a745;
+}
+
+.btn-export:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
+  color: white;
 }
 
 .filter-buttons {

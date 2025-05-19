@@ -1337,320 +1337,310 @@ function openImageZoom(imageSrc) {
   //Fim Função Lista tela Pedidos
   
   //Inicio Funçao listar Vendas
-  function listarVendas(searchQuery = "") {
-    
-    var pessoaId = localStorage.getItem("pessoaId");
-    app.dialog.preloader("Carregando...");
+// Função para obter resumo das vendas do distribuidor
+function obterResumoVendasDistribuidor() {
+  const pessoaId = localStorage.getItem("pessoaId");
   
-    // Cabeçalhos da requisição
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + userAuthToken,
-    };
-  
-    // Cabeçalhos da requisição
-    const dados = {
-      vendedor: pessoaId,
-    };
-  
-    const body = JSON.stringify({
-      class: "PedidoDigitalRest",
-      method: "MinhasVendasDigitais",
-      dados: dados,
-    });
-  
-    // Opções da requisição
-    const options = {
-      method: "POST",
-      headers: headers,
-      body: body,
-    };
-  
-    // Fazendo a requisição
-    fetch(apiServerUrl, options)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        // Verifica se o status é 'success' e se há dados de pedidos
-        if (
-          responseJson.status === "success" &&
-          responseJson.data.status === "success"
-        ) {
-          const vendas = responseJson.data.data;
-          const vendasContainer = document.getElementById("container-vendas");
-          vendasContainer.innerHTML = "";
-  
-          vendas.forEach((venda) => {
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
 
-            const vendasHTML = `                    
-                          <div class="card-list" 
-                          data-id-venda="${venda.venda_id}">
-                             <div class="card-principal">
-                                <div class="card-header open header-pago">
-                                   <div class="date">${formatarData(
-                                     venda.data_criacao
-                                   )}</div>
-                                   <div class="status">${
-                                     venda.status_compra
-                                   }</div>
-                                </div>
-                                <div class="card-body">
-                                   <div class="name">PEDIDO #${
-                                     venda.venda_id
-                                   }</div>
-                                   <div class="details">
-                                      <div class="detail">
-                                         <span>Nº</span>
-                                         <span>${venda.venda_id}</span>
-                                      </div>
-                                      <div class="detail">
-                                         <span class="mdi mdi-cash-multiple"></span>
-                                         <span>${
-                                           venda.forma_pagamento.forma
-                                         }</span>
-                                      </div>
-                                      <div class="detail">
-                                         <span>Total</span>
-                                         <span>${formatarMoeda(
-                                           venda.valor_total
-                                         )}</span>
-                                      </div>
-                                      <div class="detail">
-                                         <span>A pagar</span>
-                                         <span>${formatarMoeda(
-                                           venda.valor_total
-                                         )}</span>
-                                      </div>
-                                      <div class="items">${venda.quantidade_itens}</div>
-                                   </div>
-                                </div>
-                             </div>
-                          </div>
-                      `;
-            vendasContainer.innerHTML += vendasHTML;
-          });
-  
-          $(".card-list").click(function () {
-            // Atualiza o ícone de seleção
-            var vendaId = $(this).data("id-venda");
-            localStorage.setItem("vendaId", vendaId);
-            app.views.main.router.navigate("/resumo-venda/");
-          });
-  
-          app.dialog.close();
-        } else {
-          app.dialog.close();
-          // Verifica se há uma mensagem de erro definida
-          const errorMessage =
-            responseJson.message || "Formato de dados inválido";
-          app.dialog.alert(
-            "Erro ao carregar vendas: " + errorMessage,
-            "Falha na requisição!"
-          );
-        }
-      })
-      .catch((error) => {
-        app.dialog.close();
-        console.error("Erro:", error);
-        app.dialog.alert(
-          "Erro ao carregar vendas: " + error.message,
-          "Falha na requisição!"
-        );
-      });
-  }
-  //Fim Função Lista Vendas
-  
-  // Início da função detalhesVendas
-  function detalhesVenda() {
-    
-    var vendaId = localStorage.getItem("vendaId");
-    var pessoaId = localStorage.getItem("pessoaId");
-    app.dialog.preloader("Carregando...");
-  
-    // Cabeçalhos da requisição
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + userAuthToken,
-    };
-    const dados = {
-      vendedor: pessoaId,
-      venda_id: vendaId,
-    };
-  
-    const body = JSON.stringify({
-      class: "PedidoDigitalRest",
-      method: "MinhasVendasDigitais",
-      dados: dados
+  const body = JSON.stringify({
+    class: "PessoaRestService",
+    method: "obterResumoVendas",
+    dados: {
+      pessoa_id: pessoaId,
+      periodo: "mes_atual" // ou "ano_atual", "todos"
+    }
+  });
+
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  return fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      if (responseJson.status === "success" && responseJson.data.status === "success") {
+        return responseJson.data.data;
+      } else {
+        throw new Error(responseJson.message || "Erro ao obter resumo");
+      }
     });
+}
+
+// Função para listar vendas realizadas através do link do distribuidor
+function listarVendasPorDistribuidor(filtros = {}) {
+  const pessoaId = localStorage.getItem("pessoaId");
   
-    // Opções da requisição
-    const options = {
-      method: "POST",
-      headers: headers,
-      body: body,
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const dados = {
+    pessoa_id: pessoaId,
+    ...filtros
+  };
+
+  const body = JSON.stringify({
+    class: "PessoaRestService", 
+    method: "listarVendasDistribuidor",
+    dados: dados
+  });
+
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  return fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      if (responseJson.status === "success" && responseJson.data.status === "success") {
+        return responseJson.data.data;
+      } else {
+        throw new Error(responseJson.message || "Erro ao listar vendas");
+      }
+    });
+}
+
+// Função para obter detalhes de uma venda específica
+function obterDetalhesVenda(vendaId) {
+  const pessoaId = localStorage.getItem("pessoaId");
+  
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "PessoaRestService",
+    method: "obterDetalhesVenda", 
+    dados: {
+      venda_id: vendaId,
+      pessoa_id: pessoaId
+    }
+  });
+
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  return fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      if (responseJson.status === "success" && responseJson.data.status === "success") {
+        return responseJson.data.data;
+      } else {
+        throw new Error(responseJson.message || "Erro ao obter detalhes da venda");
+      }
+    });
+}
+
+// Função para gerar link de compartilhamento da venda
+function gerarLinkCompartilhamentoVenda(vendaId) {
+  const pessoaId = localStorage.getItem("pessoaId");
+  
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "PessoaRestService",
+    method: "gerarLinkVenda",
+    dados: {
+      venda_id: vendaId,
+      pessoa_id: pessoaId
+    }
+  });
+
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  return fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      if (responseJson.status === "success" && responseJson.data.status === "success") {
+        return responseJson.data.data.link;
+      } else {
+        throw new Error(responseJson.message || "Erro ao gerar link");
+      }
+    });
+}
+
+// Função para formatar valores monetários especificamente para vendas
+function formatarMoedaVendas(valor) {
+  if (!valor || isNaN(valor)) return "R$ 0,00";
+  
+  return parseFloat(valor).toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
+// Função para calcular estatísticas das vendas
+function calcularEstatisticasVendas(vendas) {
+  if (!vendas || vendas.length === 0) {
+    return {
+      total_vendas: 0,
+      total_comissoes: 0,
+      numero_vendas: 0,
+      ticket_medio: 0,
+      taxa_conversao: 0
     };
-  
-    // Fazendo a requisição
-    fetch(apiServerUrl, options)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        // Verifica se o status é 'success' e se há dados de pedidos
-        if (
-          responseJson.status === "success" &&
-          responseJson.data &&
-          responseJson.data.data
-        ) {
-          const detalhes = responseJson.data.data[0];
-          const detalhesContainer = document.getElementById("detalhesVenda");
-          detalhesContainer.innerHTML = "";
-  
-          // Formata a data e moeda
-          const formatarData = (data) => new Date(data).toLocaleString();
-          const formatarMoeda = (valor) =>
-            `R$ ${parseFloat(valor).toFixed(2).replace(".", ",")}`;
-  
-          // Monta o HTML dos itens do pedido
-          const itensHTML = detalhes.itens
-            .map(
-              (item) => `
-                      <li>
-                          <img src="https://vitatop.tecskill.com.br/${
-                            item.foto
-                          }" alt="${
-                item.descricao
-              }" style="width: 50px; height: 50px;"/>
-                          <span class="item-name">${item.descricao}</span>
-                          <span class="item-quantity">${item.qtde}x</span>
-                          <span class="item-price">${formatarMoeda(
-                            item.preco
-                          )}</span>
-                      </li>
-                  `
-            )
-            .join("");
-  
-          // Monta o HTML completo
-          const detalhesHTML = `
-                      <div class="order-summary">
-                          <div class="order-details">
-                              <p><h3>Número do Pedido: #${detalhes.venda_id}</h3></p>
-                              <p><strong>Data do Pedido:</strong> ${formatarData(
-                                detalhes.data_criacao
-                              )}</p>
-                          </div>
-                          <div class="order-items">
-                              <h3>Itens do Pedido</h3>
-                              <ul>${itensHTML}</ul>
-                          </div>
-                          <div class="order-payment">
-                              <h3>Forma de Pagamento</h3>
-                              <p><strong>Método:</strong> ${
-                                detalhes.forma_pagamento.forma
-                              }</p>
-                              <p><strong>Status:</strong> ${
-                                detalhes.forma_pagamento.transacao_mensagem
-                              }</p>
-                              <!-- Seção de pagamento -->
-                              <div class="payment-method-a display-none" id="pagamentoPix">
-                                  <div class="payment-center">
-                                      <img src="https://vitatop.tecskill.com.br/${
-                                        detalhes.forma_pagamento.pix_qrcode
-                                      }" width="250px" alt="QR Code">
-                                      <span class="pix-key" id="pixKey">${
-                                        detalhes.forma_pagamento.pix_key
-                                      }</span>
-                                      <button class="copy-button" id="copiarPix">Copiar Código Pix</button>
-                                  </div>
-                              </div>
-                              <!-- Seção de pagamento -->
-                              <div class="payment-method-a display-none" id="pagamentoBoleto">
-                                  <div class="payment-center">
-                                      <span class="pix-key" id="linhaBoleto">${
-                                        detalhes.forma_pagamento.boleto_linhadigitavel
-                                      }</span>
-                                      <button class="copy-button" id="copiarBoleto">Copiar Linha Digitável</button>
-                                      <button class="copy-button" id="baixarBoleto">Baixar Boleto PDF</button>
-                                  </div>
-                              </div>
-                              <!-- Seção de pagamento -->
-                              <div class="payment-method-a display-none" id="pagamentoCartao">
-                                  <div class="payment-center">
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="order-total">
-                              <h3>Resumo</h3>
-                              <p><strong>Total dos Itens:</strong> ${formatarMoeda(
-                                detalhes.valor_produto
-                              )}</p>
-                              <p><strong>Frete:</strong> ${formatarMoeda(
-                                detalhes.frete
-                              )}</p>
-                              <p><strong>Total:</strong> ${formatarMoeda(
-                                detalhes.valor_total
-                              )}</p>
-                          </div>
-                      </div>
-                  `;
-  
-          detalhesContainer.innerHTML = detalhesHTML;
-          if (detalhes.status_compra != 3) {
-            $(".pagamento-display").removeClass("display-none");
-          }
-          if (detalhes.forma_pagamento == "PIX") {
-            $("#pagamentoPix").removeClass("display-none");
-          } else if (detalhes.forma_pagamento == "BOLETO") {
-            $("#pagamentoBoleto").removeClass("display-none");
-          } else {
-            $("#pagamentoCartao").removeClass("display-none");
-          }
-  
-          $("#copiarPix").on("click", function () {
-            copiarParaAreaDeTransferencia(detalhes.pix_key);
-          });
-  
-          $("#copiarBoleto").on("click", function () {
-            copiarParaAreaDeTransferencia(detalhes.boleto_linhadigitavel);
-          });
-  
-          // Baixar boleto
-          $("#baixarBoleto").on("click", function () {
-            app.dialog.confirm(
-              "Deseja baixar o boleto no navegador?",
-              function () {
-                var ref = cordova.InAppBrowser.open(
-                  detalhes.boleto_impressao,
-                  "_system",
-                  "location=no,zoom=no"
-                );
-                ref.show();
-              }
-            );
-          });
-  
-          app.dialog.close();
-        } else {
-          app.dialog.close();
-          // Verifica se há uma mensagem de erro definida
-          const errorMessage =
-            responseJson.message || "Formato de dados inválido";
-          app.dialog.alert(
-            "Erro ao carregar pedidos: " + errorMessage,
-            "Falha na requisição!"
-          );
-        }
-      })
-      .catch((error) => {
-        app.dialog.close();
-        console.error("Erro:", error);
-        app.dialog.alert(
-          "Erro ao carregar pedidos: " + error.message,
-          "Falha na requisição!"
-        );
-      });
-  
-    localStorage.removeItem("pedidoId");
   }
-  // Fim da função detalhesVendas
+
+  const totalVendas = vendas.reduce((sum, venda) => sum + parseFloat(venda.valor_total || 0), 0);
+  const totalComissoes = vendas.reduce((sum, venda) => sum + parseFloat(venda.comissao || 0), 0);
+  const numeroVendas = vendas.length;
+  const ticketMedio = totalVendas / numeroVendas;
+  
+  // Taxa de conversão pode ser calculada se tivermos dados de cliques vs vendas
+  const taxaConversao = 0; // Implementar lógica específica se necessário
+
+  return {
+    total_vendas: totalVendas,
+    total_comissoes: totalComissoes,
+    numero_vendas: numeroVendas,
+    ticket_medio: ticketMedio,
+    taxa_conversao: taxaConversao
+  };
+}
+
+// Função para filtrar vendas por período
+function filtrarVendasPorPeriodo(vendas, dataInicio, dataFim) {
+  if (!vendas || vendas.length === 0) return [];
+  
+  if (!dataInicio && !dataFim) return vendas;
+  
+  return vendas.filter(venda => {
+    const dataVenda = new Date(venda.data_venda);
+    const inicio = dataInicio ? new Date(dataInicio) : new Date('1900-01-01');
+    const fim = dataFim ? new Date(dataFim) : new Date('2099-12-31');
+    
+    return dataVenda >= inicio && dataVenda <= fim;
+  });
+}
+
+// Função para filtrar vendas por status
+function filtrarVendasPorStatus(vendas, status) {
+  if (!vendas || vendas.length === 0 || status === 'todas') return vendas;
+  
+  return vendas.filter(venda => {
+    const statusVenda = venda.status.toLowerCase();
+    
+    switch (status) {
+      case 'pagas':
+        return statusVenda === 'paga' || statusVenda === 'concluida';
+      case 'pendentes':
+        return statusVenda === 'pendente' || statusVenda === 'processando';
+      case 'canceladas':
+        return statusVenda === 'cancelada' || statusVenda === 'rejeitada';
+      default:
+        return true;
+    }
+  });
+}
+
+// Função para ordenar vendas
+function ordenarVendas(vendas, criterio = 'data_desc') {
+  if (!vendas || vendas.length === 0) return [];
+  
+  return vendas.sort((a, b) => {
+    switch (criterio) {
+      case 'data_desc':
+        return new Date(b.data_venda) - new Date(a.data_venda);
+      case 'data_asc':
+        return new Date(a.data_venda) - new Date(b.data_venda);
+      case 'valor_desc':
+        return parseFloat(b.valor_total) - parseFloat(a.valor_total);
+      case 'valor_asc':
+        return parseFloat(a.valor_total) - parseFloat(b.valor_total);
+      case 'comissao_desc':
+        return parseFloat(b.comissao) - parseFloat(a.comissao);
+      case 'comissao_asc':
+        return parseFloat(a.comissao) - parseFloat(b.comissao);
+      default:
+        return 0;
+    }
+  });
+}
+
+// Função para exportar vendas para Excel/CSV (se o backend suportar)
+function exportarVendasParaExcel(filtros = {}) {
+  const pessoaId = localStorage.getItem("pessoaId");
+  
+  app.dialog.preloader("Exportando...");
+
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const dados = {
+    pessoa_id: pessoaId,
+    formato: "excel",
+    ...filtros
+  };
+
+  const body = JSON.stringify({
+    class: "PessoaRestService",
+    method: "exportarVendas",
+    dados: dados
+  });
+
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      app.dialog.close();
+      
+      if (responseJson.status === "success" && responseJson.data.status === "success") {
+        const linkDownload = responseJson.data.data.download_link;
+        
+        // Abre o link de download
+        if (typeof cordova !== 'undefined') {
+          // Em app móvel
+          cordova.InAppBrowser.open(linkDownload, '_system');
+        } else {
+          // Em navegador web
+          window.open(linkDownload, '_blank');
+        }
+        
+        app.toast.create({
+          text: 'Exportação iniciada com sucesso!',
+          position: 'center',
+          closeTimeout: 2000,
+        }).open();
+      } else {
+        app.dialog.alert("Erro ao exportar vendas", "Erro");
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+      app.dialog.alert("Erro ao exportar vendas", "Erro");
+    });
+}
+//Fim da funçao listar vendas
 
   // Início da função detalhesPedido
   function detalhesPedido() {
