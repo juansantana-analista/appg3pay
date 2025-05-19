@@ -3486,7 +3486,7 @@ function contarCarrinho() {
           responseJson.data.status == "success"
         ) {
           //Desenha o dashboard
-          $("#valorVenda").text(responseJson.data.dados.valor_venda_mes);
+          $("#valorVenda").text(formatarMoeda(responseJson.data.dados.valor_venda_mes));
           $("#qtdeGeral").text(responseJson.data.dados.rede_geral);
         }
       })
