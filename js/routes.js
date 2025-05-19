@@ -1153,11 +1153,7 @@ var app = new Framework7({
             }, 500); // Adiciona um fallback com pequeno delay
           }
           $("#menuPrincipal").hide("fast");
-      // Limpar o ID do produto anterior do HTML para evitar cache visual
-      $("#idProduto").html('');
-      $("#nome-detalhe").html('');
-      $("#imagemShare").attr('src', '');
-      $("#nomeShare").html('');
+
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
@@ -1167,24 +1163,13 @@ var app = new Framework7({
           $.getScript('js/qrcode.min.js');
           //$.getScript('js/detalhes.js');
           var produtoId = localStorage.getItem('produtoId');
-
-          // Verificação adicional para garantir que temos um ID
-          if (!produtoId) {
-            console.error('ID do produto não encontrado no localStorage');
-            app.dialog.alert('Erro: Produto não encontrado', 'Erro');
-            app.views.main.router.navigate("/home/");
-            return;
-          }
-
           $("#idProduto").html(produtoId);
-          // Limpar dados antigos antes de buscar o novo produto
-          localStorage.removeItem('produtoDetalhes');
-
           buscarProduto();
 
-          $("#compartilharProduto").on('click', function () {
+          
+          document.querySelector('#compartilharProduto').addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent default link behavior
             app.popup.open('.popup-compartilhar');
-            buscarProduto();
             buscarLinks();
           });
 
