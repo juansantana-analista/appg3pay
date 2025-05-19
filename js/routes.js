@@ -1025,8 +1025,8 @@ var app = new Framework7({
       },
     },
     {
-      path: '/produtos/',
-      url: 'produtos.html?v=' + versionApp,
+      path: '/home/',
+      url: 'home.html?v=' + versionApp,
       animate: false,
       on: {
         pageBeforeIn: async function (event, page) {
@@ -1717,8 +1717,8 @@ var app = new Framework7({
       }
     },    
     {
-      path: '/home/',
-      url: 'home.html?v=' + versionApp,
+      path: '/campanhas/',
+      url: 'campanhas.html?v=' + versionApp,
       animate: false,
       on: {
         pageBeforeIn: async function (event, page) {
