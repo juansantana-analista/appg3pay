@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-const versionApp = "1.5.0";
+const versionApp = "1.4.9";
 var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -1149,6 +1149,15 @@ var app = new Framework7({
       }
       $("#menuPrincipal").hide("fast");
 
+      // *** LIMPAR DADOS DO POPUP ANTES DE ENTRAR NA PÁGINA ***
+      // Isso garante que não existam dados antigos
+      $("#qrcode").empty();
+      $("#checkoutLinkUrl").html("");
+      $("#paginaLinkUrl").html("");
+      $("#imagemShare").attr('src', 'img/default.png');
+      $("#nomeShare").html('');
+      $("#precoShare").html('');
+
     },
     pageAfterIn: function (event, page) {
       // fazer algo depois da página ser exibida          
@@ -1157,25 +1166,25 @@ var app = new Framework7({
       console.log('detalhes');       
       // fazer algo quando a página for inicializada
       $.getScript('js/qrcode.min.js');
-      //$.getScript('js/detalhes.js');
+      
       var produtoId = localStorage.getItem('produtoId');
       $("#idProduto").html(produtoId);
 
+      // *** SEMPRE RECARREGAR OS DADOS DO PRODUTO ***
       buscarProduto();
       
-      // Remove o event listener anterior se existir
-      document.querySelector('#compartilharProduto').removeEventListener('click', abrirPopupCompartilhar);
+      // *** CONFIGURAR O EVENT LISTENER DO POPUP DE FORMA CORRETA ***
+      // Remove qualquer listener anterior
+      $('#compartilharProduto').off('click');
       
-      // Adiciona o novo event listener
-      document.querySelector('#compartilharProduto').addEventListener('click', abrirPopupCompartilhar);
-
-      // Função para abrir o popup e carregar os links
-      function abrirPopupCompartilhar(e) {
+      // Adiciona o novo listener
+      $('#compartilharProduto').on('click', function(e) {
         e.preventDefault();
-        app.popup.open('.popup-compartilhar');
-        // Sempre busca os links atualizados quando o popup é aberto
+        // Sempre buscar os links quando abrir o popup
+        // Isso garante que os dados estejam atualizados
         buscarLinks();
-      }
+        app.popup.open('.popup-compartilhar');
+      });
 
       $("#back-button").on('click', function () {
         app.views.main.router.navigate("/home/");
@@ -1184,8 +1193,19 @@ var app = new Framework7({
     },
     pageBeforeRemove: function (event, page) {
       // fazer algo antes da página ser removida do DOM
-      // Remove o event listener para evitar memory leaks
-      document.querySelector('#compartilharProduto').removeEventListener('click', abrirPopupCompartilhar);
+      // *** LIMPEZA COMPLETA AO SAIR DA PÁGINA ***
+      $('#compartilharProduto').off('click');
+      
+      // Limpar também os dados do popup
+      $("#qrcode").empty();
+      $("#checkoutLinkUrl").html("");
+      $("#paginaLinkUrl").html("");
+      
+      // Remover todos os event listeners dos links do popup
+      $("#shareLanding").off("click");
+      $("#linkPaginaUrl").off("click");
+      $("#linkCheckoutUrl").off("click");
+      $(".compartilhar-link").off("click");
     },
   }
 },
