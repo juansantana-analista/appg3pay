@@ -1206,6 +1206,14 @@ var app = new Framework7({
           $.getScript('js/qrcode.min.js');
           //$.getScript('js/detalhes.js');
           var produtoId = localStorage.getItem('produtoId');
+          var produtoDetalhes = localStorage.getItem('produtoDetalhes');
+          var nomeProduto = produtoDetalhes.detalhes.nome;
+          var urlBaseImagem = "https://vitatop.tecskill.com.br/";
+          var imagemProduto = urlBaseImagem + produtoDetalhes.detalhes.foto;
+
+          $("#nomeShare").text(nomeProduto);
+          $("#imagemShare").attr("src", imagemProduto);
+
           $("#idProduto").html(produtoId);
 
           buscarLinks();
