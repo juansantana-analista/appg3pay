@@ -1891,7 +1891,8 @@ function openImageZoom(imageSrc) {
             swiperWrapper.appendChild(slide);
           });
         } else {
-          console.error("Erro ao obter banners:", responseJson.message);
+          console.error("Erro ao obter banners:", responseJson.message);          
+          app.views.main.router.navigate("/login-view/");
         }
       })
       .catch((error) => {
@@ -1901,6 +1902,8 @@ function openImageZoom(imageSrc) {
           "Erro ao carregar banners: " + error.message,
           "Falha na requisição!"
         );
+        
+      app.views.main.router.navigate("/login-view/");
       });
   }
   //Fim Função Listar Banners
