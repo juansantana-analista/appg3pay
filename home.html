@@ -9,16 +9,14 @@
     />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <!-- Color theme for statusbar (Android only) -->
-    <meta name="theme-color" content="#FF4B00" />
+    <meta name="theme-color" content="#00591F" />
     <!-- Your app title -->
     <title>VITATOP</title>
     <!-- Path to Framework7 Library Bundle CSS -->
     <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
     <!-- CSS PERSONALIZADO PARA MENU-->
-    <link rel="stylesheet" href="css/index.css" />
-    
-    <link rel="stylesheet" href="css/carrinho.css" />
-    <link rel="stylesheet" href="css/campanhas.css" />
+    <link rel="stylesheet" href="css/index.css?v=1.1.8" />
+    <link rel="stylesheet" href="css/carrinho.css?v=1.1.8" />
     <!--Ícones Material Design-->
     <link rel="stylesheet" href="css/materialdesignicons.min.css" />
     <!-- Icones do Remix icon-->
@@ -31,7 +29,7 @@
       <!-- Your main view, should have "view-main" class -->
       <div class="view view-main">
         <!-- Initial Page, "data-name" contains page name -->
-        <div data-name="campanhas" class="page color-theme-blue">
+        <div data-name="home" class="page color-theme-blue">
           <!-- NAV TOPO-->
           <div class="top-nav">
             <div class="left">
@@ -43,63 +41,137 @@
                 <i class="mdi mdi-menu"></i>
               </a>
             </div>
-            <img src="img/logo-nav.png" class="title-logo" width="110px" />
-            <a href="/notificacoes/" class="btn-notificacao" data-count="0">
-              <i class="mdi mdi-bell"></i>
+            <img src="img/logo-nav.png" class="title-logo" width="130px" />
+            <a href="/carrinho/" class="btn-cart" data-count="0">
+              <i class="mdi mdi-cart-outline"></i>
             </a>
           </div>
-          <!-- Cabeçalho com título da página -->
-          <div class="dashboard-header">
-            <h1>Campanhas e Promoções</h1>
-            <p>Confira nossas campanhas especiais e ofertas exclusivas</p>
-          </div>
+
+          <form style="background-color: #f7f9fa">
+            <input id="search" placeholder="O que você procura?" type="text" />
+            <i class="icone-busca mdi mdi-magnify"></i>
+          </form>
 
           <!-- Scrollable page content -->
           <div class="page-content" style="background-color: #f7f9fa">
             <div class="block no-margin-top">
-              
-              <!-- Área de filtro de categorias -->
-              <div class="campaign-categories">
-                <div class="category-pill active" data-category="all">Todas</div>
-                <div class="category-pill" data-category="promocoes">Promoções</div>
-                <div class="category-pill" data-category="saude">Saúde</div>
-                <div class="category-pill" data-category="datas">Datas Especiais</div>
-                <div class="category-pill" data-category="lancamentos">Lançamentos</div>
+              <!-- Swiper -->
+              <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                  <!-- Banners will be dynamically inserted here -->
+                </div>
+                <div class="swiper-pagination"></div>
               </div>
-              
-              <!-- Container de campanhas -->
-              <div id="container-campanhas" class="campaigns-container">
-                <!-- Campanhas serão inseridas aqui pelo JavaScript -->
 
-                <!-- Skeleton para carregamento -->
-                <div class="campaign-card skeleton-card">
-                  <div class="campaign-image skeleton-effect-wave"></div>
-                  <div class="campaign-content">
-                    <div class="campaign-title skeleton-effect-wave"></div>
-                    <div class="campaign-subtitle skeleton-effect-wave"></div>
-                    <div class="campaign-period skeleton-effect-wave"></div>
-                  </div>
+              <!-- Categories container -->
+              <div class="categories-container">
+                <!-- Categories title section -->
+                <div class="categories-header">
+                  <h4 class="categories-title">Categorias</h4>
                 </div>
-
-                <div class="campaign-card skeleton-card">
-                  <div class="campaign-image skeleton-effect-wave"></div>
-                  <div class="campaign-content">
-                    <div class="campaign-title skeleton-effect-wave"></div>
-                    <div class="campaign-subtitle skeleton-effect-wave"></div>
-                    <div class="campaign-period skeleton-effect-wave"></div>
+                
+                <!-- Categories scrollable wrapper with arrows -->
+                <div class="categories-scroll-container">
+                  <button class="scroll-arrow scroll-left">
+                    <i class="mdi mdi-chevron-left"></i>
+                  </button>
+                  
+                  <div class="categories-scroll-wrapper">
+                    <div class="categories-grid" id="container-categorias">
+                      <!-- Categories will be dynamically inserted here -->
+                    </div>
                   </div>
+                  
+                  <button class="scroll-arrow scroll-right">
+                    <i class="mdi mdi-chevron-right"></i>
+                  </button>
                 </div>
-
-                <div class="campaign-card skeleton-card">
-                  <div class="campaign-image skeleton-effect-wave"></div>
-                  <div class="campaign-content">
-                    <div class="campaign-title skeleton-effect-wave"></div>
-                    <div class="campaign-subtitle skeleton-effect-wave"></div>
-                    <div class="campaign-period skeleton-effect-wave"></div>
-                  </div>
+                
+                <!-- Scroll indicator dots -->
+                <div class="scroll-indicator">
+                  <div class="scroll-dots"></div>
                 </div>
               </div>
-              
+              <!-- Products container -->
+              <div
+                id="container-produtos"
+                class="margin-top"
+              >
+                <!-- ITEM SKELETON - Updated to single-line layout -->
+                <div class="item-card">
+                  <a href="/detalhes/" class="item">
+                    <div class="img-container skeleton-effect-wave"></div>
+                    <div class="nome-rating">
+                      <span
+                        style="width: 80%"
+                        class="gelo skeleton-effect-wave skeleton-block color-gray"
+                      ></span>
+                      <div class="star-rating" style="margin: 5px 0;">
+                        <span
+                          style="width: 100px; height: 16px"
+                          class="gelo skeleton-effect-wave skeleton-block"
+                        ></span>
+                      </div>
+                      <div class="price">
+                        <span
+                          style="width: 80px; height: 20px"
+                          class="gelo skeleton-effect-wave skeleton-block"
+                        ></span>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+
+                <!-- ITEM SKELETON -->
+                <div class="item-card">
+                  <a href="/detalhes/" class="item">
+                    <div class="img-container skeleton-effect-wave"></div>
+                    <div class="nome-rating">
+                      <span
+                        style="width: 80%"
+                        class="gelo skeleton-effect-wave skeleton-block color-gray"
+                      ></span>
+                      <div class="star-rating" style="margin: 5px 0;">
+                        <span
+                          style="width: 100px; height: 16px"
+                          class="gelo skeleton-effect-wave skeleton-block"
+                        ></span>
+                      </div>
+                      <div class="price">
+                        <span
+                          style="width: 80px; height: 20px"
+                          class="gelo skeleton-effect-wave skeleton-block"
+                        ></span>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+
+                <!-- ITEM SKELETON -->
+                <div class="item-card">
+                  <a href="/detalhes/" class="item">
+                    <div class="img-container skeleton-effect-wave"></div>
+                    <div class="nome-rating">
+                      <span
+                        style="width: 80%"
+                        class="gelo skeleton-effect-wave skeleton-block color-gray"
+                      ></span>
+                      <div class="star-rating" style="margin: 5px 0;">
+                        <span
+                          style="width: 100px; height: 16px"
+                          class="gelo skeleton-effect-wave skeleton-block"
+                        ></span>
+                      </div>
+                      <div class="price">
+                        <span
+                          style="width: 80px; height: 20px"
+                          class="gelo skeleton-effect-wave skeleton-block"
+                        ></span>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
               <br /><br /><br /><br /><br /><br /><br /><br />
             </div>
           </div>
@@ -111,7 +183,8 @@
     <!-- jQuery -->
     <script type="text/javascript" src="lib/jquery-3.7.0.min.js"></script>
     <!-- Roteamento do app-->
-    <script type="text/javascript" src="js/routes.js"></script>
+    <script type="text/javascript" src="js/routes.js?v=1.1.8"></script>
+    <script type="text/javascript" src="js/funcoes.js?v=1.1.8"></script>
     <script src="cordova.js"></script>
   </body>
 </html>
