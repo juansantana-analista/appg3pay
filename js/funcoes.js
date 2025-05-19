@@ -2960,7 +2960,7 @@ function listarEnderecos() {
             $("#toolbar-carrinho").addClass("display-none");
   
             //MOSTRAR SACOLINHA VAZIA
-            $("#listaCarrinho").html(`
+            $("#containerCarrinho").html(`
                           <div class="text-align-center">
                               <img width="300" src="img/empty.gif">
                               <br><span class="color-gray">Nada por enquanto...</span>
