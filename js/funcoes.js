@@ -596,6 +596,7 @@ function initializeBenefits(benefits) {
 }
 
 // Modifica a função buscarProduto para usar os benefícios dinâmicos
+// Modifica a função buscarProduto para atualizar os dados do popup ao carregar um novo produto
 function buscarProduto() {  
 var produtoId = localStorage.getItem('produtoId');
 app.dialog.preloader("Carregando...");
@@ -742,7 +743,7 @@ fetch(apiServerUrl, options)
       $("#precoDesconto").html(formatarMoeda(detalhes.preco));
       $("#precoRevenda").html(formatarMoeda(detalhes.preco_lojavirtual));
       $("#precoLucro").html(formatarMoeda(precoLucro));
-      //$("#precopromo-detalhe").html(produtoPreco);
+      $("#precoShare").html(formatarMoeda(detalhes.preco)); // Atualiza o preço no popup
 
       // Selecione a div onde você quer adicionar o link
       const $container = $('#containerBtnCarrinho');
@@ -772,6 +773,10 @@ fetch(apiServerUrl, options)
       // Inicializa os benefícios do produto
       initializeBenefits(detalhes.beneficios);
 
+      // ATUALIZAÇÃO DOS DADOS DO POPUP DE COMPARTILHAMENTO
+      // Atualiza os dados básicos do produto no popup
+      atualizarDadosPopupCompartilhamento(detalhes, fotoPrincipal);
+
       localStorage.setItem('produtoDetalhes', JSON.stringify({detalhes}));
       app.dialog.close();
     } else {
@@ -793,6 +798,160 @@ fetch(apiServerUrl, options)
       "Falha na requisição!"
     );
   });
+}
+
+// Nova função para atualizar os dados do popup de compartilhamento
+function atualizarDadosPopupCompartilhamento(detalhes, fotoPrincipal) {
+  // Atualiza os dados básicos no popup
+  $("#imagemShare").attr('src', fotoPrincipal);
+  $("#nomeShare").html(detalhes.nome.toUpperCase());
+  $("#precoShare").html(formatarMoeda(detalhes.preco));
+  
+  // Limpa o QR code anterior
+  $("#qrcode").html("");
+  
+  // Remove os event listeners anteriores para evitar duplicação
+  $("#shareLanding").off("click");
+  $("#linkPaginaUrl").off("click");
+  $("#linkCheckoutUrl").off("click");
+  $(".compartilhar-link").off("click");
+  
+  // Recarrega os links específicos do produto
+  // Isso será chamado quando o popup for aberto através do evento no routes.js
+}
+
+// Modifica a função buscarLinks para garantir que os dados sejam atualizados
+function buscarLinks() {
+  var produtoId = localStorage.getItem('produtoId');
+  
+  var codigo_indicador = localStorage.getItem("codigo_indicador");
+  app.dialog.preloader("Carregando...");
+
+  var imgUrl = "https://vitatop.tecskill.com.br/";
+
+  // Cabeçalhos da requisição
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "ProdutoLinkRest",
+    method: "loadAll",
+    filters: [["produto_id", "=", produtoId]],
+  });
+
+  // Opções da requisição
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  // Fazendo a requisição
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // Verifica se o status é 'success' e se há dados de pedidos
+      if (responseJson.status === "success") {
+        console.log(responseJson);
+        const links = responseJson.data;
+        let linkLandingPage = "";
+        let linkCheckout = "";
+
+        //Limpa o container antes de popular
+        $("#qrcode").html("");
+        $("#ul-links").html("");
+
+        links.forEach((link) => {
+          const linkUrl = truncarNome(link.link_url, 40);
+
+          // Verifica se o tipo_link é igual a 1 e armazena o link_url
+          if (link.tipo_link == "1") {
+            linkLandingPage = link.link_url;
+            $("#paginaLinkUrl").html(linkUrl);
+          } else {
+            linkCheckout = link.link_url;
+            $("#checkoutLinkUrl").html(linkUrl);
+          }
+        });
+
+        // Remove event listeners anteriores antes de adicionar novos
+        $("#shareLanding").off("click");
+        $("#linkPaginaUrl").off("click");
+        $("#linkCheckoutUrl").off("click");
+        $(".compartilhar-link").off("click");
+
+        $("#shareLanding").on("click", function () {
+          // Pega o url do link clicado em share
+          //Abre opção compartilhamento
+          onCompartilhar(
+            "Link do Produto",
+            "Aproveite agora mesmo nosso produto",
+            linkLandingPage + codigo_indicador
+          );
+        });
+        $("#linkPaginaUrl").on("click", function () {
+          // Pega o url do link clicado em share
+          //Abre opção compartilhamento
+          onCompartilhar(
+            "Link do Produto",
+            "Aproveite agora mesmo nosso produto",
+            linkLandingPage + codigo_indicador
+          );
+        });
+        $("#linkCheckoutUrl").on("click", function () {
+          // Pega o url do link clicado em share
+          //Abre opção compartilhamento
+          onCompartilhar(
+            "Link do Produto",
+            "Aproveite agora mesmo nosso produto",
+            linkCheckout + codigo_indicador
+          );
+        });
+
+        $(".compartilhar-link").on("click", function () {
+          // Pega o url do link clicado em share
+          var linkUrl = $(this).data("link");
+          //Abre opção compartilhamento
+
+          onCompartilhar(
+            "Link do Produto",
+            "Aproveite agora mesmo nosso produto",
+            linkCheckout + codigo_indicador
+          );
+        });
+
+        // Gera o QR code sempre com o produto atual
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+          text: linkLandingPage + codigo_indicador, // Adiciona o código indicador na URL
+          width: 130,
+          height: 130,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H,
+        });
+
+        app.dialog.close();
+      } else {
+        app.dialog.close();
+        // Verifica se há uma mensagem de erro definida
+        const errorMessage =
+          responseJson.message || "Formato de dados inválido";
+        app.dialog.alert(
+          "Erro ao carregar links: " + errorMessage,
+          "Falha na requisição!"
+        );
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+      app.dialog.alert(
+        "Erro ao carregar links: " + error.message,
+        "Falha na requisição!"
+      );
+    });
 }
 
 // Função para abrir o zoom da imagem
@@ -957,134 +1116,6 @@ function openImageZoom(imageSrc) {
   }
 }
 //Fim Função Detalhes Produto
-  
-  //Inicio Função obter Links
-  function buscarLinks() {
-    var produtoId = localStorage.getItem('produtoId');
-    
-    var codigo_indicador = localStorage.getItem("codigo_indicador");
-    app.dialog.preloader("Carregando...");
-  
-    var imgUrl = "https://vitatop.tecskill.com.br/";
-  
-    // Cabeçalhos da requisição
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + userAuthToken,
-    };
-  
-    const body = JSON.stringify({
-      class: "ProdutoLinkRest",
-      method: "loadAll",
-      filters: [["produto_id", "=", produtoId]],
-    });
-  
-    // Opções da requisição
-    const options = {
-      method: "POST",
-      headers: headers,
-      body: body,
-    };
-  
-    // Fazendo a requisição
-    fetch(apiServerUrl, options)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        // Verifica se o status é 'success' e se há dados de pedidos
-        if (responseJson.status === "success") {
-          console.log(responseJson);
-          const links = responseJson.data;
-          let linkLandingPage = "";
-          let linkCheckout = "";
-  
-          //Limpa o container antes de copular
-          $("#qrcode").html("");
-          $("#ul-links").html("");
-  
-          links.forEach((link) => {
-            const linkUrl = truncarNome(link.link_url, 40);
-  
-            // Verifica se o tipo_link é igual a 1 e armazena o link_url
-            if (link.tipo_link == "1") {
-              linkLandingPage = link.link_url;
-              $("#paginaLinkUrl").html(linkUrl);
-            } else {
-              linkCheckout = link.link_url;
-              $("#checkoutLinkUrl").html(linkUrl);
-            }
-          });
-  
-          $("#shareLanding").on("click", function () {
-            // Pega o url do link clicado em share
-            //Abre opção compartilhamento
-            onCompartilhar(
-              "Link do Produto",
-              "Aproveite agora mesmo nosso produto",
-              linkLandingPage + codigo_indicador
-            );
-          });
-          $("#linkPaginaUrl").on("click", function () {
-            // Pega o url do link clicado em share
-            //Abre opção compartilhamento
-            onCompartilhar(
-              "Link do Produto",
-              "Aproveite agora mesmo nosso produto",
-              linkLandingPage + codigo_indicador
-            );
-          });
-          $("#linkCheckoutUrl").on("click", function () {
-            // Pega o url do link clicado em share
-            //Abre opção compartilhamento
-            onCompartilhar(
-              "Link do Produto",
-              "Aproveite agora mesmo nosso produto",
-              linkCheckout + codigo_indicador
-            );
-          });
-  
-          $(".compartilhar-link").on("click", function () {
-            // Pega o url do link clicado em share
-            var linkUrl = $(this).data("link");
-            //Abre opção compartilhamento
-  
-            onCompartilhar(
-              "Link do Produto",
-              "Aproveite agora mesmo nosso produto",
-              linkCheckout + codigo_indicador
-            );
-          });
-  
-          var qrcode = new QRCode(document.getElementById("qrcode"), {
-            text: linkLandingPage,
-            width: 130,
-            height: 130,
-            colorDark: "#000000",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.H,
-          });
-  
-          app.dialog.close();
-        } else {
-          app.dialog.close();
-          // Verifica se há uma mensagem de erro definida
-          const errorMessage =
-            responseJson.message || "Formato de dados inválido";
-          app.dialog.alert(
-            "Erro ao carregar links: " + errorMessage,
-            "Falha na requisição!"
-          );
-        }
-      })
-      .catch((error) => {
-        app.dialog.close();
-        console.error("Erro:", error);
-        app.dialog.alert(
-          "Erro ao carregar links: " + error.message,
-          "Falha na requisição!"
-        );
-      });
-  }
-  //Fim Função obter Links
   
   //Inicio Função obter id da Pessoa
   function buscarPessoaId(userId) {

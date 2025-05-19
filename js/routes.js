@@ -1129,55 +1129,66 @@ var app = new Framework7({
       }
     },
     {
-      path: '/detalhes/',
-      url: 'detalhes.html?v=' + versionApp,
-      animate: false,
-      on: {
-        pageBeforeIn: function (event, page) {          
-            
-          // fazer algo antes da página ser exibida
-          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
-          // Início função validar login
-          const isValid = validarToken();
-          if (!isValid) {
-            console.warn("Token inválido. Redirecionando para login via fallback.");
-            deleteCookie('userAuthToken');
-            app.views.main.router.navigate("/login-view/");
-            setTimeout(() => {
-              app.views.main.router.navigate("/login-view/");
-            }, 500); // Adiciona um fallback com pequeno delay
-          }
-          $("#menuPrincipal").hide("fast");
-
-        },
-        pageAfterIn: function (event, page) {
-          // fazer algo depois da página ser exibida          
-        },
-        pageInit: function (event, page) {   
-          console.log('detalhes');       
-          // fazer algo quando a página for inicializada
-          $.getScript('js/qrcode.min.js');
-          //$.getScript('js/detalhes.js');
-          var produtoId = localStorage.getItem('produtoId');
-          $("#idProduto").html(produtoId);
-
-          buscarProduto();
-          document.querySelector('#compartilharProduto').addEventListener('click', function (e) {
-            e.preventDefault(); // Prevent default link behavior
-            app.popup.open('.popup-compartilhar');
-            buscarLinks();
-          });
-
-          $("#back-button").on('click', function () {
-            app.views.main.router.navigate("/home/");
-          });
-          
-        },
-        pageBeforeRemove: function (event, page) {
-          // fazer algo antes da página ser removida do DOM
-        },
+  path: '/detalhes/',
+  url: 'detalhes.html?v=' + versionApp,
+  animate: false,
+  on: {
+    pageBeforeIn: function (event, page) {          
+        
+      // fazer algo antes da página ser exibida
+      userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+      // Início função validar login
+      const isValid = validarToken();
+      if (!isValid) {
+        console.warn("Token inválido. Redirecionando para login via fallback.");
+        deleteCookie('userAuthToken');
+        app.views.main.router.navigate("/login-view/");
+        setTimeout(() => {
+          app.views.main.router.navigate("/login-view/");
+        }, 500); // Adiciona um fallback com pequeno delay
       }
+      $("#menuPrincipal").hide("fast");
+
     },
+    pageAfterIn: function (event, page) {
+      // fazer algo depois da página ser exibida          
+    },
+    pageInit: function (event, page) {   
+      console.log('detalhes');       
+      // fazer algo quando a página for inicializada
+      $.getScript('js/qrcode.min.js');
+      //$.getScript('js/detalhes.js');
+      var produtoId = localStorage.getItem('produtoId');
+      $("#idProduto").html(produtoId);
+
+      buscarProduto();
+      
+      // Remove o event listener anterior se existir
+      document.querySelector('#compartilharProduto').removeEventListener('click', abrirPopupCompartilhar);
+      
+      // Adiciona o novo event listener
+      document.querySelector('#compartilharProduto').addEventListener('click', abrirPopupCompartilhar);
+
+      // Função para abrir o popup e carregar os links
+      function abrirPopupCompartilhar(e) {
+        e.preventDefault();
+        app.popup.open('.popup-compartilhar');
+        // Sempre busca os links atualizados quando o popup é aberto
+        buscarLinks();
+      }
+
+      $("#back-button").on('click', function () {
+        app.views.main.router.navigate("/home/");
+      });
+      
+    },
+    pageBeforeRemove: function (event, page) {
+      // fazer algo antes da página ser removida do DOM
+      // Remove o event listener para evitar memory leaks
+      document.querySelector('#compartilharProduto').removeEventListener('click', abrirPopupCompartilhar);
+    },
+  }
+},
     {
       path: '/carrinho/',
       url: 'carrinho.html?v=' + versionApp,
