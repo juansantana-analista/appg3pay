@@ -1168,10 +1168,22 @@ var app = new Framework7({
 
           
           document.querySelector('#compartilharProduto').addEventListener('click', function (e) {
-            e.preventDefault(); // Prevent default link behavior
-            app.popup.open('.popup-compartilhar');
-            buscarLinks();
-          });
+    e.preventDefault();
+    
+    // LIMPAR DADOS ANTIGOS ANTES DE ABRIR O POPUP
+    $("#imagemShare").attr('src', 'img/default.png');
+    $("#nomeShare").html('Carregando...');
+    $("#precoShare").html('');
+    $("#qrcode").html('');
+    $("#checkoutLinkUrl").html('');
+    $("#paginaLinkUrl").html('');
+    
+    // Remove todos os event listeners antigos
+    $("#btnCheckoutShare, #shareLanding, #linkPaginaUrl, #linkCheckoutUrl, .compartilhar-link").off('click');
+    
+    app.popup.open('.popup-compartilhar');
+    buscarLinks();
+});;
 
 
           $("#back-button").on('click', function () {
