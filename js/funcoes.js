@@ -625,6 +625,7 @@ const options = {
 fetch(apiServerUrl, options)
   .then((response) => response.json())
   .then((responseJson) => {
+    console.log(responseJson);
     // Verifica se o status é 'success' e se há dados de pedidos
     if (responseJson.status === "success" && responseJson.data.status === "success") {
       const detalhes = responseJson.data.data;      
