@@ -1153,10 +1153,8 @@ var app = new Framework7({
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida          
         },
-        pageInit: function (event, page) {
-          
-            
-            app.popup.close('.popup-compartilhar');
+        pageInit: function (event, page) {   
+          console.log('detalhes');       
           // fazer algo quando a página for inicializada
           $.getScript('js/qrcode.min.js');
           //$.getScript('js/detalhes.js');
