@@ -1,155 +1,76 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      <!-- Required meta tags-->
-      <meta charset="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="apple-mobile-web-app-capable" content="yes" />
-      <!-- Color theme for statusbar (Android only) -->
-      <meta name="theme-color" content="#1d4f91" />
-      <!-- Your app title -->
-      <title>VitaTop - Minhas Vendas</title>
-      <!-- Path to Framework7 Library Bundle CSS -->
-      <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
-      <!-- CSS PERSONALIZADO PARA MENU-->
-      <link rel="stylesheet" href="css/index.css" />
-      <!--Ícones Material Design-->
-      <link rel="stylesheet" href="css/materialdesignicons.min.css" />
-      <!-- Icones do Remix icon-->
-      <link rel="stylesheet" href="css/remixicon/remixicon.css" />
-   </head>
-   <body>
-      <!-- App root element -->
-      <div id="app">
-         <!-- Your main view, should have "view-main" class -->
-         <div class="view view-main">
-            <!-- Initial Page, "data-name" contains page name -->
-            <div data-name="vendas" class="page color-theme-blue">
-               <!-- NAV TOPO-->
-               <div class="top-nav">
-                  <div class="left">
-                     <a
-                        href="#"
-                        class="link panel-open btn-novo"
-                        data-panel="#panel-nested"
-                        >
-                     <i class="mdi mdi-menu"></i>
-                     </a>
-                  </div>
-                  <img src="img/logo-nav.png" class="title-logo" width="130px" />
-                  <a href="/notificacoes/" class="btn-notificacao" data-count="0">
-                  <i class="mdi mdi-bell"></i>
-                  </a>
-               </div>
-               <!-- Scrollable page content -->
-               <div
-                  class="page-content"
-                  style="background-color: #f7f9fa; padding-bottom: 100px"
-                  >
-                  <!-- Vendas Header -->
-                  <div class="vendas-header">
-                     <h1>Minhas Vendas</h1>
-                     <p>Acompanhe as vendas e comissões geradas</p>
-                  </div>
-                  <!-- Filtros de Vendas -->
-                  <div class="vendas-filters">
-                     <div class="filter-tabs">
-                        <button class="filter-tab active" data-filter="all">Todas</button>
-                        <button class="filter-tab" data-filter="pending">Pendentes</button>
-                        <button class="filter-tab" data-filter="approved">Aprovadas</button>
-                        <button class="filter-tab" data-filter="rejected">Rejeitadas</button>
-                     </div>
-                     <div class="date-filter">
-                        <select id="monthFilter">
-                           <option value="all">Todos os meses</option>
-                           <option value="1">Janeiro</option>
-                           <option value="2">Fevereiro</option>
-                           <option value="3">Março</option>
-                           <option value="4">Abril</option>
-                           <option value="5">Maio</option>
-                           <option value="6">Junho</option>
-                           <option value="7">Julho</option>
-                           <option value="8">Agosto</option>
-                           <option value="9">Setembro</option>
-                           <option value="10">Outubro</option>
-                           <option value="11">Novembro</option>
-                           <option value="12">Dezembro</option>
-                        </select>
-                     </div>
-                  </div>
-                  <!-- Resumo de Vendas -->
-                  <div class="vendas-summary">
-                     <div class="summary-card">
-                        <div class="card-icon">
-                           <i class="mdi mdi-cart-check"></i>
-                        </div>
-                        <div class="card-content">
-                           <div class="card-value" id="totalVendas">0</div>
-                           <div class="card-title">Total de Vendas</div>
-                        </div>
-                     </div>
-                     <div class="summary-card">
-                        <div class="card-icon">
-                           <i class="mdi mdi-cash-multiple"></i>
-                        </div>
-                        <div class="card-content">
-                           <div class="card-value" id="totalComissoes">R$ 0,00</div>
-                           <div class="card-title">Em Comissões</div>
-                        </div>
-                     </div>
-                  </div>
-                  <!-- Listagem de Vendas -->
-                  <div class="vendas-section">
-                     <h2 class="section-title">Vendas Recentes</h2>
-                     <!-- Skeleton Loading (aparece durante o carregamento) -->
-                     <div class="skeleton-loading">
-                        <div class="skeleton-card">
-                           <div class="skeleton-header"></div>
-                           <div class="skeleton-body">
-                              <div class="skeleton-line"></div>
-                              <div class="skeleton-line"></div>
-                              <div class="skeleton-line short"></div>
-                           </div>
-                        </div>
-                        <div class="skeleton-card">
-                           <div class="skeleton-header"></div>
-                           <div class="skeleton-body">
-                              <div class="skeleton-line"></div>
-                              <div class="skeleton-line"></div>
-                              <div class="skeleton-line short"></div>
-                           </div>
-                        </div>
-                     </div>
-                     <!-- Container para a lista de vendas -->
-                     <div id="container-vendas">
-                        <!-- Vendas serão inseridas aqui via JavaScript -->
-                     </div>
-                     <!-- Empty State (aparece quando não há vendas) -->
-                     <div class="empty-state display-none" id="empty-state-vendas">
-                        <img src="img/empty-sales.svg" alt="Sem vendas">
-                        <h3>Nenhuma venda encontrada</h3>
-                        <p>Compartilhe seus links e comece a vender!</p>
-                        <button class="share-link-button">
-                        <i class="mdi mdi-share-variant"></i>
-                        Compartilhar Link
-                        </button>
-                     </div>
-                  </div>
-                  <!-- Refresh Button -->
-                  <button class="refresh-button" id="refreshVendas">
-                  <i class="mdi mdi-refresh"></i>
-                  </button>
-               </div>
+
+<head>
+  <!-- Required meta tags-->
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <!-- Color theme for statusbar (Android only) -->
+  <meta name="theme-color" content="#FF4B00" />
+  <!-- Your app title -->
+  <title>G3 PAY</title>
+  <!-- Path to Framework7 Library Bundle CSS -->
+  <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
+  <!-- CSS PERSONALIZADO PARA MENU-->
+  <link rel="stylesheet" href="css/index.css" />
+  
+  <link rel="stylesheet" href="css/carrinho.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <!--Ícones Material Design-->
+  <link rel="stylesheet" href="css/materialdesignicons.min.css" />
+  <!-- Icones do Remix icon-->
+  <link rel="stylesheet" href="css/remixicon/remixicon.css" />
+</head>
+
+<body>
+  <!-- App root element -->
+  <div id="app">
+    <!-- Your main view, should have "view-main" class -->
+    <div class="view view-main">
+      <!-- Initial Page, "data-name" contains page name -->
+      <div data-name="vendas" class="page color-theme-blue">
+          <!-- NAV TOPO-->
+          <div class="top-nav">
+            <div class="left">
+              <a
+                href="#"
+                class="link panel-open btn-novo"
+                data-panel="#panel-nested"
+              >
+                <i class="mdi mdi-menu"></i>
+              </a>
             </div>
-         </div>
+            <img src="img/logo-nav.png" class="title-logo" width="110px" />
+            <a href="/notificacoes/" class="btn-notificacao" data-count="0">
+              <i class="mdi mdi-bell"></i>
+            </a>
+          </div>
+        <!-- Scrollable page content -->
+
+          <!-- Cabeçalho com título da página -->
+          <div class="dashboard-header">
+            <h1>Vendas realizadas</h1>
+            <p>Confira as vendas realizadas através do seu link.</p>
+          </div>
+
+        <div class="page-content" style="background-color: #f7f9fa; padding-bottom: 160px">
+          <div class="block">
+            <div class="container-order" id="container-vendas">
+            </div>     
+          </div>
+        </div>
       </div>
-      <!-- Path to Framework7 Library Bundle JS-->
-      <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
-      <!-- jQuery -->
-      <script type="text/javascript" src="lib/jquery-3.7.0.min.js"></script>
-      <!-- Roteamento do app-->
-      <script type="text/javascript" src="js/routes.js"></script>
-      <script src="cordova.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-   </body>
+    </div>
+  </div>
+  <!-- Path to Framework7 Library Bundle JS-->
+  <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
+  <!-- jQuery -->
+  <script type="text/javascript" src="lib/jquery-3.7.0.min.js"></script>
+  <!-- Roteamento do app-->
+  <script type="text/javascript" src="js/routes.js"></script>
+  <script src="cordova.js"></script>
+</body>
+
 </html>

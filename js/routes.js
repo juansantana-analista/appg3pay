@@ -823,86 +823,37 @@ var app = new Framework7({
       },
     },
     {
-  path: "/vendas/",
-  url: "vendas.html",
-  animate: false,
-  on: {
-    pageBeforeIn: function (event, page) {
-      // fazer algo antes da página ser exibida
-      userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
-      // Início função validar login
-      const isValid = validarToken();
-      if (!isValid) {
-        console.warn("Token inválido. Redirecionando para login via fallback.");
-        deleteCookie('userAuthToken');
-        app.views.main.router.navigate("/login-view/");
-        setTimeout(() => {
-          app.views.main.router.navigate("/login-view/");
-        }, 500); // Adiciona um fallback com pequeno delay
-      }
-      $("#menuPrincipal").show("fast");
+      path: "/vendas/",
+      url: "vendas.html",
+      animate: false,
+      on: {
+        pageBeforeIn: function (event, page) {
+          // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
+          $("#menuPrincipal").show("fast");
+        },
+        pageAfterIn: function (event, page) {
+          // fazer algo depois da página ser exibida
+        },
+        pageInit: function (event, page) {
+          // fazer algo quando a página for inicializada
+          listarVendas();
+        },
+        pageBeforeRemove: function (event, page) {
+          // fazer algo antes da página ser removida do DOM
+        },
+      },
     },
-    pageAfterIn: function (event, page) {
-      // fazer algo depois da página ser exibida
-    },
-    pageInit: function (event, page) {
-      // fazer algo quando a página for inicializada
-      
-      // Listar vendas inicialmente com o filtro padrão "all"
-      listarVendas("all", "all");
-      
-      // Configurar filtros de status (Todas, Pendentes, Aprovadas, Rejeitadas)
-      $(".filter-tab").on("click", function() {
-        $(".filter-tab").removeClass("active");
-        $(this).addClass("active");
-        
-        const filtro = $(this).data("filter");
-        const mes = $("#monthFilter").val();
-        
-        listarVendas(filtro, mes);
-      });
-      
-      // Configurar filtro de mês
-      $("#monthFilter").on("change", function() {
-        const mes = $(this).val();
-        const filtro = $(".filter-tab.active").data("filter");
-        
-        listarVendas(filtro, mes);
-      });
-      
-      // Configurar botão de atualização
-      $("#refreshVendas").on("click", function() {
-        // Adicionar classe de carregamento
-        $(this).addClass("loading");
-        
-        // Obter filtros atuais
-        const filtro = $(".filter-tab.active").data("filter");
-        const mes = $("#monthFilter").val();
-        
-        // Atualizar lista de vendas
-        listarVendas(filtro, mes);
-        
-        // Remover classe de carregamento após um breve período
-        setTimeout(() => {
-          $(this).removeClass("loading");
-        }, 1000);
-      });
-      
-      // Configurar botão de compartilhar link
-      $(".share-link-button").on("click", function() {
-        app.popup.open('.popup-compartilhar');
-        buscarLinkAfiliado();
-      });
-      
-      // Atualizar contador de notificações e carrinho
-      buscarQtdeNotif();
-      contarCarrinho();
-    },
-    pageBeforeRemove: function (event, page) {
-      // fazer algo antes da página ser removida do DOM
-    },
-  },
-},
     {
       path: "/resumo-venda/",
       url: "resumo-venda.html",
