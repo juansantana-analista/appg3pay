@@ -230,6 +230,9 @@ var app = new Framework7({
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida          
           localStorage.removeItem("userId");     
+          // fazer algo antes da página ser exibida
+          $("#menuPrincipal").hide("fast");
+          $("#menuPrincipal").addClass("display-none");
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
