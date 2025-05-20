@@ -1339,126 +1339,206 @@ function openImageZoom(imageSrc) {
   //Fim Função Lista tela Pedidos
   
   //Inicio Funçao listar Vendas
-  function listarVendas(searchQuery = "") {
-    
-    var pessoaId = localStorage.getItem("pessoaId");
-    app.dialog.preloader("Carregando...");
-  
-    // Cabeçalhos da requisição
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + userAuthToken,
-    };
-  
-    // Cabeçalhos da requisição
-    const dados = {
-      vendedor: pessoaId,
-    };
-  
-    const body = JSON.stringify({
-      class: "PedidoDigitalRest",
-      method: "MinhasVendasDigitais",
-      dados: dados,
-    });
-  
-    // Opções da requisição
-    const options = {
-      method: "POST",
-      headers: headers,
-      body: body,
-    };
-  
-    // Fazendo a requisição
-    fetch(apiServerUrl, options)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        // Verifica se o status é 'success' e se há dados de pedidos
-        if (
-          responseJson.status === "success" &&
-          responseJson.data.status === "success"
-        ) {
-          const vendas = responseJson.data.data;
-          const vendasContainer = document.getElementById("container-vendas");
-          vendasContainer.innerHTML = "";
-  
-          vendas.forEach((venda) => {
+/**
+ * Função atualizada para listar vendas com nova interface
+ * @param {string} filtro - Filtro de status: "all", "pending", "approved", "rejected"
+ * @param {string} mes - Filtro de mês: "all" ou número do mês (1-12)
+ */
+function listarVendas(filtro = "all", mes = "all") {
+  var pessoaId = localStorage.getItem("pessoaId");
+  app.dialog.preloader("Carregando...");
 
-            const vendasHTML = `                    
-                          <div class="card-list" 
-                          data-id-venda="${venda.venda_id}">
-                             <div class="card-principal">
-                                <div class="card-header open header-pago">
-                                   <div class="date">${formatarData(
-                                     venda.data_criacao
-                                   )}</div>
-                                   <div class="status">${
-                                     venda.status_compra
-                                   }</div>
-                                </div>
-                                <div class="card-body">
-                                   <div class="name">PEDIDO #${
-                                     venda.venda_id
-                                   }</div>
-                                   <div class="details">
-                                      <div class="detail">
-                                         <span>Nº</span>
-                                         <span>${venda.venda_id}</span>
-                                      </div>
-                                      <div class="detail">
-                                         <span class="mdi mdi-cash-multiple"></span>
-                                         <span>${
-                                           venda.forma_pagamento.forma
-                                         }</span>
-                                      </div>
-                                      <div class="detail">
-                                         <span>Total</span>
-                                         <span>${formatarMoeda(
-                                           venda.valor_total
-                                         )}</span>
-                                      </div>
-                                      <div class="detail">
-                                         <span>A pagar</span>
-                                         <span>${formatarMoeda(
-                                           venda.valor_total
-                                         )}</span>
-                                      </div>
-                                      <div class="items">${venda.quantidade_itens}</div>
-                                   </div>
-                                </div>
-                             </div>
-                          </div>
-                      `;
-            vendasContainer.innerHTML += vendasHTML;
-          });
-  
-          $(".card-list").click(function () {
-            // Atualiza o ícone de seleção
-            var vendaId = $(this).data("id-venda");
-            localStorage.setItem("vendaId", vendaId);
-            app.views.main.router.navigate("/resumo-venda/");
-          });
-  
+  // Mostrar skeleton loading
+  $(".skeleton-loading").removeClass("display-none");
+  $("#container-vendas").addClass("display-none");
+  $("#empty-state-vendas").addClass("display-none");
+
+  // Cabeçalhos da requisição
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  // Dados para a requisição
+  const dados = {
+    vendedor: pessoaId,
+    filtro: filtro !== "all" ? filtro : null,
+    mes: mes !== "all" ? mes : null
+  };
+
+  const body = JSON.stringify({
+    class: "PedidoDigitalRest",
+    method: "MinhasVendasDigitais",
+    dados: dados,
+  });
+
+  // Opções da requisição
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  // Fazendo a requisição
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // Esconder skeleton loading
+      $(".skeleton-loading").addClass("display-none");
+      $("#container-vendas").removeClass("display-none");
+      
+      // Verifica se o status é 'success' e se há dados de pedidos
+      if (
+        responseJson.status === "success" &&
+        responseJson.data.status === "success"
+      ) {
+        const vendas = responseJson.data.data;
+        
+        // Atualizar os contadores de resumo
+        atualizarResumoVendas(vendas);
+        
+        // Verificar se há vendas para mostrar
+        if (vendas.length === 0) {
+          $("#empty-state-vendas").removeClass("display-none");
+          $("#container-vendas").html("");
           app.dialog.close();
-        } else {
-          app.dialog.close();
-          // Verifica se há uma mensagem de erro definida
-          const errorMessage =
-            responseJson.message || "Formato de dados inválido";
-          app.dialog.alert(
-            "Erro ao carregar vendas: " + errorMessage,
-            "Falha na requisição!"
-          );
+          return;
         }
-      })
-      .catch((error) => {
+        
+        const vendasContainer = document.getElementById("container-vendas");
+        vendasContainer.innerHTML = "";
+
+        vendas.forEach((venda) => {
+          // Determinar a classe do status
+          let statusClass = "";
+          let headerClass = "";
+          
+          if (venda.status_compra === "Aprovado") {
+            statusClass = "aprovado";
+            headerClass = "header-pago";
+          } else if (venda.status_compra === "Pendente") {
+            statusClass = "pendente";
+            headerClass = "header-pendente";
+          } else {
+            statusClass = "rejeitado";
+            headerClass = "header-rejeitado";
+          }
+
+          const vendasHTML = `                    
+            <div class="card-list" data-id-venda="${venda.venda_id}">
+              <div class="card-principal">
+                <div class="card-header ${headerClass}">
+                  <div class="date">${formatarData(venda.data_criacao)}</div>
+                  <div class="status ${statusClass}">${venda.status_compra}</div>
+                </div>
+                <div class="card-body">
+                  <div class="name">${venda.cliente ? venda.cliente.nome : 'Cliente'} #${venda.venda_id}</div>
+                  <div class="details">
+                    <div class="detail">
+                      <span><i class="mdi mdi-cash-multiple"></i> Pagamento</span>
+                      <span>${venda.forma_pagamento.forma || 'Não informado'}</span>
+                    </div>
+                    <div class="detail">
+                      <span><i class="mdi mdi-tag-outline"></i> Total</span>
+                      <span>${formatarMoeda(venda.valor_total)}</span>
+                    </div>
+                    <div class="detail">
+                      <span><i class="mdi mdi-currency-usd"></i> Comissão</span>
+                      <span class="text-success">${formatarMoeda(calcularComissao(venda))}</span>
+                    </div>
+                    <div class="detail">
+                      <span><i class="mdi mdi-calendar-outline"></i> Data</span>
+                      <span>${formatarDataSimples(venda.data_criacao)}</span>
+                    </div>
+                    <div class="items">${venda.quantidade_itens}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          
+          vendasContainer.innerHTML += vendasHTML;
+        });
+
+        // Adicionar eventos de clique aos cards de venda
+        $(".card-list").click(function () {
+          var vendaId = $(this).data("id-venda");
+          localStorage.setItem("vendaId", vendaId);
+          app.views.main.router.navigate("/resumo-venda/");
+        });
+
         app.dialog.close();
-        console.error("Erro:", error);
-        app.dialog.alert(
-          "Erro ao carregar vendas: " + error.message,
-          "Falha na requisição!"
-        );
-      });
+      } else {
+        app.dialog.close();
+        // Mostrar estado vazio quando não há dados ou ocorreu erro
+        $("#empty-state-vendas").removeClass("display-none");
+        $("#container-vendas").html("");
+        
+        // Verifica se há uma mensagem de erro definida
+        const errorMessage = responseJson.message || "Formato de dados inválido";
+        console.error("Erro ao carregar vendas:", errorMessage);
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      $(".skeleton-loading").addClass("display-none");
+      $("#empty-state-vendas").removeClass("display-none");
+      $("#container-vendas").html("");
+      
+      console.error("Erro:", error);
+      app.dialog.alert(
+        "Erro ao carregar vendas: " + error.message,
+        "Falha na requisição!"
+      );
+    });
+}
+
+/**
+ * Função auxiliar para atualizar o resumo de vendas
+ * @param {Array} vendas - Array com as vendas
+ */
+function atualizarResumoVendas(vendas) {
+  // Contador de vendas
+  $("#totalVendas").text(vendas.length);
+  
+  // Calcular o total de comissões
+  let totalComissoes = 0;
+  vendas.forEach(venda => {
+    totalComissoes += calcularComissao(venda);
+  });
+  
+  $("#totalComissoes").text(formatarMoeda(totalComissoes));
+}
+
+/**
+ * Função auxiliar para calcular a comissão da venda
+ * @param {Object} venda - Objeto da venda
+ * @returns {number} - Valor da comissão
+ */
+function calcularComissao(venda) {
+  // Se a API já envia o valor de comissão, use-o diretamente
+  if (venda.comissao) {
+    return parseFloat(venda.comissao);
   }
+  
+  // Caso contrário, calcule a comissão com base em alguma regra (exemplo: 20% do valor total)
+  const valorTotal = parseFloat(venda.valor_total);
+  return valorTotal * 0.2; // 20% do valor total como comissão
+}
+
+/**
+ * Função para formatar data de forma mais simples (DD/MM/YYYY)
+ * @param {string} data - Data no formato ISO
+ * @returns {string} - Data formatada
+ */
+function formatarDataSimples(data) {
+  const dateObj = new Date(data);
+  const dia = dateObj.getDate().toString().padStart(2, '0');
+  const mes = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+  const ano = dateObj.getFullYear();
+  
+  return `${dia}/${mes}/${ano}`;
+}
   //Fim Função Lista Vendas
   
   // Início da função detalhesVendas
