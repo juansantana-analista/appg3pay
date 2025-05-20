@@ -3485,6 +3485,7 @@ function contarCarrinho() {
     fetch(apiServerUrl, options)
       .then((response) => response.json())
       .then((responseJson) => {
+        console.log(responseJson);
         // Verifica se o status é 'success'
         if (
           responseJson.status == "success" &&
