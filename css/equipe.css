@@ -440,3 +440,34 @@
   background-color: #ffd700;
   color: #333;
 }
+
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.right-icons {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Espaço entre os ícones */
+}
+
+.btn-notificacao,
+.btn-cart {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+.btn-notificacao:hover,
+.btn-cart:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
