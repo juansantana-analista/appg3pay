@@ -31,24 +31,31 @@
         <!-- Initial Page, "data-name" contains page name -->
         <div data-name="home" class="page color-theme-blue">
           <!-- NAV TOPO-->
-<!-- Header Principal -->
-<div class="top-nav">
-  <div class="left">
-    <!-- Logo ou Título -->
-    <div class="title-logo">
-      <span class="title-descricao">VITATOP</span>
-    </div>
-  </div>
-  
-  <div class="right d-flex">
-    <!-- Botão de Notificações -->
-    <div class="btn-notificacao" data-count="0" onclick="app.views.main.router.navigate('/notificacoes/')">
-      <i class="mdi mdi-bell-outline"></i>
+<!-- Header Principal Mobile -->
+<div class="navbar navbar-large">
+  <div class="navbar-bg"></div>
+  <div class="navbar-inner sliding">
+    <div class="left">
+      <div class="title-brand">
+        <img src="img/logo.png" alt="Vitatop" class="brand-logo">
+        <span class="brand-text">VITATOP</span>
+      </div>
     </div>
     
-    <!-- Botão do Carrinho -->
-    <div class="btn-cart" data-count="0" onclick="app.views.main.router.navigate('/carrinho/')">
-      <i class="mdi mdi-cart-outline"></i>
+    <div class="right">
+      <!-- Botão de Notificações -->
+      <a href="/notificacoes/" class="link icon-only">
+        <div class="btn-icon-mobile btn-notificacao-mobile" data-count="0">
+          <i class="mdi mdi-bell-outline"></i>
+        </div>
+      </a>
+      
+      <!-- Botão do Carrinho -->
+      <a href="/carrinho/" class="link icon-only">
+        <div class="btn-icon-mobile btn-cart-mobile" data-count="0">
+          <i class="mdi mdi-cart-outline"></i>
+        </div>
+      </a>
     </div>
   </div>
 </div>
