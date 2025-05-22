@@ -60,6 +60,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {  
+          // Inicializar menu lateral
+          inicializarMenuLateral();
+          atualizarTabbarComMenu();
           // fazer algo quando a página for inicializada  
           function detectPlatform() {
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -2117,12 +2120,6 @@ function atualizarTabbarComMenu() {
     }
   }
 }
-
-// Chamar as funções de inicialização
-$(document).ready(function() {
-  inicializarMenuLateral();
-  atualizarTabbarComMenu();
-});
 
 
 // Bloquear o menu de contexto no clique com o botão direito
