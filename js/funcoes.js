@@ -2323,14 +2323,17 @@ function apagarNotificacao(notificacaoId) {
       .then((responseJson) => {
         if (responseJson.status === "success" && responseJson.data.status === "success") {
           const quantidadeNaoVistas = responseJson.data.data.quantidade;
-  console.log(quantidadeNaoVistas);
-          // Atualizar o atributo data-count
-          const $btnNotificacao = $(".btn-notificacao");
-          if (quantidadeNaoVistas > 0) {
-            $btnNotificacao.attr("data-count", quantidadeNaoVistas);
-          } else {
-            $btnNotificacao.attr("data-count", "0"); // Define como zero se não houver notificações
-          }
+          console.log(quantidadeNaoVistas);
+          
+          // Aguardar um pouco antes de tentar atualizar
+          setTimeout(() => {
+            const $btnNotificacao = $(".btn-notificacao");
+            if (quantidadeNaoVistas > 0) {
+              $btnNotificacao.attr("data-count", quantidadeNaoVistas);
+            } else {
+              $btnNotificacao.attr("data-count", "0");
+            }
+          }, 100);
         } else {
           console.error("Erro ao contar notificações:", responseJson.message);
         }
