@@ -2088,6 +2088,9 @@ function atualizarBadgeNotificacoesMenu() {
 
 // Modificar o HTML da tabbar no routes.js
 function atualizarTabbarComMenu() {
+  
+buscarQtdeNotif();
+contarCarrinho();
   // Esta função deve ser chamada quando necessário para atualizar a tabbar
   const bottomNav = document.querySelector('.bottom-nav');
   if (bottomNav) {
@@ -2120,8 +2123,6 @@ function atualizarTabbarComMenu() {
   inicializarMenuLateral();
   atualizarTabbarComMenu();
 
-buscarQtdeNotif();
-contarCarrinho();
 
 // Bloquear o menu de contexto no clique com o botão direito
 document.addEventListener('contextmenu', function (event) {
