@@ -31,27 +31,21 @@
         <!-- Initial Page, "data-name" contains page name -->
         <div data-name="home" class="page color-theme-blue">
           <!-- NAV TOPO-->
-<!-- Header Principal -->
-<div class="top-nav">
-  <div class="left">
-    <!-- Logo ou Título -->
-    <div class="title-logo">
-      <span class="title-descricao">VITATOP</span>
-    </div>
-  </div>
-  
-  <div class="right d-flex">
-    <!-- Botão de Notificações -->
-    <div class="btn-notificacao" data-count="0" onclick="app.views.main.router.navigate('/notificacoes/')">
-      <i class="mdi mdi-bell-outline"></i>
-    </div>
-    
-    <!-- Botão do Carrinho -->
-    <div class="btn-cart" data-count="0" onclick="app.views.main.router.navigate('/carrinho/')">
-      <i class="mdi mdi-cart-outline"></i>
-    </div>
-  </div>
-</div>
+                   <!-- NAV TOPO-->
+        <div class="top-nav">
+          <div class="left">
+            <img src="img/logo-nav.png" class="title-logo" width="130px" style="margin-left: 10px;" />
+          </div>
+        <!-- Botão de Notificações -->
+        <div class="btn-notificacao" data-count="0" onclick="app.views.main.router.navigate('/notificacoes/')">
+          <i class="mdi mdi-bell-outline"></i>
+        </div>
+        
+        <!-- Botão do Carrinho -->
+        <div class="btn-cart" data-count="0" onclick="app.views.main.router.navigate('/carrinho/')">
+          <i class="mdi mdi-cart-outline"></i>
+        </div>
+        </div>
 
           <form style="background-color: #f7f9fa">
             <input id="search" placeholder="O que você procura?" type="text" />
