@@ -2329,6 +2329,7 @@ function apagarNotificacao(notificacaoId) {
           setTimeout(() => {
             if (quantidadeNaoVistas > 0) {
               $(".btn-notificacao").attr("data-count", quantidadeNaoVistas);
+              console.log("aqui");
             } else {
               $(".btn-notificacao").attr("data-count", 0);
             }
