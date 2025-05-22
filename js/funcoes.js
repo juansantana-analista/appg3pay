@@ -2327,11 +2327,10 @@ function apagarNotificacao(notificacaoId) {
           
           // Aguardar um pouco antes de tentar atualizar
           setTimeout(() => {
-            const $btnNotificacao = $(".btn-notificacao");
             if (quantidadeNaoVistas > 0) {
-              $btnNotificacao.attr("data-count", quantidadeNaoVistas);
+              $(".btn-notificacao").attr("data-count", quantidadeNaoVistas);
             } else {
-              $btnNotificacao.attr("data-count", "0");
+              $(".btn-notificacao").attr("data-count", 0);
             }
           }, 100);
         } else {
