@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-const versionApp = "1.5.1";
+const versionApp = "1.5.2";
 var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -683,70 +683,67 @@ var app = new Framework7({
       }
     },
     {
-      path: "/equipe/",
-      url: "equipe.html",
-      animate: false,
-      on: {
-        pageBeforeIn: function (event, page) {
-          // fazer algo antes da página ser exibida
-          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
-          // Início função validar login
-          const isValid = validarToken();
-          if (!isValid) {
-            console.warn("Token inválido. Redirecionando para login via fallback.");
-            deleteCookie('userAuthToken');
+    path: "/equipe/",
+    url: "equipe.html?v=" + versionApp,
+    animate: false,
+    on: {
+      pageBeforeIn: function (event, page) {
+        // fazer algo antes da página ser exibida
+        userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+        // Início função validar login
+        const isValid = validarToken();
+        if (!isValid) {
+          console.warn("Token inválido. Redirecionando para login via fallback.");
+          deleteCookie('userAuthToken');
+          app.views.main.router.navigate("/login-view/");
+          setTimeout(() => {
             app.views.main.router.navigate("/login-view/");
-            setTimeout(() => {
-              app.views.main.router.navigate("/login-view/");
-            }, 500); // Adiciona um fallback com pequeno delay
-          }
-        },
-        pageAfterIn: function (event, page) {
-          // fazer algo depois da página ser exibida
-        },
-        pageInit: function (event, page) {
-          // fazer algo quando a página for inicializada
-          listarEquipe();
-          $.getScript('js/qrcode.min.js');
-          // Abrir popup compartilhamento
-
-          $('.abrir-popup').on('click', function (e) {
-            e.preventDefault(); // Prevent default link behavior
-            app.popup.open('.popup-compartilhar');
-            //buscarLinkAfiliado();
-          });
-          let zoomLevel = 1;
-          const maxZoom = 1;  // Define o zoom máximo para o tamanho original da tela
-          const minZoom = 0.5;  // Limite de zoom mínimo
-          
-          // Função para ajustar o nível de zoom
-          function applyZoom() {
-              $('#treeContainer').css('transform', `scale(${zoomLevel})`);
-          }
-          
-          // Aumentar zoom
-          $('#zoomIn').on('click', function () {
-              if (zoomLevel < maxZoom) {
-                  zoomLevel += 0.1;
-                  applyZoom();
-              }
-          });
-          
-          // Diminuir zoom
-          $('#zoomOut').on('click', function () {
-              if (zoomLevel > minZoom) {
-                  zoomLevel -= 0.1;
-                  applyZoom();
-              }
-          });
-          
-
-        },
-        pageBeforeRemove: function (event, page) {
-          // fazer algo antes da página ser removida do DOM
-        },
+          }, 500); // Adiciona um fallback com pequeno delay
+        }
+        $("#menuPrincipal").hide("fast");
+        $("#menuPrincipal").addClass("display-none");
+      },
+      pageAfterIn: function (event, page) {
+        // fazer algo depois da página ser exibida
+      },
+      pageInit: function (event, page) {
+        // fazer algo quando a página for inicializada
+        $.getScript('js/qrcode.min.js');
+        
+        // Carrega a equipe inicialmente
+        listarEquipe();
+        
+        // Configura eventos dos filtros
+        $('.filter-btn').on('click', function() {
+          const filtro = $(this).data('filter');
+          listarEquipe(filtro);
+        });
+        
+        // Botão de voltar
+        $('.back-button').on('click', function() {
+          app.views.main.router.back();
+        });
+        
+        // Abrir popup compartilhamento
+        $('.abrir-popup').on('click', function (e) {
+          e.preventDefault();
+          app.popup.open('.popup-compartilhar');
+          buscarLinkAfiliado();
+        });
+        
+        // Botão de atualizar dados
+        $('#updateTeamData').on('click', function () {
+          atualizarDadosEquipe();
+        });
+        
+        // Buscar quantidade de notificações
+        buscarQtdeNotif();
+      },
+      pageBeforeRemove: function (event, page) {
+        // fazer algo antes da página ser removida do DOM
       },
     },
+  },
     {
       path: "/perfil/",
       url: "perfil.html",

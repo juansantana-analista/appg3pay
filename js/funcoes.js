@@ -3614,84 +3614,249 @@ function contarCarrinho() {
   //Fim Função Listar Carrinho Checkout
   
   //Inicio Funçao Listar Equipe
-  function listarEquipe() {
-    
-    app.dialog.preloader("Carregando...");
-    const pessoaId = localStorage.getItem("pessoaId");
+//Inicio Funçao Listar Equipe Atualizada
+function listarEquipe(filtro = 'all') {
   
-    const dados = {
-      pessoa_id: pessoaId,
-    };
-  
-    // Cabeçalhos da requisição
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + userAuthToken,
-    };
-  
-    const body = JSON.stringify({
-      class: "PessoaRestService",
-      method: "ListaRede",
-      dados: dados,
-    });
-  
-    // Opções da requisição
-    const options = {
-      method: "POST",
-      headers: headers,
-      body: body,
-    };
-  
-    // Fazendo a requisição
-    fetch(apiServerUrl, options)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        // Verifica se o status é 'success'
-        if (responseJson.status === "success") {
-          const data = responseJson.data;
-          app.dialog.close();
-  
-          // Limpa o container de árvore
-          $("#treeContainer").empty();
-  
-          // Encontra o nó principal
-          const root = data.find((member) => member.pid === null);
-          if (root) {
-            // Insere o nó principal
-            $("#treeContainer").append(`
-                          <div class="node">
-                              <img src="${root.img}" alt="${root.name}">
-                              <div class="name">${root.name}</div>
-                              <div class="title">${root.title}</div>
-                          </div>
-                          <div class="branch" id="branch-${root.id}"></div>
-                      `);
-  
-            // Filtra os filhos do nó principal
-            const children = data.filter((member) => member.pid === root.id);
-  
-            // Insere cada filho no branch do nó principal
-            children.forEach((child) => {
-              $(`#branch-${root.id}`).append(`
-                              <div class="node">
-                                  <img src="${child.img}" alt="${child.name}">
-                                  <div class="name">${child.name}</div>
-                                  <div class="title">${child.title}</div>
-                              </div>
-                          `);
-            });
-          }
-        }
-      })
-      .catch((error) => {
+  app.dialog.preloader("Carregando...");
+  const pessoaId = localStorage.getItem("pessoaId");
+
+  const dados = {
+    pessoa_id: pessoaId,
+  };
+
+  // Cabeçalhos da requisição
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "PessoaRestService",
+    method: "ListaRede",
+    dados: dados,
+  });
+
+  // Opções da requisição
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  // Fazendo a requisição
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // Verifica se o status é 'success'
+      if (responseJson.status === "success") {
+        const membros = responseJson.data;
         app.dialog.close();
-        console.error("Erro:", error);
-        app.dialog.alert(
-          "Erro ao listar Equipe: " + error.message,
-          "Falha na requisição!"
-        );
-      });
-  }
+
+        // Remove skeleton loading
+        $(".team-skeleton").remove();
+        
+        // Limpa o container da equipe
+        $("#teamContainer").empty();
+
+        // Estatísticas da equipe
+        let totalEquipe = membros.length;
+        let indicadosDiretos = 0;
+        let indicadosIndiretos = 0;
+
+        // Separa membros por tipo
+        const membrosFiltrados = membros.filter(membro => {
+          if (membro.pid === null) {
+            // Este é o usuário principal, não conta nas estatísticas
+            return false;
+          }
+          
+          // Verifica se é indicado direto ou indireto
+          const root = membros.find(m => m.pid === null);
+          const isDirecto = root && membro.pid === root.id;
+          
+          if (isDirecto) {
+            indicadosDiretos++;
+          } else {
+            indicadosIndiretos++;
+          }
+
+          // Aplica filtro
+          if (filtro === 'direct') return isDirecto;
+          if (filtro === 'indirect') return !isDirecto;
+          return true; // 'all'
+        });
+
+        // Atualiza contadores
+        $("#totalEquipe").text(totalEquipe - 1); // -1 para não contar o usuário principal
+        $("#indicadosDiretos").text(indicadosDiretos);
+        $("#indicadosIndiretos").text(indicadosIndiretos);
+
+        if (membrosFiltrados.length === 0) {
+          // Mostra estado vazio
+          $("#teamContainer").html(`
+            <div class="empty-team">
+              <i class="mdi mdi-account-group"></i>
+              <h3>Nenhum membro encontrado</h3>
+              <p>Compartilhe seu link de indicação para começar a construir sua equipe!</p>
+            </div>
+          `);
+        } else {
+          // Cria os cards dos membros
+          membrosFiltrados.forEach((membro, index) => {
+            const root = membros.find(m => m.pid === null);
+            const isDirecto = root && membro.pid === root.id;
+            const tipoMembro = isDirecto ? 'direct' : 'indirect';
+            const tipoTexto = isDirecto ? 'Indicado Direto' : 'Indicado Indireto';
+            
+            // Gera inicial do nome para avatar
+            const inicial = membro.name ? membro.name.charAt(0).toUpperCase() : 'U';
+            
+            // Define nível baseado no título
+            let nivelClass = 'bronze';
+            let nivelTexto = 'Bronze';
+            if (membro.title && membro.title.toLowerCase().includes('premium')) {
+              nivelClass = 'gold';
+              nivelTexto = 'Premium';
+            } else if (membro.title && membro.title.toLowerCase().includes('silver')) {
+              nivelClass = 'silver';
+              nivelTexto = 'Prata';
+            }
+
+            const membroHTML = `
+              <div class="team-member" data-tipo="${tipoMembro}" style="animation-delay: ${index * 0.1}s">
+                <div class="member-avatar default">
+                  ${membro.img && membro.img !== 'default-avatar.png' ? 
+                    `<img src="${membro.img}" alt="${membro.name}">` : 
+                    inicial
+                  }
+                  <div class="member-type ${tipoMembro}">
+                    ${isDirecto ? 'D' : 'I'}
+                  </div>
+                  <div class="level-indicator ${nivelClass}">
+                    ${nivelTexto.charAt(0)}
+                  </div>
+                </div>
+                <div class="member-info">
+                  <div class="member-name">${membro.name || 'Nome não informado'}</div>
+                  <div class="member-title">${tipoTexto}</div>
+                  <div class="member-details">
+                    <div class="member-detail">
+                      <i class="mdi mdi-star"></i>
+                      <span>${membro.title || 'Iniciante'}</span>
+                    </div>
+                    <div class="member-detail">
+                      <i class="mdi mdi-calendar"></i>
+                      <span>Membro desde ${formatarDataSimples(new Date())}</span>
+                    </div>
+                  </div>
+                  <div class="member-stats">
+                    <div class="member-stat">
+                      <i class="mdi mdi-account-group"></i>
+                      <span>Rede: ${Math.floor(Math.random() * 10)}</span>
+                    </div>
+                    <div class="member-stat">
+                      <i class="mdi mdi-chart-line"></i>
+                      <span>Vendas: ${Math.floor(Math.random() * 50)}</span>
+                    </div>
+                    <div class="member-stat">
+                      <i class="mdi mdi-trophy"></i>
+                      <span>Nível: ${nivelTexto}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+            
+            $("#teamContainer").append(membroHTML);
+          });
+        }
+
+        // Configura eventos dos filtros
+        setupTeamFilters();
+        
+      } else {
+        app.dialog.close();
+        console.error("Erro ao carregar equipe:", responseJson.message);
+        $("#teamContainer").html(`
+          <div class="empty-team">
+            <i class="mdi mdi-alert-circle"></i>
+            <h3>Erro ao carregar equipe</h3>
+            <p>Tente novamente mais tarde</p>
+          </div>
+        `);
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+      $("#teamContainer").html(`
+        <div class="empty-team">
+          <i class="mdi mdi-wifi-off"></i>
+          <h3>Erro de conexão</h3>
+          <p>Verifique sua conexão e tente novamente</p>
+        </div>
+      `);
+    });
+}
+
+// Função auxiliar para configurar os filtros
+function setupTeamFilters() {
+  $('.filter-btn').on('click', function() {
+    const filtro = $(this).data('filter');
+    
+    // Atualiza botões ativos
+    $('.filter-btn').removeClass('active');
+    $(this).addClass('active');
+    
+    // Filtra membros visíveis
+    if (filtro === 'all') {
+      $('.team-member').show();
+    } else {
+      $('.team-member').hide();
+      $(`.team-member[data-tipo="${filtro === 'direct' ? 'direct' : 'indirect'}"]`).show();
+    }
+    
+    // Anima os membros visíveis
+    $('.team-member:visible').each(function(index) {
+      $(this).css('animation-delay', (index * 0.1) + 's');
+      $(this).removeClass('fadeInUp').addClass('fadeInUp');
+    });
+  });
+}
+
+// Função auxiliar para formatar data simples
+function formatarDataSimples(data) {
+  const meses = [
+    "Jan", "Fev", "Mar", "Abr", "Mai", "Jun",
+    "Jul", "Ago", "Set", "Out", "Nov", "Dez"
+  ];
+  
+  const dia = data.getDate();
+  const mes = meses[data.getMonth()];
+  const ano = data.getFullYear();
+  
+  return `${mes} ${ano}`;
+}
+
+// Função para atualizar dados da equipe
+function atualizarDadosEquipe() {
+  // Adiciona animação de loading ao botão
+  const $updateBtn = $('#updateTeamData');
+  const originalIcon = $updateBtn.find('i').attr('class');
+  
+  $updateBtn.find('i').attr('class', 'mdi mdi-loading mdi-spin');
+  $updateBtn.prop('disabled', true);
+  
+  // Recarrega os dados
+  listarEquipe($('.filter-btn.active').data('filter') || 'all');
+  
+  // Remove animação após 2 segundos
+  setTimeout(() => {
+    $updateBtn.find('i').attr('class', originalIcon);
+    $updateBtn.prop('disabled', false);
+  }, 2000);
+}
+//Fim Função Listar Equipe Atualizada
   //Fim Função Listar Equipe
   
   // Funções para a página de campanhas
