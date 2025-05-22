@@ -4,33 +4,36 @@
 .menu-lateral-list {
   padding: 0;
   margin: 0;
+  background-color: #ffffff; /* Fundo branco para o menu */
 }
 
 .menu-lateral-list ul {
   padding: 0;
   margin: 0;
+  background-color: #ffffff;
 }
 
 .menu-lateral-list li {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   transition: background-color 0.3s ease;
 }
 
 .menu-lateral-list li:hover {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(0, 89, 31, 0.05);
 }
 
 .item-menu-lateral {
   display: block;
-  color: #000;
+  color: var(--preto);
   text-decoration: none;
   padding: 15px 20px;
   transition: all 0.3s ease;
 }
 
 .item-menu-lateral:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 89, 31, 0.1);
   transform: translateX(-5px);
+  color: var(--verde-escuro);
 }
 
 .item-menu-lateral .item-content {
@@ -46,6 +49,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  color: var(--verde-escuro);
 }
 
 .item-menu-lateral .item-inner {
@@ -56,14 +60,28 @@
 .item-menu-lateral .item-title {
   font-size: 16px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--preto);
   margin-bottom: 3px;
+  transition: color 0.3s ease;
 }
 
 .item-menu-lateral .item-subtitle {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #666666;
   font-weight: 400;
+  transition: color 0.3s ease;
+}
+
+.item-menu-lateral:hover .item-title {
+  color: var(--verde-escuro);
+}
+
+.item-menu-lateral:hover .item-subtitle {
+  color: var(--verde-escuro);
+}
+
+.item-menu-lateral:hover .item-media {
+  color: var(--verde-escuro);
 }
 
 /* Badge para notificações no menu */
@@ -93,11 +111,12 @@
 .menu-separador {
   padding: 10px 0;
   border-bottom: none !important;
+  background-color: #ffffff;
 }
 
 .separator-line {
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.1) 50%, transparent 100%);
   margin: 0 20px;
 }
 
@@ -105,6 +124,7 @@
 .menu-logo {
   padding: 20px 0;
   border-bottom: none !important;
+  background-color: #ffffff;
 }
 
 .menu-logo .item-content {
