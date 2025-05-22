@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-const versionApp = "1.7.7";
+const versionApp = "1.7.8";
 var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -1310,10 +1310,7 @@ var app = new Framework7({
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
-        pageInit: function (event, page) {
-    buscarQtdeNotif();
-    contarCarrinho();
-    
+        pageInit: function (event, page) {    
           // fazer algo quando a página for inicializada    
           // Funções para gerenciamento de modais
         $("#openAddressModal").on('click', function () {
