@@ -59,6 +59,9 @@ var app = new Framework7({
   inicializarMenuLateral();
   atualizarTabbarComMenu();
 
+  
+buscarQtdeNotif();
+contarCarrinho();
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida

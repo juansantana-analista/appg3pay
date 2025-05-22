@@ -4277,7 +4277,3 @@ function getCategoriaLabel(categoriaId) {
         }
            
   }
-
-  
-buscarQtdeNotif();
-contarCarrinho();
