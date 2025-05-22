@@ -1,6 +1,4 @@
 var appId = "Bearer " + getCookie("userAuthToken");
-buscarQtdeNotif();
-contarCarrinho();
 // Início função validar login
 function validarToken() {
   const userAuthToken = getCookie("userAuthToken"); // Lê o token do cookie
@@ -4279,3 +4277,7 @@ function getCategoriaLabel(categoriaId) {
         }
            
   }
+
+  
+buscarQtdeNotif();
+contarCarrinho();
