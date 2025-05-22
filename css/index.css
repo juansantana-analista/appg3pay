@@ -273,6 +273,7 @@ body {
   color: var(--preto);
 }
 
+/* CSS corrigido para badge do carrinho */
 .btn-cart {
   width: 30px;
   height: 30px;
@@ -285,9 +286,10 @@ body {
   border: 1px solid var(--gelo);
   font-size: 24px;
   color: var(--preto);
+  position: relative; /* Importante para o posicionamento do badge */
 }
 
-
+/* Badge do carrinho */
 .btn-cart::before {
   content: attr(data-count);
   background: #7CBE42;
@@ -300,13 +302,56 @@ body {
   font-size: 12px;
   color: var(--branco);
   position: absolute;
-  top: 5px;
-  right: 0px;
-  margin-right: 3%;
+  top: -2px;
+  right: -2px;
+  z-index: 10;
+  font-weight: bold;
+  min-width: 17px;
+  box-sizing: border-box;
+  line-height: 1;
+  text-align: center;
 }
 
-.btn-cart[data-count="0"]::before {
-  display: none;
+/* Esconder badge quando count é 0 ou vazio */
+.btn-cart[data-count="0"]::before,
+.btn-cart[data-count=""]::before,
+.btn-cart:not([data-count])::before {
+  display: none !important;
+}
+
+/* Garantir que o badge apareça quando há itens */
+.btn-cart[data-count]:not([data-count="0"]):not([data-count=""])::before {
+  display: flex !important;
+}
+
+/* Ajustar para números maiores no carrinho */
+.btn-cart[data-count="10"]::before,
+.btn-cart[data-count="11"]::before,
+.btn-cart[data-count="12"]::before,
+.btn-cart[data-count="13"]::before,
+.btn-cart[data-count="14"]::before,
+.btn-cart[data-count="15"]::before,
+.btn-cart[data-count="16"]::before,
+.btn-cart[data-count="17"]::before,
+.btn-cart[data-count="18"]::before,
+.btn-cart[data-count="19"]::before {
+  width: 20px;
+  min-width: 20px;
+  font-size: 10px;
+}
+
+/* Para números de 20+ no carrinho */
+.btn-cart[data-count^="2"]::before,
+.btn-cart[data-count^="3"]::before,
+.btn-cart[data-count^="4"]::before,
+.btn-cart[data-count^="5"]::before,
+.btn-cart[data-count^="6"]::before,
+.btn-cart[data-count^="7"]::before,
+.btn-cart[data-count^="8"]::before,
+.btn-cart[data-count^="9"]::before {
+  width: 22px;
+  min-width: 22px;
+  font-size: 9px;
 }
 
 /* CSS corrigido para badge de notificações */
