@@ -60,8 +60,6 @@ var app = new Framework7({
   atualizarTabbarComMenu();
 
   
-buscarQtdeNotif();
-contarCarrinho();
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
@@ -2122,6 +2120,8 @@ function atualizarTabbarComMenu() {
   inicializarMenuLateral();
   atualizarTabbarComMenu();
 
+buscarQtdeNotif();
+contarCarrinho();
 
 // Bloquear o menu de contexto no clique com o botão direito
 document.addEventListener('contextmenu', function (event) {
