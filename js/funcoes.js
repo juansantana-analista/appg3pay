@@ -3760,7 +3760,7 @@ function listarEquipe(filtro = 'all') {
                     </div>
                     <div class="member-stat">
                       <i class="mdi mdi-trophy"></i>
-                      <span>Nível: ${nivelTexto}</span>
+                      <span>${nivelTexto}</span>
                     </div>
                   </div>
                 </div>
