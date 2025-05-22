@@ -2119,11 +2119,8 @@ function atualizarTabbarComMenu() {
   }
 }
 
-// Chamar as funções de inicialização
-$(document).ready(function() {
   inicializarMenuLateral();
   atualizarTabbarComMenu();
-});
 
 
 // Bloquear o menu de contexto no clique com o botão direito
