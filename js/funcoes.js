@@ -1183,7 +1183,7 @@ function openImageZoom(imageSrc) {
             // Pega o url do link clicado em share
             //Abre opção compartilhamento.
             onCompartilhar(
-              "Link de Afiliado",
+              "Link de Indicação",
               "Faça seu cadastro na plataforma",
               linkUrl
             );
@@ -3740,10 +3740,6 @@ function listarEquipe(filtro = 'all') {
                   <div class="member-name">${membro.name || 'Nome não informado'}</div>
                   <div class="member-title">${tipoTexto}</div>
                   <div class="member-details">
-                    <div class="member-detail">
-                      <i class="mdi mdi-star"></i>
-                      <span>${membro.title || 'Iniciante'}</span>
-                    </div>
                     <div class="member-detail">
                       <i class="mdi mdi-calendar"></i>
                       <span>Membro desde ${formatarDataSimples(new Date())}</span>
