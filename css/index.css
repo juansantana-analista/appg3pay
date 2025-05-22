@@ -309,6 +309,7 @@ body {
   display: none;
 }
 
+/* CSS corrigido para badge de notificações */
 .btn-notificacao {
   width: 30px;
   height: 30px;
@@ -321,9 +322,10 @@ body {
   border: 1px solid var(--gelo);
   font-size: 24px;
   color: var(--preto);
+  position: relative; /* Importante para o posicionamento do badge */
 }
 
-
+/* Badge de notificação */
 .btn-notificacao::before {
   content: attr(data-count);
   background: var(--verde-escuro);
@@ -336,13 +338,61 @@ body {
   font-size: 12px;
   color: var(--branco);
   position: absolute;
-  top: 5px;
-  right: 0px;
-  margin-right: 3%;
+  top: -2px;
+  right: -2px;
+  z-index: 10;
+  font-weight: bold;
+  min-width: 17px;
+  box-sizing: border-box;
+  line-height: 1;
+  text-align: center;
 }
 
-.btn-notificacao[data-count="0"]::before {
-  display: none;
+/* Esconder badge quando count é 0 ou vazio */
+.btn-notificacao[data-count="0"]::before,
+.btn-notificacao[data-count=""]::before,
+.btn-notificacao:not([data-count])::before {
+  display: none !important;
+}
+
+/* Garantir que o badge apareça quando há notificações */
+.btn-notificacao[data-count]:not([data-count="0"]):not([data-count=""])::before {
+  display: flex !important;
+}
+
+/* Ajustar para números maiores */
+.btn-notificacao[data-count="10"]::before,
+.btn-notificacao[data-count="11"]::before,
+.btn-notificacao[data-count="12"]::before,
+.btn-notificacao[data-count="13"]::before,
+.btn-notificacao[data-count="14"]::before,
+.btn-notificacao[data-count="15"]::before,
+.btn-notificacao[data-count="16"]::before,
+.btn-notificacao[data-count="17"]::before,
+.btn-notificacao[data-count="18"]::before,
+.btn-notificacao[data-count="19"]::before {
+  width: 20px;
+  min-width: 20px;
+  font-size: 10px;
+}
+
+/* Para números de 20+ */
+.btn-notificacao[data-count^="2"]::before,
+.btn-notificacao[data-count^="3"]::before,
+.btn-notificacao[data-count^="4"]::before,
+.btn-notificacao[data-count^="5"]::before,
+.btn-notificacao[data-count^="6"]::before,
+.btn-notificacao[data-count^="7"]::before,
+.btn-notificacao[data-count^="8"]::before,
+.btn-notificacao[data-count^="9"]::before {
+  width: 22px;
+  min-width: 22px;
+  font-size: 9px;
+}
+
+/* Debug - remover depois que funcionar */
+.btn-notificacao[data-count="1"]::before {
+  background: red !important; /* Para teste, depois mude para var(--verde-escuro) */
 }
 
 .btn-notifi {

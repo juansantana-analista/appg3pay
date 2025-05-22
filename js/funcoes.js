@@ -2331,20 +2331,46 @@ function buscarQtdeNotif() {
         const quantidadeNaoVistas = responseJson.data.data.quantidade || 0;
         console.log("Quantidade de notificações não vistas:", quantidadeNaoVistas);
         
-        // Aguardar um pouco antes de tentar atualizar e usar jQuery de forma mais robusta
+        // Aguardar um pouco antes de tentar atualizar
         setTimeout(() => {
           try {
-            // Atualizar badge no cabeçalho (topo da página)
+            // Método 1: Atualizar badge no cabeçalho usando classe
             const btnNotificacao = document.querySelector(".btn-notificacao");
             if (btnNotificacao) {
               btnNotificacao.setAttribute("data-count", quantidadeNaoVistas);
+              console.log("Badge cabeçalho atualizado:", btnNotificacao.getAttribute("data-count"));
+            } else {
+              console.warn("Elemento .btn-notificacao não encontrado");
             }
             
-            // Atualizar badge no menu lateral (se existir)
+            // Método 2: Tentar também por todos os elementos com data-count (fallback)
+            const allNotificationBadges = document.querySelectorAll('[data-count]');
+            allNotificationBadges.forEach(badge => {
+              if (badge.classList.contains('btn-notificacao') || badge.querySelector('i.mdi-bell-outline')) {
+                badge.setAttribute("data-count", quantidadeNaoVistas);
+                console.log("Badge encontrado e atualizado:", badge);
+              }
+            });
+            
+            // Método 3: Atualizar badge no menu lateral
             const badgeMenuLateral = document.getElementById("badge-notif-menu");
             if (badgeMenuLateral) {
               badgeMenuLateral.setAttribute("data-count", quantidadeNaoVistas);
               badgeMenuLateral.textContent = quantidadeNaoVistas;
+              console.log("Badge menu lateral atualizado");
+            }
+            
+            // Método 4: Forçar refresh do CSS se necessário
+            if (quantidadeNaoVistas > 0) {
+              // Força uma pequena alteração para re-renderizar o CSS
+              if (btnNotificacao) {
+                btnNotificacao.style.position = 'relative'; // Força re-render
+                // Remove e readiciona o atributo para forçar atualização do CSS
+                btnNotificacao.removeAttribute("data-count");
+                setTimeout(() => {
+                  btnNotificacao.setAttribute("data-count", quantidadeNaoVistas);
+                }, 10);
+              }
             }
             
             // Salvar no localStorage para referência
@@ -2352,69 +2378,69 @@ function buscarQtdeNotif() {
             
             console.log("Badges de notificação atualizados com sucesso");
             
+            // Debug: Listar todos os elementos com data-count
+            console.log("Todos os elementos com data-count:", document.querySelectorAll('[data-count]'));
+            
           } catch (error) {
             console.error("Erro ao atualizar badges de notificação:", error);
           }
-        }, 100);
+        }, 200); // Aumentei o timeout para 200ms
         
       } else {
         console.error("Erro ao contar notificações:", responseJson.message || "Resposta inválida");
-        
-        // Em caso de erro, definir como 0
-        setTimeout(() => {
-          const btnNotificacao = document.querySelector(".btn-notificacao");
-          if (btnNotificacao) {
-            btnNotificacao.setAttribute("data-count", "0");
-          }
-          
-          const badgeMenuLateral = document.getElementById("badge-notif-menu");
-          if (badgeMenuLateral) {
-            badgeMenuLateral.setAttribute("data-count", "0");
-          }
-        }, 100);
+        atualizarBadgesNotificacao(0);
       }
     })
     .catch((error) => {
       console.error("Erro na requisição de notificações:", error);
-      
-      // Em caso de erro na requisição, definir como 0
-      setTimeout(() => {
-        const btnNotificacao = document.querySelector(".btn-notificacao");
-        if (btnNotificacao) {
-          btnNotificacao.setAttribute("data-count", "0");
-        }
-        
-        const badgeMenuLateral = document.getElementById("badge-notif-menu");
-        if (badgeMenuLateral) {
-          badgeMenuLateral.setAttribute("data-count", "0");
-        }
-      }, 100);
+      atualizarBadgesNotificacao(0);
     });
 }
-//Fim da funçao contagem Notificações
 
 // Função auxiliar para atualizar badges de notificação
 function atualizarBadgesNotificacao(quantidade) {
   const qtde = quantidade || 0;
   
-  // Atualizar badge no cabeçalho
+  setTimeout(() => {
+    // Atualizar badge no cabeçalho
+    const btnNotificacao = document.querySelector(".btn-notificacao");
+    if (btnNotificacao) {
+      btnNotificacao.setAttribute("data-count", qtde);
+      // Força re-render removendo e readicionando
+      if (qtde > 0) {
+        btnNotificacao.style.position = 'relative';
+      }
+    }
+    
+    // Atualizar badge no menu lateral
+    const badgeMenuLateral = document.getElementById("badge-notif-menu");
+    if (badgeMenuLateral) {
+      badgeMenuLateral.setAttribute("data-count", qtde);
+      badgeMenuLateral.textContent = qtde;
+    }
+    
+    // Salvar no localStorage
+    localStorage.setItem("qtdeNotificacoes", qtde);
+    
+    console.log(`Badges de notificação atualizados para: ${qtde}`);
+  }, 100);
+}
+
+// Função para debug - verificar se o CSS está funcionando
+function debugNotificationBadge() {
   const btnNotificacao = document.querySelector(".btn-notificacao");
   if (btnNotificacao) {
-    btnNotificacao.setAttribute("data-count", qtde);
+    console.log("Elemento encontrado:", btnNotificacao);
+    console.log("data-count atual:", btnNotificacao.getAttribute("data-count"));
+    console.log("Estilos computados:", window.getComputedStyle(btnNotificacao, "::before"));
+    
+    // Teste manual
+    btnNotificacao.setAttribute("data-count", "5");
+    console.log("Teste: definindo data-count como 5");
   }
-  
-  // Atualizar badge no menu lateral
-  const badgeMenuLateral = document.getElementById("badge-notif-menu");
-  if (badgeMenuLateral) {
-    badgeMenuLateral.setAttribute("data-count", qtde);
-    badgeMenuLateral.textContent = qtde;
-  }
-  
-  // Salvar no localStorage
-  localStorage.setItem("qtdeNotificacoes", qtde);
-  
-  console.log(`Badges de notificação atualizados para: ${qtde}`);
 }
+
+//Fim da funçao contagem Notificações
   //Fim da funçao contagem Notificações
   
   //Inicio Funçao Selecionar Endereço
