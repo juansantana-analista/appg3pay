@@ -2294,54 +2294,127 @@ function apagarNotificacao(notificacaoId) {
   //Fim Função Listar Categorias
   
   //Inicio da funçao contagem Notificações
-  function buscarQtdeNotif() {
-    
-    var userId = localStorage.getItem("userId");
+//Inicio da funçao contagem Notificações
+function buscarQtdeNotif() {
+  var userId = localStorage.getItem("userId");
   
-    // Cabeçalhos da requisição
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + userAuthToken,
-    };
-  
-    const body = JSON.stringify({
-      class: "NotificacaoAppRest",
-      method: "QtdeNotificacoes",
-      id_usuario: userId,
-    });
-  
-    // Opções da requisição
-    const options = {
-      method: "POST",
-      headers: headers,
-      body: body,
-    };
-  
-    // Fazendo a requisição
-    fetch(apiServerUrl, options)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status === "success" && responseJson.data.status === "success") {
-          const quantidadeNaoVistas = responseJson.data.data.quantidade;
-          console.log(quantidadeNaoVistas);
-          
-          // Aguardar um pouco antes de tentar atualizar
-          setTimeout(() => {
-            if (quantidadeNaoVistas > 0) {
-              $(".btn-notificacao").attr("data-count", quantidadeNaoVistas);
-              console.log("aqui");
-            } else {
-              $(".btn-notificacao").attr("data-count", 0);
-            }
-          }, 100);
-        } else {
-          console.error("Erro ao contar notificações:", responseJson.message);
-        }
-      })
-      .catch((error) => {
-        console.error("Erro na requisição:", error);
-      });
+  // Verifica se o userId existe
+  if (!userId) {
+    console.warn("userId não encontrado no localStorage");
+    return;
   }
+
+  // Cabeçalhos da requisição
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "NotificacaoAppRest",
+    method: "QtdeNotificacoes",
+    id_usuario: userId,
+  });
+
+  // Opções da requisição
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  // Fazendo a requisição
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      if (responseJson.status === "success" && responseJson.data.status === "success") {
+        const quantidadeNaoVistas = responseJson.data.data.quantidade || 0;
+        console.log("Quantidade de notificações não vistas:", quantidadeNaoVistas);
+        
+        // Aguardar um pouco antes de tentar atualizar e usar jQuery de forma mais robusta
+        setTimeout(() => {
+          try {
+            // Atualizar badge no cabeçalho (topo da página)
+            const btnNotificacao = document.querySelector(".btn-notificacao");
+            if (btnNotificacao) {
+              btnNotificacao.setAttribute("data-count", quantidadeNaoVistas);
+            }
+            
+            // Atualizar badge no menu lateral (se existir)
+            const badgeMenuLateral = document.getElementById("badge-notif-menu");
+            if (badgeMenuLateral) {
+              badgeMenuLateral.setAttribute("data-count", quantidadeNaoVistas);
+              badgeMenuLateral.textContent = quantidadeNaoVistas;
+            }
+            
+            // Salvar no localStorage para referência
+            localStorage.setItem("qtdeNotificacoes", quantidadeNaoVistas);
+            
+            console.log("Badges de notificação atualizados com sucesso");
+            
+          } catch (error) {
+            console.error("Erro ao atualizar badges de notificação:", error);
+          }
+        }, 100);
+        
+      } else {
+        console.error("Erro ao contar notificações:", responseJson.message || "Resposta inválida");
+        
+        // Em caso de erro, definir como 0
+        setTimeout(() => {
+          const btnNotificacao = document.querySelector(".btn-notificacao");
+          if (btnNotificacao) {
+            btnNotificacao.setAttribute("data-count", "0");
+          }
+          
+          const badgeMenuLateral = document.getElementById("badge-notif-menu");
+          if (badgeMenuLateral) {
+            badgeMenuLateral.setAttribute("data-count", "0");
+          }
+        }, 100);
+      }
+    })
+    .catch((error) => {
+      console.error("Erro na requisição de notificações:", error);
+      
+      // Em caso de erro na requisição, definir como 0
+      setTimeout(() => {
+        const btnNotificacao = document.querySelector(".btn-notificacao");
+        if (btnNotificacao) {
+          btnNotificacao.setAttribute("data-count", "0");
+        }
+        
+        const badgeMenuLateral = document.getElementById("badge-notif-menu");
+        if (badgeMenuLateral) {
+          badgeMenuLateral.setAttribute("data-count", "0");
+        }
+      }, 100);
+    });
+}
+//Fim da funçao contagem Notificações
+
+// Função auxiliar para atualizar badges de notificação
+function atualizarBadgesNotificacao(quantidade) {
+  const qtde = quantidade || 0;
+  
+  // Atualizar badge no cabeçalho
+  const btnNotificacao = document.querySelector(".btn-notificacao");
+  if (btnNotificacao) {
+    btnNotificacao.setAttribute("data-count", qtde);
+  }
+  
+  // Atualizar badge no menu lateral
+  const badgeMenuLateral = document.getElementById("badge-notif-menu");
+  if (badgeMenuLateral) {
+    badgeMenuLateral.setAttribute("data-count", qtde);
+    badgeMenuLateral.textContent = qtde;
+  }
+  
+  // Salvar no localStorage
+  localStorage.setItem("qtdeNotificacoes", qtde);
+  
+  console.log(`Badges de notificação atualizados para: ${qtde}`);
+}
   //Fim da funçao contagem Notificações
   
   //Inicio Funçao Selecionar Endereço
