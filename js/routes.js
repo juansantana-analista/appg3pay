@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-const versionApp = "1.6.1";
+const versionApp = "1.6.2";
 var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -2120,6 +2120,12 @@ function atualizarTabbarComMenu() {
     }
   }
 }
+
+// Chamar as funções de inicialização
+$(document).ready(function() {
+  inicializarMenuLateral();
+  atualizarTabbarComMenu();
+});
 
 
 // Bloquear o menu de contexto no clique com o botão direito
