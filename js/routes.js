@@ -703,8 +703,9 @@ var app = new Framework7({
             app.views.main.router.navigate("/login-view/");
           }, 500); // Adiciona um fallback com pequeno delay
         }
-        $("#menuPrincipal").hide("fast");
-        $("#menuPrincipal").addClass("display-none");
+          // fazer algo antes da página ser exibida
+          $("#menuPrincipal").show("fast");
+          $("#menuPrincipal").removeClass("display-none");
       },
       pageAfterIn: function (event, page) {
         // fazer algo depois da página ser exibida
