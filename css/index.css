@@ -437,7 +437,7 @@ body {
 
 /* Debug - remover depois que funcionar */
 .btn-notificacao[data-count="1"]::before {
-  background: red !important; /* Para teste, depois mude para var(--verde-escuro) */
+  background: #7CBE42 !important; /* Para teste, depois mude para var(--verde-escuro) */
 }
 
 .btn-notifi {
