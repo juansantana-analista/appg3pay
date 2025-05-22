@@ -64,7 +64,10 @@ var app = new Framework7({
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
-        pageInit: function (event, page) {  
+        pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+      
           // fazer algo quando a página for inicializada  
           function detectPlatform() {
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -208,6 +211,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada
           var swiper = app.swiper.create(".swiper", {
             speed: 900,
@@ -243,6 +249,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           const oneSignalId = localStorage.getItem('oneSignalId');   
           
         // Form elements
@@ -660,6 +669,9 @@ var app = new Framework7({
           }
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
           var nomeUsuario = localStorage.getItem('userName');
@@ -711,6 +723,9 @@ var app = new Framework7({
         // fazer algo depois da página ser exibida
       },
       pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
         // fazer algo quando a página for inicializada
         $.getScript('js/qrcode.min.js');
         
@@ -768,6 +783,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada
           var nomeUsuario = localStorage.getItem('userName');
           var emailUsuario = localStorage.getItem('userEmail');
@@ -814,6 +832,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada
               // Carrega as vendas inicialmente
     listarVendas();
@@ -847,6 +868,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada
           listarVendas();
         },
@@ -878,6 +902,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada          
           detalhesVenda();
         },
@@ -909,6 +936,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada
           let isHidden = true;
           $('#balance-value').text('*****');        
@@ -953,6 +983,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada
           listarPedidos();
         },
@@ -985,6 +1018,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada
           detalhesPedido();
 
@@ -1018,6 +1054,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada
           listarCategoriasCurso();
         },
@@ -1052,6 +1091,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada
           listarBanners();
 
@@ -1153,7 +1195,10 @@ var app = new Framework7({
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida          
         },
-        pageInit: function (event, page) {   
+        pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+       
           // fazer algo quando a página for inicializada
           $.getScript('js/qrcode.min.js');
           //$.getScript('js/detalhes.js');
@@ -1201,7 +1246,10 @@ var app = new Framework7({
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida          
         },
-        pageInit: function (event, page) {   
+        pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+       
           // fazer algo quando a página for inicializada
           $.getScript('js/qrcode.min.js');
           //$.getScript('js/detalhes.js');
@@ -1263,6 +1311,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada    
           // Funções para gerenciamento de modais
         $("#openAddressModal").on('click', function () {
@@ -1452,6 +1503,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada   
           listarNotificacoes();   
         },
@@ -1475,6 +1529,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada      
         },
         pageBeforeRemove: function (event, page) {
@@ -1508,6 +1565,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           var method = '';
           listarCarrinhoCheckout();
           // fazer algo quando a página for inicializada 
@@ -1640,6 +1700,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // Recuperar do localStorage
           var pagamentoData = localStorage.getItem('pagamentoData');
           var clienteNome = localStorage.getItem('userName');
@@ -1790,6 +1853,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada
           carregarCategoriasCampanha();
           listarCampanhas();
@@ -1834,6 +1900,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada 
 
           // Preselecionar o método de pagamento PIX
@@ -2088,9 +2157,6 @@ function atualizarBadgeNotificacoesMenu() {
 
 // Modificar o HTML da tabbar no routes.js
 function atualizarTabbarComMenu() {
-  
-buscarQtdeNotif();
-contarCarrinho();
   // Esta função deve ser chamada quando necessário para atualizar a tabbar
   const bottomNav = document.querySelector('.bottom-nav');
   if (bottomNav) {
