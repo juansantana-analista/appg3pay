@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-const versionApp = "1.5.6";
+const versionApp = "1.5.7";
 var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -59,7 +59,10 @@ var app = new Framework7({
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
-        pageInit: function (event, page) {
+        pageInit: function (event, page) {  
+          // Inicializar menu lateral
+          inicializarMenuLateral();
+          atualizarTabbarComMenu();
           // fazer algo quando a página for inicializada  
           function detectPlatform() {
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -1993,6 +1996,137 @@ function onDeviceReady() {
   });
   */
 }
+
+// Função para inicializar o menu lateral
+function inicializarMenuLateral() {
+  // Atualizar nome do usuário no menu lateral
+  var userName = localStorage.getItem('userName');
+  if (userName != '' && userName != null) {
+    $("#nomeUsuarioLateral").html(userName);
+  }
+
+  // Função para abrir o menu lateral
+  function abrirMenuLateral() {
+    // Atualizar badge de notificações no menu
+    atualizarBadgeNotificacoesMenu();
+    
+    // Abrir o panel
+    app.panel.open('#panel-menu-lateral', true);
+    
+    // Adicionar classe ativa ao botão do menu
+    $('.menu-tab-link').addClass('menu-active');
+  }
+
+  // Função para fechar o menu lateral
+  function fecharMenuLateral() {
+    app.panel.close('#panel-menu-lateral');
+    $('.menu-tab-link').removeClass('menu-active');
+  }
+
+  // Event listener para o botão do menu na tabbar
+  $(document).on('click', '.menu-tab-link', function(e) {
+    e.preventDefault();
+    
+    if (app.panel.get('#panel-menu-lateral').opened) {
+      fecharMenuLateral();
+    } else {
+      abrirMenuLateral();
+    }
+  });
+
+  // Event listeners para os itens do menu
+  $(document).on('click', '#configuracoes-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    app.dialog.alert('Funcionalidade em desenvolvimento', 'Configurações');
+  });
+
+  $(document).on('click', '#ajuda-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    app.dialog.alert('Entre em contato conosco pelo suporte', 'Ajuda');
+  });
+
+  $(document).on('click', '#sair-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    app.dialog.confirm('Deseja sair do aplicativo?', 'Sair', function () {
+      fazerLogout();
+      $("#menuPrincipal").hide("fast");
+      $("#menuPrincipal").addClass("display-none");
+      app.views.main.router.navigate("/login-view/");
+    });
+  });
+
+  // Fechar menu quando clicar em outros itens
+  $(document).on('click', '.item-menu-lateral.panel-close', function() {
+    setTimeout(() => {
+      $('.menu-tab-link').removeClass('menu-active');
+    }, 300);
+  });
+
+  // Event listener para fechar o menu quando o panel for fechado
+  app.on('panelClose', function(panel) {
+    if (panel.el.id === 'panel-menu-lateral') {
+      $('.menu-tab-link').removeClass('menu-active');
+    }
+  });
+}
+
+// Função para atualizar o badge de notificações no menu
+function atualizarBadgeNotificacoesMenu() {
+  // Aqui você pode implementar a lógica para buscar a quantidade de notificações
+  // Por exemplo, fazendo uma chamada para sua API
+  
+  const qtdeNotificacoes = localStorage.getItem('qtdeNotificacoes') || '0';
+  
+  const badgeElement = document.getElementById('badge-notif-menu');
+  if (badgeElement) {
+    badgeElement.setAttribute('data-count', qtdeNotificacoes);
+    badgeElement.textContent = qtdeNotificacoes;
+  }
+}
+
+// Modificar o HTML da tabbar no routes.js
+function atualizarTabbarComMenu() {
+  // Esta função deve ser chamada quando necessário para atualizar a tabbar
+  const bottomNav = document.querySelector('.bottom-nav');
+  if (bottomNav) {
+    // Encontrar e substituir o último link (Menu)
+    const lastLink = bottomNav.querySelector('a:last-child');
+    if (lastLink) {
+      lastLink.className = 'tab-link link menu-tab-link';
+      lastLink.removeAttribute('href');
+      
+      // Adicionar evento de clique se ainda não existir
+      if (!lastLink.hasAttribute('data-menu-initialized')) {
+        lastLink.setAttribute('data-menu-initialized', 'true');
+        lastLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          if (app.panel.get('#panel-menu-lateral').opened) {
+            app.panel.close('#panel-menu-lateral');
+            this.classList.remove('menu-active');
+          } else {
+            atualizarBadgeNotificacoesMenu();
+            app.panel.open('#panel-menu-lateral', true);
+            this.classList.add('menu-active');
+          }
+        });
+      }
+    }
+  }
+}
+
+// Chamar as funções de inicialização
+$(document).ready(function() {
+  inicializarMenuLateral();
+  atualizarTabbarComMenu();
+});
+
 
 // Bloquear o menu de contexto no clique com o botão direito
 document.addEventListener('contextmenu', function (event) {
