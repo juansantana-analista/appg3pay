@@ -668,9 +668,7 @@ var app = new Framework7({
             $("#nomeUsuarioHome").html(doisPrimeirosNomes);
           }
           
-          onDashboard();          
-          buscarQtdeNotif();
-          contarCarrinho();
+          onDashboard();         
 
           $('.abrir-popup').on('click', function (e) {
             e.preventDefault(); // Prevent default link behavior
@@ -740,9 +738,6 @@ var app = new Framework7({
         $('#updateTeamData').on('click', function () {
           atualizarDadosEquipe();
         });
-        
-        // Buscar quantidade de notificações
-        buscarQtdeNotif();
       },
       pageBeforeRemove: function (event, page) {
         // fazer algo antes da página ser removida do DOM
@@ -1057,7 +1052,6 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
-          contarCarrinho();
           listarBanners();
 
           var swiper = new Swiper(".mySwiper", {
@@ -1796,7 +1790,6 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {
           // fazer algo quando a página for inicializada
-          contarCarrinho();
           carregarCategoriasCampanha();
           listarCampanhas();
 
