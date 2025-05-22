@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-const versionApp = "1.7.0";
+const versionApp = "1.7.1";
 var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -55,6 +55,10 @@ var app = new Framework7({
           if(userName != '' && userName != null) {
             $("#nomeUsuario").html(userName);
           }
+          
+  inicializarMenuLateral();
+  atualizarTabbarComMenu();
+
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida

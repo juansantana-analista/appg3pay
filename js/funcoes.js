@@ -4278,8 +4278,3 @@ function getCategoriaLabel(categoriaId) {
         }
            
   }
-
-  
-          // Inicializar menu lateral
-          inicializarMenuLateral();
-          atualizarTabbarComMenu();
