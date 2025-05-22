@@ -3748,7 +3748,7 @@ function listarEquipe(filtro = 'all') {
                   <div class="member-stats">
                     <div class="member-stat">
                       <i class="mdi mdi-account-group"></i>
-                      <span>Rede: ${Math.floor(Math.random() * 10)}</span>
+                      <span>Indicados: ${Math.floor(Math.random() * 10)}</span>
                     </div>
                     <div class="member-stat">
                       <i class="mdi mdi-chart-line"></i>

@@ -599,7 +599,7 @@ var app = new Framework7({
                         },
                         {
                             element: '.referral-card',
-                            intro: 'Para expandir sua rede, compartilhe seu link de afiliado aqui!',
+                            intro: 'Para indicar um amigo, compartilhe seu link de afiliado aqui!',
                             position: 'bottom'
                         },
                         {
