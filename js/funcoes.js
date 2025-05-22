@@ -3712,8 +3712,8 @@ function listarEquipe(filtro = 'all') {
             const inicial = membro.name ? membro.name.charAt(0).toUpperCase() : 'U';
             
             // Define nível baseado no título
-            let nivelClass = 'bronze';
-            let nivelTexto = 'Bronze';
+            let nivelClass = 'distribuidor';
+            let nivelTexto = 'Distribuidor';
             if (membro.title && membro.title.toLowerCase().includes('premium')) {
               nivelClass = 'gold';
               nivelTexto = 'Premium';
