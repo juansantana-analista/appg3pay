@@ -751,7 +751,7 @@ var app = new Framework7({
   },
     {
       path: "/perfil/",
-      url: "perfil.html",
+      url: "perfil.html?v=" + versionApp,
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
@@ -796,7 +796,7 @@ var app = new Framework7({
     },
     {
       path: "/vendas/",
-      url: "vendas.html",
+      url: "vendas.html?v=" + versionApp,
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
@@ -829,7 +829,7 @@ var app = new Framework7({
     },
     {
       path: "/vendas/",
-      url: "vendas.html",
+      url: "vendas.html?v=" + versionApp,
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
@@ -861,7 +861,7 @@ var app = new Framework7({
     },
     {
       path: "/resumo-venda/",
-      url: "resumo-venda.html",
+      url: "resumo-venda.html?v=" + versionApp,
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
@@ -892,7 +892,7 @@ var app = new Framework7({
     },
     {
       path: "/carteira/",
-      url: "carteira.html",
+      url: "carteira.html?v=" + versionApp,
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
@@ -935,7 +935,7 @@ var app = new Framework7({
     },
     {
       path: "/pedidos/",
-      url: "pedidos.html",
+      url: "pedidos.html?v=" + versionApp,
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
@@ -967,7 +967,7 @@ var app = new Framework7({
     },
     {
       path: "/resumo-pedido/",
-      url: "resumo-pedido.html",
+      url: "resumo-pedido.html?v=" + versionApp,
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
@@ -1001,7 +1001,7 @@ var app = new Framework7({
     },
     {
       path: "/curso/",
-      url: "curso.html",
+      url: "curso.html?v=" + versionApp,
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
