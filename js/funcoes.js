@@ -2752,7 +2752,11 @@ function listarPerfil() {
         $("#editEmail").val(pessoa.email);
         $("#editTelefone").val(pessoa.celular);
         $("#editDocumento").val(pessoa.documento);
-
+        if(pessoa.tipo === "F"){
+          $('#editDocumento').mask('000.000.000-00');
+        } else {
+          $('#editDocumento').mask('00.000.000/0000-00');
+        }
         app.dialog.close();
       } else {
         app.dialog.close();
