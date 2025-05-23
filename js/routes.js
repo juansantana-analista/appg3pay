@@ -779,7 +779,11 @@ var app = new Framework7({
           listarPerfil();
 
           $('#editarFoto').on('click', function() {
-            app.popup.open('.popup-editar');
+            app.dialog.alert("Essa opção estará Disponível em Breve!");
+          });
+
+          $('#profileAvatar').on('click', function() {
+            app.dialog.alert("Essa opção estará Disponível em Breve!");
           });
 
           $('#editarPerfil').on('click', function() {
