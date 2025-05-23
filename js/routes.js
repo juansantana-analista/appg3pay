@@ -59,13 +59,13 @@ var app = new Framework7({
   inicializarMenuLateral();
   atualizarTabbarComMenu();
 
+      listarPerfil("index");
   
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
-      listarPerfil("index");
       buscarQtdeNotif();
       contarCarrinho();
           // fazer algo quando a página for inicializada  
