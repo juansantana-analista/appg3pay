@@ -58,6 +58,9 @@ var app = new Framework7({
           
           $(".profile-avatar-menu").on("click", function () {
               app.views.main.router.navigate("/perfil/"); 
+              setTimeout(() => {
+                $('.menu-tab-link').removeClass('menu-active');
+              }, 300);
           });
   inicializarMenuLateral();
   atualizarTabbarComMenu();
