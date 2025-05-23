@@ -2745,7 +2745,7 @@ function listarPerfil() {
       if (responseJson.data.status === "success") {
         const pessoa = responseJson.data.data.pessoa;
 
-        $("#profileImage").attr("src", pessoa.foto);
+        $("#profileImage").attr("src", "https://vitatop.tecskill.com.br/" + pessoa.foto);
         $("#usuarioNome").html(pessoa.nome);
         $("#emailUsuario").html(pessoa.email);      
         $("#editNome").val(pessoa.nome);
