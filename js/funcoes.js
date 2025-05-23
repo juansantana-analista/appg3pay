@@ -2237,7 +2237,6 @@ function apagarNotificacao(notificacaoId) {
     .then((responseJson) => {
       if (responseJson.status === "success") {
         app.dialog.close();
-        console.log("Notificação apagada com sucesso");
       } else {
         app.dialog.close();
         app.dialog.alert(
@@ -2356,10 +2355,6 @@ function buscarQtdeNotif() {
         responseJson.data.status === "success"
       ) {
         const quantidadeNaoVistas = responseJson.data.data.quantidade || 0;
-        console.log(
-          "Quantidade de notificações não vistas:",
-          quantidadeNaoVistas
-        );
 
         // Aguardar um pouco antes de tentar atualizar
         setTimeout(() => {
@@ -2368,10 +2363,6 @@ function buscarQtdeNotif() {
             const btnNotificacao = document.querySelector(".btn-notificacao");
             if (btnNotificacao) {
               btnNotificacao.setAttribute("data-count", quantidadeNaoVistas);
-              console.log(
-                "Badge cabeçalho atualizado:",
-                btnNotificacao.getAttribute("data-count")
-              );
             } else {
               console.warn("Elemento .btn-notificacao não encontrado");
             }
@@ -2385,7 +2376,6 @@ function buscarQtdeNotif() {
                 badge.querySelector("i.mdi-bell-outline")
               ) {
                 badge.setAttribute("data-count", quantidadeNaoVistas);
-                console.log("Badge encontrado e atualizado:", badge);
               }
             });
 
@@ -2395,7 +2385,6 @@ function buscarQtdeNotif() {
             if (badgeMenuLateral) {
               badgeMenuLateral.setAttribute("data-count", quantidadeNaoVistas);
               badgeMenuLateral.textContent = quantidadeNaoVistas;
-              console.log("Badge menu lateral atualizado");
             }
 
             // Método 4: Forçar refresh do CSS se necessário
@@ -2416,14 +2405,6 @@ function buscarQtdeNotif() {
 
             // Salvar no localStorage para referência
             localStorage.setItem("qtdeNotificacoes", quantidadeNaoVistas);
-
-            console.log("Badges de notificação atualizados com sucesso");
-
-            // Debug: Listar todos os elementos com data-count
-            console.log(
-              "Todos os elementos com data-count:",
-              document.querySelectorAll("[data-count]")
-            );
           } catch (error) {
             console.error("Erro ao atualizar badges de notificação:", error);
           }
@@ -2467,7 +2448,6 @@ function atualizarBadgesNotificacao(quantidade) {
     // Salvar no localStorage
     localStorage.setItem("qtdeNotificacoes", qtde);
 
-    console.log(`Badges de notificação atualizados para: ${qtde}`);
   }, 100);
 }
 
@@ -2475,16 +2455,8 @@ function atualizarBadgesNotificacao(quantidade) {
 function debugNotificationBadge() {
   const btnNotificacao = document.querySelector(".btn-notificacao");
   if (btnNotificacao) {
-    console.log("Elemento encontrado:", btnNotificacao);
-    console.log("data-count atual:", btnNotificacao.getAttribute("data-count"));
-    console.log(
-      "Estilos computados:",
-      window.getComputedStyle(btnNotificacao, "::before")
-    );
-
     // Teste manual
     btnNotificacao.setAttribute("data-count", "5");
-    console.log("Teste: definindo data-count como 5");
   }
 }
 
@@ -2881,7 +2853,6 @@ function finalizarCompra(
           "Falha na requisição!"
         );
       }
-      console.log("Success:", responseJson);
     })
     .catch((error) => {
       app.dialog.close();
@@ -2968,7 +2939,6 @@ function refazerPagamento(
           "Falha na requisição!"
         );
       }
-      console.log("Success:", responseJson);
     })
     .catch((error) => {
       app.dialog.close();
@@ -3240,8 +3210,6 @@ function alterarCarrinho(pessoaId, produtoId, quantidade) {
         responseJson.status == "success" &&
         responseJson.data.status == "sucess"
       ) {
-        console.log(responseJson);
-        // Sucesso na alteração
         app.views.main.router.refreshPage();
         app.dialog.close();
       }
@@ -3498,8 +3466,6 @@ function adicionarItemCarrinho(produtoId) {
 //Inicio Remover Item do Carrinho
 function removerItemCarrinho(pessoaId, produtoId) {
   app.dialog.preloader("Carregando...");
-  console.log(pessoaId);
-  console.log(produtoId);
   const dados = {
     pessoa_id: pessoaId,
     produto_id: produtoId,
@@ -3690,7 +3656,6 @@ function onDashboard() {
   fetch(apiServerUrl, options)
     .then((response) => response.json())
     .then((responseJson) => {
-      console.log(responseJson);
       // Verifica se o status é 'success'
       if (
         responseJson.status == "success" &&
@@ -3751,7 +3716,6 @@ function listarCarrinhoCheckout() {
         responseJson.status == "success" &&
         responseJson.data.status == "sucess"
       ) {
-        console.log(responseJson);
         // Supondo que responseJson seja o objeto que você obteve no console.log
         const quantidadeItens = responseJson.data.data.itens.length;
         const subtotal = responseJson.data.data.total;
@@ -4510,7 +4474,6 @@ function oneSignalLogin(userId, oneSignalId) {
     // Define o ID externo no OneSignal
     OneSignal.login(userId)
       .then(() => {
-        console.log(`ID externo definido com sucesso: ${userId}`);
       })
       .catch((error) => {
         console.error(`Erro ao definir ID externo: ${error}`);
@@ -4519,7 +4482,6 @@ function oneSignalLogin(userId, oneSignalId) {
     OneSignal.Notifications.requestPermission();
     OneSignal.login(userId)
       .then(() => {
-        console.log(`ID externo definido com sucesso: ${userId}`);
       })
       .catch((error) => {
         console.error(`Erro ao definir ID externo: ${error}`);

@@ -108,11 +108,8 @@ var app = new Framework7({
           if (platform === 'iOS') {
             // Ações específicas para iOS    
             if (window.navigator.standalone) {
-              console.log('O app está rodando em modo standalone (fixado na tela inicial no iOS)');
               $("#installBanner").addClass("display-none");
-            } else {
-              console.log('O app não está rodando em modo standalone no iOS');
-              
+            } else {              
               $("#installBanner").removeClass("display-none");
             }
             conteudoInstall.innerHTML = `
@@ -122,7 +119,6 @@ var app = new Framework7({
           } else if (platform === 'Android') {
             // Ações específicas para Android
             if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches) {
-              console.log('O app está rodando em modo standalone ou fullscreen');
               $("#installBanner").addClass("display-none");
             } else {
               $("#installBanner").removeClass("display-none");
@@ -142,7 +138,6 @@ var app = new Framework7({
                   <button id="fecharInstallDesktop" class="button margin-right text-color-gray">Depois</button>
                   <button id="installAppDesktop" class="button button-fill color-red"><span class="mdi mdi-cellphone-arrow-down-variant"></span> Instalar</button>
               </div>`;
-              console.log('O app está rodando em modo standalone ou fullscreen');
               $("#installBanner").addClass("display-none");
             } else {
               $("#installBanner").removeClass("display-none");
@@ -168,9 +163,7 @@ var app = new Framework7({
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                   if (choiceResult.outcome === 'accepted') {
-                    console.log('Usuário aceitou a instalação.');
                   } else {
-                    console.log('Usuário rejeitou a instalação.');
                   }
                   deferredPrompt = null;
                 });
@@ -183,9 +176,7 @@ var app = new Framework7({
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                   if (choiceResult.outcome === 'accepted') {
-                    console.log('Usuário aceitou a instalação.');
                   } else {
-                    console.log('Usuário rejeitou a instalação.');
                   }
                   deferredPrompt = null;
                 });
@@ -1402,7 +1393,6 @@ var app = new Framework7({
 
           function obterFormaPagamentoSelecionada() {
             var formaPagamento = $("input[name='payment']:checked").val();
-            console.log("Forma de pagamento selecionada:", formaPagamento);
             return formaPagamento;
           }
 
