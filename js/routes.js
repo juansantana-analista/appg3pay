@@ -67,7 +67,7 @@ var app = new Framework7({
         pageInit: function (event, page) {
     buscarQtdeNotif();
     contarCarrinho();
-      
+      listarPerfil("index");
           // fazer algo quando a página for inicializada  
           function detectPlatform() {
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
