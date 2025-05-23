@@ -783,33 +783,26 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
-    buscarQtdeNotif();
-    contarCarrinho();
-    
-          // fazer algo quando a página for inicializada
-          var nomeUsuario = localStorage.getItem('userName');
-          var emailUsuario = localStorage.getItem('userEmail');
+          buscarQtdeNotif();
+          contarCarrinho();
+          listarPerfil();
 
-          $("#usuarioNome").html(nomeUsuario);
-          $("#emailUsuario").html(emailUsuario);
-
-              $('#editarPerfil').on('click', function() {
-                app.popup.open('.popup-editar');
-              });
-
-              $('.modal-close, [data-dismiss="modal"]').on('click', function() {
-                app.popup.close('.popup-editar');
-              })
-
-          $('#sairAgora').on('click', function () {
-            app.dialog.confirm('Deseja sair do aplicativo?', function () {
-              fazerLogout();
-              $("#menuPrincipal").hide("fast");
-              $("#menuPrincipal").addClass("display-none");
-              app.views.main.router.navigate("/login-view/");
-            });
+          $('#editarPerfil').on('click', function() {
+            app.popup.open('.popup-editar');
           });
 
+          $('.modal-close, [data-dismiss="modal"]').on('click', function() {
+              app.popup.close('.popup-editar');
+            })
+
+          $('#sairAgora').on('click', function () {
+              app.dialog.confirm('Deseja sair do aplicativo?', function () {
+                fazerLogout();
+                $("#menuPrincipal").hide("fast");
+                $("#menuPrincipal").addClass("display-none");
+                app.views.main.router.navigate("/login-view/");
+              });
+          });
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
