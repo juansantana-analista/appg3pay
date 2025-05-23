@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-const versionApp = "1.8.4";
+const versionApp = "1.8.5";
 var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -792,7 +792,7 @@ var app = new Framework7({
           });
 
           $('.modal-close, [data-dismiss="modal-senha"]').on('click', function() {
-              app.popup.close('.popup-editar');
+              app.popup.close('.popup-senha');
           })
 
           $('#sairAgora').on('click', function () {
