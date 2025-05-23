@@ -794,11 +794,11 @@ var app = new Framework7({
           $("#emailUsuario").html(emailUsuario);
 
               $('#editarPerfil').on('click', function() {
-                  $('#editProfileModal').modal('show');
+                  $("#editProfileModal").removeClass("display-none");
               });
 
               $('.modal-close, [data-dismiss="modal"]').on('click', function() {
-                  $('#editProfileModal').modal('hide');
+                  $("#editProfileModal").addClass("display-none");
               })
 
           $('#sairAgora').on('click', function () {
