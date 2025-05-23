@@ -2855,6 +2855,51 @@ function enviarFotoPerfil(base64Foto) {
 }
 //Fim da Funçao atualizar Foto
 
+//Inicio da Funçao atualizar Perfil
+function salvarPerfil() {
+            const pessoaId = localStorage.getItem("pessoaId");
+            const nome = $('#editNome').val().trim();
+            const celular = $('#editTelefone').val().trim();
+
+            if (!nome || !celular) {
+              return app.dialog.alert("Preencha todos os campos obrigatórios.");
+            }
+
+            app.dialog.preloader('Salvando...');
+
+            fetch(apiServerUrl, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + userAuthToken
+              },
+              body: JSON.stringify({
+                class: "PessoaRestService",
+                method: "editarPessoa",
+                id: pessoaId,
+                nome: nome,
+                celular: celular
+              })
+            })
+            .then(res => res.json())
+            .then(data => {
+              app.dialog.close();
+              if (data.status === "success") {
+                app.popup.close('.popup-editar');
+                app.dialog.alert("Perfil atualizado com sucesso!");
+                listarPerfil(); // Atualiza os dados na tela
+              } else {
+                app.dialog.alert("Erro: " + data.message);
+              }
+            })
+            .catch(err => {
+              app.dialog.close();
+              console.error(err);
+              app.dialog.alert("Erro ao atualizar perfil.");
+            });
+}
+//Fim da Funçao atualizar Perfil
+
 //Inicio da Funçao atualizar senha
 function salvarSenha() {
             const pessoaId = localStorage.getItem("pessoaId");
