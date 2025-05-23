@@ -2747,7 +2747,7 @@ function listarPerfil() {
 
         $("#profileImage").attr("src", pessoa.foto);
         $("#usuarioNome").html(pessoa.nome);
-        $("#emailUsuario").html(pessoa.email);
+        $("#emailUsuario").html(pessoa.email);      
         $("#editNome").val(pessoa.nome);
         $("#editEmail").val(pessoa.email);
         $("#editTelefone").val(pessoa.celular);

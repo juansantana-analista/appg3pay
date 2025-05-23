@@ -794,6 +794,8 @@ var app = new Framework7({
           $('.modal-close, [data-dismiss="modal-senha"]').on('click', function() {
               app.popup.close('.popup-senha');
           })
+          
+          $("#versaoApp").html(versionApp);  
 
           $('#sairAgora').on('click', function () {
               app.dialog.confirm('Deseja sair do aplicativo?', function () {
