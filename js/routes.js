@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-const versionApp = "1.9.0";
+const versionApp = "1.9.1";
 var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -814,52 +814,24 @@ var app = new Framework7({
               });
           });
 
-          $('#inputFoto').on('change', function(event) {
-  const file = event.target.files[0];
-  if (!file) return;
+          $('#inputFotoGaleria').on('change', function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
 
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const base64String = e.target.result; // já no formato data:image/xxx;base64,...
-    
-    // Pega o id da pessoa, ajuste para sua lógica
-    const pessoaId = getPessoaId(); // sua função que retorna id
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              const base64String = e.target.result; // já no formato data:image/xxx;base64,...
 
-    // Agora envie a base64 para a API
-    enviarFotoPerfil(pessoaId, base64String);
-  };
-  reader.readAsDataURL(file);
-});
-
-function enviarFotoPerfil(pessoaId, base64Foto) {
-  fetch('https://seuservidor.com/api/editarPessoa', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + userAuthToken, // se tiver token
-    },
-    body: JSON.stringify({
-      id: pessoaId,
-      foto_base64: base64Foto
-    })
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.status === 'success') {
-      app.dialog.alert('Foto atualizada com sucesso!');
-      // Atualize a foto na tela, se quiser
-      $('#profileAvatar').attr('src', base64Foto);
-    } else {
-      app.dialog.alert('Erro: ' + data.message);
-    }
-  })
-  .catch(err => {
-    console.error(err);
-    app.dialog.alert('Erro ao enviar foto.');
-  });
-}
-
-
+              app.dialog.confirm('Deseja realmente enviar esta foto?', function() {
+                // Pega o id da pessoa, ajuste para sua lógica
+                enviarFotoPerfil(base64String);
+              }, function() {
+                // Usuário cancelou, limpa o input para permitir nova seleção
+                $('#inputFotoGaleria').val('');
+              });
+            };
+            reader.readAsDataURL(file);
+          });
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM

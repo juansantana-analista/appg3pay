@@ -2447,7 +2447,6 @@ function atualizarBadgesNotificacao(quantidade) {
 
     // Salvar no localStorage
     localStorage.setItem("qtdeNotificacoes", qtde);
-
   }, 100);
 }
 
@@ -2713,7 +2712,6 @@ function listarEnderecos() {
 }
 // Fim Função Listar Endereços
 
-
 // Início Função  Preencher Perfil
 function listarPerfil() {
   app.dialog.preloader("Carregando...");
@@ -2745,17 +2743,20 @@ function listarPerfil() {
       if (responseJson.data.status === "success") {
         const pessoa = responseJson.data.data.pessoa;
 
-        $("#profileImage").attr("src", "https://vitatop.tecskill.com.br/" + pessoa.foto);
+        $("#profileImage").attr(
+          "src",
+          "https://vitatop.tecskill.com.br/" + pessoa.foto
+        );
         $("#usuarioNome").html(pessoa.nome);
-        $("#emailUsuario").html(pessoa.email);      
+        $("#emailUsuario").html(pessoa.email);
         $("#editNome").val(pessoa.nome);
         $("#editEmail").val(pessoa.email);
         $("#editTelefone").val(pessoa.celular);
         $("#editDocumento").val(pessoa.documento);
-        if(pessoa.tipo === "F"){
-          $('#editDocumento').mask('000.000.000-00');
+        if (pessoa.tipo === "F") {
+          $("#editDocumento").mask("000.000.000-00");
         } else {
-          $('#editDocumento').mask('00.000.000/0000-00');
+          $("#editDocumento").mask("00.000.000/0000-00");
         }
         app.dialog.close();
       } else {
@@ -2776,6 +2777,67 @@ function listarPerfil() {
     });
 }
 // Fim Função Preencher Perfil
+
+//Inicio da Funçao atualizar Foto
+function enviarFotoPerfil(base64Foto) {
+  app.dialog.preloader("Enviando foto...");
+  const pessoaId = localStorage.getItem("pessoaId");
+
+  // Cabeçalhos da requisição
+  const headers = {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer " + userAuthToken,
+  };
+
+  // Corpo da requisição, compatível com sua API
+  const body = JSON.stringify({
+    class: "PessoaRestService",
+    method: "editarPessoa",
+    id: pessoaId,
+    foto_base64: base64Foto,
+  });
+
+  // Opções da requisição
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  // Fazendo a requisição
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      app.dialog.close(); // Fecha o preloader
+
+      if (responseJson.data.status === "success") {
+        app.dialog.alert("Foto atualizada com sucesso!");
+
+        // Atualiza a imagem na tela (se o backend retornar a nova URL)
+        // Se não retornar, usa a própria base64:
+        $("#profileAvatar").attr("src", base64Foto);
+
+        // Ou recarrega o perfil para garantir que tudo esteja sincronizado:
+        listarPerfil();
+      } else {
+        console.error("Erro:", responseJson.data.message);
+        app.dialog.alert("Erro: " + responseJson.data.message);
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro ao enviar foto:", error);
+      app.dialog.alert(
+        "Erro ao enviar a foto: " + error.message,
+        "Falha na requisição!"
+      );
+    })
+    .finally(() => {
+      // Limpa o input para permitir reenvio se necessário
+      $('#inputFotoGaleria').val('');
+    });
+}
+//Fim da Funçao atualizar Foto
 
 //Inicio Funçao Listar Categorias
 function finalizarCompra(
@@ -4481,16 +4543,14 @@ function oneSignalLogin(userId, oneSignalId) {
     OneSignal.Notifications.requestPermission();
     // Define o ID externo no OneSignal
     OneSignal.login(userId)
-      .then(() => {
-      })
+      .then(() => {})
       .catch((error) => {
         console.error(`Erro ao definir ID externo: ${error}`);
       });
   } else {
     OneSignal.Notifications.requestPermission();
     OneSignal.login(userId)
-      .then(() => {
-      })
+      .then(() => {})
       .catch((error) => {
         console.error(`Erro ao definir ID externo: ${error}`);
       });
