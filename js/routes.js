@@ -794,11 +794,11 @@ var app = new Framework7({
           $("#emailUsuario").html(emailUsuario);
 
               $('#editarPerfil').on('click', function() {
-                app.popup.open('.popup-compartilhar');
+                app.popup.open('.popup-editar');
               });
 
               $('.modal-close, [data-dismiss="modal"]').on('click', function() {
-                app.popup.close('.popup-compartilhar');
+                app.popup.close('.popup-editar');
               })
 
           $('#sairAgora').on('click', function () {
