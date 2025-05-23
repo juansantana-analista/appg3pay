@@ -784,7 +784,12 @@ var app = new Framework7({
 
           $('.modal-close, [data-dismiss="modal"]').on('click', function() {
               app.popup.close('.popup-editar');
-            })
+          })
+
+          
+          $('#alterarSenha').on('click', function() {
+            app.popup.open('.popup-senha');
+          });
 
           $('#sairAgora').on('click', function () {
               app.dialog.confirm('Deseja sair do aplicativo?', function () {
