@@ -2713,7 +2713,7 @@ function listarEnderecos() {
 // Fim Função Listar Endereços
 
 // Início Função  Preencher Perfil
-function listarPerfil() {
+function listarPerfil(rota) {
   app.dialog.close();
   app.dialog.preloader("Carregando...");
   const pessoaId = localStorage.getItem("pessoaId");
@@ -2744,6 +2744,13 @@ function listarPerfil() {
       if (responseJson.data.status === "success") {
         const pessoa = responseJson.data.data.pessoa;
 
+        if(rota){
+          $("#profileImageMenu").attr(
+            "src",
+            "https://vitatop.tecskill.com.br/" + pessoa.foto
+          );
+          return;
+        }
         $("#profileImage").attr(
           "src",
           "https://vitatop.tecskill.com.br/" + pessoa.foto

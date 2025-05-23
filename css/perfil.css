@@ -55,6 +55,12 @@
   border-radius: 50%;
 }
 
+.profile-avatar-menu img {
+  width: 50px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
 .avatar-overlay {
   position: absolute;
   top: 0;
