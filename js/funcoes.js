@@ -2748,10 +2748,10 @@ function listarPerfil() {
         $("#profileImage").attr("src", pessoa.foto);
         $("#usuarioNome").html(pessoa.nome);
         $("#emailUsuario").html(pessoa.email);
-        $("#editNome").html(pessoa.nome);
-        $("#editEmail").html(pessoa.email);
-        $("#editTelefone").html(pessoa.celular);
-        $("#editDocumento").html(pessoa.documento);
+        $("#editNome").val(pessoa.nome);
+        $("#editEmail").val(pessoa.email);
+        $("#editTelefone").val(pessoa.celular);
+        $("#editDocumento").val(pessoa.documento);
 
         app.dialog.close();
       } else {
