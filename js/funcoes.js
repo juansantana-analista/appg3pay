@@ -2753,6 +2753,12 @@ function listarPerfil(rota) {
           app.dialog.close();
           return;
         }
+        
+          $("#profileImageMenu").attr(
+            "src",
+            "https://vitatop.tecskill.com.br/" + pessoa.foto
+          );
+          
         $("#profileImage").attr(
           "src",
           "https://vitatop.tecskill.com.br/" + pessoa.foto
