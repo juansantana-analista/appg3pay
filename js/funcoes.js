@@ -4123,15 +4123,11 @@ function listarEquipe(filtro = "all") {
                   <div class="member-stats">
                     <div class="member-stat">
                       <i class="mdi mdi-account-group"></i>
-                      <span>Indicados: ${Math.floor(Math.random() * 10)}</span>
+                      <span>Indicados: 0</span>
                     </div>
                     <div class="member-stat">
                       <i class="mdi mdi-chart-line"></i>
-                      <span>Vendas: ${Math.floor(Math.random() * 50)}</span>
-                    </div>
-                    <div class="member-stat">
-                      <i class="mdi mdi-trophy"></i>
-                      <span>${nivelTexto}</span>
+                      <span>Vendas: 0</span>
                     </div>
                   </div>
                 </div>
