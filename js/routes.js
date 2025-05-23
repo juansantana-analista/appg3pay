@@ -778,13 +778,17 @@ var app = new Framework7({
           contarCarrinho();
           listarPerfil();
 
+          $('#editarFoto').on('click', function() {
+            app.popup.open('.popup-editar');
+          });
+
           $('#editarPerfil').on('click', function() {
             app.popup.open('.popup-editar');
           });
 
           $('.modal-close, [data-dismiss="modal"]').on('click', function() {
               app.popup.close('.popup-editar');
-          })
+          });
 
           
           $('#alterarSenha').on('click', function() {
@@ -793,7 +797,7 @@ var app = new Framework7({
 
           $('.modal-close, [data-dismiss="modal-senha"]').on('click', function() {
               app.popup.close('.popup-senha');
-          })
+          });
           
           $("#versaoApp").html(versionApp);  
 
