@@ -3846,9 +3846,14 @@ function onDashboard() {
         responseJson.data.status == "success"
       ) {
         //Desenha o dashboard
+        $("#valorComissao").text(
+          formatarMoeda(responseJson.data.dados.bonus_total_geral)
+        );
+        //Desenha o dashboard
         $("#valorVenda").text(
           formatarMoeda(responseJson.data.dados.valor_venda_mes)
         );
+        
         $("#qtdeGeral").text(responseJson.data.dados.rede_geral);
       }
     })
