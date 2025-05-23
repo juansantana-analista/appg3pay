@@ -2750,6 +2750,7 @@ function listarPerfil(rota) {
             "src",
             "https://vitatop.tecskill.com.br/" + pessoa.foto
           );
+          app.dialog.close();
           return;
         }
         $("#profileImage").attr(
