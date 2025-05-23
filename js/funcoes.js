@@ -2744,7 +2744,8 @@ function listarPerfil(rota) {
       if (responseJson.data.status === "success") {
         const pessoa = responseJson.data.data.pessoa;
 
-        if(rota){
+        if(rota == "index"){
+          console.log("aqui");
           $("#profileImageMenu").attr(
             "src",
             "https://vitatop.tecskill.com.br/" + pessoa.foto

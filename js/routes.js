@@ -65,8 +65,8 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
-    buscarQtdeNotif();
-    contarCarrinho();
+      buscarQtdeNotif();
+      contarCarrinho();
       listarPerfil("index");
           // fazer algo quando a página for inicializada  
           function detectPlatform() {
