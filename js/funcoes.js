@@ -2882,13 +2882,14 @@ function salvarSenha() {
                 class: "PessoaRestService",
                 method: "editarPessoa",
                 id: pessoaId,
+                senha_atual: senhaAtual,
                 senha: novaSenha // Assumindo que a senha atual já foi validada no backend ou não é necessária aqui
               })
             })
             .then(res => res.json())
             .then(data => {
               app.dialog.close();
-              if (data.status === "success") {
+              if (data.data.status === "success") {
                 app.popup.close('.popup-senha');
                 app.dialog.alert("Senha atualizada com sucesso!");
                 $('#senhaAtual').val('');
