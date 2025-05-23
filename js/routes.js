@@ -54,8 +54,11 @@ var app = new Framework7({
           var userName = localStorage.getItem('userName');
           if(userName != '' && userName != null) {
             $("#nomeUsuario").html(userName);
-          }
+          }          
           
+          $(".profile-avatar-menu").on("click", function () {
+              app.views.main.router.navigate("/perfil/"); 
+          });
   inicializarMenuLateral();
   atualizarTabbarComMenu();
 
