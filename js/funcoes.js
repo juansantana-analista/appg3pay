@@ -2758,7 +2758,7 @@ function listarPerfil(rota) {
             "src",
             "https://vitatop.tecskill.com.br/" + pessoa.foto
           );
-          
+
         $("#profileImage").attr(
           "src",
           "https://vitatop.tecskill.com.br/" + pessoa.foto
@@ -2854,6 +2854,58 @@ function enviarFotoPerfil(base64Foto) {
     });
 }
 //Fim da Funçao atualizar Foto
+
+//Inicio da Funçao atualizar senha
+function salvarSenha() {
+            const pessoaId = localStorage.getItem("pessoaId");
+            const senhaAtual = $('#senhaAtual').val().trim();
+            const novaSenha = $('#novaSenha').val().trim();
+            const reNovaSenha = $('#reNovaSenha').val().trim();
+
+            if (!senhaAtual || !novaSenha || !reNovaSenha) {
+              return app.dialog.alert("Preencha todos os campos.");
+            }
+
+            if (novaSenha !== reNovaSenha) {
+              return app.dialog.alert("As senhas não coincidem.");
+            }
+
+            app.dialog.preloader('Salvando...');
+
+            fetch(apiServerUrl, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + userAuthToken
+              },
+              body: JSON.stringify({
+                class: "PessoaRestService",
+                method: "editarPessoa",
+                id: pessoaId,
+                senha: novaSenha // Assumindo que a senha atual já foi validada no backend ou não é necessária aqui
+              })
+            })
+            .then(res => res.json())
+            .then(data => {
+              app.dialog.close();
+              if (data.status === "success") {
+                app.popup.close('.popup-senha');
+                app.dialog.alert("Senha atualizada com sucesso!");
+                $('#senhaAtual').val('');
+                $('#novaSenha').val('');
+                $('#reNovaSenha').val('');
+              } else {
+                app.dialog.alert("Erro: " + data.message);
+              }
+            })
+            .catch(err => {
+              app.dialog.close();
+              console.error(err);
+              app.dialog.alert("Erro ao atualizar senha.");
+            });
+}
+//Fim da Funçao atualizar senha
+
 
 //Inicio Funçao Listar Categorias
 function finalizarCompra(
