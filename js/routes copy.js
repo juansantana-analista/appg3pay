@@ -8,7 +8,7 @@ var app = new Framework7({
   // App root element
   el: '#app',
   // App Name
-  name: 'Vitatop',
+  name: 'VitaTop',
   // App id
   id: 'br.com.g3pay',
   // Enable swipe panel
@@ -104,7 +104,7 @@ var app = new Framework7({
               $("#installBanner").removeClass("display-none");
             }
             conteudoInstall.innerHTML = `
-            <p>Adicione <strong>o aplicativo Vitatop</strong> à sua tela inicial para obter atualizações regulares. Toque em Compartilhar 
+            <p>Adicione <strong>o aplicativo VitaTop</strong> à sua tela inicial para obter atualizações regulares. Toque em Compartilhar 
             <span class="mdi mdi-export-variant"></span> e depois <strong>Adicionar à <br>tela inicial </strong><span class="mdi mdi-plus-box-outline"></span>
             </p>`;
           } else if (platform === 'Android') {
@@ -116,7 +116,7 @@ var app = new Framework7({
               $("#installBanner").removeClass("display-none");
             }
             conteudoInstall.innerHTML = `
-            <p>Instale <strong>o aplicativo Vitatop</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
+            <p>Instale <strong>o aplicativo VitaTop</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
             <div class="display-flex flex-direction-row justify-content-space-between">
                 <button id="fecharInstall" class="button margin-right text-color-gray">Depois</button>
                 <button id="installAppAndroid" class="button button-fill color-red"><span class="mdi mdi-cellphone-arrow-down-variant"></span> Instalar</button>
@@ -125,7 +125,7 @@ var app = new Framework7({
             // Ações para desktop ou plataformas desconhecidas
             if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches) {
               conteudoInstall.innerHTML = `
-              <p>Instale <strong>o aplicativo Vitatop</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
+              <p>Instale <strong>o aplicativo VitaTop</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
               <div class="display-flex flex-direction-row justify-content-space-between">
                   <button id="fecharInstallDesktop" class="button margin-right text-color-gray">Depois</button>
                   <button id="installAppDesktop" class="button button-fill color-red"><span class="mdi mdi-cellphone-arrow-down-variant"></span> Instalar</button>

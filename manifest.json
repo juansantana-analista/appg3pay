@@ -2,9 +2,9 @@
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
   "background_color": "#ffffff",
   "dir": "ltr",
-  "name": "Vitatop",
+  "name": "VitaTop",
   "scope": "/",
-  "short_name": "Vitatop",
+  "short_name": "VitaTop",
   "start_url": "https://appvitatop.tecskill.com.br/",
   "id": "br.com.g3pay",
   "display": "fullscreen",
@@ -13,9 +13,9 @@
   "orientation": "portrait",
   "shortcuts": [
     {
-      "name": "Vitatop",
-      "short_name": "Vitatop",
-      "description": "Gerencie suas vendas e maximize seus ganhos com a Vitatop na palma da mão.",
+      "name": "VitaTop",
+      "short_name": "VitaTop",
+      "description": "Gerencie suas vendas e maximize seus ganhos com a VitaTop na palma da mão.",
       "url": "https://appvitatop.tecskill.com.br/"
     }
   ],
@@ -516,7 +516,7 @@
       "url": "/handle-protocol?url=%s"
     }
   ],
-  "description": "Gerencie suas vendas e maximize seus ganhos com a Vitatop na palma da mão.",
+  "description": "Gerencie suas vendas e maximize seus ganhos com a VitaTop na palma da mão.",
   "lang": "pt",
   "categories": ["business", "finance"]
 }
