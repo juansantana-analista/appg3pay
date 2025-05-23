@@ -2714,6 +2714,7 @@ function listarEnderecos() {
 
 // Início Função  Preencher Perfil
 function listarPerfil() {
+  app.dialog.close();
   app.dialog.preloader("Carregando...");
   const pessoaId = localStorage.getItem("pessoaId");
 
