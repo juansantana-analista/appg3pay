@@ -793,6 +793,14 @@ var app = new Framework7({
           $("#usuarioNome").html(nomeUsuario);
           $("#emailUsuario").html(emailUsuario);
 
+              $('#editarPerfil').on('click', function() {
+                  $('#editProfileModal').modal('show');
+              });
+
+              $('.modal-close, [data-dismiss="modal"]').on('click', function() {
+                  $('#editProfileModal').modal('hide');
+              })
+
           $('#sairAgora').on('click', function () {
             app.dialog.confirm('Deseja sair do aplicativo?', function () {
               fazerLogout();
