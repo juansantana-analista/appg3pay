@@ -779,11 +779,11 @@ var app = new Framework7({
           listarPerfil();
 
           $('#editarFoto').on('click', function() {
-            app.dialog.alert("Essa opção estará Disponível em Breve!");
+             $('#inputFoto').click();
           });
 
           $('#profileAvatar').on('click', function() {
-            app.dialog.alert("Essa opção estará Disponível em Breve!");
+             $('#inputFoto').click();
           });
 
           $('#editarPerfil').on('click', function() {
@@ -813,6 +813,53 @@ var app = new Framework7({
                 app.views.main.router.navigate("/login-view/");
               });
           });
+
+          $('#inputFoto').on('change', function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const base64String = e.target.result; // já no formato data:image/xxx;base64,...
+    
+    // Pega o id da pessoa, ajuste para sua lógica
+    const pessoaId = getPessoaId(); // sua função que retorna id
+
+    // Agora envie a base64 para a API
+    enviarFotoPerfil(pessoaId, base64String);
+  };
+  reader.readAsDataURL(file);
+});
+
+function enviarFotoPerfil(pessoaId, base64Foto) {
+  fetch('https://seuservidor.com/api/editarPessoa', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + userAuthToken, // se tiver token
+    },
+    body: JSON.stringify({
+      id: pessoaId,
+      foto_base64: base64Foto
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === 'success') {
+      app.dialog.alert('Foto atualizada com sucesso!');
+      // Atualize a foto na tela, se quiser
+      $('#profileAvatar').attr('src', base64Foto);
+    } else {
+      app.dialog.alert('Erro: ' + data.message);
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    app.dialog.alert('Erro ao enviar foto.');
+  });
+}
+
+
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
