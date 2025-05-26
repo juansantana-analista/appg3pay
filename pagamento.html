@@ -32,35 +32,27 @@
       <div class="view view-main">
         <!-- Initial Page, "data-name" contains page name -->
         <div data-name="pagamento" class="page color-theme-blue">
-
-               <!-- NAV TOPO-->
-               <div class="top-nav">
-                  <div class="left">
-                     <img src="img/logo-nav.png" class="title-logo" width="130px" style="margin-left: 10px;" />
-                  </div>
-                  <!-- Agrupe os ícones em uma div -->
-                  <div class="right-icons">
-                     <!-- Botão de Notificações -->
-                     <div class="btn-notificacao" data-count="0" onclick="app.views.main.router.navigate('/notificacoes/')">
-                        <i class="mdi mdi-bell-outline"></i>
-                     </div>
-                     <!-- Botão do Carrinho -->
-                     <div class="btn-cart" data-count="0" onclick="app.views.main.router.navigate('/carrinho/')">
-                        <i class="mdi mdi-cart-outline"></i>
-                     </div>
-                  </div>
-               </div>
+          <!-- NAV TOPO-->
+          <div class="top-nav">
+            <div class="left">
+              <a
+                href="/pedidos/"
+                class="link btn-novo"
+              >
+                <i class="mdi mdi-arrow-left"></i>
+              </a>
+            </div>
+            <img src="img/logo-nav.png" class="title-logo" width="110px" />
+            <a href="/informacoes/">
+              <!--<i class="mdi mdi-information-variant"></i>-->
+            </a>
+          </div>
           <!-- Scrollable page content -->
+
           <div
             class="page-content"
             style="background-color: #f7f9fa; padding-bottom: 160px"
           >
-
-          <!-- Cabeçalho com título da página -->
-          <div class="dashboard-header">
-            <h1>Pedidos realizados</h1>
-            <p>Confira seus pedidos realizados.</p>
-          </div>
           <div class="block">            
             <h2 class="titulo-pagina">Pagamento</h2>
           
