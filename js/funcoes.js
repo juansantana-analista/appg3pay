@@ -1185,23 +1185,34 @@ function buscarLinkAfiliado() {
       // Verifica se o status é 'success' e se há dados de pedidos
       if (responseJson.status === "success") {
         const resultado = responseJson;
-        var linkUrl = resultado.data.data.link;
+        var linkCadastro = resultado.data.data.link_cadastro;
+        var linkLp = resultado.data.data.link_lp;
         $("#qrcode").html("");
 
-        $("#link-indicacao").text(linkUrl);
+        $("#link-cadastro").text(linkCadastro);
+        $("#link-lp").text(linkLp);
 
-        $("#compartilharLink").on("click", function () {
+        $("#compartilharLinkCadastro").on("click", function () {
           // Pega o url do link clicado em share
           //Abre opção compartilhamento.
           onCompartilhar(
             "Link de Indicação",
             "Faça seu cadastro na plataforma",
-            linkUrl
+            linkCadastro
+          );
+        });
+        $("#compartilharLinkLp").on("click", function () {
+          // Pega o url do link clicado em share
+          //Abre opção compartilhamento.
+          onCompartilhar(
+            "Link de Indicação",
+            "Conheça nossa plataforma e se torne nosso Distribuidor Independente!",
+            linkLp
           );
         });
 
         var qrcode = new QRCode(document.getElementById("qrcode"), {
-          text: linkUrl,
+          text: linkCadastro,
           width: 200,
           height: 200,
           colorDark: "#000000",
