@@ -2014,17 +2014,6 @@ var app = new Framework7({
 //var mainView = app.views.create('.view-main', { url: '/index/' });
 
 
-//EVENTO PARA SABER O ITEM DO MENU ATUAL
-app.on('routeChange', function (route) {
-  var currentRoute = route.url;
-  document.querySelectorAll('.tab-link').forEach(function (el) {
-    el.classList.remove('active');
-  });
-  var targetEl = document.querySelector('.tab-link[href="' + currentRoute + '"]');
-  if (targetEl) {
-    targetEl.classList.add('active');
-  }
-});
 
 // Função para gerenciar o histórico de navegação
 function initializeBackButtonHandler() {
