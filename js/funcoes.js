@@ -1211,7 +1211,7 @@ function buscarLinkAfiliado() {
             linkLp
           );
         });
-
+        /*
         var qrcode = new QRCode(document.getElementById("qrcode"), {
           text: linkCadastro,
           width: 200,
@@ -1220,7 +1220,7 @@ function buscarLinkAfiliado() {
           colorLight: "#ffffff",
           correctLevel: QRCode.CorrectLevel.H,
         });
-
+        */
         app.dialog.close();
       } else {
         app.dialog.close();
