@@ -2149,7 +2149,7 @@ function listarNotificacoes() {
           $("#icone-pop").html(iconeNot); // Define o ícone
           $("#title-pop").text(tituloNot); // Define o título
           $("#descricao-pop").text(descricaoNot); // Define a descrição
-          $("#data-pop").text(timeAgo(dataNot));
+          $("#data-pop").text(dataNot);
           app.popup.open(".popup-detalhes-notificacao");
 
           // Aqui você pode executar outra ação, como marcar a notificação como lida
