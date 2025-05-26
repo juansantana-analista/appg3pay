@@ -2175,8 +2175,6 @@ function listarNotificacoes() {
 
 //Inicio Função Marcar como Lida a Notificação
 function marcarComoLida(notificacaoId) {
-  const userAuthToken = localStorage.getItem("userAuthToken");
-
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
