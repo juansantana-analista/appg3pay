@@ -2157,13 +2157,13 @@ function inicializarMenuLateral() {
     });
   });
 
-
-  // Event listener para fechar o menu quando o panel for fechado
-  app.on('panelClose', function(panel) {
-    if (panel.el.id === 'panel-menu-lateral') {
+  // Fechar menu quando clicar em outros itens
+  $(document).on('click', '.item-menu-lateral.panel-close', function() {
+    setTimeout(() => {
       $('.menu-tab-link').removeClass('menu-active');
-    }
+    }, 300);
   });
+
 }
 
 // Modificar o HTML da tabbar no routes.js
