@@ -145,6 +145,7 @@
   font-size: 10px;
   font-weight: 600;
   border: 2px solid white;
+  z-index: 9999;
 }
 
 .member-type.direct {
