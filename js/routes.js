@@ -2036,26 +2036,27 @@ function initializeBackButtonHandler() {
     }
     
     // Escutar mudanças no histórico do navegador
-    window.addEventListener('popstate', function(event) {
-      // Prevenir o comportamento padrão
-      event.preventDefault();
-      
-      // Verificar se estamos na página inicial
-      if (mainView.router.currentRoute.path === '/index/' || 
-          mainView.router.currentRoute.path === '/home/') {
-        // Confirmar se o usuário quer sair
-        app.dialog.confirm('Deseja sair do aplicativo?', function () {
-          // Para PWA, não podemos fechar o app, então redirecionamos ou mostramos uma mensagem
-          window.history.back();
-        }, function() {
-          // Se cancelar, adicionar estado de volta ao histórico
-          window.history.pushState({ page: 'current' }, '', window.location.href);
-        });
-      } else {
-        // Voltar para a página anterior usando o router do Framework7
-        mainView.router.back({ force: true });
-      }
+window.addEventListener('popstate', function(event) {
+  event.preventDefault();
+
+  const currentPath = mainView.router.currentRoute.path;
+
+  if (currentPath === '/index/' || currentPath === '/home/') {
+    app.dialog.confirm('Deseja sair do aplicativo?', function () {
+      window.history.back(); // ou apenas não faz nada se for PWA
+    }, function() {
+      window.history.pushState({ page: 'current' }, '', window.location.href);
     });
+  } else {
+    // Voltar com recarregamento do conteúdo da rota anterior
+    const previousUrl = document.referrer || '/'; // ou armazene o histórico manualmente
+    mainView.router.navigate(previousUrl, {
+      reloadCurrent: true,
+      ignoreCache: true
+    });
+  }
+});
+
     
     // Interceptar navegação do Framework7 para manter sincronizado com o histórico do navegador
     app.on('routeChange', function(route) {
