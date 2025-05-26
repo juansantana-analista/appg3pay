@@ -2123,7 +2123,6 @@ function inicializarMenuLateral() {
     
     // Adicionar classe ativa ao botão do menu
     $('.menu-tab-link').addClass('menu-active');
-    initializeBackButtonHandler();
   }
 
   // Função para fechar o menu lateral
@@ -2132,9 +2131,13 @@ function inicializarMenuLateral() {
     $('.menu-tab-link').removeClass('menu-active');
   }
 
-  // Event listener para o botão do menu na tabbar
-  $(document).on('click', '.menu-tab-link', function(e) {
+  // REMOVER LISTENERS ANTERIORES PARA EVITAR DUPLICAÇÃO
+  $(document).off('click.menuLateral');
+  
+  // Event listener para o botão do menu na tabbar - COM NAMESPACE
+  $(document).on('click.menuLateral', '.menu-tab-link', function(e) {
     e.preventDefault();
+    e.stopPropagation(); // Previne propagação do evento
     
     if (app.panel.get('#panel-menu-lateral').opened) {
       fecharMenuLateral();
@@ -2143,23 +2146,26 @@ function inicializarMenuLateral() {
     }
   });
 
-  // Event listeners para os itens do menu
-  $(document).on('click', '#configuracoes-menu', function(e) {
+  // Event listeners para os itens do menu - COM NAMESPACE
+  $(document).on('click.menuLateral', '#configuracoes-menu', function(e) {
     e.preventDefault();
+    e.stopPropagation();
     fecharMenuLateral();
     
     app.dialog.alert('Funcionalidade em desenvolvimento', 'Configurações');
   });
 
-  $(document).on('click', '#ajuda-menu', function(e) {
+  $(document).on('click.menuLateral', '#ajuda-menu', function(e) {
     e.preventDefault();
+    e.stopPropagation();
     fecharMenuLateral();
     
     app.dialog.alert('Entre em contato conosco pelo suporte', 'Ajuda');
   });
 
-  $(document).on('click', '#sair-menu', function(e) {
+  $(document).on('click.menuLateral', '#sair-menu', function(e) {
     e.preventDefault();
+    e.stopPropagation();
     fecharMenuLateral();
     
     app.dialog.confirm('Deseja sair do aplicativo?', 'Sair', function () {
@@ -2170,15 +2176,19 @@ function inicializarMenuLateral() {
     });
   });
 
-  // Fechar menu quando clicar em outros itens
-  $(document).on('click', '.item-menu-lateral.panel-close', function() {
+  // Fechar menu quando clicar em outros itens - COM NAMESPACE
+  $(document).on('click.menuLateral', '.item-menu-lateral.panel-close', function(e) {
+    // NÃO PREVENIR DEFAULT AQUI - deixar o Framework7 processar a navegação
     setTimeout(() => {
       $('.menu-tab-link').removeClass('menu-active');
-    }, 300);
+    }, 100); // Reduzir timeout para 100ms
   });
 
-  // Event listener para fechar o menu quando o panel for fechado
-  app.on('panelClose', function(panel) {
+  // REMOVER LISTENER ANTERIOR DO PANEL
+  app.off('panelClose.menuLateral');
+  
+  // Event listener para fechar o menu quando o panel for fechado - COM NAMESPACE
+  app.on('panelClose.menuLateral', function(panel) {
     if (panel.el.id === 'panel-menu-lateral') {
       $('.menu-tab-link').removeClass('menu-active');
     }
