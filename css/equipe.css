@@ -47,12 +47,19 @@
   border-radius: 12px;
   padding: 5px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  overflow: visible; /* Permitir overflow para mostrar indicadores */
 }
 
+/* Container da equipe */
+#teamContainer {
+  overflow: visible; /* Permitir overflow para mostrar indicadores */
+}
+
+/* Membros da equipe */
 .team-member {
   display: flex;
   align-items: center;
-  padding: 16px;
+  padding: 16px 20px; /* Aumentado padding lateral */
   border-bottom: 1px solid #f0f0f0;
   transition: all 0.3s ease;
   cursor: pointer;
@@ -66,6 +73,7 @@
   background-color: #f8f9fa;
 }
 
+/* Avatar do membro */
 .member-avatar {
   width: 60px;
   height: 60px;
@@ -77,10 +85,10 @@
   color: white;
   font-size: 24px;
   font-weight: 600;
-  margin-right: 16px;
+  margin-right: 20px; /* Aumentado margin */
   flex-shrink: 0;
   position: relative;
-  overflow: hidden;
+  overflow: visible; /* Permitir overflow para mostrar os indicadores */
 }
 
 .member-avatar img {
@@ -94,6 +102,7 @@
   background: linear-gradient(135deg, #00591F, #7CBE42);
 }
 
+/* Informações do membro */
 .member-info {
   flex-grow: 1;
 }
@@ -132,12 +141,13 @@
   color: #00591F;
 }
 
+/* Tipo de membro - indicador superior direito */
 .member-type {
   position: absolute;
-  top: -2px;
-  right: -2px;
-  width: 20px;
-  height: 20px;
+  top: -8px; /* Aumentado para dar mais espaço */
+  right: -8px; /* Aumentado para dar mais espaço */
+  width: 22px; /* Aumentado ligeiramente */
+  height: 22px; /* Aumentado ligeiramente */
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -145,7 +155,7 @@
   font-size: 10px;
   font-weight: 600;
   border: 2px solid white;
-  z-index: 9999;
+  z-index: 2; /* Garantir que fique acima */
 }
 
 .member-type.direct {
@@ -156,6 +166,61 @@
 .member-type.indirect {
   background-color: #ffc107;
   color: white;
+}
+
+/* Indicador de nível - inferior direito */
+.level-indicator {
+  position: absolute;
+  bottom: -8px; /* Aumentado para dar mais espaço */
+  right: -8px; /* Aumentado para dar mais espaço */
+  width: 20px; /* Aumentado ligeiramente */
+  height: 20px; /* Aumentado ligeiramente */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px; /* Aumentado ligeiramente */
+  font-weight: 600;
+  border: 2px solid white;
+  z-index: 2; /* Garantir que fique acima */
+}
+
+.level-indicator.bronze {
+  background-color: #cd7f32;
+  color: white;
+}
+
+.level-indicator.silver {
+  background-color: #c0c0c0;
+  color: white;
+}
+
+.level-indicator.gold {
+  background-color: #ffd700;
+  color: #333;
+}
+
+/* Estatísticas do membro */
+.member-stats {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.member-stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #888;
+  background-color: #f8f9fa;
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+
+.member-stat i {
+  font-size: 12px;
+  color: #00591F;
 }
 
 /* Skeleton loading */
@@ -354,94 +419,13 @@
   }
 }
 
-/* Responsividade */
-@media (max-width: 480px) {
-  .team-filters {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .filter-btn {
-    width: 100%;
-    max-width: 200px;
-  }
-  
-  .invitation-actions {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .btn-share,
-  .btn-qr {
-    width: 100%;
-    max-width: 250px;
-  }
-  
-  .member-details {
-    flex-direction: column;
-    gap: 6px;
-  }
-}
-
 /* Melhorias visuais adicionais */
 .team-member.highlighted {
   background-color: #e8f5e8;
   border-left: 4px solid #00591F;
 }
 
-.member-stats {
-  display: flex;
-  gap: 16px;
-  margin-top: 8px;
-}
-
-.member-stat {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  color: #888;
-  background-color: #f8f9fa;
-  padding: 4px 8px;
-  border-radius: 12px;
-}
-
-.member-stat i {
-  font-size: 12px;
-  color: #00591F;
-}
-
-/* Indicador de nível */
-.level-indicator {
-  position: absolute;
-  bottom: -2px;
-  right: -2px;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 8px;
-  font-weight: 600;
-  border: 2px solid white;
-}
-
-.level-indicator.bronze {
-  background-color: #cd7f32;
-  color: white;
-}
-
-.level-indicator.silver {
-  background-color: #c0c0c0;
-  color: white;
-}
-
-.level-indicator.gold {
-  background-color: #ffd700;
-  color: #333;
-}
-
+/* Navegação superior */
 .top-nav {
   display: flex;
   justify-content: space-between;
@@ -471,4 +455,41 @@
 .btn-notificacao:hover,
 .btn-cart:hover {
   background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+  .team-filters {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .filter-btn {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .invitation-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn-share,
+  .btn-qr {
+    width: 100%;
+    max-width: 250px;
+  }
+  
+  .member-details {
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .team-member {
+    padding: 16px 15px; /* Reduzir padding em mobile mas manter espaço suficiente */
+  }
+  
+  .member-avatar {
+    margin-right: 16px;
+  }
 }
