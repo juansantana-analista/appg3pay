@@ -2129,6 +2129,7 @@ function inicializarMenuLateral() {
   function fecharMenuLateral() {
     app.panel.close('#panel-menu-lateral');
     $('.menu-tab-link').removeClass('menu-active');
+    initializeBackButtonHandler();
   }
 
   // Event listener para o botão do menu na tabbar
@@ -2182,7 +2183,6 @@ function inicializarMenuLateral() {
       $('.menu-tab-link').removeClass('menu-active');
     }
   });
-  initializeBackButtonHandler();
 }
 
 // Função para atualizar o badge de notificações no menu
