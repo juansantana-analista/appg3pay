@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-const versionApp = "2.0.1";
+const versionApp = "2.0.2";
 var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -1115,12 +1115,14 @@ var app = new Framework7({
           $("#menuPrincipal").removeClass("display-none");
           
     
-          // Funções
-          buscarQtdeNotif();
-          contarCarrinho();
+        // Carregar dados sempre que entrar na página
+        setTimeout(() => {
           listarBanners();
           listarCategorias();
           listarProdutos();
+          buscarQtdeNotif();
+          contarCarrinho();
+        }, 100);
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
