@@ -7,7 +7,6 @@
             justify-content: center;
             margin-bottom: 20px;
             flex-wrap: nowrap; /* Impede quebra de linha */
-            overflow-x: auto; /* Permite scroll horizontal se necessário */
             padding: 5px 0;
         }
 
