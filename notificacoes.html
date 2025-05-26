@@ -1,172 +1,143 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      <!-- Required meta tags-->
-      <meta charset="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="apple-mobile-web-app-capable" content="yes" />
-      <!-- Color theme for statusbar (Android only) -->
-      <meta name="theme-color" content="#1d4f91" />
-      <!-- Your app title -->
-      <title>VitaTop</title>
-      <!-- Path to Framework7 Library Bundle CSS -->
-      <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
-      <!--Ícones Material Design-->
-      <link rel="stylesheet" href="css/materialdesignicons.min.css" />
-      <!-- Icones do Remix icon-->
-      <link rel="stylesheet" href="css/remixicon/remixicon.css" />
-   </head>
-   <body>
-      <!-- App root element -->
-      <div id="app">
-      <!-- Your main view, should have "view-main" class -->
-      <div class="view view-main">
-         <!-- Initial Page, "data-name" contains page name -->
-         <div data-name="notificacoes" class="page color-theme-blue">
-            <!-- NAV TOPO-->
-            <div class="top-nav">
-               <div class="left">
-                  <a href="#" class="link btn-novo back-button">
-                     <i class="mdi mdi-arrow-left"></i>
-                  </a>
-               </div>
-               <strong class="title-descricao">
-                  <i class="mdi mdi-bell"></i> Notificações
-               </strong>
-               <div class="right-icons">
-                  <!-- Botão de Atualizar -->
-                  <div class="btn-refresh" onclick="location.reload()">
-                     <i class="mdi mdi-refresh"></i>
-                  </div>
-               </div>
-            </div>
-            <!-- Scrollable page content -->
-            <div
-               class="page-content"
-               style="background-color: #f7f9fa; padding-bottom: 160px"
-               >
-               <!-- Notifications Header -->
-               <div class="notifications-header">
-                  <h1>Suas Notificações</h1>
-                  <p>Fique por dentro de todas as novidades</p>
-               </div>
-
-               <!-- Notifications Filter -->
-               <div class="notifications-section">
-                  <div class="filter-tabs">
-                     <div class="filter-tab active" data-filter="all">
-                        <i class="mdi mdi-all-inclusive"></i>
-                        <span>Todas</span>
-                     </div>
-                     <div class="filter-tab" data-filter="unread">
-                        <i class="mdi mdi-bell-ring"></i>
-                        <span>Não Lidas</span>
-                     </div>
-                     <div class="filter-tab" data-filter="read">
-                        <i class="mdi mdi-bell-check"></i>
-                        <span>Lidas</span>
-                     </div>
-                  </div>
-               </div>
-
-               <!-- Notifications List -->
-               <div class="notifications-section">
-                  <h2 class="section-title">Suas Notificações</h2>
-                  <div class="notifications-container" id="container-notificacao">
-                     <!-- Loading skeletons -->
-                     <div class="notification-skeleton">
-                        <div class="skeleton-icon"></div>
-                        <div class="skeleton-content">
-                           <div class="skeleton-title"></div>
-                           <div class="skeleton-message"></div>
-                           <div class="skeleton-time"></div>
+<head>
+    <!-- Required meta tags-->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- Color theme for statusbar (Android only) -->
+    <meta name="theme-color" content="#FF4B00" />
+    <!-- Your app title -->
+    <title>G3 PAY - Notificações</title>
+    <!-- Path to Framework7 Library Bundle CSS -->
+    <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
+    <!--Ícones Material Design-->
+    <link rel="stylesheet" href="css/materialdesignicons.min.css" />
+    <!-- Icones do Remix icon-->
+    <link rel="stylesheet" href="css/remixicon/remixicon.css" />
+</head>
+<body>
+    <!-- App root element -->
+    <div id="app">
+        <!-- Your main view, should have "view-main" class -->
+        <div class="view view-main">
+            <!-- Initial Page, "data-name" contains page name -->
+            <div data-name="notificacoes" class="page">
+                <!-- Header -->
+                <div class="navbar">
+                    <div class="navbar-bg"></div>
+                    <div class="navbar-inner sliding">
+                        <div class="left">
+                            <a href="#" class="link back">
+                                <i class="mdi mdi-arrow-left"></i>
+                            </a>
                         </div>
-                     </div>
-                     <div class="notification-skeleton">
-                        <div class="skeleton-icon"></div>
-                        <div class="skeleton-content">
-                           <div class="skeleton-title"></div>
-                           <div class="skeleton-message"></div>
-                           <div class="skeleton-time"></div>
+                        <div class="title">Notificações</div>
+                        <div class="right">
+                            <a href="#" class="link" onclick="marcarTodasComoLidas()">
+                                <i class="mdi mdi-check-all"></i>
+                            </a>
                         </div>
-                     </div>
-                     <div class="notification-skeleton">
-                        <div class="skeleton-icon"></div>
-                        <div class="skeleton-content">
-                           <div class="skeleton-title"></div>
-                           <div class="skeleton-message"></div>
-                           <div class="skeleton-time"></div>
+                    </div>
+                </div>
+
+                <!-- Scrollable page content -->
+                <div class="page-content">
+                    <!-- Notifications Container -->
+                    <div class="notifications-wrapper">
+                        <div class="block">
+                            <div class="container-notificacao" id="container-notificacao">
+                                <!-- Notifications will be loaded here -->
+                            </div>
                         </div>
-                     </div>
-                  </div>
-               </div>
+                    </div>
+                </div>
 
-               <!-- Empty State -->
-               <div class="empty-notifications display-none" id="empty-state">
-                  <div class="empty-icon">
-                     <i class="mdi mdi-bell-outline"></i>
-                  </div>
-                  <h3>Nenhuma notificação</h3>
-                  <p>Quando você receber notificações, elas aparecerão aqui.</p>
-               </div>
-
-               <!-- Refresh Button -->
-               <button class="refresh-button" id="updateNotifications">
-                  <i class="mdi mdi-refresh"></i>
-               </button>
-
-               <!-- INÍCIO POPUP DETALHES NOTIFICAÇÃO -->
-               <div class="popup popup-detalhes-notificacao">
-                  <div class="view popup-view">
-                     <div class="page">
-                        <div class="top-nav">
-                           <div class="left">
-                              <a href="#" class="link btn-novo popup-close">
-                                 <i class="mdi mdi-arrow-left"></i>
-                              </a>
-                           </div>
-                           <strong class="title-descricao">
-                              <i class="mdi mdi-bell-ring"></i> Detalhes da Notificação
-                           </strong>
-                           <div style="width: 30px;"></div>
-                        </div>
-                        <div class="page-content">
-                           <div class="notification-details-container">
-                              <div class="notification-details-card">
-                                 <div class="notification-details-header">
-                                    <div class="notification-details-icon" id="icone-pop">
-                                       <i class="mdi mdi-bell"></i>
+                <!-- INÍCIO POPUP NOTIFICAÇÃO -->
+                <div class="popup popup-detalhes-notificacao">
+                    <div class="view popup-view">
+                        <div class="page">
+                            <!-- Popup Header -->
+                            <div class="navbar">
+                                <div class="navbar-bg"></div>
+                                <div class="navbar-inner sliding">
+                                    <div class="left">
+                                        <a href="#" class="link popup-close">
+                                            <i class="mdi mdi-arrow-left"></i>
+                                        </a>
                                     </div>
-                                    <div class="notification-details-info">
-                                       <h2 id="title-pop">Título da Notificação</h2>
-                                       <span class="notification-details-time" id="data-pop">Há 2 horas</span>
+                                    <div class="title">Detalhes</div>
+                                    <div class="right">
+                                        <a href="#" class="link">
+                                            <i class="mdi mdi-dots-vertical"></i>
+                                        </a>
                                     </div>
-                                 </div>
-                                 <div class="notification-details-content">
-                                    <p id="descricao-pop">Descrição completa da notificação aparecerá aqui com todos os detalhes necessários.</p>
-                                 </div>
-                                 <div class="notification-details-actions">
-                                    <button class="action-button primary popup-close">
-                                       <i class="mdi mdi-check"></i>
-                                       Entendi
-                                    </button>
-                                 </div>
-                              </div>
-                           </div>
+                                </div>
+                            </div>
+
+                            <!-- Popup Content -->
+                            <div class="page-content">
+                                <div class="notification-detail-card">
+                                    <!-- Notification Icon -->
+                                    <div class="notification-detail-header">
+                                        <div class="notification-icon-large" id="icone-pop">
+                                            <i class="mdi mdi-bell"></i>
+                                        </div>
+                                    </div>
+
+                                    <!-- Notification Content -->
+                                    <div class="notification-detail-content">
+                                        <h2 class="notification-title" id="title-pop">Título da Notificação</h2>
+                                        <p class="notification-message" id="descricao-pop">Descrição detalhada da notificação...</p>
+                                        
+                                        <!-- Metadata -->
+                                        <div class="notification-metadata">
+                                            <div class="metadata-row">
+                                                <div class="metadata-label">
+                                                    <i class="mdi mdi-calendar"></i>
+                                                    <span>Data</span>
+                                                </div>
+                                                <div class="metadata-value" id="data-pop">--</div>
+                                            </div>
+                                            <div class="metadata-row">
+                                                <div class="metadata-label">
+                                                    <i class="mdi mdi-check-circle"></i>
+                                                    <span>Status</span>
+                                                </div>
+                                                <div class="metadata-value">
+                                                    <span class="status-badge">Lida</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Action Buttons -->
+                                    <div class="notification-actions">
+                                        <button class="btn-action secondary popup-close">
+                                            <i class="mdi mdi-close"></i>
+                                            Fechar
+                                        </button>
+                                        <button class="btn-action primary">
+                                            <i class="mdi mdi-information"></i>
+                                            Mais Detalhes
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                     </div>
-                  </div>
-               </div>
-               <!-- FIM POPUP DETALHES NOTIFICAÇÃO -->
+                    </div>
+                </div>
+                <!-- FIM POPUP NOTIFICAÇÃO -->
             </div>
-         </div>
-      </div>
-      <!-- Path to Framework7 Library Bundle JS-->
-      <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
-      <!-- jQuery -->
-      <script type="text/javascript" src="lib/jquery-3.7.0.min.js"></script>
-      <!-- Roteamento do app-->
-      <script type="text/javascript" src="js/routes.js"></script>
-      <script src="cordova.js"></script>
-   </body>
+        </div>
+    </div>
+
+    <!-- Path to Framework7 Library Bundle JS-->
+    <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
+    <!-- jQuery -->
+    <script type="text/javascript" src="lib/jquery-3.7.0.min.js"></script>
+    <!-- Roteamento do app-->
+    <script type="text/javascript" src="js/routes.js"></script>
+    <script src="cordova.js"></script>
+</body>
 </html>
