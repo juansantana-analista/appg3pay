@@ -2030,45 +2030,42 @@ app.on('routeChange', function (route) {
 // Função para gerenciar o histórico de navegação
 function initializeBackButtonHandler() {
   var mainView = app.views.main;
-
-  // Garante um estado inicial
-  if (!window.history.state) {
-    window.history.replaceState({ page: 'initial' }, '', window.location.href);
-  }
-
-  // Escuta mudanças no histórico
-  window.addEventListener('popstate', function(event) {
-    event.preventDefault();
-
-    const currentPath = mainView.router.currentRoute.path;
-
-    if (currentPath === '/index/' || currentPath === '/home/') {
-      app.dialog.confirm('Deseja sair do aplicativo?', function () {
-        // Em PWA não dá para sair de verdade, mas pode voltar mais uma vez ou mostrar toast
-        window.history.back(); // Ou apenas ignore
-      }, function() {
-        // Cancelado: restaura o estado no histórico
-        window.history.pushState({ page: 'current' }, '', window.location.href);
-      });
-    } else {
-      // Voltar com recarregamento da página anterior
-      mainView.router.back({
-        force: true,
-        reloadPrevious: true,
-        ignoreCache: true
-      });
+    // Garantir que temos um estado inicial
+    if (!window.history.state) {
+      window.history.replaceState({ page: 'initial' }, '', window.location.href);
     }
-  });
-
-  // Quando mudar de rota, adiciona novo estado ao histórico
-  app.on('routeChange', function(route) {
-    window.history.pushState({
-      page: route.path,
-      url: route.url
-    }, '', window.location.href);
-  });
+    
+    // Escutar mudanças no histórico do navegador
+    window.addEventListener('popstate', function(event) {
+      // Prevenir o comportamento padrão
+      event.preventDefault();
+      
+      // Verificar se estamos na página inicial
+      if (mainView.router.currentRoute.path === '/index/' || 
+          mainView.router.currentRoute.path === '/home/') {
+        // Confirmar se o usuário quer sair
+        app.dialog.confirm('Deseja sair do aplicativo?', function () {
+          // Para PWA, não podemos fechar o app, então redirecionamos ou mostramos uma mensagem
+          window.history.back();
+        }, function() {
+          // Se cancelar, adicionar estado de volta ao histórico
+          window.history.pushState({ page: 'current' }, '', window.location.href);
+        });
+      } else {
+        // Voltar para a página anterior usando o router do Framework7
+        mainView.router.back({ force: true });
+      }
+    });
+    
+    // Interceptar navegação do Framework7 para manter sincronizado com o histórico do navegador
+    app.on('routeChange', function(route) {
+      // Adicionar estado ao histórico sempre que mudar de rota
+      window.history.pushState({ 
+        page: route.path,
+        url: route.url 
+      }, '', window.location.href);
+    });
 }
-
 
 function onDeviceReady() {
   //Quando estiver rodando no celular
