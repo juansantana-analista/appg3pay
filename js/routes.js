@@ -62,7 +62,7 @@ var app = new Framework7({
               app.views.main.router.navigate("/perfil/"); 
           });
   inicializarMenuLateral();
-  //atualizarTabbarComMenu();
+  atualizarTabbarComMenu();
 
       listarPerfil("index");
   
@@ -2205,7 +2205,7 @@ function atualizarTabbarComMenu() {
 }
 
   inicializarMenuLateral();
-  //atualizarTabbarComMenu();
+  atualizarTabbarComMenu();
 
 
 // Bloquear o menu de contexto no clique com o botão direito
