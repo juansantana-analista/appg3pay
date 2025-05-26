@@ -2025,65 +2025,97 @@ app.on('routeChange', function (route) {
   }
 });
 
+// Função para gerenciar o histórico de navegação
+function initializeBackButtonHandler() {
+  var mainView = app.views.main;
+    // Garantir que temos um estado inicial
+    if (!window.history.state) {
+      window.history.replaceState({ page: 'initial' }, '', window.location.href);
+    }
+    
+    // Escutar mudanças no histórico do navegador
+    window.addEventListener('popstate', function(event) {
+      // Prevenir o comportamento padrão
+      event.preventDefault();
+      
+      // Verificar se estamos na página inicial
+      if (mainView.router.currentRoute.path === '/index/' || 
+          mainView.router.currentRoute.path === '/home/') {
+        // Confirmar se o usuário quer sair
+        app.dialog.confirm('Deseja sair do aplicativo?', function () {
+          // Para PWA, não podemos fechar o app, então redirecionamos ou mostramos uma mensagem
+          window.history.back();
+        }, function() {
+          // Se cancelar, adicionar estado de volta ao histórico
+          window.history.pushState({ page: 'current' }, '', window.location.href);
+        });
+      } else {
+        // Voltar para a página anterior usando o router do Framework7
+        mainView.router.back({ force: true });
+      }
+    });
+    
+    // Interceptar navegação do Framework7 para manter sincronizado com o histórico do navegador
+    app.on('routeChange', function(route) {
+      // Adicionar estado ao histórico sempre que mudar de rota
+      window.history.pushState({ 
+        page: route.path,
+        url: route.url 
+      }, '', window.location.href);
+    });
+}
+
 function onDeviceReady() {
   //Quando estiver rodando no celular
   var mainView = app.views.create('.view-main', { url: '/index/' });
-
-  //COMANDO PARA "OUVIR" O BOTAO VOLTAR NATIVO DO ANDROID 	
-  document.addEventListener("backbutton", function (e) {
-
-    if (mainView.router.currentRoute.path === '/index/') {
-      e.preventDefault();
-      app.dialog.confirm('Deseja sair do aplicativo?', function () {
-        navigator.app.exitApp();
-      });
-    } else {
-      e.preventDefault();
-      mainView.router.back({ force: true });
-    }
-  }, false);
+  // COMANDO PARA "OUVIR" O BOTAO VOLTAR NATIVO DO ANDROID (apenas para app nativo)
+  if (window.cordova) {
+    document.addEventListener("backbutton", function (e) {
+      if (mainView.router.currentRoute.path === '/index/') {
+        e.preventDefault();
+        app.dialog.confirm('Deseja sair do aplicativo?', function () {
+          navigator.app.exitApp();
+        });
+      } else {
+        e.preventDefault();
+        mainView.router.back({ force: true });
+      }
+    }, false);
+  }
 
   let deferredPrompt;
-
-  /* Capturar o evento beforeinstallprompt
-  window.addEventListener('beforeinstallprompt', (event) => {
-      // Prevenir o comportamento padrão
-      event.preventDefault();
-      deferredPrompt = event;
-
-      
-      $("#instalation-app").removeClass("display-none");
-    
-      //AÇÃO DOS BOTÕES
-      $("#btnNaoInstalar").on("click", function () {
-        $("#instalation-app").addClass("display-none");
-        console.log('Usuário cancelou a instalação.');
-      });
-      $("#btnInstalar").on("click", function () {
-        $("#instalation-app").addClass("display-none");
-        // Usuário clicou em "Confirmar"
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('Usuário aceitou a instalação.');
-                } else {
-                    console.log('Usuário rejeitou a instalação.');
-                }
-                deferredPrompt = null;
-            });
-        }
-      });
-  });
-
-  // Verificar se o PWA já está instalado
-  window.addEventListener('appinstalled', () => {
-      console.log('PWA instalado.');
-      // Esconder a mensagem se o PWA estiver instalado
-      $('#installPrompt').hide();
-  });
-  */
 }
+
+// Modificar a inicialização do app
+document.addEventListener('deviceready', onDeviceReady, false);
+
+// Para PWA, inicializar quando o DOM estiver pronto
+document.addEventListener('DOMContentLoaded', function() {
+  // Se não for app nativo, inicializar como PWA
+  if (!window.cordova) {
+    // Criar a view principal
+    if (!app.views.main) {
+      var mainView = app.views.create('.view-main', { url: '/index/' });
+    }
+    
+    // Inicializar o gerenciador do botão voltar para PWA
+    initializeBackButtonHandler();
+  }
+});
+
+// Alternativa adicional: Interceptar tentativas de fechar a aba/janela
+window.addEventListener('beforeunload', function(event) {
+  // Apenas mostrar aviso se estivermos em uma página que não seja a inicial
+  if (app.views.main && 
+      app.views.main.router.currentRoute.path !== '/index/' && 
+      app.views.main.router.currentRoute.path !== '/login-view/') {
+    
+    // Mostrar confirmação padrão do navegador
+    event.preventDefault();
+    event.returnValue = 'Tem certeza que deseja sair?';
+    return 'Tem certeza que deseja sair?';
+  }
+});
 
 // Função para inicializar o menu lateral
 function inicializarMenuLateral() {
