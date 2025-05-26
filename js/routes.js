@@ -2025,6 +2025,82 @@ app.on('routeChange', function (route) {
   }
 });
 
+// Função para inicializar o menu lateral
+function inicializarMenuLateral() {
+  // Atualizar nome do usuário no menu lateral
+  var userName = localStorage.getItem('userName');
+  if (userName != '' && userName != null) {
+    $("#nomeUsuarioLateral").html(userName);
+  }
+  
+
+  // Função para abrir o menu lateral
+  function abrirMenuLateral() {    
+    // Abrir o panel
+    app.panel.open('#panel-menu-lateral', true);
+    
+    // Adicionar classe ativa ao botão do menu
+    $('.menu-tab-link').addClass('menu-active');
+  }
+
+  // Função para fechar o menu lateral
+  function fecharMenuLateral() {
+    app.panel.close('#panel-menu-lateral');
+    $('.menu-tab-link').removeClass('menu-active');
+  }
+
+  // Event listener para o botão do menu na tabbar
+  $(document).on('click', '.menu-tab-link', function(e) {
+    e.preventDefault();
+    
+    if (app.panel.get('#panel-menu-lateral').opened) {
+      fecharMenuLateral();
+    } else {
+      abrirMenuLateral();
+    }
+  });
+
+  // Event listeners para os itens do menu
+  $(document).on('click', '#configuracoes-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    app.dialog.alert('Funcionalidade em desenvolvimento', 'Configurações');
+  });
+
+  $(document).on('click', '#ajuda-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    app.dialog.alert('Entre em contato conosco pelo suporte', 'Ajuda');
+  });
+
+  $(document).on('click', '#sair-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    app.dialog.confirm('Deseja sair do aplicativo?', 'Sair', function () {
+      fazerLogout();
+      $("#menuPrincipal").hide("fast");
+      $("#menuPrincipal").addClass("display-none");
+      app.views.main.router.navigate("/login-view/");
+    });
+  });
+
+  // Fechar menu quando clicar em outros itens
+  $(document).on('click', '.item-menu-lateral.panel-close', function() {
+    setTimeout(() => {
+      $('.menu-tab-link').removeClass('menu-active');
+    }, 300);
+  });
+
+  // Event listener para fechar o menu quando o panel for fechado
+  app.on('panelClose', function(panel) {
+    if (panel.el.id === 'panel-menu-lateral') {
+      $('.menu-tab-link').removeClass('menu-active');
+    }
+  });
+}
 // Função para gerenciar o histórico de navegação
 function initializeBackButtonHandler() {
   console.log('aqui teste')
@@ -2105,82 +2181,6 @@ window.addEventListener('beforeunload', function(event) {
   }
 });
 
-// Função para inicializar o menu lateral
-function inicializarMenuLateral() {
-  // Atualizar nome do usuário no menu lateral
-  var userName = localStorage.getItem('userName');
-  if (userName != '' && userName != null) {
-    $("#nomeUsuarioLateral").html(userName);
-  }
-  
-
-  // Função para abrir o menu lateral
-  function abrirMenuLateral() {    
-    // Abrir o panel
-    app.panel.open('#panel-menu-lateral', true);
-    
-    // Adicionar classe ativa ao botão do menu
-    $('.menu-tab-link').addClass('menu-active');
-  }
-
-  // Função para fechar o menu lateral
-  function fecharMenuLateral() {
-    app.panel.close('#panel-menu-lateral');
-    $('.menu-tab-link').removeClass('menu-active');
-  }
-
-  // Event listener para o botão do menu na tabbar
-  $(document).on('click', '.menu-tab-link', function(e) {
-    e.preventDefault();
-    
-    if (app.panel.get('#panel-menu-lateral').opened) {
-      fecharMenuLateral();
-    } else {
-      abrirMenuLateral();
-    }
-  });
-
-  // Event listeners para os itens do menu
-  $(document).on('click', '#configuracoes-menu', function(e) {
-    e.preventDefault();
-    fecharMenuLateral();
-    
-    app.dialog.alert('Funcionalidade em desenvolvimento', 'Configurações');
-  });
-
-  $(document).on('click', '#ajuda-menu', function(e) {
-    e.preventDefault();
-    fecharMenuLateral();
-    
-    app.dialog.alert('Entre em contato conosco pelo suporte', 'Ajuda');
-  });
-
-  $(document).on('click', '#sair-menu', function(e) {
-    e.preventDefault();
-    fecharMenuLateral();
-    
-    app.dialog.confirm('Deseja sair do aplicativo?', 'Sair', function () {
-      fazerLogout();
-      $("#menuPrincipal").hide("fast");
-      $("#menuPrincipal").addClass("display-none");
-      app.views.main.router.navigate("/login-view/");
-    });
-  });
-
-  // Fechar menu quando clicar em outros itens
-  $(document).on('click', '.item-menu-lateral.panel-close', function() {
-    setTimeout(() => {
-      $('.menu-tab-link').removeClass('menu-active');
-    }, 300);
-  });
-
-  // Event listener para fechar o menu quando o panel for fechado
-  app.on('panelClose', function(panel) {
-    if (panel.el.id === 'panel-menu-lateral') {
-      $('.menu-tab-link').removeClass('menu-active');
-    }
-  });
-}
 
 // Modificar o HTML da tabbar no routes.js
 function atualizarTabbarComMenu() {
