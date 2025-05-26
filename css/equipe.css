@@ -11,7 +11,7 @@
             padding: 5px 0;
         }
 
-        .filter-btn {
+        .filter-btn-equipe {
             padding: 8px 12px;
             border: 2px solid #e0e0e0;
             border-radius: 20px;
@@ -30,18 +30,18 @@
             flex-shrink: 0; /* Impede que os botões encolham */
         }
 
-        .filter-btn:hover {
+        .filter-btn-equipe:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .filter-btn.active {
+        .filter-btn-equipe.active {
             background-color: #00591F;
             color: white;
             border-color: #00591F;
         }
 
-        .filter-btn i {
+        .filter-btn-equipe i {
             font-size: 14px;
         }
 
@@ -469,13 +469,13 @@
                 padding: 5px;
             }
             
-            .filter-btn {
+            .filter-btn-equipe {
                 padding: 6px 8px;
                 font-size: 10px;
                 gap: 2px;
             }
             
-            .filter-btn i {
+            .filter-btn-equipe i {
                 font-size: 12px;
             }
   
