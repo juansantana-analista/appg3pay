@@ -1115,6 +1115,13 @@ var app = new Framework7({
           $("#menuPrincipal").show("fast");
           $("#menuPrincipal").removeClass("display-none");
           
+          
+
+          listarBanners();
+          listarCategorias();
+          listarProdutos();
+          buscarQtdeNotif();
+          contarCarrinho();
     
 
         },
@@ -1184,13 +1191,6 @@ var app = new Framework7({
               }
             }, 1000); // Espera 1 segundo após a última digitação
           });
-          
-
-          listarBanners();
-          listarCategorias();
-          listarProdutos();
-          buscarQtdeNotif();
-          contarCarrinho();
 
         },
         pageBeforeRemove: function (event, page) {
@@ -2000,12 +2000,31 @@ var app = new Framework7({
       }
     },
   ],
+  // Outros parametros aqui
+
+  view: {
+    animate: false, // Disable animations for view transitions
+    iosDynamicNavbar: false, // Disable dynamic navbar animations for iOS
+    stackPages: true, // To prevent reloading pages, useful if still facing issues
+  },
+
 });
 
 //Para testes direto no navegador
 //var mainView = app.views.create('.view-main', { url: '/index/' });
 
 
+//EVENTO PARA SABER O ITEM DO MENU ATUAL
+app.on('routeChange', function (route) {
+  var currentRoute = route.url;
+  document.querySelectorAll('.tab-link').forEach(function (el) {
+    el.classList.remove('active');
+  });
+  var targetEl = document.querySelector('.tab-link[href="' + currentRoute + '"]');
+  if (targetEl) {
+    targetEl.classList.add('active');
+  }
+});
 
 // Função para gerenciar o histórico de navegação
 function initializeBackButtonHandler() {
