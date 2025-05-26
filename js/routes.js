@@ -2123,13 +2123,13 @@ function inicializarMenuLateral() {
     
     // Adicionar classe ativa ao botão do menu
     $('.menu-tab-link').addClass('menu-active');
+    initializeBackButtonHandler();
   }
 
   // Função para fechar o menu lateral
   function fecharMenuLateral() {
     app.panel.close('#panel-menu-lateral');
     $('.menu-tab-link').removeClass('menu-active');
-    initializeBackButtonHandler();
   }
 
   // Event listener para o botão do menu na tabbar
