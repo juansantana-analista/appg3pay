@@ -22,6 +22,7 @@ var app = new Framework7({
   },
   // Disable page animations globally
   animate: false,
+  pushState: true,
   // Add default routes
   routes: [
     {
