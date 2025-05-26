@@ -1,45 +1,49 @@
 /* Estilos específicos para a tela de equipe */
 
 /* Filtros da equipe */
-.team-filters {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 20px;
-}
+        .team-filters {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: nowrap; /* Impede quebra de linha */
+            overflow-x: auto; /* Permite scroll horizontal se necessário */
+            padding: 10px 0;
+        }
 
-.filter-btn {
-  border: 2px solid #e0e0e0;
-  border-radius: 25px;
-  background-color: #fff;
-  color: #666;
-  font-size: 14px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 50px;
-  justify-content: center;
-}
+        .filter-btn {
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            background-color: #fff;
+            color: #666;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px; /* Largura mínima para consistência */
+            justify-content: center;
+            white-space: nowrap; /* Impede quebra do texto */
+            flex-shrink: 0; /* Impede que os botões encolham */
+        }
 
-.filter-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
 
-.filter-btn.active {
-  background-color: #00591F;
-  color: white;
-  border-color: #00591F;
-}
+        .filter-btn.active {
+            background-color: #00591F;
+            color: white;
+            border-color: #00591F;
+        }
 
-.filter-btn i {
-  font-size: 16px;
-}
+        .filter-btn i {
+            font-size: 16px;
+        }
 
 /* Lista da equipe */
 .team-list {
@@ -459,15 +463,20 @@
 
 /* Responsividade */
 @media (max-width: 480px) {
-  .team-filters {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .filter-btn {
-    width: 100%;
-    max-width: 200px;
-  }
+            .team-filters {
+                gap: 8px;
+                justify-content: flex-start; /* Alinha à esquerda em telas pequenas */
+            }
+            
+            .filter-btn {
+                min-width: 90px;
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            
+            .filter-btn i {
+                font-size: 14px;
+            }
   
   .invitation-actions {
     flex-direction: column;
