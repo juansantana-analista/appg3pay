@@ -2067,9 +2067,8 @@ function initializeBackButtonHandler() {
 }
 
 function onDeviceReady() {
-  //Quando estiver rodando no celular
   var mainView = app.views.create('.view-main', { url: '/index/' });
-  // COMANDO PARA "OUVIR" O BOTAO VOLTAR NATIVO DO ANDROID (apenas para app nativo)
+  
   if (window.cordova) {
     document.addEventListener("backbutton", function (e) {
       if (mainView.router.currentRoute.path === '/index/') {
@@ -2079,13 +2078,23 @@ function onDeviceReady() {
         });
       } else {
         e.preventDefault();
+        
+        // Se está voltando para home, força reload
+        if (mainView.router.history.length > 1) {
+          const previousRoute = mainView.router.history[mainView.router.history.length - 2];
+          if (previousRoute === '/home/') {
+            mainView.router.navigate('/home/', { 
+              reloadCurrent: true,
+              force: true 
+            });
+            return;
+          }
+        }
+        
         mainView.router.back({ force: true });
       }
     }, false);
   }
-
-      initializeBackButtonHandler();
-  let deferredPrompt;
 }
 
 // Modificar a inicialização do app
