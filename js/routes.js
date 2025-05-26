@@ -2027,7 +2027,6 @@ app.on('routeChange', function (route) {
 
 // Função para gerenciar o histórico de navegação
 function initializeBackButtonHandler() {
-  console.log('aqui teste')
   var mainView = app.views.main;
     // Garantir que temos um estado inicial
     if (!window.history.state) {
@@ -2064,6 +2063,7 @@ function initializeBackButtonHandler() {
         url: route.url 
       }, '', window.location.href);
     });
+    atualizarTabbarComMenu();
 }
 
 function onDeviceReady() {
