@@ -61,6 +61,8 @@ var app = new Framework7({
               $('.menu-tab-link').removeClass('menu-active');
               app.views.main.router.navigate("/perfil/"); 
           });
+  inicializarMenuLateral();
+  atualizarTabbarComMenu();
 
       listarPerfil("index");
   
