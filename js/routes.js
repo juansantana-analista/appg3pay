@@ -1115,23 +1115,12 @@ var app = new Framework7({
           $("#menuPrincipal").removeClass("display-none");
           
     
-        // Carregar dados sempre que entrar na página
-        setTimeout(() => {
-          console.log('beforein');
-          listarBanners();
-          listarCategorias();
-          listarProdutos();
-          buscarQtdeNotif();
-          contarCarrinho();
-        }, 100);
+
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
-          console.log('afterin');
         },
         pageInit: function (event, page) {
-
-          console.log('init');
           var swiper = new Swiper(".mySwiper", {
             slidesPerView: 1,
             spaceBetween: 30,
@@ -1195,12 +1184,19 @@ var app = new Framework7({
             }, 1000); // Espera 1 segundo após a última digitação
           });
           
-
+        // Carregar dados sempre que entrar na página
+        setTimeout(() => {
+          console.log('beforein');
+          listarBanners();
+          listarCategorias();
+          listarProdutos();
+          buscarQtdeNotif();
+          contarCarrinho();
+        }, 1000);
 
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
-          console.log('before');
         },
       }
     },
