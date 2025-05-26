@@ -1186,8 +1186,8 @@ function buscarLinkAfiliado() {
       // Verifica se o status é 'success' e se há dados de pedidos
       if (responseJson.status === "success") {
         const resultado = responseJson;
-        var linkCadastro = resultado.data.data.data.link_cadastro;
-        var linkLp = resultado.data.data.data.link_lp;
+        var linkCadastro = resultado.data.data.link_cadastro;
+        var linkLp = resultado.data.data.link_lp;
         $("#qrcode").html("");
 
         $("#link-cadastro").text(linkCadastro);
