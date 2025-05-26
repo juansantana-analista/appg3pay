@@ -2063,7 +2063,6 @@ function initializeBackButtonHandler() {
         url: route.url 
       }, '', window.location.href);
     });
-    atualizarTabbarComMenu();
 }
 
 function onDeviceReady() {
@@ -2083,7 +2082,7 @@ function onDeviceReady() {
       }
     }, false);
   }
-
+fecharMenuLateral();
       initializeBackButtonHandler();
   let deferredPrompt;
 }
