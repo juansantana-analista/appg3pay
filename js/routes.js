@@ -2063,6 +2063,8 @@ function initializeBackButtonHandler() {
         url: route.url 
       }, '', window.location.href);
     });
+    
+fecharMenuLateral();
 }
 
 function onDeviceReady() {
@@ -2082,7 +2084,6 @@ function onDeviceReady() {
       }
     }, false);
   }
-fecharMenuLateral();
       initializeBackButtonHandler();
   let deferredPrompt;
 }
