@@ -2000,14 +2000,6 @@ var app = new Framework7({
       }
     },
   ],
-  // Outros parametros aqui
-
-  view: {
-    animate: false, // Disable animations for view transitions
-    iosDynamicNavbar: false, // Disable dynamic navbar animations for iOS
-    stackPages: true, // To prevent reloading pages, useful if still facing issues
-  },
-
 });
 
 //Para testes direto no navegador
