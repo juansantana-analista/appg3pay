@@ -2164,6 +2164,12 @@ function inicializarMenuLateral() {
     }, 300);
   });
 
+  // Event listener para fechar o menu quando o panel for fechado
+  app.on('panelClose', function(panel) {
+    if (panel.el.id === 'panel-menu-lateral') {
+      $('.menu-tab-link').removeClass('menu-active');
+    }
+  });
 }
 
 // Modificar o HTML da tabbar no routes.js
@@ -2195,9 +2201,6 @@ function atualizarTabbarComMenu() {
     }
   }
 }
-
-  inicializarMenuLateral();
-  atualizarTabbarComMenu();
 
 
 // Bloquear o menu de contexto no clique com o botão direito
