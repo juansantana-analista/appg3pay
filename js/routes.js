@@ -2202,6 +2202,9 @@ function atualizarTabbarComMenu() {
   }
 }
 
+  inicializarMenuLateral();
+  atualizarTabbarComMenu();
+
 
 // Bloquear o menu de contexto no clique com o botão direito
 document.addEventListener('contextmenu', function (event) {
