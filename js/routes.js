@@ -2030,43 +2030,45 @@ app.on('routeChange', function (route) {
 // Função para gerenciar o histórico de navegação
 function initializeBackButtonHandler() {
   var mainView = app.views.main;
-    // Garantir que temos um estado inicial
-    if (!window.history.state) {
-      window.history.replaceState({ page: 'initial' }, '', window.location.href);
-    }
-    
-    // Escutar mudanças no histórico do navegador
-window.addEventListener('popstate', function(event) {
-  event.preventDefault();
 
-  const currentPath = mainView.router.currentRoute.path;
-
-  if (currentPath === '/index/' || currentPath === '/home/') {
-    app.dialog.confirm('Deseja sair do aplicativo?', function () {
-      window.history.back(); // ou apenas não faz nada se for PWA
-    }, function() {
-      window.history.pushState({ page: 'current' }, '', window.location.href);
-    });
-  } else {
-    // Voltar com recarregamento do conteúdo da rota anterior
-    const previousUrl = document.referrer || '/'; // ou armazene o histórico manualmente
-    mainView.router.navigate(previousUrl, {
-      reloadCurrent: true,
-      ignoreCache: true
-    });
+  // Garante um estado inicial
+  if (!window.history.state) {
+    window.history.replaceState({ page: 'initial' }, '', window.location.href);
   }
-});
 
-    
-    // Interceptar navegação do Framework7 para manter sincronizado com o histórico do navegador
-    app.on('routeChange', function(route) {
-      // Adicionar estado ao histórico sempre que mudar de rota
-      window.history.pushState({ 
-        page: route.path,
-        url: route.url 
-      }, '', window.location.href);
-    });
+  // Escuta mudanças no histórico
+  window.addEventListener('popstate', function(event) {
+    event.preventDefault();
+
+    const currentPath = mainView.router.currentRoute.path;
+
+    if (currentPath === '/index/' || currentPath === '/home/') {
+      app.dialog.confirm('Deseja sair do aplicativo?', function () {
+        // Em PWA não dá para sair de verdade, mas pode voltar mais uma vez ou mostrar toast
+        window.history.back(); // Ou apenas ignore
+      }, function() {
+        // Cancelado: restaura o estado no histórico
+        window.history.pushState({ page: 'current' }, '', window.location.href);
+      });
+    } else {
+      // Voltar com recarregamento da página anterior
+      mainView.router.back({
+        force: true,
+        reloadPrevious: true,
+        ignoreCache: true
+      });
+    }
+  });
+
+  // Quando mudar de rota, adiciona novo estado ao histórico
+  app.on('routeChange', function(route) {
+    window.history.pushState({
+      page: route.path,
+      url: route.url
+    }, '', window.location.href);
+  });
 }
+
 
 function onDeviceReady() {
   //Quando estiver rodando no celular
