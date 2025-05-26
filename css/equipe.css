@@ -3,30 +3,33 @@
 /* Filtros da equipe */
         .team-filters {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             justify-content: center;
             margin-bottom: 20px;
-            flex-wrap: nowrap; /* Impede quebra de linha */
-            padding: 5px 0;
+            flex-wrap: nowrap;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .filter-btn-equipe {
-            padding: 8px 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 20px;
+            padding: 6px 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 15px;
             background-color: #fff;
             color: #666;
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 11px;
+            font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
             cursor: pointer;
             transition: all 0.3s ease;
-            min-width: auto; /* Removido min-width fixo */
             justify-content: center;
-            white-space: nowrap; /* Impede quebra do texto */
-            flex-shrink: 0; /* Impede que os botões encolham */
+            white-space: nowrap;
+            flex: 1;
+            min-width: 0;
         }
 
         .filter-btn-equipe:hover {
