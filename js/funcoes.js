@@ -2060,6 +2060,7 @@ function listarNotificacoes() {
 
         notificacoes.forEach((notificacao) => {
           const isVisto = notificacao.visto === "S"; // Verifica se a notificação foi vista
+          const dataFormatada = (data) => new Date(notificacao.data_criacao).toLocaleString();
 
           const notificacaoHTML = `            
               <div class="notification-item swipeable ${
@@ -2083,7 +2084,7 @@ function listarNotificacoes() {
                     data-icone="${notificacao.icone}"
                     data-titulo="${notificacao.titulo}"
                     data-mensagem="${notificacao.mensagem}"
-                    data-data="${formatarData(notificacao.data_criacao)}">
+                    data-data="${dataFormatada}">
                     Detalhes
                   </button>
                 </div>
