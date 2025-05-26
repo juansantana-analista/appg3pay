@@ -1190,8 +1190,6 @@ var app = new Framework7({
           listarProdutos();
           buscarQtdeNotif();
           contarCarrinho();
-app.views.current.router.refreshPage();
-
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
