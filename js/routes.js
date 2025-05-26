@@ -2112,6 +2112,7 @@ function inicializarMenuLateral() {
   if (userName != '' && userName != null) {
     $("#nomeUsuarioLateral").html(userName);
   }
+  app.views.main.router.refreshPage();
 
   // Função para abrir o menu lateral
   function abrirMenuLateral() {
