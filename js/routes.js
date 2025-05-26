@@ -2001,9 +2001,13 @@ var app = new Framework7({
   // Outros parametros aqui
 
   view: {
-    animate: false, // Disable animations for view transitions
-    iosDynamicNavbar: false, // Disable dynamic navbar animations for iOS
-    stackPages: true, // To prevent reloading pages, useful if still facing issues
+    animate: false,
+    iosDynamicNavbar: false,
+    stackPages: true,
+    preloadPreviousPage: false, // IMPORTANTE: Evita conflitos de carregamento
+    reloadPages: true, // IMPORTANTE: Permite reload correto das páginas
+    restoreScrollTopOnBack: true,
+    pushStateOnLoad: false // IMPORTANTE: Evita problemas com histórico
   },
 
 });
@@ -2025,66 +2029,280 @@ app.on('routeChange', function (route) {
 });
 
 // Função para gerenciar o histórico de navegação
-function initializeBackButtonHandler() {
-  console.log('aqui teste')
-  var mainView = app.views.main;
-    // Garantir que temos um estado inicial
-    if (!window.history.state) {
-      window.history.replaceState({ page: 'initial' }, '', window.location.href);
-    }
+function inicializarMenuLateral() {
+  // Atualizar nome do usuário no menu lateral
+  var userName = localStorage.getItem('userName');
+  if (userName != '' && userName != null) {
+    $("#nomeUsuarioLateral").html(userName);
+  }
+
+  // Função para abrir o menu lateral
+  function abrirMenuLateral() {
+    atualizarBadgeNotificacoesMenu();
+    app.panel.open('#panel-menu-lateral', true);
+    $('.menu-tab-link').addClass('menu-active');
+  }
+
+  // Função para fechar o menu lateral
+  function fecharMenuLateral() {
+    app.panel.close('#panel-menu-lateral');
+    $('.menu-tab-link').removeClass('menu-active');
+  }
+
+  // Event listener para o botão do menu na tabbar
+  $(document).on('click', '.menu-tab-link', function(e) {
+    e.preventDefault();
     
-    // Escutar mudanças no histórico do navegador
-    window.addEventListener('popstate', function(event) {
-      // Prevenir o comportamento padrão
-      event.preventDefault();
+    if (app.panel.get('#panel-menu-lateral').opened) {
+      fecharMenuLateral();
+    } else {
+      abrirMenuLateral();
+    }
+  });
+
+  // =================================
+  // NAVEGAÇÃO CORRIGIDA PARA MENU LATERAL
+  // =================================
+  
+  // Event listeners para os itens do menu com navegação forçada
+  $(document).on('click', '#perfil-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    // Usar navigate com force reload para garantir que os eventos sejam chamados
+    setTimeout(() => {
+      app.views.main.router.navigate('/perfil/', {
+        force: true,
+        reload: true,
+        clearPreviousHistory: false
+      });
+    }, 300);
+  });
+
+  $(document).on('click', '#vendas-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    setTimeout(() => {
+      app.views.main.router.navigate('/vendas/', {
+        force: true,
+        reload: true,
+        clearPreviousHistory: false
+      });
+    }, 300);
+  });
+
+  $(document).on('click', '#equipe-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    setTimeout(() => {
+      app.views.main.router.navigate('/equipe/', {
+        force: true,
+        reload: true,
+        clearPreviousHistory: false
+      });
+    }, 300);
+  });
+
+  $(document).on('click', '#pedidos-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    setTimeout(() => {
+      app.views.main.router.navigate('/pedidos/', {
+        force: true,
+        reload: true,
+        clearPreviousHistory: false
+      });
+    }, 300);
+  });
+
+  $(document).on('click', '#notificacoes-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    setTimeout(() => {
+      app.views.main.router.navigate('/notificacoes/', {
+        force: true,
+        reload: true,
+        clearPreviousHistory: false
+      });
+    }, 300);
+  });
+
+  $(document).on('click', '#campanhas-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    setTimeout(() => {
+      app.views.main.router.navigate('/campanhas/', {
+        force: true,
+        reload: true,
+        clearPreviousHistory: false
+      });
+    }, 300);
+  });
+
+  $(document).on('click', '#configuracoes-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    app.dialog.alert('Funcionalidade em desenvolvimento', 'Configurações');
+  });
+
+  $(document).on('click', '#ajuda-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    app.dialog.alert('Entre em contato conosco pelo suporte', 'Ajuda');
+  });
+
+  $(document).on('click', '#sair-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    app.dialog.confirm('Deseja sair do aplicativo?', 'Sair', function () {
+      fazerLogout();
+      $("#menuPrincipal").hide("fast");
+      $("#menuPrincipal").addClass("display-none");
+      app.views.main.router.navigate("/login-view/");
+    });
+  });
+
+  // Fechar menu quando clicar em outros itens
+  $(document).on('click', '.item-menu-lateral.panel-close', function() {
+    setTimeout(() => {
+      $('.menu-tab-link').removeClass('menu-active');
+    }, 300);
+  });
+
+  // Event listener para fechar o menu quando o panel for fechado
+  app.on('panelClose', function(panel) {
+    if (panel.el.id === 'panel-menu-lateral') {
+      $('.menu-tab-link').removeClass('menu-active');
+    }
+  });
+}
+// =================================
+// FUNÇÃO PARA FORÇAR RELOAD DE PÁGINA
+// =================================
+
+function forcePageReload(route) {
+  // Função para recarregar forçadamente uma página
+  const currentRoute = app.views.main.router.currentRoute;
+  
+  if (currentRoute.path === route) {
+    // Se já estamos na rota, forçar o reload dos eventos
+    setTimeout(() => {
+      app.views.main.router.refreshPage();
+    }, 100);
+  } else {
+    // Navegar para a rota com force
+    app.views.main.router.navigate(route, {
+      force: true,
+      reload: true
+    });
+  }
+}
+
+function initializeBackButtonHandler() {
+  var mainView = app.views.main;
+  
+  if (!window.history.state) {
+    window.history.replaceState({ page: 'initial' }, '', window.location.href);
+  }
+  
+  window.addEventListener('popstate', function(event) {
+    event.preventDefault();
+    
+    const currentRoute = mainView.router.currentRoute.path;
+    const exitPages = ['/index/', '/home/', '/login-view/'];
+    
+    if (exitPages.includes(currentRoute)) {
+      app.dialog.confirm('Deseja sair do aplicativo?', function () {
+        window.history.back();
+      }, function() {
+        window.history.pushState({ page: 'current' }, '', window.location.href);
+      });
+    } else {
+      const menuPages = ['/perfil/', '/vendas/', '/equipe/', '/pedidos/', '/notificacoes/', '/campanhas/'];
       
-      // Verificar se estamos na página inicial
-      if (mainView.router.currentRoute.path === '/index/' || 
-          mainView.router.currentRoute.path === '/home/') {
-        // Confirmar se o usuário quer sair
-        app.dialog.confirm('Deseja sair do aplicativo?', function () {
-          // Para PWA, não podemos fechar o app, então redirecionamos ou mostramos uma mensagem
-          window.history.back();
-        }, function() {
-          // Se cancelar, adicionar estado de volta ao histórico
-          window.history.pushState({ page: 'current' }, '', window.location.href);
+      if (menuPages.includes(currentRoute)) {
+        // Para páginas do menu lateral, voltar para home com reload
+        mainView.router.navigate('/home/', {
+          force: true,
+          reload: true
         });
       } else {
-        // Voltar para a página anterior usando o router do Framework7
         mainView.router.back({ force: true });
       }
-    });
-    
-    // Interceptar navegação do Framework7 para manter sincronizado com o histórico do navegador
-    app.on('routeChange', function(route) {
-      // Adicionar estado ao histórico sempre que mudar de rota
-      window.history.pushState({ 
-        page: route.path,
-        url: route.url 
-      }, '', window.location.href);
-    });
+    }
+  });
+  
+  // Interceptar navegação do Framework7
+  app.on('routeChange', function(route) {
+    window.history.pushState({ 
+      page: route.path,
+      url: route.url 
+    }, '', window.location.href);
+  });
 }
 
 function onDeviceReady() {
-  //Quando estiver rodando no celular
   var mainView = app.views.create('.view-main', { url: '/index/' });
-  // COMANDO PARA "OUVIR" O BOTAO VOLTAR NATIVO DO ANDROID (apenas para app nativo)
+  
+  // COMANDO PARA "OUVIR" O BOTAO VOLTAR NATIVO DO ANDROID
   if (window.cordova) {
     document.addEventListener("backbutton", function (e) {
-      if (mainView.router.currentRoute.path === '/index/') {
-        e.preventDefault();
-        app.dialog.confirm('Deseja sair do aplicativo?', function () {
-          navigator.app.exitApp();
-        });
-      } else {
-        e.preventDefault();
-        mainView.router.back({ force: true });
-      }
+      handleBackButton(e, mainView);
     }, false);
   }
 
-      initializeBackButtonHandler();
+  // Para web/PWA
+  if (!window.cordova) {
+    initializeBackButtonHandler();
+  }
+
   let deferredPrompt;
+}
+
+function handleBackButton(e, mainView) {
+  const currentRoute = mainView.router.currentRoute.path;
+  
+  // Páginas que devem sair do app
+  const exitPages = ['/index/', '/home/', '/login-view/'];
+  
+  if (exitPages.includes(currentRoute)) {
+    e.preventDefault();
+    app.dialog.confirm('Deseja sair do aplicativo?', function () {
+      if (window.cordova) {
+        navigator.app.exitApp();
+      } else {
+        window.close();
+      }
+    });
+  } else {
+    e.preventDefault();
+    
+    // Verificar se estamos vindo de uma página do menu lateral
+    const menuPages = ['/perfil/', '/vendas/', '/equipe/', '/pedidos/', '/notificacoes/', '/campanhas/'];
+    
+    if (menuPages.includes(currentRoute)) {
+      // Para páginas do menu lateral, voltar sempre para /home/ com reload
+      mainView.router.navigate('/home/', {
+        force: true,
+        reload: true,
+        clearPreviousHistory: false
+      });
+    } else {
+      // Para outras páginas, voltar normalmente
+      mainView.router.back({ 
+        force: true,
+        reload: false
+      });
+    }
+  }
 }
 
 // Modificar a inicialização do app
