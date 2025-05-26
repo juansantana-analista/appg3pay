@@ -3,28 +3,28 @@
 /* Filtros da equipe */
         .team-filters {
             display: flex;
-            gap: 15px;
+            gap: 8px;
             justify-content: center;
             margin-bottom: 20px;
             flex-wrap: nowrap; /* Impede quebra de linha */
             overflow-x: auto; /* Permite scroll horizontal se necessário */
-            padding: 10px 0;
+            padding: 5px 0;
         }
 
         .filter-btn {
-            padding: 12px 20px;
+            padding: 8px 12px;
             border: 2px solid #e0e0e0;
-            border-radius: 25px;
+            border-radius: 20px;
             background-color: #fff;
             color: #666;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
             cursor: pointer;
             transition: all 0.3s ease;
-            min-width: 120px; /* Largura mínima para consistência */
+            min-width: auto; /* Removido min-width fixo */
             justify-content: center;
             white-space: nowrap; /* Impede quebra do texto */
             flex-shrink: 0; /* Impede que os botões encolham */
@@ -42,7 +42,7 @@
         }
 
         .filter-btn i {
-            font-size: 16px;
+            font-size: 14px;
         }
 
 /* Lista da equipe */
@@ -464,18 +464,19 @@
 /* Responsividade */
 @media (max-width: 480px) {
             .team-filters {
-                gap: 8px;
+                gap: 4px;
                 justify-content: flex-start; /* Alinha à esquerda em telas pequenas */
+                padding: 5px;
             }
             
             .filter-btn {
-                min-width: 90px;
-                padding: 8px 12px;
-                font-size: 12px;
+                padding: 6px 8px;
+                font-size: 10px;
+                gap: 2px;
             }
             
             .filter-btn i {
-                font-size: 14px;
+                font-size: 12px;
             }
   
   .invitation-actions {
