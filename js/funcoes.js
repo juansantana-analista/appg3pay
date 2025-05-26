@@ -4163,11 +4163,11 @@ function listarEquipe(filtro = "all") {
 
 // Função auxiliar para configurar os filtros
 function setupTeamFilters() {
-  $(".filter-btn").on("click", function () {
+  $(".filter-btn-equipe").on("click", function () {
     const filtro = $(this).data("filter");
 
     // Atualiza botões ativos
-    $(".filter-btn").removeClass("active");
+    $(".filter-btn-equipe").removeClass("active");
     $(this).addClass("active");
 
     // Filtra membros visíveis
@@ -4224,7 +4224,7 @@ function atualizarDadosEquipe() {
   $updateBtn.prop("disabled", true);
 
   // Recarrega os dados
-  listarEquipe($(".filter-btn.active").data("filter") || "all");
+  listarEquipe($(".filter-btn-equipe.active").data("filter") || "all");
 
   // Remove animação após 2 segundos
   setTimeout(() => {
