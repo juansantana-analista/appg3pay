@@ -23,26 +23,31 @@
         <div class="view view-main">
             <!-- Initial Page, "data-name" contains page name -->
             <div data-name="notificacoes" class="page">
-                <!-- Header -->
-                <div class="navbar">
-                    <div class="navbar-bg"></div>
-                    <div class="navbar-inner sliding">
-                        <div class="left">
-                            <a href="#" class="link back">
-                                <i class="mdi mdi-arrow-left"></i>
-                            </a>
-                        </div>
-                        <div class="title">Notificações</div>
-                        <div class="right">
-                            <a href="#" class="link" onclick="marcarTodasComoLidas()">
-                                <i class="mdi mdi-check-all"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+               <!-- NAV TOPO-->
+               <div class="top-nav">
+                  <div class="left">
+                     <img src="img/logo-nav.png" class="title-logo" width="130px" style="margin-left: 10px;" />
+                  </div>
+                  <!-- Agrupe os ícones em uma div -->
+                  <div class="right-icons">
+                     <!-- Botão de Notificações -->
+                     <div class="btn-notificacao" data-count="0" onclick="app.views.main.router.navigate('/notificacoes/')">
+                        <i class="mdi mdi-bell-outline"></i>
+                     </div>
+                     <!-- Botão do Carrinho -->
+                     <div class="btn-cart" data-count="0" onclick="app.views.main.router.navigate('/carrinho/')">
+                        <i class="mdi mdi-cart-outline"></i>
+                     </div>
+                  </div>
+               </div>
 
                 <!-- Scrollable page content -->
                 <div class="page-content">
+                  <!-- Dashboard Header -->
+                  <div class="dashboard-header">
+                     <h1>Notificações</h1>
+                     <p>Fique por dentro de todas as novidades</p>
+                  </div>
                     <!-- Notifications Container -->
                     <div class="notifications-wrapper">
                         <div class="block">
