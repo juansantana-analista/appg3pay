@@ -2083,25 +2083,12 @@ function onDeviceReady() {
     }, false);
   }
 
+      initializeBackButtonHandler();
   let deferredPrompt;
 }
 
 // Modificar a inicialização do app
 document.addEventListener('deviceready', onDeviceReady, false);
-
-// Para PWA, inicializar quando o DOM estiver pronto
-document.addEventListener('DOMContentLoaded', function() {
-  // Se não for app nativo, inicializar como PWA
-  if (!window.cordova) {
-    // Criar a view principal
-    if (!app.views.main) {
-      var mainView = app.views.create('.view-main', { url: '/index/' });
-    }
-    
-    // Inicializar o gerenciador do botão voltar para PWA
-    initializeBackButtonHandler();
-  }
-});
 
 // Alternativa adicional: Interceptar tentativas de fechar a aba/janela
 window.addEventListener('beforeunload', function(event) {
