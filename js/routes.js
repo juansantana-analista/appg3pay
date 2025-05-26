@@ -62,7 +62,7 @@ var app = new Framework7({
               app.views.main.router.navigate("/perfil/"); 
           });
   inicializarMenuLateral();
-  atualizarTabbarComMenu();
+  //atualizarTabbarComMenu();
 
       listarPerfil("index");
   
@@ -2140,6 +2140,25 @@ function inicializarMenuLateral() {
     }
   });
 
+  $(document).on('click', '#ajuda-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    app.dialog.alert('Entre em contato conosco pelo suporte', 'Ajuda');
+  });
+
+  $(document).on('click', '#sair-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    app.dialog.confirm('Deseja sair do aplicativo?', 'Sair', function () {
+      fazerLogout();
+      $("#menuPrincipal").hide("fast");
+      $("#menuPrincipal").addClass("display-none");
+      app.views.main.router.navigate("/login-view/");
+    });
+  });
+
   // Fechar menu quando clicar em outros itens
   $(document).on('click', '.item-menu-lateral.panel-close', function() {
     setTimeout(() => {
@@ -2186,7 +2205,7 @@ function atualizarTabbarComMenu() {
 }
 
   inicializarMenuLateral();
-  atualizarTabbarComMenu();
+  //atualizarTabbarComMenu();
 
 
 // Bloquear o menu de contexto no clique com o botão direito
