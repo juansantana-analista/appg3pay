@@ -2182,6 +2182,7 @@ function inicializarMenuLateral() {
       $('.menu-tab-link').removeClass('menu-active');
     }
   });
+  initializeBackButtonHandler();
 }
 
 // Função para atualizar o badge de notificações no menu
