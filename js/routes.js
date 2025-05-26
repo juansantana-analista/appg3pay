@@ -1543,8 +1543,8 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
-    buscarQtdeNotif();
-    contarCarrinho();
+          buscarQtdeNotif();
+          contarCarrinho();
     
           // fazer algo quando a página for inicializada   
           listarNotificacoes();   

@@ -2043,6 +2043,7 @@ function listarNotificacoes() {
         responseJson.status === "success" &&
         responseJson.data.status === "success"
       ) {
+        console.log(responseJson);
         const notificacoes = responseJson.data.data; // Aqui acessa a lista de notificações
         // Verifica se a lista está vazia
         if (notificacoes.length === 0) {
