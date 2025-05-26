@@ -1190,6 +1190,7 @@ var app = new Framework7({
           listarProdutos();
           buscarQtdeNotif();
           contarCarrinho();
+app.views.current.router.refreshPage();
 
         },
         pageBeforeRemove: function (event, page) {
