@@ -2315,7 +2315,6 @@ function listarCategoriasCurso() {
 //Fim Função Listar Categorias
 
 //Inicio da funçao contagem Notificações
-//Inicio da funçao contagem Notificações
 function buscarQtdeNotif() {
   var userId = localStorage.getItem("userId");
 

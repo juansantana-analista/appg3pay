@@ -561,24 +561,6 @@ var app = new Framework7({
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
-          // Toggle balance visibility
-          const toggleBalance = document.getElementById('toggleBalance');
-          const balance = document.getElementById('balance');
-          const actualBalance = document.getElementById('actualBalance');
-          let isBalanceHidden = true;
-
-          toggleBalance.addEventListener('click', () => {
-              isBalanceHidden = !isBalanceHidden;
-              if (isBalanceHidden) {
-                  balance.style.display = 'block';
-                  actualBalance.style.display = 'none';
-                  toggleBalance.className = 'far fa-eye';
-              } else {
-                  balance.style.display = 'none';
-                  actualBalance.style.display = 'block';
-                  toggleBalance.className = 'far fa-eye-slash';
-              }
-          });
           // Verifica se o tutorial já foi concluído
           if (!localStorage.getItem('tutorialCompleted')) {
             $("#installBanner").addClass("display-none");            
