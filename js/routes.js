@@ -1010,6 +1010,8 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+          
+    app.panel.open('#panel-menu-lateral', true);
     buscarQtdeNotif();
     contarCarrinho();
     
