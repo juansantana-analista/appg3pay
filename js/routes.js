@@ -2115,10 +2115,7 @@ function inicializarMenuLateral() {
   
 
   // Função para abrir o menu lateral
-  function abrirMenuLateral() {
-    // Atualizar badge de notificações no menu
-    atualizarBadgeNotificacoesMenu();
-    
+  function abrirMenuLateral() {    
     // Abrir o panel
     app.panel.open('#panel-menu-lateral', true);
     
@@ -2185,20 +2182,6 @@ function inicializarMenuLateral() {
   });
 }
 
-// Função para atualizar o badge de notificações no menu
-function atualizarBadgeNotificacoesMenu() {
-  // Aqui você pode implementar a lógica para buscar a quantidade de notificações
-  // Por exemplo, fazendo uma chamada para sua API
-  
-  const qtdeNotificacoes = localStorage.getItem('qtdeNotificacoes') || '0';
-  
-  const badgeElement = document.getElementById('badge-notif-menu');
-  if (badgeElement) {
-    badgeElement.setAttribute('data-count', qtdeNotificacoes);
-    badgeElement.textContent = qtdeNotificacoes;
-  }
-}
-
 // Modificar o HTML da tabbar no routes.js
 function atualizarTabbarComMenu() {
   // Esta função deve ser chamada quando necessário para atualizar a tabbar
@@ -2220,7 +2203,6 @@ function atualizarTabbarComMenu() {
             app.panel.close('#panel-menu-lateral');
             this.classList.remove('menu-active');
           } else {
-            atualizarBadgeNotificacoesMenu();
             app.panel.open('#panel-menu-lateral', true);
             this.classList.add('menu-active');
           }
