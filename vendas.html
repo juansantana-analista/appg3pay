@@ -31,22 +31,23 @@
     <div class="view view-main">
       <!-- Initial Page, "data-name" contains page name -->
       <div data-name="vendas" class="page color-theme-blue">
-          <!-- NAV TOPO-->
-          <div class="top-nav">
-            <div class="left">
-              <a
-                href="#"
-                class="link panel-open btn-novo"
-                data-panel="#panel-nested"
-              >
-                <i class="mdi mdi-menu"></i>
-              </a>
-            </div>
-            <img src="img/logo-nav.png" class="title-logo" width="110px" />
-            <a href="/notificacoes/" class="btn-notificacao" data-count="0">
-              <i class="mdi mdi-bell"></i>
-            </a>
-          </div>
+               <!-- NAV TOPO-->
+               <div class="top-nav">
+                  <div class="left">
+                     <img src="img/logo-nav.png" class="title-logo" width="130px" style="margin-left: 10px;" />
+                  </div>
+                  <!-- Agrupe os ícones em uma div -->
+                  <div class="right-icons">
+                     <!-- Botão de Notificações -->
+                     <div class="btn-notificacao" data-count="0" onclick="app.views.main.router.navigate('/notificacoes/')">
+                        <i class="mdi mdi-bell-outline"></i>
+                     </div>
+                     <!-- Botão do Carrinho -->
+                     <div class="btn-cart" data-count="0" onclick="app.views.main.router.navigate('/carrinho/')">
+                        <i class="mdi mdi-cart-outline"></i>
+                     </div>
+                  </div>
+               </div>
         <!-- Scrollable page content -->
 
           <!-- Cabeçalho com título da página -->
