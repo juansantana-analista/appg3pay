@@ -1184,15 +1184,12 @@ var app = new Framework7({
             }, 1000); // Espera 1 segundo após a última digitação
           });
           
-        // Carregar dados sempre que entrar na página
-        setTimeout(() => {
-          console.log('beforein');
+
           listarBanners();
           listarCategorias();
           listarProdutos();
           buscarQtdeNotif();
           contarCarrinho();
-        }, 1000);
 
         },
         pageBeforeRemove: function (event, page) {
