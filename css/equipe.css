@@ -22,7 +22,7 @@
   gap: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  min-width: 100px;
+  min-width: 50px;
   justify-content: center;
 }
 
