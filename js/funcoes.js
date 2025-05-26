@@ -2083,7 +2083,7 @@ function listarNotificacoes() {
                     data-icone="${notificacao.icone}"
                     data-titulo="${notificacao.titulo}"
                     data-mensagem="${notificacao.mensagem}"
-                    data-data="${formatarDataSimples(notificacao.data_criacao)}">
+                    data-data="${formatarData(notificacao.data_criacao)}">
                     Detalhes
                   </button>
                 </div>
