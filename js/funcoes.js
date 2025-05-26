@@ -1182,6 +1182,7 @@ function buscarLinkAfiliado() {
   fetch(apiServerUrl, options)
     .then((response) => response.json())
     .then((responseJson) => {
+      console.log(responseJson);
       // Verifica se o status é 'success' e se há dados de pedidos
       if (responseJson.status === "success") {
         const resultado = responseJson;
