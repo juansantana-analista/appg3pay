@@ -2012,19 +2012,68 @@ var app = new Framework7({
 //Para testes direto no navegador
 //var mainView = app.views.create('.view-main', { url: '/index/' });
 
+// FUNÇÃO AUXILIAR: Para garantir que a navegação funcione corretamente
+function navegarComMenuLateral(rota) {
+  // Fechar o menu lateral se estiver aberto
+  if (app.panel.get('#panel-menu-lateral').opened) {
+    app.panel.close('#panel-menu-lateral');
+    $('.menu-tab-link').removeClass('menu-active');
+    
+    // Aguardar o fechamento completo antes de navegar
+    setTimeout(() => {
+      app.views.main.router.navigate(rota);
+    }, 300);
+  } else {
+    // Navegar diretamente se o menu não estiver aberto
+    app.views.main.router.navigate(rota);
+  }
+}
 
 //EVENTO PARA SABER O ITEM DO MENU ATUAL
-app.on('routeChange', function (route) {
-  var currentRoute = route.url;
-  document.querySelectorAll('.tab-link').forEach(function (el) {
-    el.classList.remove('active');
-  });
-  var targetEl = document.querySelector('.tab-link[href="' + currentRoute + '"]');
-  if (targetEl) {
-    targetEl.classList.add('active');
+app.on('routeChange', function(route) {
+  console.log('Rota alterada para:', route.path);
+  
+  // Garantir que o menu lateral seja fechado ao navegar
+  if (app.panel.get('#panel-menu-lateral') && app.panel.get('#panel-menu-lateral').opened) {
+    app.panel.close('#panel-menu-lateral');
+    $('.menu-tab-link').removeClass('menu-active');
   }
 });
 
+// MELHORIA ADICIONAL: Interceptar navegação do botão voltar para garantir comportamento correto
+function melhorarNavegacaoVoltar() {
+  // Interceptar a navegação do Framework7
+  app.on('routeChangeBefore', function(route) {
+    // Se estivermos voltando de uma página do menu lateral, garantir que os dados sejam recarregados
+    const rotasMenuLateral = ['/notificacoes/', '/equipe/', '/campanhas/', '/perfil/', '/curso/'];
+    const rotaAtual = app.views.main.router.currentRoute.path;
+    
+    if (rotasMenuLateral.includes(rotaAtual)) {
+      // Forçar um pequeno delay para garantir que o DOM seja atualizado
+      setTimeout(() => {
+        // Trigger de eventos customizados se necessário
+        $(document).trigger('menu-lateral-navigation');
+      }, 100);
+    }
+  });
+}
+melhorarNavegacaoVoltar();
+function melhorarNavegacaoVoltar() {
+  // Interceptar a navegação do Framework7
+  app.on('routeChangeBefore', function(route) {
+    // Se estivermos voltando de uma página do menu lateral, garantir que os dados sejam recarregados
+    const rotasMenuLateral = ['/notificacoes/', '/equipe/', '/campanhas/', '/perfil/', '/curso/'];
+    const rotaAtual = app.views.main.router.currentRoute.path;
+    
+    if (rotasMenuLateral.includes(rotaAtual)) {
+      // Forçar um pequeno delay para garantir que o DOM seja atualizado
+      setTimeout(() => {
+        // Trigger de eventos customizados se necessário
+        $(document).trigger('menu-lateral-navigation');
+      }, 100);
+    }
+  });
+}
 // Função para gerenciar o histórico de navegação
 function initializeBackButtonHandler() {
   console.log('aqui teste')
@@ -2131,13 +2180,9 @@ function inicializarMenuLateral() {
     $('.menu-tab-link').removeClass('menu-active');
   }
 
-  // REMOVER LISTENERS ANTERIORES PARA EVITAR DUPLICAÇÃO
-  $(document).off('click.menuLateral');
-  
-  // Event listener para o botão do menu na tabbar - COM NAMESPACE
-  $(document).on('click.menuLateral', '.menu-tab-link', function(e) {
+  // Event listener para o botão do menu na tabbar
+  $(document).on('click', '.menu-tab-link', function(e) {
     e.preventDefault();
-    e.stopPropagation(); // Previne propagação do evento
     
     if (app.panel.get('#panel-menu-lateral').opened) {
       fecharMenuLateral();
@@ -2146,26 +2191,23 @@ function inicializarMenuLateral() {
     }
   });
 
-  // Event listeners para os itens do menu - COM NAMESPACE
-  $(document).on('click.menuLateral', '#configuracoes-menu', function(e) {
+  // Event listeners para os itens do menu
+  $(document).on('click', '#configuracoes-menu', function(e) {
     e.preventDefault();
-    e.stopPropagation();
     fecharMenuLateral();
     
     app.dialog.alert('Funcionalidade em desenvolvimento', 'Configurações');
   });
 
-  $(document).on('click.menuLateral', '#ajuda-menu', function(e) {
+  $(document).on('click', '#ajuda-menu', function(e) {
     e.preventDefault();
-    e.stopPropagation();
     fecharMenuLateral();
     
     app.dialog.alert('Entre em contato conosco pelo suporte', 'Ajuda');
   });
 
-  $(document).on('click.menuLateral', '#sair-menu', function(e) {
+  $(document).on('click', '#sair-menu', function(e) {
     e.preventDefault();
-    e.stopPropagation();
     fecharMenuLateral();
     
     app.dialog.confirm('Deseja sair do aplicativo?', 'Sair', function () {
@@ -2176,22 +2218,66 @@ function inicializarMenuLateral() {
     });
   });
 
-  // Fechar menu quando clicar em outros itens - COM NAMESPACE
-  $(document).on('click.menuLateral', '.item-menu-lateral.panel-close', function(e) {
-    // NÃO PREVENIR DEFAULT AQUI - deixar o Framework7 processar a navegação
-    setTimeout(() => {
-      $('.menu-tab-link').removeClass('menu-active');
-    }, 100); // Reduzir timeout para 100ms
-  });
-
-  // REMOVER LISTENER ANTERIOR DO PANEL
-  app.off('panelClose.menuLateral');
+  // CORREÇÃO: Remover o event listener problemático e substituir por uma abordagem mais específica
+  // Em vez de interceptar todos os cliques em '.item-menu-lateral.panel-close',
+  // vamos usar apenas o event listener do Framework7 para o panel
   
-  // Event listener para fechar o menu quando o panel for fechado - COM NAMESPACE
-  app.on('panelClose.menuLateral', function(panel) {
+  // Event listener para fechar o menu quando o panel for fechado
+  app.on('panelClose', function(panel) {
     if (panel.el.id === 'panel-menu-lateral') {
       $('.menu-tab-link').removeClass('menu-active');
     }
+  });
+
+  // NOVA ABORDAGEM: Event listeners específicos para cada item do menu que navega
+  $(document).on('click', '#notificacoes-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    // Aguardar o fechamento do panel antes de navegar
+    setTimeout(() => {
+      app.views.main.router.navigate('/notificacoes/');
+    }, 300);
+  });
+
+  $(document).on('click', '#equipe-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    // Aguardar o fechamento do panel antes de navegar
+    setTimeout(() => {
+      app.views.main.router.navigate('/equipe/');
+    }, 300);
+  });
+
+  $(document).on('click', '#campanhas-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    // Aguardar o fechamento do panel antes de navegar
+    setTimeout(() => {
+      app.views.main.router.navigate('/campanhas/');
+    }, 300);
+  });
+
+  $(document).on('click', '#perfil-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    // Aguardar o fechamento do panel antes de navegar
+    setTimeout(() => {
+      app.views.main.router.navigate('/perfil/');
+    }, 300);
+  });
+
+  $(document).on('click', '#curso-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    // Aguardar o fechamento do panel antes de navegar
+    setTimeout(() => {
+      app.views.main.router.navigate('/curso/');
+    }, 300);
   });
 }
 
