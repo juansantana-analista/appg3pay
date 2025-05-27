@@ -1909,6 +1909,7 @@ function confirmarPagamento(pedidoId) {
     .then((response) => response.json())
     .then((responseJson) => {
       app.dialog.close();
+      console.log(responseJson);
       if (responseJson.data.data.status_compra == 3) {
         app.dialog.alert('Pagamento Confirmado com Sucesso!');
       } else {
