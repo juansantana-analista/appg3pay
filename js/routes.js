@@ -1818,6 +1818,10 @@ var app = new Framework7({
                     ref.show();
                   });
                 });
+                $('#jaPagueiBoleto').on('click', function () {                
+                  confirmarPagamento();
+                });
+        
         
               } else if (formaSelecionada == 3) {
                 $("#pix-section").removeClass("display-none");
@@ -1837,6 +1841,10 @@ var app = new Framework7({
                 // Copiar código Pix
                 $('#copiarPix').on('click', function () {   
                   copiarParaAreaDeTransferencia(data.pixKey);
+                });
+
+                $('#jaPagueiPix').on('click', function () {                
+                  confirmarPagamento();
                 });
               }
         

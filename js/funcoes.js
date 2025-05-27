@@ -1584,7 +1584,6 @@ function detalhesVenda() {
                                         detalhes.forma_pagamento.pix_key
                                       }</span>
                                       <button class="copy-button" id="copiarPix">Copiar Código Pix</button>
-                                      <button class="copy-button" id="jaPaguei" style="background-color: #00591f;">Já Paguei</button>
                                   </div>
                               </div>
                               <!-- Seção de pagamento -->
@@ -1596,7 +1595,6 @@ function detalhesVenda() {
                                       }</span>
                                       <button class="copy-button" id="copiarBoleto">Copiar Linha Digitável</button>
                                       <button class="copy-button" id="baixarBoleto">Baixar Boleto PDF</button>
-                                      <button class="copy-button" id="jaPaguei" style="background-color: #00591f;">Já Paguei</button>
                                   </div>
                               </div>
                               <!-- Seção de pagamento -->
@@ -1774,6 +1772,7 @@ function detalhesPedido() {
                                         detalhes.pix_key
                                       }</span>
                                       <button class="copy-button" id="copiarPix">Copiar Código Pix</button>
+                                      <button class="copy-button" id="jaPagueiPix" style="background-color: #00591f;">Já Paguei</button>
                                   </div>
                               </div>
                               <!-- Seção de pagamento -->
@@ -1784,6 +1783,7 @@ function detalhesPedido() {
                                       }</span>
                                       <button class="copy-button" id="copiarBoleto">Copiar Linha Digitável</button>
                                       <button class="copy-button" id="baixarBoleto">Baixar Boleto PDF</button>
+                                      <button class="copy-button" id="jaPagueiBoleto" style="background-color: #00591f;">Já Paguei</button>
                                   </div>
                               </div>
                               <!-- Seção de pagamento -->
@@ -1831,6 +1831,14 @@ function detalhesPedido() {
           copiarParaAreaDeTransferencia(detalhes.pix_key);
         });
 
+        $("#jaPagueiPix").on("click", function () {
+          confirmarPagamento();
+        });
+
+        $("#jaPagueiBoleto").on("click", function () {
+          confirmarPagamento();
+        });
+
         $("#copiarBoleto").on("click", function () {
           copiarParaAreaDeTransferencia(detalhes.boleto_linhadigitavel);
         });
@@ -1874,6 +1882,49 @@ function detalhesPedido() {
   localStorage.removeItem("pedidoId");
 }
 // Fim da função detalhesPedido
+
+
+//Inicio Funçao Confirmar Pagamento
+function confirmarPagamento() {
+  app.dialog.preloader("Carregando...");
+  var pedidoId = localStorage.getItem("pedidoId");
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+  
+  const body = JSON.stringify({
+    class: "PedidoDigitalRest",
+    method: "VerificaPix",
+    pedido_id: pedidoId,
+  });
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      app.dialog.close();
+      if (responseJson.data.data.status_compra == 3) {
+        app.dialog.alert('Pagamento Confirmado com Sucesso!');
+      } else {
+        app.dialog.alert('Ainda não compensou seu pagamento, aguarde alguns minutos e tente novamente!');
+        app.views.main.router.navigate("/login-view/");
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+      app.dialog.alert(
+        "Erro ao confirmar pagamento: " + error.message,
+        "Falha na requisição!"
+      );
+    });
+}
+//Fim Função Confirmar Pagamento
+
 
 //Inicio Funçao Listar Banners
 function listarBanners() {
