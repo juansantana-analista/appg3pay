@@ -1584,6 +1584,7 @@ function detalhesVenda() {
                                         detalhes.forma_pagamento.pix_key
                                       }</span>
                                       <button class="copy-button" id="copiarPix">Copiar Código Pix</button>
+                                      <button class="copy-button" id="jaPaguei" style="background-color: #00591f;">Já Paguei</button>
                                   </div>
                               </div>
                               <!-- Seção de pagamento -->
@@ -1595,6 +1596,7 @@ function detalhesVenda() {
                                       }</span>
                                       <button class="copy-button" id="copiarBoleto">Copiar Linha Digitável</button>
                                       <button class="copy-button" id="baixarBoleto">Baixar Boleto PDF</button>
+                                      <button class="copy-button" id="jaPaguei" style="background-color: #00591f;">Já Paguei</button>
                                   </div>
                               </div>
                               <!-- Seção de pagamento -->
