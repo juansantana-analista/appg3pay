@@ -1832,11 +1832,11 @@ function detalhesPedido() {
         });
 
         $("#jaPagueiPix").on("click", function () {
-          confirmarPagamento();
+          confirmarPagamento(pedidoId);
         });
 
         $("#jaPagueiBoleto").on("click", function () {
-          confirmarPagamento();
+          confirmarPagamento(pedidoId);
         });
 
         $("#copiarBoleto").on("click", function () {
@@ -1885,9 +1885,11 @@ function detalhesPedido() {
 
 
 //Inicio Funçao Confirmar Pagamento
-function confirmarPagamento() {
+function confirmarPagamento(pedidoId) {
   app.dialog.preloader("Carregando...");
-  var pedidoId = localStorage.getItem("pedidoId");
+  if(!pedidoId){
+    var pedidoId = localStorage.getItem("pedidoId");
+  }
   const headers = {
     "Content-Type": "application/json",
     Authorization: "Bearer " + userAuthToken,
