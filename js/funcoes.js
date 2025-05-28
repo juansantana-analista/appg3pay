@@ -4185,6 +4185,7 @@ function listarEquipe(filtro = "all") {
                       )}</span>
                     </div>
                   </div>
+                  <!--
                   <div class="member-stats">
                     <div class="member-stat">
                       <i class="mdi mdi-account-group"></i>
@@ -4195,6 +4196,7 @@ function listarEquipe(filtro = "all") {
                       <span>Vendas: 0</span>
                     </div>
                   </div>
+                  -->
                 </div>
               </div>
             `;
