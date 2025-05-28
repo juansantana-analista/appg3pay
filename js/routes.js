@@ -59,6 +59,9 @@ var app = new Framework7({
 
               localStorage.setItem('produtoId', id);
               app.views.main.router.navigate(`/detalhes/`);
+            } else {
+              // Lógica para continuar usando o token
+              app.views.main.router.navigate("/home/");              
             }
           }
           var userName = localStorage.getItem('userName');
