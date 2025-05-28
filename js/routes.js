@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-const versionApp = "2.1.7";
+const versionApp = "2.1.8";
 var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -50,6 +50,15 @@ var app = new Framework7({
             } else {
               // Lógica para continuar usando o token
               app.views.main.router.navigate("/home/");              
+            }
+
+            const currentUrl = window.location.href;
+
+            if (currentUrl.includes('/produto/')) {
+              const id = currentUrl.split('/produto/')[1].split('/')[0]; // Pega o id do Produto
+
+              localStorage.setItem('produtoId', id);
+              app.views.main.router.navigate(`/detalhes/`);
             }
           }
           var userName = localStorage.getItem('userName');
