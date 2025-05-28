@@ -1523,6 +1523,7 @@ function detalhesVenda() {
         responseJson.data.data
       ) {
         const detalhes = responseJson.data.data[0];
+        console.log(detalhes);
         const detalhesContainer = document.getElementById("detalhesVenda");
         detalhesContainer.innerHTML = "";
 
@@ -1898,7 +1899,7 @@ function confirmarPagamento(pedidoId) {
   const body = JSON.stringify({
     class: "PedidoDigitalRest",
     method: "VerificaPix",
-    pedido_id: pedidoId,
+    pedido_id: pedidoId
   });
   const options = {
     method: "POST",

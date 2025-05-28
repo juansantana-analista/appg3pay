@@ -872,41 +872,6 @@ var app = new Framework7({
       },
     },
     {
-      path: "/vendas/",
-      url: "vendas.html?v=" + versionApp,
-      animate: false,
-      on: {
-        pageBeforeIn: function (event, page) {
-          // fazer algo antes da página ser exibida
-          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
-          // Início função validar login
-          const isValid = validarToken();
-          if (!isValid) {
-            console.warn("Token inválido. Redirecionando para login via fallback.");
-            deleteCookie('userAuthToken');
-            app.views.main.router.navigate("/login-view/");
-            setTimeout(() => {
-              app.views.main.router.navigate("/login-view/");
-            }, 500); // Adiciona um fallback com pequeno delay
-          }
-          $("#menuPrincipal").show("fast");
-        },
-        pageAfterIn: function (event, page) {
-          // fazer algo depois da página ser exibida
-        },
-        pageInit: function (event, page) {
-    buscarQtdeNotif();
-    contarCarrinho();
-    
-          // fazer algo quando a página for inicializada
-          listarVendas();
-        },
-        pageBeforeRemove: function (event, page) {
-          // fazer algo antes da página ser removida do DOM
-        },
-      },
-    },
-    {
       path: "/resumo-venda/",
       url: "resumo-venda.html?v=" + versionApp,
       animate: false,
