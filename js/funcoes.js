@@ -1285,6 +1285,9 @@ function listarPedidos(searchQuery = "") {
         pedidosContainer.innerHTML = "";
 
         pedidos.forEach((pedido) => {
+          // Lógica condicional para exibir o status correto
+          const statusExibir = pedido.status_compra == 3 ? pedido.status_pedido : pedido.mensagem_compra;
+          
           const pedidosHTML = `                    
                           <div class="card-list" 
                           data-id-pedido="${pedido.id}">
@@ -1293,9 +1296,7 @@ function listarPedidos(searchQuery = "") {
                                    <div class="date">${formatarData(
                                      pedido.data_emissao
                                    )}</div>
-                                   <div class="status">${
-                                     pedido.mensagem_compra
-                                   }</div>
+                                   <div class="status">${statusExibir}</div>
                                 </div>
                                 <div class="card-body">
                                    <div class="name">PEDIDO #${pedido.id}</div>
