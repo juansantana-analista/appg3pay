@@ -1820,13 +1820,14 @@ function detalhesPedido() {
         detalhesContainer.innerHTML = detalhesHTML;
         if (detalhes.status_compra != 3) {
           $(".pagamento-display").removeClass("display-none");
-        }
-        if (detalhes.forma_pagamento == "PIX") {
-          $("#pagamentoPix").removeClass("display-none");
-        } else if (detalhes.forma_pagamento == "BOLETO") {
-          $("#pagamentoBoleto").removeClass("display-none");
         } else {
-          $("#pagamentoCartao").removeClass("display-none");
+          if (detalhes.forma_pagamento == "PIX") {
+            $("#pagamentoPix").removeClass("display-none");
+          } else if (detalhes.forma_pagamento == "BOLETO") {
+            $("#pagamentoBoleto").removeClass("display-none");
+          } else {
+            $("#pagamentoCartao").removeClass("display-none");
+          }
         }
 
         $("#copiarPix").on("click", function () {
