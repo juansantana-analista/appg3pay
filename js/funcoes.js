@@ -1765,8 +1765,12 @@ function detalhesPedido() {
                               <p><strong>Método:</strong> ${
                                 detalhes.forma_pagamento
                               } <a href="#" class="pagamento-display display-none">Alterar</a></p>
-                              <p><strong>Status:</strong> ${
+                              <p><strong>Pagamento:</strong> ${
                                 detalhes.mensagem_compra
+                              }</p>
+
+                              <p><strong>Status do Pedido:</strong> ${
+                                detalhes.status_pedido
                               }</p>
                               <!-- Seção de pagamento PIX -->
                               <div class="payment-method-a display-none" id="pagamentoPix">
