@@ -1807,8 +1807,18 @@ function detalhesPedido() {
                                   </div>
                               </div>
                           </div>
+                          <div class="order-address display-none" id="detalhesEnvio">
+                              <h3>Envio</h3>
+                              <p><strong>Código de Rastreio:</strong> ${
+                                detalhes.rastreios[0].codigo_rastreio
+                              }</p>
+                              <p><strong>Data de envio:</strong> ${
+                                detalhes.rastreios[0].data_envio
+                              }</p>
+                          </div>
                           <div class="order-address">
                               <h3>Endereço de Entrega</h3>
+                              
                               <p>${detalhes.endereco_entrega.rua}, ${
           detalhes.endereco_entrega.numero
         }</p>
@@ -1878,6 +1888,10 @@ function detalhesPedido() {
               }
             );
           });
+        }
+        // Se houver código de rastreio, exibe
+        if (detalhes.rastreios && detalhes.rastreios.length > 0) {
+              $("#detalhesEnvio").removeClass("display-none");
         }
 
         app.dialog.close();
