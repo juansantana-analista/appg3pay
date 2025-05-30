@@ -1897,7 +1897,7 @@ function confirmarPagamento(pedidoId) {
   };
   
   const body = JSON.stringify({
-    class: "PedidoDigitalRest",
+    class: "PagamentoSafe2payRest",
     method: "VerificaPix",
     pedido_id: pedidoId
   });
