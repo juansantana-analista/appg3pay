@@ -1798,7 +1798,7 @@ function detalhesPedido() {
         responseJson.data &&
         responseJson.data.data
       ) {
-        const detalhes = responseJson.data.data[0];
+        const detalhes = responseJson.data.data.data[0];
         const detalhesContainer = document.getElementById("detalhesPedidos");
         detalhesContainer.innerHTML = "";
 
