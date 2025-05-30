@@ -1915,7 +1915,7 @@ function confirmarPagamento(pedidoId) {
       if (responseJson.data.data.status_compra == 3) {               
         app.dialog.confirm(
               "Pagamento Confirmado com Sucesso!",
-              "Remover",
+              "Sucesso!",
               function () {
                 app.views.main.router.navigate("/pedidos/");
               }
