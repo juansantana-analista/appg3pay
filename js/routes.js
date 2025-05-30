@@ -1785,7 +1785,7 @@ var app = new Framework7({
                   });
                 });
                 $('#jaPagueiBoleto').on('click', function () {                
-                  confirmarPagamento();
+                  confirmarPagamento(data.pedidoId);
                 });
         
         
@@ -1810,7 +1810,7 @@ var app = new Framework7({
                 });
 
                 $('#jaPagueiPix').on('click', function () {                
-                  confirmarPagamento();
+                  confirmarPagamento(data.pedidoId);
                 });
               }
         
