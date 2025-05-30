@@ -1244,28 +1244,11 @@ function buscarLinkAfiliado() {
 }
 //Fim Função obter Link Afiliado
 
-//Inicio Funçao listar pedidos tela Pedidos com Paginação
-function listarPedidos(searchQuery = "", loadMore = false) {
+//Inicio Funçao listar pedidos tela Pedidos
+function listarPedidos(searchQuery = "") {
+  app.dialog.close();
   var pessoaId = localStorage.getItem("pessoaId");
-  
-  // Se não for para carregar mais, mostra o preloader
-  if (!loadMore) {
-    app.dialog.preloader("Carregando...");
-  } else {
-    // Se for carregar mais, mostra apenas um loading no botão
-    $("#loadMoreButton").addClass("loading");
-    $("#loadMoreButton .button-text").text("Carregando...");
-    $("#loadMoreButton").prop("disabled", true);
-  }
-
-  // Recupera o offset atual (quantos pedidos já foram carregados)
-  let currentOffset = parseInt(localStorage.getItem("pedidosOffset") || "0");
-  
-  // Se não for loadMore, reset o offset
-  if (!loadMore) {
-    currentOffset = 0;
-    localStorage.setItem("pedidosOffset", "0");
-  }
+  app.dialog.preloader("Carregando...");
 
   // Cabeçalhos da requisição
   const headers = {
@@ -1278,7 +1261,6 @@ function listarPedidos(searchQuery = "", loadMore = false) {
     method: "ListarPedidos",
     pessoa_id: pessoaId,
     limit: 15,
-    offset: currentOffset
   });
 
   // Opções da requisição
@@ -1299,152 +1281,83 @@ function listarPedidos(searchQuery = "", loadMore = false) {
         responseJson.data.data
       ) {
         const pedidos = responseJson.data.data;
-        const totalPedidos = responseJson.data.total || pedidos.length;
         const pedidosContainer = document.getElementById("container-pedidos");
-        
-        // Se não for loadMore, limpa o container
-        if (!loadMore) {
-          pedidosContainer.innerHTML = "";
-          // Remove botão de carregar mais se existir
-          $("#loadMoreContainer").remove();
-        }
+        pedidosContainer.innerHTML = "";
 
-        // Se não há pedidos e não é loadMore, mostra mensagem
-        if (pedidos.length === 0 && !loadMore) {
-          pedidosContainer.innerHTML = `
-            <div class="no-orders">
-              <img src="img/empty-orders.gif" alt="Sem pedidos" style="width: 200px; opacity: 0.7;">
-              <h3 style="color: #666; margin-top: 20px;">Nenhum pedido encontrado</h3>
-              <p style="color: #999;">Você ainda não realizou nenhum pedido.</p>
-            </div>
-          `;
-        } else {
-          // Adiciona os novos pedidos
-          pedidos.forEach((pedido) => {
-            // Lógica condicional para exibir o status correto
-            const statusExibir = pedido.status_compra == 3 ? pedido.status_pedido : pedido.mensagem_compra;
-            
-            const pedidosHTML = `                    
-              <div class="card-list" data-id-pedido="${pedido.id}">
-                 <div class="card-principal">
-                    <div class="card-header open header-pago">
-                       <div class="date">${formatarData(pedido.data_emissao)}</div>
-                       <div class="status">${statusExibir}</div>
-                    </div>
-                    <div class="card-body">
-                       <div class="name">PEDIDO #${pedido.id}</div>
-                       <div class="details">
-                          <div class="detail">
-                             <span>Nº</span>
-                             <span>${pedido.id}</span>
-                          </div>
-                          <div class="detail">
-                             <span class="mdi mdi-cash-multiple"></span>
-                             <span>${pedido.forma_pagamento}</span>
-                          </div>
-                          <div class="detail">
-                             <span>Total</span>
-                             <span>${formatarMoeda(pedido.valor_total)}</span>
-                          </div>
-                          <div class="detail">
-                             <span>A pagar</span>
-                             <span>${formatarMoeda(pedido.valor_total)}</span>
-                          </div>
-                          <div class="items">${pedido.quantidade_itens} itens</div>
-                       </div>
-                    </div>
-                 </div>
-              </div>
-            `;
-            pedidosContainer.insertAdjacentHTML('beforeend', pedidosHTML);
-          });
-
-          // Atualiza o offset
-          const newOffset = currentOffset + pedidos.length;
-          localStorage.setItem("pedidosOffset", newOffset.toString());
-
-          // Verifica se há mais pedidos para carregar
-          const hasMorePedidos = pedidos.length === 15; // Se retornou 15, provavelmente há mais
+        pedidos.forEach((pedido) => {
+          // Lógica condicional para exibir o status correto
+          const statusExibir = pedido.status_compra == 3 ? pedido.status_pedido : pedido.mensagem_compra;
           
-          // Remove botão anterior se existir
-          $("#loadMoreContainer").remove();
-          
-          // Adiciona botão "Carregar Mais" se há mais pedidos
-          if (hasMorePedidos) {
-            const loadMoreHTML = `
-              <div id="loadMoreContainer" style="text-align: center; margin: 30px 0; padding: 20px;">
-                <button id="loadMoreButton" class="btn-large" style="background-color: var(--verde-escuro);">
-                  <span class="button-text">Carregar mais pedidos</span>
-                  <i class="mdi mdi-chevron-down" style="margin-left: 10px;"></i>
-                </button>
-                <p style="color: #666; font-size: 14px; margin-top: 10px;">
-                  Mostrando ${newOffset} de ${totalPedidos > newOffset ? totalPedidos : newOffset} pedidos
-                </p>
-              </div>
-            `;
-            pedidosContainer.insertAdjacentHTML('afterend', loadMoreHTML);
-            
-            // Adiciona evento de clique ao botão
-            $("#loadMoreButton").on("click", function() {
-              listarPedidos("", true); // true indica que é para carregar mais
-            });
-          } else if (newOffset > 15) {
-            // Se não há mais pedidos mas já carregou alguns, mostra mensagem
-            const endMessageHTML = `
-              <div id="loadMoreContainer" style="text-align: center; margin: 30px 0; padding: 20px;">
-                <p style="color: #666; font-size: 14px;">
-                  <i class="mdi mdi-check-circle" style="color: var(--verde-escuro); margin-right: 5px;"></i>
-                  Todos os pedidos foram carregados (${newOffset} total)
-                </p>
-              </div>
-            `;
-            pedidosContainer.insertAdjacentHTML('afterend', endMessageHTML);
-          }
+          const pedidosHTML = `                    
+                          <div class="card-list" 
+                          data-id-pedido="${pedido.id}">
+                             <div class="card-principal">
+                                <div class="card-header open header-pago">
+                                   <div class="date">${formatarData(
+                                     pedido.data_emissao
+                                   )}</div>
+                                   <div class="status">${statusExibir}</div>
+                                </div>
+                                <div class="card-body">
+                                   <div class="name">PEDIDO #${pedido.id}</div>
+                                   <div class="details">
+                                      <div class="detail">
+                                         <span>Nº</span>
+                                         <span>${pedido.id}</span>
+                                      </div>
+                                      <div class="detail">
+                                         <span class="mdi mdi-cash-multiple"></span>
+                                         <span>${pedido.forma_pagamento}</span>
+                                      </div>
+                                      <div class="detail">
+                                         <span>Total</span>
+                                         <span>${formatarMoeda(
+                                           pedido.valor_total
+                                         )}</span>
+                                      </div>
+                                      <div class="detail">
+                                         <span>A pagar</span>
+                                         <span>${formatarMoeda(
+                                           pedido.valor_total
+                                         )}</span>
+                                      </div>
+                                      <div class="items">${
+                                        pedido.quantidade_itens
+                                      }</div>
+                                   </div>
+                                </div>
+                             </div>
+                          </div>
+                      `;
+          pedidosContainer.innerHTML += pedidosHTML;
+        });
 
-          // Adiciona eventos de clique aos pedidos (tanto novos quanto existentes)
-          $(".card-list").off("click").on("click", function () {
-            var pedidoId = $(this).data("id-pedido");
-            localStorage.setItem("pedidoId", pedidoId);
-            app.views.main.router.navigate("/resumo-pedido/");
-          });
-        }
+        $(".card-list").click(function () {
+          // Atualiza o ícone de seleção
+          var pedidoId = $(this).data("id-pedido");
+          localStorage.setItem("pedidoId", pedidoId);
+          app.views.main.router.navigate("/resumo-pedido/");
+        });
 
-        // Remove loading states
-        if (!loadMore) {
-          app.dialog.close();
-        } else {
-          $("#loadMoreButton").removeClass("loading");
-          $("#loadMoreButton .button-text").text("Carregar mais pedidos");
-          $("#loadMoreButton").prop("disabled", false);
-        }
-
+        app.dialog.close();
       } else {
-        // Remove loading states
-        if (!loadMore) {
-          app.dialog.close();
-        } else {
-          $("#loadMoreButton").removeClass("loading");
-          $("#loadMoreButton .button-text").text("Carregar mais pedidos");
-          $("#loadMoreButton").prop("disabled", false);
-        }
-        
+        app.dialog.close();
         // Verifica se há uma mensagem de erro definida
-        const errorMessage = responseJson.message || "Formato de dados inválido";
-        app.dialog.alert("Erro ao carregar pedidos: " + errorMessage, "Falha na requisição!");
+        const errorMessage =
+          responseJson.message || "Formato de dados inválido";
+        app.dialog.alert(
+          "Erro ao carregar pedidos: " + errorMessage,
+          "Falha na requisição!"
+        );
       }
     })
     .catch((error) => {
-      // Remove loading states
-      if (!loadMore) {
-        app.dialog.close();
-      } else {
-        $("#loadMoreButton").removeClass("loading");
-        $("#loadMoreButton .button-text").text("Carregar mais pedidos");
-        $("#loadMoreButton").prop("disabled", false);
-      }
-      
+      app.dialog.close();
       console.error("Erro:", error);
-      app.dialog.alert("Erro ao carregar pedidos: " + error.message, "Falha na requisição!");
+      app.dialog.alert(
+        "Erro ao carregar pedidos: " + error.message,
+        "Falha na requisição!"
+      );
     });
 }
 //Fim Função Lista tela Pedidos

@@ -971,9 +971,6 @@ var app = new Framework7({
             }, 500); // Adiciona um fallback com pequeno delay
           }
           $("#menuPrincipal").show("fast");
-          
-          // Reset do offset da paginação quando entra na página
-          localStorage.removeItem("pedidosOffset");
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
@@ -982,40 +979,12 @@ var app = new Framework7({
           
           buscarQtdeNotif();
           contarCarrinho();
-
+    
           // fazer algo quando a página for inicializada
-          listarPedidos(); // Chama sem parâmetros para carregar a primeira página
-          
-          // Adiciona evento para atualizar a lista puxando para baixo (pull to refresh)
-          $(document).on('touchstart', '.page-content', function(e) {
-            if ($(this).scrollTop() === 0) {
-              // Se estiver no topo da página, permite o pull to refresh
-              let startY = e.originalEvent.touches[0].pageY;
-              let pullThreshold = 80;
-              
-              $(document).on('touchmove', function(e) {
-                let currentY = e.originalEvent.touches[0].pageY;
-                let diffY = currentY - startY;
-                
-                if (diffY > pullThreshold) {
-                  // Trigger refresh
-                  localStorage.removeItem("pedidosOffset");
-                  listarPedidos();
-                  $(document).off('touchmove');
-                }
-              });
-              
-              $(document).on('touchend', function() {
-                $(document).off('touchmove');
-                $(document).off('touchend');
-              });
-            }
-          });
+          listarPedidos();
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
-          // Limpa o offset quando sai da página
-          localStorage.removeItem("pedidosOffset");
         },
       },
     },
