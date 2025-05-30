@@ -1774,6 +1774,9 @@ function detalhesPedido() {
                               <p><strong>Data do Pedido:</strong> ${formatarData(
                                 detalhes.data_emissao
                               )}</p>
+                              <p><strong>Status do Pedido:</strong> ${
+                                detalhes.status_pedido
+                              }</p>
                           </div>
                           <div class="order-items">
                               <h3>Itens do Pedido</h3>
@@ -1788,9 +1791,6 @@ function detalhesPedido() {
                                 detalhes.mensagem_compra
                               }</p>
 
-                              <p><strong>Status do Pedido:</strong> ${
-                                detalhes.status_pedido
-                              }</p>
                               <!-- Seção de pagamento PIX -->
                               <div class="payment-method-a display-none" id="pagamentoPix">
                                   <div class="payment-center">
