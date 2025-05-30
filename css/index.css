@@ -3382,3 +3382,116 @@ input, select {
     font-size: 13px;
   }
 }
+
+/* CSS para paginação de pedidos */
+
+/* Estado de loading do botão */
+#loadMoreButton.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+#loadMoreButton.loading::after {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-left: 10px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mensagem de sem pedidos */
+.no-orders {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  min-height: 300px;
+}
+
+.no-orders img {
+  max-width: 200px;
+  opacity: 0.7;
+  margin-bottom: 20px;
+}
+
+.no-orders h3 {
+  color: #666;
+  font-size: 20px;
+  margin: 20px 0 10px 0;
+  font-weight: 600;
+}
+
+.no-orders p {
+  color: #999;
+  font-size: 16px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Container do botão carregar mais */
+#loadMoreContainer {
+  animation: fadeInUp 0.3s ease-in-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Melhorias visuais para o botão */
+#loadMoreButton {
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 89, 31, 0.2);
+}
+
+#loadMoreButton:hover:not(.loading) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 89, 31, 0.3);
+}
+
+#loadMoreButton:active:not(.loading) {
+  transform: translateY(0);
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 480px) {
+  #loadMoreContainer {
+    margin: 20px 0;
+    padding: 15px;
+  }
+  
+  #loadMoreButton {
+    width: 100%;
+    font-size: 16px;
+  }
+  
+  .no-orders img {
+    max-width: 150px;
+  }
+  
+  .no-orders h3 {
+    font-size: 18px;
+  }
+  
+  .no-orders p {
+    font-size: 14px;
+  }
+}
