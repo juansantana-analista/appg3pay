@@ -9,7 +9,7 @@
       <!-- Color theme for statusbar (Android only) -->
       <meta name="theme-color" content="#FF4B00" />
       <!-- Your app title -->
-      <title>G3 PAY</title>
+      <title>VITATOP - Pedidos</title>
       <!-- Path to Framework7 Library Bundle CSS -->
       <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
       <!-- CSS PERSONALIZADO PARA MENU-->
@@ -45,21 +45,50 @@
                      </div>
                   </div>
                </div>
-          <!-- Cabeçalho com título da página -->
-          <div class="dashboard-header">
-            <h1>Pedidos realizados</h1>
-            <p>Confira os pedidos realizados na plataforma.</p>
-          </div>
+
+               <!-- Cabeçalho com título da página -->
+               <div class="dashboard-header">
+                  <h1>Meus Pedidos</h1>
+                  <p>Confira os pedidos realizados na plataforma.</p>
+               </div>
+
                <!-- Scrollable page content -->
                <div class="page-content" style="background-color: #f7f9fa;">
                   <div class="block">
-                     <div class="container-order" id="container-pedidos" style="margin-bottom: 200px">
+                     <!-- Botão de refresh no topo -->
+                     <div style="text-align: center; margin-bottom: 20px; padding: 10px;">
+                        <button onclick="listarPedidos(false, 0)" style="background: var(--verde-escuro); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px;">
+                           <i class="mdi mdi-refresh"></i> Atualizar lista
+                        </button>
+                     </div>
+
+                     <!-- Container dos pedidos -->
+                     <div class="container-order" id="container-pedidos" style="margin-bottom: 200px;">
+                        <!-- Loading inicial -->
+                        <div class="loading-skeleton">
+                           <div class="skeleton-card" style="margin-bottom: 15px;">
+                              <div style="height: 60px; background: #f0f0f0; border-radius: 8px; margin-bottom: 10px;"></div>
+                              <div style="height: 20px; background: #f0f0f0; border-radius: 4px; margin-bottom: 8px; width: 70%;"></div>
+                              <div style="height: 16px; background: #f0f0f0; border-radius: 4px; width: 50%;"></div>
+                           </div>
+                           <div class="skeleton-card" style="margin-bottom: 15px;">
+                              <div style="height: 60px; background: #f0f0f0; border-radius: 8px; margin-bottom: 10px;"></div>
+                              <div style="height: 20px; background: #f0f0f0; border-radius: 4px; margin-bottom: 8px; width: 70%;"></div>
+                              <div style="height: 16px; background: #f0f0f0; border-radius: 4px; width: 50%;"></div>
+                           </div>
+                           <div class="skeleton-card" style="margin-bottom: 15px;">
+                              <div style="height: 60px; background: #f0f0f0; border-radius: 8px; margin-bottom: 10px;"></div>
+                              <div style="height: 20px; background: #f0f0f0; border-radius: 4px; margin-bottom: 8px; width: 70%;"></div>
+                              <div style="height: 16px; background: #f0f0f0; border-radius: 4px; width: 50%;"></div>
+                           </div>
+                        </div>
                      </div>
                   </div>
                </div>
             </div>
          </div>
       </div>
+
       <!-- Path to Framework7 Library Bundle JS-->
       <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
       <!-- jQuery -->

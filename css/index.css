@@ -3382,3 +3382,85 @@ input, select {
     font-size: 13px;
   }
 }
+         /* Estilos para skeleton loading */
+         .loading-skeleton .skeleton-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            animation: skeleton-pulse 1.5s ease-in-out infinite alternate;
+         }
+
+         @keyframes skeleton-pulse {
+            0% { opacity: 1; }
+            100% { opacity: 0.6; }
+         }
+
+         /* Melhorias visuais para estados vazios */
+         .empty-state i, .error-state i {
+            display: block;
+            margin: 0 auto 20px;
+         }
+
+         .empty-state h3, .error-state h3 {
+            margin: 0 0 10px 0;
+            font-size: 20px;
+         }
+
+         .empty-state p, .error-state p {
+            margin: 0 0 20px 0;
+            line-height: 1.5;
+         }
+
+         /* Melhorias no botão carregar mais */
+         #loadMoreButton {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+         }
+
+         #loadMoreButton:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+         }
+
+         #loadMoreButton:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+         }
+
+         /* Animação suave para novos itens */
+         .card-list {
+            animation: slideInUp 0.3s ease-out;
+         }
+
+         @keyframes slideInUp {
+            from {
+               opacity: 0;
+               transform: translateY(20px);
+            }
+            to {
+               opacity: 1;
+               transform: translateY(0);
+            }
+         }
+
+         /* Melhorias responsivas */
+         @media (max-width: 480px) {
+            .dashboard-header {
+               padding: 15px;
+            }
+            
+            .dashboard-header h1 {
+               font-size: 20px;
+            }
+            
+            #loadMoreContainer {
+               padding: 15px !important;
+            }
+            
+            #loadMoreButton {
+               font-size: 14px;
+               padding: 12px 20px;
+            }
+         }

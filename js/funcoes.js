@@ -1244,11 +1244,17 @@ function buscarLinkAfiliado() {
 }
 //Fim Função obter Link Afiliado
 
-//Inicio Funçao listar pedidos tela Pedidos
-function listarPedidos(searchQuery = "") {
-  app.dialog.close();
+//Inicio Funçao listar pedidos tela Pedidos com Paginação
+function listarPedidos(loadMore = false, offset = 0) {
+  if (!loadMore) {
+    app.dialog.preloader("Carregando...");
+  } else {
+    // Mostrar loading no botão "Carregar mais"
+    $("#loadMoreButton").html('<i class="mdi mdi-loading mdi-spin"></i> Carregando...');
+    $("#loadMoreButton").prop('disabled', true);
+  }
+
   var pessoaId = localStorage.getItem("pessoaId");
-  app.dialog.preloader("Carregando...");
 
   // Cabeçalhos da requisição
   const headers = {
@@ -1261,6 +1267,7 @@ function listarPedidos(searchQuery = "") {
     method: "ListarPedidos",
     pessoa_id: pessoaId,
     limit: 15,
+    offset: offset
   });
 
   // Opções da requisição
@@ -1278,62 +1285,107 @@ function listarPedidos(searchQuery = "") {
       if (
         responseJson.status === "success" &&
         responseJson.data &&
-        responseJson.data.data
+        responseJson.data.data &&
+        responseJson.data.data.data
       ) {
-        const pedidos = responseJson.data.data;
+        const pedidos = responseJson.data.data.data;
+        const pagination = responseJson.data.data.pagination;
         const pedidosContainer = document.getElementById("container-pedidos");
-        pedidosContainer.innerHTML = "";
+        
+        // Se não é loadMore, limpa o container
+        if (!loadMore) {
+          pedidosContainer.innerHTML = "";
+        }
+
+        // Se não há pedidos na primeira página
+        if (pedidos.length === 0 && !loadMore) {
+          pedidosContainer.innerHTML = `
+            <div class="empty-state" style="text-align: center; padding: 40px 20px; color: #666;">
+              <i class="mdi mdi-package-variant" style="font-size: 64px; margin-bottom: 20px; color: #ddd;"></i>
+              <h3 style="margin-bottom: 10px;">Nenhum pedido encontrado</h3>
+              <p>Você ainda não fez nenhum pedido.</p>
+            </div>
+          `;
+          app.dialog.close();
+          return;
+        }
+
+        // Remove o botão "Carregar mais" anterior se existir
+        $("#loadMoreContainer").remove();
 
         pedidos.forEach((pedido) => {
           // Lógica condicional para exibir o status correto
           const statusExibir = pedido.status_compra == 3 ? pedido.status_pedido : pedido.mensagem_compra;
           
           const pedidosHTML = `                    
-                          <div class="card-list" 
-                          data-id-pedido="${pedido.id}">
-                             <div class="card-principal">
-                                <div class="card-header open header-pago">
-                                   <div class="date">${formatarData(
-                                     pedido.data_emissao
-                                   )}</div>
-                                   <div class="status">${statusExibir}</div>
-                                </div>
-                                <div class="card-body">
-                                   <div class="name">PEDIDO #${pedido.id}</div>
-                                   <div class="details">
-                                      <div class="detail">
-                                         <span>Nº</span>
-                                         <span>${pedido.id}</span>
-                                      </div>
-                                      <div class="detail">
-                                         <span class="mdi mdi-cash-multiple"></span>
-                                         <span>${pedido.forma_pagamento}</span>
-                                      </div>
-                                      <div class="detail">
-                                         <span>Total</span>
-                                         <span>${formatarMoeda(
-                                           pedido.valor_total
-                                         )}</span>
-                                      </div>
-                                      <div class="detail">
-                                         <span>A pagar</span>
-                                         <span>${formatarMoeda(
-                                           pedido.valor_total
-                                         )}</span>
-                                      </div>
-                                      <div class="items">${
-                                        pedido.quantidade_itens
-                                      }</div>
-                                   </div>
-                                </div>
-                             </div>
-                          </div>
-                      `;
+            <div class="card-list" data-id-pedido="${pedido.id}">
+               <div class="card-principal">
+                  <div class="card-header open header-pago">
+                     <div class="date">${formatarData(pedido.data_emissao)}</div>
+                     <div class="status">${statusExibir}</div>
+                  </div>
+                  <div class="card-body">
+                     <div class="name">PEDIDO #${pedido.id}</div>
+                     <div class="details">
+                        <div class="detail">
+                           <span>Nº</span>
+                           <span>${pedido.id}</span>
+                        </div>
+                        <div class="detail">
+                           <span class="mdi mdi-cash-multiple"></span>
+                           <span>${pedido.forma_pagamento}</span>
+                        </div>
+                        <div class="detail">
+                           <span>Total</span>
+                           <span>${formatarMoeda(pedido.valor_total)}</span>
+                        </div>
+                        <div class="detail">
+                           <span>A pagar</span>
+                           <span>${formatarMoeda(pedido.valor_total)}</span>
+                        </div>
+                        <div class="items">${pedido.quantidade_itens} ${pedido.quantidade_itens === 1 ? 'item' : 'itens'}</div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+          `;
           pedidosContainer.innerHTML += pedidosHTML;
         });
 
-        $(".card-list").click(function () {
-          // Atualiza o ícone de seleção
+        // Adiciona o botão "Carregar mais" se houver mais dados
+        if (pagination.has_more) {
+          const loadMoreHTML = `
+            <div id="loadMoreContainer" style="text-align: center; margin: 30px 0; padding: 20px;">
+              <button id="loadMoreButton" class="btn-large" data-next-offset="${pagination.next_offset}">
+                <i class="mdi mdi-refresh"></i> Carregar mais pedidos
+              </button>
+              <div style="margin-top: 10px; font-size: 14px; color: #666;">
+                Mostrando ${(pagination.current_page - 1) * pagination.per_page + pedidos.length} de ${pagination.total_records} pedidos
+              </div>
+            </div>
+          `;
+          pedidosContainer.innerHTML += loadMoreHTML;
+
+          // Adiciona evento de clique ao botão "Carregar mais"
+          $("#loadMoreButton").off('click').on('click', function() {
+            const nextOffset = $(this).data('next-offset');
+            listarPedidos(true, nextOffset);
+          });
+        } else if (pagination.current_page > 1) {
+          // Se não há mais dados, mas já carregou algumas páginas, mostra mensagem
+          const endMessageHTML = `
+            <div id="loadMoreContainer" style="text-align: center; margin: 30px 0; padding: 20px;">
+              <div style="color: #666; font-size: 14px;">
+                <i class="mdi mdi-check-circle" style="color: #28a745;"></i>
+                Todos os ${pagination.total_records} pedidos foram carregados
+              </div>
+            </div>
+          `;
+          pedidosContainer.innerHTML += endMessageHTML;
+        }
+
+        // Adiciona evento de clique aos pedidos (apenas aos novos)
+        $(".card-list").off('click').on('click', function () {
           var pedidoId = $(this).data("id-pedido");
           localStorage.setItem("pedidoId", pedidoId);
           app.views.main.router.navigate("/resumo-pedido/");
@@ -1343,24 +1395,55 @@ function listarPedidos(searchQuery = "") {
       } else {
         app.dialog.close();
         // Verifica se há uma mensagem de erro definida
-        const errorMessage =
-          responseJson.message || "Formato de dados inválido";
-        app.dialog.alert(
-          "Erro ao carregar pedidos: " + errorMessage,
-          "Falha na requisição!"
-        );
+        const errorMessage = responseJson.message || "Formato de dados inválido";
+        
+        if (!loadMore) {
+          // Se é o primeiro carregamento e deu erro, mostra tela de erro
+          const pedidosContainer = document.getElementById("container-pedidos");
+          pedidosContainer.innerHTML = `
+            <div class="error-state" style="text-align: center; padding: 40px 20px; color: #666;">
+              <i class="mdi mdi-alert-circle" style="font-size: 64px; margin-bottom: 20px; color: #f44336;"></i>
+              <h3 style="margin-bottom: 10px; color: #f44336;">Erro ao carregar pedidos</h3>
+              <p>${errorMessage}</p>
+              <button onclick="listarPedidos()" style="margin-top: 20px; padding: 10px 20px; background: var(--verde-escuro); color: white; border: none; border-radius: 5px;">
+                <i class="mdi mdi-refresh"></i> Tentar novamente
+              </button>
+            </div>
+          `;
+        } else {
+          // Se é carregamento de mais dados, restaura o botão
+          $("#loadMoreButton").html('<i class="mdi mdi-refresh"></i> Carregar mais pedidos');
+          $("#loadMoreButton").prop('disabled', false);
+          app.dialog.alert("Erro ao carregar mais pedidos: " + errorMessage, "Erro");
+        }
       }
     })
     .catch((error) => {
       app.dialog.close();
       console.error("Erro:", error);
-      app.dialog.alert(
-        "Erro ao carregar pedidos: " + error.message,
-        "Falha na requisição!"
-      );
+      
+      if (!loadMore) {
+        // Se é o primeiro carregamento e deu erro, mostra tela de erro
+        const pedidosContainer = document.getElementById("container-pedidos");
+        pedidosContainer.innerHTML = `
+          <div class="error-state" style="text-align: center; padding: 40px 20px; color: #666;">
+            <i class="mdi mdi-wifi-off" style="font-size: 64px; margin-bottom: 20px; color: #f44336;"></i>
+            <h3 style="margin-bottom: 10px; color: #f44336;">Erro de conexão</h3>
+            <p>Verifique sua conexão com a internet e tente novamente.</p>
+            <button onclick="listarPedidos()" style="margin-top: 20px; padding: 10px 20px; background: var(--verde-escuro); color: white; border: none; border-radius: 5px;">
+              <i class="mdi mdi-refresh"></i> Tentar novamente
+            </button>
+          </div>
+        `;
+      } else {
+        // Se é carregamento de mais dados, restaura o botão
+        $("#loadMoreButton").html('<i class="mdi mdi-refresh"></i> Carregar mais pedidos');
+        $("#loadMoreButton").prop('disabled', false);
+        app.dialog.alert("Erro de conexão ao carregar mais pedidos", "Erro");
+      }
     });
 }
-//Fim Função Lista tela Pedidos
+//Fim Função Lista tela Pedidos com Paginação
 
 //Inicio Funçao listar Vendas
 function listarVendas(searchQuery = "") {
