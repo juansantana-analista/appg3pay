@@ -1246,6 +1246,7 @@ function buscarLinkAfiliado() {
 
 //Inicio Funçao listar pedidos tela Pedidos
 function listarPedidos(searchQuery = "") {
+  app.dialog.close();
   var pessoaId = localStorage.getItem("pessoaId");
   app.dialog.preloader("Carregando...");
 
