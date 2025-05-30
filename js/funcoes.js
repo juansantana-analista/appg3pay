@@ -1912,9 +1912,14 @@ function confirmarPagamento(pedidoId) {
     .then((responseJson) => {
       app.dialog.close();
       console.log(responseJson);
-      if (responseJson.data.data.status_compra == 3) {
-        app.dialog.alert('Pagamento Confirmado com Sucesso!');        
-        app.views.main.router.navigate("/pedidos/");
+      if (responseJson.data.data.status_compra == 3) {               
+        app.dialog.confirm(
+              "Pagamento Confirmado com Sucesso!",
+              "Remover",
+              function () {
+                app.views.main.router.navigate("/pedidos/");
+              }
+            );     
       } else {
         app.dialog.alert('Ainda não compensou seu pagamento, aguarde alguns minutos e tente novamente!');
       }
