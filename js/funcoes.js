@@ -1743,6 +1743,9 @@ function detalhesPedido() {
           )
           .join("");
 
+        // Verifica se deve exibir as seções de pagamento (oculta se status_compra == 3)
+        const exibirPagamento = detalhes.status_compra != 3;
+
         // Monta o HTML completo
         const detalhesHTML = `
                       <div class="order-summary">
@@ -1764,9 +1767,10 @@ function detalhesPedido() {
                               <p><strong>Status:</strong> ${
                                 detalhes.mensagem_compra
                               }</p>
-                              <!-- Seção de pagamento -->
+                              <!-- Seção de pagamento PIX -->
                               <div class="payment-method-a display-none" id="pagamentoPix">
                                   <div class="payment-center">
+                                      ${exibirPagamento ? `
                                       <img src="https://vitatop.tecskill.com.br/${
                                         detalhes.pix_qrcode
                                       }" width="250px" alt="QR Code">
@@ -1775,22 +1779,26 @@ function detalhesPedido() {
                                       }</span>
                                       <button class="copy-button" id="copiarPix">Copiar Código Pix</button>
                                       <button class="copy-button" id="jaPagueiPix" style="background-color: #00591f;">Já Paguei</button>
+                                      ` : '<p>Pagamento processado.</p>'}
                                   </div>
                               </div>
-                              <!-- Seção de pagamento -->
+                              <!-- Seção de pagamento BOLETO -->
                               <div class="payment-method-a display-none" id="pagamentoBoleto">
                                   <div class="payment-center">
+                                      ${exibirPagamento ? `
                                       <span class="pix-key" id="linhaBoleto">${
                                         detalhes.boleto_linhadigitavel
                                       }</span>
                                       <button class="copy-button" id="copiarBoleto">Copiar Linha Digitável</button>
                                       <button class="copy-button" id="baixarBoleto">Baixar Boleto PDF</button>
                                       <button class="copy-button" id="jaPagueiBoleto" style="background-color: #00591f;">Já Paguei</button>
+                                      ` : '<p>Pagamento processado.</p>'}
                                   </div>
                               </div>
-                              <!-- Seção de pagamento -->
+                              <!-- Seção de pagamento CARTÃO -->
                               <div class="payment-method-a display-none" id="pagamentoCartao">
                                   <div class="payment-center">
+                                      ${exibirPagamento ? '' : '<p>Pagamento processado.</p>'}
                                   </div>
                               </div>
                           </div>
@@ -1818,48 +1826,54 @@ function detalhesPedido() {
                   `;
 
         detalhesContainer.innerHTML = detalhesHTML;
+        
+        // Só exibe o link "Alterar" se o status_compra != 3
         if (detalhes.status_compra != 3) {
           $(".pagamento-display").removeClass("display-none");
-        } else {
+        } 
+
+        // Só exibe e configura os eventos das seções de pagamento se status_compra != 3
+        if (exibirPagamento) {
           if (detalhes.forma_pagamento == "PIX") {
-            $("#pagamentoPix").removeClass("display-none");
-          } else if (detalhes.forma_pagamento == "BOLETO") {
-            $("#pagamentoBoleto").removeClass("display-none");
-          } else {
-            $("#pagamentoCartao").removeClass("display-none");
+              $("#pagamentoPix").removeClass("display-none");
+            } else if (detalhes.forma_pagamento == "BOLETO") {
+              $("#pagamentoBoleto").removeClass("display-none");
+            } else {
+              $("#pagamentoCartao").removeClass("display-none");
           }
+
+          // Configura os eventos dos botões apenas se os elementos existem
+          $("#copiarPix").on("click", function () {
+            copiarParaAreaDeTransferencia(detalhes.pix_key);
+          });
+
+          $("#jaPagueiPix").on("click", function () {
+            confirmarPagamento(pedidoId);
+          });
+
+          $("#jaPagueiBoleto").on("click", function () {
+            confirmarPagamento(pedidoId);
+          });
+
+          $("#copiarBoleto").on("click", function () {
+            copiarParaAreaDeTransferencia(detalhes.boleto_linhadigitavel);
+          });
+
+          // Baixar boleto
+          $("#baixarBoleto").on("click", function () {
+            app.dialog.confirm(
+              "Deseja baixar o boleto no navegador?",
+              function () {
+                var ref = cordova.InAppBrowser.open(
+                  detalhes.boleto_impressao,
+                  "_system",
+                  "location=no,zoom=no"
+                );
+                ref.show();
+              }
+            );
+          });
         }
-
-        $("#copiarPix").on("click", function () {
-          copiarParaAreaDeTransferencia(detalhes.pix_key);
-        });
-
-        $("#jaPagueiPix").on("click", function () {
-          confirmarPagamento(pedidoId);
-        });
-
-        $("#jaPagueiBoleto").on("click", function () {
-          confirmarPagamento(pedidoId);
-        });
-
-        $("#copiarBoleto").on("click", function () {
-          copiarParaAreaDeTransferencia(detalhes.boleto_linhadigitavel);
-        });
-
-        // Baixar boleto
-        $("#baixarBoleto").on("click", function () {
-          app.dialog.confirm(
-            "Deseja baixar o boleto no navegador?",
-            function () {
-              var ref = cordova.InAppBrowser.open(
-                detalhes.boleto_impressao,
-                "_system",
-                "location=no,zoom=no"
-              );
-              ref.show();
-            }
-          );
-        });
 
         app.dialog.close();
       } else {
