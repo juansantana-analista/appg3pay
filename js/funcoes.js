@@ -2509,9 +2509,9 @@ function saldoCarteira() {
 
         saldo.forEach((item) => {
           if (item.bloqueado === "0") {
-            saldoDisponivel = item.valor_comissao;
+            saldoDisponivel = formatarMoeda(item.valor_comissao);
           } else if (item.bloqueado === "1") {
-            saldoBloqueado = item.valor_comissao;
+            saldoBloqueado = formatarMoeda(item.valor_comissao);
           }
         });
 
