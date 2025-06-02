@@ -2504,8 +2504,8 @@ function saldoCarteira() {
         const saldo = responseJson.data;
 
         // Inicializa os saldos com 0.00
-        let saldoDisponivel = "0.00";
-        let saldoBloqueado = "0.00";
+        let saldoDisponivel = 0.00;
+        let saldoBloqueado = 0.00;
 
         saldo.forEach((item) => {
           if (item.bloqueado === "0") {
@@ -2513,7 +2513,7 @@ function saldoCarteira() {
           } else if (item.bloqueado === "1") {
             saldoBloqueado = formatarMoeda(item.valor_comissao);
           }
-        });
+        }); 
 
         // Atualiza os elementos HTML com os valores
         $("#saldoDisponivel").html(`R$ ${parseFloat(saldoDisponivel).toFixed(2)}`);
