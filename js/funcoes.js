@@ -794,19 +794,21 @@ function buscarProduto() {
             <i class="fa-solid fa-triangle-exclamation"></i>
           </div>
         `;
-      detalhes.contra_indicacoes.forEach((contra) => {
-        const contraItem = document.createElement("div");
-        contraItem.className = "contra-indicacoes-item";
+      // Verifica se há contra-indicações válidas
+      if (Array.isArray(detalhes.contra_indicacoes) && detalhes.contra_indicacoes.length > 0) {
+        detalhes.contra_indicacoes.forEach((contra) => {
+          const contraItem = document.createElement("div");
+          contraItem.className = "contra-indicacoes-item";
 
-        contraItem.innerHTML = `
-                <div class="benefit-content">
-                    <div class="benefit-title">${contra.titulo}</div>
-                    <!--<div>${contra.descricao}</div>-->
-                </div>
-            `;
+          contraItem.innerHTML = `
+            <div class="benefit-content">
+              <div class="benefit-title">${contra.titulo}</div>
+            </div>
+          `;
 
-        contraContainer.appendChild(contraItem);
-      });
+          contraContainer.appendChild(contraItem);
+        });
+      }
 
         localStorage.setItem("produtoDetalhes", JSON.stringify({ detalhes }));
         app.dialog.close();
