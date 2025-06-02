@@ -181,6 +181,31 @@ body {
   margin-bottom: 4px;
 }
 
+.contra-indicacoes {
+  margin: 25px 15px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--medium-gray);
+}
+
+.contra-indicacoes-title {
+  padding: 15px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  background-color: var(--light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contra-indicacoes-item {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-top: 1px solid var(--medium-gray);
+  cursor: pointer;
+}
+
 .view-more {
   color: var(--primary-color);
   font-size: 0.9rem;

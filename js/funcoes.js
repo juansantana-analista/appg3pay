@@ -785,6 +785,29 @@ function buscarProduto() {
         // Inicializa os benefícios do produto
         initializeBenefits(detalhes.beneficios);
 
+
+      const contraContainer = document.querySelector(".contra-indicacoes");
+        // Manter apenas o título dos benefícios
+        contraContainer.innerHTML = `
+          <div class="contra-indicacoes-title">
+            Contra Indicação
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          </div>
+        `;
+      detalhes.contra_indicacoes.forEach((contra) => {
+        const contraItem = document.createElement("div");
+        contraItem.className = "contra-indicacoes-item";
+
+        contraItem.innerHTML = `
+                <div class="benefit-content">
+                    <div class="benefit-title">${contra.titulo}</div>
+                    <div>${contra.descricao}</div>
+                </div>
+            `;
+
+        contraContainer.appendChild(contraItem);
+      });
+
         localStorage.setItem("produtoDetalhes", JSON.stringify({ detalhes }));
         app.dialog.close();
       } else {
