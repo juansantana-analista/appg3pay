@@ -2504,20 +2504,19 @@ function saldoCarteira() {
         const saldo = responseJson.data;
 
         // Inicializa os saldos com 0.00
-        let saldoDisponivel = 0.00;
-        let saldoBloqueado = 0.00;
+        let valorDisponivel = 0.00;
+        let valorBloqueado = 0.00;
 
         saldo.forEach((item) => {
           if (item.bloqueado === "0") {
-            saldoDisponivel = formatarMoeda(item.valor_comissao);
+            valorDisponivel = parseFloat(item.valor_comissao);
           } else if (item.bloqueado === "1") {
-            saldoBloqueado = formatarMoeda(item.valor_comissao);
+            valorBloqueado = parseFloat(item.valor_comissao);
           }
-        }); 
+        });
 
-        // Atualiza os elementos HTML com os valores
-        $("#saldoDisponivel").html(`R$ ${parseFloat(saldoDisponivel).toFixed(2)}`);
-        $("#saldoBloqueado").html(`R$ ${parseFloat(saldoBloqueado).toFixed(2)}`);
+        $("#saldoDisponivel").html(formatarMoeda(valorDisponivel));
+        $("#saldoBloqueado").html(formatarMoeda(valorBloqueado));
       } else {
         console.error("Erro ao obter dados da carteira:", responseJson.message);
       }
