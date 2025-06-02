@@ -2512,9 +2512,12 @@ function saldoCarteira() {
             valorDisponivel = parseFloat(item.valor_comissao);
           } else if (item.bloqueado === "1") {
             valorBloqueado = parseFloat(item.valor_comissao);
+          } else if (item.bloqueado === "total") {
+            valorTotal = parseFloat(item.valor_comissao);
           }
         });
 
+        $("#saldoTotal").html(formatarMoeda(valorTotal));
         $("#saldoDisponivel").html(formatarMoeda(valorDisponivel));
         $("#saldoBloqueado").html(formatarMoeda(valorBloqueado));
       } else {
