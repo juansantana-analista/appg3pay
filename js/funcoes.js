@@ -801,7 +801,7 @@ function buscarProduto() {
         contraItem.innerHTML = `
                 <div class="benefit-content">
                     <div class="benefit-title">${contra.titulo}</div>
-                    <div>${contra.descricao}</div>
+                    <!--<div>${contra.descricao}</div>-->
                 </div>
             `;
 
