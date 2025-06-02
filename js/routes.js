@@ -671,6 +671,32 @@ var app = new Framework7({
           $('#updateData').on('click', function () {
             location.reload();
           });
+              // Alternar visibilidade do saldo
+    $('#toggleBalance').on('click', function () {
+      $('#saldoTotal').toggleClass('hidden');
+      $('#saldoMask').toggleClass('hidden');
+      $('#eyeIcon').toggleClass('mdi-eye mdi-eye-off');
+    });
+
+    // Abertura dos popups com Framework7
+    const appPopup = app.popup;
+
+    $('#btnSacar').on('click', function () {
+      appPopup.open('.popup-saque');
+    });
+
+    $('#btnExtrato').on('click', function () {
+      appPopup.open('.popup-extrato');
+    });
+
+    $('#btnTransferir').on('click', function () {
+      appPopup.open('.popup-transferir');
+    });
+
+    // Compartilhar link
+    $('.abrir-popup').on('click', function () {
+      appPopup.open('.popup-compartilhar');
+    });
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM      
