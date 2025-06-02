@@ -681,16 +681,19 @@ var app = new Framework7({
     // Abertura dos popups com Framework7
     const appPopup = app.popup;
 
-    $('#btnSacar').on('click', function () {
-      appPopup.open('.popup-saque');
+    $('#btnSacar').on('click', function () {      
+      app.dialog.alert("Funcionalidade em desenvolvimento, disponível em Breve!", "Em Breve!");
+      //appPopup.open('.popup-saque');
     });
 
     $('#btnExtrato').on('click', function () {
-      appPopup.open('.popup-extrato');
+      app.dialog.alert("Funcionalidade em desenvolvimento, disponível em Breve!", "Em Breve!");
+      //appPopup.open('.popup-extrato');
     });
 
     $('#btnTransferir').on('click', function () {
-      appPopup.open('.popup-transferir');
+      app.dialog.alert("Funcionalidade em desenvolvimento, disponível em Breve!", "Em Breve!");
+      //appPopup.open('.popup-transferir');
     });
 
     // Compartilhar link
