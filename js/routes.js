@@ -660,7 +660,8 @@ var app = new Framework7({
             $("#nomeUsuarioHome").html(doisPrimeirosNomes);
           }
           
-          onDashboard();         
+          onDashboard();    
+          saldoCarteira();     
 
           $('.abrir-popup').on('click', function (e) {
             e.preventDefault(); // Prevent default link behavior

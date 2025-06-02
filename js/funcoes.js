@@ -2472,6 +2472,65 @@ function apagarNotificacao(notificacaoId) {
 }
 // Fim da Funçao que apaga a notificação
 
+//Inicio Funçao Saldo da Carteira
+function saldoCarteira() {
+  app.dialog.preloader("Carregando...");
+
+  var pessoaId = localStorage.getItem("pessoaId");
+
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "BonusPremioService",
+    method: "SaldoTotal",
+    pessoa_id: pessoaId
+  });
+
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      app.dialog.close(); // Fechar o loader aqui já é mais seguro
+
+      if (responseJson.status === "success") {
+        const saldo = responseJson.data;
+
+        // Inicializa os saldos com 0.00
+        let saldoDisponivel = "0.00";
+        let saldoBloqueado = "0.00";
+
+        saldo.forEach((item) => {
+          if (item.bloqueado === "0") {
+            saldoDisponivel = item.valor_comissao;
+          } else if (item.bloqueado === "1") {
+            saldoBloqueado = item.valor_comissao;
+          }
+        });
+
+        // Atualiza os elementos HTML com os valores
+        $("#saldoDisponivel").html(`R$ ${parseFloat(saldoDisponivel).toFixed(2)}`);
+        $("#saldoBloqueado").html(`R$ ${parseFloat(saldoBloqueado).toFixed(2)}`);
+      } else {
+        console.error("Erro ao obter dados da carteira:", responseJson.message);
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+      app.dialog.alert("Erro ao obter dados da carteira Digital: " + error.message, "Falha na requisição!");
+    });
+}
+
+//Fim Função Saldo da Carteira
+
 //Inicio Funçao Listar Categorias
 function listarCategoriasCurso() {
   app.dialog.preloader("Carregando...");
