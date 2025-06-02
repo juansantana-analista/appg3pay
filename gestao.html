@@ -13,6 +13,7 @@
       <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
       <!-- CSS PERSONALIZADO PARA MENU-->
       <link rel="stylesheet" href="css/index.css" />
+      <link rel="stylesheet" href="css/gestao.css" />
       <!--Ícones Material Design-->
       <link rel="stylesheet" href="css/materialdesignicons.min.css" />
       <!-- Icones do Remix icon-->
@@ -52,6 +53,50 @@
                   <h1>Gestão do Distribuidor</h1>
                   <p>Acompanhe sua performance e lucros</p>
                </div>
+
+               <!-- Wallet Card Section -->
+               <div class="dashboard-section">
+                  <h2 class="section-title">Carteira Digital</h2>
+                  <div class="wallet-card">
+                     <div class="wallet-background">
+                        <div class="wallet-pattern"></div>
+                     </div>
+                     <div class="wallet-content">
+                        <div class="wallet-header">
+                           <div class="wallet-title">
+                              <i class="mdi mdi-wallet"></i>
+                              <span>Saldo Total</span>
+                           </div>
+                           <button class="toggle-balance" id="toggleBalance">
+                              <i class="mdi mdi-eye-outline"></i>
+                           </button>
+                        </div>
+                        
+                        <div class="wallet-balance">
+                           <div class="balance-item">
+                              <span class="balance-label">Disponível</span>
+                              <span class="balance-value" id="saldoDisponivel">R$ ****</span>
+                           </div>
+                           <div class="balance-item">
+                              <span class="balance-label">Bloqueado</span>
+                              <span class="balance-value bloqueado" id="saldoBloqueado">R$ ****</span>
+                           </div>
+                        </div>
+
+                        <div class="wallet-actions">
+                           <button class="wallet-button" id="btnSacar">
+                              <i class="mdi mdi-cash-multiple"></i>
+                              Sacar
+                           </button>
+                           <button class="wallet-button" id="btnExtrato">
+                              <i class="mdi mdi-file-document-outline"></i>
+                              Extrato
+                           </button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
                <!-- Dashboard Summary Cards -->
                <div class="dashboard-section">
                   <h2 class="section-title">Resumo</h2>
@@ -63,10 +108,6 @@
                         </div>
                         <div class="card-title">Lucro</div>
                         <div class="card-value" id="valorComissao">R$ 0,00</div>
-                        <!--<div class="trend up">
-                           <i class="mdi mdi-arrow-up"></i>
-                           <span>12.5% esse mês</span>
-                           </div>--> 
                      </div>
                      <!-- Vendas no Mês -->
                      <div class="summary-card vendas-mes">
@@ -75,10 +116,6 @@
                         </div>
                         <div class="card-title">Vendas no Mês</div>
                         <div class="card-value" id="valorVenda">R$ 0,00</div>
-                        <!--<div class="trend up">
-                           <i class="mdi mdi-arrow-up"></i>
-                           <span>8.3% vs. anterior</span>
-                           </div>--> 
                      </div>
                      <!-- Clientes Indicados -->
                      <div class="summary-card afiliados-ativos">
@@ -87,10 +124,6 @@
                         </div>
                         <div class="card-title">Indicados Ativos</div>
                         <div class="card-value" id="qtdeGeral">0</div>
-                        <!--<div class="trend up">
-                           <i class="mdi mdi-arrow-up"></i>
-                           <span>4 novos</span>
-                           </div>--> 
                      </div>
                      <!-- Nível do Parceiro -->
                      <div class="summary-card">
@@ -99,19 +132,10 @@
                         </div>
                         <div class="card-title">Distribuidor</div>
                         <div class="card-value"><span class="level-badge gold">Independente</span></div>
-                        <!--<div class="trend">
-                           <span>75% até Premium</span>
-                           </div>--> 
                      </div>
                   </div>
                </div>
-               <!-- Dashboard Chart Section -->
-               <div class="dashboard-section display-none">
-                  <h2 class="section-title">Ganhos Mensais</h2>
-                  <div class="chart-container">
-                     <canvas id="earningsChart"></canvas>
-                  </div>
-               </div>
+
                <!-- Referral link card section -->
                <div class="dashboard-section">
                   <h2 class="section-title">Link de Indicação</h2>
@@ -127,34 +151,141 @@
                      </div>
                   </div>
                </div>
+
                <!-- Dashboard Transactions Section -->
                <div class="dashboard-section">
                   <h2 class="section-title">Últimas Transações</h2>
                   <div class="transaction-list">
-                     <!-- Transaction Item 1 
-                        <div class="transaction-item">
-                          <div class="transaction-icon serasa">
-                            <i class="ri-bank-line"></i>
-                          </div>
-                          <div class="transaction-info">
-                            <div class="transaction-product">Serasa Premium</div>
-                            <div class="transaction-detail">
-                              <span>15 Mai 2025</span>
-                              <span class="status-badge paid">Pago</span>
-                            </div>
-                          </div>
-                          <div class="transaction-amount">
-                            <div>R$ 29,90</div>
-                            <div class="transaction-commission">+ R$ 5,98</div>
-                          </div>
-                        </div>
-                        -->
+                     <!-- Transações serão carregadas dinamicamente -->
                   </div>
                </div>
+
                <!-- Refresh Button -->
                <button class="refresh-button" id="updateData">
                <i class="mdi mdi-refresh"></i>
                </button>
+
+               <!-- POPUP SAQUE -->
+               <div class="popup popup-saque">
+                  <div class="view popup-view">
+                     <div class="page">
+                        <div class="top-nav">
+                           <div class="left">
+                              <a href="#" class="link btn-novo popup-close">
+                              <i class="mdi mdi-arrow-left"></i>
+                              </a>
+                           </div>
+                           <strong class="title-descricao">
+                           <i class="ri-bank-line"></i> Solicitar Saque
+                           </strong>
+                           <div style="width: 30px;"></div>
+                        </div>
+                        <div class="page-content">
+                           <div class="saque-container">
+                              <div class="saldo-info">
+                                 <div class="saldo-header">
+                                    <i class="mdi mdi-wallet"></i>
+                                    <span>Saldo Disponível</span>
+                                 </div>
+                                 <div class="saldo-value" id="saldoDisponivelSaque">R$ 0,00</div>
+                              </div>
+
+                              <div class="form-saque">
+                                 <div class="form-group">
+                                    <label>Valor do Saque</label>
+                                    <div class="input-group">
+                                       <span class="input-prefix">R$</span>
+                                       <input type="text" id="valorSaque" placeholder="0,00" class="form-control">
+                                    </div>
+                                    <small class="text-muted">Mínimo: R$ 50,00</small>
+                                 </div>
+
+                                 <div class="form-group">
+                                    <label>Tipo de Chave PIX</label>
+                                    <select id="tipoChavePix" class="form-control">
+                                       <option value="">Selecione...</option>
+                                       <option value="cpf">CPF</option>
+                                       <option value="email">E-mail</option>
+                                       <option value="telefone">Telefone</option>
+                                       <option value="aleatoria">Chave Aleatória</option>
+                                    </select>
+                                 </div>
+
+                                 <div class="form-group">
+                                    <label>Chave PIX</label>
+                                    <input type="text" id="chavePix" placeholder="Digite sua chave PIX" class="form-control">
+                                 </div>
+
+                                 <div class="info-box">
+                                    <i class="mdi mdi-information-outline"></i>
+                                    <div>
+                                       <p><strong>Prazo de processamento:</strong> Até 2 dias úteis</p>
+                                       <p><strong>Taxa:</strong> Isento</p>
+                                    </div>
+                                 </div>
+
+                                 <button class="btn-solicitar-saque" id="confirmarSaque">
+                                    <i class="mdi mdi-check"></i>
+                                    Solicitar Saque
+                                 </button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <!-- POPUP EXTRATO -->
+               <div class="popup popup-extrato">
+                  <div class="view popup-view">
+                     <div class="page">
+                        <div class="top-nav">
+                           <div class="left">
+                              <a href="#" class="link btn-novo popup-close">
+                              <i class="mdi mdi-arrow-left"></i>
+                              </a>
+                           </div>
+                           <strong class="title-descricao">
+                           <i class="ri-file-list-3-line"></i> Extrato Detalhado
+                           </strong>
+                           <div style="width: 30px;"></div>
+                        </div>
+                        <div class="page-content">
+                           <div class="extrato-container">
+                              <div class="extrato-header">
+                                 <div class="periodo-selector">
+                                    <button class="periodo-btn active" data-periodo="7">7 dias</button>
+                                    <button class="periodo-btn" data-periodo="30">30 dias</button>
+                                    <button class="periodo-btn" data-periodo="90">90 dias</button>
+                                 </div>
+                              </div>
+
+                              <div class="extrato-resumo">
+                                 <div class="resumo-item entrada">
+                                    <i class="mdi mdi-arrow-down-circle"></i>
+                                    <div>
+                                       <span class="resumo-label">Entradas</span>
+                                       <span class="resumo-value" id="totalEntradas">R$ 0,00</span>
+                                    </div>
+                                 </div>
+                                 <div class="resumo-item saida">
+                                    <i class="mdi mdi-arrow-up-circle"></i>
+                                    <div>
+                                       <span class="resumo-label">Saídas</span>
+                                       <span class="resumo-value" id="totalSaidas">R$ 0,00</span>
+                                    </div>
+                                 </div>
+                              </div>
+
+                              <div class="extrato-list" id="extratoList">
+                                 <!-- Lista de transações será carregada aqui -->
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
                <!-- INÍCIO POPUP COMPARTILHAR LINK -->
                <div class="popup popup-compartilhar">
                   <div class="view popup-view">
@@ -169,16 +300,10 @@
                            <i class="ri-share-2-line"></i> Compartilhar Link
                            </strong>
                            <div style="width: 30px;"></div>
-                           <!-- Espaço em branco para balancear o cabeçalho -->
                         </div>
                         <div class="page-content">
                            <div class="container-link">
                               <div class="card-link">
-                                 <!--
-                                 <div class="qr-container">
-                                    <div id="qrcode"></div>
-                                 </div>
-                                 -->
                                  <div class="share-info">
                                     <div style="color: #2d3436; font-weight: 600; margin-bottom: 12px;">
                                        Link de Indicação de Cadastro
