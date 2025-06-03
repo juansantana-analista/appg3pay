@@ -365,9 +365,14 @@ function showSwipeHint() {
 //Fim Função Lista categorias
 
 //Inicio Funçao listar produtos tela Home
-// Updated listarProdutos function to match the new single-line layout
-function listarProdutos(searchQuery = "", categoriaId) {
-  app.dialog.preloader("Carregando...");
+function listarProdutos(searchQuery = "", categoriaId, loadMore = false, offset = 0) {
+  if (!loadMore) {
+    app.dialog.preloader("Carregando...");
+  } else {
+    // Mostrar loading no botão "Carregar mais"
+    $("#loadMoreButton").html('<i class="mdi mdi-loading mdi-spin"></i> Carregando...');
+    $("#loadMoreButton").prop('disabled', true);
+  }
 
   var imgUrl = "https://vitatop.tecskill.com.br/";
 
@@ -382,7 +387,8 @@ function listarProdutos(searchQuery = "", categoriaId) {
     method: "listarProdutos",
     categoria_id: categoriaId,
     search: searchQuery,
-    limit: 30,
+    limit: 15, // Reduzido para paginação
+    offset: offset
   });
 
   // Opções da requisição
@@ -396,28 +402,50 @@ function listarProdutos(searchQuery = "", categoriaId) {
   fetch(apiServerUrl, options)
     .then((response) => response.json())
     .then((responseJson) => {
-      // Verifica se o status é 'success' e se há dados de pedidos
+      // Verifica se o status é 'success' e se há dados de produtos
       if (
         responseJson.status === "success" &&
         responseJson.data &&
         responseJson.data.data
       ) {
         const produtos = responseJson.data.data;
-        $("#container-produtos").empty();
+        const pagination = responseJson.data.pagination;
+        const produtosContainer = document.getElementById("container-produtos");
+        
+        // Se não é loadMore, limpa o container e remove skeletons
+        if (!loadMore) {
+          produtosContainer.innerHTML = "";
+          $(".loading-skeleton").remove();
+        }
+
+        // Se não há produtos na primeira página
+        if (produtos.length === 0 && !loadMore) {
+          produtosContainer.innerHTML = `
+            <div class="empty-state" style="text-align: center; padding: 40px 20px; color: #666;">
+              <i class="mdi mdi-package-variant" style="font-size: 64px; margin-bottom: 20px; color: #ddd;"></i>
+              <h3 style="margin-bottom: 10px;">Nenhum produto encontrado</h3>
+              <p>Tente uma busca diferente ou explore outras categorias.</p>
+            </div>
+          `;
+          app.dialog.close();
+          return;
+        }
+
+        // Remove o botão "Carregar mais" anterior se existir
+        $("#loadMoreContainer").remove();
 
         produtos.forEach((produto) => {
           var produtoPreco = formatarMoeda(produto.preco_lojavirtual);
 
-          var imgUrl = "https://vitatop.tecskill.com.br/";
           const imagemProduto = produto.foto
             ? imgUrl + produto.foto
             : "img/default.png";
-          const nomeProduto = truncarNome(produto.nome, 40); // Increased character limit
+          const nomeProduto = truncarNome(produto.nome, 40);
           const rating = 5;
 
           var produtoHTML = `
                   <!-- ITEM CARD-->
-                  <div class="item-card">
+                  <div class="item-card card-list" style="animation: slideInUp 0.3s ease-out;">
                       <a data-id="${produto.id}" 
                       data-nome="${produto.nome}" 
                       data-preco="${produto.preco}"
@@ -442,7 +470,7 @@ function listarProdutos(searchQuery = "", categoriaId) {
                       </a>
                   </div>
                   `;
-          $("#container-produtos").append(produtoHTML);
+          produtosContainer.innerHTML += produtoHTML;
 
           // Selecionar as estrelas apenas do produto atual
           const stars = $("#container-produtos")
@@ -456,8 +484,42 @@ function listarProdutos(searchQuery = "", categoriaId) {
           }
         });
 
-        // Adicionar evento de clique
-        $(".item").on("click", function () {
+        // Adiciona o botão "Carregar mais" se houver mais dados
+        if (pagination && pagination.has_more) {
+          const loadMoreHTML = `
+            <div id="loadMoreContainer" style="text-align: center; margin: 30px 0; padding: 20px;">
+              <button id="loadMoreButton" class="btn-large" data-next-offset="${pagination.next_offset}" data-search="${searchQuery}" data-categoria="${categoriaId || ''}">
+                <i class="mdi mdi-refresh"></i> Carregar mais produtos
+              </button>
+              <div style="margin-top: 10px; font-size: 14px; color: #666;">
+                Mostrando ${(pagination.current_page - 1) * pagination.per_page + produtos.length} de ${pagination.total_records} produtos
+              </div>
+            </div>
+          `;
+          produtosContainer.innerHTML += loadMoreHTML;
+
+          // Adiciona evento de clique ao botão "Carregar mais"
+          $("#loadMoreButton").off('click').on('click', function() {
+            const nextOffset = $(this).data('next-offset');
+            const searchQuery = $(this).data('search');
+            const categoriaId = $(this).data('categoria');
+            listarProdutos(searchQuery, categoriaId === '' ? undefined : categoriaId, true, nextOffset);
+          });
+        } else if (pagination && pagination.current_page > 1) {
+          // Se não há mais dados, mas já carregou algumas páginas, mostra mensagem
+          const endMessageHTML = `
+            <div id="loadMoreContainer" style="text-align: center; margin: 30px 0; padding: 20px;">
+              <div style="color: #666; font-size: 14px;">
+                <i class="mdi mdi-check-circle" style="color: #28a745;"></i>
+                Todos os ${pagination.total_records} produtos foram carregados
+              </div>
+            </div>
+          `;
+          produtosContainer.innerHTML += endMessageHTML;
+        }
+
+        // Adicionar evento de clique aos produtos (apenas aos novos)
+        $(".item").off('click').on('click', function () {
           var id = $(this).attr("data-id");
           var nomeProduto = $(this).attr("data-nome");
           var preco = $(this).attr("data-preco");
@@ -486,8 +548,159 @@ function listarProdutos(searchQuery = "", categoriaId) {
         // Verifica se há uma mensagem de erro definida
         const errorMessage =
           responseJson.message || "Formato de dados inválido";
+        
+        if (!loadMore) {
+          // Se é o primeiro carregamento e deu erro, mostra tela de erro
+          const produtosContainer = document.getElementById("container-produtos");
+          produtosContainer.innerHTML = `
+            <div class="error-state" style="text-align: center; padding: 40px 20px; color: #666;">
+              <i class="mdi mdi-alert-circle" style="font-size: 64px; margin-bottom: 20px; color: #f44336;"></i>
+              <h3 style="margin-bottom: 10px; color: #f44336;">Erro ao carregar produtos</h3>
+              <p>${errorMessage}</p>
+              <button onclick="listarProdutos('', undefined)" style="margin-top: 20px; padding: 10px 20px; background: var(--verde-escuro); color: white; border: none; border-radius: 5px;">
+                <i class="mdi mdi-refresh"></i> Tentar novamente
+              </button>
+            </div>
+          `;
+        } else {
+          // Se é carregamento de mais dados, restaura o botão
+          $("#loadMoreButton").html('<i class="mdi mdi-refresh"></i> Carregar mais produtos');
+          $("#loadMoreButton").prop('disabled', false);
+          app.dialog.alert("Erro ao carregar mais produtos: " + errorMessage, "Erro");
+        }
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+      
+      if (!loadMore) {
+        // Se é o primeiro carregamento e deu erro, mostra tela de erro
+        const produtosContainer = document.getElementById("container-produtos");
+        produtosContainer.innerHTML = `
+          <div class="error-state" style="text-align: center; padding: 40px 20px; color: #666;">
+            <i class="mdi mdi-wifi-off" style="font-size: 64px; margin-bottom: 20px; color: #f44336;"></i>
+            <h3 style="margin-bottom: 10px; color: #f44336;">Erro de conexão</h3>
+            <p>Verifique sua conexão com a internet e tente novamente.</p>
+            <button onclick="listarProdutos('', undefined)" style="margin-top: 20px; padding: 10px 20px; background: var(--verde-escuro); color: white; border: none; border-radius: 5px;">
+              <i class="mdi mdi-refresh"></i> Tentar novamente
+            </button>
+          </div>
+        `;
+      } else {
+        // Se é carregamento de mais dados, restaura o botão
+        $("#loadMoreButton").html('<i class="mdi mdi-refresh"></i> Carregar mais produtos');
+        $("#loadMoreButton").prop('disabled', false);
+        app.dialog.alert("Erro de conexão ao carregar mais produtos", "Erro");
+      }
+    });
+}
+
+// Função atualizada para lidar com mudanças de categoria
+function listarCategorias() {
+  app.dialog.preloader("Carregando...");
+
+  // Cabeçalhos da requisição
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "ProdutoCategoriaRest",
+    method: "listarCategorias",
+  });
+
+  // Opções da requisição
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  // Fazendo a requisição
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // Verifica se o status é 'success' e se há dados de categorias
+      if (
+        responseJson.status === "success" &&
+        responseJson.data &&
+        responseJson.data.data
+      ) {
+        const categorias = responseJson.data.data;
+
+        // Limpar o container de categorias
+        $("#container-categorias").empty();
+
+        // Adiciona a opção Todas ao inicio
+        var opcaoTodasHTML = `
+          <div class="category-item active" data-id="todas">
+            <div class="category-icon">
+              <i class="mdi mdi-apps"></i>
+            </div>
+            <div class="category-name">Todas</div>
+          </div>
+        `;
+        $("#container-categorias").append(opcaoTodasHTML);
+
+        // Adicione cada categoria
+        categorias.forEach((categoria) => {
+          var categoriaHTML = `
+            <div class="category-item" data-id="${categoria.id}">
+              <div class="category-icon">
+                <i class="${categoria.icone}"></i>
+              </div>
+              <div class="category-name">${categoria.nome}</div>
+            </div>
+          `;
+
+          $("#container-categorias").append(categoriaHTML);
+        });
+
+        // Adicione manipuladores de eventos para os itens de categoria
+        $(".category-item").on("click", function () {
+          // Remove a classe ativa de todos os itens
+          $(".category-item").removeClass("active");
+
+          // Adiciona a classe ativa ao item clicado
+          $(this).addClass("active");
+
+          // Pega o id da categoria clicada
+          var categoriaId = $(this).data("id");
+
+          // Se for "todas", define como undefined para listar todos os produtos
+          if (categoriaId === "todas") {
+            categoriaId = undefined;
+          }
+
+          // Chama a função listarProdutos com o id da categoria (resetando a paginação)
+          listarProdutos("", categoriaId, false, 0);
+
+          // Centraliza o item selecionado
+          scrollToCategory(this);
+
+          // Atualiza os indicadores de rolagem
+          updateScrollIndicators();
+        });
+
+        // Configurar os indicadores de rolagem
+        setupScrollIndicators();
+
+        // Configurar botões de rolagem
+        setupScrollButtons();
+
+        // Mostrar dica de rolagem na primeira vez
+        showSwipeHint();
+
+        app.dialog.close();
+      } else {
+        app.dialog.close();
+        // Verifica se há uma mensagem de erro definida
+        const errorMessage =
+          responseJson.message || "Formato de dados inválido";
         app.dialog.alert(
-          "Erro ao carregar produtos: " + errorMessage,
+          "Erro ao carregar categorias: " + errorMessage,
           "Falha na requisição!"
         );
       }
@@ -496,7 +709,7 @@ function listarProdutos(searchQuery = "", categoriaId) {
       app.dialog.close();
       console.error("Erro:", error);
       app.dialog.alert(
-        "Erro ao carregar produtos: " + error.message,
+        "Erro ao carregar categorias: " + error.message,
         "Falha na requisição!"
       );
     });

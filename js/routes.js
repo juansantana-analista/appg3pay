@@ -1116,7 +1116,7 @@ var app = new Framework7({
 
           listarBanners();
           listarCategorias();
-          listarProdutos();
+          listarProdutos("", undefined, false, 0);
           buscarQtdeNotif();
           contarCarrinho();
     
