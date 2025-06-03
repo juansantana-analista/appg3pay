@@ -1471,9 +1471,16 @@ function listarPedidos(loadMore = false, offset = 0) {
 //Fim Função Lista tela Pedidos com Paginação
 
 //Inicio Funçao listar Vendas
-function listarVendas(searchQuery = "") {
+function listarVendas(loadMore = false, offset = 0) {
+  if (!loadMore) {
+    app.dialog.preloader("Carregando...");
+  } else {
+    // Mostrar loading no botão "Carregar mais"
+    $("#loadMoreButton").html('<i class="mdi mdi-loading mdi-spin"></i> Carregando...');
+    $("#loadMoreButton").prop('disabled', true);
+  }
+
   var pessoaId = localStorage.getItem("pessoaId");
-  app.dialog.preloader("Carregando...");
 
   // Cabeçalhos da requisição
   const headers = {
@@ -1481,9 +1488,11 @@ function listarVendas(searchQuery = "") {
     Authorization: "Bearer " + userAuthToken,
   };
 
-  // Cabeçalhos da requisição
+  // Cabeçalhos da requisição - incluindo paginação
   const dados = {
     vendedor: pessoaId,
+    limit: 15,
+    offset: offset
   };
 
   const body = JSON.stringify({
@@ -1503,68 +1512,106 @@ function listarVendas(searchQuery = "") {
   fetch(apiServerUrl, options)
     .then((response) => response.json())
     .then((responseJson) => {
-      // Verifica se o status é 'success' e se há dados de pedidos
+      // Verifica se o status é 'success' e se há dados de vendas
       if (
         responseJson.status === "success" &&
         responseJson.data.status === "success"
       ) {
         const vendas = responseJson.data.data;
+        const pagination = responseJson.data.pagination;
         const vendasContainer = document.getElementById("container-vendas");
-        vendasContainer.innerHTML = "";
+        
+        // Se não é loadMore, limpa o container
+        if (!loadMore) {
+          vendasContainer.innerHTML = "";
+        }
+
+        // Se não há vendas na primeira página
+        if (vendas.length === 0 && !loadMore) {
+          vendasContainer.innerHTML = `
+            <div class="empty-state" style="text-align: center; padding: 40px 20px; color: #666;">
+              <i class="mdi mdi-cart-outline" style="font-size: 64px; margin-bottom: 20px; color: #ddd;"></i>
+              <h3 style="margin-bottom: 10px;">Nenhuma venda encontrada</h3>
+              <p>Você ainda não realizou nenhuma venda.</p>
+            </div>
+          `;
+          app.dialog.close();
+          return;
+        }
+
+        // Remove o botão "Carregar mais" anterior se existir
+        $("#loadMoreContainer").remove();
 
         vendas.forEach((venda) => {
           const vendasHTML = `                    
-                          <div class="card-list" 
-                          data-id-venda="${venda.venda_id}">
-                             <div class="card-principal">
-                                <div class="card-header open header-pago">
-                                   <div class="date">${formatarData(
-                                     venda.data_criacao
-                                   )}</div>
-                                   <div class="status">${
-                                     venda.status_compra
-                                   }</div>
-                                </div>
-                                <div class="card-body">
-                                   <div class="name">PEDIDO #${
-                                     venda.venda_id
-                                   }</div>
-                                   <div class="details">
-                                      <div class="detail">
-                                         <span>Nº</span>
-                                         <span>${venda.venda_id}</span>
-                                      </div>
-                                      <div class="detail">
-                                         <span class="mdi mdi-cash-multiple"></span>
-                                         <span>${
-                                           venda.forma_pagamento.forma
-                                         }</span>
-                                      </div>
-                                      <div class="detail">
-                                         <span>Total</span>
-                                         <span>${formatarMoeda(
-                                           venda.valor_total
-                                         )}</span>
-                                      </div>
-                                      <div class="detail">
-                                         <span>A pagar</span>
-                                         <span>${formatarMoeda(
-                                           venda.valor_total
-                                         )}</span>
-                                      </div>
-                                      <div class="items">${
-                                        venda.quantidade_itens
-                                      }</div>
-                                   </div>
-                                </div>
-                             </div>
-                          </div>
-                      `;
+            <div class="card-list" data-id-venda="${venda.venda_id}">
+               <div class="card-principal">
+                  <div class="card-header open header-pago">
+                     <div class="date">${formatarData(venda.data_criacao)}</div>
+                     <div class="status">${venda.status_compra}</div>
+                  </div>
+                  <div class="card-body">
+                     <div class="name">VENDA #${venda.venda_id}</div>
+                     <div class="details">
+                        <div class="detail">
+                           <span>Nº</span>
+                           <span>${venda.venda_id}</span>
+                        </div>
+                        <div class="detail">
+                           <span class="mdi mdi-cash-multiple"></span>
+                           <span>${venda.forma_pagamento.forma}</span>
+                        </div>
+                        <div class="detail">
+                           <span>Total</span>
+                           <span>${formatarMoeda(venda.valor_total)}</span>
+                        </div>
+                        <div class="detail">
+                           <span>Cliente</span>
+                           <span>${truncarNome(venda.cliente.nome_completo, 15)}</span>
+                        </div>
+                        <div class="items">${venda.quantidade_itens} ${venda.quantidade_itens === 1 ? 'item' : 'itens'}</div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+          `;
           vendasContainer.innerHTML += vendasHTML;
         });
 
-        $(".card-list").click(function () {
-          // Atualiza o ícone de seleção
+        // Adiciona o botão "Carregar mais" se houver mais dados
+        if (pagination && pagination.has_more) {
+          const loadMoreHTML = `
+            <div id="loadMoreContainer" style="text-align: center; margin: 30px 0; padding: 20px;">
+              <button id="loadMoreButton" class="btn-large" data-next-offset="${pagination.next_offset}">
+                <i class="mdi mdi-refresh"></i> Carregar mais vendas
+              </button>
+              <div style="margin-top: 10px; font-size: 14px; color: #666;">
+                Mostrando ${(pagination.current_page - 1) * pagination.per_page + vendas.length} de ${pagination.total_records} vendas
+              </div>
+            </div>
+          `;
+          vendasContainer.innerHTML += loadMoreHTML;
+
+          // Adiciona evento de clique ao botão "Carregar mais"
+          $("#loadMoreButton").off('click').on('click', function() {
+            const nextOffset = $(this).data('next-offset');
+            listarVendas(true, nextOffset);
+          });
+        } else if (pagination && pagination.current_page > 1) {
+          // Se não há mais dados, mas já carregou algumas páginas, mostra mensagem
+          const endMessageHTML = `
+            <div id="loadMoreContainer" style="text-align: center; margin: 30px 0; padding: 20px;">
+              <div style="color: #666; font-size: 14px;">
+                <i class="mdi mdi-check-circle" style="color: #28a745;"></i>
+                Todas as ${pagination.total_records} vendas foram carregadas
+              </div>
+            </div>
+          `;
+          vendasContainer.innerHTML += endMessageHTML;
+        }
+
+        // Adiciona evento de clique às vendas (apenas aos novos)
+        $(".card-list").off('click').on('click', function () {
           var vendaId = $(this).data("id-venda");
           localStorage.setItem("vendaId", vendaId);
           app.views.main.router.navigate("/resumo-venda/");
@@ -1574,21 +1621,52 @@ function listarVendas(searchQuery = "") {
       } else {
         app.dialog.close();
         // Verifica se há uma mensagem de erro definida
-        const errorMessage =
-          responseJson.message || "Formato de dados inválido";
-        app.dialog.alert(
-          "Erro ao carregar vendas: " + errorMessage,
-          "Falha na requisição!"
-        );
+        const errorMessage = responseJson.message || "Formato de dados inválido";
+        
+        if (!loadMore) {
+          // Se é o primeiro carregamento e deu erro, mostra tela de erro
+          const vendasContainer = document.getElementById("container-vendas");
+          vendasContainer.innerHTML = `
+            <div class="error-state" style="text-align: center; padding: 40px 20px; color: #666;">
+              <i class="mdi mdi-alert-circle" style="font-size: 64px; margin-bottom: 20px; color: #f44336;"></i>
+              <h3 style="margin-bottom: 10px; color: #f44336;">Erro ao carregar vendas</h3>
+              <p>${errorMessage}</p>
+              <button onclick="listarVendas()" style="margin-top: 20px; padding: 10px 20px; background: var(--verde-escuro); color: white; border: none; border-radius: 5px;">
+                <i class="mdi mdi-refresh"></i> Tentar novamente
+              </button>
+            </div>
+          `;
+        } else {
+          // Se é carregamento de mais dados, restaura o botão
+          $("#loadMoreButton").html('<i class="mdi mdi-refresh"></i> Carregar mais vendas');
+          $("#loadMoreButton").prop('disabled', false);
+          app.dialog.alert("Erro ao carregar mais vendas: " + errorMessage, "Erro");
+        }
       }
     })
     .catch((error) => {
       app.dialog.close();
       console.error("Erro:", error);
-      app.dialog.alert(
-        "Erro ao carregar vendas: " + error.message,
-        "Falha na requisição!"
-      );
+      
+      if (!loadMore) {
+        // Se é o primeiro carregamento e deu erro, mostra tela de erro
+        const vendasContainer = document.getElementById("container-vendas");
+        vendasContainer.innerHTML = `
+          <div class="error-state" style="text-align: center; padding: 40px 20px; color: #666;">
+            <i class="mdi mdi-wifi-off" style="font-size: 64px; margin-bottom: 20px; color: #f44336;"></i>
+            <h3 style="margin-bottom: 10px; color: #f44336;">Erro de conexão</h3>
+            <p>Verifique sua conexão com a internet e tente novamente.</p>
+            <button onclick="listarVendas()" style="margin-top: 20px; padding: 10px 20px; background: var(--verde-escuro); color: white; border: none; border-radius: 5px;">
+              <i class="mdi mdi-refresh"></i> Tentar novamente
+            </button>
+          </div>
+        `;
+      } else {
+        // Se é carregamento de mais dados, restaura o botão
+        $("#loadMoreButton").html('<i class="mdi mdi-refresh"></i> Carregar mais vendas');
+        $("#loadMoreButton").prop('disabled', false);
+        app.dialog.alert("Erro de conexão ao carregar mais vendas", "Erro");
+      }
     });
 }
 //Fim Função Lista Vendas
