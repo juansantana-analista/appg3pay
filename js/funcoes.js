@@ -1470,7 +1470,7 @@ function listarPedidos(loadMore = false, offset = 0) {
 }
 //Fim Função Lista tela Pedidos com Paginação
 
-//Inicio Funçao listar Vendas com Paginação
+//Inicio Funçao listar Vendas com Paginação Atualizada
 function listarVendas(loadMore = false, offset = 0) {
   if (!loadMore) {
     app.dialog.preloader("Carregando...");
@@ -1518,7 +1518,7 @@ function listarVendas(loadMore = false, offset = 0) {
         responseJson.data.status === "success"
       ) {
         const vendas = responseJson.data.data;
-        const pagination = responseJson.data.pagination; // Assumindo que o backend retornará dados de paginação
+        const pagination = responseJson.data.pagination; // Dados de paginação vindos do backend
         const vendasContainer = document.getElementById("container-vendas");
         
         // Se não é loadMore, limpa o container
@@ -1579,24 +1579,15 @@ function listarVendas(loadMore = false, offset = 0) {
         });
 
         // Adiciona o botão "Carregar mais" se houver mais dados
-        // Se o backend não retornar dados de paginação, você pode usar uma lógica baseada no tamanho da resposta
-        const hasMore = pagination ? pagination.has_more : vendas.length === 15; // Se retornou 15 itens, provavelmente há mais
-        const nextOffset = pagination ? pagination.next_offset : (offset + 15);
-        const totalRecords = pagination ? pagination.total_records : null;
-        const currentPage = pagination ? pagination.current_page : Math.floor(offset / 15) + 1;
-        const perPage = pagination ? pagination.per_page : 15;
-
-        if (hasMore) {
+        if (pagination && pagination.has_more) {
           const loadMoreHTML = `
             <div id="loadMoreContainer" style="text-align: center; margin: 30px 0; padding: 20px;">
-              <button id="loadMoreButton" class="btn-large" data-next-offset="${nextOffset}">
+              <button id="loadMoreButton" class="btn-large" data-next-offset="${pagination.next_offset}">
                 <i class="mdi mdi-refresh"></i> Carregar mais vendas
               </button>
-              ${totalRecords ? `
-                <div style="margin-top: 10px; font-size: 14px; color: #666;">
-                  Mostrando ${(currentPage - 1) * perPage + vendas.length} de ${totalRecords} vendas
-                </div>
-              ` : ''}
+              <div style="margin-top: 10px; font-size: 14px; color: #666;">
+                Mostrando ${(pagination.current_page - 1) * pagination.per_page + vendas.length} de ${pagination.total_records} vendas
+              </div>
             </div>
           `;
           vendasContainer.innerHTML += loadMoreHTML;
@@ -1606,13 +1597,13 @@ function listarVendas(loadMore = false, offset = 0) {
             const nextOffset = $(this).data('next-offset');
             listarVendas(true, nextOffset);
           });
-        } else if (currentPage > 1) {
+        } else if (pagination && pagination.current_page > 1) {
           // Se não há mais dados, mas já carregou algumas páginas, mostra mensagem
           const endMessageHTML = `
             <div id="loadMoreContainer" style="text-align: center; margin: 30px 0; padding: 20px;">
               <div style="color: #666; font-size: 14px;">
                 <i class="mdi mdi-check-circle" style="color: #28a745;"></i>
-                ${totalRecords ? `Todas as ${totalRecords} vendas foram carregadas` : 'Todas as vendas foram carregadas'}
+                Todas as ${pagination.total_records} vendas foram carregadas
               </div>
             </div>
           `;
