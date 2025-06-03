@@ -1515,10 +1515,11 @@ function listarVendas(loadMore = false, offset = 0) {
       // Verifica se o status é 'success' e se há dados de vendas
       if (
         responseJson.status === "success" &&
-        responseJson.data.status === "success"
+        responseJson.data.status === "success" &&
+        responseJson.data.data.status === "success"
       ) {
-        const vendas = responseJson.data.data;
-        const pagination = responseJson.data.pagination;
+        const vendas = responseJson.data.data.data;
+        const pagination = responseJson.data.data.pagination;
         const vendasContainer = document.getElementById("container-vendas");
         
         // Se não é loadMore, limpa o container
