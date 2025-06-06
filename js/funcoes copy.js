@@ -2,7 +2,7 @@
 async function validarToken(userAuthToken) {
     var userAuthToken = localStorage.getItem("userAuthToken");
     if (userAuthToken) {
-      const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
+      const apiServerUrl = "https://vitatophomologa.tecskill.com.br/rest.php";
   
       const headers = {
         "Content-Type": "application/json",
@@ -136,7 +136,7 @@ async function validarToken(userAuthToken) {
     var userAuthToken = localStorage.getItem("userAuthToken");
     app.dialog.preloader("Carregando...");
   
-    var imgUrl = "https://vitatop.tecskill.com.br/";
+    var imgUrl = "https://vitatophomologa.tecskill.com.br/";
   
     // Cabeçalhos da requisição
     const headers = {
@@ -179,7 +179,7 @@ async function validarToken(userAuthToken) {
             } else {
               produtoPreco = formatarMoeda(produto.preco_lojavirtual);
             }
-            var imgUrl = "https://vitatop.tecskill.com.br/";
+            var imgUrl = "https://vitatophomologa.tecskill.com.br/";
             const imagemProduto = produto.foto
               ? imgUrl + produto.foto
               : "img/default.png";
@@ -276,7 +276,7 @@ async function validarToken(userAuthToken) {
     var userAuthToken = localStorage.getItem("userAuthToken");
     app.dialog.preloader("Carregando...");
   
-    var imgUrl = "https://vitatop.tecskill.com.br/";
+    var imgUrl = "https://vitatophomologa.tecskill.com.br/";
   
     // Cabeçalhos da requisição
     const headers = {
@@ -337,7 +337,7 @@ async function validarToken(userAuthToken) {
     var codigo_indicador = localStorage.getItem("codigo_indicador");
     app.dialog.preloader("Carregando...");
   
-    var imgUrl = "https://vitatop.tecskill.com.br/";
+    var imgUrl = "https://vitatophomologa.tecskill.com.br/";
   
     // Cabeçalhos da requisição
     const headers = {
@@ -518,7 +518,7 @@ async function validarToken(userAuthToken) {
     const pessoaId = localStorage.getItem("pessoaId");
     app.dialog.preloader("Carregando...");
   
-    var imgUrl = "https://vitatop.tecskill.com.br/";
+    var imgUrl = "https://vitatophomologa.tecskill.com.br/";
   
     // Cabeçalhos da requisição
     const headers = {
@@ -881,7 +881,7 @@ async function validarToken(userAuthToken) {
             .map(
               (item) => `
                       <li>
-                          <img src="https://vitatop.tecskill.com.br/${
+                          <img src="https://vitatophomologa.tecskill.com.br/${
                             item.foto
                           }" alt="${
                 item.descricao
@@ -920,7 +920,7 @@ async function validarToken(userAuthToken) {
                               <!-- Seção de pagamento -->
                               <div class="payment-method-a display-none" id="pagamentoPix">
                                   <div class="payment-center">
-                                      <img src="https://vitatop.tecskill.com.br/${
+                                      <img src="https://vitatophomologa.tecskill.com.br/${
                                         detalhes.pix_qrcode
                                       }" width="250px" alt="QR Code">
                                       <span class="pix-key" id="pixKey">${
@@ -1913,7 +1913,7 @@ function apagarNotificacao(notificacaoId) {
                           <!-- ITEM DO CARRINHO-->
                           <div class="item-carrinho">
                               <div class="area-img">
-                                  <img src="https://vitatop.tecskill.com.br/${
+                                  <img src="https://vitatophomologa.tecskill.com.br/${
                                     item.foto
                                   }">
                               </div>
@@ -2511,7 +2511,7 @@ function apagarNotificacao(notificacaoId) {
               var itemLi = `
                           <!-- ITEM DO CARRINHO-->
                           <li class="item-carrinho">
-                                  <img src="https://vitatop.tecskill.com.br/${
+                                  <img src="https://vitatophomologa.tecskill.com.br/${
                                     item.foto
                                   }" width="40px">
                               <div class="area-details">

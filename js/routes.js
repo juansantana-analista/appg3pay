@@ -1,6 +1,7 @@
 //DADOS BACKEND SERVER
-const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-const versionApp = "1.0.6";
+const apiServerUrl = "https://vitatophomologa.tecskill.com.br/rest.php";
+const versionApp = "2.2.6";
+var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
 document.addEventListener('deviceready', onDeviceReady, false);
@@ -8,7 +9,7 @@ var app = new Framework7({
   // App root element
   el: '#app',
   // App Name
-  name: 'G3 Pay',
+  name: 'VitaTop',
   // App id
   id: 'br.com.g3pay',
   // Enable swipe panel
@@ -21,6 +22,7 @@ var app = new Framework7({
   },
   // Disable page animations globally
   animate: false,
+  pushState: true,
   // Add default routes
   routes: [
     {
@@ -29,33 +31,49 @@ var app = new Framework7({
       on: {
         pageBeforeIn: async function (event, page) {    
           clearLocalStorage();
+          
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Obtém a URL atual do navegador
           const currentUrl = window.location.href;
 
-          // chama a função que verifica e valida o token
-          var userAuthToken = localStorage.getItem('userAuthToken');
           // Início função validar login
-          const isValid = await validarToken(userAuthToken);
+          const isValid = validarToken();
           if (!isValid) {
             app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500);
           } else {
             // Se a URL contiver "/notificacoes", redireciona
-            if (currentUrl.includes('https://apphomologa.g3pay.com.br/#/notificacoes')) {
+            if (currentUrl.includes('https://homologaappvitatop.tecskill.com.br/#/notificacoes')) {
               app.views.main.router.navigate('/notificacoes/');
             } else {
               // Lógica para continuar usando o token
               app.views.main.router.navigate("/home/");              
             }
+            
           }
           var userName = localStorage.getItem('userName');
           if(userName != '' && userName != null) {
             $("#nomeUsuario").html(userName);
-          }
+          }          
+          
+          $(".profile-avatar-menu").on("click", function () {
+              $('.menu-tab-link').removeClass('menu-active');
+              app.views.main.router.navigate("/perfil/"); 
+          });
+  inicializarMenuLateral();
+  atualizarTabbarComMenu();
+
+      listarPerfil("index");
+  
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+      buscarQtdeNotif();
+      contarCarrinho();
           // fazer algo quando a página for inicializada  
           function detectPlatform() {
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -96,27 +114,23 @@ var app = new Framework7({
           if (platform === 'iOS') {
             // Ações específicas para iOS    
             if (window.navigator.standalone) {
-              console.log('O app está rodando em modo standalone (fixado na tela inicial no iOS)');
               $("#installBanner").addClass("display-none");
-            } else {
-              console.log('O app não está rodando em modo standalone no iOS');
-              
+            } else {              
               $("#installBanner").removeClass("display-none");
             }
             conteudoInstall.innerHTML = `
-            <p>Adicione <strong>o aplicativo G3 Pay</strong> à sua tela inicial para obter atualizações regulares. Toque em Compartilhar 
+            <p>Adicione <strong>o aplicativo VitaTop</strong> à sua tela inicial para obter atualizações regulares. Toque em Compartilhar 
             <span class="mdi mdi-export-variant"></span> e depois <strong>Adicionar à <br>tela inicial </strong><span class="mdi mdi-plus-box-outline"></span>
             </p>`;
           } else if (platform === 'Android') {
             // Ações específicas para Android
             if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches) {
-              console.log('O app está rodando em modo standalone ou fullscreen');
               $("#installBanner").addClass("display-none");
             } else {
               $("#installBanner").removeClass("display-none");
             }
             conteudoInstall.innerHTML = `
-            <p>Instale <strong>o aplicativo G3 Pay</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
+            <p>Instale <strong>o aplicativo VitaTop</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
             <div class="display-flex flex-direction-row justify-content-space-between">
                 <button id="fecharInstall" class="button margin-right text-color-gray">Depois</button>
                 <button id="installAppAndroid" class="button button-fill color-red"><span class="mdi mdi-cellphone-arrow-down-variant"></span> Instalar</button>
@@ -125,12 +139,11 @@ var app = new Framework7({
             // Ações para desktop ou plataformas desconhecidas
             if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches) {
               conteudoInstall.innerHTML = `
-              <p>Instale <strong>o aplicativo G3 Pay</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
+              <p>Instale <strong>o aplicativo VitaTop</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
               <div class="display-flex flex-direction-row justify-content-space-between">
                   <button id="fecharInstallDesktop" class="button margin-right text-color-gray">Depois</button>
                   <button id="installAppDesktop" class="button button-fill color-red"><span class="mdi mdi-cellphone-arrow-down-variant"></span> Instalar</button>
               </div>`;
-              console.log('O app está rodando em modo standalone ou fullscreen');
               $("#installBanner").addClass("display-none");
             } else {
               $("#installBanner").removeClass("display-none");
@@ -156,9 +169,7 @@ var app = new Framework7({
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                   if (choiceResult.outcome === 'accepted') {
-                    console.log('Usuário aceitou a instalação.');
                   } else {
-                    console.log('Usuário rejeitou a instalação.');
                   }
                   deferredPrompt = null;
                 });
@@ -171,9 +182,7 @@ var app = new Framework7({
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                   if (choiceResult.outcome === 'accepted') {
-                    console.log('Usuário aceitou a instalação.');
                   } else {
-                    console.log('Usuário rejeitou a instalação.');
                   }
                   deferredPrompt = null;
                 });
@@ -199,6 +208,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada
           var swiper = app.swiper.create(".swiper", {
             speed: 900,
@@ -226,11 +238,17 @@ var app = new Framework7({
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida          
           localStorage.removeItem("userId");     
+          // fazer algo antes da página ser exibida
+          $("#menuPrincipal").hide("fast");
+          $("#menuPrincipal").addClass("display-none");
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           const oneSignalId = localStorage.getItem('oneSignalId');   
           
         // Form elements
@@ -269,7 +287,7 @@ var app = new Framework7({
                 app.dialog.preloader("Carregando...");
 
               //START Fazendo a requisição
-                fetch('https://vitatop.tecskill.com.br/api/request_reset.php', {
+                fetch('https://vitatophomologa.tecskill.com.br/api/request_reset.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -341,7 +359,7 @@ var app = new Framework7({
                   };
     
                   // Faz a requisição ao servidor
-                  fetch("https://vitatop.tecskill.com.br/api/validate_code.php", options)
+                  fetch("https://vitatophomologa.tecskill.com.br/api/validate_code.php", options)
                     .then((response) => response.json())
                     .then((data) => {
                       app.dialog.close();
@@ -399,7 +417,7 @@ var app = new Framework7({
                   body: body,
                 };
     
-                fetch('https://vitatop.tecskill.com.br/api/reset_password.php', options)
+                fetch('https://vitatophomologa.tecskill.com.br/api/reset_password.php', options)
                   .then((response) => response.json())
                   .then((data) => {
                     app.dialog.close();
@@ -456,7 +474,7 @@ var app = new Framework7({
               );
             } else {
               //START Fazendo a requisição
-              fetch('https://vitatop.tecskill.com.br/api/auth_app.php', {
+              fetch('https://vitatophomologa.tecskill.com.br/api/auth_app.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -471,7 +489,9 @@ var app = new Framework7({
                   if (data.status == 'success') {
                     app.dialog.close();
                     const token = data.data;
-                    localStorage.setItem('userAuthToken', token);
+                    setCookie('userAuthToken', token, 5);
+                    appId = "Bearer " +  getCookie('userAuthToken');
+                    userAuthToken = token;
                     const decodedToken = jwt_decode(token);
                     // Navegar para outra página ou realizar outras ações necessárias
 
@@ -516,17 +536,22 @@ var app = new Framework7({
       },
     },
     {
-      path: '/home/',
-      url: 'home.html?v=' + versionApp,
+      path: '/gestao/',
+      url: 'gestao.html?v=' + versionApp,
       animate: false,
       on: {
         pageBeforeIn: async function (event, page) {
           clearLocalStorage();
-          var userAuthToken = localStorage.getItem('userAuthToken');
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
-          const isValid = await validarToken(userAuthToken);
+          const isValid = validarToken();
           if (!isValid) {
-            window.location.reload(true);
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
           }
           
           var userIdAtual = localStorage.getItem('userId');
@@ -538,24 +563,6 @@ var app = new Framework7({
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
-          // Toggle balance visibility
-          const toggleBalance = document.getElementById('toggleBalance');
-          const balance = document.getElementById('balance');
-          const actualBalance = document.getElementById('actualBalance');
-          let isBalanceHidden = true;
-
-          toggleBalance.addEventListener('click', () => {
-              isBalanceHidden = !isBalanceHidden;
-              if (isBalanceHidden) {
-                  balance.style.display = 'block';
-                  actualBalance.style.display = 'none';
-                  toggleBalance.className = 'far fa-eye';
-              } else {
-                  balance.style.display = 'none';
-                  actualBalance.style.display = 'block';
-                  toggleBalance.className = 'far fa-eye-slash';
-              }
-          });
           // Verifica se o tutorial já foi concluído
           if (!localStorage.getItem('tutorialCompleted')) {
             $("#installBanner").addClass("display-none");            
@@ -585,7 +592,7 @@ var app = new Framework7({
                         },
                         {
                             element: '.referral-card',
-                            intro: 'Para expandir sua rede, compartilhe seu link de afiliado aqui!',
+                            intro: 'Para indicar um amigo, compartilhe seu link de afiliado aqui!',
                             position: 'bottom'
                         },
                         {
@@ -641,10 +648,20 @@ var app = new Framework7({
           }
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
-          onDashboard();          
-          buscarQtdeNotif();
+          var nomeUsuario = localStorage.getItem('userName');
+          if (nomeUsuario) {
+            var nomes = nomeUsuario.trim().split(" ");
+            var doisPrimeirosNomes = nomes.slice(0, 2).join(" ");
+            $("#nomeUsuarioHome").html(doisPrimeirosNomes);
+          }
+          
+          onDashboard();    
+          saldoCarteira();     
 
           $('.abrir-popup').on('click', function (e) {
             e.preventDefault(); // Prevent default link behavior
@@ -654,6 +671,35 @@ var app = new Framework7({
           $('#updateData').on('click', function () {
             location.reload();
           });
+              // Alternar visibilidade do saldo
+    $('#toggleBalance').on('click', function () {
+      $('#saldoTotal').toggleClass('hidden');
+      $('#saldoMask').toggleClass('hidden');
+      $('#eyeIcon').toggleClass('mdi-eye mdi-eye-off');
+    });
+
+    // Abertura dos popups com Framework7
+    const appPopup = app.popup;
+
+    $('#btnSacar').on('click', function () {      
+      app.dialog.alert("Funcionalidade em desenvolvimento, disponível em Breve!", "Em Breve!");
+      //appPopup.open('.popup-saque');
+    });
+
+    $('#btnExtrato').on('click', function () {
+      app.dialog.alert("Funcionalidade em desenvolvimento, disponível em Breve!", "Em Breve!");
+      //appPopup.open('.popup-extrato');
+    });
+
+    $('#btnTransferir').on('click', function () {
+      app.dialog.alert("Funcionalidade em desenvolvimento, disponível em Breve!", "Em Breve!");
+      //appPopup.open('.popup-transferir');
+    });
+
+    // Compartilhar link
+    $('.abrir-popup').on('click', function () {
+      appPopup.open('.popup-compartilhar');
+    });
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM      
@@ -661,87 +707,159 @@ var app = new Framework7({
       }
     },
     {
-      path: "/equipe/",
-      url: "equipe.html",
-      animate: false,
-      on: {
-        pageBeforeIn: function (event, page) {
+    path: "/equipe/",
+    url: "equipe.html?v=" + versionApp,
+    animate: false,
+    on: {
+      pageBeforeIn: function (event, page) {
+        // fazer algo antes da página ser exibida
+        userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+        // Início função validar login
+        const isValid = validarToken();
+        if (!isValid) {
+          console.warn("Token inválido. Redirecionando para login via fallback.");
+          deleteCookie('userAuthToken');
+          app.views.main.router.navigate("/login-view/");
+          setTimeout(() => {
+            app.views.main.router.navigate("/login-view/");
+          }, 500); // Adiciona um fallback com pequeno delay
+        }
           // fazer algo antes da página ser exibida
-        },
-        pageAfterIn: function (event, page) {
-          // fazer algo depois da página ser exibida
-        },
-        pageInit: function (event, page) {
-          // fazer algo quando a página for inicializada
-          listarEquipe();
-          $.getScript('js/qrcode.min.js');
-          // Abrir popup compartilhamento
-
-          $('.abrir-popup').on('click', function (e) {
-            e.preventDefault(); // Prevent default link behavior
-            app.popup.open('.popup-compartilhar');
-            //buscarLinkAfiliado();
-          });
-          let zoomLevel = 1;
-          const maxZoom = 1;  // Define o zoom máximo para o tamanho original da tela
-          const minZoom = 0.5;  // Limite de zoom mínimo
-          
-          // Função para ajustar o nível de zoom
-          function applyZoom() {
-              $('#treeContainer').css('transform', `scale(${zoomLevel})`);
-          }
-          
-          // Aumentar zoom
-          $('#zoomIn').on('click', function () {
-              if (zoomLevel < maxZoom) {
-                  zoomLevel += 0.1;
-                  applyZoom();
-              }
-          });
-          
-          // Diminuir zoom
-          $('#zoomOut').on('click', function () {
-              if (zoomLevel > minZoom) {
-                  zoomLevel -= 0.1;
-                  applyZoom();
-              }
-          });
-          
-
-        },
-        pageBeforeRemove: function (event, page) {
-          // fazer algo antes da página ser removida do DOM
-        },
+          $("#menuPrincipal").show("fast");
+          $("#menuPrincipal").removeClass("display-none");
+      },
+      pageAfterIn: function (event, page) {
+        // fazer algo depois da página ser exibida
+      },
+      pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
+        // fazer algo quando a página for inicializada
+        $.getScript('js/qrcode.min.js');
+        
+        // Carrega a equipe inicialmente
+        listarEquipe();
+        
+        // Configura eventos dos filtros
+        $('.filter-btn').on('click', function() {
+          const filtro = $(this).data('filter');
+          listarEquipe(filtro);
+        });
+        
+        // Botão de voltar
+        $('.back-button').on('click', function() {
+          app.views.main.router.back();
+        });
+        
+        // Abrir popup compartilhamento
+        $('.abrir-popup').on('click', function (e) {
+          e.preventDefault();
+          app.popup.open('.popup-compartilhar');
+          buscarLinkAfiliado();
+        });
+        
+        // Botão de atualizar dados
+        $('#updateTeamData').on('click', function () {
+          atualizarDadosEquipe();
+        });
+      },
+      pageBeforeRemove: function (event, page) {
+        // fazer algo antes da página ser removida do DOM
       },
     },
+  },
     {
       path: "/perfil/",
-      url: "perfil.html",
+      url: "perfil.html?v=" + versionApp,
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
-          // fazer algo quando a página for inicializada
-          var nomeUsuario = localStorage.getItem('userName');
-          var emailUsuario = localStorage.getItem('userEmail');
+          buscarQtdeNotif();
+          contarCarrinho();
+          listarPerfil();
 
-          $("#usuarioNome").html(nomeUsuario);
-          $("#emailUsuario").html(emailUsuario);
-
-          $('#sairAgora').on('click', function () {
-            app.dialog.confirm('Deseja sair do aplicativo?', function () {
-              fazerLogout();
-              $("#menuPrincipal").hide("fast");
-              $("#menuPrincipal").addClass("display-none");
-              app.views.main.router.navigate("/login-view/");
-            });
+          $('#editarFoto').on('click', function() {
+             $('#inputFotoGaleria').click();
           });
 
+          $('#profileAvatar').on('click', function() {
+             $('#inputFotoGaleria').click();
+          });
+
+          $('#editarPerfil').on('click', function() {
+            app.popup.open('.popup-editar');
+          });
+
+          $('.modal-close, [data-dismiss="modal"]').on('click', function() {
+              app.popup.close('.popup-editar');
+          });
+
+          
+          $('#alterarSenha').on('click', function() {
+            app.popup.open('.popup-senha');
+          });
+
+          $('.modal-close, [data-dismiss="modal-senha"]').on('click', function() {
+              app.popup.close('.popup-senha');
+          });
+          
+          $("#versaoApp").html(versionApp);  
+
+          $('#sairAgora').on('click', function () {
+              app.dialog.confirm('Deseja sair do aplicativo?', function () {
+                fazerLogout();
+                $("#menuPrincipal").hide("fast");
+                $("#menuPrincipal").addClass("display-none");
+                app.views.main.router.navigate("/login-view/");
+              });
+          });
+
+          $('#inputFotoGaleria').on('change', function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              const base64String = e.target.result; // já no formato data:image/xxx;base64,...
+
+              app.dialog.confirm('Deseja realmente enviar esta foto?', function() {
+                // Pega o id da pessoa, ajuste para sua lógica
+                enviarFotoPerfil(base64String);
+              }, function() {
+                // Usuário cancelou, limpa o input para permitir nova seleção
+                $('#inputFotoGaleria').val('');
+              });
+            };
+            reader.readAsDataURL(file);
+          });
+
+          $('#salvarPerfil').on('click', function () {
+            salvarPerfil();
+          });
+
+          $('#salvarSenha').on('click', function () {
+            salvarSenha();
+          });
+
+
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
@@ -750,40 +868,34 @@ var app = new Framework7({
     },
     {
       path: "/vendas/",
-      url: "vendas.html",
+      url: "vendas.html?v=" + versionApp,
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
           $("#menuPrincipal").show("fast");
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada
-          listarVendas();
-        },
-        pageBeforeRemove: function (event, page) {
-          // fazer algo antes da página ser removida do DOM
-        },
-      },
-    },
-    {
-      path: "/vendas/",
-      url: "vendas.html",
-      animate: false,
-      on: {
-        pageBeforeIn: function (event, page) {
-          // fazer algo antes da página ser exibida
-          $("#menuPrincipal").show("fast");
-        },
-        pageAfterIn: function (event, page) {
-          // fazer algo depois da página ser exibida
-        },
-        pageInit: function (event, page) {
-          // fazer algo quando a página for inicializada
-          listarVendas();
+              // Carrega as vendas inicialmente
+    listarVendas();
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
@@ -792,18 +904,32 @@ var app = new Framework7({
     },
     {
       path: "/resumo-venda/",
-      url: "resumo-venda.html",
+      url: "resumo-venda.html?v=" + versionApp,
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada          
-          detalhesPedido();
+          detalhesVenda();
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
@@ -812,16 +938,30 @@ var app = new Framework7({
     },
     {
       path: "/carteira/",
-      url: "carteira.html",
+      url: "carteira.html?v=" + versionApp,
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada
           let isHidden = true;
           $('#balance-value').text('*****');        
@@ -844,17 +984,32 @@ var app = new Framework7({
     },
     {
       path: "/pedidos/",
-      url: "pedidos.html",
+      url: "pedidos.html?v=" + versionApp,
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
           $("#menuPrincipal").show("fast");
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+          
+          buscarQtdeNotif();
+          contarCarrinho();
+    
           // fazer algo quando a página for inicializada
           listarPedidos();
         },
@@ -865,17 +1020,31 @@ var app = new Framework7({
     },
     {
       path: "/resumo-pedido/",
-      url: "resumo-pedido.html",
+      url: "resumo-pedido.html?v=" + versionApp,
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
           $("#menuPrincipal").hide("fast");
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada
           detalhesPedido();
 
@@ -888,16 +1057,30 @@ var app = new Framework7({
     },
     {
       path: "/curso/",
-      url: "curso.html",
+      url: "curso.html?v=" + versionApp,
       animate: false,
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada
           listarCategoriasCurso();
         },
@@ -907,31 +1090,42 @@ var app = new Framework7({
       },
     },
     {
-      path: '/produtos/',
-      url: 'produtos.html?v=' + versionApp,
+      path: '/home/',
+      url: 'home.html?v=' + versionApp,
+      keepAlive: false,
       animate: false,
       on: {
         pageBeforeIn: async function (event, page) {
           clearLocalStorage();
-          var userAuthToken = localStorage.getItem('userAuthToken');
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
-          const isValid = await validarToken(userAuthToken);
+          const isValid = validarToken();
           if (!isValid) {
-            window.location.reload(true);
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
           }
           // fazer algo antes da página ser exibida
           $("#menuPrincipal").show("fast");
           $("#menuPrincipal").removeClass("display-none");
-          localStorage.setItem('operacao', 'venda');
+          
+          
+
+          listarBanners();
+          listarCategorias();
+          listarProdutos();
+          buscarQtdeNotif();
+          contarCarrinho();
+    
+
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
-          // fazer algo quando a página for inicializada
-          contarCarrinho();
-          listarBanners();
-
           var swiper = new Swiper(".mySwiper", {
             slidesPerView: 1,
             spaceBetween: 30,
@@ -959,7 +1153,6 @@ var app = new Framework7({
           });
 
 
-          listarCategorias();
           var swiper2 = new Swiper(".categorias", {
             slidesPerView: 3,
             spaceBetween: 10,
@@ -981,59 +1174,20 @@ var app = new Framework7({
                 spaceBetween: 10
               },
             }
-          });
-
-          // Manipular clique no botão "Venda"
-          $('#btn-venda').click(function () {
-            // Alterar estilos para o botão "Venda"
-            localStorage.setItem('operacao', 'venda');
-            $(this).css({
-              'background-color': '#ff5500',
-              color: '#ffffff',
-            });
-            // Alterar estilos para o botão "Compra"
-            $('#btn-compra').css({
-              'background-color': '#f7f9fa',
-              color: '#333',
-            });
-            listarProdutos();
-          });
-
-          // Manipular clique no botão "Compra"
-          $('#btn-compra').click(function () {
-            // Alterar estilos para o botão "Compra"
-            localStorage.setItem('operacao', 'compra');
-            $(this).css({
-              'background-color': '#ff5500',
-              color: '#ffffff',
-            });
-            // Alterar estilos para o botão "Venda"
-            $('#btn-venda').css({
-              'background-color': '#f7f9fa',
-              color: '#333',
-            });
-            listarProdutos(null, null, 'compra');
-          });
-
-          
+          });      
 
           let searchTimeout; // Variável para armazenar o temporizador
 
           $(document).on("input", "#search", function () {
-            clearTimeout(searchTimeout); // Cancela o temporizador anterior
-          
-            var tipoOperacao = localStorage.getItem('operacao');
+            clearTimeout(searchTimeout); 
             const searchQuery = $(this).val();
           
             searchTimeout = setTimeout(() => {
               if (searchQuery.length >= 3 || searchQuery.length < 1) {
-                listarProdutos(searchQuery, null, tipoOperacao);
+                listarProdutos(searchQuery, null);
               }
             }, 1000); // Espera 1 segundo após a última digitação
           });
-          
-
-          listarProdutos();
 
         },
         pageBeforeRemove: function (event, page) {
@@ -1046,47 +1200,108 @@ var app = new Framework7({
       url: 'detalhes.html?v=' + versionApp,
       animate: false,
       on: {
-        pageBeforeIn: function (event, page) {
+        pageBeforeIn: function (event, page) {          
+            
           // fazer algo antes da página ser exibida
-          $("#menuPrincipal").hide("fast");
-          
-          var operacao = localStorage.getItem('operacao');
-          if (operacao == 'venda'){            
-            $('#addCarrinho').addClass('display-none');
-            $('#comprarAgora').addClass('display-none');
-            $('#compartilharBtn').removeClass('display-none');
-            $('#compartilharProduto').removeClass('display-none');
-          } else {            
-            $('#compartilharBtn').addClass('display-none');
-            $('#compartilharProduto').addClass('display-none');
-            $('#addCarrinho').removeClass('display-none');
-            $('#comprarAgora').removeClass('display-none');
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
           }
+          $("#menuPrincipal").hide("fast");
 
         },
         pageAfterIn: function (event, page) {
-          // fazer algo depois da página ser exibida
+          // fazer algo depois da página ser exibida          
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+       
           // fazer algo quando a página for inicializada
           $.getScript('js/qrcode.min.js');
           //$.getScript('js/detalhes.js');
           var produtoId = localStorage.getItem('produtoId');
-          buscarProduto(produtoId);
+          $("#idProduto").html(produtoId);
 
-          // JavaScript to open popup
-          document.querySelector('.abrir-popup').addEventListener('click', function (e) {
-            e.preventDefault(); // Prevent default link behavior
-            app.popup.open('.popup-compartilhar');
-            buscarLinks(produtoId);
-          });
-          document.querySelector('#compartilharBtn').addEventListener('click', function (e) {
-            e.preventDefault(); // Prevent default link behavior
-            app.popup.open('.popup-compartilhar');
-            buscarLinks(produtoId);
+          buscarProduto();
+          document.querySelector('#compartilharProduto').addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent default link behavior       
+            app.views.main.router.navigate("/detalhes-share/");
           });
 
+          $("#back-button").on('click', function () {
+            app.views.main.router.navigate("/home/");
+          });
           
+        },
+        pageBeforeRemove: function (event, page) {
+          // fazer algo antes da página ser removida do DOM
+        },
+      }
+    },
+    {
+      path: '/detalhes-share/',
+      url: 'detalhes-share.html?v=' + versionApp,
+      animate: false,
+      on: {
+        pageBeforeIn: function (event, page) {          
+            
+          // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
+          $("#menuPrincipal").hide("fast");
+
+        },
+        pageAfterIn: function (event, page) {
+          // fazer algo depois da página ser exibida          
+        },
+        pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+       
+          // fazer algo quando a página for inicializada
+          $.getScript('js/qrcode.min.js');
+          //$.getScript('js/detalhes.js');
+          var produtoId = localStorage.getItem('produtoId');
+          // Recupera e faz o parse do objeto salvo no localStorage
+          var produtoDetalhes = JSON.parse(localStorage.getItem('produtoDetalhes'));
+
+          // Verifica se o objeto foi carregado corretamente
+          if (produtoDetalhes && produtoDetalhes.detalhes) {
+            var nomeProduto = produtoDetalhes.detalhes.nome;
+            var urlBaseImagem = "https://vitatophomologa.tecskill.com.br/";
+            var imagemProduto = urlBaseImagem + produtoDetalhes.detalhes.foto;
+
+            // Atribui os valores com jQuery
+            $("#imagemShare").attr("src", imagemProduto);
+            $("#nomeShare").text(nomeProduto);
+          } else {
+            console.warn("Produto não encontrado no localStorage.");
+          }
+
+          $("#idProduto").html(produtoId);
+
+          buscarLinks();
+
+          $("#back-button").on('click', function () {
+            app.views.main.router.navigate("/detalhes/");
+          });
           
         },
         pageBeforeRemove: function (event, page) {
@@ -1103,13 +1318,24 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
           $("#menuPrincipal").hide("fast");
           localStorage.removeItem('enderecoDetalhes');
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
-        pageInit: function (event, page) {
+        pageInit: function (event, page) {    
           // fazer algo quando a página for inicializada    
           // Funções para gerenciamento de modais
         $("#openAddressModal").on('click', function () {
@@ -1200,7 +1426,6 @@ var app = new Framework7({
 
           function obterFormaPagamentoSelecionada() {
             var formaPagamento = $("input[name='payment']:checked").val();
-            console.log("Forma de pagamento selecionada:", formaPagamento);
             return formaPagamento;
           }
 
@@ -1281,13 +1506,27 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          $("#menuPrincipal").hide("fast");
-          $("#menuPrincipal").addClass("display-none");
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
+          $("#menuPrincipal").show("fast");
+          $("#menuPrincipal").removeClass("display-none");
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+          buscarQtdeNotif();
+          contarCarrinho();
+    
           // fazer algo quando a página for inicializada   
           listarNotificacoes();   
         },
@@ -1311,6 +1550,9 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada      
         },
         pageBeforeRemove: function (event, page) {
@@ -1327,12 +1569,26 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
           $("#menuPrincipal").hide("fast");
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           var method = '';
           listarCarrinhoCheckout();
           // fazer algo quando a página for inicializada 
@@ -1448,12 +1704,26 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
           $("#menuPrincipal").hide("fast");
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // Recuperar do localStorage
           var pagamentoData = localStorage.getItem('pagamentoData');
           var clienteNome = localStorage.getItem('userName');
@@ -1544,6 +1814,10 @@ var app = new Framework7({
                     ref.show();
                   });
                 });
+                $('#jaPagueiBoleto').on('click', function () {                
+                  confirmarPagamento(data.pedidoId);
+                });
+        
         
               } else if (formaSelecionada == 3) {
                 $("#pix-section").removeClass("display-none");
@@ -1563,6 +1837,10 @@ var app = new Framework7({
                 // Copiar código Pix
                 $('#copiarPix').on('click', function () {   
                   copiarParaAreaDeTransferencia(data.pixKey);
+                });
+
+                $('#jaPagueiPix').on('click', function () {                
+                  confirmarPagamento(data.pedidoId);
                 });
               }
         
@@ -1585,6 +1863,47 @@ var app = new Framework7({
       }
     },    
     {
+      path: '/campanhas/',
+      url: 'campanhas.html?v=' + versionApp,
+      animate: false,
+      on: {
+        pageBeforeIn: async function (event, page) {
+          clearLocalStorage();
+          // Início função validar login
+          const isValid = await validarToken();
+          if (!isValid) {
+            window.location.reload(true);
+          }
+          // fazer algo antes da página ser exibida
+          $("#menuPrincipal").show("fast");
+          $("#menuPrincipal").removeClass("display-none");
+        },
+        pageAfterIn: function (event, page) {
+          // fazer algo depois da página ser exibida
+        },
+        pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
+          // fazer algo quando a página for inicializada
+          carregarCategoriasCampanha();
+          listarCampanhas();
+
+          // Adiciona eventos aos filtros de categoria
+          $('.category-pill').on('click', function() {
+            $('.category-pill').removeClass('active');
+            $(this).addClass('active');
+            
+            const categoria = $(this).attr('data-category');
+            listarCampanhas(categoria);
+          });
+        },
+        pageBeforeRemove: function (event, page) {
+          // fazer algo antes da página ser removida do DOM
+        },
+      }
+    },
+    {
       path: '/refazer-pagamento/',
       url: 'refazer-pagamento.html?v=' + versionApp,
       options: {
@@ -1593,12 +1912,26 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
           $("#menuPrincipal").hide("fast");
         },
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
+    buscarQtdeNotif();
+    contarCarrinho();
+    
           // fazer algo quando a página for inicializada 
 
           // Preselecionar o método de pagamento PIX
@@ -1698,65 +2031,186 @@ app.on('routeChange', function (route) {
   }
 });
 
+// Função para gerenciar o histórico de navegação
+function initializeBackButtonHandler() {
+  var mainView = app.views.main;
+    // Garantir que temos um estado inicial
+    if (!window.history.state) {
+      window.history.replaceState({ page: 'initial' }, '', window.location.href);
+    }
+    
+    // Escutar mudanças no histórico do navegador
+    window.addEventListener('popstate', function(event) {
+      // Prevenir o comportamento padrão
+      event.preventDefault();
+      
+      // Verificar se estamos na página inicial
+      if (mainView.router.currentRoute.path === '/index/' || 
+          mainView.router.currentRoute.path === '/home/') {
+        // Confirmar se o usuário quer sair
+        app.dialog.confirm('Deseja sair do aplicativo?', function () {
+          // Para PWA, não podemos fechar o app, então redirecionamos ou mostramos uma mensagem
+          window.history.back();
+        }, function() {
+          // Se cancelar, adicionar estado de volta ao histórico
+          window.history.pushState({ page: 'current' }, '', window.location.href);
+        });
+      } else {
+        // Voltar para a página anterior usando o router do Framework7
+        mainView.router.back({ force: true });
+      }
+    });
+    
+    // Interceptar navegação do Framework7 para manter sincronizado com o histórico do navegador
+    app.on('routeChange', function(route) {
+      // Adicionar estado ao histórico sempre que mudar de rota
+      window.history.pushState({ 
+        page: route.path,
+        url: route.url 
+      }, '', window.location.href);
+    });
+}
+
 function onDeviceReady() {
   //Quando estiver rodando no celular
   var mainView = app.views.create('.view-main', { url: '/index/' });
-
-  //COMANDO PARA "OUVIR" O BOTAO VOLTAR NATIVO DO ANDROID 	
-  document.addEventListener("backbutton", function (e) {
-
-    if (mainView.router.currentRoute.path === '/index/') {
-      e.preventDefault();
-      app.dialog.confirm('Deseja sair do aplicativo?', function () {
-        navigator.app.exitApp();
-      });
-    } else {
-      e.preventDefault();
-      mainView.router.back({ force: true });
-    }
-  }, false);
-
+  // COMANDO PARA "OUVIR" O BOTAO VOLTAR NATIVO DO ANDROID (apenas para app nativo)
+  if (window.cordova) {
+    document.addEventListener("backbutton", function (e) {
+      if (mainView.router.currentRoute.path === '/index/') {
+        e.preventDefault();
+        app.dialog.confirm('Deseja sair do aplicativo?', function () {
+          navigator.app.exitApp();
+        });
+      } else {
+        e.preventDefault();
+        mainView.router.back({ force: true });
+      }
+    }, false);
+  }
+      initializeBackButtonHandler();
   let deferredPrompt;
-
-  /* Capturar o evento beforeinstallprompt
-  window.addEventListener('beforeinstallprompt', (event) => {
-      // Prevenir o comportamento padrão
-      event.preventDefault();
-      deferredPrompt = event;
-
-      
-      $("#instalation-app").removeClass("display-none");
-    
-      //AÇÃO DOS BOTÕES
-      $("#btnNaoInstalar").on("click", function () {
-        $("#instalation-app").addClass("display-none");
-        console.log('Usuário cancelou a instalação.');
-      });
-      $("#btnInstalar").on("click", function () {
-        $("#instalation-app").addClass("display-none");
-        // Usuário clicou em "Confirmar"
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('Usuário aceitou a instalação.');
-                } else {
-                    console.log('Usuário rejeitou a instalação.');
-                }
-                deferredPrompt = null;
-            });
-        }
-      });
-  });
-
-  // Verificar se o PWA já está instalado
-  window.addEventListener('appinstalled', () => {
-      console.log('PWA instalado.');
-      // Esconder a mensagem se o PWA estiver instalado
-      $('#installPrompt').hide();
-  });
-  */
 }
+
+// Modificar a inicialização do app
+document.addEventListener('deviceready', onDeviceReady, false);
+
+// Alternativa adicional: Interceptar tentativas de fechar a aba/janela
+window.addEventListener('beforeunload', function(event) {
+  // Apenas mostrar aviso se estivermos em uma página que não seja a inicial
+  if (app.views.main && 
+      app.views.main.router.currentRoute.path !== '/index/' && 
+      app.views.main.router.currentRoute.path !== '/login-view/') {
+    
+    // Mostrar confirmação padrão do navegador
+    event.preventDefault();
+    event.returnValue = 'Tem certeza que deseja sair?';
+    return 'Tem certeza que deseja sair?';
+  }
+});
+
+// Função para inicializar o menu lateral
+function inicializarMenuLateral() {
+  // Atualizar nome do usuário no menu lateral
+  var userName = localStorage.getItem('userName');
+  if (userName != '' && userName != null) {
+    $("#nomeUsuarioLateral").html(userName);
+  }
+  
+
+  // Função para abrir o menu lateral
+  function abrirMenuLateral() {    
+    // Abrir o panel
+    app.panel.open('#panel-menu-lateral', true);
+    
+    // Adicionar classe ativa ao botão do menu
+    $('.menu-tab-link').addClass('menu-active');
+  }
+
+  // Função para fechar o menu lateral
+  function fecharMenuLateral() {
+    app.panel.close('#panel-menu-lateral');
+    $('.menu-tab-link').removeClass('menu-active');
+  }
+
+  // Event listener para o botão do menu na tabbar
+  $(document).on('click', '.menu-tab-link', function(e) {
+    e.preventDefault();
+    
+    if (app.panel.get('#panel-menu-lateral').opened) {
+      fecharMenuLateral();
+    } else {
+      abrirMenuLateral();
+    }
+  });
+
+  $(document).on('click', '#ajuda-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    app.dialog.alert('Entre em contato conosco pelo suporte', 'Ajuda');
+  });
+
+  $(document).on('click', '#sair-menu', function(e) {
+    e.preventDefault();
+    fecharMenuLateral();
+    
+    app.dialog.confirm('Deseja sair do aplicativo?', 'Sair', function () {
+      fazerLogout();
+      $("#menuPrincipal").hide("fast");
+      $("#menuPrincipal").addClass("display-none");
+      app.views.main.router.navigate("/login-view/");
+    });
+  });
+
+  // Fechar menu quando clicar em outros itens
+  $(document).on('click', '.item-menu-lateral.panel-close', function() {
+    setTimeout(() => {
+      $('.menu-tab-link').removeClass('menu-active');
+    }, 300);
+  });
+
+  // Event listener para fechar o menu quando o panel for fechado
+  app.on('panelClose', function(panel) {
+    if (panel.el.id === 'panel-menu-lateral') {
+      $('.menu-tab-link').removeClass('menu-active');
+    }
+  });
+}
+
+// Modificar o HTML da tabbar no routes.js
+function atualizarTabbarComMenu() {
+  // Esta função deve ser chamada quando necessário para atualizar a tabbar
+  const bottomNav = document.querySelector('.bottom-nav');
+  if (bottomNav) {
+    // Encontrar e substituir o último link (Menu)
+    const lastLink = bottomNav.querySelector('a:last-child');
+    if (lastLink) {
+      lastLink.className = 'tab-link link menu-tab-link';
+      lastLink.removeAttribute('href');
+      
+      // Adicionar evento de clique se ainda não existir
+      if (!lastLink.hasAttribute('data-menu-initialized')) {
+        lastLink.setAttribute('data-menu-initialized', 'true');
+        lastLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          if (app.panel.get('#panel-menu-lateral').opened) {
+            app.panel.close('#panel-menu-lateral');
+            this.classList.remove('menu-active');
+          } else {
+            app.panel.open('#panel-menu-lateral', true);
+            this.classList.add('menu-active');
+          }
+        });
+      }
+    }
+  }
+}
+
+  inicializarMenuLateral();
+  atualizarTabbarComMenu();
+
 
 // Bloquear o menu de contexto no clique com o botão direito
 document.addEventListener('contextmenu', function (event) {
@@ -1770,3 +2224,21 @@ document.querySelectorAll('img, a').forEach(function (element) {
 });
 //Fim dos bloqueios do menu contexto
 
+// Bloqueia Ctrl + Scroll
+window.addEventListener('wheel', function(e) {
+  if (e.ctrlKey) {
+    e.preventDefault();
+  }
+}, { passive: false });
+
+// Bloqueia Ctrl + '+' ou '-'
+window.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '-' || e.key === '=')) {
+    e.preventDefault();
+  }
+
+  // Também bloqueia Ctrl + 0 (reset zoom)
+  if ((e.ctrlKey || e.metaKey) && e.key === '0') {
+    e.preventDefault();
+  }
+});

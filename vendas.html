@@ -10,12 +10,12 @@
   <!-- Color theme for statusbar (Android only) -->
   <meta name="theme-color" content="#FF4B00" />
   <!-- Your app title -->
-  <title>G3 PAY</title>
+  <title>VITATOP - Vendas</title>
   <!-- Path to Framework7 Library Bundle CSS -->
   <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
   <!-- CSS PERSONALIZADO PARA MENU-->
   <link rel="stylesheet" href="css/index.css" />
-  <link rel="stylesheet" href="css/detalhes.css" />
+  
   <link rel="stylesheet" href="css/carrinho.css" />
   <link rel="stylesheet" href="css/dashboard.css" />
   <!--Ícones Material Design-->
@@ -31,24 +31,52 @@
     <div class="view view-main">
       <!-- Initial Page, "data-name" contains page name -->
       <div data-name="vendas" class="page color-theme-blue">
-        <!-- NAV TOPO-->
-        <div class="top-nav">
-          <div class="left">
-            <a href="#" class="link panel-open btn-novo" data-panel="#panel-nested">
-              <i class="mdi mdi-menu"></i>
-            </a>
+               <!-- NAV TOPO-->
+               <div class="top-nav">
+                  <div class="left">
+                     <img src="img/logo-nav.png" class="title-logo" width="130px" style="margin-left: 10px;" />
+                  </div>
+                  <!-- Agrupe os ícones em uma div -->
+                  <div class="right-icons">
+                     <!-- Botão de Notificações -->
+                     <div class="btn-notificacao" data-count="0" onclick="app.views.main.router.navigate('/notificacoes/')">
+                        <i class="mdi mdi-bell-outline"></i>
+                     </div>
+                     <!-- Botão do Carrinho -->
+                     <div class="btn-cart" data-count="0" onclick="app.views.main.router.navigate('/carrinho/')">
+                        <i class="mdi mdi-cart-outline"></i>
+                     </div>
+                  </div>
+               </div>
+
+          <!-- Cabeçalho com título da página -->
+          <div class="dashboard-header">
+            <h1>Vendas realizadas</h1>
+            <p>Confira as vendas realizadas através do seu link.</p>
           </div>
-          <img src="img/logo-nav.png" class="title-logo" width="110px" />
-          <a href="/informacoes/">
-            <!--<i class="mdi mdi-information-variant"></i>-->
-          </a>
-        </div>
-        <!-- Scrollable page content -->
 
-
-        <div class="page-content" style="background-color: #f7f9fa; padding-bottom: 160px">
+        <div class="page-content" style="background-color: #f7f9fa;">
           <div class="block">
-            <div class="container-order" id="container-vendas">
+            <!-- Container das vendas -->
+            <div class="container-order" id="container-vendas" style="margin-bottom: 120px; padding-bottom: 100px;">
+              <!-- Loading inicial -->
+              <div class="loading-skeleton">
+                <div class="skeleton-card" style="margin-bottom: 15px;">
+                  <div style="height: 60px; background: #f0f0f0; border-radius: 8px; margin-bottom: 10px;"></div>
+                  <div style="height: 20px; background: #f0f0f0; border-radius: 4px; margin-bottom: 8px; width: 70%;"></div>
+                  <div style="height: 16px; background: #f0f0f0; border-radius: 4px; width: 50%;"></div>
+                </div>
+                <div class="skeleton-card" style="margin-bottom: 15px;">
+                  <div style="height: 60px; background: #f0f0f0; border-radius: 8px; margin-bottom: 10px;"></div>
+                  <div style="height: 20px; background: #f0f0f0; border-radius: 4px; margin-bottom: 8px; width: 70%;"></div>
+                  <div style="height: 16px; background: #f0f0f0; border-radius: 4px; width: 50%;"></div>
+                </div>
+                <div class="skeleton-card" style="margin-bottom: 15px;">
+                  <div style="height: 60px; background: #f0f0f0; border-radius: 8px; margin-bottom: 10px;"></div>
+                  <div style="height: 20px; background: #f0f0f0; border-radius: 4px; margin-bottom: 8px; width: 70%;"></div>
+                  <div style="height: 16px; background: #f0f0f0; border-radius: 4px; width: 50%;"></div>
+                </div>
+              </div>
             </div>     
           </div>
         </div>
