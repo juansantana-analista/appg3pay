@@ -177,7 +177,7 @@ async function validarToken(userAuthToken) {
             if (compra == "compra") {
               produtoPreco = formatarMoeda(produto.preco);
             } else {
-              produtoPreco = formatarMoeda(produto.preco_lojavirtual);
+              produtoPreco = formatarMoeda(produto.preco2);
             }
             var imgUrl = "https://vitatophomologa.tecskill.com.br/";
             const imagemProduto = produto.foto
@@ -193,7 +193,7 @@ async function validarToken(userAuthToken) {
                           data-nome="${produto.nome}" 
                           data-preco="${produto.preco}"
                           data-preco2="${produto.preco2}"
-                          data-preco_lojavirtual="${produto.preco_lojavirtual}"
+                          data-preco2="${produto.preco2}"
                           data-imagem="${imagemProduto}"
                           href="#" class="item">
                               <div class="img-container">
@@ -230,7 +230,7 @@ async function validarToken(userAuthToken) {
             var nomeProduto = $(this).attr("data-nome");
             var preco = $(this).attr("data-preco");
             var preco2 = $(this).attr("data-preco2");
-            var preco_lojavirtual = $(this).attr("data-preco_lojavirtual");
+            var preco2 = $(this).attr("data-preco2");
             var imagem = $(this).attr("data-imagem");
             localStorage.setItem("produtoId", id);
             const produto = {
@@ -242,7 +242,7 @@ async function validarToken(userAuthToken) {
               reviews: 5,
               preco: preco,
               preco2: preco2,
-              preco_lojavirtual: preco_lojavirtual,
+              preco2: preco2,
             };
             localStorage.setItem("produto", JSON.stringify(produto));
             app.views.main.router.navigate("/detalhes/");

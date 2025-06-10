@@ -222,7 +222,7 @@ function renderProdutos(produtos) {
   container.innerHTML = "";
 
   produtos.forEach((produto) => {
-    const produtoPreco = formatarMoeda(produto.preco_lojavirtual);
+    const produtoPreco = formatarMoeda(produto.preco2);
     const imagemProduto = produto.foto
       ? CONFIG.IMAGE_BASE_URL + produto.foto
       : CONFIG.DEFAULT_IMAGE;
@@ -234,7 +234,7 @@ function renderProdutos(produtos) {
            data-nome="${produto.nome}" 
            data-preco="${produto.preco}"
            data-preco2="${produto.preco2}"
-           data-preco_lojavirtual="${produto.preco_lojavirtual}"
+           data-preco2="${produto.preco2}"
            data-imagem="${imagemProduto}"
            href="#" class="item">
           <div class="img-container">
@@ -283,7 +283,7 @@ function adicionarEventosProdutos() {
         reviews: 5,
         preco: this.dataset.preco,
         preco2: this.dataset.preco2,
-        preco_lojavirtual: this.dataset.preco_lojavirtual,
+        preco2: this.dataset.preco2,
       };
       
       localStorage.setItem("produtoId", produto.id);

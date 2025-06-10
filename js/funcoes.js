@@ -406,7 +406,7 @@ function listarProdutos(searchQuery = "", categoriaId) {
         $("#container-produtos").empty();
 
         produtos.forEach((produto) => {
-          var produtoPreco = formatarMoeda(produto.preco_lojavirtual);
+          var produtoPreco = formatarMoeda(produto.preco2);
 
           var imgUrl = "https://vitatophomologa.tecskill.com.br/";
           const imagemProduto = produto.foto
@@ -422,7 +422,7 @@ function listarProdutos(searchQuery = "", categoriaId) {
                       data-nome="${produto.nome}" 
                       data-preco="${produto.preco}"
                       data-preco2="${produto.preco2}"
-                      data-preco_lojavirtual="${produto.preco_lojavirtual}"
+                      data-preco2="${produto.preco2}"
                       data-imagem="${imagemProduto}"
                       href="#" class="item">
                           <div class="img-container">
@@ -462,7 +462,7 @@ function listarProdutos(searchQuery = "", categoriaId) {
           var nomeProduto = $(this).attr("data-nome");
           var preco = $(this).attr("data-preco");
           var preco2 = $(this).attr("data-preco2");
-          var preco_lojavirtual = $(this).attr("data-preco_lojavirtual");
+          var preco2 = $(this).attr("data-preco2");
           var imagem = $(this).attr("data-imagem");
           localStorage.setItem("produtoId", id);
           const produto = {
@@ -474,7 +474,7 @@ function listarProdutos(searchQuery = "", categoriaId) {
             reviews: 5,
             preco: preco,
             preco2: preco2,
-            preco_lojavirtual: preco_lojavirtual,
+            preco2: preco2,
           };
           localStorage.setItem("produto", JSON.stringify(produto));
           app.views.main.router.navigate("/detalhes/");
@@ -750,10 +750,10 @@ function buscarProduto() {
         $("#nome-detalhe").html(detalhes.nome.toUpperCase());
         $("#nomeShare").html(detalhes.nome.toUpperCase());
 
-        var precoLucro = detalhes.preco_lojavirtual - detalhes.preco;
-        $("#precoOriginal").html(formatarMoeda(detalhes.preco_lojavirtual));
+        var precoLucro = detalhes.preco2 - detalhes.preco;
+        $("#precoOriginal").html(formatarMoeda(detalhes.preco2));
         $("#precoDesconto").html(formatarMoeda(detalhes.preco));
-        $("#precoRevenda").html(formatarMoeda(detalhes.preco_lojavirtual));
+        $("#precoRevenda").html(formatarMoeda(detalhes.preco2));
         $("#precoLucro").html(formatarMoeda(precoLucro));
         //$("#precopromo-detalhe").html(produtoPreco);
 
