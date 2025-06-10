@@ -3495,7 +3495,7 @@ function refazerPagamento(
 }
 //Fim Função Refazer Pagamento
 
-//Inicio Funçao Listar Carrinho Melhorada
+//Inicio Funçao Listar Carrinho
 function listarCarrinho() {
   app.dialog.preloader("Carregando...");
   const pessoaId = localStorage.getItem("pessoaId");
@@ -3547,7 +3547,7 @@ function listarCarrinho() {
           responseJson.data.data.itens.forEach((item) => {
             var itemDiv = `
               
-                  <div class="flex space-x-4" style="margin-bottom: 18px;" data-item-id="${item.produto_id}">
+                  <div class="flex space-x-4" style="margin-bottom: 18px;">
                     <img
                       src="https://vitatophomologa.tecskill.com.br/${item.foto}"
                       alt="${item.nome}"
@@ -3578,9 +3578,9 @@ function listarCarrinho() {
                         <div class="flex items-center space-x-2">
                           <button
                             class="minus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
-                            data-produto-id="${item.produto_id}" 
-                            data-produto-qtde="${item.quantidade}"
-                            ${item.quantidade <= 1 ? 'disabled' : ''}
+                            data-produto-id="${
+                              item.produto_id
+                            }" data-produto-qtde="${item.quantidade}"
                           >
                             <svg
                               class="w-4 h-4"
@@ -3596,11 +3596,14 @@ function listarCarrinho() {
                               ></path>
                             </svg>
                           </button>
-                          <span class="w-8 text-center qtd-display" data-produto-id="${item.produto_id}">${item.quantidade}</span>
+                          <span class="w-8 text-center">${
+                            item.quantidade
+                          }</span>
                           <button
                             class="plus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
-                            data-produto-id="${item.produto_id}" 
-                            data-produto-qtde="${item.quantidade}"
+                            data-produto-id="${
+                              item.produto_id
+                            }" data-produto-qtde="${item.quantidade}"
                           >
                             <svg
                               class="w-4 h-4"
@@ -3617,7 +3620,9 @@ function listarCarrinho() {
                             </svg>
                           </button>
                         </div>
-                        <span class="font-semibold preco-item" data-produto-id="${item.produto_id}">${formatarMoeda(item.preco_total)}</span>
+                        <span class="font-semibold">${formatarMoeda(
+                          item.preco_unitario
+                        )}</span>
                       </div>
                     </div>
                   </div>
@@ -3626,12 +3631,6 @@ function listarCarrinho() {
             $("#listaCarrinho").append(itemDiv);
           });
 
-          // Remove event listeners antigos para evitar duplicação
-          $(".delete-item").off("click");
-          $(".minus").off("click");
-          $(".plus").off("click");
-
-          // Adiciona novos event listeners
           $(".delete-item").on("click", function () {
             var produtoId = $(this).data("produto-id");
             //CONFIRMAR
@@ -3645,46 +3644,30 @@ function listarCarrinho() {
           });
 
           $(".minus").on("click", function () {
-            // Desabilita o botão temporariamente para evitar cliques múltiplos
-            var button = $(this);
-            if (button.prop('disabled')) return;
-            
-            button.prop('disabled', true);
-            
             var produtoId = $(this).data("produto-id");
-            var quantidade = parseInt($(this).data("produto-qtde"));
+            var quantidade = $(this).data("produto-qtde");
             var qtdeAtualizada = quantidade - 1;
 
             //SE TEM MAIS DE UM ITEM NA QUANTIDADE
             if (quantidade > 1) {
-              alterarQuantidadeCarrinho(pessoaIdCarrinho, produtoId, qtdeAtualizada, button);
+              alterarCarrinho(pessoaIdCarrinho, produtoId, qtdeAtualizada);
             } else {
-              button.prop('disabled', false); // Reabilita o botão
               app.dialog.confirm(
                 `Gostaria de remover este item?`,
                 "REMOVER",
                 function () {
                   removerItemCarrinho(pessoaIdCarrinho, produtoId);
-                },
-                function () {
-                  button.prop('disabled', false); // Reabilita se cancelar
                 }
               );
             }
           });
 
           $(".plus").on("click", function () {
-            // Desabilita o botão temporariamente para evitar cliques múltiplos
-            var button = $(this);
-            if (button.prop('disabled')) return;
-            
-            button.prop('disabled', true);
-            
             var produtoId = $(this).data("produto-id");
-            var quantidade = parseInt($(this).data("produto-qtde"));
+            var quantidade = $(this).data("produto-qtde");
             var qtdeAtualizada = quantidade + 1;
 
-            alterarQuantidadeCarrinho(pessoaIdCarrinho, produtoId, qtdeAtualizada, button);
+            alterarCarrinho(pessoaIdCarrinho, produtoId, qtdeAtualizada);
           });
 
           //MOSTRAR O SUBTOTAL
@@ -3720,12 +3703,6 @@ function listarCarrinho() {
 
         listarEnderecos();
         app.dialog.close();
-      } else {
-        app.dialog.close();
-        app.dialog.alert(
-          "Erro ao listar carrinho: " + (responseJson.message || "Erro desconhecido"),
-          "Falha na requisição!"
-        );
       }
     })
     .catch((error) => {
@@ -3737,7 +3714,7 @@ function listarCarrinho() {
       );
     });
 }
-//Fim Função Listar Carrinho Melhorada
+//Fim Função Listar Carrinho
 
 //Inicio Funçao Alterar Carrinho
 function alterarCarrinho(pessoaId, produtoId, quantidade) {

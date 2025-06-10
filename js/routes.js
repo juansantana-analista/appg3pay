@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-const versionApp = "2.3.4";
+const versionApp = "2.3.2";
 var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -1341,258 +1341,193 @@ var app = new Framework7({
       }
     },
     {
-    path: '/carrinho/',
-    url: 'carrinho.html?v=' + versionApp,
-    options: {
-      transition: 'f7-push',
-    },
-    on: {
-      pageBeforeIn: function (event, page) {
-        // fazer algo antes da página ser exibida
-        userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
-        // Início função validar login
-        const isValid = validarToken();
-        if (!isValid) {
-          console.warn("Token inválido. Redirecionando para login via fallback.");
-          deleteCookie('userAuthToken');
-          app.views.main.router.navigate("/login-view/");
-          setTimeout(() => {
+      path: '/carrinho/',
+      url: 'carrinho.html?v=' + versionApp,
+      options: {
+        transition: 'f7-push',
+      },
+      on: {
+        pageBeforeIn: function (event, page) {
+          // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
-          }, 500); // Adiciona um fallback com pequeno delay
-        }
-        $("#menuPrincipal").hide("fast");
-        localStorage.removeItem('enderecoDetalhes');
-      },
-      pageAfterIn: function (event, page) {
-        // fazer algo depois da página ser exibida
-      },
-      pageInit: function (event, page) {    
-        // fazer algo quando a página for inicializada    
-        
-        // Remove todos os event listeners antigos para evitar duplicação
-        $(document).off('click.carrinho');
-        
-        // Funções para gerenciamento de modais
-        $(document).on('click.carrinho', "#openAddressModal", function () {
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
+          $("#menuPrincipal").hide("fast");
+          localStorage.removeItem('enderecoDetalhes');
+        },
+        pageAfterIn: function (event, page) {
+          // fazer algo depois da página ser exibida
+        },
+        pageInit: function (event, page) {    
+          // fazer algo quando a página for inicializada    
+          // Funções para gerenciamento de modais
+        $("#openAddressModal").on('click', function () {
           document.getElementById('addressModal').classList.remove('hidden');
         });
-        
-        $(document).on('click.carrinho', "#closeAddressModal", function () {
+        $("#closeAddressModal").on('click', function () {
           document.getElementById('addressModal').classList.add('hidden');
         });
-        
-        $(document).on('click.carrinho', "#showNewAddressForm", function () {
+        $("#showNewAddressForm").on('click', function () {
           document.getElementById('addressModal').classList.add('hidden');
           document.getElementById('newAddressModal').classList.remove('hidden');
         });
-        
-        $(document).on('click.carrinho', ".closeNewAddressModal", function () {
+        $(".closeNewAddressModal").on('click', function () {
           document.getElementById('newAddressModal').classList.add('hidden');
           document.getElementById('addressModal').classList.remove('hidden');
         });
         
-        // Carrega o carrinho
-        listarCarrinho();
+          listarCarrinho();
 
-        // Event listener para esvaziar carrinho
-        $(document).on('click.carrinho', "#esvaziar", function () {
-          app.dialog.confirm(
-            'Tem certeza que quer esvaziar o carrinho?', 
-            '<strong>ESVAZIAR</strong>', 
-            function () {
+          $("#esvaziar").on('click', function () {
+            app.dialog.confirm('Tem certeza que quer esvaziar o carrinho?', '<strong>ESVAZIAR</strong>', function () {
+              //Chamar a funçao que limpa o carrinho
               limparCarrinho();
+            });
+          });
+
+          $("#btnDesconto").on('click', function () {
+            var cupomDesconto = $("#cupomDesconto").val();
+            if(cupomDesconto) {
+              app.dialog.alert("Cupom inválido ou expirado", "Cupom");
+            } else {
+              app.dialog.alert("Digite um cupom de Desconto", "Cupom");
             }
-          );
-        });
+          });
 
-        // Event listener para cupom de desconto
-        $(document).on('click.carrinho', "#btnDesconto", function () {
-          var cupomDesconto = $("#cupomDesconto").val();
-          if(cupomDesconto && cupomDesconto.trim() !== '') {
-            // Aqui você pode implementar a validação do cupom
-            app.dialog.alert("Cupom inválido ou expirado", "Cupom");
-          } else {
-            app.dialog.alert("Digite um cupom de Desconto", "Cupom");
-          }
-        });
+          //INICIO API CEP PARA ENDEREÇO DE NOVO CLIENTE
+          $('#cepCliente').mask('00000-000');
+          const cepInput = document.getElementById('cepCliente');
+          const logradouroInput = document.getElementById('logradouroEndCliente');
+          const bairroInput = document.getElementById('bairroEndCliente');
+          const cidadeInput = document.getElementById('cidadeEndCliente');
+          const estadoInput = document.getElementById('estadoEndCliente');
 
-        //INICIO API CEP PARA ENDEREÇO DE NOVO CLIENTE
-        $('#cepCliente').mask('00000-000');
-        
-        // Remove listener antigo se existir
-        $('#cepCliente').off('input.cep');
-        
-        $('#cepCliente').on('input.cep', function () {
-          const cep = this.value.replace(/\D/g, '');
+          cepInput.addEventListener('input', function () {
+            const cep = cepInput.value.replace(/\D/g, '');
 
-          if (cep.length === 8) {
-            const validacep = /^[0-9]{8}$/;
+            if (cep.length === 8) {
+              const validacep = /^[0-9]{8}$/;
 
-            if (validacep.test(cep)) {
-              cepEndereco(cep);
+              if (validacep.test(cep)) {
+                cepEndereco(cep)
+              } else {
+                // Não faz nada se o CEP não estiver completo ou for inválido
+              }
             }
-          }
-        });
-        //FIM API CEP PARA ENDEREÇO DE NOVO CLIENTE
+          });
+          //FIM API CEP PARA ENDEREÇO DE NOVO CLIENTE
 
-        //INICIO API CEP PARA EDITAR ENDEREÇO
-        $('#cepEdit').mask('00000-000');
-        
-        // Remove listener antigo se existir
-        $('#cepEdit').off('input.cepEdit');
-        
-        $('#cepEdit').on('input.cepEdit', function () {
-          const cep = this.value.replace(/\D/g, '');
+          //INICIO API CEP PARA EDITAR ENDEREÇO
+          $('#cepEdit').mask('00000-000');
+          const cepEdit = document.getElementById('cepEdit');
+          const logradouroEndEdit = document.getElementById('logradouroEndEdit');
+          const bairroEndEdit = document.getElementById('bairroEndEdit');
+          const cidadeEndEdit = document.getElementById('cidadeEndEdit');
+          const estadoEndEdit = document.getElementById('estadoEndEdit');
 
-          if (cep.length === 8) {
-            const validacep = /^[0-9]{8}$/;
+          cepEdit.addEventListener('input', function () {
+            const cep = cepEdit.value.replace(/\D/g, '');
 
-            if (validacep.test(cep)) {
-              cepEnderecoEdit(cep);
+            if (cep.length === 8) {
+              const validacep = /^[0-9]{8}$/;
+
+              if (validacep.test(cep)) {
+                cepEnderecoEdit(cep)
+              } else {
+                // Não faz nada se o CEP não estiver completo ou for inválido
+              }
             }
-          }
-        });
-        //FIM API CEP PARA EDITAR ENDEREÇO
+          });
+          //FIM API CEP PARA EDITAR ENDEREÇO
 
-        // Event listeners para salvar endereços
-        $(document).off('click.endereco');
-        
-        $(document).on('click.endereco', '#salvarEndereco', function () {
-          // Validação básica dos campos obrigatórios
-          const nomeEndereco = $("#nomeEndereco").val().trim();
-          const cep = $("#cepCliente").val().trim();
-          const logradouro = $("#logradouroEndCliente").val().trim();
-          const numero = $("#numeroEndCliente").val().trim();
-          const bairro = $("#bairroEndCliente").val().trim();
-          const cidade = $("#cidadeEndCliente").val().trim();
-          const estado = $("#estadoEndCliente").val().trim();
+          $('#salvarEndereco').on('click', function () {
+            adicionarEndereco();
+          });
+          $('#salvarEnderecoEdit').on('click', function () {
+            editarEndereco();
+          });
 
-          if (!nomeEndereco || !cep || !logradouro || !numero || !bairro || !cidade || !estado) {
-            app.dialog.alert("Por favor, preencha todos os campos obrigatórios.", "Erro!");
-            return;
-          }
-
-          adicionarEndereco();
-        });
-        
-        $(document).on('click.endereco', '#salvarEnderecoEdit', function () {
-          // Validação básica dos campos obrigatórios
-          const nomeEndereco = $("#nomeEnderecoEdit").val().trim();
-          const cep = $("#cepEdit").val().trim();
-          const logradouro = $("#logradouroEndEdit").val().trim();
-          const numero = $("#numeroEndEdit").val().trim();
-          const bairro = $("#bairroEndEdit").val().trim();
-          const cidade = $("#cidadeEndEdit").val().trim();
-          const estado = $("#estadoEndEdit").val().trim();
-
-          if (!nomeEndereco || !cep || !logradouro || !numero || !bairro || !cidade || !estado) {
-            app.dialog.alert("Por favor, preencha todos os campos obrigatórios.", "Erro!");
-            return;
+          function obterFormaPagamentoSelecionada() {
+            var formaPagamento = $("input[name='payment']:checked").val();
+            return formaPagamento;
           }
 
-          editarEndereco();
-        });
+          $('#numeroCartao').mask('0000 0000 0000 0000');
+          $('#dataExpiracao').mask('00/0000');
+          $('#cvc').mask('000');
 
-        // Função para obter forma de pagamento selecionada
-        function obterFormaPagamentoSelecionada() {
-          var formaPagamento = $("input[name='payment']:checked").val();
-          return formaPagamento;
-        }
+          $("#opcaoCartao").on("click", function () {
+            document.getElementById('cartaoModal').classList.remove('hidden');
+          });
 
-        // Máscaras para cartão
-        $('#numeroCartao').mask('0000 0000 0000 0000');
-        $('#dataExpiracao').mask('00/0000');
-        $('#cvc').mask('000');
-
-        // Event listeners para modal de cartão
-        $(document).off('click.cartao');
-        
-        $(document).on('click.cartao', "#opcaoCartao", function () {
-          document.getElementById('cartaoModal').classList.remove('hidden');
-        });
-
-        $(document).on('click.cartao', "#closeCartaoModal", function () {
-          document.getElementById('cartaoModal').classList.add('hidden');
-          $("input[name='payment'][value='3']").prop("checked", true);
-        });
-
-        // Event listener para finalizar compra
-        $(document).off('click.finalizar');
-        
-        $(document).on('click.finalizar', ".finalizar-compra", function () {
-          // Previne múltiplos cliques
-          if ($(this).prop('disabled')) return;
-          
-          var formaPagamento = obterFormaPagamentoSelecionada();
-          var nomeTitular = '', numeroCartao = '', dataExpiracao = '', cvc = '';
-          
-          if (formaPagamento == 1) {
-            nomeTitular = $("#nomeTitular").val().trim();
-            numeroCartao = $("#numeroCartao").val().replace(/\s/g, '');
-            dataExpiracao = $("#dataExpiracao").val().trim();
-            cvc = $("#cvc").val().trim();
-
-            // Validações dos campos
-            if (!nomeTitular) {
-              app.dialog.alert("Por favor, preencha o nome do titular.", "Erro!");
-              return;
-            }
-            if (!numeroCartao || numeroCartao.length < 16) {
-              app.dialog.alert("Por favor, insira um número de cartão válido com 16 dígitos.", "Erro!");
-              return;
-            }
-            if (!dataExpiracao || !validarDataExpiracao(dataExpiracao)) {
-              app.dialog.alert("Por favor, insira a data de expiração no formato MM/YYYY.", "Erro!");
-              return;
-            }
-            if (!cvc || cvc.length < 3) {
-              app.dialog.alert("Por favor, insira um código CVC válido de 3 dígitos.", "Erro!");
-              return;
-            }
-          } else if (formaPagamento == 2) {
-            formaPagamento = 2;
-          } else if (formaPagamento == 3) {
-            formaPagamento = 3;
-          } else {
-            app.dialog.alert("Forma de pagamento não selecionada.", "Erro!");
-            return;
-          }
-
-          if (formaPagamento) {
-            // Desabilita o botão temporariamente
-            $(this).prop('disabled', true);
+          $("#closeCartaoModal").on("click", function () {
+            document.getElementById('cartaoModal').classList.add('hidden');
+            $("input[name='payment'][value='3']").prop("checked", true);
+          });
+          // Exemplo de uso ao clicar em um botão
+          $(".finalizar-compra").on("click", function () {
+            var formaPagamento = obterFormaPagamentoSelecionada();
             
-            finalizarCompra(formaPagamento, nomeTitular, numeroCartao, dataExpiracao, cvc)
-              .finally(() => {
-                // Reabilita o botão após o processamento
-                $(this).prop('disabled', false);
-              });
-          }
-        });
+            if (formaPagamento == 1) {
+              var nomeTitular = $("#nomeTitular").val();
+              var numeroCartao = $("#numeroCartao").val();
+              var dataExpiracao = $("#dataExpiracao").val();
+              var cvc = $("#cvc").val();
 
-        // Event listener para ir ao checkout  
-        $(document).on('click.checkout', '#irCheckout', function () {
-          var enderecoSelecionado = localStorage.getItem('enderecoDetalhes');
-          if (enderecoSelecionado && enderecoSelecionado != null) {
-            app.views.main.router.navigate("/checkout/");
-          } else {              
-            listarEnderecos();
-            app.popup.open(".popup-enderecos");
-          }
-        });
-      },
-      pageBeforeRemove: function (event, page) {
-        // Remove todos os event listeners específicos da página
-        $(document).off('click.carrinho');
-        $(document).off('click.endereco');
-        $(document).off('click.cartao');
-        $(document).off('click.finalizar');
-        $(document).off('click.checkout');
-        $(document).off('input.cep');
-        $(document).off('input.cepEdit');
-      },
-    }
-  },
+              // Validações dos campos
+              if (!nomeTitular) {
+                app.dialog.alert("Por favor, preencha o nome do titular.", "Erro!");
+                return;
+              }
+              if (!numeroCartao || numeroCartao.length < 16) {
+                app.dialog.alert("Por favor, insira um número de cartão válido com 16 dígitos.", "Erro!");
+                return;
+              }
+              if (!dataExpiracao || !validarDataExpiracao(dataExpiracao)) {
+                app.dialog.alert("Por favor, insira a data de expiração no formato MM/YYYY.", "Erro!");
+                return;
+              }
+              if (!cvc || cvc.length < 3) {
+                app.dialog.alert("Por favor, insira um código CVC válido de 3 dígitos.", "Erro!");
+                return;
+              }
+            } else if (formaPagamento == 2) {
+              formaPagamento = 2;
+            } else if (formaPagamento == 3) {
+              formaPagamento = 3;
+            } else {
+              app.dialog.alert("Forma de pagamento não selecionada.", "Erro!");
+              return;
+            }
+
+            if (formaPagamento) {
+              finalizarCompra(formaPagamento, nomeTitular, numeroCartao, dataExpiracao, cvc);
+            }
+          });
+
+          $('#irCheckout').on('click', function () {
+            var enderecoSelecionado = localStorage.getItem('enderecoDetalhes');
+            if (enderecoSelecionado && enderecoSelecionado != null) {
+              app.views.main.router.navigate("/checkout/");
+            } else {              
+              listarEnderecos();
+              app.popup.open(".popup-enderecos");
+            }
+          });
+        },
+        pageBeforeRemove: function (event, page) {
+          // fazer algo antes da página ser removida do DOM
+        },
+      }
+    },
     {
       path: '/notificacoes/',
       url: 'notificacoes.html?v=' + versionApp,
