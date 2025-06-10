@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-const versionApp = "2.2.6";
+const versionApp = "2.2.7";
 var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -1178,16 +1178,24 @@ var app = new Framework7({
 
           let searchTimeout; // Variável para armazenar o temporizador
 
-          $(document).on("input", "#search", function () {
-            clearTimeout(searchTimeout); 
-            const searchQuery = $(this).val();
+        $(document).on("input", "#search", function () {
+          clearTimeout(searchTimeout); 
+          const searchQuery = $(this).val();
           
-            searchTimeout = setTimeout(() => {
-              if (searchQuery.length >= 3 || searchQuery.length < 1) {
-                listarProdutos(searchQuery, null);
-              }
-            }, 1000); // Espera 1 segundo após a última digitação
-          });
+          searchTimeout = setTimeout(() => {
+            if (searchQuery.length >= 3 || searchQuery.length < 1) {
+              listarProdutos(searchQuery, null);
+              
+              // Fecha o teclado
+              $("#search").blur();
+
+              // Rola suavemente até os produtos
+              document.getElementById("container-produtos").scrollIntoView({
+                behavior: "smooth"
+              });
+            }
+          }, 1000);
+        });
 
         },
         pageBeforeRemove: function (event, page) {
