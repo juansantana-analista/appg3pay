@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-const versionApp = "2.2.7";
+const versionApp = "2.2.8";
 var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -1178,24 +1178,40 @@ var app = new Framework7({
 
           let searchTimeout; // Variável para armazenar o temporizador
 
-        $(document).on("input", "#search", function () {
-          clearTimeout(searchTimeout); 
-          const searchQuery = $(this).val();
-          
-          searchTimeout = setTimeout(() => {
-            if (searchQuery.length >= 3 || searchQuery.length < 1) {
-              listarProdutos(searchQuery, null);
-              
-              // Fecha o teclado
-              $("#search").blur();
+          $(document).on("input", "#search", function () {
+            clearTimeout(searchTimeout); 
+            const searchQuery = $(this).val();
 
-              // Rola suavemente até os produtos
-              document.getElementById("container-produtos").scrollIntoView({
-                behavior: "smooth"
-              });
+            searchTimeout = setTimeout(() => {
+              if (searchQuery.length >= 3 || searchQuery.length < 1) {
+                listarProdutos(searchQuery, null);
+                
+                // Fechar o teclado e rolar para os produtos após a pesquisa
+                $(this).blur(); // Remove o foco do input, fechando o teclado
+                
+                // Aguardar um pouco para garantir que a pesquisa seja concluída
+                setTimeout(() => {
+                  // Rolar suavemente para a seção de produtos
+                  const produtosContainer = document.getElementById('container-produtos');
+                  if (produtosContainer) {
+                    produtosContainer.scrollIntoView({ 
+                      behavior: 'smooth', 
+                      block: 'start' 
+                    });
+                  }
+                }, 300);
+              }
+            }, 1000); // Espera 1 segundo após a última digitação
+          });
+
+          // 2. Adicionar event listener para desabilitar o Enter
+          $(document).on("keydown", "#search", function (e) {
+            if (e.key === "Enter" || e.keyCode === 13) {
+              e.preventDefault(); // Impede a ação padrão do Enter
+              $(this).blur(); // Remove o foco do input, fechando o teclado
+              return false;
             }
-          }, 1000);
-        });
+          });
 
         },
         pageBeforeRemove: function (event, page) {

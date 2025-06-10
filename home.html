@@ -46,9 +46,16 @@
                      </div>
                   </div>
                </div>
-               <form style="background-color: #f7f9fa">
-                  <input id="search" placeholder="Qual produto você procura?" type="text" />
-                  <i class="icone-busca mdi mdi-magnify"></i>
+               <!-- Formulário de pesquisa modificado -->
+               <form style="background-color: #f7f9fa" onsubmit="return false;">
+               <input 
+                  id="search" 
+                  placeholder="Qual produto você procura?" 
+                  type="text" 
+                  autocomplete="off"
+                  enterkeyhint="search"
+               />
+               <i class="icone-busca mdi mdi-magnify"></i>
                </form>
                <!-- Scrollable page content -->
                <div class="page-content" style="background-color: #f7f9fa">
