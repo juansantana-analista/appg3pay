@@ -1176,42 +1176,82 @@ var app = new Framework7({
             }
           });      
 
-          let searchTimeout; // Variável para armazenar o temporizador
+let searchTimeout; // Variável para armazenar o temporizador
+let isSearchActive = false; // Flag para controlar quando a pesquisa está ativa
 
-          $(document).on("input", "#search", function () {
-            clearTimeout(searchTimeout); 
-            const searchQuery = $(this).val();
+$(document).on("input", "#search", function () {
+  clearTimeout(searchTimeout); 
+  const searchQuery = $(this).val();
+  
+  searchTimeout = setTimeout(() => {
+    if (searchQuery.length >= 3 || searchQuery.length < 1) {
+      // Só marca como pesquisa ativa se tiver conteúdo para pesquisar
+      isSearchActive = searchQuery.length >= 3;
+      
+      listarProdutos(searchQuery, null);
+      
+      // Fechar o teclado apenas se houver uma pesquisa ativa
+      if (isSearchActive) {
+        $(this).blur(); // Remove o foco do input, fechando o teclado
+        
+        // Aguardar um pouco para garantir que a pesquisa seja concluída
+        setTimeout(() => {
+          // Rolar suavemente para a seção de produtos apenas se pesquisa ativa
+          const produtosContainer = document.getElementById('container-produtos');
+          if (produtosContainer) {
+            produtosContainer.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'start' 
+            });
+          }
+        }, 300);
+      }
+    } else {
+      // Se não há pesquisa suficiente, não é pesquisa ativa
+      isSearchActive = false;
+    }
+  }, 1000); // Espera 1 segundo após a última digitação
+});
 
-            searchTimeout = setTimeout(() => {
-              if (searchQuery.length >= 3 || searchQuery.length < 1) {
-                listarProdutos(searchQuery, null);
-                
-                // Fechar o teclado e rolar para os produtos após a pesquisa
-                $(this).blur(); // Remove o foco do input, fechando o teclado
-                
-                // Aguardar um pouco para garantir que a pesquisa seja concluída
-                setTimeout(() => {
-                  // Rolar suavemente para a seção de produtos
-                  const produtosContainer = document.getElementById('container-produtos');
-                  if (produtosContainer) {
-                    produtosContainer.scrollIntoView({ 
-                      behavior: 'smooth', 
-                      block: 'start' 
-                    });
-                  }
-                }, 300);
-              }
-            }, 1000); // Espera 1 segundo após a última digitação
+// Event listener para desabilitar o Enter
+$(document).on("keydown", "#search", function (e) {
+  if (e.key === "Enter" || e.keyCode === 13) {
+    e.preventDefault(); // Impede a ação padrão do Enter
+    
+    // Só executa ações se houver texto suficiente para pesquisa
+    const searchQuery = $(this).val();
+    if (searchQuery.length >= 3) {
+      $(this).blur(); // Remove o foco do input, fechando o teclado
+      
+      // Executar pesquisa imediatamente ao pressionar Enter
+      clearTimeout(searchTimeout);
+      listarProdutos(searchQuery, null);
+      
+      setTimeout(() => {
+        const produtosContainer = document.getElementById('container-produtos');
+        if (produtosContainer) {
+          produtosContainer.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
           });
+        }
+      }, 300);
+    } else {
+      // Se não há texto suficiente, apenas fecha o teclado
+      $(this).blur();
+    }
+    
+    return false;
+  }
+});
 
-          // 2. Adicionar event listener para desabilitar o Enter
-          $(document).on("keydown", "#search", function (e) {
-            if (e.key === "Enter" || e.keyCode === 13) {
-              e.preventDefault(); // Impede a ação padrão do Enter
-              $(this).blur(); // Remove o foco do input, fechando o teclado
-              return false;
-            }
-          });
+// Opcional: Event listener para quando o usuário clica fora do input
+$(document).on("click", function(e) {
+  if (!$(e.target).closest('#search').length) {
+    // Usuário clicou fora do input de pesquisa
+    // Não faz scroll automático, deixa o usuário navegar livremente
+  }
+});
 
         },
         pageBeforeRemove: function (event, page) {
