@@ -4318,7 +4318,7 @@ function listarCarrinhoCheckout() {
           } else {
             $("#freteCheckout").html(formatarMoeda(valor_frete));
           }
-          $("#subTotalCheckout").html(formatarMoeda(subtotalDesconto));
+          $("#subTotalCheckout").html(formatarMoeda(subtotal));
           $("#totalCheckout").html(formatarMoeda(total));
         }
 
