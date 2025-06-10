@@ -25,6 +25,7 @@
     color: var(--preto)
 }
 
+
 .nav-top.cart a:first-child {
     margin-left: 20px;
 }
@@ -33,18 +34,15 @@
     margin-right: 20px;
 }
 
-/* Para o checkout */
 .item-carrinho {
-  display: flex;
-  align-items: center;
-  margin-bottom: 15px;
-  padding: 10px;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.item-carrinho img {
-  border-radius: 8px;
-  margin-right: 15px;
+    display: flex;
+    align-items: center;
+    width: 90%;
+    height: 120px;
+    padding: 10px 0px;
+    /* background: blue; */
+    margin: auto;
+    border-bottom: 1px solid var(--gelo);
 }
 
 .area-img {
@@ -64,20 +62,31 @@
 }
 
 .area-details {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
+    flex: 70%;
+    display: flex;
+    justify-content: center;
+    flex-flow: column wrap;
+    height: 100%;
 }
 
 .sup {
-  flex: 1;
+    width: 90%;
+    /* background: red; */
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .name-prod {
-  font-weight: 500;
-  color: #333;
-  font-size: 14px;
+    font-weight: 500;
+    font-size: 16px;
+    margin-left: 15px;
+    max-width: 250px;
+    /* border: 1px solid black; */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .delete-item {
@@ -91,31 +100,13 @@
     margin-left: 15px;
 }
 
-/* Melhorias na exibição de preços */
 .preco-quantidade {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 5px;
-}
-
-.preco-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  text-align: right;
-}
-
-.preco-unitario {
-  font-size: 12px;
-  color: #666;
-  font-weight: normal;
-}
-
-.preco-total {
-  font-size: 16px;
-  color: #28a745;
-  font-weight: bold;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* background: blue; */
+    flex-flow: row nowrap;
 }
 
 .preco-quantidade span {
@@ -129,10 +120,12 @@
 }
 
 .count {
-  margin-left: 10px;
+    flex: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 }
 
-/* Melhorias para botões +/- */
 .minus {
     display: flex;
     align-items: center;
@@ -144,28 +137,12 @@
     border: 1px solid var(--gelo);
     border-radius: 5px;
     font-size: 16px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.minus:hover {
-    background-color: #e9ecef !important;
-    transform: scale(1.05);
-}
-
-.minus:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
 }
 
 .qtd-item {
-  width: 40px;
-  text-align: center;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 5px;
-  background-color: #f9f9f9;
+    width: 25px;
+    text-align: center;
+    background: var(--branco) !important;
 }
 
 .plus {
@@ -179,65 +156,6 @@
     border: 1px solid var(--verde);
     border-radius: 5px;
     font-size: 16px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.plus:hover {
-    background-color: #e9ecef !important;
-    transform: scale(1.05);
-}
-
-.plus:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-}
-
-/* Animação de loading para botões */
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Estado de loading para botões */
-.minus.loading,
-.plus.loading {
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-/* Flash de sucesso */
-.success-flash {
-  background-color: #28a745 !important;
-  color: white !important;
-  transition: all 0.3s ease;
-}
-
-/* Container do item do carrinho */
-.item-carrinho-container {
-  transition: opacity 0.3s ease;
-}
-
-.item-carrinho-container.updating {
-  opacity: 0.7;
-}
-
-/* Quantidade display */
-.quantidade-display {
-  font-weight: 600;
-  color: #333;
-  min-width: 32px;
-  display: inline-block;
-}
-
-/* Animação suave para mudanças de total */
-.total-item {
-  transition: color 0.3s ease;
-}
-
-.total-item.updated {
-  color: #007bff !important;
 }
 
 .flex-100 {
@@ -258,15 +176,14 @@
     border-bottom: 1px solid var(--gelo);
 }
 
+
 .blurred {
     filter: blur(5px);
 }
-
 .custo-container {
     display: flex;
     align-items: center;
 }
-
 #toggleCusto {
     cursor: pointer;
     margin-right: 4px;
@@ -274,28 +191,3 @@
     color:rgb(78, 78, 78);
 }
 
-/* Responsividade para telas menores */
-@media (max-width: 480px) {
-  .area-details {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  
-  .preco-quantidade {
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .preco-info {
-    align-items: flex-start;
-  }
-  
-  .minus,
-  .plus {
-    width: 36px;
-    height: 36px;
-  }
-}

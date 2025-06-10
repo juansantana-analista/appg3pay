@@ -3495,7 +3495,7 @@ function refazerPagamento(
 }
 //Fim Função Refazer Pagamento
 
-//Inicio Funçao Listar Carrinho (MELHORADA)
+//Inicio Funçao Listar Carrinho
 function listarCarrinho() {
   app.dialog.preloader("Carregando...");
   const pessoaId = localStorage.getItem("pessoaId");
@@ -3545,12 +3545,9 @@ function listarCarrinho() {
 
           //PERCORRER O NOSSO CARRINHO E ALIMENTAR A ÁREA
           responseJson.data.data.itens.forEach((item) => {
-            // Calcular o total do item (preço × quantidade)
-            const totalItem = parseFloat(item.preco_unitario) * parseInt(item.quantidade);
-            
             var itemDiv = `
               
-                  <div class="flex space-x-4 item-carrinho-container" style="margin-bottom: 18px;" data-produto-id="${item.produto_id}">
+                  <div class="flex space-x-4" style="margin-bottom: 18px;">
                     <img
                       src="https://vitatop.tecskill.com.br/${item.foto}"
                       alt="${item.nome}"
@@ -3581,9 +3578,9 @@ function listarCarrinho() {
                         <div class="flex items-center space-x-2">
                           <button
                             class="minus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
-                            data-produto-id="${item.produto_id}" 
-                            data-produto-qtde="${item.quantidade}"
-                            data-preco-unitario="${item.preco_unitario}"
+                            data-produto-id="${
+                              item.produto_id
+                            }" data-produto-qtde="${item.quantidade}"
                           >
                             <svg
                               class="w-4 h-4"
@@ -3599,12 +3596,14 @@ function listarCarrinho() {
                               ></path>
                             </svg>
                           </button>
-                          <span class="w-8 text-center quantidade-display">${item.quantidade}</span>
+                          <span class="w-8 text-center">${
+                            item.quantidade
+                          }</span>
                           <button
                             class="plus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
-                            data-produto-id="${item.produto_id}" 
-                            data-produto-qtde="${item.quantidade}"
-                            data-preco-unitario="${item.preco_unitario}"
+                            data-produto-id="${
+                              item.produto_id
+                            }" data-produto-qtde="${item.quantidade}"
                           >
                             <svg
                               class="w-4 h-4"
@@ -3621,10 +3620,9 @@ function listarCarrinho() {
                             </svg>
                           </button>
                         </div>
-                        <div class="text-right">
-                          <div class="text-sm text-gray-500">${formatarMoeda(item.preco_unitario)} cada</div>
-                          <span class="font-semibold text-green-600 total-item">${formatarMoeda(totalItem)}</span>
-                        </div>
+                        <span class="font-semibold">${formatarMoeda(
+                          item.preco_unitario
+                        )}</span>
                       </div>
                     </div>
                   </div>
@@ -3633,9 +3631,9 @@ function listarCarrinho() {
             $("#listaCarrinho").append(itemDiv);
           });
 
-          // Evento para remover item
           $(".delete-item").on("click", function () {
             var produtoId = $(this).data("produto-id");
+            //CONFIRMAR
             app.dialog.confirm(
               "Tem certeza que quer remover este item?",
               "Remover",
@@ -3645,24 +3643,14 @@ function listarCarrinho() {
             );
           });
 
-          // Evento para diminuir quantidade
           $(".minus").on("click", function () {
-            const $btn = $(this);
-            
-            // Previne cliques múltiplos
-            if ($btn.hasClass('loading')) return;
-            
-            var produtoId = $btn.data("produto-id");
-            var quantidade = parseInt($btn.data("produto-qtde"));
-            var precoUnitario = parseFloat($btn.data("preco-unitario"));
+            var produtoId = $(this).data("produto-id");
+            var quantidade = $(this).data("produto-qtde");
             var qtdeAtualizada = quantidade - 1;
 
+            //SE TEM MAIS DE UM ITEM NA QUANTIDADE
             if (quantidade > 1) {
-              // Atualiza localmente primeiro
-              atualizarItemLocal(produtoId, qtdeAtualizada, precoUnitario);
-              
-              // Depois chama a API
-              alterarCarrinhoMelhorado(pessoaIdCarrinho, produtoId, qtdeAtualizada, $btn);
+              alterarCarrinho(pessoaIdCarrinho, produtoId, qtdeAtualizada);
             } else {
               app.dialog.confirm(
                 `Gostaria de remover este item?`,
@@ -3674,33 +3662,37 @@ function listarCarrinho() {
             }
           });
 
-          // Evento para aumentar quantidade
           $(".plus").on("click", function () {
-            const $btn = $(this);
-            
-            // Previne cliques múltiplos
-            if ($btn.hasClass('loading')) return;
-            
-            var produtoId = $btn.data("produto-id");
-            var quantidade = parseInt($btn.data("produto-qtde"));
-            var precoUnitario = parseFloat($btn.data("preco-unitario"));
+            var produtoId = $(this).data("produto-id");
+            var quantidade = $(this).data("produto-qtde");
             var qtdeAtualizada = quantidade + 1;
 
-            // Atualiza localmente primeiro
-            atualizarItemLocal(produtoId, qtdeAtualizada, precoUnitario);
-            
-            // Depois chama a API
-            alterarCarrinhoMelhorado(pessoaIdCarrinho, produtoId, qtdeAtualizada, $btn);
+            alterarCarrinho(pessoaIdCarrinho, produtoId, qtdeAtualizada);
           });
 
           //MOSTRAR O SUBTOTAL
-          $("#subtotal").html(formatarMoeda(total));
-          $("#totalCarrinho").html(formatarMoeda(total));
+          $("#subtotal").html(
+            total.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })
+          );
+          //MOSTRAR O SUBTOTAL
+          $("#totalCarrinho").html(
+            total.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })
+          );
         } else {
           //MOSTRAR CARRINHO VAZIO
+          //ESVAZIAR LISTA DO CARRINHO
           $("#listaCarrinho").empty();
+
+          //SUMIR OS ITENS DE BAIXO BOTÃO E TOTAIS
           $("#toolbar-carrinho").addClass("display-none");
 
+          //MOSTRAR SACOLINHA VAZIA
           $("#containerCarrinho").html(`
               <div class="display-flex flex-direction-column align-items-center justify-content-center" style="height: 100%;">
                 <img width="300" src="img/empty.gif">
@@ -3722,93 +3714,7 @@ function listarCarrinho() {
       );
     });
 }
-
-// Função para atualizar item localmente (sem recarregar página)
-function atualizarItemLocal(produtoId, novaQuantidade, precoUnitario) {
-  const $container = $(`.item-carrinho-container[data-produto-id="${produtoId}"]`);
-  
-  // Atualiza a quantidade exibida
-  $container.find('.quantidade-display').text(novaQuantidade);
-  
-  // Atualiza os data-attributes dos botões
-  $container.find('.minus, .plus').attr('data-produto-qtde', novaQuantidade);
-  
-  // Calcula e atualiza o total do item
-  const novoTotal = parseFloat(precoUnitario) * parseInt(novaQuantidade);
-  $container.find('.total-item').text(formatarMoeda(novoTotal));
-  
-  // Atualiza o total geral (soma todos os totais de itens visíveis)
-  let totalGeral = 0;
-  $('.total-item').each(function() {
-    const valorTexto = $(this).text().replace(/[^\d,]/g, '').replace(',', '.');
-    totalGeral += parseFloat(valorTexto) || 0;
-  });
-  
-  $("#subtotal").html(formatarMoeda(totalGeral));
-  $("#totalCarrinho").html(formatarMoeda(totalGeral));
-}
-
-//Inicio Funçao Alterar Carrinho Melhorada
-function alterarCarrinhoMelhorado(pessoaId, produtoId, quantidade, $btn) {
-  // Adiciona classe loading ao botão
-  $btn.addClass('loading').prop('disabled', true);
-  
-  // Adiciona um pequeno indicador visual
-  const originalHtml = $btn.html();
-  $btn.html('<div style="width: 12px; height: 12px; border: 2px solid #ccc; border-top: 2px solid #666; border-radius: 50%; animation: spin 1s linear infinite;"></div>');
-
-  const dados = {
-    pessoa_id: pessoaId,
-    produto_id: produtoId,
-    quantidade: quantidade,
-  };
-
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
-  };
-
-  const body = JSON.stringify({
-    class: "PagamentoSafe2payRest",
-    method: "AlterarCarrinho",
-    dados: dados,
-  });
-
-  const options = {
-    method: "POST",
-    headers: headers,
-    body: body,
-  };
-
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      if (responseJson.status == "success" && responseJson.data.status == "sucess") {
-        // Sucesso - apenas atualiza o contador do carrinho
-        contarCarrinho();
-        
-        // Remove loading e restaura botão
-        $btn.removeClass('loading').prop('disabled', false);
-        $btn.html(originalHtml);
-        
-        // Pequeno feedback visual de sucesso
-        $btn.addClass('success-flash');
-        setTimeout(() => {
-          $btn.removeClass('success-flash');
-        }, 300);
-        
-      } else {
-        // Em caso de erro, recarrega a página para sincronizar
-        app.views.main.router.refreshPage();
-      }
-    })
-    .catch((error) => {
-      console.error("Erro:", error);
-      // Em caso de erro, recarrega a página para sincronizar
-      app.views.main.router.refreshPage();
-    });
-}
-//Fim Função Alterar Carrinho Melhorada
+//Fim Função Listar Carrinho
 
 //Inicio Funçao Alterar Carrinho
 function alterarCarrinho(pessoaId, produtoId, quantidade) {
@@ -4322,7 +4228,7 @@ function onDashboard() {
 }
 //Fim Função Dados Dashboard
 
-//Inicio Funçao Listar Carrinho Checkout (MODIFICADA)
+//Inicio Funçao Listar Carrinho Checkout
 function listarCarrinhoCheckout() {
   app.dialog.preloader("Carregando...");
   const pessoaId = localStorage.getItem("pessoaId");
@@ -4373,9 +4279,6 @@ function listarCarrinhoCheckout() {
 
           //PERCORRER O NOSSO CARRINHO E ALIMENTAR A ÁREA
           responseJson.data.data.itens.forEach((item) => {
-            // Calcular o total do item (preço × quantidade)
-            const totalItem = parseFloat(item.preco_unitario) * parseInt(item.quantidade);
-            
             var itemLi = `
                           <!-- ITEM DO CARRINHO-->
                           <li class="item-carrinho">
@@ -4389,12 +4292,9 @@ function listarCarrinhoCheckout() {
                                       </span>
                                   </div>
                                   <div class="preco-quantidade">
-                                      <div class="preco-info">
-                                          <span class="preco-unitario">${formatarMoeda(
-                                            item.preco_unitario
-                                          )} cada</span>
-                                          <span class="preco-total">${formatarMoeda(totalItem)}</span>
-                                      </div>
+                                      <span>${formatarMoeda(
+                                        item.preco_unitario
+                                      )}</span>
                                       <div class="count">
                                           <input readonly class="qtd-item" type="text" value="${
                                             item.quantidade
@@ -4433,6 +4333,7 @@ function listarCarrinhoCheckout() {
 //Fim Função Listar Carrinho Checkout
 
 //Inicio Funçao Listar Equipe
+//Inicio Funçao Listar Equipe Atualizada
 function listarEquipe(filtro = "all") {
   app.dialog.preloader("Carregando...");
   const pessoaId = localStorage.getItem("pessoaId");
