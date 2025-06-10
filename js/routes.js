@@ -1185,6 +1185,7 @@ var app = new Framework7({
             searchTimeout = setTimeout(() => {
               if (searchQuery.length >= 3 || searchQuery.length < 1) {
                 listarProdutos(searchQuery, null);
+                $(this).blur(); // Remove o foco do input, fechando o teclado
               }
             }, 1000); // Espera 1 segundo após a última digitação
           });
