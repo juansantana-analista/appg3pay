@@ -1176,55 +1176,36 @@ var app = new Framework7({
             }
           });      
 
-let searchTimeout; // Variável para armazenar o temporizador
+          let searchTimeout; // Variável para armazenar o temporizador
 
-$(document).on("input", "#search", function () {
-  clearTimeout(searchTimeout); 
-  const searchQuery = $(this).val();
-  
-  searchTimeout = setTimeout(() => {
-    if (searchQuery.length >= 3 || searchQuery.length < 1) {
-      listarProdutos(searchQuery, null);
-    }
-  }, 1000); // Espera 1 segundo após a última digitação
-});
-
-// Event listener para desabilitar o Enter e fazer scroll apenas quando solicitado
-$(document).on("keydown", "#search", function (e) {
-  if (e.key === "Enter" || e.keyCode === 13) {
-    e.preventDefault(); // Impede a ação padrão do Enter
-    
-    const searchQuery = $(this).val();
-    $(this).blur(); // Remove o foco do input, fechando o teclado
-    
-    // Se houver pesquisa, executa e faz scroll
-    if (searchQuery.length >= 3) {
-      clearTimeout(searchTimeout);
-      listarProdutos(searchQuery, null);
-      
-      setTimeout(() => {
-        // Usar scroll manual ao invés de scrollIntoView
-        const produtosContainer = document.getElementById('container-produtos');
-        if (produtosContainer) {
-          const containerTop = produtosContainer.offsetTop;
-          
-          // Scroll suave usando window.scrollTo
-          window.scrollTo({
-            top: containerTop - 100, // -100px para dar um espaço do topo
-            behavior: 'smooth'
+          $(document).on("input", "#search", function () {
+            clearTimeout(searchTimeout); 
+            const searchQuery = $(this).val();
+            
+            searchTimeout = setTimeout(() => {
+              if (searchQuery.length >= 3 || searchQuery.length < 1) {
+                listarProdutos(searchQuery, null);
+              }
+            }, 1000); // Espera 1 segundo após a última digitação
           });
-          
-          // Alternativa usando jQuery (caso a primeira não funcione)
-          // $('html, body').animate({
-          //   scrollTop: containerTop - 100
-          // }, 500);
-        }
-      }, 300);
-    }
-    
-    return false;
-  }
-});
+
+          // Event listener para desabilitar o Enter
+          $(document).on("keydown", "#search", function (e) {
+            if (e.key === "Enter" || e.keyCode === 13) {
+              e.preventDefault(); // Impede a ação padrão do Enter
+              
+              const searchQuery = $(this).val();
+              $(this).blur(); // Remove o foco do input, fechando o teclado
+              
+              // Se houver pesquisa, executa SEM scroll automático
+              if (searchQuery.length >= 3) {
+                clearTimeout(searchTimeout);
+                listarProdutos(searchQuery, null);
+              }
+              
+              return false;
+            }
+          });
 
         },
         pageBeforeRemove: function (event, page) {
