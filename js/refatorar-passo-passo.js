@@ -6,9 +6,9 @@
 // ========== ADICIONAR NO INÍCIO DO ARQUIVO ==========
 
 const CONFIG = {
-  API_BASE_URL: "https://vitatophomologa.tecskill.com.br/",
-  API_ENDPOINT: "https://vitatophomologa.tecskill.com.br/rest.php",
-  IMAGE_BASE_URL: "https://vitatophomologa.tecskill.com.br/",
+  API_BASE_URL: "https://vitatop.tecskill.com.br/",
+  API_ENDPOINT: "https://vitatop.tecskill.com.br/rest.php",
+  IMAGE_BASE_URL: "https://vitatop.tecskill.com.br/",
   DEFAULT_IMAGE: "img/default.png",
   PAGINATION_LIMIT: 30,
   SEARCH_DELAY: 1000,
@@ -222,7 +222,7 @@ function renderProdutos(produtos) {
   container.innerHTML = "";
 
   produtos.forEach((produto) => {
-    const produtoPreco = formatarMoeda(produto.preco2);
+    const produtoPreco = formatarMoeda(produto.preco_lojavirtual);
     const imagemProduto = produto.foto
       ? CONFIG.IMAGE_BASE_URL + produto.foto
       : CONFIG.DEFAULT_IMAGE;
@@ -234,7 +234,7 @@ function renderProdutos(produtos) {
            data-nome="${produto.nome}" 
            data-preco="${produto.preco}"
            data-preco2="${produto.preco2}"
-           data-preco2="${produto.preco2}"
+           data-preco_lojavirtual="${produto.preco_lojavirtual}"
            data-imagem="${imagemProduto}"
            href="#" class="item">
           <div class="img-container">
@@ -283,7 +283,7 @@ function adicionarEventosProdutos() {
         reviews: 5,
         preco: this.dataset.preco,
         preco2: this.dataset.preco2,
-        preco2: this.dataset.preco2,
+        preco_lojavirtual: this.dataset.preco_lojavirtual,
       };
       
       localStorage.setItem("produtoId", produto.id);

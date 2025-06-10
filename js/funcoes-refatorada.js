@@ -322,14 +322,14 @@ class ProductService extends BaseService {
       : CONFIG.DEFAULT_IMAGE;
     
     const productName = Formatter.truncateText(product.nome, 40);
-    const productPrice = Formatter.currency(product.preco2);
+    const productPrice = Formatter.currency(product.preco_lojavirtual);
 
     div.innerHTML = `
       <a data-id="${product.id}" 
          data-nome="${product.nome}" 
          data-preco="${product.preco}"
          data-preco2="${product.preco2}"
-         data-preco2="${product.preco2}"
+         data-preco_lojavirtual="${product.preco_lojavirtual}"
          data-imagem="${imageUrl}"
          href="#" class="item">
         <div class="img-container">
@@ -371,7 +371,7 @@ class ProductService extends BaseService {
           reviews: 5,
           preco: item.dataset.preco,
           preco2: item.dataset.preco2,
-          preco2: item.dataset.preco2,
+          preco_lojavirtual: item.dataset.preco_lojavirtual,
         };
 
         localStorage.setItem("produtoId", productData.id);
