@@ -3495,7 +3495,7 @@ function refazerPagamento(
 }
 //Fim Função Refazer Pagamento
 
-//Inicio Funçao Listar Carrinho
+//Inicio Funçao Listar Carrinho (MODIFICADA)
 function listarCarrinho() {
   app.dialog.preloader("Carregando...");
   const pessoaId = localStorage.getItem("pessoaId");
@@ -3545,6 +3545,9 @@ function listarCarrinho() {
 
           //PERCORRER O NOSSO CARRINHO E ALIMENTAR A ÁREA
           responseJson.data.data.itens.forEach((item) => {
+            // Calcular o total do item (preço × quantidade)
+            const totalItem = parseFloat(item.preco_unitario) * parseInt(item.quantidade);
+            
             var itemDiv = `
               
                   <div class="flex space-x-4" style="margin-bottom: 18px;">
@@ -3620,9 +3623,10 @@ function listarCarrinho() {
                             </svg>
                           </button>
                         </div>
-                        <span class="font-semibold">${formatarMoeda(
-                          item.preco_unitario
-                        )}</span>
+                        <div class="text-right">
+                          <div class="text-sm text-gray-500">${formatarMoeda(item.preco_unitario)} cada</div>
+                          <span class="font-semibold text-green-600">${formatarMoeda(totalItem)}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -4228,7 +4232,7 @@ function onDashboard() {
 }
 //Fim Função Dados Dashboard
 
-//Inicio Funçao Listar Carrinho Checkout
+//Inicio Funçao Listar Carrinho Checkout (MODIFICADA)
 function listarCarrinhoCheckout() {
   app.dialog.preloader("Carregando...");
   const pessoaId = localStorage.getItem("pessoaId");
@@ -4279,6 +4283,9 @@ function listarCarrinhoCheckout() {
 
           //PERCORRER O NOSSO CARRINHO E ALIMENTAR A ÁREA
           responseJson.data.data.itens.forEach((item) => {
+            // Calcular o total do item (preço × quantidade)
+            const totalItem = parseFloat(item.preco_unitario) * parseInt(item.quantidade);
+            
             var itemLi = `
                           <!-- ITEM DO CARRINHO-->
                           <li class="item-carrinho">
@@ -4292,9 +4299,12 @@ function listarCarrinhoCheckout() {
                                       </span>
                                   </div>
                                   <div class="preco-quantidade">
-                                      <span>${formatarMoeda(
-                                        item.preco_unitario
-                                      )}</span>
+                                      <div class="preco-info">
+                                          <span class="preco-unitario">${formatarMoeda(
+                                            item.preco_unitario
+                                          )} cada</span>
+                                          <span class="preco-total">${formatarMoeda(totalItem)}</span>
+                                      </div>
                                       <div class="count">
                                           <input readonly class="qtd-item" type="text" value="${
                                             item.quantidade
@@ -4333,7 +4343,6 @@ function listarCarrinhoCheckout() {
 //Fim Função Listar Carrinho Checkout
 
 //Inicio Funçao Listar Equipe
-//Inicio Funçao Listar Equipe Atualizada
 function listarEquipe(filtro = "all") {
   app.dialog.preloader("Carregando...");
   const pessoaId = localStorage.getItem("pessoaId");

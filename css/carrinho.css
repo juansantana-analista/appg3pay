@@ -34,15 +34,18 @@
     margin-right: 20px;
 }
 
+/* Para o checkout */
 .item-carrinho {
-    display: flex;
-    align-items: center;
-    width: 90%;
-    height: 120px;
-    padding: 10px 0px;
-    /* background: blue; */
-    margin: auto;
-    border-bottom: 1px solid var(--gelo);
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 10px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.item-carrinho img {
+  border-radius: 8px;
+  margin-right: 15px;
 }
 
 .area-img {
@@ -62,31 +65,20 @@
 }
 
 .area-details {
-    flex: 70%;
-    display: flex;
-    justify-content: center;
-    flex-flow: column wrap;
-    height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 .sup {
-    width: 90%;
-    /* background: red; */
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    justify-content: space-between;
+  flex: 1;
 }
 
 .name-prod {
-    font-weight: 500;
-    font-size: 16px;
-    margin-left: 15px;
-    max-width: 250px;
-    /* border: 1px solid black; */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  font-weight: 500;
+  color: #333;
+  font-size: 14px;
 }
 
 .delete-item {
@@ -101,12 +93,29 @@
 }
 
 .preco-quantidade {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    /* background: blue; */
-    flex-flow: row nowrap;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.preco-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.preco-unitario {
+  font-size: 12px;
+  color: #666;
+  font-weight: normal;
+}
+
+.preco-total {
+  font-size: 16px;
+  color: #28a745;
+  font-weight: bold;
 }
 
 .preco-quantidade span {
@@ -120,11 +129,9 @@
 }
 
 .count {
-    flex: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
+  margin-left: 10px;
 }
+
 
 .minus {
     display: flex;
@@ -140,9 +147,12 @@
 }
 
 .qtd-item {
-    width: 25px;
-    text-align: center;
-    background: var(--branco) !important;
+  width: 40px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+  background-color: #f9f9f9;
 }
 
 .plus {
@@ -191,3 +201,22 @@
     color:rgb(78, 78, 78);
 }
 
+/* Responsividade para telas menores */
+@media (max-width: 480px) {
+  .area-details {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .preco-quantidade {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .preco-info {
+    align-items: flex-start;
+  }
+}

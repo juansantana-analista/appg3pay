@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-const versionApp = "2.3.1";
+const versionApp = "2.3.2";
 var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
