@@ -5,7 +5,7 @@
   "name": "VitaTop",
   "scope": "/",
   "short_name": "VitaTop",
-  "start_url": "https://appvitatop.tecskill.com.br/",
+  "start_url": "https://homologaappvitatop.tecskill.com.br/",
   "id": "br.com.g3pay",
   "display": "fullscreen",
   "display_override": ["standalone", "window-controls-overlay"],
@@ -16,7 +16,7 @@
       "name": "VitaTop",
       "short_name": "VitaTop",
       "description": "Gerencie suas vendas e maximize seus ganhos com a VitaTop na palma da mão.",
-      "url": "https://appvitatop.tecskill.com.br/"
+      "url": "https://homologaappvitatop.tecskill.com.br/"
     }
   ],
   "icons": [

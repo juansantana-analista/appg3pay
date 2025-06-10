@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatophomologa.tecskill.com.br/rest.php";
-const versionApp = "2.2.6";
+const versionApp = "2.3.2";
 var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -817,8 +817,20 @@ var app = new Framework7({
             app.popup.open('.popup-senha');
           });
 
+
+
           $('.modal-close, [data-dismiss="modal-senha"]').on('click', function() {
               app.popup.close('.popup-senha');
+          });
+
+          
+          // JavaScript com jQuery
+          $('#suporteClick').on('click', function () {
+              const numero = '5543999049868'; 
+              const mensagem = 'Olá, preciso de ajuda com Aplicativo VitaTop.'; 
+              const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+
+              window.open(url, '_blank');
           });
           
           $("#versaoApp").html(versionApp);  
@@ -1181,12 +1193,31 @@ var app = new Framework7({
           $(document).on("input", "#search", function () {
             clearTimeout(searchTimeout); 
             const searchQuery = $(this).val();
-          
+            
             searchTimeout = setTimeout(() => {
               if (searchQuery.length >= 3 || searchQuery.length < 1) {
                 listarProdutos(searchQuery, null);
+                $(this).blur(); // Remove o foco do input, fechando o teclado
               }
             }, 1000); // Espera 1 segundo após a última digitação
+          });
+
+          // Event listener para desabilitar o Enter
+          $(document).on("keydown", "#search", function (e) {
+            if (e.key === "Enter" || e.keyCode === 13) {
+              e.preventDefault(); // Impede a ação padrão do Enter
+              
+              const searchQuery = $(this).val();
+              $(this).blur(); // Remove o foco do input, fechando o teclado
+              
+              // Se houver pesquisa, executa SEM scroll automático
+              if (searchQuery.length >= 3) {
+                clearTimeout(searchTimeout);
+                listarProdutos(searchQuery, null);
+              }
+              
+              return false;
+            }
           });
 
         },

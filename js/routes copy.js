@@ -40,7 +40,7 @@ var app = new Framework7({
             app.views.main.router.navigate("/login-view/");
           } else {
             // Se a URL contiver "/notificacoes", redireciona
-            if (currentUrl.includes('https://appvitatop.tecskill.com.br/#/notificacoes')) {
+            if (currentUrl.includes('https://homologaappvitatop.tecskill.com.br/#/notificacoes')) {
               app.views.main.router.navigate('/notificacoes/');
             } else {
               // Lógica para continuar usando o token
