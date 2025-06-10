@@ -4270,9 +4270,10 @@ function listarCarrinhoCheckout() {
       ) {
         // Supondo que responseJson seja o objeto que você obteve no console.log
         const quantidadeItens = responseJson.data.data.itens.length;
-        const subtotal = responseJson.data.data.total;
+        const subtotal = responseJson.data.data.total_sem_desconto;
+        const subtotalDesconto = responseJson.data.data.total;
         let valor_frete = responseJson.data.data.valor_frete;
-        const total = parseFloat(subtotal) + parseFloat(valor_frete);
+        const total = parseFloat(subtotalDesconto) + parseFloat(valor_frete);
 
         var pessoaIdCarrinho = responseJson.data.data.pessoa_id;
 
@@ -4317,7 +4318,7 @@ function listarCarrinhoCheckout() {
           } else {
             $("#freteCheckout").html(formatarMoeda(valor_frete));
           }
-          $("#subTotalCheckout").html(formatarMoeda(subtotal));
+          $("#subTotalCheckout").html(formatarMoeda(subtotalDesconto));
           $("#totalCheckout").html(formatarMoeda(total));
         }
 
