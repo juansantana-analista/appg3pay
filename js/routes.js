@@ -298,6 +298,7 @@ var app = new Framework7({
                 })
                 .then(response => response.json())
                 .then(data => {
+                  console.log(data);
                   if (data.status == 'success' && data.data.status == 'success') {
                     localStorage.setItem("emailRecuperacao", emailRecuperacao);
                       app.dialog.close();
