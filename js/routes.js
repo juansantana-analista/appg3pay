@@ -1185,7 +1185,6 @@ $(document).on("input", "#search", function () {
   searchTimeout = setTimeout(() => {
     if (searchQuery.length >= 3 || searchQuery.length < 1) {
       listarProdutos(searchQuery, null);
-      // Removido o scroll automático daqui - só fecha teclado se necessário
     }
   }, 1000); // Espera 1 segundo após a última digitação
 });
@@ -1204,12 +1203,21 @@ $(document).on("keydown", "#search", function (e) {
       listarProdutos(searchQuery, null);
       
       setTimeout(() => {
+        // Usar scroll manual ao invés de scrollIntoView
         const produtosContainer = document.getElementById('container-produtos');
         if (produtosContainer) {
-          produtosContainer.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
+          const containerTop = produtosContainer.offsetTop;
+          
+          // Scroll suave usando window.scrollTo
+          window.scrollTo({
+            top: containerTop - 100, // -100px para dar um espaço do topo
+            behavior: 'smooth'
           });
+          
+          // Alternativa usando jQuery (caso a primeira não funcione)
+          // $('html, body').animate({
+          //   scrollTop: containerTop - 100
+          // }, 500);
         }
       }, 300);
     }
