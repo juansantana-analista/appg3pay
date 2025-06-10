@@ -3620,9 +3620,9 @@ function listarCarrinho() {
                             </svg>
                           </button>
                         </div>
-                        <span class="font-semibold">${formatarMoeda(
-                          item.preco_unitario
-                        )}</span>
+                        <span class="font-semibold"><s>${formatarMoeda(
+                          item.preco_original
+                        )}</s></span>
                         <span class="font-semibold">${formatarMoeda(
                           item.preco_unitario
                         )}</span>
