@@ -1,5 +1,5 @@
 /**
- * VitaTop App - Core Functions
+ * VitaTopHomolog App - Core Functions
  * Versão refatorada com boas práticas
  */
 
@@ -842,5 +842,5 @@ document.addEventListener('DOMContentLoaded', () => {
   window.userAuthToken = AuthManager.getCookie('userAuthToken') || "";
   window.appId = "Bearer " + window.userAuthToken;
   
-  console.log("VitaTop App Core Functions carregado");
+  console.log("VitaTopHomolog App Core Functions carregado");
 });
