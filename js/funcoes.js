@@ -3623,6 +3623,9 @@ function listarCarrinho() {
                         <span class="font-semibold">${formatarMoeda(
                           item.preco_unitario
                         )}</span>
+                        <span class="font-semibold">${formatarMoeda(
+                          item.preco_unitario
+                        )}</span>
                       </div>
                     </div>
                   </div>
