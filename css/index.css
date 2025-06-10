@@ -4,8 +4,8 @@
   --verde: #19c463;
   --preto: #2a2a2a;
   --laranja: #ff5500;
-  --verde-escuro: #00591F;
-  --verde-claro: #7CBE42;
+  --verde-escuro: #00591f;
+  --verde-claro: #7cbe42;
   --rosa: #ffc0cb;
 }
 
@@ -99,7 +99,6 @@ body {
   font-size: 12px; /* Tamanho do texto */
 }
 
-
 /* CSS para o badge do carrinho na barra inferior usando o mesmo estilo da barra superior */
 .bottom-nav .cart-link {
   position: relative;
@@ -111,7 +110,7 @@ body {
 
 .bottom-nav .cart-badge::before {
   content: attr(data-count);
-  background: #7CBE42;
+  background: #7cbe42;
   width: 17px;
   height: 17px;
   border-radius: 50%;
@@ -292,7 +291,7 @@ body {
 /* Badge do carrinho */
 .btn-cart::before {
   content: attr(data-count);
-  background: #7CBE42;
+  background: #7cbe42;
   width: 17px;
   height: 17px;
   border-radius: 50%;
@@ -373,7 +372,7 @@ body {
 /* Badge de notificação */
 .btn-notificacao::before {
   content: attr(data-count);
-  background: #7CBE42;
+  background: #7cbe42;
   width: 17px;
   height: 17px;
   border-radius: 50%;
@@ -401,7 +400,9 @@ body {
 }
 
 /* Garantir que o badge apareça quando há notificações */
-.btn-notificacao[data-count]:not([data-count="0"]):not([data-count=""])::before {
+.btn-notificacao[data-count]:not([data-count="0"]):not(
+    [data-count=""]
+  )::before {
   display: flex !important;
 }
 
@@ -437,7 +438,7 @@ body {
 
 /* Debug - remover depois que funcionar */
 .btn-notificacao[data-count="1"]::before {
-  background: #7CBE42 !important; /* Para teste, depois mude para var(--verde-escuro) */
+  background: #7cbe42 !important; /* Para teste, depois mude para var(--verde-escuro) */
 }
 
 .btn-notifi {
@@ -553,7 +554,7 @@ form {
   margin-bottom: 10px; /* Increased from 5px */
   position: relative;
   border-radius: 10px; /* Added border radius */
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Added subtle shadow */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Added subtle shadow */
   padding: 10px; /* Added padding */
   height: auto; /* Remove fixed height */
   min-height: 130px; /* Minimum height */
@@ -562,7 +563,7 @@ form {
 
 .item-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .item-card .item {
@@ -628,7 +629,6 @@ form {
   text-align: left; /* Left aligned stars */
 }
 
-
 .star {
   display: inline-block;
   width: 20px; /* Largura de cada estrela */
@@ -663,7 +663,6 @@ form {
   text-align: left;
 }
 
-
 .gelo {
   background: var(--gelo) !important;
 }
@@ -685,7 +684,7 @@ form {
     flex: 30%;
   }
   #installBanner {
-      display: none;
+    display: none;
   }
 }
 
@@ -1456,7 +1455,7 @@ form {
 }
 
 .category-item:after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -5px;
   left: 50%;
@@ -1486,13 +1485,13 @@ form {
   border-radius: 50%;
   background-color: var(--verde-escuro);
   margin-bottom: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
 }
 
 .category-item.active .category-icon {
   background-color: var(--verde-escuro);
-  box-shadow: 0 3px 10px rgba(0,100,0,0.15);
+  box-shadow: 0 3px 10px rgba(0, 100, 0, 0.15);
   transform: scale(1.05);
 }
 
@@ -1531,7 +1530,7 @@ form {
   border-radius: 50%;
   background-color: #ffffff;
   border: none;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 2;
   display: flex;
   align-items: center;
@@ -1586,9 +1585,18 @@ form {
 
 /* Swipe animation hint */
 @keyframes swipeHint {
-  0% { transform: translateX(0); opacity: 0.8; }
-  50% { transform: translateX(20px); opacity: 1; }
-  100% { transform: translateX(0); opacity: 0.8; }
+  0% {
+    transform: translateX(0);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateX(20px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 0.8;
+  }
 }
 
 .swipe-hint {
@@ -1599,7 +1607,7 @@ form {
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 20px;
   padding: 8px 15px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   gap: 5px;
@@ -1645,7 +1653,7 @@ form {
   }
 }
 
-.categorias{
+.categorias {
   margin-top: 16px;
 }
 .categorias-curso {
@@ -2342,7 +2350,7 @@ form {
   max-width: 400px;
   background-color: white;
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
@@ -2615,18 +2623,19 @@ form {
 
 @keyframes slideUp {
   from {
-      transform: translateY(50px);
-      opacity: 0;
+    transform: translateY(50px);
+    opacity: 0;
   }
   to {
-      transform: translateY(0);
-      opacity: 1;
+    transform: translateY(0);
+    opacity: 1;
   }
 }
 
-input, select {
-    -webkit-user-select: text;
-    user-select: text;
+input,
+select {
+  -webkit-user-select: text;
+  user-select: text;
 }
 /*LOGIN CSS*/
 
@@ -2636,12 +2645,12 @@ input, select {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 }
 .login-container {
   background-color: white;
   border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 380px;
   padding: 40px 30px;
@@ -2666,7 +2675,7 @@ input, select {
 .input-group input:focus {
   border-color: var(--verde-escuro);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(255,85,0,0.1);
+  box-shadow: 0 0 0 3px rgba(255, 85, 0, 0.1);
 }
 .input-group i {
   position: absolute;
@@ -2675,7 +2684,8 @@ input, select {
   transform: translateY(-50%);
   color: #888;
 }
-.login-btn, .recovery-btn {
+.login-btn,
+.recovery-btn {
   width: 100%;
   padding: 15px;
   background-color: var(--verde-escuro);
@@ -2685,7 +2695,8 @@ input, select {
   font-weight: bold;
   transition: background-color 0.3s ease;
 }
-.login-btn:hover, .recovery-btn:hover {
+.login-btn:hover,
+.recovery-btn:hover {
   background-color: #e64400;
 }
 .social-login {
@@ -2737,33 +2748,32 @@ input, select {
 }
 @media (max-width: 480px) {
   .login-container {
-      width: 90%;
-      padding: 30px 20px;
+    width: 90%;
+    padding: 30px 20px;
   }
   .item-card {
     padding: 8px;
   }
-  
+
   .img-container {
     width: 100px;
     min-width: 100px;
     height: 100px;
   }
-  
+
   .img-container img {
     max-width: 85px;
     max-height: 85px;
   }
-  
+
   .nome-rating {
     font-size: 13px;
   }
-  
+
   .price {
     font-size: 16px;
   }
 }
-
 
 .header-pagamento {
   display: flex;
@@ -2891,21 +2901,23 @@ input, select {
 
 #product-gallery-thumbs .swiper-slide-thumb-active {
   opacity: 1;
-  border-color: #3B82F6;
+  border-color: #3b82f6;
 }
 
 /* Paginação e navegação */
 .swiper-pagination-bullet-active {
-  background-color: #3B82F6;
+  background-color: #3b82f6;
 }
 
-.swiper-button-next, .swiper-button-prev {
-  color: #3B82F6;
+.swiper-button-next,
+.swiper-button-prev {
+  color: #3b82f6;
   width: 30px;
   height: 30px;
 }
 
-.swiper-button-next:after, .swiper-button-prev:after {
+.swiper-button-next:after,
+.swiper-button-prev:after {
   font-size: 18px;
   font-weight: bold;
 }
@@ -2980,11 +2992,11 @@ input, select {
   #product-gallery-main .swiper-slide {
     height: 250px;
   }
-  
+
   #product-gallery-thumbs {
     height: 70px;
   }
-  
+
   #product-gallery-thumbs .swiper-slide {
     width: 70px;
     height: 70px;
@@ -3288,11 +3300,11 @@ input, select {
   .card-link {
     padding: 15px;
   }
-  
+
   .qr-container {
     margin-bottom: 15px;
   }
-  
+
   #qrcode {
     transform: scale(0.9);
   }
@@ -3317,7 +3329,7 @@ input, select {
   right: 0;
   width: 150px;
   height: 150px;
-  background-image: url('img/leaf-pattern.png');
+  background-image: url("img/leaf-pattern.png");
   background-size: contain;
   background-repeat: no-repeat;
   opacity: 0.1;
@@ -3339,7 +3351,7 @@ input, select {
 }
 
 .welcome-section #nomeUsuarioHome {
-  color: #7CBE42;
+  color: #7cbe42;
   font-weight: 700;
   position: relative;
   display: inline-block;
@@ -3355,13 +3367,19 @@ input, select {
 
 /* Efeito de animação para o nome do usuário */
 @keyframes highlight {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .welcome-section #nomeUsuarioHome {
-  background: linear-gradient(90deg, #7CBE42, #b4ff65, #7CBE42);
+  background: linear-gradient(90deg, #7cbe42, #b4ff65, #7cbe42);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -3373,95 +3391,101 @@ input, select {
   .welcome-section {
     padding: 15px;
   }
-  
+
   .welcome-section h1 {
     font-size: 20px;
   }
-  
+
   .welcome-section p {
     font-size: 13px;
   }
 }
-         /* Estilos para skeleton loading */
-         .loading-skeleton .skeleton-card {
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            animation: skeleton-pulse 1.5s ease-in-out infinite alternate;
-         }
+/* Estilos para skeleton loading */
+.loading-skeleton .skeleton-card {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  animation: skeleton-pulse 1.5s ease-in-out infinite alternate;
+}
 
-         @keyframes skeleton-pulse {
-            0% { opacity: 1; }
-            100% { opacity: 0.6; }
-         }
+@keyframes skeleton-pulse {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
 
-         /* Melhorias visuais para estados vazios */
-         .empty-state i, .error-state i {
-            display: block;
-            margin: 0 auto 20px;
-         }
+/* Melhorias visuais para estados vazios */
+.empty-state i,
+.error-state i {
+  display: block;
+  margin: 0 auto 20px;
+}
 
-         .empty-state h3, .error-state h3 {
-            margin: 0 0 10px 0;
-            font-size: 20px;
-         }
+.empty-state h3,
+.error-state h3 {
+  margin: 0 0 10px 0;
+  font-size: 20px;
+}
 
-         .empty-state p, .error-state p {
-            margin: 0 0 20px 0;
-            line-height: 1.5;
-         }
+.empty-state p,
+.error-state p {
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+}
 
-         /* Melhorias no botão carregar mais */
-         #loadMoreButton {
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-         }
+/* Melhorias no botão carregar mais */
+#loadMoreButton {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
 
-         #loadMoreButton:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-         }
+#loadMoreButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
 
-         #loadMoreButton:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-         }
+#loadMoreButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
 
-         /* Animação suave para novos itens */
-         .card-list {
-            animation: slideInUp 0.3s ease-out;
-         }
+/* Animação suave para novos itens */
+.card-list {
+  animation: slideInUp 0.3s ease-out;
+}
 
-         @keyframes slideInUp {
-            from {
-               opacity: 0;
-               transform: translateY(20px);
-            }
-            to {
-               opacity: 1;
-               transform: translateY(0);
-            }
-         }
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-         /* Melhorias responsivas */
-         @media (max-width: 480px) {
-            .dashboard-header {
-               padding: 15px;
-            }
-            
-            .dashboard-header h1 {
-               font-size: 20px;
-            }
-            
-            #loadMoreContainer {
-               padding: 15px !important;
-            }
-            
-            #loadMoreButton {
-               font-size: 14px;
-               padding: 12px 20px;
-            }
-         }
-         
+/* Melhorias responsivas */
+@media (max-width: 480px) {
+  .dashboard-header {
+    padding: 15px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 20px;
+  }
+
+  #loadMoreContainer {
+    padding: 15px !important;
+  }
+
+  #loadMoreButton {
+    font-size: 14px;
+    padding: 12px 20px;
+  }
+}
