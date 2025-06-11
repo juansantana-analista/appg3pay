@@ -52,194 +52,273 @@
             </div>
           </div>
 
+          <!-- Loading State -->
+          <div id="loadingCarrinho" class="loading-container display-none">
+            <div class="preloader"></div>
+            <p>Carregando carrinho...</p>
+          </div>
+
           <!-- Scrollable page content -->
           <div class="page-content" id="containerCarrinho">
-            <!-- TAB BAR-->
-            <!-- Conteúdo principal -->
-            <main class="container mx-auto px-4 pb-32">
-              <!-- Seção de Endereço -->
-              <div
-                class="bg-white rounded-2xl shadow-sm mb-4"
-                style="margin-top: 20px"
-              >
-                <div class="p-4 border-b flex justify-between items-center">
-                  <h2 class="text-lg font-semibold">Endereço de Entrega</h2>
+            <!-- Seção de Endereço -->
+            <div
+              class="bg-white rounded-2xl shadow-sm mb-4"
+              style="margin-top: 20px"
+            >
+              <div class="p-4 border-b flex justify-between items-center">
+                <h2 class="text-lg font-semibold">Endereço de Entrega</h2>
+                <button
+                  id="openAddressModal"
+                  class="text-blue-600 text-sm font-medium"
+                  style="width: 84px"
+                >
+                  Gerenciar
+                </button>
+              </div>
+              <div class="p-4" id="selectedAddress">
+                <div class="loading-address">
+                  <p>Carregando endereços...</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Lista de Produtos -->
+            <div class="bg-white rounded-2xl shadow-sm mb-4" id="produtos-container">
+              <div class="p-4 border-b">
+                <h2 class="text-lg font-semibold">Seus Produtos</h2>
+              </div>
+
+              <!-- Item do carrinho -->
+              <div id="listaCarrinho" class="p-4 border-b">
+                <!-- Produtos serão inseridos aqui -->
+              </div>
+
+              <!-- Cupom de desconto -->
+              <div class="p-4">
+                <div class="flex space-x-2">
+                  <input
+                    type="text"
+                    placeholder="Cupom de desconto"
+                    id="cupomDesconto"
+                    class="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    style="border: 1px solid #ccc; border-radius: 8px"
+                  />
                   <button
-                    id="openAddressModal"
-                    class="text-blue-600 text-sm font-medium"
-                    style="width: 84px"
+                    id="btnDesconto"
+                    class="px-6 py-2 text-white rounded-lg font-medium hover:bg-blue-700 transition duration-200"
+                    style="background-color: #004d00; width: 100px"
                   >
-                    Gerenciar
+                    Aplicar
                   </button>
                 </div>
-                <div class="p-4" id="selectedAddress">
-                  <!-- Endereço selecionado -->
-                </div>
               </div>
+            </div>
 
-              <!-- Lista de Produtos -->
-              <div class="bg-white rounded-2xl shadow-sm mb-4">
-                <div class="p-4 border-b">
-                  <h2 class="text-lg font-semibold">Seus Produtos</h2>
-                </div>
-
-                <!-- Item do carrinho -->
-                <div id="listaCarrinho" class="p-4 border-b"></div>
-
-                <!-- Cupom de desconto -->
-                <div class="p-4">
-                  <div class="flex space-x-2">
-                    <input
-                      type="text"
-                      placeholder="Cupom de desconto"
-                      id="cupomDesconto"
-                      class="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      style="border: 1px solid #ccc; border-radius: 8px"
-                    />
-                    <button
-                      id="btnDesconto"
-                      class="px-6 py-2 text-white rounded-lg font-medium hover:bg-blue-700 transition duration-200"
-                      style="background-color: #004d00; width: 100px"
-                    >
-                      Aplicar
-                    </button>
-                  </div>
-                </div>
+            <!-- Métodos de pagamento -->
+            <div class="bg-white rounded-2xl shadow-sm mb-4">
+              <div class="p-4 border-b">
+                <h2 class="text-lg font-semibold">Forma de Pagamento</h2>
               </div>
-
-              <!-- Métodos de pagamento -->
-              <div class="bg-white rounded-2xl shadow-sm mb-4">
-                <div class="p-4 border-b">
-                  <h2 class="text-lg font-semibold">Forma de Pagamento</h2>
-                </div>
-                <div class="p-4">
-                  <div class="space-y-3">
-                    <label
-                      class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50"
-                    >
-                      <input
-                        type="radio"
-                        value="3"
-                        name="payment"
-                        class="form-radio text-blue-600"
-                        checked
-                      />
-                      <span class="ml-2">Pix</span>
-                      <svg
-                        class="w-6 h-6 ml-auto text-green-500"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                        ></path>
-                      </svg>
-                    </label>
-
-                    <label
-                      class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50"
-                      id="opcaoCartao"
-                    >
-                      <input
-                        type="radio"
-                        value="1"
-                        name="payment"
-                        class="form-radio text-blue-600"                        
-                      />
-                      <span class="ml-2">Cartão de Crédito</span>
-                      <svg
-                        class="w-6 h-6 ml-auto text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                        ></path>
-                      </svg>
-                    </label>
-
-                    <label
-                      class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50"
-                    >
-                      <input
-                        type="radio"
-                        value="2"
-                        name="payment"
-                        class="form-radio text-blue-600"
-                      />
-                      <span class="ml-2">Boleto Bancário</span>
-                      <svg
-                        class="w-6 h-6 ml-auto text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                        ></path>
-                      </svg>
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Resumo do pedido -->
-              <div class="bg-white rounded-2xl shadow-sm mb-4">
-                <div class="p-4 border-b">
-                  <h2 class="text-lg font-semibold">Resumo do Pedido</h2>
-                </div>
-                <div class="p-4 space-y-3">
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">Subtotal</span>
-                    <span id="subtotal"></span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">Desconto de<span id="porcentagemDesconto"> 30%</span></span>
-                    <span id="descontoAplicado"></span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">Frete</span>
-                    <span class="text-green-600" id="fretePedido">Grátis</span>
-                  </div>
-                  <div
-                    id="descontoContainer"
-                    class="flex justify-between display-none"
+              <div class="p-4">
+                <div class="space-y-3">
+                  <label
+                    class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50"
                   >
-                    <span class="text-gray-600">Desconto</span>
-                    <span class="text-red-600" id="descontoPedido"
-                      >- R$ 0,00</span
+                    <input
+                      type="radio"
+                      value="3"
+                      name="payment"
+                      class="form-radio text-blue-600"
+                      checked
+                    />
+                    <span class="ml-2">Pix</span>
+                    <svg
+                      class="w-6 h-6 ml-auto text-green-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
-                  </div>
-                  <div class="pt-3 border-t flex justify-between font-semibold">
-                    <span>Total</span>
-                    <span class="text-lg" id="totalCarrinho"></span>
-                  </div>
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      ></path>
+                    </svg>
+                  </label>
+
+                  <label
+                    class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50"
+                    id="opcaoCartao"
+                  >
+                    <input
+                      type="radio"
+                      value="1"
+                      name="payment"
+                      class="form-radio text-blue-600"                        
+                    />
+                    <span class="ml-2">Cartão de Crédito</span>
+                    <svg
+                      class="w-6 h-6 ml-auto text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                      ></path>
+                    </svg>
+                  </label>
+
+                  <label
+                    class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50"
+                  >
+                    <input
+                      type="radio"
+                      value="2"
+                      name="payment"
+                      class="form-radio text-blue-600"
+                    />
+                    <span class="ml-2">Boleto Bancário</span>
+                    <svg
+                      class="w-6 h-6 ml-auto text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      ></path>
+                    </svg>
+                  </label>
                 </div>
               </div>
-            </main>
+            </div>
 
-            <!-- Footer fixo com botão de finalizar -->
-            <footer
-              class="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-40"
-            >
-              <div class="container mx-auto px-4 py-3">
-                <button
-                  id="finalizarCompra"
-                  class="finalizar-compra w-full text-white py-3 px-4 rounded-xl font-semibold hover:bg-blue-700 transition duration-200 flex items-center justify-center space-x-2"
-                  style="background-color: #004d00"
+            <!-- Resumo do pedido -->
+            <div class="bg-white rounded-2xl shadow-sm mb-4">
+              <div class="p-4 border-b">
+                <h2 class="text-lg font-semibold">Resumo do Pedido</h2>
+              </div>
+              <div class="p-4 space-y-3">
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Subtotal</span>
+                  <span id="subtotal">R$ 0,00</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Frete</span>
+                  <span class="text-green-600" id="fretePedido">Grátis</span>
+                </div>
+                <div
+                  id="descontoContainer"
+                  class="flex justify-between display-none"
                 >
-                  <span>Finalizar Compra</span>
+                  <span class="text-gray-600">Desconto</span>
+                  <span class="text-red-600" id="descontoPedido">- R$ 0,00</span>
+                </div>
+                <div class="pt-3 border-t flex justify-between font-semibold">
+                  <span>Total</span>
+                  <span class="text-lg" id="totalCarrinho">R$ 0,00</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyCartState" class="text-center py-8 display-none">
+              <div class="empty-cart-icon">
+                <img width="300" src="img/empty.gif" alt="Carrinho vazio">
+              </div>
+              <h3 class="text-lg font-semibold text-gray-600 mt-4">Seu carrinho está vazio</h3>
+              <p class="text-gray-500 mt-2">Adicione produtos para continuar</p>
+              <button 
+                onclick="app.views.main.router.navigate('/home/')"
+                class="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Continuar Comprando
+              </button>
+            </div>
+          </div>
+
+          <!-- Footer fixo com botão de finalizar -->
+          <footer
+            id="toolbar-carrinho"
+            class="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-40 display-none"
+          >
+            <div class="container mx-auto px-4 py-3">
+              <button
+                id="finalizarCompra"
+                class="finalizar-compra w-full text-white py-3 px-4 rounded-xl font-semibold hover:bg-blue-700 transition duration-200 flex items-center justify-center space-x-2"
+                style="background-color: #004d00"
+                disabled
+              >
+                <span>Finalizar Compra</span>
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </footer>
+
+          <!-- Modal de Endereços -->
+          <div
+            id="addressModal"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+          >
+            <div class="bg-white w-full max-w-lg mx-4 rounded-2xl">
+              <!-- Modal Header -->
+              <div class="p-4 border-b flex justify-between items-center">
+                <h3 class="text-lg font-semibold">Endereços</h3>
+                <button
+                  id="closeAddressModal"
+                  class="text-gray-500"
+                  style="width: 30px"
+                >
+                  <svg
+                    class="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Lista de Endereços -->
+              <div
+                class="p-4 max-h-[60vh] overflow-y-auto"
+                style="max-height: calc(6 * 75px + 1rem)"
+              >
+                <div class="space-y-4" id="listaDeEnderecos">
+                  <!-- Endereços serão inseridos aqui -->
+                </div>
+
+                <!-- Botão Adicionar Novo Endereço -->
+                <button
+                  id="showNewAddressForm"
+                  class="mt-4 w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-500 transition duration-200 flex items-center justify-center space-x-2"
+                >
                   <svg
                     class="w-5 h-5"
                     fill="none"
@@ -250,523 +329,501 @@
                       stroke-linecap="round"
                       stroke-linejoin="round"
                       stroke-width="2"
-                      d="M14 5l7 7m0 0l-7 7m7-7H3"
+                      d="M12 4v16m8-8H4"
+                    ></path>
+                  </svg>
+                  <span>Adicionar Novo Endereço</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal de Novo Endereço -->
+          <div
+            id="newAddressModal"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+          >
+            <div class="bg-white w-full max-w-lg mx-4 rounded-2xl">
+              <div class="p-4 border-b flex justify-between items-center">
+                <h3 class="text-lg font-semibold">Novo Endereço</h3>
+                <button
+                  class="closeNewAddressModal text-gray-500"
+                  style="width: 30px"
+                >
+                  <svg
+                    class="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
                     ></path>
                   </svg>
                 </button>
               </div>
-            </footer>
-            <!-- Modal de Endereços -->
-            <div
-              id="addressModal"
-              class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
-            >
-              <div class="bg-white w-full max-w-lg mx-4 rounded-2xl">
-                <!-- Modal Header -->
-                <div class="p-4 border-b flex justify-between items-center">
-                  <h3 class="text-lg font-semibold">Endereços</h3>
-                  <button
-                    id="closeAddressModal"
-                    class="text-gray-500"
-                    style="width: 30px"
-                  >
-                    <svg
-                      class="w-6 h-6"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+
+              <form class="p-4 space-y-4">
+                <div class="space-y-4">
+                  <div class="flex space-x-4">
+                    <div class="flex-1">
+                      <label class="text-sm font-medium text-gray-700 mb-1"
+                        >Nome do Endereço</label
+                      >
+                      <input
+                        type="text"
+                        id="nomeEndereco"
+                        placeholder="Ex: Casa, Trabalho"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        style="
+                          border: 1px solid #ccc;
+                          border-radius: 8px;
+                          padding: 10px;
+                        "
+                      />
+                    </div>
+                    <div class="w-1/3">
+                      <label class="text-sm font-medium text-gray-700 mb-1"
+                        >CEP</label
+                      >
+                      <input
+                        type="text"
+                        id="cepCliente"
+                        placeholder="00000-000"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        style="
+                          border: 1px solid #ccc;
+                          border-radius: 8px;
+                          padding: 10px;
+                        "
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="text-sm font-medium text-gray-700 mb-1"
+                      >Rua</label
                     >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      ></path>
-                    </svg>
-                  </button>
+                    <input
+                      type="text"
+                      id="logradouroEndCliente"
+                      placeholder="Nome da rua"
+                      class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      style="
+                        border: 1px solid #ccc;
+                        border-radius: 8px;
+                        padding: 10px;
+                      "
+                    />
+                  </div>
+
+                  <div class="flex space-x-4">
+                    <div class="w-1/3">
+                      <label class="text-sm font-medium text-gray-700 mb-1"
+                        >Número</label
+                      >
+                      <input
+                        type="text"
+                        id="numeroEndCliente"
+                        placeholder="123"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        style="
+                          border: 1px solid #ccc;
+                          border-radius: 8px;
+                          padding: 10px;
+                        "
+                      />
+                    </div>
+                    <div class="flex-1">
+                      <label class="text-sm font-medium text-gray-700 mb-1"
+                        >Complemento</label
+                      >
+                      <input
+                        type="text"
+                        id="complementoEndCliente"
+                        placeholder="Apto, Bloco, etc"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        style="
+                          border: 1px solid #ccc;
+                          border-radius: 8px;
+                          padding: 10px;
+                        "
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="text-sm font-medium text-gray-700 mb-1"
+                      >Bairro</label
+                    >
+                    <input
+                      type="text"
+                      id="bairroEndCliente"
+                      placeholder="Nome do bairro"
+                      class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      style="
+                        border: 1px solid #ccc;
+                        border-radius: 8px;
+                        padding: 10px;
+                      "
+                    />
+                  </div>
+
+                  <div class="flex space-x-4">
+                    <div class="flex-1">
+                      <label class="text-sm font-medium text-gray-700 mb-1"
+                        >Cidade</label
+                      >
+                      <input
+                        type="text"
+                        id="cidadeEndCliente"
+                        placeholder="Cidade"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        style="
+                          border: 1px solid #ccc;
+                          border-radius: 8px;
+                          padding: 10px;
+                        "
+                      />
+                    </div>
+                    <div class="w-1/4">
+                      <label class="text-sm font-medium text-gray-700 mb-1"
+                        >Estado</label
+                      >
+                      <input
+                        type="text"
+                        id="estadoEndCliente"
+                        placeholder="Estado"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        style="
+                          border: 1px solid #ccc;
+                          border-radius: 8px;
+                          padding: 10px;
+                        "
+                        readonly
+                      />
+                    </div>
+                  </div>
+
+                  <div class="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="defaultAddress"
+                      class="form-checkbox text-blue-600"
+                    />
+                    <label for="defaultAddress" class="text-sm text-gray-700"
+                      >Definir como endereço principal</label
+                    >
+                  </div>
                 </div>
 
-                <!-- Lista de Endereços -->
-                <div
-                  class="p-4 max-h-[60vh] overflow-y-auto"
-                  style="max-height: calc(6 * 75px + 1rem)"
+                <div class="flex space-x-3 pt-4">
+                  <button
+                    type="button"
+                    class="closeNewAddressModal flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-200"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="button"
+                    id="salvarEndereco"
+                    class="flex-1 px-4 py-2 text-white rounded-lg hover:bg-blue-700 transition duration-200"
+                    style="background-color: #ff7b39"
+                  >
+                    Salvar Endereço
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Modal de Editar Endereço -->
+          <div
+            id="editAddressModal"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+          >
+            <div class="bg-white w-full max-w-lg mx-4 rounded-2xl">
+              <div class="p-4 border-b flex justify-between items-center">
+                <h3 class="text-lg font-semibold">Editar Endereço</h3>
+                <button
+                  class="closeEditAddressModal text-gray-500"
+                  style="width: 30px"
                 >
-                  <div class="space-y-4" id="listaDeEnderecos">
-                    <!-- Endereço 1 -->
-                  </div>
-
-                  <!-- Botão Adicionar Novo Endereço -->
-                  <button
-                    id="showNewAddressForm"
-                    class="mt-4 w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-500 transition duration-200 flex items-center justify-center space-x-2"
+                  <svg
+                    class="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    <svg
-                      class="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 4v16m8-8H4"
-                      ></path>
-                    </svg>
-                    <span>Adicionar Novo Endereço</span>
-                  </button>
-                </div>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    ></path>
+                  </svg>
+                </button>
               </div>
-            </div>
 
-            <!-- Modal de Novo Endereço -->
-            <div
-              id="newAddressModal"
-              class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
-            >
-              <div class="bg-white w-full max-w-lg mx-4 rounded-2xl">
-                <div class="p-4 border-b flex justify-between items-center">
-                  <h3 class="text-lg font-semibold">Novo Endereço</h3>
-                  <button
-                    class="closeNewAddressModal text-gray-500"
-                    style="width: 30px"
-                  >
-                    <svg
-                      class="w-6 h-6"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+              <form class="p-4 space-y-4">
+                <div class="space-y-4">
+                  <div class="flex space-x-4">
+                    <div class="flex-1">
+                      <label class="text-sm font-medium text-gray-700 mb-1"
+                        >Nome do Endereço</label
+                      >
+                      <input type="hidden" id="idEnderecoEdit" />
+                      <input
+                        type="text"
+                        id="nomeEnderecoEdit"
+                        placeholder="Ex: Casa, Trabalho"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        style="
+                          border: 1px solid #ccc;
+                          border-radius: 8px;
+                          padding: 10px;
+                        "
+                      />
+                    </div>
+                    <div class="w-1/3">
+                      <label class="text-sm font-medium text-gray-700 mb-1"
+                        >CEP</label
+                      >
+                      <input
+                        type="text"
+                        id="cepEdit"
+                        placeholder="00000-000"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        style="
+                          border: 1px solid #ccc;
+                          border-radius: 8px;
+                          padding: 10px;
+                        "
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="text-sm font-medium text-gray-700 mb-1"
+                      >Rua</label
                     >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      ></path>
-                    </svg>
-                  </button>
+                    <input
+                      type="text"
+                      id="logradouroEndEdit"
+                      placeholder="Nome da rua"
+                      class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      style="
+                        border: 1px solid #ccc;
+                        border-radius: 8px;
+                        padding: 10px;
+                      "
+                    />
+                  </div>
+
+                  <div class="flex space-x-4">
+                    <div class="w-1/3">
+                      <label class="text-sm font-medium text-gray-700 mb-1"
+                        >Número</label
+                      >
+                      <input
+                        type="text"
+                        id="numeroEndEdit"
+                        placeholder="123"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        style="
+                          border: 1px solid #ccc;
+                          border-radius: 8px;
+                          padding: 10px;
+                        "
+                      />
+                    </div>
+                    <div class="flex-1">
+                      <label class="text-sm font-medium text-gray-700 mb-1"
+                        >Complemento</label
+                      >
+                      <input
+                        type="text"
+                        id="complementoEndEdit"
+                        placeholder="Apto, Bloco, etc"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        style="
+                          border: 1px solid #ccc;
+                          border-radius: 8px;
+                          padding: 10px;
+                        "
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="text-sm font-medium text-gray-700 mb-1"
+                      >Bairro</label
+                    >
+                    <input
+                      type="text"
+                      id="bairroEndEdit"
+                      placeholder="Nome do bairro"
+                      class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      style="
+                        border: 1px solid #ccc;
+                        border-radius: 8px;
+                        padding: 10px;
+                      "
+                    />
+                  </div>
+
+                  <div class="flex space-x-4">
+                    <div class="flex-1">
+                      <label class="text-sm font-medium text-gray-700 mb-1"
+                        >Cidade</label
+                      >
+                      <input
+                        type="text"
+                        id="cidadeEndEdit"
+                        placeholder="Cidade"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        style="
+                          border: 1px solid #ccc;
+                          border-radius: 8px;
+                          padding: 10px;
+                        "
+                      />
+                    </div>
+                    <div class="w-1/4">
+                      <label class="text-sm font-medium text-gray-700 mb-1"
+                        >Estado</label
+                      >
+                      <input
+                        type="text"
+                        id="estadoEndEdit"
+                        placeholder="Estado"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        style="
+                          border: 1px solid #ccc;
+                          border-radius: 8px;
+                          padding: 10px;
+                        "
+                        readonly
+                      />
+                    </div>
+                  </div>
+
+                  <div class="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="defaultAddressEdit"
+                      class="form-checkbox text-blue-600"
+                    />
+                    <label
+                      for="defaultAddressEdit"
+                      class="text-sm text-gray-700"
+                      >Definir como endereço principal</label
+                    >
+                  </div>
                 </div>
 
-                <form class="p-4 space-y-4">
-                  <div class="space-y-4">
-                    <div class="flex space-x-4">
-                      <div class="flex-1">
-                        <label class="text-sm font-medium text-gray-700 mb-1"
-                          >Nome do Endereço</label
-                        >
-                        <input
-                          type="text"
-                          id="nomeEndereco"
-                          placeholder="Ex: Casa, Trabalho"
-                          class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="
-                            border: 1px solid #ccc;
-                            border-radius: 8px;
-                            padding: 10px;
-                          "
-                        />
-                      </div>
-                      <div class="w-1/3">
-                        <label class="text-sm font-medium text-gray-700 mb-1"
-                          >CEP</label
-                        >
-                        <input
-                          type="text"
-                          id="cepCliente"
-                          placeholder="00000-000"
-                          class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="
-                            border: 1px solid #ccc;
-                            border-radius: 8px;
-                            padding: 10px;
-                          "
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label class="text-sm font-medium text-gray-700 mb-1"
-                        >Rua</label
-                      >
-                      <input
-                        type="text"
-                        id="logradouroEndCliente"
-                        placeholder="Nome da rua"
-                        class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        style="
-                          border: 1px solid #ccc;
-                          border-radius: 8px;
-                          padding: 10px;
-                        "
-                      />
-                    </div>
-
-                    <div class="flex space-x-4">
-                      <div class="w-1/3">
-                        <label class="text-sm font-medium text-gray-700 mb-1"
-                          >Número</label
-                        >
-                        <input
-                          type="text"
-                          id="numeroEndCliente"
-                          placeholder="123"
-                          class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="
-                            border: 1px solid #ccc;
-                            border-radius: 8px;
-                            padding: 10px;
-                          "
-                        />
-                      </div>
-                      <div class="flex-1">
-                        <label class="text-sm font-medium text-gray-700 mb-1"
-                          >Complemento</label
-                        >
-                        <input
-                          type="text"
-                          id="complementoEndCliente"
-                          placeholder="Apto, Bloco, etc"
-                          class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="
-                            border: 1px solid #ccc;
-                            border-radius: 8px;
-                            padding: 10px;
-                          "
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label class="text-sm font-medium text-gray-700 mb-1"
-                        >Bairro</label
-                      >
-                      <input
-                        type="text"
-                        id="bairroEndCliente"
-                        placeholder="Nome do bairro"
-                        class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        style="
-                          border: 1px solid #ccc;
-                          border-radius: 8px;
-                          padding: 10px;
-                        "
-                      />
-                    </div>
-
-                    <div class="flex space-x-4">
-                      <div class="flex-1">
-                        <label class="text-sm font-medium text-gray-700 mb-1"
-                          >Cidade</label
-                        >
-                        <input
-                          type="text"
-                          id="cidadeEndCliente"
-                          placeholder="Cidade"
-                          class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="
-                            border: 1px solid #ccc;
-                            border-radius: 8px;
-                            padding: 10px;
-                          "
-                        />
-                      </div>
-                      <div class="w-1/4">
-                        <label class="text-sm font-medium text-gray-700 mb-1"
-                          >Estado</label
-                        >
-                        <input
-                          type="text"
-                          id="estadoEndCliente"
-                          placeholder="Estado"
-                          class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="
-                            border: 1px solid #ccc;
-                            border-radius: 8px;
-                            padding: 10px;
-                          "
-                          readonly
-                        />
-                      </div>
-                    </div>
-
-                    <div class="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        id="defaultAddress"
-                        class="form-checkbox text-blue-600"
-                      />
-                      <label for="defaultAddress" class="text-sm text-gray-700"
-                        >Definir como endereço principal</label
-                      >
-                    </div>
-                  </div>
-
-                  <div class="flex space-x-3 pt-4">
-                    <button
-                      type="button"
-                      class="closeNewAddressModal flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-200"
-                    >
-                      Cancelar
-                    </button>
-                    <button
-                      type="button"
-                      id="salvarEndereco"
-                      class="flex-1 px-4 py-2 text-white rounded-lg hover:bg-blue-700 transition duration-200"
-                      style="background-color: #ff7b39"
-                    >
-                      Salvar Endereço
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-            <!-- Modal de Editar Endereço -->
-            <div
-              id="editAddressModal"
-              class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
-            >
-              <div class="bg-white w-full max-w-lg mx-4 rounded-2xl">
-                <div class="p-4 border-b flex justify-between items-center">
-                  <h3 class="text-lg font-semibold">Editar Endereço</h3>
+                <div class="flex space-x-3 pt-4">
                   <button
-                    class="closeEditAddressModal text-gray-500"
-                    style="width: 30px"
+                    type="button"
+                    class="closeEditAddressModal flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-200"
                   >
-                    <svg
-                      class="w-6 h-6"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      ></path>
-                    </svg>
+                    Cancelar
+                  </button>
+                  <button
+                    type="button"
+                    id="salvarEnderecoEdit"
+                    class="flex-1 px-4 py-2 text-white rounded-lg hover:bg-blue-700 transition duration-200"
+                    style="background-color: #ff7b39"
+                  >
+                    Salvar Endereço
                   </button>
                 </div>
-
-                <form class="p-4 space-y-4">
-                  <div class="space-y-4">
-                    <div class="flex space-x-4">
-                      <div class="flex-1">
-                        <label class="text-sm font-medium text-gray-700 mb-1"
-                          >Nome do Endereço</label
-                        >
-                        <input type="hidden" id="idEnderecoEdit" />
-                        <input
-                          type="text"
-                          id="nomeEnderecoEdit"
-                          placeholder="Ex: Casa, Trabalho"
-                          class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="
-                            border: 1px solid #ccc;
-                            border-radius: 8px;
-                            padding: 10px;
-                          "
-                        />
-                      </div>
-                      <div class="w-1/3">
-                        <label class="text-sm font-medium text-gray-700 mb-1"
-                          >CEP</label
-                        >
-                        <input
-                          type="text"
-                          id="cepEdit"
-                          placeholder="00000-000"
-                          class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="
-                            border: 1px solid #ccc;
-                            border-radius: 8px;
-                            padding: 10px;
-                          "
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label class="text-sm font-medium text-gray-700 mb-1"
-                        >Rua</label
-                      >
-                      <input
-                        type="text"
-                        id="logradouroEndEdit"
-                        placeholder="Nome da rua"
-                        class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        style="
-                          border: 1px solid #ccc;
-                          border-radius: 8px;
-                          padding: 10px;
-                        "
-                      />
-                    </div>
-
-                    <div class="flex space-x-4">
-                      <div class="w-1/3">
-                        <label class="text-sm font-medium text-gray-700 mb-1"
-                          >Número</label
-                        >
-                        <input
-                          type="text"
-                          id="numeroEndEdit"
-                          placeholder="123"
-                          class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="
-                            border: 1px solid #ccc;
-                            border-radius: 8px;
-                            padding: 10px;
-                          "
-                        />
-                      </div>
-                      <div class="flex-1">
-                        <label class="text-sm font-medium text-gray-700 mb-1"
-                          >Complemento</label
-                        >
-                        <input
-                          type="text"
-                          id="complementoEndEdit"
-                          placeholder="Apto, Bloco, etc"
-                          class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="
-                            border: 1px solid #ccc;
-                            border-radius: 8px;
-                            padding: 10px;
-                          "
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label class="text-sm font-medium text-gray-700 mb-1"
-                        >Bairro</label
-                      >
-                      <input
-                        type="text"
-                        id="bairroEndEdit"
-                        placeholder="Nome do bairro"
-                        class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        style="
-                          border: 1px solid #ccc;
-                          border-radius: 8px;
-                          padding: 10px;
-                        "
-                      />
-                    </div>
-
-                    <div class="flex space-x-4">
-                      <div class="flex-1">
-                        <label class="text-sm font-medium text-gray-700 mb-1"
-                          >Cidade</label
-                        >
-                        <input
-                          type="text"
-                          id="cidadeEndEdit"
-                          placeholder="Cidade"
-                          class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="
-                            border: 1px solid #ccc;
-                            border-radius: 8px;
-                            padding: 10px;
-                          "
-                        />
-                      </div>
-                      <div class="w-1/4">
-                        <label class="text-sm font-medium text-gray-700 mb-1"
-                          >Estado</label
-                        >
-                        <input
-                          type="text"
-                          id="estadoEndEdit"
-                          placeholder="Estado"
-                          class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="
-                            border: 1px solid #ccc;
-                            border-radius: 8px;
-                            padding: 10px;
-                          "
-                          readonly
-                        />
-                      </div>
-                    </div>
-
-                    <div class="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        id="defaultAddressEdit"
-                        class="form-checkbox text-blue-600"
-                      />
-                      <label
-                        for="defaultAddressEdit"
-                        class="text-sm text-gray-700"
-                        >Definir como endereço principal</label
-                      >
-                    </div>
-                  </div>
-
-                  <div class="flex space-x-3 pt-4">
-                    <button
-                      type="button"
-                      class="closeEditAddressModal flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-200"
-                    >
-                      Cancelar
-                    </button>
-                    <button
-                      type="button"
-                      id="salvarEnderecoEdit"
-                      class="flex-1 px-4 py-2 text-white rounded-lg hover:bg-blue-700 transition duration-200"
-                      style="background-color: #ff7b39"
-                    >
-                      Salvar Endereço
-                    </button>
-                  </div>
-                </form>
-              </div>
+              </form>
             </div>
+          </div>
 
-            <!-- Modal Cartão de Crédito -->
-            <div
-              id="cartaoModal"
-              class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
-            >
-              <div class="bg-white w-full max-w-lg mx-4 rounded-2xl">
-                <!-- Modal Header -->
-                <div class="p-4 border-b flex justify-between items-center">
-                  <h3 class="text-lg font-semibold">Cartão de Crédito</h3>
-                  <button
-                    id="closeCartaoModal"
-                    class="text-gray-500"
-                    style="width: 30px"
-                  >
-                    <svg
-                      class="w-6 h-6"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      ></path>
-                    </svg>
-                  </button>
-                </div>
-                <div
-                  class="p-4 max-h-[60vh] overflow-y-auto"
-                  style="max-height: calc(6 * 75px + 1rem)"
+          <!-- Modal Cartão de Crédito -->
+          <div
+            id="cartaoModal"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+          >
+            <div class="bg-white w-full max-w-lg mx-4 rounded-2xl">
+              <!-- Modal Header -->
+              <div class="p-4 border-b flex justify-between items-center">
+                <h3 class="text-lg font-semibold">Cartão de Crédito</h3>
+                <button
+                  id="closeCartaoModal"
+                  class="text-gray-500"
+                  style="width: 30px"
                 >
-                  <div class="space-y-4">
-                    <div>
+                  <svg
+                    class="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+              <div
+                class="p-4 max-h-[60vh] overflow-y-auto"
+                style="max-height: calc(6 * 75px + 1rem)"
+              >
+                <div class="space-y-4">
+                  <div>
+                    <label class="text-sm font-medium text-gray-700 mb-1"
+                      >Nome do Titular</label
+                    >
+                    <input
+                      type="text"
+                      id="nomeTitular"
+                      placeholder="Ex.: Maria Aparecida"
+                      class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      style="
+                        border: 1px solid #ccc;
+                        border-radius: 8px;
+                        padding: 10px;
+                      "
+                    />
+                  </div>
+
+                  <div>
+                    <label class="text-sm font-medium text-gray-700 mb-1"
+                      >Número do Cartão</label
+                    >
+                    <input
+                      type="text"
+                      id="numeroCartao"
+                      placeholder="0000 0000 0000 0000"
+                      maxlength="19"
+                      class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      style="
+                        border: 1px solid #ccc;
+                        border-radius: 8px;
+                        padding: 10px;
+                      "
+                    />
+                  </div>
+
+                  <div class="flex space-x-4">
+                    <div class="w-1/2">
                       <label class="text-sm font-medium text-gray-700 mb-1"
-                        >Nome do Titular</label
+                        >Validade</label
                       >
                       <input
                         type="text"
-                        id="nomeTitular"
-                        placeholder="Ex.: Maria Aparecida"
+                        id="dataExpiracao"
+                        placeholder="MM/AA"
+                        maxlength="5"
                         class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         style="
                           border: 1px solid #ccc;
@@ -775,16 +832,15 @@
                         "
                       />
                     </div>
-
-                    <div>
+                    <div class="w-1/2">
                       <label class="text-sm font-medium text-gray-700 mb-1"
-                        >Número do Cartão</label
+                        >CVV</label
                       >
                       <input
-                        type="text"
-                        id="numeroCartao"
-                        placeholder="0000 0000 0000 0000"
-                        maxlength="19"
+                        type="password"
+                        id="cvc"
+                        placeholder="123"
+                        maxlength="4"
                         class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         style="
                           border: 1px solid #ccc;
@@ -793,76 +849,39 @@
                         "
                       />
                     </div>
+                  </div>
 
-                    <div class="flex space-x-4">
-                      <div class="w-1/2">
-                        <label class="text-sm font-medium text-gray-700 mb-1"
-                          >Validade</label
-                        >
-                        <input
-                          type="text"
-                          id="dataExpiracao"
-                          placeholder="MM/AA"
-                          maxlength="5"
-                          class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="
-                            border: 1px solid #ccc;
-                            border-radius: 8px;
-                            padding: 10px;
-                          "
-                        />
-                      </div>
-                      <div class="w-1/2">
-                        <label class="text-sm font-medium text-gray-700 mb-1"
-                          >CVV</label
-                        >
-                        <input
-                          type="password"
-                          id="cvc"
-                          placeholder="123"
-                          maxlength="4"
-                          class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          style="
-                            border: 1px solid #ccc;
-                            border-radius: 8px;
-                            padding: 10px;
-                          "
-                        />
-                      </div>
-                    </div>
-
-                    <div class="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        id="salvarCartao"
-                        class="form-checkbox text-blue-600"
-                      />
-                      <label for="salvarCartao" class="text-sm text-gray-700"
-                        >Salvar cartão para futuras compras</label
+                  <div class="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="salvarCartao"
+                      class="form-checkbox text-blue-600"
+                    />
+                    <label for="salvarCartao" class="text-sm text-gray-700"
+                      >Salvar cartão para futuras compras</label
+                    >
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <button
+                      id="finalizarCompraCartao"
+                      class="finalizar-compra w-full text-white py-3 px-4 rounded-xl font-semibold hover:bg-blue-700 transition duration-200 flex items-center justify-center space-x-2"
+                      style="background-color: #ff5500"
+                    >
+                      <span>Finalizar Compra</span>
+                      <svg
+                        class="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
                       >
-                    </div>
-                    <div class="flex items-center space-x-2">
-                      <button
-                        id="finalizarCompraCartao"
-                        class="finalizar-compra w-full text-white py-3 px-4 rounded-xl font-semibold hover:bg-blue-700 transition duration-200 flex items-center justify-center space-x-2"
-                        style="background-color: #ff5500"
-                      >
-                        <span>Finalizar Compra</span>
-                        <svg
-                          class="w-5 h-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M14 5l7 7m0 0l-7 7m7-7H3"
-                          ></path>
-                        </svg>
-                      </button>
-                    </div>
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M14 5l7 7m0 0l-7 7m7-7H3"
+                        ></path>
+                      </svg>
+                    </button>
                   </div>
                 </div>
               </div>
