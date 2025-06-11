@@ -3495,27 +3495,43 @@ function refazerPagamento(
 }
 //Fim Função Refazer Pagamento
 
-//Inicio Funçao Listar Carrinho - VERSÃO ULTRA ROBUSTA
-function listarCarrinho(tentativa = 1, maxTentativas = 3) {
-  // Só mostra preloader na primeira tentativa para não confundir o usuário
-  if (tentativa === 1) {
-    app.dialog.preloader("Carregando...");
+//============================================
+// SOLUÇÃO OTIMIZADA PARA CARRINHO
+// Reduz drasticamente o número de requisições ao servidor
+//============================================
+
+// Cache do carrinho para evitar requisições desnecessárias
+let carrinhoCache = null;
+let carrinhoLastUpdate = 0;
+const CACHE_DURATION = 30000; // 30 segundos
+
+// Queue para batch de alterações
+let alteracoesQueue = new Map();
+let queueTimer = null;
+
+//Inicio Funçao Listar Carrinho - VERSÃO OTIMIZADA
+function listarCarrinho(forceRefresh = false) {
+  // Verifica se pode usar cache
+  const now = Date.now();
+  if (!forceRefresh && carrinhoCache && (now - carrinhoLastUpdate) < CACHE_DURATION) {
+    renderizarCarrinho(carrinhoCache);
+    carregarEnderecosSafe();
+    return Promise.resolve();
   }
-  
+
+  app.dialog.preloader("Carregando...");
   const pessoaId = localStorage.getItem("pessoaId");
 
-  // Validação básica
   if (!pessoaId) {
     app.dialog.close();
     app.dialog.alert("Erro: ID do usuário não encontrado", "Erro");
-    return;
+    return Promise.reject("ID do usuário não encontrado");
   }
 
   const dados = {
     pessoa_id: pessoaId,
   };
 
-  // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
     Authorization: "Bearer " + userAuthToken,
@@ -3527,303 +3543,270 @@ function listarCarrinho(tentativa = 1, maxTentativas = 3) {
     dados: dados,
   });
 
-  // Opções da requisição com timeout
   const options = {
     method: "POST",
     headers: headers,
     body: body,
   };
 
-  // Controller para cancelar requisição se necessário
-  const controller = new AbortController();
-  options.signal = controller.signal;
-
-  // Timeout de 15 segundos
-  const timeoutId = setTimeout(() => {
-    controller.abort();
-  }, 15000);
-
-  // Fazendo a requisição
-  fetch(apiServerUrl, options)
+  return fetch(apiServerUrl, options)
     .then((response) => {
-      clearTimeout(timeoutId);
-      
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
-      
       return response.json();
     })
     .then((responseJson) => {
-      // Verifica se o status é 'success'
-      if (
-        responseJson.status == "success" &&
-        responseJson.data.status == "sucess"
-      ) {
-        processarCarrinhoSucesso(responseJson);
+      if (responseJson.status == "success" && responseJson.data.status == "sucess") {
+        // Atualiza cache
+        carrinhoCache = responseJson;
+        carrinhoLastUpdate = Date.now();
+        
+        renderizarCarrinho(responseJson);
         app.dialog.close();
+        
+        // Carregar endereços de forma assíncrona
+        carregarEnderecosSafe();
+        
+        return responseJson;
       } else {
         throw new Error(responseJson.message || "Resposta inválida do servidor");
       }
     })
     .catch((error) => {
-      clearTimeout(timeoutId);
-      console.error(`Tentativa ${tentativa} falhou:`, error);
-      
-      // Se não é a última tentativa, tenta novamente
-      if (tentativa < maxTentativas) {
-        console.log(`Tentando novamente... (${tentativa + 1}/${maxTentativas})`);
-        setTimeout(() => {
-          listarCarrinho(tentativa + 1, maxTentativas);
-        }, 1000 * tentativa); // Delay progressivo: 1s, 2s, 3s...
-        return;
-      }
-
-      // Última tentativa falhou - mostra erro e estado de fallback
       app.dialog.close();
+      console.error("Erro ao carregar carrinho:", error);
       mostrarEstadoErroCarrinho(error);
+      throw error;
     });
 }
 
-// Função para processar sucesso do carrinho (extraída para reutilização)
-function processarCarrinhoSucesso(responseJson) {
+// Função para renderizar carrinho (separada da lógica de requisição)
+function renderizarCarrinho(responseJson) {
   const quantidadeItens = responseJson.data.data.itens.length;
   const total = responseJson.data.data.total;
-  var pessoaIdCarrinho = responseJson.data.data.pessoa_id;
+  const pessoaIdCarrinho = responseJson.data.data.pessoa_id;
 
   if (quantidadeItens > 0) {
-    //TEM ITENS NO CARRINHO
     $("#toolbar-carrinho").removeClass("display-none");
-    //ESVAZIAR A ÁREA DOS ITENS
     $("#listaCarrinho").empty();
 
-    //PERCORRER O NOSSO CARRINHO E ALIMENTAR A ÁREA
     responseJson.data.data.itens.forEach((item) => {
-      var itemDiv = `
-        <div class="flex space-x-4" style="margin-bottom: 18px;">
-          <img
-            src="https://vitatophomologa.tecskill.com.br/${item.foto}"
-            alt="${item.nome}"
-            class="w-20 h-20 rounded-lg object-cover"
-            onerror="this.src='img/default.png'"
-          />
-          <div class="flex-1">
-            <div class="flex justify-between">
-              <h3 class="font-medium">${item.nome}</h3>
-              <button class="text-red-500 delete-item" style="width: 30px;"
-              data-produto-id="${item.produto_id}">
-                <svg
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-            <p class="text-gray-500 text-sm mb-2">Premium</p>
-            <div class="flex justify-between items-center">
-              <div class="flex items-center space-x-2">
-                <button
-                  class="minus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
-                  data-produto-id="${item.produto_id}" 
-                  data-produto-qtde="${item.quantidade}"
-                >
-                  <svg
-                    class="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M20 12H4"
-                    ></path>
-                  </svg>
-                </button>
-                <span class="w-8 text-center qtd-display" data-produto-id="${item.produto_id}">${item.quantidade}</span>
-                <button
-                  class="plus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
-                  data-produto-id="${item.produto_id}" 
-                  data-produto-qtde="${item.quantidade}"
-                >
-                  <svg
-                    class="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 4v16m8-8H4"
-                    ></path>
-                  </svg>
-                  </button>
-              </div>
-              <span class="font-semibold">${formatarMoeda(item.preco_unitario)}</span>
-            </div>
-          </div>
-        </div>
-      `;
-
+      const itemDiv = criarItemCarrinhoHTML(item);
       $("#listaCarrinho").append(itemDiv);
     });
 
-    // Configurar event handlers
     configurarEventHandlersCarrinho(pessoaIdCarrinho);
-
-    //MOSTRAR O SUBTOTAL
-    $("#subtotal").html(
-      total.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      })
-    );
-    //MOSTRAR O SUBTOTAL
-    $("#totalCarrinho").html(
-      total.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      })
-    );
+    atualizarTotaisInterface(total);
   } else {
     mostrarCarrinhoVazio();
   }
-
-  // Tentar carregar endereços, mas não bloquear se falhar
-  carregarEnderecosSafe();
 }
 
-// Função para configurar event handlers (extraída para melhor organização)
+// Função para criar HTML do item (reutilizável)
+function criarItemCarrinhoHTML(item) {
+  return `
+    <div class="flex space-x-4" style="margin-bottom: 18px;" data-item-id="${item.produto_id}">
+      <img
+        src="https://vitatophomologa.tecskill.com.br/${item.foto}"
+        alt="${item.nome}"
+        class="w-20 h-20 rounded-lg object-cover"
+        onerror="this.src='img/default.png'"
+      />
+      <div class="flex-1">
+        <div class="flex justify-between">
+          <h3 class="font-medium">${item.nome}</h3>
+          <button class="text-red-500 delete-item" style="width: 30px;"
+          data-produto-id="${item.produto_id}">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+            </svg>
+          </button>
+        </div>
+        <p class="text-gray-500 text-sm mb-2">Premium</p>
+        <div class="flex justify-between items-center">
+          <div class="flex items-center space-x-2">
+            <button class="minus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                    data-produto-id="${item.produto_id}" data-produto-qtde="${item.quantidade}">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+              </svg>
+            </button>
+            <span class="w-8 text-center qtd-display" data-produto-id="${item.produto_id}">${item.quantidade}</span>
+            <button class="plus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                    data-produto-id="${item.produto_id}" data-produto-qtde="${item.quantidade}">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+              </svg>
+            </button>
+          </div>
+          <span class="font-semibold">${formatarMoeda(item.preco_unitario)}</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// Função para atualizar totais na interface
+function atualizarTotaisInterface(total) {
+  const totalFormatado = total.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+  
+  $("#subtotal").html(totalFormatado);
+  $("#totalCarrinho").html(totalFormatado);
+}
+
+// Event handlers otimizados
 function configurarEventHandlersCarrinho(pessoaIdCarrinho) {
-  // Event handlers com debounce e controle melhorado
-  $(".delete-item").off('click').on("click", function () {
-    var produtoId = $(this).data("produto-id");
+  // Remove handlers antigos
+  $(".delete-item, .minus, .plus").off('click');
+
+  // Delete item
+  $(".delete-item").on("click", function () {
+    const produtoId = $(this).data("produto-id");
     app.dialog.confirm(
       "Tem certeza que quer remover este item?",
       "Remover",
-      function () {
-        removerItemCarrinhoSafe(pessoaIdCarrinho, produtoId);
-      }
+      () => removerItemCarrinhoOtimizado(pessoaIdCarrinho, produtoId)
     );
   });
 
-  // Implementa debounce para os botões + e -
-  let clickTimeout;
-
-  $(".minus").off('click').on("click", function () {
+  // Diminuir quantidade
+  $(".minus").on("click", function () {
     const $button = $(this);
-    
     if ($button.prop('disabled')) return;
     
-    clearTimeout(clickTimeout);
-    clickTimeout = setTimeout(() => {
-      var produtoId = $button.data("produto-id");
-      var quantidade = parseInt($button.data("produto-qtde"));
-      var qtdeAtualizada = quantidade - 1;
-
-      if (quantidade > 1) {
-        alterarCarrinhoSafe(pessoaIdCarrinho, produtoId, qtdeAtualizada);
-      } else {
-        app.dialog.confirm(
-          `Gostaria de remover este item?`,
-          "REMOVER",
-          function () {
-            removerItemCarrinhoSafe(pessoaIdCarrinho, produtoId);
-          }
-        );
-      }
-    }, 300);
+    const produtoId = $button.data("produto-id");
+    const quantidade = parseInt($button.data("produto-qtde"));
+    
+    if (quantidade > 1) {
+      alterarQuantidadeOtimista(produtoId, quantidade - 1);
+      adicionarAlteracaoQueue(pessoaIdCarrinho, produtoId, quantidade - 1);
+    } else {
+      app.dialog.confirm(
+        "Gostaria de remover este item?",
+        "REMOVER",
+        () => removerItemCarrinhoOtimizado(pessoaIdCarrinho, produtoId)
+      );
+    }
   });
 
-  $(".plus").off('click').on("click", function () {
+  // Aumentar quantidade
+  $(".plus").on("click", function () {
     const $button = $(this);
-    
     if ($button.prop('disabled')) return;
     
-    clearTimeout(clickTimeout);
-    clickTimeout = setTimeout(() => {
-      var produtoId = $button.data("produto-id");
-      var quantidade = parseInt($button.data("produto-qtde"));
-      var qtdeAtualizada = quantidade + 1;
-
-      alterarCarrinhoSafe(pessoaIdCarrinho, produtoId, qtdeAtualizada);
-    }, 300);
+    const produtoId = $button.data("produto-id");
+    const quantidade = parseInt($button.data("produto-qtde"));
+    
+    alterarQuantidadeOtimista(produtoId, quantidade + 1);
+    adicionarAlteracaoQueue(pessoaIdCarrinho, produtoId, quantidade + 1);
   });
 }
 
-// Função para mostrar carrinho vazio
-function mostrarCarrinhoVazio() {
-  $("#listaCarrinho").empty();
-  $("#toolbar-carrinho").addClass("display-none");
+// Atualização otimista da interface (sem aguardar servidor)
+function alterarQuantidadeOtimista(produtoId, novaQuantidade) {
+  // Atualiza interface imediatamente
+  $(`.qtd-display[data-produto-id="${produtoId}"]`).text(novaQuantidade);
+  $(`.plus[data-produto-id="${produtoId}"], .minus[data-produto-id="${produtoId}"]`)
+    .attr('data-produto-qtde', novaQuantidade);
   
-  $("#containerCarrinho").html(`
-    <div class="display-flex flex-direction-column align-items-center justify-content-center" style="height: 100%;">
-      <img width="300" src="img/empty.gif">
-      <br><span class="color-gray">Nada por enquanto...</span>
-    </div>
-  `);
+  // Atualiza cache se existir
+  if (carrinhoCache) {
+    const item = carrinhoCache.data.data.itens.find(i => i.produto_id == produtoId);
+    if (item) {
+      item.quantidade = novaQuantidade;
+      // Recalcular total aproximado (será sincronizado depois)
+      calcularTotalAproximado();
+    }
+  }
+  
+  // Feedback visual
+  $(`.qtd-display[data-produto-id="${produtoId}"]`).addClass('updating');
+  setTimeout(() => {
+    $(`.qtd-display[data-produto-id="${produtoId}"]`).removeClass('updating');
+  }, 300);
 }
 
-// Função para mostrar estado de erro
-function mostrarEstadoErroCarrinho(error) {
-  $("#listaCarrinho").empty();
-  $("#toolbar-carrinho").addClass("display-none");
+// Calcula total aproximado para feedback imediato
+function calcularTotalAproximado() {
+  if (!carrinhoCache) return;
   
-  $("#containerCarrinho").html(`
-    <div class="display-flex flex-direction-column align-items-center justify-content-center" style="height: 100%; padding: 20px;">
-      <i class="mdi mdi-wifi-off" style="font-size: 64px; color: #ccc; margin-bottom: 20px;"></i>
-      <h3 style="color: #666; margin-bottom: 10px;">Erro ao carregar carrinho</h3>
-      <p style="color: #999; text-align: center; margin-bottom: 20px;">
-        Verifique sua conexão e tente novamente
-      </p>
-      <button onclick="listarCarrinho()" style="
-        background: #19c463; 
-        color: white; 
-        border: none; 
-        padding: 10px 20px; 
-        border-radius: 5px;
-        cursor: pointer;
-      ">
-        <i class="mdi mdi-refresh"></i> Tentar Novamente
-      </button>
-    </div>
-  `);
+  let total = 0;
+  carrinhoCache.data.data.itens.forEach(item => {
+    total += item.preco_unitario * item.quantidade;
+  });
+  
+  atualizarTotaisInterface(total);
 }
 
-//Inicio Funçao Alterar Carrinho - VERSÃO ULTRA ROBUSTA
-function alterarCarrinhoSafe(pessoaId, produtoId, quantidade, tentativa = 1, maxTentativas = 3) {
-  // Previne múltiplas requisições simultâneas
-  const requestKey = `${pessoaId}_${produtoId}`;
+// Sistema de queue para batch de alterações
+function adicionarAlteracaoQueue(pessoaId, produtoId, quantidade) {
+  // Adiciona/atualiza na queue
+  alteracoesQueue.set(produtoId, { pessoaId, produtoId, quantidade });
   
-  if (window.carrinhoRequests && window.carrinhoRequests[requestKey]) {
-    return Promise.resolve();
+  // Cancela timer anterior
+  if (queueTimer) {
+    clearTimeout(queueTimer);
   }
+  
+  // Programa processamento da queue
+  queueTimer = setTimeout(() => {
+    processarQueueAlteracoes();
+  }, 1000); // 1 segundo de debounce
+}
 
-  if (!window.carrinhoRequests) {
-    window.carrinhoRequests = {};
+// Processa todas as alterações em batch
+function processarQueueAlteracoes() {
+  if (alteracoesQueue.size === 0) return;
+  
+  const alteracoes = Array.from(alteracoesQueue.values());
+  alteracoesQueue.clear();
+  
+  // Desabilita todos os botões temporariamente
+  $('.plus, .minus').prop('disabled', true).addClass('loading');
+  
+  // Processa uma alteração por vez com delay
+  processarAlteracaoSequencial(alteracoes, 0);
+}
+
+// Processa alterações sequencialmente para evitar sobrecarga
+function processarAlteracaoSequencial(alteracoes, index) {
+  if (index >= alteracoes.length) {
+    // Todas processadas - reabilita botões e atualiza carrinho
+    $('.plus, .minus').prop('disabled', false).removeClass('loading');
+    
+    // Força refresh do carrinho para sincronizar
+    setTimeout(() => {
+      listarCarrinho(true);
+    }, 500);
+    
+    return;
   }
+  
+  const alteracao = alteracoes[index];
+  
+  alterarCarrinhoServidor(alteracao.pessoaId, alteracao.produtoId, alteracao.quantidade)
+    .then(() => {
+      // Próxima alteração após pequeno delay
+      setTimeout(() => {
+        processarAlteracaoSequencial(alteracoes, index + 1);
+      }, 200);
+    })
+    .catch((error) => {
+      console.error("Erro ao processar alteração:", error);
+      // Continua com próxima mesmo com erro
+      setTimeout(() => {
+        processarAlteracaoSequencial(alteracoes, index + 1);
+      }, 200);
+    });
+}
 
-  window.carrinhoRequests[requestKey] = true;
-
-  // Desabilita os botões deste produto específico
-  $(`.plus[data-produto-id="${produtoId}"], .minus[data-produto-id="${produtoId}"]`).prop('disabled', true);
-
-  // Só mostra preloader na primeira tentativa
-  if (tentativa === 1) {
-    app.dialog.preloader("Alterando...");
-  }
-
+// Função para alterar no servidor (sem UI)
+function alterarCarrinhoServidor(pessoaId, produtoId, quantidade) {
   const dados = {
     pessoa_id: pessoaId,
     produto_id: produtoId,
@@ -3841,86 +3824,66 @@ function alterarCarrinhoSafe(pessoaId, produtoId, quantidade, tentativa = 1, max
     dados: dados,
   });
 
-  const controller = new AbortController();
   const options = {
     method: "POST",
     headers: headers,
     body: body,
-    signal: controller.signal,
   };
 
-  // Timeout de 10 segundos
-  const timeoutId = setTimeout(() => {
-    controller.abort();
-  }, 10000);
-
   return fetch(apiServerUrl, options)
-    .then((response) => {
-      clearTimeout(timeoutId);
-      
+    .then(response => {
       if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        throw new Error(`HTTP ${response.status}`);
       }
-      
       return response.json();
     })
-    .then((responseJson) => {
-      if (responseJson.status == "success" && responseJson.data.status == "sucess") {
-        // Atualizar quantidade na interface imediatamente (otimista)
-        $(`.qtd-display[data-produto-id="${produtoId}"]`).text(quantidade);
-        $(`.plus[data-produto-id="${produtoId}"], .minus[data-produto-id="${produtoId}"]`)
-          .attr('data-produto-qtde', quantidade);
-        
-        app.dialog.close();
-        
-        // Recarregar carrinho completo após delay para sincronizar
-        setTimeout(() => {
-          listarCarrinho();
-        }, 500);
-      } else {
-        throw new Error(responseJson.message || "Erro ao alterar quantidade");
+    .then(responseJson => {
+      if (!(responseJson.status == "success" && responseJson.data.status == "sucess")) {
+        throw new Error(responseJson.message || "Erro no servidor");
       }
-    })
-    .catch((error) => {
-      clearTimeout(timeoutId);
-      console.error(`Tentativa ${tentativa} de alterar carrinho falhou:`, error);
-      
-      // Retry logic
-      if (tentativa < maxTentativas) {
-        setTimeout(() => {
-          alterarCarrinhoSafe(pessoaId, produtoId, quantidade, tentativa + 1, maxTentativas);
-        }, 1000 * tentativa);
-        return;
-      }
-
-      // Falha final
-      app.dialog.close();
-      app.dialog.alert("Erro ao alterar quantidade. Tente novamente.", "Erro");
-    })
-    .finally(() => {
-      // Cleanup
-      delete window.carrinhoRequests[requestKey];
-      
-      setTimeout(() => {
-        $(`.plus[data-produto-id="${produtoId}"], .minus[data-produto-id="${produtoId}"]`).prop('disabled', false);
-      }, 500);
+      return responseJson;
     });
 }
 
-// Função para carregar endereços de forma segura
-function carregarEnderecosSafe() {
-  try {
-    listarEnderecos();
-  } catch (error) {
-    console.error("Erro ao carregar endereços:", error);
-    // Não bloqueia a interface se endereços falharem
+// Remoção otimizada de item
+function removerItemCarrinhoOtimizado(pessoaId, produtoId) {
+  // Remove da interface imediatamente
+  $(`[data-item-id="${produtoId}"]`).fadeOut(300, function() {
+    $(this).remove();
+    
+    // Verifica se carrinho ficou vazio
+    if ($("#listaCarrinho").children().length === 0) {
+      mostrarCarrinhoVazio();
+    }
+  });
+  
+  // Remove do cache
+  if (carrinhoCache) {
+    carrinhoCache.data.data.itens = carrinhoCache.data.data.itens.filter(
+      item => item.produto_id != produtoId
+    );
+    calcularTotalAproximado();
   }
+  
+  // Remove do servidor
+  removerItemServidor(pessoaId, produtoId)
+    .then(() => {
+      // Atualiza carrinho para sincronizar
+      setTimeout(() => {
+        listarCarrinho(true);
+      }, 500);
+    })
+    .catch(error => {
+      console.error("Erro ao remover item:", error);
+      app.dialog.alert("Erro ao remover item. A página será atualizada.", "Erro");
+      setTimeout(() => {
+        listarCarrinho(true);
+      }, 1000);
+    });
 }
 
-// Função para remover item de forma segura
-function removerItemCarrinhoSafe(pessoaId, produtoId) {
-  app.dialog.preloader("Removendo...");
-  
+// Remove item do servidor
+function removerItemServidor(pessoaId, produtoId) {
   const dados = {
     pessoa_id: pessoaId,
     produto_id: produtoId,
@@ -3937,39 +3900,86 @@ function removerItemCarrinhoSafe(pessoaId, produtoId) {
     dados: dados,
   });
 
-  const options = {
+  return fetch(apiServerUrl, {
     method: "POST",
     headers: headers,
     body: body,
-  };
-
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      app.dialog.close();
-      if (responseJson.status == "success" && responseJson.data.status == "sucess") {
-        // Recarregar carrinho
-        listarCarrinho();
-      } else {
-        app.dialog.alert("Erro ao remover item: " + (responseJson.message || "Erro desconhecido"), "Erro");
-      }
-    })
-    .catch((error) => {
-      app.dialog.close();
-      console.error("Erro ao remover item:", error);
-      app.dialog.alert("Erro ao remover item. Tente novamente.", "Erro");
-    });
+  })
+  .then(response => response.json())
+  .then(responseJson => {
+    if (!(responseJson.status == "success" && responseJson.data.status == "sucess")) {
+      throw new Error(responseJson.message || "Erro ao remover");
+    }
+    return responseJson;
+  });
 }
-//Fim Função Listar Carrinho - VERSÃO ULTRA ROBUSTA
 
-// Wrapper para manter compatibilidade com código existente
+// Funções auxiliares mantidas
+function mostrarCarrinhoVazio() {
+  $("#listaCarrinho").empty();
+  $("#toolbar-carrinho").addClass("display-none");
+  
+  $("#containerCarrinho").html(`
+    <div class="display-flex flex-direction-column align-items-center justify-content-center" style="height: 100%;">
+      <img width="300" src="img/empty.gif">
+      <br><span class="color-gray">Nada por enquanto...</span>
+    </div>
+  `);
+}
+
+function mostrarEstadoErroCarrinho(error) {
+  $("#listaCarrinho").empty();
+  $("#toolbar-carrinho").addClass("display-none");
+  
+  $("#containerCarrinho").html(`
+    <div class="display-flex flex-direction-column align-items-center justify-content-center" style="height: 100%; padding: 20px;">
+      <i class="mdi mdi-wifi-off" style="font-size: 64px; color: #ccc; margin-bottom: 20px;"></i>
+      <h3 style="color: #666; margin-bottom: 10px;">Erro ao carregar carrinho</h3>
+      <p style="color: #999; text-align: center; margin-bottom: 20px;">
+        Verifique sua conexão e tente novamente
+      </p>
+      <button onclick="listarCarrinho(true)" style="
+        background: #19c463; 
+        color: white; 
+        border: none; 
+        padding: 10px 20px; 
+        border-radius: 5px;
+        cursor: pointer;
+      ">
+        <i class="mdi mdi-refresh"></i> Tentar Novamente
+      </button>
+    </div>
+  `);
+}
+
+function carregarEnderecosSafe() {
+  try {
+    listarEnderecos();
+  } catch (error) {
+    console.error("Erro ao carregar endereços:", error);
+  }
+}
+
+// Wrappers para compatibilidade
 function alterarCarrinho(pessoaId, produtoId, quantidade) {
-  return alterarCarrinhoSafe(pessoaId, produtoId, quantidade);
+  // Esta função agora é chamada apenas em contextos específicos
+  alterarQuantidadeOtimista(produtoId, quantidade);
+  adicionarAlteracaoQueue(pessoaId, produtoId, quantidade);
 }
 
-// Wrapper para manter compatibilidade com código existente
 function removerItemCarrinho(pessoaId, produtoId) {
-  return removerItemCarrinhoSafe(pessoaId, produtoId);
+  return removerItemCarrinhoOtimizado(pessoaId, produtoId);
+}
+
+// Limpar cache quando necessário
+function limparCacheCarrinho() {
+  carrinhoCache = null;
+  carrinhoLastUpdate = 0;
+  alteracoesQueue.clear();
+  if (queueTimer) {
+    clearTimeout(queueTimer);
+    queueTimer = null;
+  }
 }
 
 //Inicio Adicionar Endereço
