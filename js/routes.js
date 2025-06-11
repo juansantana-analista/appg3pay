@@ -1349,9 +1349,8 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = getCookie('userAuthToken');
-          
-          // Validar token
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
@@ -1359,52 +1358,173 @@ var app = new Framework7({
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
-            }, 500);
-            return;
+            }, 500); // Adiciona um fallback com pequeno delay
           }
-          
           $("#menuPrincipal").hide("fast");
           localStorage.removeItem('enderecoDetalhes');
-          
-          // Resetar estado do carrinho
-          carrinhoState = {
-            loading: false,
-            pessoaId: localStorage.getItem("pessoaId"),
-            enderecoSelecionado: null,
-            itens: [],
-            total: 0,
-            subtotal: 0,
-            frete: 0
-          };
         },
-        
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
+        pageInit: function (event, page) {    
+          // fazer algo quando a página for inicializada    
+          // Funções para gerenciamento de modais
+        $("#openAddressModal").on('click', function () {
+          document.getElementById('addressModal').classList.remove('hidden');
+        });
+        $("#closeAddressModal").on('click', function () {
+          document.getElementById('addressModal').classList.add('hidden');
+        });
+        $("#showNewAddressForm").on('click', function () {
+          document.getElementById('addressModal').classList.add('hidden');
+          document.getElementById('newAddressModal').classList.remove('hidden');
+        });
+        $(".closeNewAddressModal").on('click', function () {
+          document.getElementById('newAddressModal').classList.add('hidden');
+          document.getElementById('addressModal').classList.remove('hidden');
+        });
         
-        pageInit: function (event, page) {
-          // Configurar eventos dos modais
-          setupModalEvents();
-          
-          // Configurar máscaras de input
-          setupInputMasks();
-          
-          // Configurar eventos dos formulários
-          setupFormEvents();
-          
-          // Configurar eventos de pagamento
-          setupPaymentEvents();
-          
-          // Carregar dados do carrinho
           listarCarrinho();
-          
-          // Configurar eventos principais
-          setupMainCarrinhoEvents();
+
+          $("#esvaziar").on('click', function () {
+            app.dialog.confirm('Tem certeza que quer esvaziar o carrinho?', '<strong>ESVAZIAR</strong>', function () {
+              //Chamar a funçao que limpa o carrinho
+              limparCarrinho();
+            });
+          });
+
+          $("#btnDesconto").on('click', function () {
+            var cupomDesconto = $("#cupomDesconto").val();
+            if(cupomDesconto) {
+              app.dialog.alert("Cupom inválido ou expirado", "Cupom");
+            } else {
+              app.dialog.alert("Digite um cupom de Desconto", "Cupom");
+            }
+          });
+
+          //INICIO API CEP PARA ENDEREÇO DE NOVO CLIENTE
+          $('#cepCliente').mask('00000-000');
+          const cepInput = document.getElementById('cepCliente');
+          const logradouroInput = document.getElementById('logradouroEndCliente');
+          const bairroInput = document.getElementById('bairroEndCliente');
+          const cidadeInput = document.getElementById('cidadeEndCliente');
+          const estadoInput = document.getElementById('estadoEndCliente');
+
+          cepInput.addEventListener('input', function () {
+            const cep = cepInput.value.replace(/\D/g, '');
+
+            if (cep.length === 8) {
+              const validacep = /^[0-9]{8}$/;
+
+              if (validacep.test(cep)) {
+                cepEndereco(cep)
+              } else {
+                // Não faz nada se o CEP não estiver completo ou for inválido
+              }
+            }
+          });
+          //FIM API CEP PARA ENDEREÇO DE NOVO CLIENTE
+
+          //INICIO API CEP PARA EDITAR ENDEREÇO
+          $('#cepEdit').mask('00000-000');
+          const cepEdit = document.getElementById('cepEdit');
+          const logradouroEndEdit = document.getElementById('logradouroEndEdit');
+          const bairroEndEdit = document.getElementById('bairroEndEdit');
+          const cidadeEndEdit = document.getElementById('cidadeEndEdit');
+          const estadoEndEdit = document.getElementById('estadoEndEdit');
+
+          cepEdit.addEventListener('input', function () {
+            const cep = cepEdit.value.replace(/\D/g, '');
+
+            if (cep.length === 8) {
+              const validacep = /^[0-9]{8}$/;
+
+              if (validacep.test(cep)) {
+                cepEnderecoEdit(cep)
+              } else {
+                // Não faz nada se o CEP não estiver completo ou for inválido
+              }
+            }
+          });
+          //FIM API CEP PARA EDITAR ENDEREÇO
+
+          $('#salvarEndereco').on('click', function () {
+            adicionarEndereco();
+          });
+          $('#salvarEnderecoEdit').on('click', function () {
+            editarEndereco();
+          });
+
+          function obterFormaPagamentoSelecionada() {
+            var formaPagamento = $("input[name='payment']:checked").val();
+            return formaPagamento;
+          }
+
+          $('#numeroCartao').mask('0000 0000 0000 0000');
+          $('#dataExpiracao').mask('00/0000');
+          $('#cvc').mask('000');
+
+          $("#opcaoCartao").on("click", function () {
+            document.getElementById('cartaoModal').classList.remove('hidden');
+          });
+
+          $("#closeCartaoModal").on("click", function () {
+            document.getElementById('cartaoModal').classList.add('hidden');
+            $("input[name='payment'][value='3']").prop("checked", true);
+          });
+          // Exemplo de uso ao clicar em um botão
+          $(".finalizar-compra").on("click", function () {
+            var formaPagamento = obterFormaPagamentoSelecionada();
+            
+            if (formaPagamento == 1) {
+              var nomeTitular = $("#nomeTitular").val();
+              var numeroCartao = $("#numeroCartao").val();
+              var dataExpiracao = $("#dataExpiracao").val();
+              var cvc = $("#cvc").val();
+
+              // Validações dos campos
+              if (!nomeTitular) {
+                app.dialog.alert("Por favor, preencha o nome do titular.", "Erro!");
+                return;
+              }
+              if (!numeroCartao || numeroCartao.length < 16) {
+                app.dialog.alert("Por favor, insira um número de cartão válido com 16 dígitos.", "Erro!");
+                return;
+              }
+              if (!dataExpiracao || !validarDataExpiracao(dataExpiracao)) {
+                app.dialog.alert("Por favor, insira a data de expiração no formato MM/YYYY.", "Erro!");
+                return;
+              }
+              if (!cvc || cvc.length < 3) {
+                app.dialog.alert("Por favor, insira um código CVC válido de 3 dígitos.", "Erro!");
+                return;
+              }
+            } else if (formaPagamento == 2) {
+              formaPagamento = 2;
+            } else if (formaPagamento == 3) {
+              formaPagamento = 3;
+            } else {
+              app.dialog.alert("Forma de pagamento não selecionada.", "Erro!");
+              return;
+            }
+
+            if (formaPagamento) {
+              finalizarCompra(formaPagamento, nomeTitular, numeroCartao, dataExpiracao, cvc);
+            }
+          });
+
+          $('#irCheckout').on('click', function () {
+            var enderecoSelecionado = localStorage.getItem('enderecoDetalhes');
+            if (enderecoSelecionado && enderecoSelecionado != null) {
+              app.views.main.router.navigate("/checkout/");
+            } else {              
+              listarEnderecos();
+              app.popup.open(".popup-enderecos");
+            }
+          });
         },
-        
         pageBeforeRemove: function (event, page) {
-          // Limpar eventos para evitar memory leaks
-          cleanupCarrinhoEvents();
+          // fazer algo antes da página ser removida do DOM
         },
       }
     },

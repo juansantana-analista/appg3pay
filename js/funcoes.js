@@ -2821,6 +2821,257 @@ function debugNotificationBadge() {
 }
 
 //Fim da funçao contagem Notificações
+//Fim da funçao contagem Notificações
+
+//Inicio Funçao Selecionar Endereço
+function selecionarEndereco(enderecoSelecionado) {
+  app.dialog.preloader("Carregando...");
+
+  const pessoaId = localStorage.getItem("pessoaId");
+
+  const endereco = enderecoSelecionado;
+
+  const dados = {
+    pessoa_id: pessoaId,
+    endereco_id: endereco.id,
+  };
+
+  // Armazena o endereço selecionado no localStorage
+  localStorage.setItem("enderecoSelecionado", endereco.id);
+
+  // Cabeçalhos da requisição
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "PagamentoSafe2payRest",
+    method: "AlterarEndereco",
+    dados: dados,
+  });
+
+  // Opções da requisição
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  // Fazendo a requisição
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      if (
+        responseJson.status == "success" &&
+        responseJson.data.status == "success"
+      ) {
+        app.dialog.close();
+        var valorFrete = responseJson.data.data.frete;
+
+        // Atualiza o valor do frete na interface
+        $("#fretePedido").html(
+          valorFrete.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          })
+        );
+
+        // Destacar o endereço selecionado na interface
+        $(".select-address").removeClass("text-blue-700 font-bold");
+        $(`.select-address[data-id='${endereco.id}']`).addClass(
+          "text-blue-700 font-bold"
+        );
+
+        if (endereco) {
+          $("#selectedAddress").html(`
+            <div class="flex items-start space-x-3">
+              <svg class="w-5 h-5 text-gray-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              <div>
+                <div class="flex items-center space-x-2">
+                  <h3 class="font-medium">${
+                    endereco.nome_endereco || "Residencial"
+                  }</h3>
+                  ${
+                    endereco.principal == "S"
+                      ? `<span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39">Principal</span>`
+                      : ""
+                  }
+                </div>
+                <p class="text-gray-600 text-sm mt-1">
+                  ${endereco.rua}, ${endereco.numero} - ${endereco.bairro}
+                </p>
+                <p class="text-gray-600 text-sm">
+                  ${endereco.municipio.nome}, ${endereco.estado.sigla} - CEP: ${
+            endereco.cep
+          }
+                </p>
+              </div>
+            </div>
+          `);
+        }
+      } else {
+        app.dialog.close();
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+    });
+}
+//Fim Função Selecionar Endereço
+
+// Início Função Listar Endereços
+function listarEnderecos() {
+  app.dialog.preloader("Carregando...");
+  const pessoaId = localStorage.getItem("pessoaId");
+
+  // Cabeçalhos da requisição
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "PessoaRestService",
+    method: "listarPessoa",
+    pessoa_id: pessoaId,
+  });
+
+  // Opções da requisição
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  // Fazendo a requisição
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      if (responseJson.data.status === "success") {
+        const enderecos = responseJson.data.data.enderecos;
+        $("#listaDeEnderecos").html(""); // Limpa a lista
+
+        let enderecoPrincipal = null;
+        let ultimoEndereco = null;
+
+        enderecos.forEach((endereco, index) => {
+          ultimoEndereco = endereco; // Atualiza o último endereço iterado
+
+          var enderecoHTML = `
+            <div class="border rounded-lg p-4">
+              <div class="flex items-start justify-between">
+                <div class="flex-1">
+                  <div class="flex items-center space-x-2 mb-2">
+                    <span class="font-medium">${
+                      endereco.nome_endereco || "Residencial"
+                    }</span>
+                    ${
+                      endereco.principal == "S"
+                        ? `<span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39">Principal</span>`
+                        : ""
+                    }
+                  </div>
+                  <p class="text-gray-600 text-sm">
+                    ${endereco.rua}, ${endereco.numero} - ${endereco.bairro}
+                  </p>
+                  <p class="text-gray-600 text-sm">
+                    ${endereco.municipio.nome}, ${
+            endereco.estado.sigla
+          } - CEP: ${endereco.cep}
+                  </p>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <button class="text-gray-400 hover:text-gray-600 edit-address">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                    </svg>
+                  </button>
+                  <button class="text-blue-500 hover:text-blue-700 select-address">
+                    Selecionar
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+
+          if (endereco.principal == "S") {
+            enderecoPrincipal = endereco;
+          }
+
+          $("#listaDeEnderecos").append(enderecoHTML);
+          // Atribuindo o objeto endereco ao botão clicado
+          $(".edit-address").last().data("editarEndereco", endereco);
+          $(".select-address").last().data("endereco", endereco);
+        });
+
+        $(".edit-address").on("click", function () {
+          let editarEndereco = $(this).data("editarEndereco");
+          $("#idEnderecoEdit").val(editarEndereco.id);
+          $("#nomeEnderecoEdit").val(editarEndereco.nome_endereco);
+          $("#cepEdit").val(editarEndereco.cep);
+          $("#logradouroEndEdit").val(editarEndereco.rua);
+          $("#numeroEndEdit").val(editarEndereco.numero);
+          $("#complementoEndEdit").val(editarEndereco.complemento);
+          $("#bairroEndEdit").val(editarEndereco.bairro);
+          $("#cidadeEndEdit").val(editarEndereco.cidade);
+          $("#estadoEndEdit").val(editarEndereco.estado.sigla);
+          // Definir o estado do checkbox baseado no valor de is_principal
+          if (editarEndereco.principal == "S") {
+            $("#defaultAddressEdit").prop("checked", true); // Marca o checkbox
+          } else {
+            $("#defaultAddressEdit").prop("checked", false); // Desmarca o checkbox
+          }
+
+          document.getElementById("addressModal").classList.add("hidden");
+          document
+            .getElementById("editAddressModal")
+            .classList.remove("hidden");
+        });
+
+        $(".closeEditAddressModal").on("click", function () {
+          document.getElementById("editAddressModal").classList.add("hidden");
+          document.getElementById("addressModal").classList.remove("hidden");
+        });
+
+        // Define o endereço selecionado automaticamente
+        let enderecoSelecionado = enderecoPrincipal || ultimoEndereco;
+        if (enderecoSelecionado) {
+          // Chama a função para selecionar o endereço e recalcular o frete
+          selecionarEndereco(enderecoSelecionado);
+        }
+
+        // Adiciona evento para recalcular o frete ao trocar o endereço
+        $(".select-address").click(function () {
+          let endereco = $(this).data("endereco");
+          selecionarEndereco(endereco);
+          $("#addressModal").addClass("hidden");
+        });
+
+        app.dialog.close();
+      } else {
+        app.dialog.close();
+        console.error(
+          "Erro ao obter dados de endereços:",
+          responseJson.message
+        );
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+      app.dialog.alert(
+        "Erro ao carregar endereços: " + error.message,
+        "Falha na requisição!"
+      );
+    });
+}
+// Fim Função Listar Endereços
 
 // Início Função  Preencher Perfil
 function listarPerfil(rota) {
@@ -3062,6 +3313,102 @@ function salvarSenha() {
 //Fim da Funçao atualizar senha
 
 
+//Inicio Funçao Listar Categorias
+function finalizarCompra(
+  formaPagamento,
+  titular,
+  numero_cartao,
+  data_expiracao,
+  cvc
+) {
+  app.dialog.preloader("Carregando...");
+  const pessoaId = localStorage.getItem("pessoaId");
+  const enderecoEntregaId = localStorage.getItem("enderecoSelecionado");
+
+  const data = {
+    class: "PagamentoSafe2payRest",
+    method: "IncluirVenda",
+    dados: {
+      pessoa_id: pessoaId,
+      pagamento: {
+        forma_pagamento: formaPagamento,
+        titular: titular,
+        numero_cartao: numero_cartao,
+        data_expiracao: data_expiracao,
+        cvc: cvc,
+      },
+      destinatario: {
+        pessoa_id: pessoaId,
+        endereco_id: enderecoEntregaId,
+        frete: 0,
+      },
+    },
+  };
+
+  fetch(apiServerUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + userAuthToken,
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // Verifica se o status é 'success'
+      if (
+        responseJson.status == "success" &&
+        responseJson.data.status == "success"
+      ) {
+        // Dados a serem armazenados
+        var data = {
+          formaSelecionada: formaPagamento,
+          linhaDigitavel: responseJson.data.data.boleto_linhadigitavel,
+          pixKey: responseJson.data.data.pix_key,
+          qrCodePix: responseJson.data.data.pix_qrcode,
+          linkBoleto: responseJson.data.data.boleto_impressao,
+          dataVencimento: responseJson.data.data.data_vencimento,
+          valorTotal: responseJson.data.data.valor_total,
+          pedidoId: responseJson.data.data.pedido_id,
+          status_compra: responseJson.data.data.status_compra,
+          status_mensagem: responseJson.data.data.status_mensagem,
+          bandeira: responseJson.data.data.bandeira,
+          cartao_numero: responseJson.data.data.cartao_numero,
+          nome_cartao: responseJson.data.data.nome_cartao,
+        };
+
+        // Armazenar no localStorage
+        localStorage.setItem("pagamentoData", JSON.stringify(data));
+        localStorage.setItem(
+          "pedidoIdPagamento",
+          responseJson.data.data.pedido_id
+        );
+
+        app.dialog.close();
+        app.views.main.router.navigate("/pagamento/");
+
+        /* Abrir navegador para baixar boleto
+              var ref = cordova.InAppBrowser.open(linkBoleto, '_system', 'location=no,zoom=no');
+              ref.show();*/
+      } else {
+        app.dialog.close();
+        app.dialog.alert(
+          "Erro ao finalizar compra: " + responseJson,
+          "Falha na requisição!"
+        );
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      app.dialog.alert(
+        "Erro ao finalizar compra: " + error,
+        "Falha na requisição!"
+      );
+      console.error("Error:", error);
+    });
+}
+//Fim Função Finalizar Compra
+
 //Inicio Função Refazer Pagamento
 function refazerPagamento(
   formaPagamento,
@@ -3148,6 +3495,229 @@ function refazerPagamento(
 }
 //Fim Função Refazer Pagamento
 
+//Inicio Funçao Listar Carrinho
+function listarCarrinho() {
+  app.dialog.preloader("Carregando...");
+  const pessoaId = localStorage.getItem("pessoaId");
+
+  const dados = {
+    pessoa_id: pessoaId,
+  };
+
+  // Cabeçalhos da requisição
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "PagamentoSafe2payRest",
+    method: "ListarCarrinho",
+    dados: dados,
+  });
+
+  // Opções da requisição
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  // Fazendo a requisição
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // Verifica se o status é 'success'
+      if (
+        responseJson.status == "success" &&
+        responseJson.data.status == "sucess"
+      ) {
+        // Supondo que responseJson seja o objeto que você obteve no console.log
+        const quantidadeItens = responseJson.data.data.itens.length;
+        const total = responseJson.data.data.total;
+        var pessoaIdCarrinho = responseJson.data.data.pessoa_id;
+
+        if (quantidadeItens > 0) {
+          //TEM ITENS NO CARRINHO
+          $("#toolbar-carrinho").removeClass("display-none");
+          //ESVAZIAR A ÁREA DOS ITENS
+          $("#listaCarrinho").empty();
+
+          //PERCORRER O NOSSO CARRINHO E ALIMENTAR A ÁREA
+          responseJson.data.data.itens.forEach((item) => {
+            var itemDiv = `
+              
+                  <div class="flex space-x-4" style="margin-bottom: 18px;">
+                    <img
+                      src="https://vitatophomologa.tecskill.com.br/${item.foto}"
+                      alt="${item.nome}"
+                      class="w-20 h-20 rounded-lg object-cover"
+                    />
+                    <div class="flex-1">
+                      <div class="flex justify-between">
+                        <h3 class="font-medium">${item.nome}</h3>
+                        <button class="text-red-500 delete-item" style="width: 30px;"
+                        data-produto-id="${item.produto_id}">
+                          <svg
+                            class="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            ></path>
+                          </svg>
+                        </button>
+                      </div>
+                      <p class="text-gray-500 text-sm mb-2">Premium</p>
+                      <div class="flex justify-between items-center">
+                        <div class="flex items-center space-x-2">
+                          <button
+                            class="minus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                            data-produto-id="${
+                              item.produto_id
+                            }" data-produto-qtde="${item.quantidade}"
+                          >
+                            <svg
+                              class="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M20 12H4"
+                              ></path>
+                            </svg>
+                          </button>
+                          <span class="w-8 text-center">${
+                            item.quantidade
+                          }</span>
+                          <button
+                            class="plus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                            data-produto-id="${
+                              item.produto_id
+                            }" data-produto-qtde="${item.quantidade}"
+                          >
+                            <svg
+                              class="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 4v16m8-8H4"
+                              ></path>
+                            </svg>
+                          </button>
+                        </div>
+                        <span class="font-semibold"><s>${formatarMoeda(
+                          item.preco_original
+                        )}</s></span>
+                        <span class="font-semibold">${formatarMoeda(
+                          item.preco_unitario
+                        )}</span>
+                      </div>
+                    </div>
+                  </div>
+                          `;
+
+            $("#listaCarrinho").append(itemDiv);
+          });
+
+          $(".delete-item").on("click", function () {
+            var produtoId = $(this).data("produto-id");
+            //CONFIRMAR
+            app.dialog.confirm(
+              "Tem certeza que quer remover este item?",
+              "Remover",
+              function () {
+                removerItemCarrinho(pessoaIdCarrinho, produtoId);
+              }
+            );
+          });
+
+          $(".minus").on("click", function () {
+            var produtoId = $(this).data("produto-id");
+            var quantidade = $(this).data("produto-qtde");
+            var qtdeAtualizada = quantidade - 1;
+
+            //SE TEM MAIS DE UM ITEM NA QUANTIDADE
+            if (quantidade > 1) {
+              alterarCarrinho(pessoaIdCarrinho, produtoId, qtdeAtualizada);
+            } else {
+              app.dialog.confirm(
+                `Gostaria de remover este item?`,
+                "REMOVER",
+                function () {
+                  removerItemCarrinho(pessoaIdCarrinho, produtoId);
+                }
+              );
+            }
+          });
+
+          $(".plus").on("click", function () {
+            var produtoId = $(this).data("produto-id");
+            var quantidade = $(this).data("produto-qtde");
+            var qtdeAtualizada = quantidade + 1;
+
+            alterarCarrinho(pessoaIdCarrinho, produtoId, qtdeAtualizada);
+          });
+
+          //MOSTRAR O SUBTOTAL
+          $("#subtotal").html(
+            total.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })
+          );
+          //MOSTRAR O SUBTOTAL
+          $("#totalCarrinho").html(
+            total.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })
+          );
+        } else {
+          //MOSTRAR CARRINHO VAZIO
+          //ESVAZIAR LISTA DO CARRINHO
+          $("#listaCarrinho").empty();
+
+          //SUMIR OS ITENS DE BAIXO BOTÃO E TOTAIS
+          $("#toolbar-carrinho").addClass("display-none");
+
+          //MOSTRAR SACOLINHA VAZIA
+          $("#containerCarrinho").html(`
+              <div class="display-flex flex-direction-column align-items-center justify-content-center" style="height: 100%;">
+                <img width="300" src="img/empty.gif">
+                <br><span class="color-gray">Nada por enquanto...</span>
+              </div>
+            `);
+        }
+
+        listarEnderecos();
+        app.dialog.close();
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+      app.dialog.alert(
+        "Erro ao listar carrinho: " + error.message,
+        "Falha na requisição!"
+      );
+    });
+}
+//Fim Função Listar Carrinho
 
 //Inicio Funçao Alterar Carrinho
 function alterarCarrinho(pessoaId, produtoId, quantidade) {
@@ -3372,6 +3942,235 @@ function editarEndereco() {
 }
 //Fim Função Editar Endereço
 
+//Inicio Adicionar Item Carrinho
+function adicionarItemCarrinho(produtoId) {
+  const pessoaId = localStorage.getItem("pessoaId");
+  app.dialog.preloader("Carregando...");
+
+  const dados = {
+    pessoa_id: pessoaId,
+    produto_id: produtoId,
+    quantidade: 1,
+  };
+
+  // Cabeçalhos da requisição
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "PagamentoSafe2payRest",
+    method: "IncluirCarrinho",
+    dados: dados,
+  });
+
+  // Opções da requisição
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  // Fazendo a requisição
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // Verifica se o status é 'success'
+      if (
+        responseJson.status == "success" &&
+        responseJson.data.status == "sucess"
+      ) {
+        // Sucesso na alteração
+        var toastCenter = app.toast.create({
+          text: `Produto adicionado ao carrinho`,
+          position: "center",
+          closeTimeout: 2000,
+        });
+
+        toastCenter.open();
+        app.dialog.close();
+        app.views.main.router.navigate("/home/");
+      } else {
+        app.dialog.close();
+        app.dialog.alert(
+          "Erro ao alterar carrinho: " + responseJson.data.message,
+          responseJson.data.status
+        );
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+      app.dialog.alert(
+        "Erro ao alterar carrinho: " + error.message,
+        "Falha na requisição!"
+      );
+    });
+}
+//Fim Função Adicionar Item Carrinho
+
+//Inicio Remover Item do Carrinho
+function removerItemCarrinho(pessoaId, produtoId) {
+  app.dialog.preloader("Carregando...");
+  const dados = {
+    pessoa_id: pessoaId,
+    produto_id: produtoId,
+  };
+
+  // Cabeçalhos da requisição
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "PagamentoSafe2payRest",
+    method: "ExcluirCarrinho",
+    dados: dados,
+  });
+
+  // Opções da requisição
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  // Fazendo a requisição
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // Verifica se o status é 'success'
+      app.dialog.close();
+      if (
+        responseJson.status == "success" &&
+        responseJson.data.status == "sucess"
+      ) {
+        // Sucesso na alteração
+        app.views.main.router.refreshPage();
+      } else {
+        app.dialog.alert(
+          "Erro ao alterar carrinho: " + responseJson.data.message,
+          responseJson.data.status
+        );
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+      app.dialog.alert(
+        "Erro ao alterar carrinho: " + error.message,
+        "Falha na requisição!"
+      );
+    });
+}
+//Fim Função Remover Item do Carrinho
+
+//Inicio Funçao Esvaziar Carrinho
+function limparCarrinho() {
+  const pessoaId = localStorage.getItem("pessoaId");
+  app.dialog.preloader("Carregando...");
+
+  const dados = {
+    pessoa_id: pessoaId,
+  };
+
+  // Cabeçalhos da requisição
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "PagamentoSafe2payRest",
+    method: "LimparCarrinho",
+    dados: dados,
+  });
+
+  // Opções da requisição
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  // Fazendo a requisição
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // Verifica se o status é 'success'
+      if (
+        responseJson.status == "success" &&
+        responseJson.data.status == "sucess"
+      ) {
+        // Sucesso na alteração
+        app.views.main.router.refreshPage();
+        app.dialog.close();
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+      app.dialog.alert(
+        "Erro ao alterar carrinho: " + error.message,
+        "Falha na requisição!"
+      );
+    });
+}
+//Fim Função Esvaziar Carrinho
+
+//Inicio Funçao contar Carrinho
+function contarCarrinho() {
+  const pessoaId = localStorage.getItem("pessoaId");
+
+  const dados = {
+    pessoa_id: pessoaId,
+  };
+
+  // Cabeçalhos da requisição
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "PagamentoSafe2payRest",
+    method: "ListarCarrinho",
+    dados: dados,
+  });
+
+  // Opções da requisição
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  // Fazendo a requisição
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // Verifica se o status é 'success'
+      if (
+        responseJson.status == "success" &&
+        responseJson.data.status == "sucess"
+      ) {
+        // Supondo que responseJson seja o objeto que você obteve no console.log
+        const quantidadeItens = responseJson.data.data.itens.length;
+
+        // Atualizar o contador no cabeçalho
+        $(".btn-cart").attr("data-count", quantidadeItens);
+
+        // Atualizar o contador na barra inferior
+        $(".cart-badge").attr("data-count", quantidadeItens);
+      }
+    })
+    .catch((error) => {
+      console.error("Erro:", error);
+    });
+}
+//Fim Função contar Carrinho
 
 //Inicio Funçao Dados Dashboard
 function onDashboard() {
@@ -4237,1414 +5036,4 @@ function oneSignalLogin(userId, oneSignalId) {
         console.error(`Erro ao definir ID externo: ${error}`);
       });
   }
-}
-// Estado global do carrinho
-let carrinhoState = {
-  loading: false,
-  pessoaId: null,
-  enderecoSelecionado: null,
-  itens: [],
-  total: 0,
-  subtotal: 0,
-  frete: 0
-};
-
-// Debounce para evitar múltiplas chamadas
-function debounce(func, wait) {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-}
-
-// Função principal para listar carrinho
-function listarCarrinho() {
-  if (carrinhoState.loading) {
-    console.log('Carrinho já está carregando...');
-    return;
-  }
-
-  showLoadingState();
-  carrinhoState.loading = true;
-
-  const pessoaId = localStorage.getItem("pessoaId");
-  carrinhoState.pessoaId = pessoaId;
-
-  const dados = { pessoa_id: pessoaId };
-
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
-  };
-
-  const body = JSON.stringify({
-    class: "PagamentoSafe2payRest",
-    method: "ListarCarrinho",
-    dados: dados,
-  });
-
-  const options = {
-    method: "POST",
-    headers: headers,
-    body: body,
-  };
-
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      hideLoadingState();
-      carrinhoState.loading = false;
-
-      if (responseJson.status === "success" && responseJson.data.status === "sucess") {
-        const data = responseJson.data.data;
-        carrinhoState.itens = data.itens || [];
-        carrinhoState.subtotal = data.total || 0;
-        carrinhoState.frete = data.valor_frete || 0;
-        carrinhoState.total = carrinhoState.subtotal + carrinhoState.frete;
-
-        renderCarrinho(data);
-        listarEnderecos();
-      } else {
-        showErrorState("Erro ao carregar carrinho");
-      }
-    })
-    .catch((error) => {
-      hideLoadingState();
-      carrinhoState.loading = false;
-      console.error("Erro:", error);
-      showErrorState("Erro de conexão");
-    });
-}
-
-// Função para renderizar o carrinho
-function renderCarrinho(data) {
-  const listaCarrinho = $("#listaCarrinho");
-  const emptyState = $("#emptyCartState");
-  const produtosContainer = $("#produtos-container");
-  const toolbarCarrinho = $("#toolbar-carrinho");
-
-  if (!data.itens || data.itens.length === 0) {
-    // Carrinho vazio
-    produtosContainer.addClass("display-none");
-    emptyState.removeClass("display-none");
-    toolbarCarrinho.addClass("display-none");
-    return;
-  }
-
-  // Carrinho com itens
-  emptyState.addClass("display-none");
-  produtosContainer.removeClass("display-none");
-  toolbarCarrinho.removeClass("display-none");
-
-  // Limpar lista atual
-  listaCarrinho.empty();
-
-  // Renderizar cada item
-  data.itens.forEach((item) => {
-    const itemElement = createCartItemElement(item);
-    listaCarrinho.append(itemElement);
-  });
-
-  // Atualizar totais
-  updateCartSummary(data);
-
-  // Configurar eventos dos itens
-  setupCartItemEvents();
-
-  // Habilitar botão de finalizar
-  $("#finalizarCompra").prop("disabled", false);
-}
-
-// Função para criar elemento do item do carrinho
-function createCartItemElement(item) {
-  const imagemUrl = item.foto 
-    ? `https://vitatophomologa.tecskill.com.br/${item.foto}`
-    : "img/default.png";
-
-  return $(`
-    <div class="cart-item" data-produto-id="${item.produto_id}">
-      <div class="cart-item-content">
-        <img 
-          src="${imagemUrl}" 
-          alt="${item.nome}" 
-          class="cart-item-image"
-          onerror="this.src='img/default.png'"
-        />
-        <div class="cart-item-details">
-          <div class="cart-item-header">
-            <h3 class="cart-item-name">${item.nome}</h3>
-            <button class="cart-item-delete delete-item" data-produto-id="${item.produto_id}">
-              <i class="mdi mdi-delete-outline"></i>
-            </button>
-          </div>
-          <div class="cart-item-footer">
-            <div class="quantity-controls">
-              <button class="quantity-btn minus-btn" data-produto-id="${item.produto_id}" data-quantidade="${item.quantidade}">
-                <i class="mdi mdi-minus"></i>
-              </button>
-              <input type="number" class="quantity-input" value="${item.quantidade}" readonly />
-              <button class="quantity-btn plus-btn" data-produto-id="${item.produto_id}" data-quantidade="${item.quantidade}">
-                <i class="mdi mdi-plus"></i>
-              </button>
-            </div>
-            <span class="cart-item-price">${formatarMoeda(item.preco_total)}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  `);
-}
-
-// Função para configurar eventos dos itens do carrinho
-function setupCartItemEvents() {
-  // Eventos de exclusão
-  $(".delete-item").off("click").on("click", function() {
-    const produtoId = $(this).data("produto-id");
-    confirmarRemocaoItem(produtoId);
-  });
-
-  // Eventos de diminuir quantidade
-  $(".minus-btn").off("click").on("click", debounce(function() {
-    const produtoId = $(this).data("produto-id");
-    const quantidade = parseInt($(this).data("quantidade"));
-    
-    if (quantidade > 1) {
-      alterarQuantidade(produtoId, quantidade - 1);
-    } else {
-      confirmarRemocaoItem(produtoId);
-    }
-  }, 300));
-
-  // Eventos de aumentar quantidade
-  $(".plus-btn").off("click").on("click", debounce(function() {
-    const produtoId = $(this).data("produto-id");
-    const quantidade = parseInt($(this).data("quantidade"));
-    alterarQuantidade(produtoId, quantidade + 1);
-  }, 300));
-}
-
-// Função para alterar quantidade
-function alterarQuantidade(produtoId, novaQuantidade) {
-  if (carrinhoState.loading) return;
-
-  const itemElement = $(`.cart-item[data-produto-id="${produtoId}"]`);
-  
-  // Mostrar estado de carregamento no item
-  itemElement.addClass("updating");
-  
-  const dados = {
-    pessoa_id: carrinhoState.pessoaId,
-    produto_id: produtoId,
-    quantidade: novaQuantidade,
-  };
-
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
-  };
-
-  const body = JSON.stringify({
-    class: "PagamentoSafe2payRest",
-    method: "AlterarCarrinho",
-    dados: dados,
-  });
-
-  const options = {
-    method: "POST",
-    headers: headers,
-    body: body,
-  };
-
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      itemElement.removeClass("updating");
-      
-      if (responseJson.status === "success" && responseJson.data.status === "sucess") {
-        // Recarregar carrinho para atualizar totais
-        listarCarrinho();
-        showToast("Quantidade atualizada", "success");
-      } else {
-        showToast("Erro ao alterar quantidade", "error");
-      }
-    })
-    .catch((error) => {
-      itemElement.removeClass("updating");
-      console.error("Erro:", error);
-      showToast("Erro de conexão", "error");
-    });
-}
-
-// Função para confirmar remoção de item
-function confirmarRemocaoItem(produtoId) {
-  app.dialog.confirm(
-    "Tem certeza que deseja remover este item?",
-    "Remover Item",
-    function() {
-      removerItemCarrinho(produtoId);
-    }
-  );
-}
-
-// Função para remover item do carrinho
-function removerItemCarrinho(produtoId) {
-  if (carrinhoState.loading) return;
-
-  const itemElement = $(`.cart-item[data-produto-id="${produtoId}"]`);
-  
-  // Animar remoção
-  itemElement.addClass("removing");
-  
-  const dados = {
-    pessoa_id: carrinhoState.pessoaId,
-    produto_id: produtoId,
-  };
-
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
-  };
-
-  const body = JSON.stringify({
-    class: "PagamentoSafe2payRest",
-    method: "ExcluirCarrinho",
-    dados: dados,
-  });
-
-  const options = {
-    method: "POST",
-    headers: headers,
-    body: body,
-  };
-
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      if (responseJson.status === "success" && responseJson.data.status === "sucess") {
-        // Remover elemento após animação
-        setTimeout(() => {
-          itemElement.remove();
-          // Recarregar carrinho para atualizar totais
-          listarCarrinho();
-        }, 300);
-        
-        showToast("Item removido", "success");
-      } else {
-        itemElement.removeClass("removing");
-        showToast("Erro ao remover item", "error");
-      }
-    })
-    .catch((error) => {
-      itemElement.removeClass("removing");
-      console.error("Erro:", error);
-      showToast("Erro de conexão", "error");
-    });
-}
-
-// Função para limpar carrinho
-function limparCarrinho() {
-  if (carrinhoState.loading) return;
-
-  app.dialog.confirm(
-    "Tem certeza que deseja esvaziar o carrinho?",
-    "Esvaziar Carrinho",
-    function() {
-      showLoadingState();
-      
-      const dados = {
-        pessoa_id: carrinhoState.pessoaId,
-      };
-
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + userAuthToken,
-      };
-
-      const body = JSON.stringify({
-        class: "PagamentoSafe2payRest",
-        method: "LimparCarrinho",
-        dados: dados,
-      });
-
-      const options = {
-        method: "POST",
-        headers: headers,
-        body: body,
-      };
-
-      fetch(apiServerUrl, options)
-        .then((response) => response.json())
-        .then((responseJson) => {
-          hideLoadingState();
-          
-          if (responseJson.status === "success" && responseJson.data.status === "sucess") {
-            listarCarrinho();
-            showToast("Carrinho esvaziado", "success");
-          } else {
-            showToast("Erro ao esvaziar carrinho", "error");
-          }
-        })
-        .catch((error) => {
-          hideLoadingState();
-          console.error("Erro:", error);
-          showToast("Erro de conexão", "error");
-        });
-    }
-  );
-}
-
-// Função para atualizar resumo do carrinho
-function updateCartSummary(data) {
-  const subtotal = data.total || 0;
-  const frete = data.valor_frete || 0;
-  const total = subtotal + frete;
-
-  $("#subtotal").text(formatarMoeda(subtotal));
-  
-  if (frete === 0) {
-    $("#fretePedido").text("Grátis").addClass("text-green-600");
-  } else {
-    $("#fretePedido").text(formatarMoeda(frete)).removeClass("text-green-600");
-  }
-  
-  $("#totalCarrinho").text(formatarMoeda(total));
-}
-
-// Função para mostrar estado de carregamento
-function showLoadingState() {
-  $("#loadingCarrinho").removeClass("display-none");
-  $("#containerCarrinho").addClass("blurred");
-}
-
-// Função para esconder estado de carregamento
-function hideLoadingState() {
-  $("#loadingCarrinho").addClass("display-none");
-  $("#containerCarrinho").removeClass("blurred");
-}
-
-// Função para mostrar estado de erro
-function showErrorState(message) {
-  const errorHtml = `
-    <div class="text-center py-8">
-      <i class="mdi mdi-alert-circle-outline" style="font-size: 48px; color: #ff3b30;"></i>
-      <h3 class="text-lg font-semibold text-gray-600 mt-4">${message}</h3>
-      <button 
-        onclick="listarCarrinho()"
-        class="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-      >
-        Tentar Novamente
-      </button>
-    </div>
-  `;
-  
-  $("#listaCarrinho").html(errorHtml);
-  $("#toolbar-carrinho").addClass("display-none");
-}
-
-// Função para mostrar toast
-function showToast(message, type = "info") {
-  const toast = app.toast.create({
-    text: message,
-    position: "center",
-    closeTimeout: 2000,
-    cssClass: `toast-${type}`
-  });
-  toast.open();
-}
-
-// Função melhorada para selecionar endereço
-function selecionarEndereco(enderecoSelecionado) {
-  if (carrinhoState.loading) return;
-
-  showLoadingState();
-
-  const dados = {
-    pessoa_id: carrinhoState.pessoaId,
-    endereco_id: enderecoSelecionado.id,
-  };
-
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
-  };
-
-  const body = JSON.stringify({
-    class: "PagamentoSafe2payRest",
-    method: "AlterarEndereco",
-    dados: dados,
-  });
-
-  const options = {
-    method: "POST",
-    headers: headers,
-    body: body,
-  };
-
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      hideLoadingState();
-      
-      if (responseJson.status === "success" && responseJson.data.status === "success") {
-        carrinhoState.enderecoSelecionado = enderecoSelecionado.id;
-        localStorage.setItem("enderecoSelecionado", enderecoSelecionado.id);
-        
-        const valorFrete = responseJson.data.data.frete || 0;
-        carrinhoState.frete = valorFrete;
-
-        // Atualizar display do frete
-        if (valorFrete === 0) {
-          $("#fretePedido").text("Grátis").addClass("text-green-600");
-        } else {
-          $("#fretePedido").text(formatarMoeda(valorFrete)).removeClass("text-green-600");
-        }
-
-        // Atualizar total
-        const novoTotal = carrinhoState.subtotal + valorFrete;
-        $("#totalCarrinho").text(formatarMoeda(novoTotal));
-
-        // Destacar endereço selecionado
-        $(".select-address").removeClass("text-blue-700 font-bold");
-        $(`.select-address[data-id='${enderecoSelecionado.id}']`).addClass("text-blue-700 font-bold");
-
-        // Atualizar display do endereço selecionado
-        updateSelectedAddressDisplay(enderecoSelecionado);
-        
-        showToast("Endereço atualizado", "success");
-      } else {
-        showToast("Erro ao alterar endereço", "error");
-      }
-    })
-    .catch((error) => {
-      hideLoadingState();
-      console.error("Erro:", error);
-      showToast("Erro de conexão", "error");
-    });
-}
-
-// Função para atualizar display do endereço selecionado
-function updateSelectedAddressDisplay(endereco) {
-  const addressHtml = `
-    <div class="flex items-start space-x-3">
-      <svg class="w-5 h-5 text-gray-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-      </svg>
-      <div>
-        <div class="flex items-center space-x-2">
-          <h3 class="font-medium">${endereco.nome_endereco || "Residencial"}</h3>
-          ${endereco.principal === "S" ? 
-            '<span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39">Principal</span>' : 
-            ''
-          }
-        </div>
-        <p class="text-gray-600 text-sm mt-1">
-          ${endereco.rua}, ${endereco.numero} - ${endereco.bairro}
-        </p>
-        <p class="text-gray-600 text-sm">
-          ${endereco.municipio.nome}, ${endereco.estado.sigla} - CEP: ${endereco.cep}
-        </p>
-      </div>
-    </div>
-  `;
-  
-  $("#selectedAddress").html(addressHtml);
-}
-
-// Função melhorada para listar endereços
-function listarEnderecos() {
-  const pessoaId = localStorage.getItem("pessoaId");
-
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
-  };
-
-  const body = JSON.stringify({
-    class: "PessoaRestService",
-    method: "listarPessoa",
-    pessoa_id: pessoaId,
-  });
-
-  const options = {
-    method: "POST",
-    headers: headers,
-    body: body,
-  };
-
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      if (responseJson.data.status === "success") {
-        const enderecos = responseJson.data.data.enderecos;
-        renderEnderecos(enderecos);
-        
-        // Selecionar endereço automaticamente
-        let enderecoPrincipal = enderecos.find(e => e.principal === "S");
-        let enderecoParaSelecionar = enderecoPrincipal || enderecos[0];
-        
-        if (enderecoParaSelecionar) {
-          selecionarEndereco(enderecoParaSelecionar);
-        }
-      } else {
-        console.error("Erro ao carregar endereços:", responseJson.message);
-        $("#selectedAddress").html(`
-          <div class="text-center py-4">
-            <p class="text-gray-500">Erro ao carregar endereços</p>
-            <button onclick="listarEnderecos()" class="mt-2 text-blue-600">Tentar novamente</button>
-          </div>
-        `);
-      }
-    })
-    .catch((error) => {
-      console.error("Erro:", error);
-      $("#selectedAddress").html(`
-        <div class="text-center py-4">
-          <p class="text-gray-500">Erro de conexão</p>
-          <button onclick="listarEnderecos()" class="mt-2 text-blue-600">Tentar novamente</button>
-        </div>
-      `);
-    });
-}
-
-// Função para renderizar endereços
-function renderEnderecos(enderecos) {
-  const container = $("#listaDeEnderecos");
-  container.empty();
-
-  enderecos.forEach((endereco) => {
-    const enderecoHtml = `
-      <div class="address-card border rounded-lg p-4" data-endereco-id="${endereco.id}">
-        <div class="flex items-start justify-between">
-          <div class="flex-1">
-            <div class="flex items-center space-x-2 mb-2">
-              <span class="font-medium">${endereco.nome_endereco || "Residencial"}</span>
-              ${endereco.principal === "S" ? 
-                '<span class="px-2 py-0.5 text-white text-xs rounded-full" style="background-color: #ff7b39">Principal</span>' : 
-                ''
-              }
-            </div>
-            <p class="text-gray-600 text-sm">
-              ${endereco.rua}, ${endereco.numero} - ${endereco.bairro}
-            </p>
-            <p class="text-gray-600 text-sm">
-              ${endereco.municipio.nome}, ${endereco.estado.sigla} - CEP: ${endereco.cep}
-            </p>
-          </div>
-          <div class="flex items-center space-x-2">
-            <button class="text-gray-400 hover:text-gray-600 edit-address" data-endereco='${JSON.stringify(endereco)}'>
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
-              </svg>
-            </button>
-            <button class="text-blue-500 hover:text-blue-700 select-address" data-endereco='${JSON.stringify(endereco)}' data-id="${endereco.id}">
-              Selecionar
-            </button>
-          </div>
-        </div>
-      </div>
-    `;
-    
-    container.append(enderecoHtml);
-  });
-
-  // Configurar eventos
-  setupAddressEvents();
-}
-
-// Função para configurar eventos dos endereços
-function setupAddressEvents() {
-  // Evento de seleção
-  $(".select-address").off("click").on("click", function() {
-    const endereco = JSON.parse($(this).attr("data-endereco"));
-    selecionarEndereco(endereco);
-    $("#addressModal").addClass("hidden");
-  });
-
-  // Evento de edição
-  $(".edit-address").off("click").on("click", function() {
-    const endereco = JSON.parse($(this).attr("data-endereco"));
-    openEditAddressModal(endereco);
-  });
-}
-
-// Função para abrir modal de edição
-function openEditAddressModal(endereco) {
-  $("#idEnderecoEdit").val(endereco.id);
-  $("#nomeEnderecoEdit").val(endereco.nome_endereco);
-  $("#cepEdit").val(endereco.cep);
-  $("#logradouroEndEdit").val(endereco.rua);
-  $("#numeroEndEdit").val(endereco.numero);
-  $("#complementoEndEdit").val(endereco.complemento);
-  $("#bairroEndEdit").val(endereco.bairro);
-  $("#cidadeEndEdit").val(endereco.cidade);
-  $("#estadoEndEdit").val(endereco.estado.sigla);
-  $("#defaultAddressEdit").prop("checked", endereco.principal === "S");
-
-  $("#addressModal").addClass("hidden");
-  $("#editAddressModal").removeClass("hidden");
-}
-
-// Função para contar itens do carrinho
-function contarCarrinho() {
-  const pessoaId = localStorage.getItem("pessoaId");
-  if (!pessoaId) return;
-
-  const dados = { pessoa_id: pessoaId };
-
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
-  };
-
-  const body = JSON.stringify({
-    class: "PagamentoSafe2payRest",
-    method: "ListarCarrinho",
-    dados: dados,
-  });
-
-  const options = {
-    method: "POST",
-    headers: headers,
-    body: body,
-  };
-
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      if (responseJson.status === "success" && responseJson.data.status === "sucess") {
-        const quantidadeItens = responseJson.data.data.itens.length;
-        
-        // Atualizar badges do carrinho
-        $(".btn-cart").attr("data-count", quantidadeItens);
-        $(".cart-badge").attr("data-count", quantidadeItens);
-      }
-    })
-    .catch((error) => {
-      console.error("Erro ao contar carrinho:", error);
-    });
-}
-
-// Função para adicionar item ao carrinho
-function adicionarItemCarrinho(produtoId, quantidade = 1) {
-  const pessoaId = localStorage.getItem("pessoaId");
-  
-  if (!pessoaId) {
-    showToast("Erro: usuário não identificado", "error");
-    return;
-  }
-
-  // Mostrar loading
-  app.dialog.preloader("Adicionando ao carrinho...");
-
-  const dados = {
-    pessoa_id: pessoaId,
-    produto_id: produtoId,
-    quantidade: quantidade,
-  };
-
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
-  };
-
-  const body = JSON.stringify({
-    class: "PagamentoSafe2payRest",
-    method: "IncluirCarrinho",
-    dados: dados,
-  });
-
-  const options = {
-    method: "POST",
-    headers: headers,
-    body: body,
-  };
-
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      app.dialog.close();
-      
-      if (responseJson.status === "success" && responseJson.data.status === "sucess") {
-        showToast("Produto adicionado ao carrinho", "success");
-        contarCarrinho(); // Atualizar contador
-      } else {
-        showToast("Erro ao adicionar produto", "error");
-      }
-    })
-    .catch((error) => {
-      app.dialog.close();
-      console.error("Erro:", error);
-      showToast("Erro de conexão", "error");
-    });
-}
-
-// Função para finalizar compra melhorada
-function finalizarCompra(formaPagamento, titular, numero_cartao, data_expiracao, cvc) {
-  if (carrinhoState.loading) return;
-  
-  // Validar se há itens no carrinho
-  if (!carrinhoState.itens || carrinhoState.itens.length === 0) {
-    showToast("Seu carrinho está vazio", "error");
-    return;
-  }
-
-  // Validar se há endereço selecionado
-  if (!carrinhoState.enderecoSelecionado) {
-    showToast("Selecione um endereço de entrega", "error");
-    return;
-  }
-
-  app.dialog.preloader("Processando compra...");
-  
-  const pessoaId = localStorage.getItem("pessoaId");
-  const enderecoEntregaId = localStorage.getItem("enderecoSelecionado");
-
-  const data = {
-    class: "PagamentoSafe2payRest",
-    method: "IncluirVenda",
-    dados: {
-      pessoa_id: pessoaId,
-      pagamento: {
-        forma_pagamento: formaPagamento,
-        titular: titular,
-        numero_cartao: numero_cartao,
-        data_expiracao: data_expiracao,
-        cvc: cvc,
-      },
-      destinatario: {
-        pessoa_id: pessoaId,
-        endereco_id: enderecoEntregaId,
-        frete: carrinhoState.frete,
-      },
-    },
-  };
-
-  fetch(apiServerUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + userAuthToken,
-    },
-    body: JSON.stringify(data),
-  })
-    .then((response) => response.json())
-    .then((responseJson) => {
-      app.dialog.close();
-      
-      if (responseJson.status === "success" && responseJson.data.status === "success") {
-        // Salvar dados do pagamento
-        const pagamentoData = {
-          formaSelecionada: formaPagamento,
-          linhaDigitavel: responseJson.data.data.boleto_linhadigitavel,
-          pixKey: responseJson.data.data.pix_key,
-          qrCodePix: responseJson.data.data.pix_qrcode,
-          linkBoleto: responseJson.data.data.boleto_impressao,
-          dataVencimento: responseJson.data.data.data_vencimento,
-          valorTotal: responseJson.data.data.valor_total,
-          pedidoId: responseJson.data.data.pedido_id,
-          status_compra: responseJson.data.data.status_compra,
-          status_mensagem: responseJson.data.data.status_mensagem,
-          bandeira: responseJson.data.data.bandeira,
-          cartao_numero: responseJson.data.data.cartao_numero,
-          nome_cartao: responseJson.data.data.nome_cartao,
-        };
-
-        localStorage.setItem("pagamentoData", JSON.stringify(pagamentoData));
-        localStorage.setItem("pedidoIdPagamento", responseJson.data.data.pedido_id);
-
-        // Limpar estado do carrinho
-        carrinhoState = {
-          loading: false,
-          pessoaId: null,
-          enderecoSelecionado: null,
-          itens: [],
-          total: 0,
-          subtotal: 0,
-          frete: 0
-        };
-
-        // Navegar para página de pagamento
-        app.views.main.router.navigate("/pagamento/");
-      } else {
-        showToast("Erro ao processar compra", "error");
-      }
-    })
-    .catch((error) => {
-      app.dialog.close();
-      console.error("Erro:", error);
-      showToast("Erro de conexão", "error");
-    });
-}
-
-// Função para configurar eventos dos modais
-function setupModalEvents() {
-  // Modal de endereços
-  $("#openAddressModal").off('click').on('click', function () {
-    document.getElementById('addressModal').classList.remove('hidden');
-  });
-  
-  $("#closeAddressModal").off('click').on('click', function () {
-    document.getElementById('addressModal').classList.add('hidden');
-  });
-  
-  // Modal de novo endereço
-  $("#showNewAddressForm").off('click').on('click', function () {
-    document.getElementById('addressModal').classList.add('hidden');
-    document.getElementById('newAddressModal').classList.remove('hidden');
-  });
-  
-  $(".closeNewAddressModal").off('click').on('click', function () {
-    document.getElementById('newAddressModal').classList.add('hidden');
-    document.getElementById('addressModal').classList.remove('hidden');
-  });
-  
-  // Modal de edição de endereço
-  $(".closeEditAddressModal").off('click').on('click', function () {
-    document.getElementById('editAddressModal').classList.add('hidden');
-    document.getElementById('addressModal').classList.remove('hidden');
-  });
-  
-  // Modal de cartão
-  $("#opcaoCartao").off('click').on('click', function () {
-    document.getElementById('cartaoModal').classList.remove('hidden');
-  });
-  
-  $("#closeCartaoModal").off('click').on('click', function () {
-    document.getElementById('cartaoModal').classList.add('hidden');
-    $("input[name='payment'][value='3']").prop("checked", true);
-  });
-}
-
-// Função para configurar máscaras de input
-function setupInputMasks() {
-  // Máscaras para novo endereço
-  $('#cepCliente').mask('00000-000');
-  
-  // Máscaras para edição de endereço
-  $('#cepEdit').mask('00000-000');
-  
-  // Máscaras para cartão
-  $('#numeroCartao').mask('0000 0000 0000 0000');
-  $('#dataExpiracao').mask('00/0000');
-  $('#cvc').mask('000');
-}
-
-// Função para configurar eventos dos formulários
-function setupFormEvents() {
-  // Evento de CEP para novo endereço
-  $('#cepCliente').off('input').on('input', function () {
-    const cep = this.value.replace(/\D/g, '');
-    if (cep.length === 8) {
-      const validacep = /^[0-9]{8}$/;
-      if (validacep.test(cep)) {
-        cepEndereco(cep);
-      }
-    }
-  });
-  
-  // Evento de CEP para edição de endereço
-  $('#cepEdit').off('input').on('input', function () {
-    const cep = this.value.replace(/\D/g, '');
-    if (cep.length === 8) {
-      const validacep = /^[0-9]{8}$/;
-      if (validacep.test(cep)) {
-        cepEnderecoEdit(cep);
-      }
-    }
-  });
-  
-  // Salvar novo endereço
-  $('#salvarEndereco').off('click').on('click', function () {
-    if (validateAddressForm()) {
-      adicionarEndereco();
-    }
-  });
-  
-  // Salvar edição de endereço
-  $('#salvarEnderecoEdit').off('click').on('click', function () {
-    if (validateEditAddressForm()) {
-      editarEndereco();
-    }
-  });
-}
-
-// Função para configurar eventos de pagamento
-function setupPaymentEvents() {
-  // Finalizar compra - botão principal
-  $(".finalizar-compra").off('click').on('click', function () {
-    if (carrinhoState.loading) return;
-    
-    const formaPagamento = obterFormaPagamentoSelecionada();
-    
-    if (!formaPagamento) {
-      showToast("Selecione uma forma de pagamento", "error");
-      return;
-    }
-    
-    // Validar se há endereço selecionado
-    if (!carrinhoState.enderecoSelecionado) {
-      showToast("Selecione um endereço de entrega", "error");
-      $("#openAddressModal").click();
-      return;
-    }
-    
-    // Validar se há itens no carrinho
-    if (!carrinhoState.itens || carrinhoState.itens.length === 0) {
-      showToast("Seu carrinho está vazio", "error");
-      return;
-    }
-    
-    processarCompra(formaPagamento);
-  });
-  
-  // Finalizar compra - botão do modal do cartão
-  $("#finalizarCompraCartao").off('click').on('click', function () {
-    if (carrinhoState.loading) return;
-    
-    if (validateCardForm()) {
-      const dadosCartao = getCardData();
-      processarCompra(1, dadosCartao);
-    }
-  });
-}
-
-// Função para configurar eventos principais do carrinho
-function setupMainCarrinhoEvents() {
-  // Esvaziar carrinho
-  $("#esvaziar").off('click').on('click', function () {
-    limparCarrinho();
-  });
-  
-  // Aplicar cupom de desconto
-  $("#btnDesconto").off('click').on('click', function () {
-    const cupomDesconto = $("#cupomDesconto").val().trim();
-    if (cupomDesconto) {
-      // TODO: Implementar lógica de cupom
-      showToast("Cupom inválido ou expirado", "error");
-    } else {
-      showToast("Digite um cupom de desconto", "error");
-    }
-  });
-}
-
-// Função para obter forma de pagamento selecionada
-function obterFormaPagamentoSelecionada() {
-  return $("input[name='payment']:checked").val();
-}
-
-// Função para validar formulário de novo endereço
-function validateAddressForm() {
-  const campos = {
-    nomeEndereco: $("#nomeEndereco").val().trim(),
-    cep: $("#cepCliente").val().trim(),
-    logradouro: $("#logradouroEndCliente").val().trim(),
-    numero: $("#numeroEndCliente").val().trim(),
-    bairro: $("#bairroEndCliente").val().trim(),
-    cidade: $("#cidadeEndCliente").val().trim(),
-    estado: $("#estadoEndCliente").val().trim()
-  };
-  
-  // Validar campos obrigatórios
-  for (const [campo, valor] of Object.entries(campos)) {
-    if (!valor) {
-      showToast(`Campo ${campo} é obrigatório`, "error");
-      return false;
-    }
-  }
-  
-  // Validar CEP
-  if (campos.cep.replace(/\D/g, '').length !== 8) {
-    showToast("CEP inválido", "error");
-    return false;
-  }
-  
-  return true;
-}
-
-// Função para validar formulário de edição de endereço
-function validateEditAddressForm() {
-  const campos = {
-    nomeEndereco: $("#nomeEnderecoEdit").val().trim(),
-    cep: $("#cepEdit").val().trim(),
-    logradouro: $("#logradouroEndEdit").val().trim(),
-    numero: $("#numeroEndEdit").val().trim(),
-    bairro: $("#bairroEndEdit").val().trim(),
-    cidade: $("#cidadeEndEdit").val().trim(),
-    estado: $("#estadoEndEdit").val().trim()
-  };
-  
-  // Validar campos obrigatórios
-  for (const [campo, valor] of Object.entries(campos)) {
-    if (!valor) {
-      showToast(`Campo ${campo} é obrigatório`, "error");
-      return false;
-    }
-  }
-  
-  // Validar CEP
-  if (campos.cep.replace(/\D/g, '').length !== 8) {
-    showToast("CEP inválido", "error");
-    return false;
-  }
-  
-  return true;
-}
-
-// Função para validar formulário do cartão
-function validateCardForm() {
-  const nomeTitular = $("#nomeTitular").val().trim();
-  const numeroCartao = $("#numeroCartao").val().replace(/\s/g, '');
-  const dataExpiracao = $("#dataExpiracao").val().trim();
-  const cvc = $("#cvc").val().trim();
-  
-  if (!nomeTitular) {
-    showToast("Preencha o nome do titular", "error");
-    return false;
-  }
-  
-  if (!numeroCartao || numeroCartao.length < 16) {
-    showToast("Número do cartão inválido", "error");
-    return false;
-  }
-  
-  if (!dataExpiracao || !validarDataExpiracao(dataExpiracao)) {
-    showToast("Data de expiração inválida", "error");
-    return false;
-  }
-  
-  if (!cvc || cvc.length < 3) {
-    showToast("CVC inválido", "error");
-    return false;
-  }
-  
-  return true;
-}
-
-// Função para obter dados do cartão
-function getCardData() {
-  return {
-    titular: $("#nomeTitular").val().trim(),
-    numero_cartao: $("#numeroCartao").val().replace(/\s/g, ''),
-    data_expiracao: $("#dataExpiracao").val().trim(),
-    cvc: $("#cvc").val().trim()
-  };
-}
-
-// Função para processar compra
-function processarCompra(formaPagamento, dadosCartao = null) {
-  let titular = '';
-  let numero_cartao = '';
-  let data_expiracao = '';
-  let cvc = '';
-  
-  if (formaPagamento == 1 && dadosCartao) {
-    titular = dadosCartao.titular;
-    numero_cartao = dadosCartao.numero_cartao;
-    data_expiracao = dadosCartao.data_expiracao;
-    cvc = dadosCartao.cvc;
-    
-    // Fechar modal do cartão
-    document.getElementById('cartaoModal').classList.add('hidden');
-  }
-  
-  // Chamar função de finalizar compra
-  finalizarCompra(formaPagamento, titular, numero_cartao, data_expiracao, cvc);
-}
-
-// Função para limpar eventos (evitar memory leaks)
-function cleanupCarrinhoEvents() {
-  // Remover todos os event listeners específicos do carrinho
-  $("#openAddressModal").off('click');
-  $("#closeAddressModal").off('click');
-  $("#showNewAddressForm").off('click');
-  $(".closeNewAddressModal").off('click');
-  $(".closeEditAddressModal").off('click');
-  $("#opcaoCartao").off('click');
-  $("#closeCartaoModal").off('click');
-  $("#cepCliente").off('input');
-  $("#cepEdit").off('input');
-  $("#salvarEndereco").off('click');
-  $("#salvarEnderecoEdit").off('click');
-  $(".finalizar-compra").off('click');
-  $("#finalizarCompraCartao").off('click');
-  $("#esvaziar").off('click');
-  $("#btnDesconto").off('click');
-  
-  // Limpar eventos dinâmicos
-  $(".delete-item").off('click');
-  $(".minus-btn").off('click');
-  $(".plus-btn").off('click');
-  $(".select-address").off('click');
-  $(".edit-address").off('click');
-}
-
-// Função melhorada para adicionar endereço
-function adicionarEndereco() {
-  if (carrinhoState.loading) return;
-  
-  app.dialog.preloader("Salvando endereço...");
-
-  const pessoaId = localStorage.getItem("pessoaId");
-  
-  const dados = {
-    pessoa_id: pessoaId,
-    nome_endereco: $("#nomeEndereco").val().trim(),
-    cep: $("#cepCliente").val().replace(/\D/g, ''),
-    endereco: $("#logradouroEndCliente").val().trim(),
-    numero: $("#numeroEndCliente").val().trim(),
-    complemento: $("#complementoEndCliente").val().trim(),
-    bairro: $("#bairroEndCliente").val().trim(),
-    cidade: $("#cidadeEndCliente").val().trim(),
-    estado: $("#estadoEndCliente").val().trim(),
-    tipo: 1,
-    is_principal: $("#defaultAddress").prop("checked") ? "S" : "N",
-  };
-
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
-  };
-
-  const body = JSON.stringify({
-    class: "EnderecoRest",
-    method: "salvarEnderecoEntrega",
-    dados: dados,
-  });
-
-  const options = {
-    method: "POST",
-    headers: headers,
-    body: body,
-  };
-
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      app.dialog.close();
-      
-      if (responseJson.status === "success" && responseJson.data.status === "success") {
-        showToast("Endereço adicionado com sucesso", "success");
-        
-        // Limpar formulário
-        clearAddressForm();
-        
-        // Fechar modal
-        $("#newAddressModal").addClass("hidden");
-        $("#addressModal").addClass("hidden");
-        
-        // Recarregar endereços
-        listarEnderecos();
-      } else {
-        showToast("Erro ao salvar endereço", "error");
-      }
-    })
-    .catch((error) => {
-      app.dialog.close();
-      console.error("Erro:", error);
-      showToast("Erro de conexão", "error");
-    });
-}
-
-// Função melhorada para editar endereço
-function editarEndereco() {
-  if (carrinhoState.loading) return;
-  
-  app.dialog.preloader("Salvando alterações...");
-
-  const pessoaId = localStorage.getItem("pessoaId");
-  
-  const dados = {
-    endereco_id: $("#idEnderecoEdit").val(),
-    pessoa_id: pessoaId,
-    nome_endereco: $("#nomeEnderecoEdit").val().trim(),
-    cep: $("#cepEdit").val().replace(/\D/g, ''),
-    endereco: $("#logradouroEndEdit").val().trim(),
-    numero: $("#numeroEndEdit").val().trim(),
-    complemento: $("#complementoEndEdit").val().trim(),
-    bairro: $("#bairroEndEdit").val().trim(),
-    cidade: $("#cidadeEndEdit").val().trim(),
-    estado: $("#estadoEndEdit").val().trim(),
-    tipo: 1,
-    is_principal: $("#defaultAddressEdit").prop("checked") ? "S" : "N",
-  };
-
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
-  };
-
-  const body = JSON.stringify({
-    class: "EnderecoRest",
-    method: "salvarEnderecoEntrega",
-    dados: dados,
-  });
-
-  const options = {
-    method: "POST",
-    headers: headers,
-    body: body,
-  };
-
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      app.dialog.close();
-      
-      if (responseJson.status === "success" && responseJson.data.status === "success") {
-        showToast("Endereço atualizado com sucesso", "success");
-        
-        // Fechar modal
-        $("#editAddressModal").addClass("hidden");
-        $("#addressModal").addClass("hidden");
-        
-        // Recarregar endereços
-        listarEnderecos();
-      } else {
-        showToast("Erro ao atualizar endereço", "error");
-      }
-    })
-    .catch((error) => {
-      app.dialog.close();
-      console.error("Erro:", error);
-      showToast("Erro de conexão", "error");
-    });
-}
-
-// Função para limpar formulário de endereço
-function clearAddressForm() {
-  $("#nomeEndereco").val('');
-  $("#cepCliente").val('');
-  $("#logradouroEndCliente").val('');
-  $("#numeroEndCliente").val('');
-  $("#complementoEndCliente").val('');
-  $("#bairroEndCliente").val('');
-  $("#cidadeEndCliente").val('');
-  $("#estadoEndCliente").val('');
-  $("#defaultAddress").prop("checked", false);
-}
-
-// Função para limpar formulário de edição de endereço
-function clearEditAddressForm() {
-  $("#idEnderecoEdit").val('');
-  $("#nomeEnderecoEdit").val('');
-  $("#cepEdit").val('');
-  $("#logradouroEndEdit").val('');
-  $("#numeroEndEdit").val('');
-  $("#complementoEndEdit").val('');
-  $("#bairroEndEdit").val('');
-  $("#cidadeEndEdit").val('');
-  $("#estadoEndEdit").val('');
-  $("#defaultAddressEdit").prop("checked", false);
-}
-
-// Função para limpar formulário de cartão
-function clearCardForm() {
-  $("#nomeTitular").val('');
-  $("#numeroCartao").val('');
-  $("#dataExpiracao").val('');
-  $("#cvc").val('');
-  $("#salvarCartao").prop("checked", false);
-}
-
-// Função melhorada para buscar CEP
-function cepEndereco(cep) {
-  if (!cep || cep.length !== 8) return;
-  
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
-  };
-  
-  const dados = { cep: cep };
-  
-  const body = JSON.stringify({
-    class: "PessoaRestService",
-    method: "ConsultaCEP",
-    dados: dados,
-  });
-  
-  const options = {
-    method: "POST",
-    headers: headers,
-    body: body,
-  };
-  
-  // Mostrar loading sutil
-  $("#logradouroEndCliente").attr("placeholder", "Buscando...");
-  
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      $("#logradouroEndCliente").attr("placeholder", "Nome da rua");
-      
-      if (responseJson.status === "success") {
-        const dadosEndereco = responseJson.data;
-        $("#logradouroEndCliente").val(dadosEndereco.rua);
-        $("#bairroEndCliente").val(dadosEndereco.bairro);
-        $("#cidadeEndCliente").val(dadosEndereco.cidade);
-        $("#estadoEndCliente").val(dadosEndereco.uf);
-      } else {
-        showToast("CEP não encontrado", "error");
-      }
-    })
-    .catch((error) => {
-      $("#logradouroEndCliente").attr("placeholder", "Nome da rua");
-      console.error("Erro:", error);
-      showToast("Erro ao buscar CEP", "error");
-    });
-}
-
-// Função melhorada para buscar CEP na edição
-function cepEnderecoEdit(cep) {
-  if (!cep || cep.length !== 8) return;
-  
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
-  };
-  
-  const dados = { cep: cep };
-  
-  const body = JSON.stringify({
-    class: "PessoaRestService",
-    method: "ConsultaCEP",
-    dados: dados,
-  });
-  
-  const options = {
-    method: "POST",
-    headers: headers,
-    body: body,
-  };
-  
-  // Mostrar loading sutil
-  $("#logradouroEndEdit").attr("placeholder", "Buscando...");
-  
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      $("#logradouroEndEdit").attr("placeholder", "Nome da rua");
-      
-      if (responseJson.status === "success") {
-        const dadosEndereco = responseJson.data;
-        $("#logradouroEndEdit").val(dadosEndereco.rua);
-        $("#bairroEndEdit").val(dadosEndereco.bairro);
-        $("#cidadeEndEdit").val(dadosEndereco.cidade);
-        $("#estadoEndEdit").val(dadosEndereco.uf);
-      } else {
-        showToast("CEP não encontrado", "error");
-      }
-    })
-    .catch((error) => {
-      $("#logradouroEndEdit").attr("placeholder", "Nome da rua");
-      console.error("Erro:", error);
-      showToast("Erro ao buscar CEP", "error");
-    });
 }
