@@ -3495,43 +3495,16 @@ function refazerPagamento(
 }
 //Fim Função Refazer Pagamento
 
-//============================================
-// SOLUÇÃO OTIMIZADA PARA CARRINHO
-// Reduz drasticamente o número de requisições ao servidor
-//============================================
-
-// Cache do carrinho para evitar requisições desnecessárias
-let carrinhoCache = null;
-let carrinhoLastUpdate = 0;
-const CACHE_DURATION = 30000; // 30 segundos
-
-// Queue para batch de alterações
-let alteracoesQueue = new Map();
-let queueTimer = null;
-
-//Inicio Funçao Listar Carrinho - VERSÃO OTIMIZADA
-function listarCarrinho(forceRefresh = false) {
-  // Verifica se pode usar cache
-  const now = Date.now();
-  if (!forceRefresh && carrinhoCache && (now - carrinhoLastUpdate) < CACHE_DURATION) {
-    renderizarCarrinho(carrinhoCache);
-    carregarEnderecosSafe();
-    return Promise.resolve();
-  }
-
+//Inicio Funçao Listar Carrinho
+function listarCarrinho() {
   app.dialog.preloader("Carregando...");
   const pessoaId = localStorage.getItem("pessoaId");
-
-  if (!pessoaId) {
-    app.dialog.close();
-    app.dialog.alert("Erro: ID do usuário não encontrado", "Erro");
-    return Promise.reject("ID do usuário não encontrado");
-  }
 
   const dados = {
     pessoa_id: pessoaId,
   };
 
+  // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
     Authorization: "Bearer " + userAuthToken,
@@ -3543,276 +3516,220 @@ function listarCarrinho(forceRefresh = false) {
     dados: dados,
   });
 
+  // Opções da requisição
   const options = {
     method: "POST",
     headers: headers,
     body: body,
   };
 
-  return fetch(apiServerUrl, options)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-      return response.json();
-    })
+  // Fazendo a requisição
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
-      if (responseJson.status == "success" && responseJson.data.status == "sucess") {
-        // Atualiza cache
-        carrinhoCache = responseJson;
-        carrinhoLastUpdate = Date.now();
-        
-        renderizarCarrinho(responseJson);
+      // Verifica se o status é 'success'
+      if (
+        responseJson.status == "success" &&
+        responseJson.data.status == "sucess"
+      ) {
+        // Supondo que responseJson seja o objeto que você obteve no console.log
+        const quantidadeItens = responseJson.data.data.itens.length;
+        const total = responseJson.data.data.total;
+        var pessoaIdCarrinho = responseJson.data.data.pessoa_id;
+
+        if (quantidadeItens > 0) {
+          //TEM ITENS NO CARRINHO
+          $("#toolbar-carrinho").removeClass("display-none");
+          //ESVAZIAR A ÁREA DOS ITENS
+          $("#listaCarrinho").empty();
+
+          //PERCORRER O NOSSO CARRINHO E ALIMENTAR A ÁREA
+          responseJson.data.data.itens.forEach((item) => {
+            var itemDiv = `
+              
+                  <div class="flex space-x-4" style="margin-bottom: 18px;">
+                    <img
+                      src="https://vitatophomologa.tecskill.com.br/${item.foto}"
+                      alt="${item.nome}"
+                      class="w-20 h-20 rounded-lg object-cover"
+                    />
+                    <div class="flex-1">
+                      <div class="flex justify-between">
+                        <h3 class="font-medium">${item.nome}</h3>
+                        <button class="text-red-500 delete-item" style="width: 30px;"
+                        data-produto-id="${item.produto_id}">
+                          <svg
+                            class="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            ></path>
+                          </svg>
+                        </button>
+                      </div>
+                      <p class="text-gray-500 text-sm mb-2">Premium</p>
+                      <div class="flex justify-between items-center">
+                        <div class="flex items-center space-x-2">
+                          <button
+                            class="minus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                            data-produto-id="${
+                              item.produto_id
+                            }" data-produto-qtde="${item.quantidade}"
+                          >
+                            <svg
+                              class="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M20 12H4"
+                              ></path>
+                            </svg>
+                          </button>
+                          <span class="w-8 text-center">${
+                            item.quantidade
+                          }</span>
+                          <button
+                            class="plus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                            data-produto-id="${
+                              item.produto_id
+                            }" data-produto-qtde="${item.quantidade}"
+                          >
+                            <svg
+                              class="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 4v16m8-8H4"
+                              ></path>
+                            </svg>
+                          </button>
+                        </div>
+                        <span class="font-semibold"><s>${formatarMoeda(
+                          item.preco_original
+                        )}</s></span>
+                        <span class="font-semibold">${formatarMoeda(
+                          item.preco_unitario
+                        )}</span>
+                      </div>
+                    </div>
+                  </div>
+                          `;
+
+            $("#listaCarrinho").append(itemDiv);
+          });
+
+          $(".delete-item").on("click", function () {
+            var produtoId = $(this).data("produto-id");
+            //CONFIRMAR
+            app.dialog.confirm(
+              "Tem certeza que quer remover este item?",
+              "Remover",
+              function () {
+                removerItemCarrinho(pessoaIdCarrinho, produtoId);
+              }
+            );
+          });
+
+          $(".minus").on("click", function () {
+            var produtoId = $(this).data("produto-id");
+            var quantidade = $(this).data("produto-qtde");
+            var qtdeAtualizada = quantidade - 1;
+
+            //SE TEM MAIS DE UM ITEM NA QUANTIDADE
+            if (quantidade > 1) {
+              alterarCarrinho(pessoaIdCarrinho, produtoId, qtdeAtualizada);
+            } else {
+              app.dialog.confirm(
+                `Gostaria de remover este item?`,
+                "REMOVER",
+                function () {
+                  removerItemCarrinho(pessoaIdCarrinho, produtoId);
+                }
+              );
+            }
+          });
+
+          $(".plus").on("click", function () {
+            var produtoId = $(this).data("produto-id");
+            var quantidade = $(this).data("produto-qtde");
+            var qtdeAtualizada = quantidade + 1;
+
+            alterarCarrinho(pessoaIdCarrinho, produtoId, qtdeAtualizada);
+          });
+
+          //MOSTRAR O SUBTOTAL
+          $("#subtotal").html(
+            total.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })
+          );
+          //MOSTRAR O SUBTOTAL
+          $("#totalCarrinho").html(
+            total.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })
+          );
+        } else {
+          //MOSTRAR CARRINHO VAZIO
+          //ESVAZIAR LISTA DO CARRINHO
+          $("#listaCarrinho").empty();
+
+          //SUMIR OS ITENS DE BAIXO BOTÃO E TOTAIS
+          $("#toolbar-carrinho").addClass("display-none");
+
+          //MOSTRAR SACOLINHA VAZIA
+          $("#containerCarrinho").html(`
+              <div class="display-flex flex-direction-column align-items-center justify-content-center" style="height: 100%;">
+                <img width="300" src="img/empty.gif">
+                <br><span class="color-gray">Nada por enquanto...</span>
+              </div>
+            `);
+        }
+
+        listarEnderecos();
         app.dialog.close();
-        
-        // Carregar endereços de forma assíncrona
-        carregarEnderecosSafe();
-        
-        return responseJson;
-      } else {
-        throw new Error(responseJson.message || "Resposta inválida do servidor");
       }
     })
     .catch((error) => {
       app.dialog.close();
-      console.error("Erro ao carregar carrinho:", error);
-      mostrarEstadoErroCarrinho(error);
-      throw error;
-    });
-}
-
-// Função para renderizar carrinho (separada da lógica de requisição)
-function renderizarCarrinho(responseJson) {
-  const quantidadeItens = responseJson.data.data.itens.length;
-  const total = responseJson.data.data.total;
-  const pessoaIdCarrinho = responseJson.data.data.pessoa_id;
-
-  if (quantidadeItens > 0) {
-    $("#toolbar-carrinho").removeClass("display-none");
-    $("#listaCarrinho").empty();
-
-    responseJson.data.data.itens.forEach((item) => {
-      const itemDiv = criarItemCarrinhoHTML(item);
-      $("#listaCarrinho").append(itemDiv);
-    });
-
-    configurarEventHandlersCarrinho(pessoaIdCarrinho);
-    atualizarTotaisInterface(total);
-  } else {
-    mostrarCarrinhoVazio();
-  }
-}
-
-// Função para criar HTML do item (reutilizável)
-function criarItemCarrinhoHTML(item) {
-  return `
-    <div class="flex space-x-4" style="margin-bottom: 18px;" data-item-id="${item.produto_id}">
-      <img
-        src="https://vitatophomologa.tecskill.com.br/${item.foto}"
-        alt="${item.nome}"
-        class="w-20 h-20 rounded-lg object-cover"
-        onerror="this.src='img/default.png'"
-      />
-      <div class="flex-1">
-        <div class="flex justify-between">
-          <h3 class="font-medium">${item.nome}</h3>
-          <button class="text-red-500 delete-item" style="width: 30px;"
-          data-produto-id="${item.produto_id}">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-            </svg>
-          </button>
-        </div>
-        <p class="text-gray-500 text-sm mb-2">Premium</p>
-        <div class="flex justify-between items-center">
-          <div class="flex items-center space-x-2">
-            <button class="minus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
-                    data-produto-id="${item.produto_id}" data-produto-qtde="${item.quantidade}">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
-              </svg>
-            </button>
-            <span class="w-8 text-center qtd-display" data-produto-id="${item.produto_id}">${item.quantidade}</span>
-            <button class="plus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
-                    data-produto-id="${item.produto_id}" data-produto-qtde="${item.quantidade}">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-              </svg>
-            </button>
-          </div>
-          <span class="font-semibold">${formatarMoeda(item.preco_unitario)}</span>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-// Função para atualizar totais na interface
-function atualizarTotaisInterface(total) {
-  const totalFormatado = total.toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  });
-  
-  $("#subtotal").html(totalFormatado);
-  $("#totalCarrinho").html(totalFormatado);
-}
-
-// Event handlers otimizados
-function configurarEventHandlersCarrinho(pessoaIdCarrinho) {
-  // Remove handlers antigos
-  $(".delete-item, .minus, .plus").off('click');
-
-  // Delete item
-  $(".delete-item").on("click", function () {
-    const produtoId = $(this).data("produto-id");
-    app.dialog.confirm(
-      "Tem certeza que quer remover este item?",
-      "Remover",
-      () => removerItemCarrinhoOtimizado(pessoaIdCarrinho, produtoId)
-    );
-  });
-
-  // Diminuir quantidade
-  $(".minus").on("click", function () {
-    const $button = $(this);
-    if ($button.prop('disabled')) return;
-    
-    const produtoId = $button.data("produto-id");
-    const quantidade = parseInt($button.data("produto-qtde"));
-    
-    if (quantidade > 1) {
-      alterarQuantidadeOtimista(produtoId, quantidade - 1);
-      adicionarAlteracaoQueue(pessoaIdCarrinho, produtoId, quantidade - 1);
-    } else {
-      app.dialog.confirm(
-        "Gostaria de remover este item?",
-        "REMOVER",
-        () => removerItemCarrinhoOtimizado(pessoaIdCarrinho, produtoId)
+      console.error("Erro:", error);
+      app.dialog.alert(
+        "Erro ao listar carrinho: " + error.message,
+        "Falha na requisição!"
       );
-    }
-  });
-
-  // Aumentar quantidade
-  $(".plus").on("click", function () {
-    const $button = $(this);
-    if ($button.prop('disabled')) return;
-    
-    const produtoId = $button.data("produto-id");
-    const quantidade = parseInt($button.data("produto-qtde"));
-    
-    alterarQuantidadeOtimista(produtoId, quantidade + 1);
-    adicionarAlteracaoQueue(pessoaIdCarrinho, produtoId, quantidade + 1);
-  });
-}
-
-// Atualização otimista da interface (sem aguardar servidor)
-function alterarQuantidadeOtimista(produtoId, novaQuantidade) {
-  // Atualiza interface imediatamente
-  $(`.qtd-display[data-produto-id="${produtoId}"]`).text(novaQuantidade);
-  $(`.plus[data-produto-id="${produtoId}"], .minus[data-produto-id="${produtoId}"]`)
-    .attr('data-produto-qtde', novaQuantidade);
-  
-  // Atualiza cache se existir
-  if (carrinhoCache) {
-    const item = carrinhoCache.data.data.itens.find(i => i.produto_id == produtoId);
-    if (item) {
-      item.quantidade = novaQuantidade;
-      // Recalcular total aproximado (será sincronizado depois)
-      calcularTotalAproximado();
-    }
-  }
-  
-  // Feedback visual
-  $(`.qtd-display[data-produto-id="${produtoId}"]`).addClass('updating');
-  setTimeout(() => {
-    $(`.qtd-display[data-produto-id="${produtoId}"]`).removeClass('updating');
-  }, 300);
-}
-
-// Calcula total aproximado para feedback imediato
-function calcularTotalAproximado() {
-  if (!carrinhoCache) return;
-  
-  let total = 0;
-  carrinhoCache.data.data.itens.forEach(item => {
-    total += item.preco_unitario * item.quantidade;
-  });
-  
-  atualizarTotaisInterface(total);
-}
-
-// Sistema de queue para batch de alterações
-function adicionarAlteracaoQueue(pessoaId, produtoId, quantidade) {
-  // Adiciona/atualiza na queue
-  alteracoesQueue.set(produtoId, { pessoaId, produtoId, quantidade });
-  
-  // Cancela timer anterior
-  if (queueTimer) {
-    clearTimeout(queueTimer);
-  }
-  
-  // Programa processamento da queue
-  queueTimer = setTimeout(() => {
-    processarQueueAlteracoes();
-  }, 1000); // 1 segundo de debounce
-}
-
-// Processa todas as alterações em batch
-function processarQueueAlteracoes() {
-  if (alteracoesQueue.size === 0) return;
-  
-  const alteracoes = Array.from(alteracoesQueue.values());
-  alteracoesQueue.clear();
-  
-  // Desabilita todos os botões temporariamente
-  $('.plus, .minus').prop('disabled', true).addClass('loading');
-  
-  // Processa uma alteração por vez com delay
-  processarAlteracaoSequencial(alteracoes, 0);
-}
-
-// Processa alterações sequencialmente para evitar sobrecarga
-function processarAlteracaoSequencial(alteracoes, index) {
-  if (index >= alteracoes.length) {
-    // Todas processadas - reabilita botões e atualiza carrinho
-    $('.plus, .minus').prop('disabled', false).removeClass('loading');
-    
-    // Força refresh do carrinho para sincronizar
-    setTimeout(() => {
-      listarCarrinho(true);
-    }, 500);
-    
-    return;
-  }
-  
-  const alteracao = alteracoes[index];
-  
-  alterarCarrinhoServidor(alteracao.pessoaId, alteracao.produtoId, alteracao.quantidade)
-    .then(() => {
-      // Próxima alteração após pequeno delay
-      setTimeout(() => {
-        processarAlteracaoSequencial(alteracoes, index + 1);
-      }, 200);
-    })
-    .catch((error) => {
-      console.error("Erro ao processar alteração:", error);
-      // Continua com próxima mesmo com erro
-      setTimeout(() => {
-        processarAlteracaoSequencial(alteracoes, index + 1);
-      }, 200);
     });
 }
+//Fim Função Listar Carrinho
 
-// Função para alterar no servidor (sem UI)
-function alterarCarrinhoServidor(pessoaId, produtoId, quantidade) {
+//Inicio Funçao Alterar Carrinho
+function alterarCarrinho(pessoaId, produtoId, quantidade) {
+  app.dialog.preloader("Carregando...");
+
   const dados = {
     pessoa_id: pessoaId,
     produto_id: produtoId,
     quantidade: quantidade,
   };
 
+  // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
     Authorization: "Bearer " + userAuthToken,
@@ -3824,163 +3741,36 @@ function alterarCarrinhoServidor(pessoaId, produtoId, quantidade) {
     dados: dados,
   });
 
+  // Opções da requisição
   const options = {
     method: "POST",
     headers: headers,
     body: body,
   };
 
-  return fetch(apiServerUrl, options)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
+  // Fazendo a requisição
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // Verifica se o status é 'success'
+      if (
+        responseJson.status == "success" &&
+        responseJson.data.status == "sucess"
+      ) {
+        app.views.main.router.refreshPage();
+        app.dialog.close();
       }
-      return response.json();
     })
-    .then(responseJson => {
-      if (!(responseJson.status == "success" && responseJson.data.status == "sucess")) {
-        throw new Error(responseJson.message || "Erro no servidor");
-      }
-      return responseJson;
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+      app.dialog.alert(
+        "Erro ao alterar carrinho: " + error.message,
+        "Falha na requisição!"
+      );
     });
 }
-
-// Remoção otimizada de item
-function removerItemCarrinhoOtimizado(pessoaId, produtoId) {
-  // Remove da interface imediatamente
-  $(`[data-item-id="${produtoId}"]`).fadeOut(300, function() {
-    $(this).remove();
-    
-    // Verifica se carrinho ficou vazio
-    if ($("#listaCarrinho").children().length === 0) {
-      mostrarCarrinhoVazio();
-    }
-  });
-  
-  // Remove do cache
-  if (carrinhoCache) {
-    carrinhoCache.data.data.itens = carrinhoCache.data.data.itens.filter(
-      item => item.produto_id != produtoId
-    );
-    calcularTotalAproximado();
-  }
-  
-  // Remove do servidor
-  removerItemServidor(pessoaId, produtoId)
-    .then(() => {
-      // Atualiza carrinho para sincronizar
-      setTimeout(() => {
-        listarCarrinho(true);
-      }, 500);
-    })
-    .catch(error => {
-      console.error("Erro ao remover item:", error);
-      app.dialog.alert("Erro ao remover item. A página será atualizada.", "Erro");
-      setTimeout(() => {
-        listarCarrinho(true);
-      }, 1000);
-    });
-}
-
-// Remove item do servidor
-function removerItemServidor(pessoaId, produtoId) {
-  const dados = {
-    pessoa_id: pessoaId,
-    produto_id: produtoId,
-  };
-
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
-  };
-
-  const body = JSON.stringify({
-    class: "PagamentoSafe2payRest",
-    method: "ExcluirCarrinho",
-    dados: dados,
-  });
-
-  return fetch(apiServerUrl, {
-    method: "POST",
-    headers: headers,
-    body: body,
-  })
-  .then(response => response.json())
-  .then(responseJson => {
-    if (!(responseJson.status == "success" && responseJson.data.status == "sucess")) {
-      throw new Error(responseJson.message || "Erro ao remover");
-    }
-    return responseJson;
-  });
-}
-
-// Funções auxiliares mantidas
-function mostrarCarrinhoVazio() {
-  $("#listaCarrinho").empty();
-  $("#toolbar-carrinho").addClass("display-none");
-  
-  $("#containerCarrinho").html(`
-    <div class="display-flex flex-direction-column align-items-center justify-content-center" style="height: 100%;">
-      <img width="300" src="img/empty.gif">
-      <br><span class="color-gray">Nada por enquanto...</span>
-    </div>
-  `);
-}
-
-function mostrarEstadoErroCarrinho(error) {
-  $("#listaCarrinho").empty();
-  $("#toolbar-carrinho").addClass("display-none");
-  
-  $("#containerCarrinho").html(`
-    <div class="display-flex flex-direction-column align-items-center justify-content-center" style="height: 100%; padding: 20px;">
-      <i class="mdi mdi-wifi-off" style="font-size: 64px; color: #ccc; margin-bottom: 20px;"></i>
-      <h3 style="color: #666; margin-bottom: 10px;">Erro ao carregar carrinho</h3>
-      <p style="color: #999; text-align: center; margin-bottom: 20px;">
-        Verifique sua conexão e tente novamente
-      </p>
-      <button onclick="listarCarrinho(true)" style="
-        background: #19c463; 
-        color: white; 
-        border: none; 
-        padding: 10px 20px; 
-        border-radius: 5px;
-        cursor: pointer;
-      ">
-        <i class="mdi mdi-refresh"></i> Tentar Novamente
-      </button>
-    </div>
-  `);
-}
-
-function carregarEnderecosSafe() {
-  try {
-    listarEnderecos();
-  } catch (error) {
-    console.error("Erro ao carregar endereços:", error);
-  }
-}
-
-// Wrappers para compatibilidade
-function alterarCarrinho(pessoaId, produtoId, quantidade) {
-  // Esta função agora é chamada apenas em contextos específicos
-  alterarQuantidadeOtimista(produtoId, quantidade);
-  adicionarAlteracaoQueue(pessoaId, produtoId, quantidade);
-}
-
-function removerItemCarrinho(pessoaId, produtoId) {
-  return removerItemCarrinhoOtimizado(pessoaId, produtoId);
-}
-
-// Limpar cache quando necessário
-function limparCacheCarrinho() {
-  carrinhoCache = null;
-  carrinhoLastUpdate = 0;
-  alteracoesQueue.clear();
-  if (queueTimer) {
-    clearTimeout(queueTimer);
-    queueTimer = null;
-  }
-}
+//Fim Função Alterar Carrinho
 
 //Inicio Adicionar Endereço
 function adicionarEndereco() {
