@@ -191,3 +191,40 @@
     color:rgb(78, 78, 78);
 }
 
+/* Estilos para botões desabilitados no carrinho */
+.plus:disabled,
+.minus:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Adicionar ao carrinho.css existente */
+.plus:disabled svg,
+.minus:disabled svg {
+    opacity: 0.6;
+}
+
+/* Indicador visual de carregamento opcional */
+.carrinho-loading {
+    position: relative;
+}
+
+.carrinho-loading::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #19c463;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}

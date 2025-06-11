@@ -3495,7 +3495,94 @@ function refazerPagamento(
 }
 //Fim Função Refazer Pagamento
 
-//Inicio Funçao Listar Carrinho
+//Inicio Funçao Alterar Carrinho - VERSÃO CORRIGIDA
+function alterarCarrinho(pessoaId, produtoId, quantidade) {
+  // Previne múltiplas requisições simultâneas
+  const requestKey = `${pessoaId}_${produtoId}`;
+  
+  // Verifica se já existe uma requisição em andamento para este produto
+  if (window.carrinhoRequests && window.carrinhoRequests[requestKey]) {
+    return Promise.resolve(); // Retorna sem fazer nova requisição
+  }
+
+  // Inicializa o objeto de controle se não existir
+  if (!window.carrinhoRequests) {
+    window.carrinhoRequests = {};
+  }
+
+  // Marca que há uma requisição em andamento
+  window.carrinhoRequests[requestKey] = true;
+
+  // Desabilita os botões deste produto específico
+  $(`.plus[data-produto-id="${produtoId}"], .minus[data-produto-id="${produtoId}"]`).prop('disabled', true);
+
+  app.dialog.preloader("Carregando...");
+
+  const dados = {
+    pessoa_id: pessoaId,
+    produto_id: produtoId,
+    quantidade: quantidade,
+  };
+
+  // Cabeçalhos da requisição
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "PagamentoSafe2payRest",
+    method: "AlterarCarrinho",
+    dados: dados,
+  });
+
+  // Opções da requisição
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  // Fazendo a requisição
+  return fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // Verifica se o status é 'success'
+      if (
+        responseJson.status == "success" &&
+        responseJson.data.status == "sucess"
+      ) {
+        app.views.main.router.refreshPage();
+        app.dialog.close();
+      } else {
+        app.dialog.close();
+        app.dialog.alert(
+          "Erro ao alterar carrinho: " + responseJson.data.message,
+          "Falha na requisição!"
+        );
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+      app.dialog.alert(
+        "Erro ao alterar carrinho: " + error.message,
+        "Falha na requisição!"
+      );
+    })
+    .finally(() => {
+      // Remove o lock da requisição
+      delete window.carrinhoRequests[requestKey];
+      
+      // Reabilita os botões após um pequeno delay
+      setTimeout(() => {
+        $(`.plus[data-produto-id="${produtoId}"], .minus[data-produto-id="${produtoId}"]`).prop('disabled', false);
+      }, 500);
+    });
+}
+//Fim Função Alterar Carrinho - VERSÃO CORRIGIDA
+
+//Inicio Funçao Listar Carrinho - VERSÃO CORRIGIDA
 function listarCarrinho() {
   app.dialog.preloader("Carregando...");
   const pessoaId = localStorage.getItem("pessoaId");
@@ -3578,9 +3665,8 @@ function listarCarrinho() {
                         <div class="flex items-center space-x-2">
                           <button
                             class="minus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
-                            data-produto-id="${
-                              item.produto_id
-                            }" data-produto-qtde="${item.quantidade}"
+                            data-produto-id="${item.produto_id}" 
+                            data-produto-qtde="${item.quantidade}"
                           >
                             <svg
                               class="w-4 h-4"
@@ -3596,14 +3682,11 @@ function listarCarrinho() {
                               ></path>
                             </svg>
                           </button>
-                          <span class="w-8 text-center">${
-                            item.quantidade
-                          }</span>
+                          <span class="w-8 text-center qtd-display" data-produto-id="${item.produto_id}">${item.quantidade}</span>
                           <button
                             class="plus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
-                            data-produto-id="${
-                              item.produto_id
-                            }" data-produto-qtde="${item.quantidade}"
+                            data-produto-id="${item.produto_id}" 
+                            data-produto-qtde="${item.quantidade}"
                           >
                             <svg
                               class="w-4 h-4"
@@ -3620,9 +3703,6 @@ function listarCarrinho() {
                             </svg>
                           </button>
                         </div>
-                        <span class="font-semibold"><s>${formatarMoeda(
-                          item.preco_original
-                        )}</s></span>
                         <span class="font-semibold">${formatarMoeda(
                           item.preco_unitario
                         )}</span>
@@ -3634,7 +3714,8 @@ function listarCarrinho() {
             $("#listaCarrinho").append(itemDiv);
           });
 
-          $(".delete-item").on("click", function () {
+          // Event handlers com debounce e controle melhorado
+          $(".delete-item").off('click').on("click", function () {
             var produtoId = $(this).data("produto-id");
             //CONFIRMAR
             app.dialog.confirm(
@@ -3646,31 +3727,50 @@ function listarCarrinho() {
             );
           });
 
-          $(".minus").on("click", function () {
-            var produtoId = $(this).data("produto-id");
-            var quantidade = $(this).data("produto-qtde");
-            var qtdeAtualizada = quantidade - 1;
+          // Implementa debounce para os botões + e -
+          let clickTimeout;
 
-            //SE TEM MAIS DE UM ITEM NA QUANTIDADE
-            if (quantidade > 1) {
-              alterarCarrinho(pessoaIdCarrinho, produtoId, qtdeAtualizada);
-            } else {
-              app.dialog.confirm(
-                `Gostaria de remover este item?`,
-                "REMOVER",
-                function () {
-                  removerItemCarrinho(pessoaIdCarrinho, produtoId);
-                }
-              );
-            }
+          $(".minus").off('click').on("click", function () {
+            const $button = $(this);
+            
+            // Previne cliques múltiplos
+            if ($button.prop('disabled')) return;
+            
+            clearTimeout(clickTimeout);
+            clickTimeout = setTimeout(() => {
+              var produtoId = $button.data("produto-id");
+              var quantidade = parseInt($button.data("produto-qtde"));
+              var qtdeAtualizada = quantidade - 1;
+
+              //SE TEM MAIS DE UM ITEM NA QUANTIDADE
+              if (quantidade > 1) {
+                alterarCarrinho(pessoaIdCarrinho, produtoId, qtdeAtualizada);
+              } else {
+                app.dialog.confirm(
+                  `Gostaria de remover este item?`,
+                  "REMOVER",
+                  function () {
+                    removerItemCarrinho(pessoaIdCarrinho, produtoId);
+                  }
+                );
+              }
+            }, 300); // Debounce de 300ms
           });
 
-          $(".plus").on("click", function () {
-            var produtoId = $(this).data("produto-id");
-            var quantidade = $(this).data("produto-qtde");
-            var qtdeAtualizada = quantidade + 1;
+          $(".plus").off('click').on("click", function () {
+            const $button = $(this);
+            
+            // Previne cliques múltiplos
+            if ($button.prop('disabled')) return;
+            
+            clearTimeout(clickTimeout);
+            clickTimeout = setTimeout(() => {
+              var produtoId = $button.data("produto-id");
+              var quantidade = parseInt($button.data("produto-qtde"));
+              var qtdeAtualizada = quantidade + 1;
 
-            alterarCarrinho(pessoaIdCarrinho, produtoId, qtdeAtualizada);
+              alterarCarrinho(pessoaIdCarrinho, produtoId, qtdeAtualizada);
+            }, 300); // Debounce de 300ms
           });
 
           //MOSTRAR O SUBTOTAL
@@ -3717,60 +3817,7 @@ function listarCarrinho() {
       );
     });
 }
-//Fim Função Listar Carrinho
-
-//Inicio Funçao Alterar Carrinho
-function alterarCarrinho(pessoaId, produtoId, quantidade) {
-  app.dialog.preloader("Carregando...");
-
-  const dados = {
-    pessoa_id: pessoaId,
-    produto_id: produtoId,
-    quantidade: quantidade,
-  };
-
-  // Cabeçalhos da requisição
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
-  };
-
-  const body = JSON.stringify({
-    class: "PagamentoSafe2payRest",
-    method: "AlterarCarrinho",
-    dados: dados,
-  });
-
-  // Opções da requisição
-  const options = {
-    method: "POST",
-    headers: headers,
-    body: body,
-  };
-
-  // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      // Verifica se o status é 'success'
-      if (
-        responseJson.status == "success" &&
-        responseJson.data.status == "sucess"
-      ) {
-        app.views.main.router.refreshPage();
-        app.dialog.close();
-      }
-    })
-    .catch((error) => {
-      app.dialog.close();
-      console.error("Erro:", error);
-      app.dialog.alert(
-        "Erro ao alterar carrinho: " + error.message,
-        "Falha na requisição!"
-      );
-    });
-}
-//Fim Função Alterar Carrinho
+//Fim Função Listar Carrinho - VERSÃO CORRIGIDA
 
 //Inicio Adicionar Endereço
 function adicionarEndereco() {
