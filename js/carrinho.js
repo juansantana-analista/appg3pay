@@ -214,14 +214,16 @@ $(document).ready(function() {
     // Carregar endereços
     async function carregarEnderecos() {
         try {
-            const response = await makeApiRequest('EnderecoRest', 'ListarEnderecos', {
+            const response = await makeApiRequest('PessoaRestService', 'listarPessoa', {
                 pessoa_id: pessoaId
             });
 
-            if (response.status === 'success') {
-                enderecosDisponiveis = response.data;
+            if (response.status === 'success' && response.data.status === 'success') {
+                enderecosDisponiveis = response.data.data.enderecos;
                 renderizarEnderecos();
                 selecionarEnderecoPrincipal();
+            } else {
+                console.error('Erro ao carregar endereços:', response.data?.message || response.message);
             }
         } catch (error) {
             console.error('Erro ao carregar endereços:', error);
@@ -233,21 +235,32 @@ $(document).ready(function() {
         const lista = $('#listaDeEnderecos');
         lista.empty();
 
+        if (!enderecosDisponiveis || enderecosDisponiveis.length === 0) {
+            lista.html(`
+                <div class="text-center py-4">
+                    <p class="text-gray-500">Nenhum endereço cadastrado</p>
+                </div>
+            `);
+            return;
+        }
+
         enderecosDisponiveis.forEach(endereco => {
+            const principal = endereco.principal === 'S';
             const enderecoHtml = `
-                <div class="endereco-item p-3 border rounded-lg cursor-pointer hover:bg-gray-50 ${endereco.principal ? 'border-blue-500 bg-blue-50' : ''}" 
+                <div class="endereco-item p-3 border rounded-lg cursor-pointer hover:bg-gray-50 ${principal ? 'border-blue-500 bg-blue-50' : ''}" 
                      data-endereco-id="${endereco.id}">
                     <div class="flex justify-between items-start">
                         <div class="flex-1">
-                            <h4 class="font-medium">${endereco.nome || 'Endereço'}</h4>
+                            <h4 class="font-medium">${endereco.nome_endereco || 'Endereço'}</h4>
                             <p class="text-sm text-gray-600">
                                 ${endereco.rua}, ${endereco.numero}
                                 ${endereco.complemento ? ', ' + endereco.complemento : ''}
                             </p>
                             <p class="text-sm text-gray-600">
-                                ${endereco.bairro}, ${endereco.cidade} - ${endereco.estado}
+                                ${endereco.bairro}, ${endereco.cidade} - ${endereco.estado.sigla}
                             </p>
                             <p class="text-sm text-gray-600">CEP: ${endereco.cep}</p>
+                            ${principal ? '<span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Principal</span>' : ''}
                         </div>
                         <div class="flex space-x-2">
                             <button class="text-blue-600 hover:text-blue-800" onclick="editarEndereco(${endereco.id})">
@@ -296,7 +309,7 @@ $(document).ready(function() {
 
     // Selecionar endereço principal automaticamente
     function selecionarEnderecoPrincipal() {
-        const enderecoPrincipal = enderecosDisponiveis.find(e => e.principal);
+        const enderecoPrincipal = enderecosDisponiveis.find(e => e.principal === 'S');
         if (enderecoPrincipal) {
             enderecoSelecionado = enderecoPrincipal;
             atualizarEnderecoSelecionado();
@@ -310,13 +323,13 @@ $(document).ready(function() {
         if (enderecoSelecionado) {
             container.html(`
                 <div>
-                    <h4 class="font-medium">${enderecoSelecionado.nome || 'Endereço'}</h4>
+                    <h4 class="font-medium">${enderecoSelecionado.nome_endereco || 'Endereço'}</h4>
                     <p class="text-sm text-gray-600">
                         ${enderecoSelecionado.rua}, ${enderecoSelecionado.numero}
                         ${enderecoSelecionado.complemento ? ', ' + enderecoSelecionado.complemento : ''}
                     </p>
                     <p class="text-sm text-gray-600">
-                        ${enderecoSelecionado.bairro}, ${enderecoSelecionado.cidade} - ${enderecoSelecionado.estado}
+                        ${enderecoSelecionado.bairro}, ${enderecoSelecionado.cidade} - ${enderecoSelecionado.estado.sigla}
                     </p>
                     <p class="text-sm text-gray-600">CEP: ${enderecoSelecionado.cep}</p>
                 </div>
@@ -392,15 +405,15 @@ $(document).ready(function() {
         
         if (endereco) {
             $('#idEnderecoEdit').val(endereco.id);
-            $('#nomeEnderecoEdit').val(endereco.nome);
+            $('#nomeEnderecoEdit').val(endereco.nome_endereco);
             $('#cepEdit').val(endereco.cep);
             $('#logradouroEndEdit').val(endereco.rua);
             $('#numeroEndEdit').val(endereco.numero);
-            $('#complementoEndEdit').val(endereco.complemento);
+            $('#complementoEndEdit').val(endereco.complemento || '');
             $('#bairroEndEdit').val(endereco.bairro);
             $('#cidadeEndEdit').val(endereco.cidade);
-            $('#estadoEndEdit').val(endereco.estado);
-            $('#defaultAddressEdit').prop('checked', endereco.principal);
+            $('#estadoEndEdit').val(endereco.estado.sigla);
+            $('#defaultAddressEdit').prop('checked', endereco.principal === 'S');
             
             $('#addressModal').addClass('hidden');
             $('#editAddressModal').removeClass('hidden');
