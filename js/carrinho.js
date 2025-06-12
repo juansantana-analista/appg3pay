@@ -53,12 +53,23 @@ $(document).ready(function() {
 
     // Função para fazer requisições à API
     async function makeApiRequest(className, methodName, dados = {}) {
-        // Estrutura correta: dados no nível raiz junto com class e method
-        const body = JSON.stringify({
-            class: className,
-            method: methodName,
-            ...dados  // Spread dos dados no nível raiz
-        });
+        let body;
+        
+        // Verificar se é uma API que usa estrutura aninhada (como PagamentoSafe2payRest)
+        if (className === 'PagamentoSafe2payRest') {
+            body = JSON.stringify({
+                class: className,
+                method: methodName,
+                dados: dados  // Estrutura aninhada para PagamentoSafe2payRest
+            });
+        } else {
+            // Estrutura plana para outras APIs (como PessoaRestService)
+            body = JSON.stringify({
+                class: className,
+                method: methodName,
+                ...dados  // Spread dos dados no nível raiz
+            });
+        }
 
         const options = {
             method: "POST",
