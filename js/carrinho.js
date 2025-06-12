@@ -555,9 +555,24 @@ $(document).ready(function() {
         const total = parseFloat(carrinhoData.total) || 0;
         const valorFrete = parseFloat(carrinhoData.valor_frete) || 0;
         
+        // Calcular desconto (diferença entre subtotal e total)
+        const valorDesconto = totalSemDesconto - total;
+        
+        // Atualizar subtotal
         $('#subtotal').text(formatPrice(totalSemDesconto));
+        
+        // Mostrar/ocultar seção de desconto
+        if (valorDesconto > 0) {
+            $('#descontoContainer').removeClass('display-none').show();
+            $('#descontoPedido').text('- ' + formatPrice(valorDesconto));
+        } else {
+            $('#descontoContainer').addClass('display-none').hide();
+        }
+        
+        // Atualizar total final
         $('#totalCarrinho').text(formatPrice(total));
         
+        // Atualizar frete
         if (valorFrete > 0) {
             $('#fretePedido').text(formatPrice(valorFrete)).removeClass('text-green-600');
         } else {
