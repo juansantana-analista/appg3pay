@@ -217,7 +217,7 @@ $(document).ready(function() {
             const response = await makeApiRequest('PessoaRestService', 'listarPessoa', {
                 pessoa_id: pessoaId
             });
-
+console.log(response);
             if (response.status === 'success' && response.data.status === 'success') {
                 enderecosDisponiveis = response.data.data.enderecos;
                 renderizarEnderecos();
