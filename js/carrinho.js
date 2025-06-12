@@ -300,7 +300,7 @@ $(document).ready(function() {
             const itemHtml = `
                 <div class="item-carrinho" data-produto-id="${item.produto_id}">
                     <div class="area-img">
-                        <img src="https://vitatophomologa.tecskill.com.br/${item.foto || 'img/placeholder.jpg'}" alt="${item.nome}">
+                        <img src="${item.foto || 'img/placeholder.jpg'}" alt="${item.nome}">
                     </div>
                     <div class="area-details">
                         <div class="sup">
@@ -768,16 +768,36 @@ $(document).ready(function() {
             return;
         }
 
-        // Sincronizar carrinho antes de finalizar
-        if (timeoutSincronizacao) {
-            alert('Aguarde, sincronizando carrinho...');
-            await sincronizarCarrinho();
-        }
+        // Desabilitar botão durante o processamento
+        const $botao = $(this);
+        $botao.prop('disabled', true).text('Processando...');
 
-        if (metodoPagamentoSelecionado === '1') {
-            $('#cartaoModal').removeClass('hidden');
-        } else {
-            processarPagamento();
+        try {
+            // Sincronizar carrinho antes de finalizar
+            if (timeoutSincronizacao) {
+                if (typeof app !== 'undefined' && app.dialog) {
+                    app.dialog.preloader("Sincronizando carrinho...");
+                }
+                await sincronizarCarrinho();
+                if (typeof app !== 'undefined' && app.dialog) {
+                    app.dialog.close();
+                }
+            }
+
+            if (metodoPagamentoSelecionado === '1') {
+                $('#cartaoModal').removeClass('hidden');
+            } else {
+                await processarPagamento();
+            }
+        } catch (error) {
+            console.error('Erro ao processar:', error);
+            alert('Erro ao processar pedido. Tente novamente.');
+            if (typeof app !== 'undefined' && app.dialog) {
+                app.dialog.close();
+            }
+        } finally {
+            // Reabilitar botão
+            $botao.prop('disabled', false).text('Finalizar Compra');
         }
     });
 
@@ -811,16 +831,22 @@ $(document).ready(function() {
         }
 
         // Desabilitar botão para evitar cliques duplos
-        $(this).prop('disabled', true).text('Processando...');
+        const $botao = $(this);
+        $botao.prop('disabled', true).text('Processando...');
 
         processarPagamento().finally(() => {
             // Reabilitar botão
-            $(this).prop('disabled', false).text('Finalizar Compra');
+            $botao.prop('disabled', false).text('Finalizar Compra');
         });
     });
 
     // Processar pagamento
     async function processarPagamento() {
+        // Mostrar preloader
+        if (typeof app !== 'undefined' && app.dialog) {
+            app.dialog.preloader("Processando pagamento...");
+        }
+
         const dadosPagamento = {
             destinatario: {
                 pessoa_id: pessoaId,
@@ -879,14 +905,31 @@ $(document).ready(function() {
                 // Fechar modal de cartão se estiver aberto
                 $('#cartaoModal').addClass('hidden');
                 
+                // Fechar preloader
+                if (typeof app !== 'undefined' && app.dialog) {
+                    app.dialog.close();
+                }
+                
                 // Redirecionar sempre para a mesma página de pagamento
-                app.views.main.router.navigate("/pagamento/");
+                if (typeof app !== 'undefined' && app.views && app.views.main) {
+                    app.views.main.router.navigate("/pagamento/");
+                } else {
+                    window.location.href = '/pagamento/';
+                }
                 
             } else {
+                // Fechar preloader em caso de erro
+                if (typeof app !== 'undefined' && app.dialog) {
+                    app.dialog.close();
+                }
                 alert('Erro ao processar pagamento: ' + (response.data?.message || response.message));
                 console.error('Erro no processamento:', response);
             }
         } catch (error) {
+            // Fechar preloader em caso de erro
+            if (typeof app !== 'undefined' && app.dialog) {
+                app.dialog.close();
+            }
             console.error('Erro ao processar pagamento:', error);
             alert('Erro ao processar pagamento. Tente novamente.');
         }
