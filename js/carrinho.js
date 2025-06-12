@@ -15,6 +15,8 @@ $(document).ready(function() {
     let enderecosDisponiveis = [];
     let enderecoSelecionado = null;
     let metodoPagamentoSelecionado = '3'; // PIX por padrão
+    let requisicoesPendentes = new Set(); // Controlar requisições pendentes
+    let timeoutQuantidade = null; // Timeout para debounce
 
     // Verificar se as variáveis necessárias estão disponíveis
     if (!userAuthToken) {
@@ -53,6 +55,25 @@ $(document).ready(function() {
 
     // Função para fazer requisições à API
     async function makeApiRequest(className, methodName, dados = {}) {
+        // Criar uma chave única para a requisição
+        const requestKey = `${className}-${methodName}-${JSON.stringify(dados)}`;
+        
+        // Se já existe uma requisição idêntica pendente, aguardar
+        if (requisicoesPendentes.has(requestKey)) {
+            console.log('Requisição já em andamento, aguardando...', requestKey);
+            return new Promise(resolve => {
+                const checkInterval = setInterval(() => {
+                    if (!requisicoesPendentes.has(requestKey)) {
+                        clearInterval(checkInterval);
+                        resolve(makeApiRequest(className, methodName, dados));
+                    }
+                }, 100);
+            });
+        }
+        
+        // Adicionar à lista de requisições pendentes
+        requisicoesPendentes.add(requestKey);
+        
         let body;
         
         // Verificar se é uma API que usa estrutura aninhada (como PagamentoSafe2payRest)
@@ -82,6 +103,11 @@ $(document).ready(function() {
             console.log('Body da requisição:', body);
             
             const response = await fetch(apiServerUrl, options);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
             const responseText = await response.text();
             
             console.log('Resposta bruta:', responseText);
@@ -94,9 +120,15 @@ $(document).ready(function() {
             
             const data = JSON.parse(responseText);
             console.log('Resposta parseada:', data);
+            
+            // Remover da lista de requisições pendentes
+            requisicoesPendentes.delete(requestKey);
+            
             return data;
         } catch (error) {
             console.error('Erro na requisição:', error);
+            // Remover da lista de requisições pendentes mesmo em caso de erro
+            requisicoesPendentes.delete(requestKey);
             throw error;
         }
     }
@@ -179,31 +211,67 @@ $(document).ready(function() {
             `;
             listaCarrinho.append(itemHtml);
         });
+        
+        // Adicionar estilo para botões desabilitados
+        if (!$('style#disable-buttons').length) {
+            $('head').append(`
+                <style id="disable-buttons">
+                    .minus.disabled, .plus.disabled {
+                        opacity: 0.5;
+                        cursor: not-allowed !important;
+                    }
+                </style>
+            `);
+        }
     }
 
-    // Alterar quantidade de item
-    window.alterarQuantidade = async function(produtoId, novaQuantidade) {
+    // Alterar quantidade de item com debounce
+    window.alterarQuantidade = function(produtoId, novaQuantidade) {
+        // Limpar timeout anterior se existir
+        if (timeoutQuantidade) {
+            clearTimeout(timeoutQuantidade);
+        }
+        
+        // Atualizar UI imediatamente para feedback visual
+        const itemElement = $(`.item-carrinho[data-produto-id="${produtoId}"] .qtd-item`);
+        itemElement.val(novaQuantidade);
+        
+        // Desabilitar botões temporariamente
+        const itemContainer = $(`.item-carrinho[data-produto-id="${produtoId}"]`);
+        itemContainer.find('.minus, .plus').addClass('disabled').css('pointer-events', 'none');
+        
         if (novaQuantidade <= 0) {
             removerItem(produtoId);
             return;
         }
 
-        try {
-            const response = await makeApiRequest('PagamentoSafe2payRest', 'AlterarCarrinho', {
-                pessoa_id: pessoaId,
-                produto_id: produtoId,
-                quantidade: novaQuantidade
-            });
+        // Usar debounce para evitar múltiplas requisições
+        timeoutQuantidade = setTimeout(async () => {
+            try {
+                const response = await makeApiRequest('PagamentoSafe2payRest', 'AlterarCarrinho', {
+                    pessoa_id: pessoaId,
+                    produto_id: produtoId,
+                    quantidade: novaQuantidade
+                });
 
-            if (response.status === 'success' && response.data.status === 'sucess') {
+                if (response.status === 'success' && response.data.status === 'sucess') {
+                    // Recarregar carrinho após sucesso
+                    await carregarCarrinho();
+                } else {
+                    alert('Erro ao alterar quantidade: ' + (response.data?.message || response.message));
+                    // Reverter valor em caso de erro
+                    carregarCarrinho();
+                }
+            } catch (error) {
+                console.error('Erro ao alterar quantidade:', error);
+                alert('Erro ao alterar quantidade');
+                // Reverter valor em caso de erro
                 carregarCarrinho();
-            } else {
-                alert('Erro ao alterar quantidade: ' + (response.data?.message || response.message));
+            } finally {
+                // Reabilitar botões
+                itemContainer.find('.minus, .plus').removeClass('disabled').css('pointer-events', 'auto');
             }
-        } catch (error) {
-            console.error('Erro ao alterar quantidade:', error);
-            alert('Erro ao alterar quantidade');
-        }
+        }, 500); // Aguardar 500ms antes de fazer a requisição
     };
 
     // Remover item do carrinho
