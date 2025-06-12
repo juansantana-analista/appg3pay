@@ -64,13 +64,14 @@ $(document).ready(function() {
             const response = await makeApiRequest('PagamentoSafe2payRest', 'ListarCarrinho', {
                 pessoa_id: pessoaId
             });
-            console.log(response);
-            if (response.status === 'sucess') {
-                carrinhoData = response.data;
+
+            // A resposta vem aninhada: response.data.data contém os dados do carrinho
+            if (response.status === 'success' && response.data.status === 'sucess') {
+                carrinhoData = response.data.data;
                 renderizarCarrinho();
                 atualizarResumo();
             } else {
-                console.error('Erro ao carregar carrinho:', response.message);
+                console.error('Erro ao carregar carrinho:', response.data?.message || response.message);
             }
         } catch (error) {
             console.error('Erro ao carregar carrinho:', error);
@@ -109,11 +110,11 @@ $(document).ready(function() {
                             <span>Produto disponível</span>
                         </div>
                         <div class="preco-quantidade">
-                            <span>${formatPrice(item.preco_total)}</span>
+                            <span>${formatPrice(parseFloat(item.preco_total))}</span>
                             <div class="count">
-                                <div class="minus" onclick="alterarQuantidade(${item.produto_id}, ${item.quantidade - 1})">-</div>
+                                <div class="minus" onclick="alterarQuantidade(${item.produto_id}, ${parseInt(item.quantidade) - 1})">-</div>
                                 <input type="number" class="qtd-item" value="${item.quantidade}" readonly>
-                                <div class="plus" onclick="alterarQuantidade(${item.produto_id}, ${item.quantidade + 1})">+</div>
+                                <div class="plus" onclick="alterarQuantidade(${item.produto_id}, ${parseInt(item.quantidade) + 1})">+</div>
                             </div>
                         </div>
                     </div>
@@ -137,10 +138,10 @@ $(document).ready(function() {
                 quantidade: novaQuantidade
             });
 
-            if (response.status === 'sucess') {
+            if (response.status === 'success' && response.data.status === 'sucess') {
                 carregarCarrinho();
             } else {
-                alert('Erro ao alterar quantidade: ' + response.message);
+                alert('Erro ao alterar quantidade: ' + (response.data?.message || response.message));
             }
         } catch (error) {
             console.error('Erro ao alterar quantidade:', error);
@@ -158,10 +159,10 @@ $(document).ready(function() {
                 produto_id: produtoId
             });
 
-            if (response.status === 'sucess') {
+            if (response.status === 'success' && response.data.status === 'sucess') {
                 carregarCarrinho();
             } else {
-                alert('Erro ao remover item: ' + response.message);
+                alert('Erro ao remover item: ' + (response.data?.message || response.message));
             }
         } catch (error) {
             console.error('Erro ao remover item:', error);
@@ -180,11 +181,11 @@ $(document).ready(function() {
                 pessoa_id: pessoaId
             });
 
-            if (response.status === 'sucess') {
+            if (response.status === 'success' && response.data.status === 'sucess') {
                 carregarCarrinho();
                 $('.popover-menu').removeClass('modal-in').addClass('modal-out');
             } else {
-                alert('Erro ao limpar carrinho: ' + response.message);
+                alert('Erro ao limpar carrinho: ' + (response.data?.message || response.message));
             }
         } catch (error) {
             console.error('Erro ao limpar carrinho:', error);
@@ -194,11 +195,15 @@ $(document).ready(function() {
 
     // Atualizar resumo do pedido
     function atualizarResumo() {
-        $('#subtotal').text(formatPrice(carrinhoData.total_sem_desconto || 0));
-        $('#totalCarrinho').text(formatPrice(carrinhoData.total || 0));
+        const totalSemDesconto = parseFloat(carrinhoData.total_sem_desconto) || 0;
+        const total = parseFloat(carrinhoData.total) || 0;
+        const valorFrete = parseFloat(carrinhoData.valor_frete) || 0;
         
-        if (carrinhoData.valor_frete > 0) {
-            $('#fretePedido').text(formatPrice(carrinhoData.valor_frete));
+        $('#subtotal').text(formatPrice(totalSemDesconto));
+        $('#totalCarrinho').text(formatPrice(total));
+        
+        if (valorFrete > 0) {
+            $('#fretePedido').text(formatPrice(valorFrete)).removeClass('text-green-600');
         } else {
             $('#fretePedido').text('Grátis').addClass('text-green-600');
         }
@@ -516,9 +521,9 @@ $(document).ready(function() {
         try {
             const response = await makeApiRequest('PagamentoSafe2payRest', 'IncluirVenda', dadosPagamento);
             
-            if (response.status === 'success') {
+            if (response.status === 'success' && response.data.status === 'success') {
                 // Redirecionar para página de confirmação com dados do pagamento
-                const dadosRetorno = response.data;
+                const dadosRetorno = response.data.data;
                 
                 // Salvar dados no sessionStorage para usar na próxima página
                 sessionStorage.setItem('dadosPagamento', JSON.stringify(dadosRetorno));
@@ -536,7 +541,7 @@ $(document).ready(function() {
                         break;
                 }
             } else {
-                alert('Erro ao processar pagamento: ' + response.message);
+                alert('Erro ao processar pagamento: ' + (response.data?.message || response.message));
             }
         } catch (error) {
             console.error('Erro ao processar pagamento:', error);
