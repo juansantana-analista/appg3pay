@@ -174,10 +174,19 @@ $(document).ready(function() {
         sincronizandoCarrinho = true;
         console.log('Sincronizando carrinho com servidor...');
 
+        // Mostrar preloader durante sincronização
+        if (typeof app !== 'undefined' && app.dialog) {
+            app.dialog.preloader("Sincronizando carrinho...");
+        }
+
         try {
             const carrinhoLocal = carregarCarrinhoLocal();
             if (!carrinhoLocal || !carrinhoLocal.itens) {
                 sincronizandoCarrinho = false;
+                // Fechar preloader se não há nada para sincronizar
+                if (typeof app !== 'undefined' && app.dialog) {
+                    app.dialog.close();
+                }
                 return;
             }
 
@@ -201,6 +210,10 @@ $(document).ready(function() {
             console.error('Erro na sincronização:', error);
         } finally {
             sincronizandoCarrinho = false;
+            // Sempre fechar preloader ao finalizar
+            if (typeof app !== 'undefined' && app.dialog) {
+                app.dialog.close();
+            }
         }
     }
 
@@ -326,12 +339,12 @@ $(document).ready(function() {
             listaCarrinho.append(itemHtml);
         });
         
-        // Mostrar indicador se há sincronização pendente
-        if (timeoutSincronizacao) {
+        // Mostrar indicador discreto se há sincronização pendente (mas não preloader)
+        if (timeoutSincronizacao && !sincronizandoCarrinho) {
             if (!$('.sync-indicator').length) {
                 $('body').append(`
                     <div class="sync-indicator" style="position: fixed; top: 20px; right: 20px; background: #4CAF50; color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; z-index: 1000;">
-                        <i class="mdi mdi-sync mdi-spin"></i> Sincronizando...
+                        <i class="mdi mdi-sync mdi-spin"></i> Pendente
                     </div>
                 `);
             }
@@ -773,15 +786,9 @@ $(document).ready(function() {
         $botao.prop('disabled', true).text('Processando...');
 
         try {
-            // Sincronizar carrinho antes de finalizar
+            // Sincronizar carrinho antes de finalizar (se necessário)
             if (timeoutSincronizacao) {
-                if (typeof app !== 'undefined' && app.dialog) {
-                    app.dialog.preloader("Sincronizando carrinho...");
-                }
                 await sincronizarCarrinho();
-                if (typeof app !== 'undefined' && app.dialog) {
-                    app.dialog.close();
-                }
             }
 
             if (metodoPagamentoSelecionado === '1') {
@@ -792,6 +799,7 @@ $(document).ready(function() {
         } catch (error) {
             console.error('Erro ao processar:', error);
             alert('Erro ao processar pedido. Tente novamente.');
+            // Fechar qualquer preloader em caso de erro
             if (typeof app !== 'undefined' && app.dialog) {
                 app.dialog.close();
             }
@@ -911,7 +919,11 @@ $(document).ready(function() {
                 }
                 
                 // Redirecionar sempre para a mesma página de pagamento
-                app.views.main.router.navigate("/pagamento/");
+                if (typeof app !== 'undefined' && app.views && app.views.main) {
+                    app.views.main.router.navigate("/pagamento/");
+                } else {
+                    window.location.href = '/pagamento/';
+                }
                 
             } else {
                 // Fechar preloader em caso de erro
