@@ -342,6 +342,7 @@ $(document).ready(function() {
                                     </svg>
                                 </button>
                             </div>
+                            <span class="font-semibold"><s>${formatPrice(parseFloat(item.preco_original_total))}</s></span>
                             <span class="font-semibold">${formatPrice(parseFloat(item.preco_total))}</span>
                         </div>
                     </div>
@@ -351,21 +352,27 @@ $(document).ready(function() {
         });
 
         // Adicionar eventos de clique para os novos botões
-        $('.delete-item').off('click').on('click', function() {
+        $('.delete-item').off('click').on('click', function(e) {
+            e.preventDefault();
             const produtoId = $(this).data('produto-id');
-            removerItem(produtoId);
+            console.log('Removendo produto:', produtoId);
+            window.removerItem(produtoId);
         });
 
-        $('.minus').off('click').on('click', function() {
+        $('.minus').off('click').on('click', function(e) {
+            e.preventDefault();
             const produtoId = $(this).data('produto-id');
             const quantidadeAtual = parseInt($(this).data('produto-qtde'));
-            alterarQuantidade(produtoId, quantidadeAtual - 1);
+            console.log('Diminuindo quantidade do produto:', produtoId, 'de', quantidadeAtual, 'para', quantidadeAtual - 1);
+            window.alterarQuantidade(produtoId, quantidadeAtual - 1);
         });
 
-        $('.plus').off('click').on('click', function() {
+        $('.plus').off('click').on('click', function(e) {
+            e.preventDefault();
             const produtoId = $(this).data('produto-id');
             const quantidadeAtual = parseInt($(this).data('produto-qtde'));
-            alterarQuantidade(produtoId, quantidadeAtual + 1);
+            console.log('Aumentando quantidade do produto:', produtoId, 'de', quantidadeAtual, 'para', quantidadeAtual + 1);
+            window.alterarQuantidade(produtoId, quantidadeAtual + 1);
         });
         
         // Mostrar indicador discreto se há sincronização pendente (mas não preloader)
@@ -387,7 +394,8 @@ $(document).ready(function() {
         console.log(`Alterando quantidade do produto ${produtoId} para ${novaQuantidade}`);
         
         if (novaQuantidade <= 0) {
-            removerItemLocal(produtoId);
+            // Se quantidade for 0 ou menos, remover o item
+            window.removerItem(produtoId);
             return;
         }
 
@@ -397,10 +405,12 @@ $(document).ready(function() {
             if (item) {
                 const quantidadeAnterior = parseInt(item.quantidade);
                 const precoUnitario = parseFloat(item.preco_unitario);
+                const precoOriginal = parseFloat(item.preco_original);
                 
                 // Atualizar quantidade e recalcular preços
-                item.quantidade = novaQuantidade;
+                item.quantidade = novaQuantidade.toString();
                 item.preco_total = (precoUnitario * novaQuantidade).toFixed(2);
+                item.preco_original_total = (precoOriginal * novaQuantidade).toFixed(2);
                 
                 // Recalcular totais
                 recalcularTotais();
@@ -471,8 +481,16 @@ $(document).ready(function() {
         let total = 0;
         
         carrinhoData.itens.forEach(item => {
-            const precoOriginalTotal = parseFloat(item.preco_original) * parseInt(item.quantidade);
-            const precoTotal = parseFloat(item.preco_total);
+            const quantidade = parseInt(item.quantidade);
+            const precoOriginal = parseFloat(item.preco_original);
+            const precoUnitario = parseFloat(item.preco_unitario);
+            
+            const precoOriginalTotal = precoOriginal * quantidade;
+            const precoTotal = precoUnitario * quantidade;
+            
+            // Atualizar os campos totais do item
+            item.preco_original_total = precoOriginalTotal.toFixed(2);
+            item.preco_total = precoTotal.toFixed(2);
             
             totalSemDesconto += precoOriginalTotal;
             total += precoTotal;
