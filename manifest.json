@@ -2,10 +2,10 @@
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
   "background_color": "#ffffff",
   "dir": "ltr",
-  "name": "VitaTopHomolog",
+  "name": "VitaTop",
   "scope": "/",
-  "short_name": "VitaTopHomolog",
-  "start_url": "https://homologaappvitatop.tecskill.com.br/",
+  "short_name": "VitaTop",
+  "start_url": "https://appvitatop.tecskill.com.br/",
   "id": "br.com.g3pay",
   "display": "fullscreen",
   "display_override": ["standalone", "window-controls-overlay"],
@@ -13,10 +13,10 @@
   "orientation": "portrait",
   "shortcuts": [
     {
-      "name": "VitaTopHomolog",
-      "short_name": "VitaTopHomolog",
-      "description": "Gerencie suas vendas e maximize seus ganhos com a VitaTopHomolog na palma da mão.",
-      "url": "https://homologaappvitatop.tecskill.com.br/"
+      "name": "VitaTop",
+      "short_name": "VitaTop",
+      "description": "Gerencie suas vendas e maximize seus ganhos com a VitaTop na palma da mão.",
+      "url": "https://appvitatop.tecskill.com.br/"
     }
   ],
   "icons": [
@@ -516,7 +516,7 @@
       "url": "/handle-protocol?url=%s"
     }
   ],
-  "description": "Gerencie suas vendas e maximize seus ganhos com a VitaTopHomolog na palma da mão.",
+  "description": "Gerencie suas vendas e maximize seus ganhos com a VitaTop na palma da mão.",
   "lang": "pt",
   "categories": ["business", "finance"]
 }

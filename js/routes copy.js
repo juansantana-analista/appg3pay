@@ -1,5 +1,5 @@
 //DADOS BACKEND SERVER
-const apiServerUrl = "https://vitatophomologa.tecskill.com.br/rest.php";
+const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
 const versionApp = "1.0.6";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -8,7 +8,7 @@ var app = new Framework7({
   // App root element
   el: '#app',
   // App Name
-  name: 'VitaTopHomolog',
+  name: 'VitaTop',
   // App id
   id: 'br.com.g3pay',
   // Enable swipe panel
@@ -40,7 +40,7 @@ var app = new Framework7({
             app.views.main.router.navigate("/login-view/");
           } else {
             // Se a URL contiver "/notificacoes", redireciona
-            if (currentUrl.includes('https://homologaappvitatop.tecskill.com.br/#/notificacoes')) {
+            if (currentUrl.includes('https://appvitatop.tecskill.com.br/#/notificacoes')) {
               app.views.main.router.navigate('/notificacoes/');
             } else {
               // Lógica para continuar usando o token
@@ -104,7 +104,7 @@ var app = new Framework7({
               $("#installBanner").removeClass("display-none");
             }
             conteudoInstall.innerHTML = `
-            <p>Adicione <strong>o aplicativo VitaTopHomolog</strong> à sua tela inicial para obter atualizações regulares. Toque em Compartilhar 
+            <p>Adicione <strong>o aplicativo VitaTop</strong> à sua tela inicial para obter atualizações regulares. Toque em Compartilhar 
             <span class="mdi mdi-export-variant"></span> e depois <strong>Adicionar à <br>tela inicial </strong><span class="mdi mdi-plus-box-outline"></span>
             </p>`;
           } else if (platform === 'Android') {
@@ -116,7 +116,7 @@ var app = new Framework7({
               $("#installBanner").removeClass("display-none");
             }
             conteudoInstall.innerHTML = `
-            <p>Instale <strong>o aplicativo VitaTopHomolog</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
+            <p>Instale <strong>o aplicativo VitaTop</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
             <div class="display-flex flex-direction-row justify-content-space-between">
                 <button id="fecharInstall" class="button margin-right text-color-gray">Depois</button>
                 <button id="installAppAndroid" class="button button-fill color-red"><span class="mdi mdi-cellphone-arrow-down-variant"></span> Instalar</button>
@@ -125,7 +125,7 @@ var app = new Framework7({
             // Ações para desktop ou plataformas desconhecidas
             if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches) {
               conteudoInstall.innerHTML = `
-              <p>Instale <strong>o aplicativo VitaTopHomolog</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
+              <p>Instale <strong>o aplicativo VitaTop</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
               <div class="display-flex flex-direction-row justify-content-space-between">
                   <button id="fecharInstallDesktop" class="button margin-right text-color-gray">Depois</button>
                   <button id="installAppDesktop" class="button button-fill color-red"><span class="mdi mdi-cellphone-arrow-down-variant"></span> Instalar</button>
@@ -255,7 +255,7 @@ var app = new Framework7({
               );
             } else {
               //START Fazendo a requisição
-              fetch('https://vitatophomologa.tecskill.com.br/api/auth_app.php', {
+              fetch('https://vitatop.tecskill.com.br/api/auth_app.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -313,7 +313,7 @@ var app = new Framework7({
                 app.dialog.preloader("Carregando...");
 
               //START Fazendo a requisição
-                fetch('https://vitatophomologa.tecskill.com.br/api/request_reset.php', {
+                fetch('https://vitatop.tecskill.com.br/api/request_reset.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -407,7 +407,7 @@ var app = new Framework7({
               };
 
               // Faz a requisição ao servidor
-              fetch("https://vitatophomologa.tecskill.com.br/api/validate_code.php", options)
+              fetch("https://vitatop.tecskill.com.br/api/validate_code.php", options)
                 .then((response) => response.json())
                 .then((data) => {
                   app.dialog.close();
@@ -483,7 +483,7 @@ var app = new Framework7({
                   body: body,
                 };
     
-                fetch('https://vitatophomologa.tecskill.com.br/api/reset_password.php', options)
+                fetch('https://vitatop.tecskill.com.br/api/reset_password.php', options)
                   .then((response) => response.json())
                   .then((data) => {
                     app.dialog.close();

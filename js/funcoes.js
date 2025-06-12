@@ -1922,7 +1922,7 @@ function detalhesPedido() {
               item.descricao
             }" style="width: 50px; height: 50px;"/>
                           <span class="item-name">${item.descricao}</span>
-                          <span class="item-quantity">${item.quantidade} un</span>
+                          <span class="item-quantity">${item.quantidade}x</span>
                           <span class="item-price">${formatarMoeda(
                             item.preco_total
                           )}</span>
@@ -3620,9 +3620,6 @@ function listarCarrinho() {
                             </svg>
                           </button>
                         </div>
-                        <span class="font-semibold"><s>${formatarMoeda(
-                          item.preco_original
-                        )}</s></span>
                         <span class="font-semibold">${formatarMoeda(
                           item.preco_unitario
                         )}</span>
@@ -4270,10 +4267,9 @@ function listarCarrinhoCheckout() {
       ) {
         // Supondo que responseJson seja o objeto que você obteve no console.log
         const quantidadeItens = responseJson.data.data.itens.length;
-        const subtotal = responseJson.data.data.total_sem_desconto;
-        const subtotalDesconto = responseJson.data.data.total;
+        const subtotal = responseJson.data.data.total;
         let valor_frete = responseJson.data.data.valor_frete;
-        const total = parseFloat(subtotalDesconto) + parseFloat(valor_frete);
+        const total = parseFloat(subtotal) + parseFloat(valor_frete);
 
         var pessoaIdCarrinho = responseJson.data.data.pessoa_id;
 

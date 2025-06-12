@@ -1,13 +1,13 @@
 /**
- * VitaTopHomolog App - Core Functions
+ * VitaTop App - Core Functions
  * Versão refatorada com boas práticas
  */
 
 // ========== CONFIGURAÇÕES E CONSTANTES ==========
 const CONFIG = {
-  API_BASE_URL: "https://vitatophomologa.tecskill.com.br/",
-  API_ENDPOINT: "https://vitatophomologa.tecskill.com.br/rest.php",
-  IMAGE_BASE_URL: "https://vitatophomologa.tecskill.com.br/",
+  API_BASE_URL: "https://vitatop.tecskill.com.br/",
+  API_ENDPOINT: "https://vitatop.tecskill.com.br/rest.php",
+  IMAGE_BASE_URL: "https://vitatop.tecskill.com.br/",
   DEFAULT_IMAGE: "img/default.png",
   PAGINATION_LIMIT: 30,
   SEARCH_DELAY: 1000,
@@ -842,5 +842,5 @@ document.addEventListener('DOMContentLoaded', () => {
   window.userAuthToken = AuthManager.getCookie('userAuthToken') || "";
   window.appId = "Bearer " + window.userAuthToken;
   
-  console.log("VitaTopHomolog App Core Functions carregado");
+  console.log("VitaTop App Core Functions carregado");
 });

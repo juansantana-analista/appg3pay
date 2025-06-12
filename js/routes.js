@@ -1,5 +1,5 @@
 //DADOS BACKEND SERVER
-const apiServerUrl = "https://vitatophomologa.tecskill.com.br/rest.php";
+const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
 const versionApp = "2.3.2";
 var userAuthToken = "";
 
@@ -9,7 +9,7 @@ var app = new Framework7({
   // App root element
   el: '#app',
   // App Name
-  name: 'VitaTopHomolog',
+  name: 'VitaTop',
   // App id
   id: 'br.com.g3pay',
   // Enable swipe panel
@@ -45,7 +45,7 @@ var app = new Framework7({
             }, 500);
           } else {
             // Se a URL contiver "/notificacoes", redireciona
-            if (currentUrl.includes('https://homologaappvitatop.tecskill.com.br/#/notificacoes')) {
+            if (currentUrl.includes('https://appvitatop.tecskill.com.br/#/notificacoes')) {
               app.views.main.router.navigate('/notificacoes/');
             } else {
               // Lógica para continuar usando o token
@@ -119,7 +119,7 @@ var app = new Framework7({
               $("#installBanner").removeClass("display-none");
             }
             conteudoInstall.innerHTML = `
-            <p>Adicione <strong>o aplicativo VitaTopHomolog</strong> à sua tela inicial para obter atualizações regulares. Toque em Compartilhar 
+            <p>Adicione <strong>o aplicativo VitaTop</strong> à sua tela inicial para obter atualizações regulares. Toque em Compartilhar 
             <span class="mdi mdi-export-variant"></span> e depois <strong>Adicionar à <br>tela inicial </strong><span class="mdi mdi-plus-box-outline"></span>
             </p>`;
           } else if (platform === 'Android') {
@@ -130,7 +130,7 @@ var app = new Framework7({
               $("#installBanner").removeClass("display-none");
             }
             conteudoInstall.innerHTML = `
-            <p>Instale <strong>o aplicativo VitaTopHomolog</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
+            <p>Instale <strong>o aplicativo VitaTop</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
             <div class="display-flex flex-direction-row justify-content-space-between">
                 <button id="fecharInstall" class="button margin-right text-color-gray">Depois</button>
                 <button id="installAppAndroid" class="button button-fill color-red"><span class="mdi mdi-cellphone-arrow-down-variant"></span> Instalar</button>
@@ -139,7 +139,7 @@ var app = new Framework7({
             // Ações para desktop ou plataformas desconhecidas
             if (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches) {
               conteudoInstall.innerHTML = `
-              <p>Instale <strong>o aplicativo VitaTopHomolog</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
+              <p>Instale <strong>o aplicativo VitaTop</strong> para obter atualizações regulares. É rápido e ocupa menos armazenamento</p>
               <div class="display-flex flex-direction-row justify-content-space-between">
                   <button id="fecharInstallDesktop" class="button margin-right text-color-gray">Depois</button>
                   <button id="installAppDesktop" class="button button-fill color-red"><span class="mdi mdi-cellphone-arrow-down-variant"></span> Instalar</button>
@@ -287,7 +287,7 @@ var app = new Framework7({
                 app.dialog.preloader("Carregando...");
 
               //START Fazendo a requisição
-                fetch('https://vitatophomologa.tecskill.com.br/api/request_reset.php', {
+                fetch('https://vitatop.tecskill.com.br/api/request_reset.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -298,6 +298,7 @@ var app = new Framework7({
                 })
                 .then(response => response.json())
                 .then(data => {
+                  console.log(data);
                   if (data.status == 'success' && data.data.status == 'success') {
                     localStorage.setItem("emailRecuperacao", emailRecuperacao);
                       app.dialog.close();
@@ -359,7 +360,7 @@ var app = new Framework7({
                   };
     
                   // Faz a requisição ao servidor
-                  fetch("https://vitatophomologa.tecskill.com.br/api/validate_code.php", options)
+                  fetch("https://vitatop.tecskill.com.br/api/validate_code.php", options)
                     .then((response) => response.json())
                     .then((data) => {
                       app.dialog.close();
@@ -417,7 +418,7 @@ var app = new Framework7({
                   body: body,
                 };
     
-                fetch('https://vitatophomologa.tecskill.com.br/api/reset_password.php', options)
+                fetch('https://vitatop.tecskill.com.br/api/reset_password.php', options)
                   .then((response) => response.json())
                   .then((data) => {
                     app.dialog.close();
@@ -474,7 +475,7 @@ var app = new Framework7({
               );
             } else {
               //START Fazendo a requisição
-              fetch('https://vitatophomologa.tecskill.com.br/api/auth_app_homolog.php', {
+              fetch('https://vitatop.tecskill.com.br/api/auth_app.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -827,7 +828,7 @@ var app = new Framework7({
           // JavaScript com jQuery
           $('#suporteClick').on('click', function () {
               const numero = '5543999049868'; 
-              const mensagem = 'Olá, preciso de ajuda com Aplicativo VitaTopHomolog.'; 
+              const mensagem = 'Olá, preciso de ajuda com Aplicativo VitaTop.'; 
               const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
 
               window.open(url, '_blank');
@@ -1316,7 +1317,7 @@ var app = new Framework7({
           // Verifica se o objeto foi carregado corretamente
           if (produtoDetalhes && produtoDetalhes.detalhes) {
             var nomeProduto = produtoDetalhes.detalhes.nome;
-            var urlBaseImagem = "https://vitatophomologa.tecskill.com.br/";
+            var urlBaseImagem = "https://vitatop.tecskill.com.br/";
             var imagemProduto = urlBaseImagem + produtoDetalhes.detalhes.foto;
 
             // Atribui os valores com jQuery
@@ -1368,8 +1369,160 @@ var app = new Framework7({
         },
         pageInit: function (event, page) {    
           // fazer algo quando a página for inicializada    
+          // Funções para gerenciamento de modais
+        $("#openAddressModal").on('click', function () {
+          document.getElementById('addressModal').classList.remove('hidden');
+        });
+        $("#closeAddressModal").on('click', function () {
+          document.getElementById('addressModal').classList.add('hidden');
+        });
+        $("#showNewAddressForm").on('click', function () {
+          document.getElementById('addressModal').classList.add('hidden');
+          document.getElementById('newAddressModal').classList.remove('hidden');
+        });
+        $(".closeNewAddressModal").on('click', function () {
+          document.getElementById('newAddressModal').classList.add('hidden');
+          document.getElementById('addressModal').classList.remove('hidden');
+        });
+        
+          listarCarrinho();
 
-          $.getScript('js/carrinho.js');
+          $("#esvaziar").on('click', function () {
+            app.dialog.confirm('Tem certeza que quer esvaziar o carrinho?', '<strong>ESVAZIAR</strong>', function () {
+              //Chamar a funçao que limpa o carrinho
+              limparCarrinho();
+            });
+          });
+
+          $("#btnDesconto").on('click', function () {
+            var cupomDesconto = $("#cupomDesconto").val();
+            if(cupomDesconto) {
+              app.dialog.alert("Cupom inválido ou expirado", "Cupom");
+            } else {
+              app.dialog.alert("Digite um cupom de Desconto", "Cupom");
+            }
+          });
+
+          //INICIO API CEP PARA ENDEREÇO DE NOVO CLIENTE
+          $('#cepCliente').mask('00000-000');
+          const cepInput = document.getElementById('cepCliente');
+          const logradouroInput = document.getElementById('logradouroEndCliente');
+          const bairroInput = document.getElementById('bairroEndCliente');
+          const cidadeInput = document.getElementById('cidadeEndCliente');
+          const estadoInput = document.getElementById('estadoEndCliente');
+
+          cepInput.addEventListener('input', function () {
+            const cep = cepInput.value.replace(/\D/g, '');
+
+            if (cep.length === 8) {
+              const validacep = /^[0-9]{8}$/;
+
+              if (validacep.test(cep)) {
+                cepEndereco(cep)
+              } else {
+                // Não faz nada se o CEP não estiver completo ou for inválido
+              }
+            }
+          });
+          //FIM API CEP PARA ENDEREÇO DE NOVO CLIENTE
+
+          //INICIO API CEP PARA EDITAR ENDEREÇO
+          $('#cepEdit').mask('00000-000');
+          const cepEdit = document.getElementById('cepEdit');
+          const logradouroEndEdit = document.getElementById('logradouroEndEdit');
+          const bairroEndEdit = document.getElementById('bairroEndEdit');
+          const cidadeEndEdit = document.getElementById('cidadeEndEdit');
+          const estadoEndEdit = document.getElementById('estadoEndEdit');
+
+          cepEdit.addEventListener('input', function () {
+            const cep = cepEdit.value.replace(/\D/g, '');
+
+            if (cep.length === 8) {
+              const validacep = /^[0-9]{8}$/;
+
+              if (validacep.test(cep)) {
+                cepEnderecoEdit(cep)
+              } else {
+                // Não faz nada se o CEP não estiver completo ou for inválido
+              }
+            }
+          });
+          //FIM API CEP PARA EDITAR ENDEREÇO
+
+          $('#salvarEndereco').on('click', function () {
+            adicionarEndereco();
+          });
+          $('#salvarEnderecoEdit').on('click', function () {
+            editarEndereco();
+          });
+
+          function obterFormaPagamentoSelecionada() {
+            var formaPagamento = $("input[name='payment']:checked").val();
+            return formaPagamento;
+          }
+
+          $('#numeroCartao').mask('0000 0000 0000 0000');
+          $('#dataExpiracao').mask('00/0000');
+          $('#cvc').mask('000');
+
+          $("#opcaoCartao").on("click", function () {
+            document.getElementById('cartaoModal').classList.remove('hidden');
+          });
+
+          $("#closeCartaoModal").on("click", function () {
+            document.getElementById('cartaoModal').classList.add('hidden');
+            $("input[name='payment'][value='3']").prop("checked", true);
+          });
+          // Exemplo de uso ao clicar em um botão
+          $(".finalizar-compra").on("click", function () {
+            var formaPagamento = obterFormaPagamentoSelecionada();
+            
+            if (formaPagamento == 1) {
+              var nomeTitular = $("#nomeTitular").val();
+              var numeroCartao = $("#numeroCartao").val();
+              var dataExpiracao = $("#dataExpiracao").val();
+              var cvc = $("#cvc").val();
+
+              // Validações dos campos
+              if (!nomeTitular) {
+                app.dialog.alert("Por favor, preencha o nome do titular.", "Erro!");
+                return;
+              }
+              if (!numeroCartao || numeroCartao.length < 16) {
+                app.dialog.alert("Por favor, insira um número de cartão válido com 16 dígitos.", "Erro!");
+                return;
+              }
+              if (!dataExpiracao || !validarDataExpiracao(dataExpiracao)) {
+                app.dialog.alert("Por favor, insira a data de expiração no formato MM/YYYY.", "Erro!");
+                return;
+              }
+              if (!cvc || cvc.length < 3) {
+                app.dialog.alert("Por favor, insira um código CVC válido de 3 dígitos.", "Erro!");
+                return;
+              }
+            } else if (formaPagamento == 2) {
+              formaPagamento = 2;
+            } else if (formaPagamento == 3) {
+              formaPagamento = 3;
+            } else {
+              app.dialog.alert("Forma de pagamento não selecionada.", "Erro!");
+              return;
+            }
+
+            if (formaPagamento) {
+              finalizarCompra(formaPagamento, nomeTitular, numeroCartao, dataExpiracao, cvc);
+            }
+          });
+
+          $('#irCheckout').on('click', function () {
+            var enderecoSelecionado = localStorage.getItem('enderecoDetalhes');
+            if (enderecoSelecionado && enderecoSelecionado != null) {
+              app.views.main.router.navigate("/checkout/");
+            } else {              
+              listarEnderecos();
+              app.popup.open(".popup-enderecos");
+            }
+          });
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
