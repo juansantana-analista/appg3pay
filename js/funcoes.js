@@ -3532,18 +3532,14 @@ function listarCarrinho() {
         responseJson.status == "success" &&
         responseJson.data.status == "sucess"
       ) {
-        // Supondo que responseJson seja o objeto que você obteve no console.log
         const quantidadeItens = responseJson.data.data.itens.length;
         const total = responseJson.data.data.total;
         var pessoaIdCarrinho = responseJson.data.data.pessoa_id;
 
         if (quantidadeItens > 0) {
-          //TEM ITENS NO CARRINHO
           $("#toolbar-carrinho").removeClass("display-none");
-          //ESVAZIAR A ÁREA DOS ITENS
           $("#listaCarrinho").empty();
 
-          //PERCORRER O NOSSO CARRINHO E ALIMENTAR A ÁREA
           responseJson.data.data.itens.forEach((item) => {
             var itemDiv = `
               
@@ -3631,14 +3627,11 @@ function listarCarrinho() {
             $("#listaCarrinho").append(itemDiv);
           });
           
-          // --- INÍCIO DA MODIFICAÇÃO ---
-
           let debounceTimer;
-          const DEBOUNCE_DELAY = 2000; // 1000 ms = 1 segundo. Altere aqui se desejar.
+          const DEBOUNCE_DELAY = 1800; 
 
           $(".delete-item").on("click", function () {
             var produtoId = $(this).data("produto-id");
-            //CONFIRMAR
             app.dialog.confirm(
               "Tem certeza que quer remover este item?",
               "Remover",
@@ -3659,20 +3652,18 @@ function listarCarrinho() {
             if (quantidade > 1) {
               quantidade--;
               
-              // 1. Atualiza a UI imediatamente para feedback do usuário
               $quantitySpan.text(quantidade);
               $button.data("produto-qtde", quantidade);
-              $plusButton.data("produto-qtde", quantidade); // Atualiza o botão irmão também
+              $plusButton.data("produto-qtde", quantidade);
               
-              // 2. Lógica de Debounce
-              clearTimeout(debounceTimer); // Cancela o temporizador anterior
+              // Cancela a requisição anterior e agenda uma nova
+              clearTimeout(debounceTimer); 
               debounceTimer = setTimeout(() => {
-                // Chama a API somente após o usuário parar de clicar
                 alterarCarrinho(pessoaIdCarrinho, produtoId, quantidade);
               }, DEBOUNCE_DELAY);
 
             } else {
-              // Cancela qualquer alteração pendente antes de perguntar sobre a remoção
+              // Cancela qualquer requisição pendente
               clearTimeout(debounceTimer); 
               app.dialog.confirm(
                 `Gostaria de remover este item?`,
@@ -3694,28 +3685,23 @@ function listarCarrinho() {
 
             quantidade++;
 
-            // 1. Atualiza a UI imediatamente
             $quantitySpan.text(quantidade);
             $button.data("produto-qtde", quantidade);
             $minusButton.data("produto-qtde", quantidade);
 
-            // 2. Lógica de Debounce
+            // Cancela a requisição anterior e agenda uma nova
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
               alterarCarrinho(pessoaIdCarrinho, produtoId, quantidade);
             }, DEBOUNCE_DELAY);
           });
 
-          // --- FIM DA MODIFICAÇÃO ---
-
-          //MOSTRAR O SUBTOTAL
           $("#subtotal").html(
             total.toLocaleString("pt-BR", {
               style: "currency",
               currency: "BRL",
             })
           );
-          //MOSTRAR O SUBTOTAL
           $("#totalCarrinho").html(
             total.toLocaleString("pt-BR", {
               style: "currency",
@@ -3723,14 +3709,8 @@ function listarCarrinho() {
             })
           );
         } else {
-          //MOSTRAR CARRINHO VAZIO
-          //ESVAZIAR LISTA DO CARRINHO
           $("#listaCarrinho").empty();
-
-          //SUMIR OS ITENS DE BAIXO BOTÃO E TOTAIS
           $("#toolbar-carrinho").addClass("display-none");
-
-          //MOSTRAR SACOLINHA VAZIA
           $("#containerCarrinho").html(`
               <div class="display-flex flex-direction-column align-items-center justify-content-center" style="height: 100%;">
                 <img width="300" src="img/empty.gif">
