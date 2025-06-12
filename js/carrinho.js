@@ -306,45 +306,124 @@ $(document).ready(function() {
                     <a href="/home/" class="text-blue-600 mt-2 inline-block">Continuar comprando</a>
                 </div>
             `);
+            
+            // Desbloquear botão se carrinho vazio
+            bloquearBotaoFinalizarCompra(false);
             return;
         }
 
         carrinhoData.itens.forEach(item => {
             const itemHtml = `
-                <div class="item-carrinho" data-produto-id="${item.produto_id}">
-                    <div class="area-img">
-                        <img src="https://vitatophomologa.tecskill.com.br/${item.foto || 'img/placeholder.jpg'}" alt="${item.nome}">
-                    </div>
-                    <div class="area-details">
-                        <div class="sup">
-                            <div class="name-prod">${item.nome}</div>
-                            <div class="delete-item" onclick="removerItem(${item.produto_id})">
-                                <i class="mdi mdi-delete"></i>
-                            </div>
+                <div class="flex space-x-4" style="margin-bottom: 18px;" data-produto-id="${item.produto_id}">
+                    <img
+                        src="https://vitatophomologa.tecskill.com.br/${item.foto}"
+                        alt="${item.nome}"
+                        class="w-20 h-20 rounded-lg object-cover"
+                    />
+                    <div class="flex-1">
+                        <div class="flex justify-between">
+                            <h3 class="font-medium">${item.nome}</h3>
+                            <button class="text-red-500 delete-item" style="width: 30px;" data-produto-id="${item.produto_id}">
+                                <svg
+                                    class="w-5 h-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                    ></path>
+                                </svg>
+                            </button>
                         </div>
-                        <div class="middle">
-                            <span>Produto disponível</span>
-                        </div>
-                        <div class="preco-quantidade">
-                            <span>${formatPrice(parseFloat(item.preco_total))}</span>
-                            <div class="count">
-                                <div class="minus" onclick="alterarQuantidade(${item.produto_id}, ${parseInt(item.quantidade) - 1})">-</div>
-                                <input type="number" class="qtd-item" value="${item.quantidade}" readonly>
-                                <div class="plus" onclick="alterarQuantidade(${item.produto_id}, ${parseInt(item.quantidade) + 1})">+</div>
+                        <p class="text-gray-500 text-sm mb-2">Premium</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center space-x-2">
+                                <button
+                                    class="minus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                                    data-produto-id="${item.produto_id}" 
+                                    data-produto-qtde="${item.quantidade}"
+                                >
+                                    <svg
+                                        class="w-4 h-4"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M20 12H4"
+                                        ></path>
+                                    </svg>
+                                </button>
+                                <span class="w-8 text-center">${item.quantidade}</span>
+                                <button
+                                    class="plus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                                    data-produto-id="${item.produto_id}" 
+                                    data-produto-qtde="${item.quantidade}"
+                                >
+                                    <svg
+                                        class="w-4 h-4"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M12 4v16m8-8H4"
+                                        ></path>
+                                    </svg>
+                                </button>
                             </div>
+                            <span class="font-semibold"><s>${formatPrice(parseFloat(item.preco_original))}</s></span>
+                            <span class="font-semibold">${formatPrice(parseFloat(item.preco_unitario))}</span>
                         </div>
                     </div>
                 </div>
             `;
             listaCarrinho.append(itemHtml);
         });
+
+        // Adicionar eventos aos botões usando delegação de eventos
+        $(document).off('click', '.minus, .plus, .delete-item').on('click', '.minus, .plus, .delete-item', function(e) {
+            e.preventDefault();
+            
+            const $button = $(this);
+            const produtoId = $button.data('produto-id');
+            const quantidadeAtual = parseInt($button.data('produto-qtde'));
+            
+            if ($button.hasClass('minus')) {
+                alterarQuantidade(produtoId, quantidadeAtual - 1);
+            } else if ($button.hasClass('plus')) {
+                alterarQuantidade(produtoId, quantidadeAtual + 1);
+            } else if ($button.hasClass('delete-item')) {
+                removerItem(produtoId);
+            }
+        });
         
-        // Mostrar indicador discreto se há sincronização pendente (mas não preloader)
-        if (timeoutSincronizacao && !sincronizandoCarrinho) {
+        // Gerenciar estado do botão de finalizar compra baseado na sincronização
+        const temSincronizacaoPendente = timeoutSincronizacao !== null;
+        const estaSincronizando = sincronizandoCarrinho;
+        
+        if (temSincronizacaoPendente || estaSincronizando) {
+            bloquearBotaoFinalizarCompra(true);
+        } else {
+            bloquearBotaoFinalizarCompra(false);
+        }
+        
+        // Mostrar indicador discreto se há sincronização pendente (mas não durante sincronização ativa)
+        if (temSincronizacaoPendente && !estaSincronizando) {
             if (!$('.sync-indicator').length) {
                 $('body').append(`
-                    <div class="sync-indicator" style="position: fixed; top: 20px; right: 20px; background: #4CAF50; color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; z-index: 1000;">
-                        <i class="mdi mdi-sync mdi-spin"></i> Pendente
+                    <div class="sync-indicator" style="position: fixed; top: 20px; right: 20px; background: #FF9800; color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+                        <i class="mdi mdi-sync mdi-spin"></i> Aguardando sincronização...
                     </div>
                 `);
             }
