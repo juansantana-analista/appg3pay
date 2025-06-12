@@ -300,7 +300,7 @@ $(document).ready(function() {
             const itemHtml = `
                 <div class="item-carrinho" data-produto-id="${item.produto_id}">
                     <div class="area-img">
-                        <img src="${item.foto || 'img/placeholder.jpg'}" alt="${item.nome}">
+                        <img src="https://vitatophomologa.tecskill.com.br/${item.foto || 'img/placeholder.jpg'}" alt="${item.nome}">
                     </div>
                     <div class="area-details">
                         <div class="sup">
@@ -911,11 +911,7 @@ $(document).ready(function() {
                 }
                 
                 // Redirecionar sempre para a mesma página de pagamento
-                if (typeof app !== 'undefined' && app.views && app.views.main) {
-                    app.views.main.router.navigate("/pagamento/");
-                } else {
-                    window.location.href = '/pagamento/';
-                }
+                app.views.main.router.navigate("/pagamento/");
                 
             } else {
                 // Fechar preloader em caso de erro
