@@ -784,17 +784,39 @@ $(document).ready(function() {
     // Finalizar compra com cartão
     $('#finalizarCompraCartao').on('click', function() {
         // Validar dados do cartão
-        const nomeTitular = $('#nomeTitular').val();
-        const numeroCartao = $('#numeroCartao').val();
-        const dataExpiracao = $('#dataExpiracao').val();
-        const cvc = $('#cvc').val();
+        const nomeTitular = $('#nomeTitular').val().trim();
+        const numeroCartao = $('#numeroCartao').val().replace(/\s/g, '');
+        const dataExpiracao = $('#dataExpiracao').val().trim();
+        const cvc = $('#cvc').val().trim();
 
         if (!nomeTitular || !numeroCartao || !dataExpiracao || !cvc) {
             alert('Por favor, preencha todos os dados do cartão');
             return;
         }
 
-        processarPagamento();
+        // Validações adicionais
+        if (numeroCartao.length < 13 || numeroCartao.length > 19) {
+            alert('Número do cartão inválido');
+            return;
+        }
+
+        if (dataExpiracao.length !== 5) {
+            alert('Data de expiração inválida (MM/AA)');
+            return;
+        }
+
+        if (cvc.length < 3 || cvc.length > 4) {
+            alert('CVV inválido');
+            return;
+        }
+
+        // Desabilitar botão para evitar cliques duplos
+        $(this).prop('disabled', true).text('Processando...');
+
+        processarPagamento().finally(() => {
+            // Reabilitar botão
+            $(this).prop('disabled', false).text('Finalizar Compra');
+        });
     });
 
     // Processar pagamento
@@ -821,34 +843,135 @@ $(document).ready(function() {
             const response = await makeApiRequest('PagamentoSafe2payRest', 'IncluirVenda', dadosPagamento);
             
             if (response.status === 'success' && response.data.status === 'success') {
-                // Redirecionar para página de confirmação com dados do pagamento
                 const dadosRetorno = response.data.data;
                 
-                // Salvar dados no sessionStorage para usar na próxima página
-                sessionStorage.setItem('dadosPagamento', JSON.stringify(dadosRetorno));
+                // Preparar dados para localStorage seguindo a estrutura solicitada
+                const data = {
+                    formaSelecionada: metodoPagamentoSelecionado,
+                    linhaDigitavel: dadosRetorno.boleto_linhadigitavel || '',
+                    pixKey: dadosRetorno.pix_key || '',
+                    qrCodePix: dadosRetorno.pix_qrcode || '',
+                    linkBoleto: dadosRetorno.boleto_impressao || '',
+                    dataVencimento: dadosRetorno.data_vencimento || '',
+                    valorTotal: dadosRetorno.valor_total || carrinhoData.total,
+                    pedidoId: dadosRetorno.pedido_id,
+                    status_compra: dadosRetorno.status_compra || '',
+                    status_mensagem: dadosRetorno.status_mensagem || '',
+                    bandeira: dadosRetorno.bandeira || '',
+                    cartao_numero: dadosRetorno.cartao_numero || '',
+                    nome_cartao: dadosRetorno.nome_cartao || $('#nomeTitular').val() || '',
+                    // Dados adicionais que podem ser úteis
+                    tid: dadosRetorno.tid || '',
+                    transacao_id: dadosRetorno.transacao_id || '',
+                    codigo_autorizacao: dadosRetorno.codigo_autorizacao || '',
+                    timestamp: new Date().toISOString()
+                };
+
+                // Armazenar no localStorage
+                localStorage.setItem("pagamentoData", JSON.stringify(data));
+                localStorage.setItem("pedidoIdPagamento", data.pedidoId);
+                
+                console.log('Dados de pagamento armazenados:', data);
+                
+                // Limpar carrinho local após pagamento bem-sucedido
+                limparCarrinhoLocal();
+                
+                // Fechar modal de cartão se estiver aberto
+                $('#cartaoModal').addClass('hidden');
                 
                 // Redirecionar baseado no tipo de pagamento
                 switch(metodoPagamentoSelecionado) {
                     case '1': // Cartão
-                        window.location.href = '/pagamento-cartao/';
+                        if (typeof app !== 'undefined' && app.views && app.views.main) {
+                            app.views.main.router.navigate("/pagamento-cartao/");
+                        } else {
+                            window.location.href = '/pagamento-cartao/';
+                        }
                         break;
                     case '2': // Boleto
-                        window.location.href = '/pagamento-boleto/';
+                        if (typeof app !== 'undefined' && app.views && app.views.main) {
+                            app.views.main.router.navigate("/pagamento-boleto/");
+                        } else {
+                            window.location.href = '/pagamento-boleto/';
+                        }
                         break;
                     case '3': // PIX
-                        window.location.href = '/pagamento-pix/';
+                        if (typeof app !== 'undefined' && app.views && app.views.main) {
+                            app.views.main.router.navigate("/pagamento-pix/");
+                        } else {
+                            window.location.href = '/pagamento-pix/';
+                        }
                         break;
+                    default:
+                        if (typeof app !== 'undefined' && app.views && app.views.main) {
+                            app.views.main.router.navigate("/pagamento/");
+                        } else {
+                            window.location.href = '/pagamento/';
+                        }
                 }
+                
+                // Mostrar mensagem de sucesso
+                alert('Pedido criado com sucesso! Você será redirecionado para a página de pagamento.');
+                
             } else {
                 alert('Erro ao processar pagamento: ' + (response.data?.message || response.message));
+                console.error('Erro no processamento:', response);
             }
         } catch (error) {
             console.error('Erro ao processar pagamento:', error);
-            alert('Erro ao processar pagamento');
+            alert('Erro ao processar pagamento. Tente novamente.');
         }
     }
 
-    // ==================== EVENTOS DE MODAL ====================
+    // ==================== FUNÇÕES UTILITÁRIAS ====================
+
+    // Função para recuperar dados de pagamento do localStorage
+    window.getPagamentoData = function() {
+        try {
+            const data = localStorage.getItem("pagamentoData");
+            return data ? JSON.parse(data) : null;
+        } catch (error) {
+            console.error('Erro ao recuperar dados de pagamento:', error);
+            return null;
+        }
+    };
+
+    // Função para recuperar pedido ID do localStorage
+    window.getPedidoIdPagamento = function() {
+        return localStorage.getItem("pedidoIdPagamento");
+    };
+
+    // Função para limpar dados de pagamento (usar após conclusão)
+    window.limparDadosPagamento = function() {
+        localStorage.removeItem("pagamentoData");
+        localStorage.removeItem("pedidoIdPagamento");
+        console.log('Dados de pagamento limpos do localStorage');
+    };
+
+    // Função para verificar status do pagamento (se necessário)
+    window.verificarStatusPagamento = async function(pedidoId) {
+        try {
+            const response = await makeApiRequest('PagamentoSafe2payRest', 'VerificaPix', {
+                pedido_id: pedidoId
+            });
+            
+            if (response.status === 'success') {
+                // Atualizar dados no localStorage se o status mudou
+                const dadosAtuais = getPagamentoData();
+                if (dadosAtuais) {
+                    dadosAtuais.status_compra = response.data.status_compra;
+                    dadosAtuais.status_mensagem = response.data.status_mensagem;
+                    dadosAtuais.timestamp_verificacao = new Date().toISOString();
+                    localStorage.setItem("pagamentoData", JSON.stringify(dadosAtuais));
+                }
+                
+                return response.data;
+            }
+        } catch (error) {
+            console.error('Erro ao verificar status do pagamento:', error);
+        }
+        return null;
+    };
 
     // Modais de endereço
     $('#openAddressModal').on('click', function() {
