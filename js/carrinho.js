@@ -53,10 +53,11 @@ $(document).ready(function() {
 
     // Função para fazer requisições à API
     async function makeApiRequest(className, methodName, dados = {}) {
+        // Estrutura correta: dados no nível raiz junto com class e method
         const body = JSON.stringify({
             class: className,
             method: methodName,
-            dados: dados
+            ...dados  // Spread dos dados no nível raiz
         });
 
         const options = {
@@ -67,6 +68,7 @@ $(document).ready(function() {
 
         try {
             console.log('Enviando requisição:', { className, methodName, dados });
+            console.log('Body da requisição:', body);
             
             const response = await fetch(apiServerUrl, options);
             const responseText = await response.text();
