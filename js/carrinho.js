@@ -342,7 +342,6 @@ $(document).ready(function() {
                                     </svg>
                                 </button>
                             </div>
-                            <span class="font-semibold"><s>${formatPrice(parseFloat(item.preco_original_total))}</s></span>
                             <span class="font-semibold">${formatPrice(parseFloat(item.preco_total))}</span>
                         </div>
                     </div>
