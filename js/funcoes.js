@@ -3532,18 +3532,14 @@ function listarCarrinho() {
         responseJson.status == "success" &&
         responseJson.data.status == "sucess"
       ) {
-        // Supondo que responseJson seja o objeto que você obteve no console.log
         const quantidadeItens = responseJson.data.data.itens.length;
         const total = responseJson.data.data.total;
         var pessoaIdCarrinho = responseJson.data.data.pessoa_id;
 
         if (quantidadeItens > 0) {
-          //TEM ITENS NO CARRINHO
           $("#toolbar-carrinho").removeClass("display-none");
-          //ESVAZIAR A ÁREA DOS ITENS
           $("#listaCarrinho").empty();
 
-          //PERCORRER O NOSSO CARRINHO E ALIMENTAR A ÁREA
           responseJson.data.data.itens.forEach((item) => {
             var itemDiv = `
               
@@ -3630,10 +3626,12 @@ function listarCarrinho() {
 
             $("#listaCarrinho").append(itemDiv);
           });
+          
+          let debounceTimer;
+          const DEBOUNCE_DELAY = 1800; 
 
           $(".delete-item").on("click", function () {
             var produtoId = $(this).data("produto-id");
-            //CONFIRMAR
             app.dialog.confirm(
               "Tem certeza que quer remover este item?",
               "Remover",
@@ -3644,14 +3642,29 @@ function listarCarrinho() {
           });
 
           $(".minus").on("click", function () {
-            var produtoId = $(this).data("produto-id");
-            var quantidade = $(this).data("produto-qtde");
-            var qtdeAtualizada = quantidade - 1;
+            const $button = $(this);
+            const produtoId = $button.data("produto-id");
+            let quantidade = parseInt($button.data("produto-qtde"));
+            
+            const $quantitySpan = $button.siblings("span.w-8");
+            const $plusButton = $button.siblings(".plus");
 
-            //SE TEM MAIS DE UM ITEM NA QUANTIDADE
             if (quantidade > 1) {
-              alterarCarrinho(pessoaIdCarrinho, produtoId, qtdeAtualizada);
+              quantidade--;
+              
+              $quantitySpan.text(quantidade);
+              $button.data("produto-qtde", quantidade);
+              $plusButton.data("produto-qtde", quantidade);
+              
+              // Cancela a requisição anterior e agenda uma nova
+              clearTimeout(debounceTimer); 
+              debounceTimer = setTimeout(() => {
+                alterarCarrinho(pessoaIdCarrinho, produtoId, quantidade);
+              }, DEBOUNCE_DELAY);
+
             } else {
+              // Cancela qualquer requisição pendente
+              clearTimeout(debounceTimer); 
               app.dialog.confirm(
                 `Gostaria de remover este item?`,
                 "REMOVER",
@@ -3663,21 +3676,32 @@ function listarCarrinho() {
           });
 
           $(".plus").on("click", function () {
-            var produtoId = $(this).data("produto-id");
-            var quantidade = $(this).data("produto-qtde");
-            var qtdeAtualizada = quantidade + 1;
+            const $button = $(this);
+            const produtoId = $button.data("produto-id");
+            let quantidade = parseInt($button.data("produto-qtde"));
 
-            alterarCarrinho(pessoaIdCarrinho, produtoId, qtdeAtualizada);
+            const $quantitySpan = $button.siblings("span.w-8");
+            const $minusButton = $button.siblings(".minus");
+
+            quantidade++;
+
+            $quantitySpan.text(quantidade);
+            $button.data("produto-qtde", quantidade);
+            $minusButton.data("produto-qtde", quantidade);
+
+            // Cancela a requisição anterior e agenda uma nova
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+              alterarCarrinho(pessoaIdCarrinho, produtoId, quantidade);
+            }, DEBOUNCE_DELAY);
           });
 
-          //MOSTRAR O SUBTOTAL
           $("#subtotal").html(
             total.toLocaleString("pt-BR", {
               style: "currency",
               currency: "BRL",
             })
           );
-          //MOSTRAR O SUBTOTAL
           $("#totalCarrinho").html(
             total.toLocaleString("pt-BR", {
               style: "currency",
@@ -3685,14 +3709,8 @@ function listarCarrinho() {
             })
           );
         } else {
-          //MOSTRAR CARRINHO VAZIO
-          //ESVAZIAR LISTA DO CARRINHO
           $("#listaCarrinho").empty();
-
-          //SUMIR OS ITENS DE BAIXO BOTÃO E TOTAIS
           $("#toolbar-carrinho").addClass("display-none");
-
-          //MOSTRAR SACOLINHA VAZIA
           $("#containerCarrinho").html(`
               <div class="display-flex flex-direction-column align-items-center justify-content-center" style="height: 100%;">
                 <img width="300" src="img/empty.gif">
