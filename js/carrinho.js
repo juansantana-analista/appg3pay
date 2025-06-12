@@ -190,7 +190,7 @@ $(document).ready(function() {
                 return;
             }
 
-            // Enviar atualizações para o servidor
+            // Enviar atualizações apenas para itens que ainda existem no carrinho local
             for (const item of carrinhoLocal.itens) {
                 try {
                     await makeApiRequest('PagamentoSafe2payRest', 'AlterarCarrinho', {
@@ -203,8 +203,9 @@ $(document).ready(function() {
                 }
             }
 
-            // Após sincronizar, recarregar do servidor para confirmar
-            await carregarCarrinhoServidor();
+            // Após sincronizar mudanças de quantidade, recarregar do servidor para confirmar
+            // IMPORTANTE: Não sobrescrever remoções que foram feitas localmente
+            console.log('Sincronização de quantidades concluída');
             
         } catch (error) {
             console.error('Erro na sincronização:', error);
@@ -420,11 +421,12 @@ $(document).ready(function() {
         }
     };
 
-    // Remover item localmente
-    function removerItemLocal(produtoId) {
+    // Remover item localmente e do servidor
+    async function removerItemLocal(produtoId) {
         if (carrinhoData.itens) {
             const index = carrinhoData.itens.findIndex(i => i.produto_id == produtoId);
             if (index !== -1) {
+                // Remover do array local imediatamente
                 carrinhoData.itens.splice(index, 1);
                 
                 // Recalcular totais
@@ -437,10 +439,27 @@ $(document).ready(function() {
                 renderizarCarrinho();
                 atualizarResumo();
                 
-                // Agendar sincronização com servidor
-                agendarSincronizacao();
-                
                 console.log(`Item ${produtoId} removido localmente`);
+                
+                // Remover do servidor imediatamente (não agendar)
+                try {
+                    const response = await makeApiRequest('PagamentoSafe2payRest', 'ExcluirCarrinho', {
+                        pessoa_id: pessoaId,
+                        produto_id: produtoId
+                    });
+
+                    if (response.status === 'success' && response.data.status === 'sucess') {
+                        console.log(`Item ${produtoId} removido do servidor com sucesso`);
+                    } else {
+                        console.error('Erro ao remover item do servidor:', response.data?.message || response.message);
+                        // Em caso de erro, recarregar do servidor para sincronizar
+                        await carregarCarrinhoServidor();
+                    }
+                } catch (error) {
+                    console.error('Erro ao remover item do servidor:', error);
+                    // Em caso de erro, recarregar do servidor para sincronizar
+                    await carregarCarrinhoServidor();
+                }
             }
         }
     }
@@ -467,9 +486,22 @@ $(document).ready(function() {
     }
 
     // Remover item do carrinho
-    window.removerItem = function(produtoId) {
+    window.removerItem = async function(produtoId) {
         if (!confirm('Deseja remover este item do carrinho?')) return;
-        removerItemLocal(produtoId);
+        
+        // Mostrar preloader durante remoção
+        if (typeof app !== 'undefined' && app.dialog) {
+            app.dialog.preloader("Removendo item...");
+        }
+        
+        try {
+            await removerItemLocal(produtoId);
+        } finally {
+            // Fechar preloader
+            if (typeof app !== 'undefined' && app.dialog) {
+                app.dialog.close();
+            }
+        }
     };
 
     // Limpar carrinho
