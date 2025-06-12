@@ -16,6 +16,25 @@ $(document).ready(function() {
     let enderecoSelecionado = null;
     let metodoPagamentoSelecionado = '3'; // PIX por padrão
 
+    // Verificar se as variáveis necessárias estão disponíveis
+    if (!userAuthToken) {
+        console.error('Token de autenticação não encontrado');
+        alert('Erro de autenticação. Por favor, faça login novamente.');
+        // Redirecionar para login se necessário
+        // window.location.href = '/login/';
+        return;
+    }
+
+    if (!pessoaId) {
+        console.error('ID da pessoa não encontrado');
+        alert('Erro de sessão. Por favor, faça login novamente.');
+        // Redirecionar para login se necessário
+        // window.location.href = '/login/';
+        return;
+    }
+
+    console.log('Inicializando carrinho com:', { pessoaId, userAuthToken: userAuthToken ? 'Presente' : 'Ausente' });
+
     // Função para obter cookies
     function getCookie(name) {
         const value = `; ${document.cookie}`;
@@ -47,8 +66,21 @@ $(document).ready(function() {
         };
 
         try {
+            console.log('Enviando requisição:', { className, methodName, dados });
+            
             const response = await fetch(apiServerUrl, options);
-            const data = await response.json();
+            const responseText = await response.text();
+            
+            console.log('Resposta bruta:', responseText);
+            
+            // Verificar se a resposta é JSON válido
+            if (!responseText.trim().startsWith('{') && !responseText.trim().startsWith('[')) {
+                console.error('Resposta não é JSON válido:', responseText);
+                throw new Error('Resposta da API não é JSON válido: ' + responseText.substring(0, 200));
+            }
+            
+            const data = JSON.parse(responseText);
+            console.log('Resposta parseada:', data);
             return data;
         } catch (error) {
             console.error('Erro na requisição:', error);
@@ -61,20 +93,32 @@ $(document).ready(function() {
     // Carregar carrinho
     async function carregarCarrinho() {
         try {
+            console.log('Carregando carrinho para pessoa ID:', pessoaId);
+            
             const response = await makeApiRequest('PagamentoSafe2payRest', 'ListarCarrinho', {
                 pessoa_id: pessoaId
             });
 
+            console.log('Resposta completa carrinho:', response);
+
             // A resposta vem aninhada: response.data.data contém os dados do carrinho
             if (response.status === 'success' && response.data.status === 'sucess') {
                 carrinhoData = response.data.data;
+                console.log('Dados do carrinho:', carrinhoData);
                 renderizarCarrinho();
                 atualizarResumo();
             } else {
                 console.error('Erro ao carregar carrinho:', response.data?.message || response.message);
+                // Inicializar carrinho vazio em caso de erro
+                carrinhoData = { itens: [], total: 0, total_sem_desconto: 0, valor_frete: 0 };
+                renderizarCarrinho();
+                atualizarResumo();
             }
         } catch (error) {
             console.error('Erro ao carregar carrinho:', error);
+            carrinhoData = { itens: [], total: 0, total_sem_desconto: 0, valor_frete: 0 };
+            renderizarCarrinho();
+            atualizarResumo();
         }
     }
 
@@ -214,19 +258,34 @@ $(document).ready(function() {
     // Carregar endereços
     async function carregarEnderecos() {
         try {
+            console.log('Carregando endereços para pessoa ID:', pessoaId);
+            
             const response = await makeApiRequest('PessoaRestService', 'listarPessoa', {
                 pessoa_id: pessoaId
             });
-console.log(response);
+
+            console.log('Resposta completa endereços:', response);
+
             if (response.status === 'success' && response.data.status === 'success') {
-                enderecosDisponiveis = response.data.data.enderecos;
+                enderecosDisponiveis = response.data.data.enderecos || [];
+                console.log('Endereços carregados:', enderecosDisponiveis);
                 renderizarEnderecos();
                 selecionarEnderecoPrincipal();
             } else {
                 console.error('Erro ao carregar endereços:', response.data?.message || response.message);
+                // Se não conseguir carregar, inicializar array vazio
+                enderecosDisponiveis = [];
+                renderizarEnderecos();
             }
         } catch (error) {
             console.error('Erro ao carregar endereços:', error);
+            enderecosDisponiveis = [];
+            renderizarEnderecos();
+            
+            // Mostrar erro mais detalhado para o usuário se necessário
+            if (error.message.includes('JSON')) {
+                alert('Erro de comunicação com o servidor. Verifique sua conexão.');
+            }
         }
     }
 
