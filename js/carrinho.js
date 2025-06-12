@@ -187,6 +187,8 @@ $(document).ready(function() {
                 if (typeof app !== 'undefined' && app.dialog) {
                     app.dialog.close();
                 }
+                // Desbloquear botão
+                bloquearBotaoFinalizarCompra(false);
                 return;
             }
 
@@ -210,10 +212,18 @@ $(document).ready(function() {
             console.error('Erro na sincronização:', error);
         } finally {
             sincronizandoCarrinho = false;
+            timeoutSincronizacao = null; // Limpar timeout
+            
             // Sempre fechar preloader ao finalizar
             if (typeof app !== 'undefined' && app.dialog) {
                 app.dialog.close();
             }
+            
+            // Desbloquear botão de finalizar compra
+            bloquearBotaoFinalizarCompra(false);
+            
+            // Atualizar interface para remover indicadores
+            renderizarCarrinho();
         }
     }
 
@@ -222,6 +232,9 @@ $(document).ready(function() {
         if (timeoutSincronizacao) {
             clearTimeout(timeoutSincronizacao);
         }
+        
+        // Bloquear botão de finalizar compra
+        bloquearBotaoFinalizarCompra(true);
         
         timeoutSincronizacao = setTimeout(() => {
             sincronizarCarrinho();
@@ -306,6 +319,9 @@ $(document).ready(function() {
                     <a href="/home/" class="text-blue-600 mt-2 inline-block">Continuar comprando</a>
                 </div>
             `);
+            
+            // Desbloquear botão se carrinho vazio
+            bloquearBotaoFinalizarCompra(false);
             return;
         }
 
@@ -313,7 +329,7 @@ $(document).ready(function() {
             const itemHtml = `
                 <div class="item-carrinho" data-produto-id="${item.produto_id}">
                     <div class="area-img">
-                        <img src="https://vitatophomologa.tecskill.com.br/${item.foto || 'img/placeholder.jpg'}" alt="${item.nome}">
+                        <img src="${item.foto || 'img/placeholder.jpg'}" alt="${item.nome}">
                     </div>
                     <div class="area-details">
                         <div class="sup">
@@ -339,12 +355,22 @@ $(document).ready(function() {
             listaCarrinho.append(itemHtml);
         });
         
-        // Mostrar indicador discreto se há sincronização pendente (mas não preloader)
-        if (timeoutSincronizacao && !sincronizandoCarrinho) {
+        // Gerenciar estado do botão de finalizar compra baseado na sincronização
+        const temSincronizacaoPendente = timeoutSincronizacao !== null;
+        const estaSincronizando = sincronizandoCarrinho;
+        
+        if (temSincronizacaoPendente || estaSincronizando) {
+            bloquearBotaoFinalizarCompra(true);
+        } else {
+            bloquearBotaoFinalizarCompra(false);
+        }
+        
+        // Mostrar indicador discreto se há sincronização pendente (mas não durante sincronização ativa)
+        if (temSincronizacaoPendente && !estaSincronizando) {
             if (!$('.sync-indicator').length) {
                 $('body').append(`
-                    <div class="sync-indicator" style="position: fixed; top: 20px; right: 20px; background: #4CAF50; color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; z-index: 1000;">
-                        <i class="mdi mdi-sync mdi-spin"></i> Pendente
+                    <div class="sync-indicator" style="position: fixed; top: 20px; right: 20px; background: #FF9800; color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+                        <i class="mdi mdi-sync mdi-spin"></i> Aguardando sincronização...
                     </div>
                 `);
             }
@@ -781,16 +807,18 @@ $(document).ready(function() {
             return;
         }
 
+        // Verificar se há sincronização pendente ou em andamento
+        if (timeoutSincronizacao || sincronizandoCarrinho) {
+            alert('Aguarde a sincronização do carrinho terminar antes de finalizar a compra.');
+            return;
+        }
+
         // Desabilitar botão durante o processamento
         const $botao = $(this);
-        $botao.prop('disabled', true).text('Processando...');
+        const textoOriginal = $botao.find('span').text();
+        $botao.prop('disabled', true).find('span').text('Processando...');
 
         try {
-            // Sincronizar carrinho antes de finalizar (se necessário)
-            if (timeoutSincronizacao) {
-                await sincronizarCarrinho();
-            }
-
             if (metodoPagamentoSelecionado === '1') {
                 $('#cartaoModal').removeClass('hidden');
             } else {
@@ -805,7 +833,7 @@ $(document).ready(function() {
             }
         } finally {
             // Reabilitar botão
-            $botao.prop('disabled', false).text('Finalizar Compra');
+            $botao.prop('disabled', false).find('span').text(textoOriginal);
         }
     });
 
@@ -944,6 +972,30 @@ $(document).ready(function() {
     }
 
     // ==================== FUNÇÕES UTILITÁRIAS ====================
+
+    // Função para bloquear/desbloquear botão de finalizar compra
+    function bloquearBotaoFinalizarCompra(bloquear) {
+        const $botao = $('#finalizarCompra');
+        
+        if (bloquear) {
+            $botao.prop('disabled', true)
+                  .addClass('bg-gray-400 cursor-not-allowed')
+                  .removeClass('bg-green-600 hover:bg-green-700');
+            
+            // Atualizar texto do botão
+            const textoOriginal = $botao.find('span').text();
+            $botao.find('span').text('Sincronizando...');
+            $botao.data('texto-original', textoOriginal);
+        } else {
+            $botao.prop('disabled', false)
+                  .removeClass('bg-gray-400 cursor-not-allowed')
+                  .addClass('bg-green-600 hover:bg-green-700');
+            
+            // Restaurar texto original
+            const textoOriginal = $botao.data('texto-original') || 'Finalizar Compra';
+            $botao.find('span').text(textoOriginal);
+        }
+    }
 
     // Função para recuperar dados de pagamento do localStorage
     window.getPagamentoData = function() {
