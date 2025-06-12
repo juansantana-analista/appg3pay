@@ -300,7 +300,7 @@ $(document).ready(function() {
             const itemHtml = `
                 <div class="item-carrinho" data-produto-id="${item.produto_id}">
                     <div class="area-img">
-                        <img src="${item.foto || 'img/placeholder.jpg'}" alt="${item.nome}">
+                        <img src="https://vitatophomologa.tecskill.com.br/${item.foto || 'img/placeholder.jpg'}" alt="${item.nome}">
                     </div>
                     <div class="area-details">
                         <div class="sup">
