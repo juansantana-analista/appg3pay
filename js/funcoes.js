@@ -3630,6 +3630,11 @@ function listarCarrinho() {
 
             $("#listaCarrinho").append(itemDiv);
           });
+          
+          // --- INÍCIO DA MODIFICAÇÃO ---
+
+          let debounceTimer;
+          const DEBOUNCE_DELAY = 1000; // 1000 ms = 1 segundo. Altere aqui se desejar.
 
           $(".delete-item").on("click", function () {
             var produtoId = $(this).data("produto-id");
@@ -3644,14 +3649,31 @@ function listarCarrinho() {
           });
 
           $(".minus").on("click", function () {
-            var produtoId = $(this).data("produto-id");
-            var quantidade = $(this).data("produto-qtde");
-            var qtdeAtualizada = quantidade - 1;
+            const $button = $(this);
+            const produtoId = $button.data("produto-id");
+            let quantidade = parseInt($button.data("produto-qtde"));
+            
+            const $quantitySpan = $button.siblings("span.w-8");
+            const $plusButton = $button.siblings(".plus");
 
-            //SE TEM MAIS DE UM ITEM NA QUANTIDADE
             if (quantidade > 1) {
-              alterarCarrinho(pessoaIdCarrinho, produtoId, qtdeAtualizada);
+              quantidade--;
+              
+              // 1. Atualiza a UI imediatamente para feedback do usuário
+              $quantitySpan.text(quantidade);
+              $button.data("produto-qtde", quantidade);
+              $plusButton.data("produto-qtde", quantidade); // Atualiza o botão irmão também
+              
+              // 2. Lógica de Debounce
+              clearTimeout(debounceTimer); // Cancela o temporizador anterior
+              debounceTimer = setTimeout(() => {
+                // Chama a API somente após o usuário parar de clicar
+                alterarCarrinho(pessoaIdCarrinho, produtoId, quantidade);
+              }, DEBOUNCE_DELAY);
+
             } else {
+              // Cancela qualquer alteração pendente antes de perguntar sobre a remoção
+              clearTimeout(debounceTimer); 
               app.dialog.confirm(
                 `Gostaria de remover este item?`,
                 "REMOVER",
@@ -3663,12 +3685,28 @@ function listarCarrinho() {
           });
 
           $(".plus").on("click", function () {
-            var produtoId = $(this).data("produto-id");
-            var quantidade = $(this).data("produto-qtde");
-            var qtdeAtualizada = quantidade + 1;
+            const $button = $(this);
+            const produtoId = $button.data("produto-id");
+            let quantidade = parseInt($button.data("produto-qtde"));
 
-            alterarCarrinho(pessoaIdCarrinho, produtoId, qtdeAtualizada);
+            const $quantitySpan = $button.siblings("span.w-8");
+            const $minusButton = $button.siblings(".minus");
+
+            quantidade++;
+
+            // 1. Atualiza a UI imediatamente
+            $quantitySpan.text(quantidade);
+            $button.data("produto-qtde", quantidade);
+            $minusButton.data("produto-qtde", quantidade);
+
+            // 2. Lógica de Debounce
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+              alterarCarrinho(pessoaIdCarrinho, produtoId, quantidade);
+            }, DEBOUNCE_DELAY);
           });
+
+          // --- FIM DA MODIFICAÇÃO ---
 
           //MOSTRAR O SUBTOTAL
           $("#subtotal").html(
