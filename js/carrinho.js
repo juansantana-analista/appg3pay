@@ -15,8 +15,9 @@ $(document).ready(function() {
     let enderecosDisponiveis = [];
     let enderecoSelecionado = null;
     let metodoPagamentoSelecionado = '3'; // PIX por padrão
-    let requisicoesPendentes = new Set(); // Controlar requisições pendentes
-    let timeoutQuantidade = null; // Timeout para debounce
+    let requisicoesPendentes = new Set(); 
+    let timeoutSincronizacao = null; // Timeout para sincronização
+    let sincronizandoCarrinho = false; // Flag para evitar conflitos
 
     // Verificar se as variáveis necessárias estão disponíveis
     if (!userAuthToken) {
@@ -133,12 +134,91 @@ $(document).ready(function() {
         }
     }
 
-    // ==================== FUNÇÕES DE CARRINHO ====================
+    // ==================== FUNÇÕES DE CARRINHO LOCAL ====================
 
-    // Carregar carrinho
-    async function carregarCarrinho() {
+    // Salvar carrinho no localStorage
+    function salvarCarrinhoLocal(carrinho) {
         try {
-            console.log('Carregando carrinho para pessoa ID:', pessoaId);
+            const carrinhoJson = JSON.stringify(carrinho);
+            localStorage.setItem(`carrinho_${pessoaId}`, carrinhoJson);
+            console.log('Carrinho salvo localmente:', carrinho);
+        } catch (error) {
+            console.error('Erro ao salvar carrinho local:', error);
+        }
+    }
+
+    // Carregar carrinho do localStorage
+    function carregarCarrinhoLocal() {
+        try {
+            const carrinhoJson = localStorage.getItem(`carrinho_${pessoaId}`);
+            if (carrinhoJson) {
+                const carrinho = JSON.parse(carrinhoJson);
+                console.log('Carrinho carregado localmente:', carrinho);
+                return carrinho;
+            }
+        } catch (error) {
+            console.error('Erro ao carregar carrinho local:', error);
+        }
+        return null;
+    }
+
+    // Limpar carrinho local
+    function limparCarrinhoLocal() {
+        localStorage.removeItem(`carrinho_${pessoaId}`);
+    }
+
+    // Sincronizar carrinho local com servidor
+    async function sincronizarCarrinho() {
+        if (sincronizandoCarrinho) return;
+        
+        sincronizandoCarrinho = true;
+        console.log('Sincronizando carrinho com servidor...');
+
+        try {
+            const carrinhoLocal = carregarCarrinhoLocal();
+            if (!carrinhoLocal || !carrinhoLocal.itens) {
+                sincronizandoCarrinho = false;
+                return;
+            }
+
+            // Enviar atualizações para o servidor
+            for (const item of carrinhoLocal.itens) {
+                try {
+                    await makeApiRequest('PagamentoSafe2payRest', 'AlterarCarrinho', {
+                        pessoa_id: pessoaId,
+                        produto_id: item.produto_id,
+                        quantidade: item.quantidade
+                    });
+                } catch (error) {
+                    console.error('Erro ao sincronizar item:', item.produto_id, error);
+                }
+            }
+
+            // Após sincronizar, recarregar do servidor para confirmar
+            await carregarCarrinhoServidor();
+            
+        } catch (error) {
+            console.error('Erro na sincronização:', error);
+        } finally {
+            sincronizandoCarrinho = false;
+        }
+    }
+
+    // Agendar sincronização
+    function agendarSincronizacao() {
+        if (timeoutSincronizacao) {
+            clearTimeout(timeoutSincronizacao);
+        }
+        
+        timeoutSincronizacao = setTimeout(() => {
+            sincronizarCarrinho();
+        }, 2000); // Sincronizar após 2 segundos de inatividade
+    }
+
+    // Carregar carrinho do servidor
+    async function carregarCarrinhoServidor() {
+        try {
+            console.log('Carregando carrinho do servidor para pessoa ID:', pessoaId);
             
             const response = await makeApiRequest('PagamentoSafe2payRest', 'ListarCarrinho', {
                 pessoa_id: pessoaId
@@ -146,25 +226,59 @@ $(document).ready(function() {
 
             console.log('Resposta completa carrinho:', response);
 
-            // A resposta vem aninhada: response.data.data contém os dados do carrinho
             if (response.status === 'success' && response.data.status === 'sucess') {
                 carrinhoData = response.data.data;
-                console.log('Dados do carrinho:', carrinhoData);
+                console.log('Dados do carrinho do servidor:', carrinhoData);
+                
+                // Salvar no localStorage
+                salvarCarrinhoLocal(carrinhoData);
+                
                 renderizarCarrinho();
                 atualizarResumo();
             } else {
                 console.error('Erro ao carregar carrinho:', response.data?.message || response.message);
-                // Inicializar carrinho vazio em caso de erro
-                carrinhoData = { itens: [], total: 0, total_sem_desconto: 0, valor_frete: 0 };
-                renderizarCarrinho();
-                atualizarResumo();
+                // Se falhar, usar versão local se disponível
+                const carrinhoLocal = carregarCarrinhoLocal();
+                if (carrinhoLocal) {
+                    carrinhoData = carrinhoLocal;
+                    renderizarCarrinho();
+                    atualizarResumo();
+                } else {
+                    carrinhoData = { itens: [], total: 0, total_sem_desconto: 0, valor_frete: 0 };
+                    renderizarCarrinho();
+                    atualizarResumo();
+                }
             }
         } catch (error) {
-            console.error('Erro ao carregar carrinho:', error);
-            carrinhoData = { itens: [], total: 0, total_sem_desconto: 0, valor_frete: 0 };
+            console.error('Erro ao carregar carrinho do servidor:', error);
+            
+            // Em caso de erro, usar versão local
+            const carrinhoLocal = carregarCarrinhoLocal();
+            if (carrinhoLocal) {
+                carrinhoData = carrinhoLocal;
+                console.log('Usando carrinho local devido a erro do servidor');
+            } else {
+                carrinhoData = { itens: [], total: 0, total_sem_desconto: 0, valor_frete: 0 };
+            }
+            
             renderizarCarrinho();
             atualizarResumo();
         }
+    }
+
+    // Função principal para carregar carrinho (tenta local primeiro)
+    async function carregarCarrinho() {
+        // Primeiro, tentar carregar do localStorage para resposta rápida
+        const carrinhoLocal = carregarCarrinhoLocal();
+        if (carrinhoLocal) {
+            carrinhoData = carrinhoLocal;
+            renderizarCarrinho();
+            atualizarResumo();
+            console.log('Carrinho carregado do localStorage');
+        }
+
+        // Depois, carregar do servidor em background
+        await carregarCarrinhoServidor();
     }
 
     // Renderizar itens do carrinho
@@ -212,110 +326,136 @@ $(document).ready(function() {
             listaCarrinho.append(itemHtml);
         });
         
-        // Adicionar estilo para botões desabilitados
-        if (!$('style#disable-buttons').length) {
-            $('head').append(`
-                <style id="disable-buttons">
-                    .minus.disabled, .plus.disabled {
-                        opacity: 0.5;
-                        cursor: not-allowed !important;
-                    }
-                </style>
-            `);
+        // Mostrar indicador se há sincronização pendente
+        if (timeoutSincronizacao) {
+            if (!$('.sync-indicator').length) {
+                $('body').append(`
+                    <div class="sync-indicator" style="position: fixed; top: 20px; right: 20px; background: #4CAF50; color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; z-index: 1000;">
+                        <i class="mdi mdi-sync mdi-spin"></i> Sincronizando...
+                    </div>
+                `);
+            }
+        } else {
+            $('.sync-indicator').remove();
         }
     }
 
-    // Alterar quantidade de item com debounce
+    // Alterar quantidade localmente (sem requisição imediata)
     window.alterarQuantidade = function(produtoId, novaQuantidade) {
-        // Limpar timeout anterior se existir
-        if (timeoutQuantidade) {
-            clearTimeout(timeoutQuantidade);
-        }
-        
-        // Atualizar UI imediatamente para feedback visual
-        const itemElement = $(`.item-carrinho[data-produto-id="${produtoId}"] .qtd-item`);
-        itemElement.val(novaQuantidade);
-        
-        // Desabilitar botões temporariamente
-        const itemContainer = $(`.item-carrinho[data-produto-id="${produtoId}"]`);
-        itemContainer.find('.minus, .plus').addClass('disabled').css('pointer-events', 'none');
+        console.log(`Alterando quantidade do produto ${produtoId} para ${novaQuantidade}`);
         
         if (novaQuantidade <= 0) {
-            removerItem(produtoId);
+            removerItemLocal(produtoId);
             return;
         }
 
-        // Usar debounce para evitar múltiplas requisições
-        timeoutQuantidade = setTimeout(async () => {
-            try {
-                const response = await makeApiRequest('PagamentoSafe2payRest', 'AlterarCarrinho', {
-                    pessoa_id: pessoaId,
-                    produto_id: produtoId,
-                    quantidade: novaQuantidade
-                });
-
-                if (response.status === 'success' && response.data.status === 'sucess') {
-                    // Recarregar carrinho após sucesso
-                    await carregarCarrinho();
-                } else {
-                    alert('Erro ao alterar quantidade: ' + (response.data?.message || response.message));
-                    // Reverter valor em caso de erro
-                    carregarCarrinho();
-                }
-            } catch (error) {
-                console.error('Erro ao alterar quantidade:', error);
-                alert('Erro ao alterar quantidade');
-                // Reverter valor em caso de erro
-                carregarCarrinho();
-            } finally {
-                // Reabilitar botões
-                itemContainer.find('.minus, .plus').removeClass('disabled').css('pointer-events', 'auto');
+        // Atualizar carrinho local imediatamente
+        if (carrinhoData.itens) {
+            const item = carrinhoData.itens.find(i => i.produto_id == produtoId);
+            if (item) {
+                const quantidadeAnterior = parseInt(item.quantidade);
+                const precoUnitario = parseFloat(item.preco_unitario);
+                
+                // Atualizar quantidade e recalcular preços
+                item.quantidade = novaQuantidade;
+                item.preco_total = (precoUnitario * novaQuantidade).toFixed(2);
+                
+                // Recalcular totais
+                recalcularTotais();
+                
+                // Salvar no localStorage
+                salvarCarrinhoLocal(carrinhoData);
+                
+                // Atualizar interface
+                renderizarCarrinho();
+                atualizarResumo();
+                
+                // Agendar sincronização com servidor
+                agendarSincronizacao();
+                
+                console.log(`Quantidade alterada de ${quantidadeAnterior} para ${novaQuantidade}`);
             }
-        }, 500); // Aguardar 500ms antes de fazer a requisição
-    };
-
-    // Remover item do carrinho
-    window.removerItem = async function(produtoId) {
-        if (!confirm('Deseja remover este item do carrinho?')) return;
-
-        try {
-            const response = await makeApiRequest('PagamentoSafe2payRest', 'ExcluirCarrinho', {
-                pessoa_id: pessoaId,
-                produto_id: produtoId
-            });
-
-            if (response.status === 'success' && response.data.status === 'sucess') {
-                carregarCarrinho();
-            } else {
-                alert('Erro ao remover item: ' + (response.data?.message || response.message));
-            }
-        } catch (error) {
-            console.error('Erro ao remover item:', error);
-            alert('Erro ao remover item');
         }
     };
 
+    // Remover item localmente
+    function removerItemLocal(produtoId) {
+        if (carrinhoData.itens) {
+            const index = carrinhoData.itens.findIndex(i => i.produto_id == produtoId);
+            if (index !== -1) {
+                carrinhoData.itens.splice(index, 1);
+                
+                // Recalcular totais
+                recalcularTotais();
+                
+                // Salvar no localStorage
+                salvarCarrinhoLocal(carrinhoData);
+                
+                // Atualizar interface
+                renderizarCarrinho();
+                atualizarResumo();
+                
+                // Agendar sincronização com servidor
+                agendarSincronizacao();
+                
+                console.log(`Item ${produtoId} removido localmente`);
+            }
+        }
+    }
+
+    // Recalcular totais do carrinho
+    function recalcularTotais() {
+        if (!carrinhoData.itens) return;
+        
+        let totalSemDesconto = 0;
+        let total = 0;
+        
+        carrinhoData.itens.forEach(item => {
+            const precoOriginalTotal = parseFloat(item.preco_original) * parseInt(item.quantidade);
+            const precoTotal = parseFloat(item.preco_total);
+            
+            totalSemDesconto += precoOriginalTotal;
+            total += precoTotal;
+        });
+        
+        carrinhoData.total_sem_desconto = totalSemDesconto.toFixed(2);
+        carrinhoData.total = total.toFixed(2);
+        
+        console.log('Totais recalculados:', { totalSemDesconto, total });
+    }
+
+    // Remover item do carrinho
+    window.removerItem = function(produtoId) {
+        if (!confirm('Deseja remover este item do carrinho?')) return;
+        removerItemLocal(produtoId);
+    };
+
     // Limpar carrinho
-    $('#esvaziar').on('click', async function(e) {
+    $('#esvaziar').on('click', function(e) {
         e.preventDefault();
         
         if (!confirm('Deseja esvaziar todo o carrinho?')) return;
 
-        try {
-            const response = await makeApiRequest('PagamentoSafe2payRest', 'LimparCarrinho', {
-                pessoa_id: pessoaId
-            });
+        // Limpar localmente primeiro
+        carrinhoData = { itens: [], total: 0, total_sem_desconto: 0, valor_frete: 0 };
+        salvarCarrinhoLocal(carrinhoData);
+        renderizarCarrinho();
+        atualizarResumo();
+        
+        $('.popover-menu').removeClass('modal-in').addClass('modal-out');
 
+        // Sincronizar com servidor em background
+        makeApiRequest('PagamentoSafe2payRest', 'LimparCarrinho', {
+            pessoa_id: pessoaId
+        }).then(response => {
             if (response.status === 'success' && response.data.status === 'sucess') {
-                carregarCarrinho();
-                $('.popover-menu').removeClass('modal-in').addClass('modal-out');
+                console.log('Carrinho limpo no servidor');
             } else {
-                alert('Erro ao limpar carrinho: ' + (response.data?.message || response.message));
+                console.error('Erro ao limpar carrinho no servidor:', response.data?.message || response.message);
             }
-        } catch (error) {
-            console.error('Erro ao limpar carrinho:', error);
-            alert('Erro ao limpar carrinho');
-        }
+        }).catch(error => {
+            console.error('Erro ao limpar carrinho no servidor:', error);
+        });
     });
 
     // Atualizar resumo do pedido
@@ -621,11 +761,17 @@ $(document).ready(function() {
 
     // ==================== FUNÇÕES DE PAGAMENTO ====================
 
-    // Finalizar compra
-    $('#finalizarCompra').on('click', function() {
+    // Finalizar compra (sincronizar antes de processar)
+    $('#finalizarCompra').on('click', async function() {
         if (!enderecoSelecionado) {
             alert('Por favor, selecione um endereço de entrega');
             return;
+        }
+
+        // Sincronizar carrinho antes de finalizar
+        if (timeoutSincronizacao) {
+            alert('Aguarde, sincronizando carrinho...');
+            await sincronizarCarrinho();
         }
 
         if (metodoPagamentoSelecionado === '1') {
