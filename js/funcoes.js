@@ -3634,7 +3634,7 @@ function listarCarrinho() {
           // --- INÍCIO DA MODIFICAÇÃO ---
 
           let debounceTimer;
-          const DEBOUNCE_DELAY = 1000; // 1000 ms = 1 segundo. Altere aqui se desejar.
+          const DEBOUNCE_DELAY = 2000; // 1000 ms = 1 segundo. Altere aqui se desejar.
 
           $(".delete-item").on("click", function () {
             var produtoId = $(this).data("produto-id");
