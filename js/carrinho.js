@@ -879,35 +879,11 @@ $(document).ready(function() {
                 // Fechar modal de cartão se estiver aberto
                 $('#cartaoModal').addClass('hidden');
                 
-                // Redirecionar baseado no tipo de pagamento
-                switch(metodoPagamentoSelecionado) {
-                    case '1': // Cartão
-                        if (typeof app !== 'undefined' && app.views && app.views.main) {
-                            app.views.main.router.navigate("/pagamento-cartao/");
-                        } else {
-                            window.location.href = '/pagamento-cartao/';
-                        }
-                        break;
-                    case '2': // Boleto
-                        if (typeof app !== 'undefined' && app.views && app.views.main) {
-                            app.views.main.router.navigate("/pagamento-boleto/");
-                        } else {
-                            window.location.href = '/pagamento-boleto/';
-                        }
-                        break;
-                    case '3': // PIX
-                        if (typeof app !== 'undefined' && app.views && app.views.main) {
-                            app.views.main.router.navigate("/pagamento-pix/");
-                        } else {
-                            window.location.href = '/pagamento-pix/';
-                        }
-                        break;
-                    default:
-                        if (typeof app !== 'undefined' && app.views && app.views.main) {
-                            app.views.main.router.navigate("/pagamento/");
-                        } else {
-                            window.location.href = '/pagamento/';
-                        }
+                // Redirecionar sempre para a mesma página de pagamento
+                if (typeof app !== 'undefined' && app.views && app.views.main) {
+                    app.views.main.router.navigate("/pagamento/");
+                } else {
+                    window.location.href = '/pagamento/';
                 }
                 
                 // Mostrar mensagem de sucesso
