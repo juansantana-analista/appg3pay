@@ -880,14 +880,7 @@ $(document).ready(function() {
                 $('#cartaoModal').addClass('hidden');
                 
                 // Redirecionar sempre para a mesma página de pagamento
-                if (typeof app !== 'undefined' && app.views && app.views.main) {
-                    app.views.main.router.navigate("/pagamento/");
-                } else {
-                    window.location.href = '/pagamento/';
-                }
-                
-                // Mostrar mensagem de sucesso
-                alert('Pedido criado com sucesso! Você será redirecionado para a página de pagamento.');
+                app.views.main.router.navigate("/pagamento/");
                 
             } else {
                 alert('Erro ao processar pagamento: ' + (response.data?.message || response.message));
