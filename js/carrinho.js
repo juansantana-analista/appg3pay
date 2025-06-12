@@ -306,9 +306,6 @@ $(document).ready(function() {
                     <a href="/home/" class="text-blue-600 mt-2 inline-block">Continuar comprando</a>
                 </div>
             `);
-            
-            // Desbloquear botão se carrinho vazio
-            bloquearBotaoFinalizarCompra(false);
             return;
         }
 
@@ -324,61 +321,23 @@ $(document).ready(function() {
                         <div class="flex justify-between">
                             <h3 class="font-medium">${item.nome}</h3>
                             <button class="text-red-500 delete-item" style="width: 30px;" data-produto-id="${item.produto_id}">
-                                <svg
-                                    class="w-5 h-5"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                    ></path>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                 </svg>
                             </button>
                         </div>
                         <p class="text-gray-500 text-sm mb-2">Premium</p>
                         <div class="flex justify-between items-center">
                             <div class="flex items-center space-x-2">
-                                <button
-                                    class="minus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
-                                    data-produto-id="${item.produto_id}" 
-                                    data-produto-qtde="${item.quantidade}"
-                                >
-                                    <svg
-                                        class="w-4 h-4"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M20 12H4"
-                                        ></path>
+                                <button class="minus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center" data-produto-id="${item.produto_id}" data-produto-qtde="${item.quantidade}">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
                                     </svg>
                                 </button>
                                 <span class="w-8 text-center">${item.quantidade}</span>
-                                <button
-                                    class="plus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
-                                    data-produto-id="${item.produto_id}" 
-                                    data-produto-qtde="${item.quantidade}"
-                                >
-                                    <svg
-                                        class="w-4 h-4"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M12 4v16m8-8H4"
-                                        ></path>
+                                <button class="plus w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center" data-produto-id="${item.produto_id}" data-produto-qtde="${item.quantidade}">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                                     </svg>
                                 </button>
                             </div>
@@ -391,39 +350,30 @@ $(document).ready(function() {
             listaCarrinho.append(itemHtml);
         });
 
-        // Adicionar eventos aos botões usando delegação de eventos
-        $(document).off('click', '.minus, .plus, .delete-item').on('click', '.minus, .plus, .delete-item', function(e) {
-            e.preventDefault();
-            
-            const $button = $(this);
-            const produtoId = $button.data('produto-id');
-            const quantidadeAtual = parseInt($button.data('produto-qtde'));
-            
-            if ($button.hasClass('minus')) {
-                alterarQuantidade(produtoId, quantidadeAtual - 1);
-            } else if ($button.hasClass('plus')) {
-                alterarQuantidade(produtoId, quantidadeAtual + 1);
-            } else if ($button.hasClass('delete-item')) {
-                removerItem(produtoId);
-            }
+        // Adicionar eventos de clique para os novos botões
+        $('.delete-item').off('click').on('click', function() {
+            const produtoId = $(this).data('produto-id');
+            removerItem(produtoId);
+        });
+
+        $('.minus').off('click').on('click', function() {
+            const produtoId = $(this).data('produto-id');
+            const quantidadeAtual = parseInt($(this).data('produto-qtde'));
+            alterarQuantidade(produtoId, quantidadeAtual - 1);
+        });
+
+        $('.plus').off('click').on('click', function() {
+            const produtoId = $(this).data('produto-id');
+            const quantidadeAtual = parseInt($(this).data('produto-qtde'));
+            alterarQuantidade(produtoId, quantidadeAtual + 1);
         });
         
-        // Gerenciar estado do botão de finalizar compra baseado na sincronização
-        const temSincronizacaoPendente = timeoutSincronizacao !== null;
-        const estaSincronizando = sincronizandoCarrinho;
-        
-        if (temSincronizacaoPendente || estaSincronizando) {
-            bloquearBotaoFinalizarCompra(true);
-        } else {
-            bloquearBotaoFinalizarCompra(false);
-        }
-        
-        // Mostrar indicador discreto se há sincronização pendente (mas não durante sincronização ativa)
-        if (temSincronizacaoPendente && !estaSincronizando) {
+        // Mostrar indicador discreto se há sincronização pendente (mas não preloader)
+        if (timeoutSincronizacao && !sincronizandoCarrinho) {
             if (!$('.sync-indicator').length) {
                 $('body').append(`
-                    <div class="sync-indicator" style="position: fixed; top: 20px; right: 20px; background: #FF9800; color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
-                        <i class="mdi mdi-sync mdi-spin"></i> Aguardando sincronização...
+                    <div class="sync-indicator" style="position: fixed; top: 20px; right: 20px; background: #4CAF50; color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; z-index: 1000;">
+                        <i class="mdi mdi-sync mdi-spin"></i> Pendente
                     </div>
                 `);
             }
