@@ -64,7 +64,7 @@ $(document).ready(function() {
             const response = await makeApiRequest('PagamentoSafe2payRest', 'ListarCarrinho', {
                 pessoa_id: pessoaId
             });
-
+            console.log(response);
             if (response.status === 'sucess') {
                 carrinhoData = response.data;
                 renderizarCarrinho();
