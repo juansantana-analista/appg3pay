@@ -475,7 +475,7 @@ var app = new Framework7({
               );
             } else {
               //START Fazendo a requisição
-              fetch('https://vitatophomologa.tecskill.com.br/api/auth_app.php', {
+              fetch('https://vitatophomologa.tecskill.com.br/api/auth_app_homolog.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
