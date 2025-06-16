@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatop.tecskill.com.br/rest.php";
-const versionApp = "2.3.2";
+const versionApp = "2.3.5";
 var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -1582,8 +1582,86 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
-    buscarQtdeNotif();
-    contarCarrinho();
+            const retryButton = document.getElementById('retryButton');
+            const connectionStatus = document.getElementById('connectionStatus');
+
+            // Função para verificar conexão
+            function checkConnection() {
+                return navigator.onLine;
+            }
+
+            // Função para atualizar status de conexão
+            function updateConnectionStatus() {
+                const isOnline = checkConnection();
+                
+                if (isOnline) {
+                    connectionStatus.innerHTML = '<i class="mdi mdi-wifi"></i> Conectado';
+                    connectionStatus.classList.add('online');
+                    
+                    // Redirecionar para home após 2 segundos
+                    setTimeout(() => {
+                        if (window.app && window.app.views && window.app.views.main) {
+                            window.app.views.main.router.navigate('/home/');
+                        } else {
+                            window.location.href = 'index.html';
+                        }
+                    }, 2000);
+                } else {
+                    connectionStatus.innerHTML = '<i class="mdi mdi-wifi-off"></i> Sem conexão';
+                    connectionStatus.classList.remove('online');
+                }
+            }
+
+            // Função para tentar reconectar
+            function attemptReconnection() {
+                const button = retryButton;
+                const icon = button.querySelector('i');
+                const originalText = button.innerHTML;
+                
+                // Mostrar estado de carregamento
+                button.classList.add('loading');
+                button.innerHTML = '<i class="mdi mdi-loading"></i> Verificando<span class="loading-dots"></span>';
+                button.disabled = true;
+                
+                // Simular verificação (tempo mínimo para melhor UX)
+                setTimeout(() => {
+                    updateConnectionStatus();
+                    
+                    // Restaurar botão
+                    button.classList.remove('loading');
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                    
+                    if (!checkConnection()) {
+                        // Mostrar feedback se ainda offline
+                        button.style.background = '#ff4757';
+                        button.innerHTML = '<i class="mdi mdi-close"></i> Ainda offline';
+                        
+                        setTimeout(() => {
+                            button.style.background = '';
+                            button.innerHTML = originalText;
+                        }, 2000);
+                    }
+                }, 1500);
+            }
+
+            // Event listeners
+            retryButton.addEventListener('click', attemptReconnection);
+
+            // Detectar mudanças na conexão
+            window.addEventListener('online', function() {
+                updateConnectionStatus();
+            });
+
+            window.addEventListener('offline', function() {
+                updateConnectionStatus();
+            });
+
+            // Verificação inicial
+            updateConnectionStatus();
+
+            // Verificação periódica (a cada 5 segundos)
+            setInterval(updateConnectionStatus, 5000);
     
           // fazer algo quando a página for inicializada      
         },
