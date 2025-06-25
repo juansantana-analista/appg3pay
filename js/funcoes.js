@@ -1711,7 +1711,8 @@ function detalhesVenda() {
         responseJson.data &&
         responseJson.data.data
       ) {
-        const detalhes = responseJson.data.data[0];
+        const detalhes = responseJson?.data?.data?.data?.[0];
+
         console.log(detalhes);
         const detalhesContainer = document.getElementById("detalhesVenda");
         detalhesContainer.innerHTML = "";
