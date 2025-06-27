@@ -1154,8 +1154,12 @@ function buscarPessoaId(userId) {
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (responseJson.status === "success") {
-        const pessoaId = responseJson.data[0].id;
-        localStorage.setItem("pessoaId", pessoaId);
+        const maiorId = responseJson.data.reduce((max, pessoa) => {
+          const idNum = parseInt(pessoa.id, 10);
+          return idNum > max ? idNum : max;
+        }, 0);
+
+        localStorage.setItem("pessoaId", maiorId);
         app.dialog.close();
       } else {
         app.dialog.close();
