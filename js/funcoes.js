@@ -1136,7 +1136,9 @@ function buscarPessoaId(userId) {
   const body = JSON.stringify({
     class: "PessoaRest",
     method: "loadAll",
-    filters: [["user_id", "=", userId]],
+    filters: [["user_id", "=", userId]], 
+    order: "id",
+    direction: "desc"
   });
 
   // Opções da requisição
