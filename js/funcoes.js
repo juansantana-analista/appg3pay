@@ -1,23 +1,39 @@
 var appId = "Bearer " + getCookie("userAuthToken");
 // Início função validar login
 function validarToken() {
-  const userAuthToken = getCookie("userAuthToken"); // Lê o token do cookie
+  const userAuthToken = getCookie("userAuthToken");
 
   if (!userAuthToken) {
+    console.log("Token não encontrado");
     return false;
   }
 
   try {
-    // Dividir o token e pegar o payload (segunda parte do JWT)
     const base64Url = userAuthToken.split(".")[1];
     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
     const payload = JSON.parse(atob(base64));
 
-    // Verificar se há um campo expires e se ele ainda é válido
-    const currentTime = Math.floor(Date.now() / 1000); // Tempo atual em segundos
-    return payload.expires && payload.expires > currentTime;
+    const currentTime = Math.floor(Date.now() / 1000);
+    const isValid = payload.expires && payload.expires > currentTime;
+    
+    if (!isValid) {
+      console.log("Token expirado");
+      // Limpa dados expirados - IMPORTANTE PARA iOS
+      deleteCookie('userAuthToken');
+      if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+        localStorage.clear();
+        sessionStorage.clear();
+      }
+    }
+    
+    return isValid;
   } catch (error) {
     console.error("Erro ao decodificar o token:", error);
+    deleteCookie('userAuthToken');
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+      localStorage.clear();
+      sessionStorage.clear();
+    }
     return false;
   }
 }

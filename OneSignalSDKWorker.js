@@ -1,7 +1,7 @@
 importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
 
-const CACHE = "pwabuilder-cache-v4";
+const CACHE = "pwabuilder-cache-v6"; // MUDEI A VERSÃO AQUI
 const offlineFallbackPage = "offline.html";
 
 self.addEventListener("install", (event) => {
@@ -10,7 +10,7 @@ self.addEventListener("install", (event) => {
       return cache.add(offlineFallbackPage);
     })
   );
-  self.skipWaiting(); // Garante que o novo SW seja ativado imediatamente
+  self.skipWaiting();
 });
 
 // Limpa caches antigos ao ativar um novo SW
@@ -45,12 +45,14 @@ if (workbox.navigationPreload.isSupported()) {
   workbox.navigationPreload.enable();
 }
 
-// Intercepta requisições
+// Intercepta requisições - NOVA ESTRATÉGIA PARA iOS
 self.addEventListener("fetch", (event) => {
   if (event.request.mode === "navigate") {
-    // Força atualização imediata do HTML
+    // Para páginas HTML - sempre busca do servidor no iOS
     event.respondWith(
-      fetch(event.request, { cache: "no-store" }).catch(async () => {
+      fetch(event.request, { 
+        cache: "no-store" 
+      }).catch(async () => {
         const cache = await caches.open(CACHE);
         return cache.match(offlineFallbackPage);
       })
@@ -58,26 +60,25 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-event.respondWith(
-  caches.open(CACHE).then(async (cache) => {
-    try {
-      const response = await fetch(event.request);
+  // Para outros recursos
+  event.respondWith(
+    caches.open(CACHE).then(async (cache) => {
+      try {
+        const response = await fetch(event.request);
 
-      // Só faz cache de requisições GET
-      if (event.request.method === 'GET') {
-        cache.put(event.request, response.clone());
+        // Só faz cache de requisições GET
+        if (event.request.method === 'GET') {
+          cache.put(event.request, response.clone());
+        }
+
+        return response;
+      } catch (error) {
+        if (event.request.method === 'GET') {
+          return cache.match(event.request) || fetch(event.request);
+        } else {
+          throw error;
+        }
       }
-
-      return response;
-    } catch (error) {
-      if (event.request.method === 'GET') {
-        return cache.match(event.request) || fetch(event.request);
-      } else {
-        throw error;
-      }
-    }
-  })
-);
-
+    })
+  );
 });
-
