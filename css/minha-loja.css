@@ -707,6 +707,17 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.add-banner-card h4 {
+  color: #333;
+  margin-bottom: 5px;
+  font-size: 18px;
+}
+
+.add-banner-card p {
+  line-height: 1.4;
+  margin-bottom: 0;
+}
+
 .btn-add-banner {
   background: linear-gradient(135deg, #00591F, #7CBE42);
   color: white;
@@ -724,9 +735,16 @@
   width: 100%;
 }
 
-.btn-add-banner:hover {
+.btn-add-banner:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(0, 89, 31, 0.3);
+}
+
+.btn-add-banner:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .banners-list {

@@ -27,10 +27,9 @@ function verificarLoja() {
     .then((responseJson) => {
       app.dialog.close();
       
-        console.log(responseJson);
       if (responseJson.status === "success" && responseJson.data.tem_loja) {
         // Usuário já tem loja - mostrar tela de gerenciamento
-        const loja = responseJson.data;
+        const loja = responseJson.data.data;
         localStorage.setItem("minhaLoja", JSON.stringify(loja));
         mostrarTelaGerenciamento(loja);
         carregarBannersLoja(loja.id);
@@ -58,16 +57,15 @@ function mostrarTelaBemVindo() {
 
 // Mostrar tela de gerenciamento
 function mostrarTelaGerenciamento(loja) {
-    console.log(loja);
   $("#welcome-screen").addClass("display-none");
   $("#create-form").addClass("display-none");
   $("#manage-screen").removeClass("display-none");
 
   // Atualizar dados da loja na tela
-  $("#nomeLojaAtual").text(loja.data.nome_loja);
+  $("#nomeLojaAtual").text(loja.nome_loja);
   
   // Gerar link da loja
-  const linkLoja = `https://vitatop.tecskill.com.br/loja/${loja.data.id}`;
+  const linkLoja = `https://vitatop.tecskill.com.br/loja/${loja.id}`;
   localStorage.setItem("linkLoja", linkLoja);
 }
 
@@ -284,6 +282,14 @@ function carregarBannersLoja(lojaId) {
           $("#bannerAtual").attr("src", bannerPrincipal.url_arquivo);
         }
       }
+      
+      // Verificar quantos banners já existem para controlar limite
+      const totalBanners = responseJson.data ? responseJson.data.length : 0;
+      if (totalBanners >= 4) {
+        $("#btnAdicionarBanner").prop("disabled", true).html('<i class="mdi mdi-block-helper"></i> Limite de 4 banners atingido');
+      } else {
+        $("#btnAdicionarBanner").prop("disabled", false).html(`<i class="mdi mdi-plus"></i> Adicionar Banner (${totalBanners}/4)`);
+      }
     })
     .catch((error) => {
       console.error("Erro ao carregar banners:", error);
@@ -319,11 +325,62 @@ function exibirBanners(banners) {
 
 // Adicionar novo banner
 function adicionarNovoBanner() {
-  $("#novoBannerInput").click();
+  // Verificar limite de banners antes de abrir seletor
+  const lojaId = JSON.parse(localStorage.getItem("minhaLoja")).id;
+  
+  // Verificar quantos banners ativos existem
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "LojinhaBannerRest", 
+    method: "listarBannersAtivos",
+    lojinha_vitatop_id: lojaId
+  });
+
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      const totalBanners = responseJson.data ? responseJson.data.length : 0;
+      
+      if (totalBanners >= 4) {
+        app.dialog.alert("Você já atingiu o limite máximo de 4 banners por loja.", "Limite atingido");
+        return;
+      }
+      
+      // Se ainda pode adicionar, abrir seletor de arquivo
+      $("#novoBannerInput").click();
+    })
+    .catch((error) => {
+      console.error("Erro:", error);
+      $("#novoBannerInput").click(); // Em caso de erro, permitir tentativa
+    });
 }
 
-// Processar novo banner
+// Processar novo banner com validação de tamanho
 function processarNovoBanner(arquivo) {
+  // Validar tamanho do arquivo (máximo 5MB)
+  const maxSize = 5 * 1024 * 1024; // 5MB em bytes
+  if (arquivo.size > maxSize) {
+    app.dialog.alert("A imagem deve ter no máximo 5MB. Tente uma imagem menor.", "Arquivo muito grande");
+    return;
+  }
+
+  // Validar tipo de arquivo
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+  if (!allowedTypes.includes(arquivo.type)) {
+    app.dialog.alert("Apenas arquivos JPG, JPEG, PNG e GIF são permitidos.", "Formato inválido");
+    return;
+  }
+
   const lojaId = JSON.parse(localStorage.getItem("minhaLoja")).id;
   
   app.dialog.preloader("Adicionando banner...");
