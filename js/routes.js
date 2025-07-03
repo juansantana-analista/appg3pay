@@ -1973,6 +1973,152 @@ var app = new Framework7({
       }
     },    
     {
+      path: '/minha-loja/',
+      url: 'minha-loja.html?v=' + versionApp,
+      animate: false,
+      on: {
+        pageBeforeIn: async function (event, page) {
+          clearLocalStorage();
+          // Início função validar login
+          const isValid = await validarToken();
+          if (!isValid) {
+            window.location.reload(true);
+          }
+          // fazer algo antes da página ser exibida
+          $("#menuPrincipal").show("fast");
+          $("#menuPrincipal").removeClass("display-none");
+        },
+        pageAfterIn: function (event, page) {
+          // fazer algo depois da página ser exibida
+        },
+        pageInit: function (event, page) {            
+          $.getScript('js/minha-loja.js');
+          buscarQtdeNotif();
+          contarCarrinho();
+          
+          // Verificar se usuário já tem loja criada
+          verificarLoja();
+
+          // Event listeners para criação da loja
+          
+          // Botão criar loja
+          $("#btnCriarLoja").on("click", function() {
+            mostrarFormularioCriacao();
+          });
+
+          // Step 1 - Nome da loja
+          $("#nomeLoja").on("input", function() {
+            const nome = $(this).val().trim();
+            $("#previewNome").text(nome || "Nome da sua loja aparecerá aqui");
+            $("#btnStep1Next").prop("disabled", nome.length < 3);
+          });
+
+          $("#btnStep1Next").on("click", function() {
+            proximoStep(1);
+          });
+
+          // Step 2 - Banner
+          $("#uploadArea").on("click", function() {
+            $("#bannerInput").click();
+          });
+
+          $("#bannerInput").on("change", function() {
+            const file = this.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = function(e) {
+                $("#bannerPreview").attr("src", e.target.result);
+                $("#uploadArea").hide();
+                $("#previewBanner").removeClass("display-none");
+              };
+              reader.readAsDataURL(file);
+            }
+          });
+
+          $("#btnRemoveBanner").on("click", function() {
+            $("#bannerInput").val("");
+            $("#previewBanner").addClass("display-none");
+            $("#uploadArea").show();
+          });
+
+          $("#btnStep2Back").on("click", function() {
+            stepAnterior(2);
+          });
+
+          $("#btnStep2Next").on("click", function() {
+            proximoStep(2);
+          });
+
+          // Step 3 - Finalizar
+          $("#btnStep3Back").on("click", function() {
+            stepAnterior(3);
+          });
+
+          $("#btnCopyLink").on("click", function() {
+            copiarLinkLoja();
+          });
+
+          $("#btnFinalizar").on("click", function() {
+            criarLoja();
+          });
+
+          // Event listeners para gerenciamento da loja
+
+          // Editar nome da loja
+          $("#editarNomeLoja").on("click", function() {
+            editarNomeLoja();
+          });
+
+          $("#btnSalvarNome").on("click", function() {
+            salvarNovoNome();
+          });
+
+          // Gerenciar banners
+          $("#gerenciarBanners").on("click", function() {
+            app.popup.open(".popup-banners");
+          });
+
+          $("#btnAdicionarBanner").on("click", function() {
+            adicionarNovoBanner();
+          });
+
+          $("#novoBannerInput").on("change", function() {
+            const file = this.files[0];
+            if (file) {
+              processarNovoBanner(file);
+            }
+          });
+
+          // Ações da loja
+          $("#btnCompartilharLoja").on("click", function() {
+            compartilharLoja();
+          });
+
+          $("#btnVisualizarLoja").on("click", function() {
+            visualizarLoja();
+          });
+
+          // Popup de sucesso
+          $("#btnCompartilharAgora").on("click", function() {
+            compartilharLoja();
+          });
+
+          $("#btnContinuar").on("click", function() {
+            app.popup.close(".popup-sucesso");
+            verificarLoja(); // Recarregar para mostrar tela de gerenciamento
+          });
+
+          // Configurações (placeholder)
+          $("#configuracoes").on("click", function() {
+            app.dialog.alert("Funcionalidade em desenvolvimento!", "Em breve");
+          });
+        },
+        pageBeforeRemove: function (event, page) {
+          // fazer algo antes da página ser removida do DOM
+        },
+      }
+    },
+    {
       path: '/campanhas/',
       url: 'campanhas.html?v=' + versionApp,
       animate: false,
