@@ -1991,39 +1991,57 @@ var app = new Framework7({
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
-        pageInit: function (event, page) {   
+        pageInit: function (event, page) {    
           buscarQtdeNotif();
           contarCarrinho();
           
           // Verificar se usuário já tem loja criada
           verificarLoja();
 
-          // Event listeners para criação da loja
+          // Event listeners para criação da loja - USANDO OFF() PARA EVITAR DUPLICAÇÃO
           
           // Botão criar loja
-          $("#btnCriarLoja").on("click", function() {
+          $("#btnCriarLoja").off('click').on("click", function() {
             mostrarFormularioCriacao();
           });
 
           // Step 1 - Nome da loja
-          $("#nomeLoja").on("input", function() {
+          $("#nomeLoja").off('input').on("input", function() {
             const nome = $(this).val().trim();
             $("#previewNome").text(nome || "Nome da sua loja aparecerá aqui");
             $("#btnStep1Next").prop("disabled", nome.length < 3);
           });
 
-          $("#btnStep1Next").on("click", function() {
+          $("#btnStep1Next").off('click').on("click", function() {
             proximoStep(1);
           });
 
-          // Step 2 - Banner
-          $("#uploadArea").on("click", function() {
+          // Step 2 - Banner - CORREÇÃO PRINCIPAL DO PROBLEMA
+          $("#uploadArea").off('click').on("click", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             $("#bannerInput").click();
           });
 
-          $("#bannerInput").on("change", function() {
+          $("#bannerInput").off('change').on("change", function() {
             const file = this.files[0];
             if (file) {
+              // Validar tamanho do arquivo (máximo 5MB)
+              const maxSize = 5 * 1024 * 1024; // 5MB em bytes
+              if (file.size > maxSize) {
+                app.dialog.alert("A imagem deve ter no máximo 5MB. Tente uma imagem menor.", "Arquivo muito grande");
+                $(this).val(''); // Limpar o input
+                return;
+              }
+
+              // Validar tipo de arquivo
+              const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+              if (!allowedTypes.includes(file.type)) {
+                app.dialog.alert("Apenas arquivos JPG, JPEG, PNG e GIF são permitidos.", "Formato inválido");
+                $(this).val(''); // Limpar o input
+                return;
+              }
+
               const reader = new FileReader();
               reader.onload = function(e) {
                 $("#bannerPreview").attr("src", e.target.result);
@@ -2034,54 +2052,56 @@ var app = new Framework7({
             }
           });
 
-          $("#btnRemoveBanner").on("click", function() {
+          $("#btnRemoveBanner").off('click').on("click", function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             $("#bannerInput").val("");
             $("#previewBanner").addClass("display-none");
             $("#uploadArea").show();
           });
 
-          $("#btnStep2Back").on("click", function() {
+          $("#btnStep2Back").off('click').on("click", function() {
             stepAnterior(2);
           });
 
-          $("#btnStep2Next").on("click", function() {
+          $("#btnStep2Next").off('click').on("click", function() {
             proximoStep(2);
           });
 
           // Step 3 - Finalizar
-          $("#btnStep3Back").on("click", function() {
+          $("#btnStep3Back").off('click').on("click", function() {
             stepAnterior(3);
           });
 
-          $("#btnCopyLink").on("click", function() {
+          $("#btnCopyLink").off('click').on("click", function() {
             copiarLinkLoja();
           });
 
-          $("#btnFinalizar").on("click", function() {
+          $("#btnFinalizar").off('click').on("click", function() {
             criarLoja();
           });
 
           // Event listeners para gerenciamento da loja
 
           // Editar nome da loja
-          $("#editarNomeLoja").on("click", function() {
+          $("#editarNomeLoja").off('click').on("click", function() {
             editarNomeLoja();
           });
 
-          $("#btnSalvarNome").on("click", function() {
+          $("#btnSalvarNome").off('click').on("click", function() {
             salvarNovoNome();
           });
 
           // Gerenciar banners
-          $("#gerenciarBanners").on("click", function() {
+          $("#gerenciarBanners").off('click').on("click", function() {
             app.popup.open(".popup-banners");
           });
 
-          $("#btnAdicionarBanner").on("click", function() {
+          $("#btnAdicionarBanner").off('click').on("click", function() {
             adicionarNovoBanner();
           });
 
-          $("#novoBannerInput").on("change", function() {
+          $("#novoBannerInput").off('change').on("change", function() {
             const file = this.files[0];
             if (file) {
               processarNovoBanner(file);
@@ -2089,28 +2109,29 @@ var app = new Framework7({
           });
 
           // Ações da loja
-          $("#btnCompartilharLoja").on("click", function() {
+          $("#btnCompartilharLoja").off('click').on("click", function() {
             compartilharLoja();
           });
 
-          $("#btnVisualizarLoja").on("click", function() {
+          $("#btnVisualizarLoja").off('click').on("click", function() {
             visualizarLoja();
           });
 
           // Popup de sucesso
-          $("#btnCompartilharAgora").on("click", function() {
+          $("#btnCompartilharAgora").off('click').on("click", function() {
             compartilharLoja();
           });
 
-          $("#btnContinuar").on("click", function() {
+          $("#btnContinuar").off('click').on("click", function() {
             app.popup.close(".popup-sucesso");
             verificarLoja(); // Recarregar para mostrar tela de gerenciamento
           });
 
           // Configurações (placeholder)
-          $("#configuracoes").on("click", function() {
+          $("#configuracoes").off('click').on("click", function() {
             app.dialog.alert("Funcionalidade em desenvolvimento!", "Em breve");
           });
+          
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM

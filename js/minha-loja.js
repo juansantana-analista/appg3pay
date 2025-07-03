@@ -1,4 +1,4 @@
-// Funções para Minha Loja - Adicionar ao arquivo funcoes.js
+// Funções para Minha Loja - VERSÃO CORRIGIDA
 
 // Verificar se o usuário já tem uma loja criada
 function verificarLoja() {
@@ -198,8 +198,23 @@ function criarLoja() {
     });
 }
 
-// Enviar banner da loja
+// Enviar banner da loja - VERSÃO MELHORADA
 function enviarBannerLoja(lojaId, arquivo, callback) {
+  // Validar arquivo antes de processar
+  const maxSize = 5 * 1024 * 1024; // 5MB
+  if (arquivo.size > maxSize) {
+    app.dialog.alert("A imagem deve ter no máximo 5MB. Tente uma imagem menor.", "Arquivo muito grande");
+    if (callback) callback();
+    return;
+  }
+
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+  if (!allowedTypes.includes(arquivo.type)) {
+    app.dialog.alert("Apenas arquivos JPG, JPEG, PNG e GIF são permitidos.", "Formato inválido");
+    if (callback) callback();
+    return;
+  }
+
   const reader = new FileReader();
   reader.onload = function(e) {
     const base64 = e.target.result;
@@ -241,6 +256,11 @@ function enviarBannerLoja(lojaId, arquivo, callback) {
         console.error("Erro ao enviar banner:", error);
         if (callback) callback();
       });
+  };
+  
+  reader.onerror = function() {
+    app.dialog.alert("Erro ao processar a imagem", "Erro");
+    if (callback) callback();
   };
   
   reader.readAsDataURL(arquivo);
@@ -323,10 +343,17 @@ function exibirBanners(banners) {
   });
 }
 
-// Adicionar novo banner
+// Adicionar novo banner - VERSÃO MELHORADA
 function adicionarNovoBanner() {
   // Verificar limite de banners antes de abrir seletor
-  const lojaId = JSON.parse(localStorage.getItem("minhaLoja")).id;
+  const lojaData = localStorage.getItem("minhaLoja");
+  if (!lojaData) {
+    app.dialog.alert("Erro ao obter dados da loja", "Erro");
+    return;
+  }
+  
+  const loja = JSON.parse(lojaData);
+  const lojaId = loja.id;
   
   // Verificar quantos banners ativos existem
   const headers = {
@@ -371,6 +398,7 @@ function processarNovoBanner(arquivo) {
   const maxSize = 5 * 1024 * 1024; // 5MB em bytes
   if (arquivo.size > maxSize) {
     app.dialog.alert("A imagem deve ter no máximo 5MB. Tente uma imagem menor.", "Arquivo muito grande");
+    $("#novoBannerInput").val(''); // Limpar o input
     return;
   }
 
@@ -378,10 +406,18 @@ function processarNovoBanner(arquivo) {
   const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
   if (!allowedTypes.includes(arquivo.type)) {
     app.dialog.alert("Apenas arquivos JPG, JPEG, PNG e GIF são permitidos.", "Formato inválido");
+    $("#novoBannerInput").val(''); // Limpar o input
     return;
   }
 
-  const lojaId = JSON.parse(localStorage.getItem("minhaLoja")).id;
+  const lojaData = localStorage.getItem("minhaLoja");
+  if (!lojaData) {
+    app.dialog.alert("Erro ao obter dados da loja", "Erro");
+    return;
+  }
+  
+  const loja = JSON.parse(lojaData);
+  const lojaId = loja.id;
   
   app.dialog.preloader("Adicionando banner...");
   
@@ -389,6 +425,7 @@ function processarNovoBanner(arquivo) {
     app.dialog.close();
     app.dialog.alert("Banner adicionado com sucesso!", "Sucesso");
     carregarBannersLoja(lojaId);
+    $("#novoBannerInput").val(''); // Limpar o input após sucesso
   });
 }
 
@@ -420,8 +457,11 @@ function excluirBanner(bannerId) {
         app.dialog.close();
         if (responseJson.status === "success") {
           app.dialog.alert("Banner excluído com sucesso!", "Sucesso");
-          const lojaId = JSON.parse(localStorage.getItem("minhaLoja")).id;
-          carregarBannersLoja(lojaId);
+          const lojaData = localStorage.getItem("minhaLoja");
+          if (lojaData) {
+            const loja = JSON.parse(lojaData);
+            carregarBannersLoja(loja.id);
+          }
         } else {
           app.dialog.alert("Erro ao excluir banner: " + responseJson.message, "Erro");
         }
@@ -436,7 +476,13 @@ function excluirBanner(bannerId) {
 
 // Editar nome da loja
 function editarNomeLoja() {
-  const lojaAtual = JSON.parse(localStorage.getItem("minhaLoja"));
+  const lojaData = localStorage.getItem("minhaLoja");
+  if (!lojaData) {
+    app.dialog.alert("Erro ao obter dados da loja", "Erro");
+    return;
+  }
+  
+  const lojaAtual = JSON.parse(lojaData);
   $("#novoNomeLoja").val(lojaAtual.nome_loja);
   app.popup.open(".popup-editar-nome");
 }
@@ -452,7 +498,14 @@ function salvarNovoNome() {
 
   app.dialog.preloader("Salvando...");
   
-  const lojaAtual = JSON.parse(localStorage.getItem("minhaLoja"));
+  const lojaData = localStorage.getItem("minhaLoja");
+  if (!lojaData) {
+    app.dialog.close();
+    app.dialog.alert("Erro ao obter dados da loja", "Erro");
+    return;
+  }
+  
+  const lojaAtual = JSON.parse(lojaData);
   
   const headers = {
     "Content-Type": "application/json",
@@ -502,7 +555,15 @@ function salvarNovoNome() {
 // Compartilhar loja
 function compartilharLoja() {
   const linkLoja = localStorage.getItem("linkLoja");
-  const nomeLoja = JSON.parse(localStorage.getItem("minhaLoja")).nome_loja;
+  const lojaData = localStorage.getItem("minhaLoja");
+  
+  if (!linkLoja || !lojaData) {
+    app.dialog.alert("Erro ao obter dados da loja", "Erro");
+    return;
+  }
+  
+  const loja = JSON.parse(lojaData);
+  const nomeLoja = loja.nome_loja;
   
   onCompartilhar(
     nomeLoja,
@@ -515,6 +576,11 @@ function compartilharLoja() {
 function visualizarLoja() {
   const linkLoja = localStorage.getItem("linkLoja");
   
+  if (!linkLoja) {
+    app.dialog.alert("Erro ao obter link da loja", "Erro");
+    return;
+  }
+  
   app.dialog.confirm("Deseja abrir sua loja no navegador?", "Visualizar Loja", function() {
     window.open(linkLoja, '_blank');
   });
@@ -523,5 +589,9 @@ function visualizarLoja() {
 // Copiar link da loja
 function copiarLinkLoja() {
   const linkLoja = localStorage.getItem("linkLoja") || $("#linkLoja").text();
-  copiarParaAreaDeTransferencia(linkLoja);
+  if (linkLoja) {
+    copiarParaAreaDeTransferencia(linkLoja);
+  } else {
+    app.dialog.alert("Erro ao obter link da loja", "Erro");
+  }
 }
