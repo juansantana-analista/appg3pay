@@ -27,7 +27,7 @@ function verificarLoja() {
     .then((responseJson) => {
       app.dialog.close();
       
-        console.log('aqui');
+        console.log(responseJson);
       if (responseJson.status === "success" && responseJson.tem_loja) {
         // Usuário já tem loja - mostrar tela de gerenciamento
         const loja = responseJson.data;
