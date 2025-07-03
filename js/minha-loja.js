@@ -232,7 +232,7 @@ function enviarBannerLoja(lojaId, arquivo, callback) {
 
     const body = JSON.stringify({
       class: "LojinhaBannerRest",
-      method: "store",
+      method: "salvarBanner",
       data: {
         lojinha_vitatop_id: lojaId,
         titulo: "Banner Principal",
