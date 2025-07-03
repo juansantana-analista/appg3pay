@@ -24,26 +24,24 @@
     <!-- Your main view, should have "view-main" class -->
     <div class="view view-main">
       <!-- Initial Page, "data-name" contains page name -->
-      <div data-name="minha-loja" class="page color-theme-blue">
-        <!-- NAV TOPO-->
-        <div class="top-nav">
-          <div class="left">
-            <a href="/gestao/" class="link back-button">
-              <i class="mdi mdi-arrow-left"></i>
-            </a>
-          </div>
-          <strong class="title-descricao">Minha Loja</strong>
-          <div class="right-icons">
-            <!-- Botão de Notificações -->
-            <div class="btn-notificacao" data-count="0" onclick="app.views.main.router.navigate('/notificacoes/')">
-              <i class="mdi mdi-bell-outline"></i>
+      <div data-name="minha-loja" class="page color-theme-blue">        
+            <!-- NAV TOPO-->
+            <div class="top-nav">
+               <div class="left">
+                  <img src="img/logo-nav.png" class="title-logo" width="130px" style="margin-left: 10px;" />
+               </div>
+               <!-- Agrupe os ícones em uma div -->
+               <div class="right-icons">
+                  <!-- Botão de Notificações -->
+                  <div class="btn-notificacao" data-count="0" onclick="app.views.main.router.navigate('/notificacoes/')">
+                     <i class="mdi mdi-bell-outline"></i>
+                  </div>
+                  <!-- Botão do Carrinho -->
+                  <div class="btn-cart" data-count="0" onclick="app.views.main.router.navigate('/carrinho/')">
+                     <i class="mdi mdi-cart-outline"></i>
+                  </div>
+               </div>
             </div>
-            <!-- Botão do Carrinho -->
-            <div class="btn-cart" data-count="0" onclick="app.views.main.router.navigate('/carrinho/')">
-              <i class="mdi mdi-cart-outline"></i>
-            </div>
-          </div>
-        </div>
 
         <!-- Scrollable page content -->
         <div class="page-content" style="background-color: #f7f9fa; padding-bottom: 160px">
