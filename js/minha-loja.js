@@ -188,6 +188,7 @@ function criarLoja() {
             mostrarSucessoCriacao();
           });
         } else {
+          enviarBannerLoja(lojaId);
           app.dialog.close();
           mostrarSucessoCriacao();
         }
@@ -205,7 +206,46 @@ function criarLoja() {
 
 // Enviar banner da loja - VERSÃO SEGURA
 function enviarBannerLoja(lojaId, arquivo, callback) {
-  // Validar arquivo antes de processar
+  // Se não foi passado nenhum arquivo, envia mesmo assim para que o sistema crie banners padrão
+  if (!arquivo) {
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + userAuthToken,
+    };
+
+    const body = JSON.stringify({
+      class: "LojinhaBannerRest",
+      method: "salvarBanner",
+      data: {
+        lojinha_vitatop_id: lojaId
+      }
+    });
+
+    const options = {
+      method: "POST",
+      headers: headers,
+      body: body,
+    };
+
+    fetch(apiServerUrl, options)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.status === "success") {
+          if (callback) callback();
+        } else {
+          console.error("Erro ao enviar banner (sem arquivo):", responseJson.message);
+          if (callback) callback();
+        }
+      })
+      .catch((error) => {
+        console.error("Erro ao enviar banner (sem arquivo):", error);
+        if (callback) callback();
+      });
+
+    return; // evita continuar o fluxo com FileReader
+  }
+
+  // Se arquivo existe, continua com as validações e envio
   const maxSize = 5 * 1024 * 1024; // 5MB
   if (arquivo.size > maxSize) {
     app.dialog.alert("A imagem deve ter no máximo 5MB. Tente uma imagem menor.", "Arquivo muito grande");
@@ -221,10 +261,10 @@ function enviarBannerLoja(lojaId, arquivo, callback) {
   }
 
   const reader = new FileReader();
-  
+
   reader.onload = function(e) {
     const base64 = e.target.result;
-    
+
     const headers = {
       "Content-Type": "application/json",
       Authorization: "Bearer " + userAuthToken,
@@ -263,14 +303,15 @@ function enviarBannerLoja(lojaId, arquivo, callback) {
         if (callback) callback();
       });
   };
-  
+
   reader.onerror = function() {
     app.dialog.alert("Erro ao processar a imagem", "Erro");
     if (callback) callback();
   };
-  
+
   reader.readAsDataURL(arquivo);
 }
+
 
 // Mostrar sucesso da criação
 function mostrarSucessoCriacao() {
