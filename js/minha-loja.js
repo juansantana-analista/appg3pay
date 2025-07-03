@@ -311,7 +311,7 @@ function carregarBannersLoja(lojaId) {
       }
       
       // Verificar quantos banners já existem para controlar limite
-      const totalBanners = responseJson.data ? responseJson.data.length : 0;
+      const totalBanners = responseJson.data.data ? responseJson.data.data.length : 0;
       if (totalBanners >= 4) {
         $("#btnAdicionarBanner").prop("disabled", true).html('<i class="mdi mdi-block-helper"></i> Limite de 4 banners atingido');
       } else {
