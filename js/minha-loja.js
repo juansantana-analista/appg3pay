@@ -299,12 +299,12 @@ function carregarBannersLoja(lojaId) {
   fetch(apiServerUrl, options)
     .then((response) => response.json())
     .then((responseJson) => {
-      if (responseJson.status === "success" && responseJson.data && responseJson.data.length > 0) {
+      if (responseJson.status === "success" && responseJson.data && responseJson.data.data.length > 0) {
         exibirBanners(responseJson.data.data);
         
         // Definir banner principal
         const bannerPrincipal = responseJson.data.data[0];
-        console.log(bannerPrincipal);
+        
         if (bannerPrincipal && bannerPrincipal.url_arquivo) {
           $("#bannerAtual").attr("src", bannerPrincipal.url_arquivo);
         }
