@@ -27,10 +27,10 @@ function verificarLoja() {
     .then((responseJson) => {
       app.dialog.close();
       
+        console.log('aqui');
       if (responseJson.status === "success" && responseJson.tem_loja) {
         // Usuário já tem loja - mostrar tela de gerenciamento
         const loja = responseJson.data;
-        console.log('aqui');
         localStorage.setItem("minhaLoja", JSON.stringify(loja));
         mostrarTelaGerenciamento(loja);
         carregarBannersLoja(loja.id);
