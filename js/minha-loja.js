@@ -304,6 +304,7 @@ function carregarBannersLoja(lojaId) {
         
         // Definir banner principal
         const bannerPrincipal = responseJson.data.data[0];
+        console.log(bannerPrincipal);
         if (bannerPrincipal && bannerPrincipal.url_arquivo) {
           $("#bannerAtual").attr("src", bannerPrincipal.url_arquivo);
         }
