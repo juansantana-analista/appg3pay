@@ -175,6 +175,8 @@ function criarLoja() {
     .then((response) => response.json())
     .then((responseJson) => {
       if (responseJson.status === "success") {
+        console.log(responseJson);
+        console.log(responseJson.data.id);
         const lojaId = responseJson.data.id;
         localStorage.setItem("lojaId", lojaId);
         
