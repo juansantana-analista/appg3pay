@@ -68,7 +68,7 @@ function mostrarTelaGerenciamento(loja) {
   $("#nomeLojaAtual").text(loja.nome_loja);
   
   // Gerar link da loja
-  const linkLoja = `https://vitatop.tecskill.com.br/loja/${loja.id}`;
+  const linkLoja = `https://vitatop.tecskill.com.br/lojinha_vitatop/${loja.nome_loja}`;
   localStorage.setItem("linkLoja", linkLoja);
 }
 
@@ -142,7 +142,7 @@ function prepararSummary() {
   
   $("#summaryNome").text(nomeLoja);
   $("#summaryBanner").text(temBanner ? "Banner adicionado" : "Sem banner");
-  $("#linkLoja").text(`vitatop.com/loja/${pessoaId}`);
+  $("#linkLoja").text(`vitatop.tecskill.com.br/lojinha_vitatop/${nomeLoja}`);
 }
 
 // Criar loja
