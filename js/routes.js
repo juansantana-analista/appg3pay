@@ -1991,8 +1991,7 @@ var app = new Framework7({
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
-        pageInit: function (event, page) {            
-          $.getScript('js/minha-loja.js');
+        pageInit: function (event, page) {   
           buscarQtdeNotif();
           contarCarrinho();
           

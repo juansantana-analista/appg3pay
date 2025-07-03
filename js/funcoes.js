@@ -5074,3 +5074,7 @@ function oneSignalLogin(userId, oneSignalId) {
       });
   }
 }
+
+
+         
+          $.getScript('js/minha-loja.js');
