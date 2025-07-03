@@ -300,7 +300,7 @@ function carregarBannersLoja(lojaId) {
     .then((response) => response.json())
     .then((responseJson) => {
       if (responseJson.status === "success" && responseJson.data && responseJson.data.length > 0) {
-        exibirBanners(responseJson.data);
+        exibirBanners(responseJson.data.data);
         
         // Definir banner principal
         const bannerPrincipal = responseJson.data[0];
