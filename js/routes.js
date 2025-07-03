@@ -2219,6 +2219,13 @@ var app = new Framework7({
 
           // Inicializar eventos
           initializeMinhaLojaEvents();
+              $('#novoNomeLoja').on('input', function() {
+                let valor = $(this).val();
+                // Substitui todos os espaços por "_"
+                valor = valor.replace(/ /g, '_');
+                // Atualiza o campo
+                $(this).val(valor);
+              });
         },
         pageBeforeRemove: function (event, page) {
           // Limpar todos os event listeners quando a página for removida
