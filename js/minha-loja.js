@@ -64,10 +64,10 @@ function mostrarTelaGerenciamento(loja) {
   $("#manage-screen").removeClass("display-none");
 
   // Atualizar dados da loja na tela
-  $("#nomeLojaAtual").text(loja.nome_loja);
+  $("#nomeLojaAtual").text(loja.data.nome_loja);
   
   // Gerar link da loja
-  const linkLoja = `https://vitatop.tecskill.com.br/loja/${loja.id}`;
+  const linkLoja = `https://vitatop.tecskill.com.br/loja/${loja.data.id}`;
   localStorage.setItem("linkLoja", linkLoja);
 }
 
