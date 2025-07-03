@@ -58,6 +58,7 @@ function mostrarTelaBemVindo() {
 
 // Mostrar tela de gerenciamento
 function mostrarTelaGerenciamento(loja) {
+    console.log(loja);
   $("#welcome-screen").addClass("display-none");
   $("#create-form").addClass("display-none");
   $("#manage-screen").removeClass("display-none");
