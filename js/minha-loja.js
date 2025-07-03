@@ -1,4 +1,7 @@
-// Funções para Minha Loja - VERSÃO CORRIGIDA
+// VERSÃO MELHORADA DAS FUNÇÕES MINHA LOJA
+// Substitua o conteúdo do arquivo js/minha-loja.js
+
+// Funções para Minha Loja - VERSÃO FINAL CORRIGIDA
 
 // Verificar se o usuário já tem uma loja criada
 function verificarLoja() {
@@ -134,7 +137,7 @@ function stepAnterior(stepAtual) {
 // Preparar summary no step 3
 function prepararSummary() {
   const nomeLoja = $("#nomeLoja").val();
-  const temBanner = $("#bannerInput")[0].files.length > 0;
+  const temBanner = $("#bannerInput")[0] && $("#bannerInput")[0].files.length > 0;
   const pessoaId = localStorage.getItem("pessoaId");
   
   $("#summaryNome").text(nomeLoja);
@@ -176,7 +179,9 @@ function criarLoja() {
         localStorage.setItem("lojaId", lojaId);
         
         // Se tem banner, enviar banner
-        const bannerFile = $("#bannerInput")[0].files[0];
+        const bannerInput = document.getElementById('bannerInput');
+        const bannerFile = bannerInput && bannerInput.files[0];
+        
         if (bannerFile) {
           enviarBannerLoja(lojaId, bannerFile, function() {
             app.dialog.close();
@@ -198,7 +203,7 @@ function criarLoja() {
     });
 }
 
-// Enviar banner da loja - VERSÃO MELHORADA
+// Enviar banner da loja - VERSÃO SEGURA
 function enviarBannerLoja(lojaId, arquivo, callback) {
   // Validar arquivo antes de processar
   const maxSize = 5 * 1024 * 1024; // 5MB
@@ -216,6 +221,7 @@ function enviarBannerLoja(lojaId, arquivo, callback) {
   }
 
   const reader = new FileReader();
+  
   reader.onload = function(e) {
     const base64 = e.target.result;
     
@@ -293,7 +299,7 @@ function carregarBannersLoja(lojaId) {
   fetch(apiServerUrl, options)
     .then((response) => response.json())
     .then((responseJson) => {
-      if (responseJson.status === "success" && responseJson.data.length > 0) {
+      if (responseJson.status === "success" && responseJson.data && responseJson.data.length > 0) {
         exibirBanners(responseJson.data);
         
         // Definir banner principal
@@ -343,62 +349,12 @@ function exibirBanners(banners) {
   });
 }
 
-// Adicionar novo banner - VERSÃO MELHORADA
-function adicionarNovoBanner() {
-  // Verificar limite de banners antes de abrir seletor
-  const lojaData = localStorage.getItem("minhaLoja");
-  if (!lojaData) {
-    app.dialog.alert("Erro ao obter dados da loja", "Erro");
-    return;
-  }
-  
-  const loja = JSON.parse(lojaData);
-  const lojaId = loja.id;
-  
-  // Verificar quantos banners ativos existem
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
-  };
-
-  const body = JSON.stringify({
-    class: "LojinhaBannerRest", 
-    method: "listarBannersAtivos",
-    lojinha_vitatop_id: lojaId
-  });
-
-  const options = {
-    method: "POST",
-    headers: headers,
-    body: body,
-  };
-
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      const totalBanners = responseJson.data ? responseJson.data.length : 0;
-      
-      if (totalBanners >= 4) {
-        app.dialog.alert("Você já atingiu o limite máximo de 4 banners por loja.", "Limite atingido");
-        return;
-      }
-      
-      // Se ainda pode adicionar, abrir seletor de arquivo
-      $("#novoBannerInput").click();
-    })
-    .catch((error) => {
-      console.error("Erro:", error);
-      $("#novoBannerInput").click(); // Em caso de erro, permitir tentativa
-    });
-}
-
-// Processar novo banner com validação de tamanho
+// Processar novo banner - VERSÃO SEGURA
 function processarNovoBanner(arquivo) {
   // Validar tamanho do arquivo (máximo 5MB)
-  const maxSize = 5 * 1024 * 1024; // 5MB em bytes
+  const maxSize = 5 * 1024 * 1024;
   if (arquivo.size > maxSize) {
     app.dialog.alert("A imagem deve ter no máximo 5MB. Tente uma imagem menor.", "Arquivo muito grande");
-    $("#novoBannerInput").val(''); // Limpar o input
     return;
   }
 
@@ -406,7 +362,6 @@ function processarNovoBanner(arquivo) {
   const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
   if (!allowedTypes.includes(arquivo.type)) {
     app.dialog.alert("Apenas arquivos JPG, JPEG, PNG e GIF são permitidos.", "Formato inválido");
-    $("#novoBannerInput").val(''); // Limpar o input
     return;
   }
 
@@ -425,7 +380,6 @@ function processarNovoBanner(arquivo) {
     app.dialog.close();
     app.dialog.alert("Banner adicionado com sucesso!", "Sucesso");
     carregarBannersLoja(lojaId);
-    $("#novoBannerInput").val(''); // Limpar o input após sucesso
   });
 }
 

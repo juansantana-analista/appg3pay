@@ -1991,46 +1991,78 @@ var app = new Framework7({
         pageAfterIn: function (event, page) {
           // fazer algo depois da página ser exibida
         },
-        pageInit: function (event, page) {    
+        pageInit: function (event, page) {   
           buscarQtdeNotif();
           contarCarrinho();
+          
+          // VERIFICAR SE JÁ FOI INICIALIZADO PARA EVITAR DUPLICAÇÃO
+          if (page.$el.hasClass('minha-loja-initialized')) {
+            return;
+          }
+          page.$el.addClass('minha-loja-initialized');
           
           // Verificar se usuário já tem loja criada
           verificarLoja();
 
-          // Event listeners para criação da loja - USANDO OFF() PARA EVITAR DUPLICAÇÃO
-          
-          // Botão criar loja
-          $("#btnCriarLoja").off('click').on("click", function() {
-            mostrarFormularioCriacao();
-          });
+          // FUNÇÃO PARA INICIALIZAR EVENTS APENAS UMA VEZ
+          function initializeMinhaLojaEvents() {
+            // Remover todos os event listeners existentes primeiro
+            $(document).off('click.minhaLoja');
+            $(document).off('input.minhaLoja');
+            $(document).off('change.minhaLoja');
 
-          // Step 1 - Nome da loja
-          $("#nomeLoja").off('input').on("input", function() {
-            const nome = $(this).val().trim();
-            $("#previewNome").text(nome || "Nome da sua loja aparecerá aqui");
-            $("#btnStep1Next").prop("disabled", nome.length < 3);
-          });
+            // Event listeners para criação da loja - USANDO NAMESPACE
+            
+            // Botão criar loja
+            $(document).on('click.minhaLoja', "#btnCriarLoja", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              mostrarFormularioCriacao();
+            });
 
-          $("#btnStep1Next").off('click').on("click", function() {
-            proximoStep(1);
-          });
+            // Step 1 - Nome da loja
+            $(document).on('input.minhaLoja', "#nomeLoja", function(e) {
+              const nome = $(this).val().trim();
+              $("#previewNome").text(nome || "Nome da sua loja aparecerá aqui");
+              $("#btnStep1Next").prop("disabled", nome.length < 3);
+            });
 
-          // Step 2 - Banner - CORREÇÃO PRINCIPAL DO PROBLEMA
-          $("#uploadArea").off('click').on("click", function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            $("#bannerInput").click();
-          });
+            $(document).on('click.minhaLoja', "#btnStep1Next", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              proximoStep(1);
+            });
 
-          $("#bannerInput").off('change').on("change", function() {
-            const file = this.files[0];
-            if (file) {
+            // Step 2 - Banner - SOLUÇÃO PRINCIPAL
+            $(document).on('click.minhaLoja', "#uploadArea", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              
+              // Criar um novo input file temporário para evitar conflitos
+              const tempInput = document.createElement('input');
+              tempInput.type = 'file';
+              tempInput.accept = 'image/*';
+              tempInput.style.display = 'none';
+              
+              tempInput.onchange = function() {
+                const file = this.files[0];
+                if (file) {
+                  handleBannerFile(file);
+                }
+                // Remover o input temporário
+                document.body.removeChild(tempInput);
+              };
+              
+              document.body.appendChild(tempInput);
+              tempInput.click();
+            });
+
+            // Função para processar arquivo de banner
+            function handleBannerFile(file) {
               // Validar tamanho do arquivo (máximo 5MB)
-              const maxSize = 5 * 1024 * 1024; // 5MB em bytes
+              const maxSize = 5 * 1024 * 1024;
               if (file.size > maxSize) {
                 app.dialog.alert("A imagem deve ter no máximo 5MB. Tente uma imagem menor.", "Arquivo muito grande");
-                $(this).val(''); // Limpar o input
                 return;
               }
 
@@ -2038,7 +2070,6 @@ var app = new Framework7({
               const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
               if (!allowedTypes.includes(file.type)) {
                 app.dialog.alert("Apenas arquivos JPG, JPEG, PNG e GIF são permitidos.", "Formato inválido");
-                $(this).val(''); // Limpar o input
                 return;
               }
 
@@ -2047,94 +2078,156 @@ var app = new Framework7({
                 $("#bannerPreview").attr("src", e.target.result);
                 $("#uploadArea").hide();
                 $("#previewBanner").removeClass("display-none");
+                
+                // Atualizar o input original para manter compatibilidade
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                document.getElementById('bannerInput').files = dataTransfer.files;
               };
+              
+              reader.onerror = function() {
+                app.dialog.alert("Erro ao processar a imagem", "Erro");
+              };
+              
               reader.readAsDataURL(file);
             }
-          });
 
-          $("#btnRemoveBanner").off('click').on("click", function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            $("#bannerInput").val("");
-            $("#previewBanner").addClass("display-none");
-            $("#uploadArea").show();
-          });
+            $(document).on('click.minhaLoja', "#btnRemoveBanner", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              $("#bannerInput").val("");
+              $("#previewBanner").addClass("display-none");
+              $("#uploadArea").show();
+            });
 
-          $("#btnStep2Back").off('click').on("click", function() {
-            stepAnterior(2);
-          });
+            $(document).on('click.minhaLoja', "#btnStep2Back", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              stepAnterior(2);
+            });
 
-          $("#btnStep2Next").off('click').on("click", function() {
-            proximoStep(2);
-          });
+            $(document).on('click.minhaLoja', "#btnStep2Next", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              proximoStep(2);
+            });
 
-          // Step 3 - Finalizar
-          $("#btnStep3Back").off('click').on("click", function() {
-            stepAnterior(3);
-          });
+            // Step 3 - Finalizar
+            $(document).on('click.minhaLoja', "#btnStep3Back", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              stepAnterior(3);
+            });
 
-          $("#btnCopyLink").off('click').on("click", function() {
-            copiarLinkLoja();
-          });
+            $(document).on('click.minhaLoja', "#btnCopyLink", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              copiarLinkLoja();
+            });
 
-          $("#btnFinalizar").off('click').on("click", function() {
-            criarLoja();
-          });
+            $(document).on('click.minhaLoja', "#btnFinalizar", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              criarLoja();
+            });
 
-          // Event listeners para gerenciamento da loja
+            // Event listeners para gerenciamento da loja
+            $(document).on('click.minhaLoja', "#editarNomeLoja", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              editarNomeLoja();
+            });
 
-          // Editar nome da loja
-          $("#editarNomeLoja").off('click').on("click", function() {
-            editarNomeLoja();
-          });
+            $(document).on('click.minhaLoja', "#btnSalvarNome", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              salvarNovoNome();
+            });
 
-          $("#btnSalvarNome").off('click').on("click", function() {
-            salvarNovoNome();
-          });
+            $(document).on('click.minhaLoja', "#gerenciarBanners", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              app.popup.open(".popup-banners");
+            });
 
-          // Gerenciar banners
-          $("#gerenciarBanners").off('click').on("click", function() {
-            app.popup.open(".popup-banners");
-          });
+            $(document).on('click.minhaLoja', "#btnAdicionarBanner", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              adicionarNovoBannerSeguro();
+            });
 
-          $("#btnAdicionarBanner").off('click').on("click", function() {
-            adicionarNovoBanner();
-          });
-
-          $("#novoBannerInput").off('change').on("change", function() {
-            const file = this.files[0];
-            if (file) {
-              processarNovoBanner(file);
+            // Função segura para adicionar banner
+            function adicionarNovoBannerSeguro() {
+              const lojaData = localStorage.getItem("minhaLoja");
+              if (!lojaData) {
+                app.dialog.alert("Erro ao obter dados da loja", "Erro");
+                return;
+              }
+              
+              const loja = JSON.parse(lojaData);
+              const lojaId = loja.id;
+              
+              // Criar input temporário
+              const tempInput = document.createElement('input');
+              tempInput.type = 'file';
+              tempInput.accept = 'image/*';
+              tempInput.style.display = 'none';
+              
+              tempInput.onchange = function() {
+                const file = this.files[0];
+                if (file) {
+                  processarNovoBanner(file);
+                }
+                document.body.removeChild(tempInput);
+              };
+              
+              document.body.appendChild(tempInput);
+              tempInput.click();
             }
-          });
 
-          // Ações da loja
-          $("#btnCompartilharLoja").off('click').on("click", function() {
-            compartilharLoja();
-          });
+            $(document).on('click.minhaLoja', "#btnCompartilharLoja", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              compartilharLoja();
+            });
 
-          $("#btnVisualizarLoja").off('click').on("click", function() {
-            visualizarLoja();
-          });
+            $(document).on('click.minhaLoja', "#btnVisualizarLoja", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              visualizarLoja();
+            });
 
-          // Popup de sucesso
-          $("#btnCompartilharAgora").off('click').on("click", function() {
-            compartilharLoja();
-          });
+            $(document).on('click.minhaLoja', "#btnCompartilharAgora", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              compartilharLoja();
+            });
 
-          $("#btnContinuar").off('click').on("click", function() {
-            app.popup.close(".popup-sucesso");
-            verificarLoja(); // Recarregar para mostrar tela de gerenciamento
-          });
+            $(document).on('click.minhaLoja', "#btnContinuar", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              app.popup.close(".popup-sucesso");
+              verificarLoja();
+            });
 
-          // Configurações (placeholder)
-          $("#configuracoes").off('click').on("click", function() {
-            app.dialog.alert("Funcionalidade em desenvolvimento!", "Em breve");
-          });
-          
+            $(document).on('click.minhaLoja', "#configuracoes", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              app.dialog.alert("Funcionalidade em desenvolvimento!", "Em breve");
+            });
+          }
+
+          // Inicializar eventos
+          initializeMinhaLojaEvents();
         },
         pageBeforeRemove: function (event, page) {
-          // fazer algo antes da página ser removida do DOM
+          // Limpar todos os event listeners quando a página for removida
+          $(document).off('click.minhaLoja');
+          $(document).off('input.minhaLoja');
+          $(document).off('change.minhaLoja');
+          
+          // Remover classe de inicialização
+          page.$el.removeClass('minha-loja-initialized');
         },
       }
     },
