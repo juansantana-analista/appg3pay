@@ -70,6 +70,9 @@ function mostrarTelaGerenciamento(loja) {
   // Gerar link da loja
   const linkLoja = `https://vitatop.tecskill.com.br/lojinha_vitatop/${loja.nome_loja}`;
   localStorage.setItem("linkLoja", linkLoja);
+  
+  // Carregar categorias selecionadas
+  atualizarInterfaceCategorias();
 }
 
 // Mostrar formulário de criação
@@ -590,4 +593,228 @@ function copiarLinkLoja() {
   } else {
     app.dialog.alert("Erro ao obter link da loja", "Erro");
   }
+}
+
+// ========================================
+// FUNÇÕES PARA GERENCIAMENTO DE CATEGORIAS
+// ========================================
+
+// Abrir popup de gerenciamento de categorias
+function gerenciarCategorias() {
+  carregarCategoriasDisponiveis();
+  app.popup.open(".popup-categorias");
+}
+
+// Carregar categorias disponíveis do servidor
+function carregarCategoriasDisponiveis() {
+  app.dialog.preloader("Carregando categorias...");
+  
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "ProdutoCategoriaRest",
+    method: "listarCategorias",
+  });
+
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      app.dialog.close();
+      
+      if (responseJson.status === "success" && responseJson.data && responseJson.data.data) {
+        const categorias = responseJson.data.data;
+        exibirCategoriasDisponiveis(categorias);
+      } else {
+        app.dialog.alert("Erro ao carregar categorias: " + (responseJson.message || "Dados inválidos"), "Erro");
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+      app.dialog.alert("Erro ao carregar categorias: " + error.message, "Erro");
+    });
+}
+
+// Exibir categorias disponíveis no popup
+function exibirCategoriasDisponiveis(categorias) {
+  const container = $("#categoriasContainer");
+  container.empty();
+  
+  // Carregar categorias selecionadas do localStorage
+  const categoriasSelecionadas = JSON.parse(localStorage.getItem("categoriasLoja") || "[]");
+  
+  // Adicionar contador de categorias selecionadas
+  const contadorHTML = `
+    <div class="categorias-selecionadas">
+      <h5>Categorias Selecionadas: <span id="contadorCategorias">${categoriasSelecionadas.length}</span></h5>
+      <div class="categorias-tags" id="categoriasTagsPopup">
+        ${categoriasSelecionadas.map(cat => `<span class="categoria-tag">${cat.nome}</span>`).join('')}
+      </div>
+    </div>
+  `;
+  container.append(contadorHTML);
+  
+  categorias.forEach((categoria) => {
+    const isSelected = categoriasSelecionadas.some(cat => cat.id === categoria.id);
+    
+    const categoriaHTML = `
+      <div class="categoria-item ${isSelected ? 'selected' : ''}" data-id="${categoria.id}">
+        <div class="categoria-checkbox">
+          <i class="mdi mdi-check"></i>
+        </div>
+        <div class="categoria-icon">
+          <i class="${categoria.icone || 'mdi mdi-tag'}"></i>
+        </div>
+        <div class="categoria-info">
+          <div class="categoria-nome">${categoria.nome}</div>
+          <div class="categoria-descricao">Categoria de produtos</div>
+        </div>
+      </div>
+    `;
+    
+    container.append(categoriaHTML);
+  });
+  
+  // Adicionar eventos de clique
+  $(".categoria-item").on("click", function() {
+    const categoriaId = $(this).data("id");
+    const categoria = categorias.find(cat => cat.id === categoriaId);
+    
+    if ($(this).hasClass("selected")) {
+      // Desmarcar categoria
+      $(this).removeClass("selected");
+      removerCategoriaSelecionada(categoria);
+    } else {
+      // Marcar categoria
+      $(this).addClass("selected");
+      adicionarCategoriaSelecionada(categoria);
+    }
+    
+    // Atualizar contador e tags
+    atualizarContadorCategorias();
+  });
+}
+
+// Atualizar contador de categorias selecionadas
+function atualizarContadorCategorias() {
+  const categoriasSelecionadas = JSON.parse(localStorage.getItem("categoriasLoja") || "[]");
+  const contador = $("#contadorCategorias");
+  const tagsContainer = $("#categoriasTagsPopup");
+  
+  contador.text(categoriasSelecionadas.length);
+  
+  // Atualizar tags
+  tagsContainer.empty();
+  categoriasSelecionadas.forEach(cat => {
+    const tagHTML = `<span class="categoria-tag">${cat.nome}</span>`;
+    tagsContainer.append(tagHTML);
+  });
+}
+
+// Adicionar categoria à lista de selecionadas
+function adicionarCategoriaSelecionada(categoria) {
+  const categoriasSelecionadas = JSON.parse(localStorage.getItem("categoriasLoja") || "[]");
+  
+  // Verificar se já não está na lista
+  if (!categoriasSelecionadas.some(cat => cat.id === categoria.id)) {
+    categoriasSelecionadas.push(categoria);
+    localStorage.setItem("categoriasLoja", JSON.stringify(categoriasSelecionadas));
+  }
+}
+
+// Remover categoria da lista de selecionadas
+function removerCategoriaSelecionada(categoria) {
+  const categoriasSelecionadas = JSON.parse(localStorage.getItem("categoriasLoja") || "[]");
+  
+  const index = categoriasSelecionadas.findIndex(cat => cat.id === categoria.id);
+  if (index > -1) {
+    categoriasSelecionadas.splice(index, 1);
+    localStorage.setItem("categoriasLoja", JSON.stringify(categoriasSelecionadas));
+  }
+}
+
+// Salvar categorias selecionadas
+function salvarCategoriasSelecionadas() {
+  const categoriasSelecionadas = JSON.parse(localStorage.getItem("categoriasLoja") || "[]");
+  
+  if (categoriasSelecionadas.length === 0) {
+    app.dialog.alert("Selecione pelo menos uma categoria para sua loja", "Atenção");
+    return;
+  }
+  
+  app.dialog.preloader("Salvando categorias...");
+  
+  // Por enquanto, apenas salva no localStorage
+  // Aqui você pode adicionar uma chamada para a API quando necessário
+  setTimeout(() => {
+    app.dialog.close();
+    app.popup.close(".popup-categorias");
+    app.dialog.alert("Categorias salvas com sucesso!", "Sucesso");
+    
+    // Atualizar a interface se necessário
+    atualizarInterfaceCategorias();
+  }, 1000);
+}
+
+// Função para limpar todas as categorias selecionadas
+function limparCategoriasSelecionadas() {
+  localStorage.removeItem("categoriasLoja");
+  atualizarInterfaceCategorias();
+}
+
+// Função para selecionar todas as categorias
+function selecionarTodasCategorias() {
+  // Esta função pode ser implementada se necessário
+  // Por enquanto, apenas um placeholder
+  console.log("Função para selecionar todas as categorias");
+}
+
+// Atualizar interface após salvar categorias
+function atualizarInterfaceCategorias() {
+  const categoriasSelecionadas = JSON.parse(localStorage.getItem("categoriasLoja") || "[]");
+  
+  const displayContainer = $("#categoriasSelecionadasDisplay");
+  const tagsContainer = $("#categoriasTagsDisplay");
+  
+  if (categoriasSelecionadas.length > 0) {
+    // Mostrar a seção de categorias
+    displayContainer.show();
+    
+    // Limpar tags existentes
+    tagsContainer.empty();
+    
+    // Adicionar tags para cada categoria selecionada
+    categoriasSelecionadas.forEach((categoria) => {
+      const tagHTML = `
+        <div class="categoria-tag-display">
+          <i class="${categoria.icone || 'mdi mdi-tag'}"></i>
+          <span>${categoria.nome}</span>
+        </div>
+      `;
+      tagsContainer.append(tagHTML);
+    });
+  } else {
+    // Esconder a seção se não há categorias selecionadas
+    displayContainer.hide();
+  }
+}
+
+// Obter categorias selecionadas
+function obterCategoriasSelecionadas() {
+  return JSON.parse(localStorage.getItem("categoriasLoja") || "[]");
+}
+
+// Verificar se uma categoria está selecionada
+function categoriaEstaSelecionada(categoriaId) {
+  const categoriasSelecionadas = JSON.parse(localStorage.getItem("categoriasLoja") || "[]");
+  return categoriasSelecionadas.some(cat => cat.id === categoriaId);
 }

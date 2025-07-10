@@ -2150,6 +2150,28 @@ var app = new Framework7({
               app.popup.open(".popup-banners");
             });
 
+            $(document).on('click.minhaLoja', "#gerenciarCategorias", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              gerenciarCategorias();
+            });
+
+            $(document).on('click.minhaLoja', "#btnSalvarCategorias", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              salvarCategoriasSelecionadas();
+            });
+
+            $(document).on('click.minhaLoja', "#btnLimparCategorias", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              app.dialog.confirm("Tem certeza que deseja limpar todas as categorias selecionadas?", "Confirmar", function() {
+                limparCategoriasSelecionadas();
+                app.popup.close(".popup-categorias");
+                app.dialog.alert("Categorias limpas com sucesso!", "Sucesso");
+              });
+            });
+
             $(document).on('click.minhaLoja', "#btnAdicionarBanner", function(e) {
               e.preventDefault();
               e.stopImmediatePropagation();

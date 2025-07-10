@@ -263,6 +263,17 @@
               </div>
             </div>
 
+            <!-- Categorias Selecionadas -->
+            <div class="categorias-selecionadas-display" id="categoriasSelecionadasDisplay" style="display: none;">
+              <h4 class="section-title">
+                <i class="mdi mdi-tag-multiple"></i>
+                Categorias da Loja
+              </h4>
+              <div class="categorias-tags-display" id="categoriasTagsDisplay">
+                <!-- Tags das categorias selecionadas serão exibidas aqui -->
+              </div>
+            </div>
+
             <!-- Opções de Gerenciamento -->
             <div class="management-options">
               <h3 class="section-title">
@@ -290,6 +301,19 @@
                 <div class="option-content">
                   <h4>Banners</h4>
                   <p>Adicionar e gerenciar banners</p>
+                </div>
+                <div class="option-arrow">
+                  <i class="mdi mdi-chevron-right"></i>
+                </div>
+              </div>
+
+              <div class="option-card" id="gerenciarCategorias">
+                <div class="option-icon">
+                  <i class="mdi mdi-tag-multiple"></i>
+                </div>
+                <div class="option-content">
+                  <h4>Categorias</h4>
+                  <p>Selecionar categorias de produtos</p>
                 </div>
                 <div class="option-arrow">
                   <i class="mdi mdi-chevron-right"></i>
@@ -375,6 +399,46 @@
             </div>
           </div>
 
+          <!-- Popup para Gerenciar Categorias -->
+          <div class="popup popup-categorias">
+            <div class="view popup-view">
+              <div class="page">
+                <div class="top-nav">
+                  <div class="left">
+                    <a href="#" class="link btn-novo popup-close">
+                      <i class="mdi mdi-arrow-left"></i>
+                    </a>
+                  </div>
+                  <strong class="title-descricao">Gerenciar Categorias</strong>
+                  <div style="width: 30px;"></div>
+                </div>
+                <div class="page-content">
+                  <div class="block">
+                    <div class="categorias-header">
+                      <h4>Selecione as categorias que deseja exibir em sua loja</h4>
+                      <p>Escolha as categorias de produtos que melhor se adequam ao seu público</p>
+                    </div>
+
+                    <div class="categorias-container" id="categoriasContainer">
+                      <!-- Categorias serão carregadas aqui dinamicamente -->
+                    </div>
+
+                    <div class="categorias-actions">
+                      <button class="btn-clear-categorias" id="btnLimparCategorias">
+                        <i class="mdi mdi-delete"></i>
+                        Limpar Todas
+                      </button>
+                      <button class="btn-save-categorias" id="btnSalvarCategorias">
+                        <i class="mdi mdi-check"></i>
+                        Salvar Categorias
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Popup de Sucesso -->
           <div class="popup popup-sucesso">
             <div class="view popup-view">
@@ -413,6 +477,8 @@
   <script type="text/javascript" src="lib/jquery-3.7.0.min.js"></script>
   <!-- Roteamento do app-->
   <script type="text/javascript" src="js/routes.js"></script>
+  <!-- Funções da Minha Loja -->
+  <script type="text/javascript" src="js/minha-loja.js"></script>
   <script src="cordova.js"></script>
 </body>
 </html>
