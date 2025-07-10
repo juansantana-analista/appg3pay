@@ -60,19 +60,28 @@ function mostrarTelaBemVindo() {
 
 // Mostrar tela de gerenciamento
 function mostrarTelaGerenciamento(loja) {
+  if (!loja) {
+    console.error("Dados da loja inválidos:", loja);
+    return;
+  }
+  
   $("#welcome-screen").addClass("display-none");
   $("#create-form").addClass("display-none");
   $("#manage-screen").removeClass("display-none");
 
   // Atualizar dados da loja na tela
-  $("#nomeLojaAtual").text(loja.nome_loja);
+  $("#nomeLojaAtual").text(loja.nome_loja || "Minha Loja");
   
   // Gerar link da loja
-  const linkLoja = `https://vitatop.tecskill.com.br/lojinha_vitatop/${loja.nome_loja}`;
+  const linkLoja = `https://vitatop.tecskill.com.br/lojinha_vitatop/${loja.nome_loja || "loja"}`;
   localStorage.setItem("linkLoja", linkLoja);
   
   // Carregar categorias selecionadas
-  atualizarInterfaceCategorias();
+  try {
+    atualizarInterfaceCategorias();
+  } catch (error) {
+    console.error("Erro ao atualizar interface de categorias:", error);
+  }
 }
 
 // Mostrar formulário de criação
@@ -632,7 +641,20 @@ function carregarCategoriasDisponiveis() {
       
       if (responseJson.status === "success" && responseJson.data && responseJson.data.data) {
         const categorias = responseJson.data.data;
-        exibirCategoriasDisponiveis(categorias);
+        
+        // Verificar se as categorias são válidas
+        if (Array.isArray(categorias) && categorias.length > 0) {
+          // Filtrar categorias inválidas
+          const categoriasValidas = categorias.filter(cat => cat && cat.id && cat.nome);
+          
+          if (categoriasValidas.length > 0) {
+            exibirCategoriasDisponiveis(categoriasValidas);
+          } else {
+            app.dialog.alert("Nenhuma categoria válida encontrada", "Aviso");
+          }
+        } else {
+          app.dialog.alert("Nenhuma categoria disponível no momento", "Aviso");
+        }
       } else {
         app.dialog.alert("Erro ao carregar categorias: " + (responseJson.message || "Dados inválidos"), "Erro");
       }
@@ -657,14 +679,20 @@ function exibirCategoriasDisponiveis(categorias) {
     <div class="categorias-selecionadas">
       <h5>Categorias Selecionadas: <span id="contadorCategorias">${categoriasSelecionadas.length}</span></h5>
       <div class="categorias-tags" id="categoriasTagsPopup">
-        ${categoriasSelecionadas.map(cat => `<span class="categoria-tag">${cat.nome}</span>`).join('')}
+        ${categoriasSelecionadas.map(cat => `<span class="categoria-tag">${cat && cat.nome ? cat.nome : 'Categoria'}</span>`).join('')}
       </div>
     </div>
   `;
   container.append(contadorHTML);
   
   categorias.forEach((categoria) => {
-    const isSelected = categoriasSelecionadas.some(cat => cat.id === categoria.id);
+    // Verificar se a categoria é válida
+    if (!categoria || !categoria.id) {
+      console.warn("Categoria inválida encontrada:", categoria);
+      return;
+    }
+    
+    const isSelected = categoriasSelecionadas.some(cat => cat && cat.id === categoria.id);
     
     const categoriaHTML = `
       <div class="categoria-item ${isSelected ? 'selected' : ''}" data-id="${categoria.id}">
@@ -675,7 +703,7 @@ function exibirCategoriasDisponiveis(categorias) {
           <i class="${categoria.icone || 'mdi mdi-tag'}"></i>
         </div>
         <div class="categoria-info">
-          <div class="categoria-nome">${categoria.nome}</div>
+          <div class="categoria-nome">${categoria.nome || 'Categoria'}</div>
           <div class="categoria-descricao">Categoria de produtos</div>
         </div>
       </div>
@@ -687,7 +715,12 @@ function exibirCategoriasDisponiveis(categorias) {
   // Adicionar eventos de clique
   $(".categoria-item").on("click", function() {
     const categoriaId = $(this).data("id");
-    const categoria = categorias.find(cat => cat.id === categoriaId);
+    const categoria = categorias.find(cat => cat && cat.id === categoriaId);
+    
+    if (!categoria) {
+      console.warn("Categoria não encontrada para ID:", categoriaId);
+      return;
+    }
     
     if ($(this).hasClass("selected")) {
       // Desmarcar categoria
@@ -715,17 +748,24 @@ function atualizarContadorCategorias() {
   // Atualizar tags
   tagsContainer.empty();
   categoriasSelecionadas.forEach(cat => {
-    const tagHTML = `<span class="categoria-tag">${cat.nome}</span>`;
-    tagsContainer.append(tagHTML);
+    if (cat && cat.nome) {
+      const tagHTML = `<span class="categoria-tag">${cat.nome}</span>`;
+      tagsContainer.append(tagHTML);
+    }
   });
 }
 
 // Adicionar categoria à lista de selecionadas
 function adicionarCategoriaSelecionada(categoria) {
+  if (!categoria || !categoria.id) {
+    console.warn("Tentativa de adicionar categoria inválida:", categoria);
+    return;
+  }
+  
   const categoriasSelecionadas = JSON.parse(localStorage.getItem("categoriasLoja") || "[]");
   
   // Verificar se já não está na lista
-  if (!categoriasSelecionadas.some(cat => cat.id === categoria.id)) {
+  if (!categoriasSelecionadas.some(cat => cat && cat.id === categoria.id)) {
     categoriasSelecionadas.push(categoria);
     localStorage.setItem("categoriasLoja", JSON.stringify(categoriasSelecionadas));
   }
@@ -733,9 +773,14 @@ function adicionarCategoriaSelecionada(categoria) {
 
 // Remover categoria da lista de selecionadas
 function removerCategoriaSelecionada(categoria) {
+  if (!categoria || !categoria.id) {
+    console.warn("Tentativa de remover categoria inválida:", categoria);
+    return;
+  }
+  
   const categoriasSelecionadas = JSON.parse(localStorage.getItem("categoriasLoja") || "[]");
   
-  const index = categoriasSelecionadas.findIndex(cat => cat.id === categoria.id);
+  const index = categoriasSelecionadas.findIndex(cat => cat && cat.id === categoria.id);
   if (index > -1) {
     categoriasSelecionadas.splice(index, 1);
     localStorage.setItem("categoriasLoja", JSON.stringify(categoriasSelecionadas));
@@ -780,31 +825,42 @@ function selecionarTodasCategorias() {
 
 // Atualizar interface após salvar categorias
 function atualizarInterfaceCategorias() {
-  const categoriasSelecionadas = JSON.parse(localStorage.getItem("categoriasLoja") || "[]");
-  
-  const displayContainer = $("#categoriasSelecionadasDisplay");
-  const tagsContainer = $("#categoriasTagsDisplay");
-  
-  if (categoriasSelecionadas.length > 0) {
-    // Mostrar a seção de categorias
-    displayContainer.show();
+  try {
+    const categoriasSelecionadas = JSON.parse(localStorage.getItem("categoriasLoja") || "[]");
     
-    // Limpar tags existentes
-    tagsContainer.empty();
+    const displayContainer = $("#categoriasSelecionadasDisplay");
+    const tagsContainer = $("#categoriasTagsDisplay");
     
-    // Adicionar tags para cada categoria selecionada
-    categoriasSelecionadas.forEach((categoria) => {
-      const tagHTML = `
-        <div class="categoria-tag-display">
-          <i class="${categoria.icone || 'mdi mdi-tag'}"></i>
-          <span>${categoria.nome}</span>
-        </div>
-      `;
-      tagsContainer.append(tagHTML);
-    });
-  } else {
-    // Esconder a seção se não há categorias selecionadas
-    displayContainer.hide();
+    if (!displayContainer.length || !tagsContainer.length) {
+      console.warn("Elementos da interface de categorias não encontrados");
+      return;
+    }
+    
+    if (categoriasSelecionadas && categoriasSelecionadas.length > 0) {
+      // Mostrar a seção de categorias
+      displayContainer.show();
+      
+      // Limpar tags existentes
+      tagsContainer.empty();
+      
+      // Adicionar tags para cada categoria selecionada
+      categoriasSelecionadas.forEach((categoria) => {
+        if (categoria && categoria.nome) {
+          const tagHTML = `
+            <div class="categoria-tag-display">
+              <i class="${categoria.icone || 'mdi mdi-tag'}"></i>
+              <span>${categoria.nome}</span>
+            </div>
+          `;
+          tagsContainer.append(tagHTML);
+        }
+      });
+    } else {
+      // Esconder a seção se não há categorias selecionadas
+      displayContainer.hide();
+    }
+  } catch (error) {
+    console.error("Erro ao atualizar interface de categorias:", error);
   }
 }
 
@@ -816,5 +872,5 @@ function obterCategoriasSelecionadas() {
 // Verificar se uma categoria está selecionada
 function categoriaEstaSelecionada(categoriaId) {
   const categoriasSelecionadas = JSON.parse(localStorage.getItem("categoriasLoja") || "[]");
-  return categoriasSelecionadas.some(cat => cat.id === categoriaId);
+  return categoriasSelecionadas.some(cat => cat && cat.id === categoriaId);
 }
