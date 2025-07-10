@@ -694,8 +694,15 @@ function exibirCategoriasDisponiveis(categorias) {
     
     const isSelected = categoriasSelecionadas.some(cat => cat && cat.id === categoria.id);
     
+    // Escapar caracteres especiais para evitar problemas no HTML
+    const nomeEscapado = (categoria.nome || 'Categoria').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    const iconeEscapado = (categoria.icone || 'mdi mdi-tag').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    
     const categoriaHTML = `
-      <div class="categoria-item ${isSelected ? 'selected' : ''}" data-id="${categoria.id}">
+      <div class="categoria-item ${isSelected ? 'selected' : ''}" 
+           data-id="${categoria.id}"
+           data-nome="${nomeEscapado}"
+           data-icone="${iconeEscapado}">
         <div class="categoria-checkbox">
           <i class="mdi mdi-check"></i>
         </div>
@@ -709,18 +716,43 @@ function exibirCategoriasDisponiveis(categorias) {
       </div>
     `;
     
+    console.log("HTML gerado para categoria:", categoria.id, categoriaHTML);
+    
     container.append(categoriaHTML);
   });
   
-  // Adicionar eventos de clique
-  $(".categoria-item").on("click", function() {
-    const categoriaId = $(this).data("id");
-    const categoria = categorias.find(cat => cat && cat.id === categoriaId);
+  // Usar delegate para garantir que os eventos funcionem
+  $(document).off("click.categorias", ".categoria-item");
+  $(document).on("click.categorias", ".categoria-item", function() {
+    const categoriaId = $(this).attr("data-id");
+    let categoriaNome = $(this).attr("data-nome");
+    let categoriaIcone = $(this).attr("data-icone");
     
-    if (!categoria) {
-      console.warn("Categoria não encontrada para ID:", categoriaId);
+    console.log("Dados da categoria clicada:", { categoriaId, categoriaNome, categoriaIcone });
+    
+    // Verificar se os dados estão sendo recuperados corretamente
+    if (!categoriaId || !categoriaNome) {
+      console.error("Dados da categoria não encontrados no elemento:", {
+        element: this,
+        dataId: $(this).attr("data-id"),
+        dataNome: $(this).attr("data-nome"),
+        dataIcone: $(this).attr("data-icone")
+      });
       return;
     }
+    
+    // Decodificar caracteres especiais
+    categoriaNome = categoriaNome.replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+    categoriaIcone = categoriaIcone.replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+    
+    // Criar objeto categoria a partir dos dados do elemento
+    const categoria = {
+      id: categoriaId,
+      nome: categoriaNome,
+      icone: categoriaIcone
+    };
+    
+    console.log("Objeto categoria criado:", categoria);
     
     if ($(this).hasClass("selected")) {
       // Desmarcar categoria
