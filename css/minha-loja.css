@@ -1296,27 +1296,6 @@
   padding-bottom: 90px;
 }
 
-/* Ajuste robusto para tabbar/toolbar no iPhone (safe area) */
-.tabbar, .toolbar, .framework7-root .tabbar, .framework7-root .toolbar,
-.tabbar-labels, .tabbar-inner, .toolbar-inner {
-  padding-bottom: env(safe-area-inset-bottom, 24px) !important;
-  min-height: calc(56px + env(safe-area-inset-bottom, 24px)) !important;
-  background: #fff;
-  width: 100%;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  box-sizing: border-box;
-  border-top: 1px solid #eee;
-  align-items: flex-start !important;
-  display: flex !important;
-}
-
-.tabbar .tab-link, .toolbar .tab-link, .tabbar-labels .tab-link {
-  align-items: flex-start !important;
-  display: flex !important;
-}
-
 /* Garante que o conteúdo não fique atrás da tabbar */
 .page-content, .view-main, .framework7-root .page-content {
   padding-bottom: calc(56px + env(safe-area-inset-bottom, 24px));
