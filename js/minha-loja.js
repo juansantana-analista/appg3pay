@@ -31,11 +31,9 @@ function verificarLoja() {
       app.dialog.close();
       
       if (responseJson.status === "success" && responseJson.data.tem_loja) {
-        // Usuário já tem loja - mostrar tela de gerenciamento
+        // Usuário já tem loja - buscar dados completos incluindo visitas
         const loja = responseJson.data.data;
-        localStorage.setItem("minhaLoja", JSON.stringify(loja));
-        mostrarTelaGerenciamento(loja);
-        carregarBannersLoja(loja.id);
+        buscarDadosCompletosLoja(loja.id);
       } else {
         // Usuário não tem loja - mostrar tela de boas-vindas
         mostrarTelaBemVindo();
@@ -48,6 +46,45 @@ function verificarLoja() {
         "Erro ao verificar loja: " + error.message,
         "Falha na requisição!"
       );
+    });
+}
+
+// Buscar dados completos da loja incluindo visitas
+function buscarDadosCompletosLoja(lojaId) {
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "LojinhaRestService",
+    method: "obterLojaDados",
+    loja_id: lojaId
+  });
+
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      if (responseJson.status === "success" && responseJson.data.status === "success") {
+        // Dados completos da loja incluindo visitas
+        const loja = responseJson.data.data;
+        localStorage.setItem("minhaLoja", JSON.stringify(loja));
+        mostrarTelaGerenciamento(loja);
+        carregarBannersLoja(loja.id);
+      } else {
+        console.error("Erro ao buscar dados completos da loja:", responseJson.message);
+        app.dialog.alert("Erro ao carregar dados da loja: " + responseJson.message, "Erro");
+      }
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar dados completos da loja:", error);
+      app.dialog.alert("Erro ao carregar dados da loja: " + error.message, "Erro");
     });
 }
 
@@ -71,6 +108,9 @@ function mostrarTelaGerenciamento(loja) {
 
   // Atualizar dados da loja na tela
   $("#nomeLojaAtual").text(loja.nome_loja || "Minha Loja");
+  
+  // Atualizar visualizações
+  $("#visualizacoes").text(loja.visitas || 0);
   
   // Gerar link da loja
   const linkLoja = `https://vitatop.tecskill.com.br/lojinha_vitatop/${loja.nome_loja || "loja"}`;
@@ -327,6 +367,11 @@ function enviarBannerLoja(lojaId, arquivo, callback) {
 
 // Mostrar sucesso da criação
 function mostrarSucessoCriacao() {
+  // Recarregar dados completos da loja para atualizar visualizações
+  const lojaId = localStorage.getItem("lojaId");
+  if (lojaId) {
+    buscarDadosCompletosLoja(lojaId);
+  }
   app.popup.open(".popup-sucesso");
 }
 
@@ -433,7 +478,8 @@ function processarNovoBanner(arquivo) {
   enviarBannerLoja(lojaId, arquivo, function() {
     app.dialog.close();
     app.dialog.alert("Banner adicionado com sucesso!", "Sucesso");
-    carregarBannersLoja(lojaId);
+    // Recarregar dados completos da loja para atualizar visualizações
+    buscarDadosCompletosLoja(lojaId);
   });
 }
 
@@ -468,7 +514,8 @@ function excluirBanner(bannerId) {
           const lojaData = localStorage.getItem("minhaLoja");
           if (lojaData) {
             const loja = JSON.parse(lojaData);
-            carregarBannersLoja(loja.id);
+            // Recarregar dados completos da loja para atualizar visualizações
+            buscarDadosCompletosLoja(loja.id);
           }
         } else {
           app.dialog.alert("Erro ao excluir banner: " + responseJson.message, "Erro");
@@ -540,12 +587,8 @@ function salvarNovoNome() {
     .then((responseJson) => {
       app.dialog.close();
       if (responseJson.status === "success") {
-        // Atualizar localStorage
-        lojaAtual.nome_loja = novoNome;
-        localStorage.setItem("minhaLoja", JSON.stringify(lojaAtual));
-        
-        // Atualizar tela
-        $("#nomeLojaAtual").text(novoNome);
+        // Recarregar dados completos da loja para atualizar visualizações
+        buscarDadosCompletosLoja(lojaAtual.id);
         
         app.popup.close(".popup-editar-nome");
         app.dialog.alert("Nome da loja atualizado com sucesso!", "Sucesso");
@@ -773,7 +816,8 @@ function salvarCategoriasSelecionadas() {
     if (resp.status === "success") {
       app.popup.close(".popup-categorias");
       app.dialog.alert("Categorias salvas com sucesso!", "Sucesso");
-      atualizarInterfaceCategorias();
+      // Recarregar dados completos da loja para atualizar visualizações
+      buscarDadosCompletosLoja(lojinhaId);
     } else {
       app.dialog.alert("Erro ao salvar categorias: " + (resp.message || "Erro desconhecido"), "Erro");
     }
