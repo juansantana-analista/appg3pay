@@ -668,6 +668,8 @@ function gerenciarCategorias() {
 
 // Exibir categorias disponíveis no popup
 function exibirCategoriasDisponiveis(categorias, selecionadasIds) {
+  // Filtrar apenas categorias habilitadas
+  const categoriasAtivas = categorias.filter(cat => String(cat.habilitado) === '1');
   const container = $("#categoriasContainer");
   container.empty();
   // Adicionar contador de categorias selecionadas
@@ -675,12 +677,12 @@ function exibirCategoriasDisponiveis(categorias, selecionadasIds) {
     <div class="categorias-selecionadas">
       <h5>Categorias Selecionadas: <span id="contadorCategorias">${selecionadasIds.length}</span></h5>
       <div class="categorias-tags" id="categoriasTagsPopup">
-        ${categorias.filter(cat => selecionadasIds.includes(String(cat.id))).map(cat => `<span class="categoria-tag">${cat.nome}</span>`).join('')}
+        ${categoriasAtivas.filter(cat => selecionadasIds.includes(String(cat.id))).map(cat => `<span class="categoria-tag">${cat.nome}</span>`).join('')}
       </div>
     </div>
   `;
   container.append(contadorHTML);
-  categorias.forEach((categoria) => {
+  categoriasAtivas.forEach((categoria) => {
     if (!categoria || !categoria.id) return;
     const isSelected = selecionadasIds.includes(String(categoria.id));
     const nomeEscapado = (categoria.nome || 'Categoria').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
@@ -718,15 +720,17 @@ function exibirCategoriasDisponiveis(categorias, selecionadasIds) {
         window.categoriasSelecionadasLojinha.push(String(categoriaId));
       }
     }
-    atualizarContadorCategoriasPopup(categorias, window.categoriasSelecionadasLojinha);
+    atualizarContadorCategoriasPopup(categoriasAtivas, window.categoriasSelecionadasLojinha);
   });
 }
 
 function atualizarContadorCategoriasPopup(categorias, selecionadasIds) {
+  // Filtrar apenas categorias habilitadas
+  const categoriasAtivas = categorias.filter(cat => String(cat.habilitado) === '1');
   $("#contadorCategorias").text(selecionadasIds.length);
   const tagsContainer = $("#categoriasTagsPopup");
   tagsContainer.empty();
-  categorias.filter(cat => selecionadasIds.includes(String(cat.id))).forEach(cat => {
+  categoriasAtivas.filter(cat => selecionadasIds.includes(String(cat.id))).forEach(cat => {
     tagsContainer.append(`<span class="categoria-tag">${cat.nome}</span>`);
   });
 }
@@ -768,16 +772,22 @@ function atualizarInterfaceCategorias() {
     const tagsContainer = $("#categoriasTagsDisplay");
     if (!displayContainer.length || !tagsContainer.length) return;
     if (resp.status === "success" && resp.data && Array.isArray(resp.data.data) && resp.data.data.length > 0) {
-      displayContainer.show();
-      tagsContainer.empty();
-      resp.data.data.forEach((cat) => {
-        tagsContainer.append(`
-          <div class="categoria-tag-display">
-            <i class="${cat.icone || 'mdi mdi-tag'}"></i>
-            <span>${cat.categoria_nome || cat.nome}</span>
-          </div>
-        `);
-      });
+      // Filtrar apenas categorias habilitadas
+      const categoriasAtivas = resp.data.data.filter(cat => String(cat.habilitado) === '1');
+      if (categoriasAtivas.length > 0) {
+        displayContainer.show();
+        tagsContainer.empty();
+        categoriasAtivas.forEach((cat) => {
+          tagsContainer.append(`
+            <div class="categoria-tag-display">
+              <i class="${cat.icone || 'mdi mdi-tag'}"></i>
+              <span>${cat.categoria_nome || cat.nome}</span>
+            </div>
+          `);
+        });
+      } else {
+        displayContainer.hide();
+      }
     } else {
       displayContainer.hide();
     }
