@@ -668,7 +668,7 @@ function gerenciarCategorias() {
 
 // Exibir categorias disponíveis no popup
 function exibirCategoriasDisponiveis(categorias, selecionadasIds) {
-  // Remover filtro de categorias habilitadas, exibir todas
+  // Exibir todas as categorias (sem filtro de habilitado)
   const container = $("#categoriasContainer");
   container.empty();
   // Adicionar contador de categorias selecionadas
@@ -724,7 +724,7 @@ function exibirCategoriasDisponiveis(categorias, selecionadasIds) {
 }
 
 function atualizarContadorCategoriasPopup(categorias, selecionadasIds) {
-  // Remover filtro de categorias habilitadas, exibir todas
+  // Exibir todas as categorias (sem filtro de habilitado)
   $("#contadorCategorias").text(selecionadasIds.length);
   const tagsContainer = $("#categoriasTagsPopup");
   tagsContainer.empty();
