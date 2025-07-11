@@ -427,7 +427,7 @@ function listarProdutos(searchQuery = "", categoriaId) {
         }
         $("#container-produtos").empty();
 
-        produtosFiltrados.forEach((produto) => {
+        produtos.forEach((produto) => {
           var produtoPreco = formatarMoeda(produto.preco_lojavirtual);
 
           var imgUrl = "https://vitatop.tecskill.com.br/";
