@@ -419,9 +419,15 @@ function listarProdutos(searchQuery = "", categoriaId) {
         responseJson.data.data
       ) {
         const produtos = responseJson.data.data;
+        let produtosFiltrados = produtos;
+        if (window.categoriasSelecionadasLojinha && Array.isArray(window.categoriasSelecionadasLojinha) && window.categoriasSelecionadasLojinha.length > 0) {
+          produtosFiltrados = produtos.filter(produto =>
+            window.categoriasSelecionadasLojinha.includes(String(produto.categoria_produto))
+          );
+        }
         $("#container-produtos").empty();
 
-        produtos.forEach((produto) => {
+        produtosFiltrados.forEach((produto) => {
           var produtoPreco = formatarMoeda(produto.preco_lojavirtual);
 
           var imgUrl = "https://vitatop.tecskill.com.br/";
@@ -445,7 +451,7 @@ function listarProdutos(searchQuery = "", categoriaId) {
                               <img src="${imagemProduto}" alt="${nomeProduto}">
                           </div>
                           <div class="nome-rating">
-                                  <span class="color-gray product-name">${nomeProduto.toLocaleUpperCase()}</span>                     
+                                  <span class="color-gray product-name">${nomeProduto.toLocaleUpperCase()}
                               <div class="star-rating">
                                   <span class="star"></span>
                                   <span class="star"></span>
