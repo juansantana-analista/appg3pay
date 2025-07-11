@@ -5075,3 +5075,54 @@ function oneSignalLogin(userId, oneSignalId) {
   }
 }
 
+// Listar categorias da lojinha
+function listarCategoriasLojinha(lojinhaId, callback) {
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+  const body = JSON.stringify({
+    class: "LojinhaRestService",
+    method: "listarCategoriasLojinha",
+    lojinha_vitatop_id: lojinhaId
+  });
+  fetch(apiServerUrl, {
+    method: "POST",
+    headers,
+    body
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      if (typeof callback === 'function') callback(responseJson);
+    })
+    .catch((error) => {
+      if (typeof callback === 'function') callback({ status: 'error', error });
+    });
+}
+
+// Atualizar categorias da lojinha
+function atualizarCategoriasLojinha(lojinhaId, arrayCategorias, callback) {
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+  const body = JSON.stringify({
+    class: "LojinhaRestService",
+    method: "atualizarCategoriasLojinha",
+    lojinha_vitatop_id: lojinhaId,
+    categorias: arrayCategorias
+  });
+  fetch(apiServerUrl, {
+    method: "POST",
+    headers,
+    body
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      if (typeof callback === 'function') callback(responseJson);
+    })
+    .catch((error) => {
+      if (typeof callback === 'function') callback({ status: 'error', error });
+    });
+}
+
