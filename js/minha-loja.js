@@ -733,6 +733,27 @@ function atualizarContadorCategoriasPopup(categorias, selecionadasIds) {
   });
 }
 
+// Função global para limpar todas as categorias selecionadas
+function limparCategoriasSelecionadas() {
+  window.categoriasSelecionadasLojinha = [];
+  // Atualiza a interface do popup, se estiver aberto
+  if (typeof exibirCategoriasDisponiveis === 'function' && window.ultimaListaCategoriasDisponiveis) {
+    exibirCategoriasDisponiveis(window.ultimaListaCategoriasDisponiveis, window.categoriasSelecionadasLojinha);
+  } else {
+    // Alternativa: tentar atualizar contador e tags
+    if (typeof atualizarContadorCategoriasPopup === 'function' && window.ultimaListaCategoriasDisponiveis) {
+      atualizarContadorCategoriasPopup(window.ultimaListaCategoriasDisponiveis, window.categoriasSelecionadasLojinha);
+    }
+  }
+}
+
+// (Opcional: salve a última lista de categorias disponíveis ao exibir o popup)
+const _exibirCategoriasDisponiveis = exibirCategoriasDisponiveis;
+exibirCategoriasDisponiveis = function(categorias, selecionadasIds) {
+  window.ultimaListaCategoriasDisponiveis = categorias;
+  return _exibirCategoriasDisponiveis.apply(this, arguments);
+};
+
 // Salvar categorias selecionadas
 function salvarCategoriasSelecionadas() {
   const lojaData = localStorage.getItem("minhaLoja");
