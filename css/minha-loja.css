@@ -1283,3 +1283,8 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Garantir espaço extra para os botões no popup de categorias */
+.popup-categorias .block {
+  padding-bottom: 90px;
+}
