@@ -1295,3 +1295,31 @@
 .popup-categorias .block {
   padding-bottom: 90px;
 }
+
+/* Ajuste para tabbar/toolbar no iPhone (safe area) */
+.tabbar, .toolbar, .framework7-root .tabbar, .framework7-root .toolbar {
+  padding-bottom: env(safe-area-inset-bottom, 12px);
+  box-sizing: border-box;
+}
+
+/* Garante que as fontes de ícones sejam carregadas corretamente */
+@font-face {
+  font-family: 'Material Design Icons';
+  src: url('../fonts/materialdesignicons-webfont.woff2') format('woff2'),
+       url('../fonts/materialdesignicons-webfont.woff') format('woff'),
+       url('../fonts/materialdesignicons-webfont.ttf') format('truetype'),
+       url('../fonts/materialdesignicons-webfont.eot') format('embedded-opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'remixicon';
+  src: url('../css/remixicon/remixicon.woff2') format('woff2'),
+       url('../css/remixicon/remixicon.woff') format('woff'),
+       url('../css/remixicon/remixicon.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
