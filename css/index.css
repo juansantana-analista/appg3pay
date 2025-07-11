@@ -58,17 +58,19 @@ body {
   font-weight: 600;
 }
 
+/* Ajuste robusto para safe area da bottom-nav no iPhone */
 .bottom-nav {
-  display: flex;
-  position: fixed;
-  bottom: 0;
-  left: 0;
+  padding-bottom: env(safe-area-inset-bottom, 24px) !important;
+  min-height: calc(56px + env(safe-area-inset-bottom, 24px)) !important;
+  background: #fff;
   width: 100%;
-  justify-content: space-around;
-  background-color: #ffffff;
-  border-top: 1px solid #ccc;
+  left: 0;
+  right: 0;
   z-index: 1000;
-  padding-bottom: env(safe-area-inset-bottom); /* Ajusta para o Safe Area */
+  box-sizing: border-box;
+  border-top: 1px solid #eee;
+  align-items: flex-start !important;
+  display: flex !important;
 }
 .d-flex {
   display: flex;
