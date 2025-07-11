@@ -1296,9 +1296,21 @@
   padding-bottom: 90px;
 }
 
-/* Ajuste para tabbar/toolbar no iPhone (safe area) */
+/* Ajuste robusto para tabbar/toolbar no iPhone (safe area) */
 .tabbar, .toolbar, .framework7-root .tabbar, .framework7-root .toolbar {
-  padding-bottom: env(safe-area-inset-bottom, 12px);
+  padding-bottom: env(safe-area-inset-bottom, 24px);
+  background: #fff;
+  width: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-sizing: border-box;
+  border-top: 1px solid #eee;
+}
+
+/* Garante que o conteúdo não fique atrás da tabbar */
+.page-content, .view-main, .framework7-root .page-content {
+  padding-bottom: calc(56px + env(safe-area-inset-bottom, 24px));
   box-sizing: border-box;
 }
 
