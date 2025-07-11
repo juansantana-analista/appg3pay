@@ -2033,90 +2033,11 @@ var app = new Framework7({
               proximoStep(1);
             });
 
-            // Step 2 - Banner - SOLUÇÃO PRINCIPAL
-            $(document).on('click.minhaLoja', "#uploadArea", function(e) {
-              e.preventDefault();
-              e.stopImmediatePropagation();
-              
-              // Criar um novo input file temporário para evitar conflitos
-              const tempInput = document.createElement('input');
-              tempInput.type = 'file';
-              tempInput.accept = 'image/*';
-              tempInput.style.display = 'none';
-              
-              tempInput.onchange = function() {
-                const file = this.files[0];
-                if (file) {
-                  handleBannerFile(file);
-                }
-                // Remover o input temporário
-                document.body.removeChild(tempInput);
-              };
-              
-              document.body.appendChild(tempInput);
-              tempInput.click();
-            });
-
-            // Função para processar arquivo de banner
-            function handleBannerFile(file) {
-              // Validar tamanho do arquivo (máximo 5MB)
-              const maxSize = 5 * 1024 * 1024;
-              if (file.size > maxSize) {
-                app.dialog.alert("A imagem deve ter no máximo 5MB. Tente uma imagem menor.", "Arquivo muito grande");
-                return;
-              }
-
-              // Validar tipo de arquivo
-              const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-              if (!allowedTypes.includes(file.type)) {
-                app.dialog.alert("Apenas arquivos JPG, JPEG, PNG e GIF são permitidos.", "Formato inválido");
-                return;
-              }
-
-              const reader = new FileReader();
-              reader.onload = function(e) {
-                $("#bannerPreview").attr("src", e.target.result);
-                $("#uploadArea").hide();
-                $("#previewBanner").removeClass("display-none");
-                
-                // Atualizar o input original para manter compatibilidade
-                const dataTransfer = new DataTransfer();
-                dataTransfer.items.add(file);
-                document.getElementById('bannerInput').files = dataTransfer.files;
-              };
-              
-              reader.onerror = function() {
-                app.dialog.alert("Erro ao processar a imagem", "Erro");
-              };
-              
-              reader.readAsDataURL(file);
-            }
-
-            $(document).on('click.minhaLoja', "#btnRemoveBanner", function(e) {
-              e.preventDefault();
-              e.stopImmediatePropagation();
-              $("#bannerInput").val("");
-              $("#previewBanner").addClass("display-none");
-              $("#uploadArea").show();
-            });
-
+            // Step 2 - Finalizar
             $(document).on('click.minhaLoja', "#btnStep2Back", function(e) {
               e.preventDefault();
               e.stopImmediatePropagation();
               stepAnterior(2);
-            });
-
-            $(document).on('click.minhaLoja', "#btnStep2Next", function(e) {
-              e.preventDefault();
-              e.stopImmediatePropagation();
-              proximoStep(2);
-            });
-
-            // Step 3 - Finalizar
-            $(document).on('click.minhaLoja', "#btnStep3Back", function(e) {
-              e.preventDefault();
-              e.stopImmediatePropagation();
-              stepAnterior(3);
             });
 
             $(document).on('click.minhaLoja', "#btnCopyLink", function(e) {

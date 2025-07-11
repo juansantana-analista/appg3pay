@@ -147,9 +147,6 @@ function resetarFormulario() {
   // Limpar campos
   $("#nomeLoja").val("");
   $("#previewNome").text("Nome da sua loja aparecerá aqui");
-  $("#bannerInput").val("");
-  $("#previewBanner").addClass("display-none");
-  $("#uploadArea").show();
   
   // Desabilitar botão
   $("#btnStep1Next").prop("disabled", true);
@@ -167,8 +164,8 @@ function proximoStep(stepAtual) {
   $(".step-content").addClass("display-none");
   $(`#step-${proximoStep}`).removeClass("display-none");
   
-  // Se for o step 3, preparar summary
-  if (proximoStep === 3) {
+  // Se for o step 2, preparar summary
+  if (proximoStep === 2) {
     prepararSummary();
   }
 }
@@ -186,14 +183,11 @@ function stepAnterior(stepAtual) {
   $(`#step-${stepAnterior}`).removeClass("display-none");
 }
 
-// Preparar summary no step 3
+// Preparar summary no step 2
 function prepararSummary() {
   const nomeLoja = $("#nomeLoja").val();
-  const temBanner = $("#bannerInput")[0] && $("#bannerInput")[0].files.length > 0;
-  const pessoaId = localStorage.getItem("pessoaId");
   
   $("#summaryNome").text(nomeLoja);
-  $("#summaryBanner").text(temBanner ? "Banner adicionado" : "Sem banner");
   $("#linkLoja").text(`vitatop.tecskill.com.br/lojinha_vitatop/${nomeLoja}`);
 }
 
@@ -230,20 +224,10 @@ function criarLoja() {
         const lojaId = responseJson.data.data.id;
         localStorage.setItem("lojaId", lojaId);
         
-        // Se tem banner, enviar banner
-        const bannerInput = document.getElementById('bannerInput');
-        const bannerFile = bannerInput && bannerInput.files[0];
-        
-        if (bannerFile) {
-          enviarBannerLoja(lojaId, bannerFile, function() {
-            app.dialog.close();
-            mostrarSucessoCriacao();
-          });
-        } else {
-          enviarBannerLoja(lojaId);
-          app.dialog.close();
-          mostrarSucessoCriacao();
-        }
+        // Criar banners padrão automaticamente
+        enviarBannerLoja(lojaId);
+        app.dialog.close();
+        mostrarSucessoCriacao();
       } else {
         app.dialog.close();
         app.dialog.alert("Erro ao criar loja: " + responseJson.message, "Erro");

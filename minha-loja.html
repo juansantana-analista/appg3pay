@@ -90,10 +90,6 @@
               </div>
               <div class="step" data-step="2">
                 <span>2</span>
-                <label>Banner Principal</label>
-              </div>
-              <div class="step" data-step="3">
-                <span>3</span>
                 <label>Finalizar</label>
               </div>
             </div>
@@ -134,48 +130,10 @@
               </div>
             </div>
 
-            <!-- Passo 2: Banner Principal -->
+
+
+            <!-- Passo 2: Finalizar -->
             <div class="step-content display-none" id="step-2">
-              <div class="form-card">
-                <div class="form-header">
-                  <i class="mdi mdi-image-outline"></i>
-                  <h3>Adicione um banner principal</h3>
-                  <p>Uma imagem atrativa para destacar sua loja</p>
-                </div>
-
-                <div class="upload-area" id="uploadArea">
-                  <div class="upload-placeholder">
-                    <i class="mdi mdi-cloud-upload"></i>
-                    <h4>Clique para adicionar uma imagem</h4>
-                    <p><strong>Tamanho recomendado: 1200x600px</strong><br>
-                    Máximo: 5MB | Formatos: JPG, PNG, GIF<br>
-                    <small>Para melhor qualidade, use imagens com proporção 2:1</small></p>
-                  </div>
-                  <input type="file" id="bannerInput" accept="image/*" style="display: none;">
-                </div>
-
-                <div class="preview-banner display-none" id="previewBanner">
-                  <img id="bannerPreview" alt="Preview do banner">
-                  <button class="btn-remove-banner" id="btnRemoveBanner">
-                    <i class="mdi mdi-close"></i>
-                  </button>
-                </div>
-
-                <div class="form-actions">
-                  <button class="btn-back" id="btnStep2Back">
-                    <i class="mdi mdi-arrow-left"></i>
-                    Voltar
-                  </button>
-                  <button class="btn-next" id="btnStep2Next">
-                    Próximo Passo
-                    <i class="mdi mdi-arrow-right"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Passo 3: Finalizar -->
-            <div class="step-content display-none" id="step-3">
               <div class="form-card">
                 <div class="form-header success">
                   <i class="mdi mdi-check-circle"></i>
@@ -189,10 +147,6 @@
                     <span id="summaryNome">-</span>
                   </div>
                   <div class="summary-item">
-                    <label>Banner:</label>
-                    <span id="summaryBanner">Adicionado</span>
-                  </div>
-                  <div class="summary-item">
                     <label>Link da Loja:</label>
                     <div class="link-preview">
                       <span id="linkLoja">vitatop.com/loja/</span>
@@ -204,7 +158,7 @@
                 </div>
 
                 <div class="form-actions">
-                  <button class="btn-back" id="btnStep3Back">
+                  <button class="btn-back" id="btnStep2Back">
                     <i class="mdi mdi-arrow-left"></i>
                     Voltar
                   </button>
