@@ -3549,10 +3549,13 @@ function finalizarCompra(
               ref.show();*/
       } else {
         app.dialog.close();
-        app.dialog.alert(
-          "Erro ao finalizar compra: " + responseJson,
-          "Falha na requisição!"
-        );
+        let msg = "Erro ao finalizar compra.";
+        if (responseJson && (responseJson.message || (responseJson.data && responseJson.data.message))) {
+          msg += " " + (responseJson.message || responseJson.data.message);
+        } else {
+          msg += " " + JSON.stringify(responseJson);
+        }
+        app.dialog.alert(msg, "Falha na requisição!");
       }
     })
     .catch((error) => {
@@ -3635,10 +3638,13 @@ function refazerPagamento(
               ref.show();*/
       } else {
         app.dialog.close();
-        app.dialog.alert(
-          "Erro ao finalizar compra: " + responseJson,
-          "Falha na requisição!"
-        );
+        let msg = "Erro ao finalizar compra.";
+        if (responseJson && (responseJson.message || (responseJson.data && responseJson.data.message))) {
+          msg += " " + (responseJson.message || responseJson.data.message);
+        } else {
+          msg += " " + JSON.stringify(responseJson);
+        }
+        app.dialog.alert(msg, "Falha na requisição!");
       }
     })
     .catch((error) => {
