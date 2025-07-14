@@ -199,40 +199,20 @@ function deleteCookie(name) {
 function listarCategorias() {
   app.dialog.preloader("Carregando...");
 
-  // Cabeçalhos da requisição
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
-  };
-
-  const body = JSON.stringify({
+  const data = {
     class: "ProdutoCategoriaRest",
     method: "listarCategorias",
-  });
-
-  // Opções da requisição
-  const options = {
-    method: "POST",
-    headers: headers,
-    body: body,
   };
 
-  // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data })
     .then((responseJson) => {
-      // Verifica se o status é 'success' e se há dados de categorias
       if (
         responseJson.status === "success" &&
         responseJson.data &&
         responseJson.data.data
       ) {
         const categorias = responseJson.data.data;
-
-        // Limpar o container de categorias
         $("#container-categorias").empty();
-
-        // Adiciona a opção Todas ao inicio
         var opcaoTodasHTML = `
           <div class="category-item active" data-id="todas">
             <div class="category-icon">
@@ -242,8 +222,6 @@ function listarCategorias() {
           </div>
         `;
         $("#container-categorias").append(opcaoTodasHTML);
-
-        // Adicione cada categoria
         categorias.forEach((categoria) => {
           var categoriaHTML = `
             <div class="category-item" data-id="${categoria.id}">
@@ -253,49 +231,25 @@ function listarCategorias() {
               <div class="category-name">${categoria.nome}</div>
             </div>
           `;
-
           $("#container-categorias").append(categoriaHTML);
         });
-
-        // Adicione manipuladores de eventos para os itens de categoria
         $(".category-item").on("click", function () {
-          // Remove a classe ativa de todos os itens
           $(".category-item").removeClass("active");
-
-          // Adiciona a classe ativa ao item clicado
           $(this).addClass("active");
-
-          // Pega o id da categoria clicada
           var categoriaId = $(this).data("id");
-
-          // Se for "todas", define como undefined para listar todos os produtos
           if (categoriaId === "todas") {
             categoriaId = undefined;
           }
-
-          // Chama a função listarProdutos com o id da categoria
           listarProdutos("", categoriaId);
-
-          // Centraliza o item selecionado
           scrollToCategory(this);
-
-          // Atualiza os indicadores de rolagem
           updateScrollIndicators();
         });
-
-        // Configurar os indicadores de rolagem
         setupScrollIndicators();
-
-        // Configurar botões de rolagem
         setupScrollButtons();
-
-        // Mostrar dica de rolagem na primeira vez
         showSwipeHint();
-
         app.dialog.close();
       } else {
         app.dialog.close();
-        // Verifica se há uma mensagem de erro definida
         const errorMessage =
           responseJson.message || "Formato de dados inválido";
         app.dialog.alert(
