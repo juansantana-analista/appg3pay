@@ -113,7 +113,7 @@ function mostrarTelaGerenciamento(loja) {
   $("#visualizacoes").text(loja.visitas || 0);
   
   // Gerar link da loja
-  const linkLoja = `https://vitatophomologa.tecskill.com.brlojinha_vitatop/${loja.nome_loja || "loja"}`;
+  const linkLoja = `https://vitatophomologa.tecskill.com.br/lojinha_vitatop/${loja.nome_loja || "loja"}`;
   localStorage.setItem("linkLoja", linkLoja);
   
   // Carregar categorias selecionadas

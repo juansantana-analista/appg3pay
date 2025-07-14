@@ -385,7 +385,7 @@ function showSwipeHint() {
 function listarProdutos(searchQuery = "", categoriaId) {
   app.dialog.preloader("Carregando...");
 
-  var imgUrl = "https://vitatophomologa.tecskill.com.br";
+  var imgUrl = "https://vitatophomologa.tecskill.com.br/";
 
   // Cabeçalhos da requisição
   const headers = {
@@ -430,7 +430,7 @@ function listarProdutos(searchQuery = "", categoriaId) {
         produtos.forEach((produto) => {
           var produtoPreco = formatarMoeda(produto.preco_lojavirtual);
 
-          var imgUrl = "https://vitatophomologa.tecskill.com.br";
+          var imgUrl = "https://vitatophomologa.tecskill.com.br/";
           const imagemProduto = produto.foto
             ? imgUrl + produto.foto
             : "img/default.png";
@@ -622,7 +622,7 @@ function buscarProduto() {
   var produtoId = localStorage.getItem("produtoId");
   app.dialog.preloader("Carregando...");
 
-  var imgUrl = "https://vitatophomologa.tecskill.com.br";
+  var imgUrl = "https://vitatophomologa.tecskill.com.br/";
 
   // Cabeçalhos da requisição
   const headers = {
@@ -1025,7 +1025,7 @@ function buscarLinks() {
   var codigo_indicador = localStorage.getItem("codigo_indicador");
   app.dialog.preloader("Carregando...");
 
-  var imgUrl = "https://vitatophomologa.tecskill.com.br";
+  var imgUrl = "https://vitatophomologa.tecskill.com.br/";
 
   // Cabeçalhos da requisição
   const headers = {
@@ -1210,7 +1210,7 @@ function buscarLinkAfiliado() {
   const pessoaId = localStorage.getItem("pessoaId");
   app.dialog.preloader("Carregando...");
 
-  var imgUrl = "https://vitatophomologa.tecskill.com.br";
+  var imgUrl = "https://vitatophomologa.tecskill.com.br/";
 
   // Cabeçalhos da requisição
   const headers = {
@@ -1796,7 +1796,7 @@ function detalhesVenda() {
                               <!-- Seção de pagamento -->
                               <div class="payment-method-a display-none" id="pagamentoPix">
                                   <div class="payment-center">
-                                      <img src="https://vitatophomologa.tecskill.com.br${
+                                      <img src="https://vitatophomologa.tecskill.com.br/${
                                         detalhes.forma_pagamento.pix_qrcode
                                       }" width="250px" alt="QR Code">
                                       <span class="pix-key" id="pixKey">${
@@ -1945,7 +1945,7 @@ function detalhesPedido() {
           .map(
             (item) => `
                       <li>
-                          <img src="https://vitatophomologa.tecskill.com.br${
+                          <img src="https://vitatophomologa.tecskill.com.br/${
                             item.foto
                           }" alt="${
               item.descricao
@@ -2011,7 +2011,7 @@ function detalhesPedido() {
                               <div class="payment-method-a display-none" id="pagamentoPix">
                                   <div class="payment-center">
                                       ${exibirPagamento ? `
-                                      <img src="https://vitatophomologa.tecskill.com.br${
+                                      <img src="https://vitatophomologa.tecskill.com.br/${
                                         detalhes.pix_qrcode
                                       }" width="250px" alt="QR Code">
                                       <span class="pix-key" id="pixKey">${
@@ -3137,7 +3137,7 @@ function listarPerfil(rota) {
         if(rota == "index"){
           $("#profileImageMenu").attr(
             "src",
-            "https://vitatophomologa.tecskill.com.br" + pessoa.foto
+            "https://vitatophomologa.tecskill.com.br/" + pessoa.foto
           );
           app.dialog.close();
           return;
@@ -3145,12 +3145,12 @@ function listarPerfil(rota) {
         
           $("#profileImageMenu").attr(
             "src",
-            "https://vitatophomologa.tecskill.com.br" + pessoa.foto
+            "https://vitatophomologa.tecskill.com.br/" + pessoa.foto
           );
 
         $("#profileImage").attr(
           "src",
-          "https://vitatophomologa.tecskill.com.br" + pessoa.foto
+          "https://vitatophomologa.tecskill.com.br/" + pessoa.foto
         );
         $("#usuarioNome").html(pessoa.nome);
         $("#emailUsuario").html(pessoa.email);
@@ -3574,7 +3574,7 @@ function listarCarrinho() {
               
                   <div class="flex space-x-4" style="margin-bottom: 18px;">
                     <img
-                      src="https://vitatophomologa.tecskill.com.br${item.foto}"
+                      src="https://vitatophomologa.tecskill.com.br/${item.foto}"
                       alt="${item.nome}"
                       class="w-20 h-20 rounded-lg object-cover"
                     />
@@ -4329,7 +4329,7 @@ function listarCarrinhoCheckout() {
             var itemLi = `
                           <!-- ITEM DO CARRINHO-->
                           <li class="item-carrinho">
-                                  <img src="https://vitatophomologa.tecskill.com.br${
+                                  <img src="https://vitatophomologa.tecskill.com.br/${
                                     item.foto
                                   }" width="40px">
                               <div class="area-details">
@@ -4807,7 +4807,7 @@ function listarCampanhas(categoriaId = "all") {
 
             // Define uma imagem padrão caso não tenha
             const imagemCampanha = campanha.imagem
-              ? "https://vitatophomologa.tecskill.com.br" + campanha.imagem
+              ? "https://vitatophomologa.tecskill.com.br/" + campanha.imagem
               : "img/default-campaign.jpg";
 
             // HTML do card da campanha
