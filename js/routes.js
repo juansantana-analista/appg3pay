@@ -1,7 +1,7 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatophomologa.tecskill.com.br/rest.php";
 const versionApp = "2.3.8";
-var userAuthToken = "";
+// Removido: var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
 document.addEventListener('deviceready', onDeviceReady, false);
@@ -32,7 +32,17 @@ var app = new Framework7({
         pageBeforeIn: async function (event, page) {    
           clearLocalStorage();
           
-          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Sempre utilize AuthManager.getCookie('userAuthToken') para obter o token
+          // Utilize UIManager para loaders, alerts e mensagens
+          // Utilize AuthManager.getAuthHeaders() para headers de requisição
+
+          // Exemplo de uso:
+          // const headers = AuthManager.getAuthHeaders();
+          // UIManager.showLoader();
+          // UIManager.hideLoader();
+          // UIManager.showError('Mensagem de erro');
+          // UIManager.showSuccess('Mensagem de sucesso');
+
           // Obtém a URL atual do navegador
           const currentUrl = window.location.href;
 
@@ -284,7 +294,7 @@ var app = new Framework7({
             const emailRecuperacao = this.querySelector('input[type="email"]').value;
             
             //START BOTÃO RECUPERAR SENHA     
-                app.dialog.preloader("Carregando...");
+                UIManager.showLoader("Carregando...");
 
               //START Fazendo a requisição
                 fetch('https://vitatophomologa.tecskill.com.br/api/request_reset.php', {
@@ -301,17 +311,17 @@ var app = new Framework7({
                   console.log(data);
                   if (data.status == 'success' && data.data.status == 'success') {
                     localStorage.setItem("emailRecuperacao", emailRecuperacao);
-                      app.dialog.close();
+                      UIManager.hideLoader();
                       recoveryEmailForm.classList.add('hidden');
                       verificationCodeForm.classList.remove('hidden');
                   } else {
-                    app.dialog.close();
-                    app.dialog.alert("Erro na requisição: " + (data.message || "Dados inválidos"), "Falha");
+                    UIManager.hideLoader();
+                    UIManager.showError("Erro na requisição: " + (data.message || "Dados inválidos"), "Falha");
                   }
                 })
                 .catch(error => {
-                  app.dialog.close();
-                  app.dialog.alert("Erro na requisição: " + (error || "Dados inválidos"), "Falha");
+                  UIManager.hideLoader();
+                  UIManager.showError("Erro na requisição: " + (error || "Dados inválidos"), "Falha");
                     console.error('Error:', error);
                 })              
               //END Fazendo a requisição
@@ -337,7 +347,7 @@ var app = new Framework7({
         // Verification Code Form Submission
         verificationCodeForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            app.dialog.preloader("Carregando...");
+            UIManager.showLoader("Carregando...");
             const code = Array.from(codeInputs).map(input => input.value).join('');
             
             // Simulated code validation
@@ -363,13 +373,13 @@ var app = new Framework7({
                   fetch("https://vitatophomologa.tecskill.com.br/api/validate_code.php", options)
                     .then((response) => response.json())
                     .then((data) => {
-                      app.dialog.close();
+                      UIManager.hideLoader();
                       if (data.status === "success" && data.data.status === "success") {
                         localStorage.setItem("codigoRecuperacao", code);
                         verificationCodeForm.classList.add('hidden');
                         newPasswordForm.classList.remove('hidden');
                       } else {
-                        app.dialog.alert(
+                        UIManager.showError(
                           "Erro, Código informado inválido ou expirado.",
                           '<i class="mdi mdi-alert"></i> Código Inválido'
                         );
@@ -377,15 +387,15 @@ var app = new Framework7({
                     })
                     .catch((error) => {
                       console.error("Erro:", error);
-                      app.dialog.close();
-                      app.dialog.alert(
+                      UIManager.hideLoader();
+                      UIManager.showError(
                         "Erro, Código informado inválido ou expirado.",
                         '<i class="mdi mdi-alert"></i> Código Inválido'
                       );
                     });
             } else {           
-              app.dialog.close();   
-              return app.dialog.alert(
+              UIManager.hideLoader();
+              return UIManager.showError(
                 "Por favor, insira todos os 6 dígitos do código.",
                 '<i class="mdi mdi-alert"></i> Código Incompleto'
               );
@@ -395,7 +405,7 @@ var app = new Framework7({
         // New Password Form Submission
         newPasswordForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            app.dialog.preloader("Carregando...");
+            UIManager.showLoader("Carregando...");
             var emailRecuperacao = localStorage.getItem("emailRecuperacao");
             var codigoRecuperacao = localStorage.getItem("codigoRecuperacao");
             const newPassword = this.querySelectorAll('input[type="password"]')[0].value;
@@ -421,18 +431,18 @@ var app = new Framework7({
                 fetch('https://vitatophomologa.tecskill.com.br/api/reset_password.php', options)
                   .then((response) => response.json())
                   .then((data) => {
-                    app.dialog.close();
+                    UIManager.hideLoader();
                     if (data.status == 'success' && data.data.status == 'success') {
                       // Reset all forms
                       newPasswordForm.classList.add('hidden');
                       loginForm.classList.remove('hidden');
-                      app.dialog.alert(
+                      UIManager.showSuccess(
                         "Sucesso, Senha alterada.",
                         '<i class="mdi mdi-alert"></i> Sucesso'
                       );                    
                     } else {
-                      app.dialog.close();
-                      app.dialog.alert(
+                      UIManager.hideLoader();
+                      UIManager.showError(
                         "Erro, Código informado invalido ou expirado.",
                         '<i class="mdi mdi-alert"></i> Código Inválido'
                       );
@@ -440,15 +450,15 @@ var app = new Framework7({
                   })
                   .catch((error) => {
                     console.error("Erro:", error);
-                    app.dialog.close();
-                    app.dialog.alert(
+                    UIManager.hideLoader();
+                    UIManager.showError(
                       "Erro, Código informado invalido ou expirado.",
                       '<i class="mdi mdi-alert"></i> Código Inválido'
                     );
                   });
             } else {
-              app.dialog.close();
-              app.dialog.alert(
+              UIManager.hideLoader();
+              UIManager.showError(
                 "As senhas não coincidem. Por favor, tente novamente",
                 '<i class="mdi mdi-alert"></i> Erro'
               );
@@ -457,7 +467,7 @@ var app = new Framework7({
         // Login Form Submission
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            app.dialog.preloader("Carregando...");
+            UIManager.showLoader("Carregando...");
             const userName = this.querySelector('input[type="email"]').value;
             const userPassword = this.querySelector('input[type="password"]').value;            
             
@@ -468,8 +478,8 @@ var app = new Framework7({
             }
 
             if (userName == "" || userPassword == "" || !validarEmail(userName)) {
-              app.dialog.close();
-              app.dialog.alert(
+              UIManager.hideLoader();
+              UIManager.showError(
                 "Por favor, verifique seu Email e Senha e tente novamente.",
                 '<i class="mdi mdi-alert"></i> Erro!'
               );
@@ -488,10 +498,10 @@ var app = new Framework7({
                 .then(response => response.json())
                 .then(data => {
                   if (data.status == 'success') {
-                    app.dialog.close();
+                    UIManager.hideLoader();
                     const token = data.data;
-                    setCookie('userAuthToken', token, 5);
-                    appId = "Bearer " +  getCookie('userAuthToken');
+                    AuthManager.setCookie('userAuthToken', token, 5);
+                    appId = "Bearer " +  AuthManager.getCookie('userAuthToken');
                     userAuthToken = token;
                     const decodedToken = jwt_decode(token);
                     // Navegar para outra página ou realizar outras ações necessárias
@@ -515,8 +525,8 @@ var app = new Framework7({
                     }, 300);
 
                   } else {
-                    app.dialog.close();
-                    app.dialog.alert("Erro no login: " + (data.message || "Dados inválidos"), "Falha no Login");
+                    UIManager.hideLoader();
+                    UIManager.showError("Erro no login: " + (data.message || "Dados inválidos"), "Falha no Login");
                   }
                 })
                 .catch(error => {
@@ -543,12 +553,11 @@ var app = new Framework7({
       on: {
         pageBeforeIn: async function (event, page) {
           clearLocalStorage();
-          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            deleteCookie('userAuthToken');
+            AuthManager.deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -683,17 +692,17 @@ var app = new Framework7({
     const appPopup = app.popup;
 
     $('#btnSacar').on('click', function () {      
-      app.dialog.alert("Funcionalidade em desenvolvimento, disponível em Breve!", "Em Breve!");
+      UIManager.showError("Funcionalidade em desenvolvimento, disponível em Breve!", "Em Breve!");
       //appPopup.open('.popup-saque');
     });
 
     $('#btnExtrato').on('click', function () {
-      app.dialog.alert("Funcionalidade em desenvolvimento, disponível em Breve!", "Em Breve!");
+      UIManager.showError("Funcionalidade em desenvolvimento, disponível em Breve!", "Em Breve!");
       //appPopup.open('.popup-extrato');
     });
 
     $('#btnTransferir').on('click', function () {
-      app.dialog.alert("Funcionalidade em desenvolvimento, disponível em Breve!", "Em Breve!");
+      UIManager.showError("Funcionalidade em desenvolvimento, disponível em Breve!", "Em Breve!");
       //appPopup.open('.popup-transferir');
     });
 
@@ -714,12 +723,12 @@ var app = new Framework7({
     on: {
       pageBeforeIn: function (event, page) {
         // fazer algo antes da página ser exibida
-        userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+        userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
         // Início função validar login
         const isValid = validarToken();
         if (!isValid) {
           console.warn("Token inválido. Redirecionando para login via fallback.");
-          deleteCookie('userAuthToken');
+          AuthManager.deleteCookie('userAuthToken');
           app.views.main.router.navigate("/login-view/");
           setTimeout(() => {
             app.views.main.router.navigate("/login-view/");
@@ -777,12 +786,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            deleteCookie('userAuthToken');
+            AuthManager.deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -886,12 +895,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            deleteCookie('userAuthToken');
+            AuthManager.deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -922,12 +931,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            deleteCookie('userAuthToken');
+            AuthManager.deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -956,12 +965,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            deleteCookie('userAuthToken');
+            AuthManager.deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -1002,12 +1011,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            deleteCookie('userAuthToken');
+            AuthManager.deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -1038,12 +1047,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            deleteCookie('userAuthToken');
+            AuthManager.deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -1075,12 +1084,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            deleteCookie('userAuthToken');
+            AuthManager.deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -1110,12 +1119,11 @@ var app = new Framework7({
       on: {
         pageBeforeIn: async function (event, page) {
           clearLocalStorage();
-          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            deleteCookie('userAuthToken');
+            AuthManager.deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -1235,12 +1243,12 @@ var app = new Framework7({
         pageBeforeIn: function (event, page) {          
             
           // fazer algo antes da página ser exibida
-          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            deleteCookie('userAuthToken');
+            AuthManager.deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -1286,12 +1294,12 @@ var app = new Framework7({
         pageBeforeIn: function (event, page) {          
             
           // fazer algo antes da página ser exibida
-          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            deleteCookie('userAuthToken');
+            AuthManager.deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -1350,12 +1358,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            deleteCookie('userAuthToken');
+            AuthManager.deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -1397,9 +1405,9 @@ var app = new Framework7({
           $("#btnDesconto").on('click', function () {
             var cupomDesconto = $("#cupomDesconto").val();
             if(cupomDesconto) {
-              app.dialog.alert("Cupom inválido ou expirado", "Cupom");
+              UIManager.showError("Cupom inválido ou expirado", "Cupom");
             } else {
-              app.dialog.alert("Digite um cupom de Desconto", "Cupom");
+              UIManager.showError("Digite um cupom de Desconto", "Cupom");
             }
           });
 
@@ -1485,19 +1493,19 @@ var app = new Framework7({
 
               // Validações dos campos
               if (!nomeTitular) {
-                app.dialog.alert("Por favor, preencha o nome do titular.", "Erro!");
+                UIManager.showError("Por favor, preencha o nome do titular.", "Erro!");
                 return;
               }
               if (!numeroCartao || numeroCartao.length < 16) {
-                app.dialog.alert("Por favor, insira um número de cartão válido com 16 dígitos.", "Erro!");
+                UIManager.showError("Por favor, insira um número de cartão válido com 16 dígitos.", "Erro!");
                 return;
               }
               if (!dataExpiracao || !validarDataExpiracao(dataExpiracao)) {
-                app.dialog.alert("Por favor, insira a data de expiração no formato MM/YYYY.", "Erro!");
+                UIManager.showError("Por favor, insira a data de expiração no formato MM/YYYY.", "Erro!");
                 return;
               }
               if (!cvc || cvc.length < 3) {
-                app.dialog.alert("Por favor, insira um código CVC válido de 3 dígitos.", "Erro!");
+                UIManager.showError("Por favor, insira um código CVC válido de 3 dígitos.", "Erro!");
                 return;
               }
             } else if (formaPagamento == 2) {
@@ -1505,7 +1513,7 @@ var app = new Framework7({
             } else if (formaPagamento == 3) {
               formaPagamento = 3;
             } else {
-              app.dialog.alert("Forma de pagamento não selecionada.", "Erro!");
+              UIManager.showError("Forma de pagamento não selecionada.", "Erro!");
               return;
             }
 
@@ -1538,12 +1546,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            deleteCookie('userAuthToken');
+            AuthManager.deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -1679,12 +1687,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            deleteCookie('userAuthToken');
+            AuthManager.deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -1770,19 +1778,19 @@ var app = new Framework7({
 
               // Validações dos campos
               if (!nomeTitular) {
-                app.dialog.alert("Por favor, preencha o nome do titular.", "Erro!");
+                UIManager.showError("Por favor, preencha o nome do titular.", "Erro!");
                 return;
               }
               if (!numeroCartao || numeroCartao.length < 16) {
-                app.dialog.alert("Por favor, insira um número de cartão válido com 16 dígitos.", "Erro!");
+                UIManager.showError("Por favor, insira um número de cartão válido com 16 dígitos.", "Erro!");
                 return;
               }
               if (!dataExpiracao || !validarDataExpiracao(dataExpiracao)) {
-                app.dialog.alert("Por favor, insira a data de expiração no formato MM/YYYY.", "Erro!");
+                UIManager.showError("Por favor, insira a data de expiração no formato MM/YYYY.", "Erro!");
                 return;
               }
               if (!cvc || cvc.length < 3) {
-                app.dialog.alert("Por favor, insira um código CVC válido de 3 dígitos.", "Erro!");
+                UIManager.showError("Por favor, insira um código CVC válido de 3 dígitos.", "Erro!");
                 return;
               }
             } else if (method === "boleto") {
@@ -1790,7 +1798,7 @@ var app = new Framework7({
             } else if (method === "pix" || method == '') {
               formaPagamento = 3;
             } else {
-              app.dialog.alert("Forma de pagamento não selecionada.", "Erro!");
+              UIManager.showError("Forma de pagamento não selecionada.", "Erro!");
               return;
             }
 
@@ -1814,12 +1822,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            deleteCookie('userAuthToken');
+            AuthManager.deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -2089,7 +2097,7 @@ var app = new Framework7({
               app.dialog.confirm("Tem certeza que deseja limpar todas as categorias selecionadas?", "Confirmar", function() {
                 limparCategoriasSelecionadas();
                 app.popup.close(".popup-categorias");
-                app.dialog.alert("Categorias limpas com sucesso!", "Sucesso");
+                UIManager.showSuccess("Categorias limpas com sucesso!", "Sucesso");
               });
             });
 
@@ -2103,7 +2111,7 @@ var app = new Framework7({
             function adicionarNovoBannerSeguro() {
               const lojaData = localStorage.getItem("minhaLoja");
               if (!lojaData) {
-                app.dialog.alert("Erro ao obter dados da loja", "Erro");
+                UIManager.showError("Erro ao obter dados da loja", "Erro");
                 return;
               }
               
@@ -2156,7 +2164,7 @@ var app = new Framework7({
             $(document).on('click.minhaLoja', "#configuracoes", function(e) {
               e.preventDefault();
               e.stopImmediatePropagation();
-              app.dialog.alert("Funcionalidade em desenvolvimento!", "Em breve");
+              UIManager.showError("Funcionalidade em desenvolvimento!", "Em breve");
             });
           }
 
@@ -2239,12 +2247,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            deleteCookie('userAuthToken');
+            AuthManager.deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -2317,7 +2325,7 @@ var app = new Framework7({
               formaPagamento = 3;
 
             } else {
-              app.dialog.alert("Forma de pagamento não selecionada. ", "Erro!");
+              UIManager.showError("Forma de pagamento não selecionada. ", "Erro!");
             }
 
             if (formaPagamento) {

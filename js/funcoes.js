@@ -1,4 +1,132 @@
-var appId = "Bearer " + getCookie("userAuthToken");
+// ========== CONFIGURAÇÕES E CONSTANTES ==========
+const CONFIG = {
+  API_BASE_URL: "https://vitatophomologa.tecskill.com.br/",
+  API_ENDPOINT: "https://vitatophomologa.tecskill.com.br/rest.php",
+  IMAGE_BASE_URL: "https://vitatophomologa.tecskill.com.br/",
+  DEFAULT_IMAGE: "img/default.png",
+  PAGINATION_LIMIT: 30,
+  SEARCH_DELAY: 1000,
+  COOKIE_EXPIRES_HOURS: 5
+};
+
+// ========== CLASSES E UTILITÁRIOS ==========
+
+class UIManager {
+  static showLoader(message = "Carregando...") {
+    app.dialog.preloader(message);
+  }
+  static hideLoader() {
+    app.dialog.close();
+  }
+  static showError(message, title = "Erro") {
+    this.hideLoader();
+    app.dialog.alert(message, title);
+  }
+  static showSuccess(message, duration = 2000) {
+    const toast = app.toast.create({
+      text: message,
+      position: "center",
+      closeTimeout: duration,
+    });
+    toast.open();
+  }
+  static showConfirm(message, callback, title = "Confirmação") {
+    app.dialog.confirm(message, title, callback);
+  }
+}
+
+class Formatter {
+  static currency(value) {
+    return parseFloat(value).toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+  }
+  static date(date) {
+    const dateObj = new Date(date);
+    const months = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
+    const day = dateObj.getDate();
+    const month = months[dateObj.getMonth()];
+    const year = dateObj.getFullYear();
+    const hours = dateObj.getHours().toString().padStart(2, "0");
+    const minutes = dateObj.getMinutes().toString().padStart(2, "0");
+    return `${day} ${month} ${year} ${hours}:${minutes}`;
+  }
+  static truncateText(text, limit) {
+    return text.length > limit ? text.substring(0, limit) + "..." : text;
+  }
+}
+
+class AuthManager {
+  static getCookie(name) {
+    const nameEQ = name + "=";
+    const cookies = document.cookie.split(";");
+    for (let cookie of cookies) {
+      cookie = cookie.trim();
+      if (cookie.indexOf(nameEQ) === 0) {
+        return cookie.substring(nameEQ.length);
+      }
+    }
+    return null;
+  }
+  static setCookie(name, value, hours) {
+    let expires = "";
+    if (hours) {
+      const date = new Date();
+      date.setTime(date.getTime() + hours * 60 * 60 * 1000);
+      expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = `${name}=${value || ""}${expires}; path=/`;
+  }
+  static deleteCookie(name) {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+  }
+  static validateToken() {
+    const userAuthToken = this.getCookie("userAuthToken");
+    if (!userAuthToken) return false;
+    try {
+      const base64Url = userAuthToken.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const payload = JSON.parse(atob(base64));
+      const currentTime = Math.floor(Date.now() / 1000);
+      return payload.expires && payload.expires > currentTime;
+    } catch (error) {
+      console.error("Erro ao decodificar o token:", error);
+      return false;
+    }
+  }
+  static getAuthHeaders() {
+    const token = this.getCookie("userAuthToken");
+    return {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    };
+  }
+}
+
+// Funções utilitárias para uso no restante do código
+function setCookie(name, value, hours) {
+  return AuthManager.setCookie(name, value, hours);
+}
+function getCookie(name) {
+  return AuthManager.getCookie(name);
+}
+function deleteCookie(name) {
+  return AuthManager.deleteCookie(name);
+}
+function validarToken() {
+  return AuthManager.validateToken();
+}
+function formatarMoeda(valor) {
+  return Formatter.currency(valor);
+}
+function formatarData(data) {
+  return Formatter.date(data);
+}
+function truncarNome(nome, limite) {
+  return Formatter.truncateText(nome, limite);
+}
+
 // Início função validar login
 function validarToken() {
   const userAuthToken = getCookie("userAuthToken");
