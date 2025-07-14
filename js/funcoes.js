@@ -5045,12 +5045,6 @@ function formatarMoeda(valor) {
 }
 //Fim da Funçao formatar Moeda
 
-// Função para truncar o nome do produto
-const truncarNome = (nome, limite) => {
-  return nome.length > limite ? nome.substring(0, limite) + "..." : nome;
-};
-// Fim Função para truncar o nome do produto
-
 // Função para limpar o local storage
 function clearLocalStorage() {
   localStorage.removeItem("produtoId");
