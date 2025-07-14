@@ -3502,22 +3502,12 @@ function finalizarCompra(
     },
   };
 
-  fetch(apiServerUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
-    },
-    body: JSON.stringify(data),
-  })
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data })
     .then((responseJson) => {
-      // Verifica se o status é 'success'
       if (
         responseJson.status == "success" &&
         responseJson.data.status == "success"
       ) {
-        // Dados a serem armazenados
         var data = {
           formaSelecionada: formaPagamento,
           linhaDigitavel: responseJson.data.data.boleto_linhadigitavel,
@@ -3533,20 +3523,13 @@ function finalizarCompra(
           cartao_numero: responseJson.data.data.cartao_numero,
           nome_cartao: responseJson.data.data.nome_cartao,
         };
-
-        // Armazenar no localStorage
         localStorage.setItem("pagamentoData", JSON.stringify(data));
         localStorage.setItem(
           "pedidoIdPagamento",
           responseJson.data.data.pedido_id
         );
-
         app.dialog.close();
         app.views.main.router.navigate("/pagamento/");
-
-        /* Abrir navegador para baixar boleto
-              var ref = cordova.InAppBrowser.open(linkBoleto, '_system', 'location=no,zoom=no');
-              ref.show();*/
       } else {
         app.dialog.close();
         let msg = "Erro ao finalizar compra.";
@@ -3567,9 +3550,7 @@ function finalizarCompra(
       console.error("Error:", error);
     });
 }
-//Fim Função Finalizar Compra
 
-//Inicio Função Refazer Pagamento
 function refazerPagamento(
   formaPagamento,
   titular,
@@ -3595,22 +3576,12 @@ function refazerPagamento(
     },
   };
 
-  fetch(apiServerUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
-    },
-    body: JSON.stringify(data),
-  })
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data })
     .then((responseJson) => {
-      // Verifica se o status é 'success'
       if (
         responseJson.status == "success" &&
         responseJson.data.status == "success"
       ) {
-        // Dados a serem armazenados
         var data = {
           formaSelecionada: formaPagamento,
           linhaDigitavel: responseJson.data.data.boleto_linhadigitavel,
@@ -3626,16 +3597,9 @@ function refazerPagamento(
           cartao_numero: responseJson.data.data.cartao_numero,
           nome_cartao: responseJson.data.data.nome_cartao,
         };
-
-        // Armazenar no localStorage
         localStorage.setItem("pagamentoData", JSON.stringify(data));
-
         app.dialog.close();
         app.views.main.router.navigate("/pagamento/");
-
-        /* Abrir navegador para baixar boleto
-              var ref = cordova.InAppBrowser.open(linkBoleto, '_system', 'location=no,zoom=no');
-              ref.show();*/
       } else {
         app.dialog.close();
         let msg = "Erro ao finalizar compra.";
@@ -3656,7 +3620,7 @@ function refazerPagamento(
       console.error("Error:", error);
     });
 }
-//Fim Função Refazer Pagamento
+//Fim Função Finalizar Compra
 
 //Inicio Funçao Listar Carrinho
 function listarCarrinho() {
@@ -5258,5 +5222,24 @@ function atualizarCategoriasLojinha(lojinhaId, arrayCategorias, callback) {
     .catch((error) => {
       if (typeof callback === 'function') callback({ status: 'error', error });
     });
+}
+
+// Classe utilitária para requisições HTTP padronizadas
+class HttpClient {
+  static async request({ url, method = 'POST', data = null, headers = {} }) {
+    const config = {
+      method,
+      headers: { ...AuthManager.getAuthHeaders(), ...headers }
+    };
+    if (data) config.body = JSON.stringify(data);
+    try {
+      const response = await fetch(url, config);
+      const json = await response.json();
+      return json;
+    } catch (error) {
+      console.error('Erro na requisição:', error);
+      throw error;
+    }
+  }
 }
 
