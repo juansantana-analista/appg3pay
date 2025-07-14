@@ -202,7 +202,7 @@ function listarCategorias() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -518,7 +518,7 @@ function listarProdutos(searchQuery = "", categoriaId) {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -755,7 +755,7 @@ function buscarProduto() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -1158,7 +1158,7 @@ function buscarLinks() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -1280,7 +1280,7 @@ function buscarPessoaId(userId) {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -1343,7 +1343,7 @@ function buscarLinkAfiliado() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -1440,7 +1440,7 @@ function listarPedidos(loadMore = false, offset = 0) {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -1641,7 +1641,7 @@ function listarVendas(loadMore = false, offset = 0) {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   // Cabeçalhos da requisição - incluindo paginação
@@ -1837,7 +1837,7 @@ function detalhesVenda() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
   const dados = {
     vendedor: pessoaId,
@@ -2033,7 +2033,7 @@ function detalhesPedido() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -2279,7 +2279,7 @@ function confirmarPagamento(pedidoId) {
   }
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
   
   const body = JSON.stringify({
@@ -2326,7 +2326,7 @@ function listarBanners() {
   app.dialog.preloader("Carregando...");
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
   const dados = {
     local: 1,
@@ -2385,7 +2385,7 @@ function cepEndereco(cep) {
   app.dialog.preloader("Carregando...");
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
   const dados = {
     cep: cep,
@@ -2430,7 +2430,7 @@ function cepEnderecoEdit(cep) {
   app.dialog.preloader("Carregando...");
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
   const dados = {
     cep: cep,
@@ -2478,7 +2478,7 @@ function listarNotificacoes() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -2638,7 +2638,7 @@ function marcarComoLida(notificacaoId) {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -2675,7 +2675,7 @@ function apagarNotificacao(notificacaoId) {
 
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -2718,7 +2718,7 @@ function saldoCarteira() {
 
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -2777,7 +2777,7 @@ function listarCategoriasCurso() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -2848,7 +2848,7 @@ function buscarQtdeNotif() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -2999,7 +2999,7 @@ function selecionarEndereco(enderecoSelecionado) {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -3089,7 +3089,7 @@ function listarEnderecos() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -3239,7 +3239,7 @@ function listarPerfil(rota) {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -3319,7 +3319,7 @@ function enviarFotoPerfil(base64Foto) {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    "Authorization": "Bearer " + userAuthToken,
+    "Authorization": "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   // Corpo da requisição, compatível com sua API
@@ -3388,7 +3388,7 @@ function salvarPerfil() {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                "Authorization": "Bearer " + userAuthToken
+                "Authorization": "Bearer " + AuthManager.getCookie('userAuthToken')
               },
               body: JSON.stringify({
                 class: "PessoaRestService",
@@ -3438,7 +3438,7 @@ function salvarSenha() {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                "Authorization": "Bearer " + userAuthToken
+                "Authorization": "Bearer " + AuthManager.getCookie('userAuthToken')
               },
               body: JSON.stringify({
                 class: "PessoaRestService",
@@ -3506,7 +3506,7 @@ function finalizarCompra(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer " + userAuthToken,
+      Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
     },
     body: JSON.stringify(data),
   })
@@ -3596,7 +3596,7 @@ function refazerPagamento(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer " + userAuthToken,
+      Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
     },
     body: JSON.stringify(data),
   })
@@ -3664,7 +3664,7 @@ function listarCarrinho() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -3904,7 +3904,7 @@ function alterarCarrinho(pessoaId, produtoId, quantidade) {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -3977,7 +3977,7 @@ function adicionarEndereco() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -4063,7 +4063,7 @@ function editarEndereco() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -4128,7 +4128,7 @@ function adicionarItemCarrinho(produtoId) {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -4193,7 +4193,7 @@ function removerItemCarrinho(pessoaId, produtoId) {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -4251,7 +4251,7 @@ function limparCarrinho() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -4303,7 +4303,7 @@ function contarCarrinho() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -4355,7 +4355,7 @@ function onDashboard() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -4415,7 +4415,7 @@ function listarCarrinhoCheckout() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -4520,7 +4520,7 @@ function listarEquipe(filtro = "all") {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -4786,7 +4786,7 @@ function carregarCategoriasCampanha() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   const body = JSON.stringify({
@@ -4868,7 +4868,7 @@ function listarCampanhas(categoriaId = "all") {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
 
   // Prepara o body da requisição, incluindo categoria_id se for necessário
@@ -5207,7 +5207,7 @@ function oneSignalLogin(userId, oneSignalId) {
 function listarCategoriasLojinha(lojinhaId, callback) {
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
   const body = JSON.stringify({
     class: "LojinhaRestService",
@@ -5232,7 +5232,7 @@ function listarCategoriasLojinha(lojinhaId, callback) {
 function atualizarCategoriasLojinha(lojinhaId, arrayCategorias, callback) {
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
+    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
   };
   const body = JSON.stringify({
     class: "LojinhaRestService",
