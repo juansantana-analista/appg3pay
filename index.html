@@ -7,7 +7,11 @@
       <meta name="apple-mobile-web-app-capable" content="yes">
       <meta name="mobile-web-app-capable" content="yes">
       <meta name="apple-touch-fullscreen" content="yes">
-      <meta name="apple-mobile-web-app-status-bar-style" content="black">
+      <meta name="apple-mobile-web-app-status-bar-style" content="default">
+      <meta name="apple-mobile-web-app-title" content="VitaTop">
+      <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+      <meta http-equiv="Pragma" content="no-cache">
+      <meta http-equiv="Expires" content="0">
       <link rel="manifest" href="/manifest.json">
       <!-- Color theme for statusbar (Android only) -->
       <meta name="theme-color" content="#00591F" />
@@ -31,17 +35,67 @@
              },
            });
          });
-      </script>      
+      </script>   
+      <!-- SCRIPT PARA CORRIGIR PROBLEMA DO iOS - ADICIONE DEPOIS DAS META TAGS -->
+      <script>
+      // Fix para iOS Safari PWA
+      (function() {
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      
+      if (isIOS) {
+         let wasHidden = false;
+         
+         document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+            wasHidden = true;
+            localStorage.setItem('app_last_hidden', Date.now().toString());
+            } else if (wasHidden) {
+            const lastHidden = localStorage.getItem('app_last_hidden');
+            const timeDiff = Date.now() - (lastHidden ? parseInt(lastHidden) : 0);
+            
+            // Se ficou em background por mais de 10 minutos, força refresh
+            if (timeDiff > 600000) {
+               console.log('App retornando após longo período, forçando refresh...');
+               window.location.reload(true);
+            }
+            }
+         });
+         
+         // Detecta pageshow (específico do iOS)
+         window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+            console.log('Página carregada do cache, verificando...');
+            const lastHidden = localStorage.getItem('app_last_hidden');
+            if (lastHidden) {
+               const timeDiff = Date.now() - parseInt(lastHidden);
+               if (timeDiff > 600000) {
+                  window.location.reload(true);
+               }
+            }
+            }
+         });
+         
+         // Verifica se a tela ficou branca após 5 segundos
+         setTimeout(function() {
+            if (document.body.innerText.trim().length === 0) {
+            console.log('Tela branca detectada, recarregando...');
+            window.location.reload(true);
+            }
+         }, 5000);
+      }
+      })();
+      </script>   
       <!-- Path to Framework7 Library Bundle CSS -->
       <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
       <!-- CSS PERSONALIZADO PARA MENU-->
-      <link rel="stylesheet" href="css/index.css?v=2.3.4" />
-      <link rel="stylesheet" href="css/carrinho.css?v=2.3.4" />
-      <link rel="stylesheet" href="css/gestao.css?v=2.3.4" />
-      <link rel="stylesheet" href="css/detalhes.css?v=2.3.4" />
-      <link rel="stylesheet" href="css/equipe.css?v=2.3.4" />
-      <link rel="stylesheet" href="css/panel.css?v=2.3.4" />
-      <link rel="stylesheet" href="css/perfil.css?v=2.3.4" />
+      <link rel="stylesheet" href="css/index.css?v=2.3.8" />
+      <link rel="stylesheet" href="css/carrinho.css?v=2.3.8" />
+      <link rel="stylesheet" href="css/gestao.css?v=2.3.8" />
+      <link rel="stylesheet" href="css/detalhes.css?v=2.3.8" />
+      <link rel="stylesheet" href="css/equipe.css?v=2.3.8" />
+      <link rel="stylesheet" href="css/panel.css?v=2.3.8" />
+      <link rel="stylesheet" href="css/perfil.css?v=2.3.8" />
+      <link rel="stylesheet" href="css/minha-loja.css?v=2.3.8" />
       <!--Ícones Material Design-->
       <link rel="stylesheet" href="css/materialdesignicons.min.css" />
       <!-- Icones do Remix icon-->
@@ -152,6 +206,16 @@
                            </div>
                         </a>
                      </li>
+                     <li>
+                        <a href="/minha-loja/" class="panel-close item-menu-lateral">
+                           <div class="item-content">
+                              <div class="item-media"><i class="mdi mdi-store-edit"></i></div>
+                              <div class="item-inner">
+                                 <div class="item-title">Sua Loja</div>
+                              </div>
+                           </div>
+                        </a>
+                     </li>
                      <!-- Separador -->
                      <li class="menu-separador">
                         <div class="item-content">
@@ -218,8 +282,9 @@
       <script src="lib/jwt-decode.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
       <!-- Roteamento do app-->       
-      <script type="text/javascript" src="js/funcoes.js?v=2.3.4"></script>
-      <script type="text/javascript" src="js/routes.js?v=2.3.4"></script>   
+      <script type="text/javascript" src="js/funcoes.js?v=2.3.8"></script>
+      <script type="text/javascript" src="js/minha-loja.js?v=2.3.8"></script>
+      <script type="text/javascript" src="js/routes.js?v=2.3.8"></script>   
       <script src="cordova.js"></script>
    </body>
 </html>

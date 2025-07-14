@@ -6,9 +6,9 @@
 // ========== ADICIONAR NO INÍCIO DO ARQUIVO ==========
 
 const CONFIG = {
-  API_BASE_URL: "https://vitatophomologa.tecskill.com.br/",
-  API_ENDPOINT: "https://vitatophomologa.tecskill.com.br/rest.php",
-  IMAGE_BASE_URL: "https://vitatophomologa.tecskill.com.br/",
+  API_BASE_URL: "https://vitatophomologa.tecskill.com.br",
+  API_ENDPOINT: "https://vitatophomologa.tecskill.com.brrest.php",
+  IMAGE_BASE_URL: "https://vitatophomologa.tecskill.com.br",
   DEFAULT_IMAGE: "img/default.png",
   PAGINATION_LIMIT: 30,
   SEARCH_DELAY: 1000,

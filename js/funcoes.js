@@ -1,23 +1,39 @@
 var appId = "Bearer " + getCookie("userAuthToken");
 // Início função validar login
 function validarToken() {
-  const userAuthToken = getCookie("userAuthToken"); // Lê o token do cookie
+  const userAuthToken = getCookie("userAuthToken");
 
   if (!userAuthToken) {
+    console.log("Token não encontrado");
     return false;
   }
 
   try {
-    // Dividir o token e pegar o payload (segunda parte do JWT)
     const base64Url = userAuthToken.split(".")[1];
     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
     const payload = JSON.parse(atob(base64));
 
-    // Verificar se há um campo expires e se ele ainda é válido
-    const currentTime = Math.floor(Date.now() / 1000); // Tempo atual em segundos
-    return payload.expires && payload.expires > currentTime;
+    const currentTime = Math.floor(Date.now() / 1000);
+    const isValid = payload.expires && payload.expires > currentTime;
+    
+    if (!isValid) {
+      console.log("Token expirado");
+      // Limpa dados expirados - IMPORTANTE PARA iOS
+      deleteCookie('userAuthToken');
+      if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+        localStorage.clear();
+        sessionStorage.clear();
+      }
+    }
+    
+    return isValid;
   } catch (error) {
     console.error("Erro ao decodificar o token:", error);
+    deleteCookie('userAuthToken');
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+      localStorage.clear();
+      sessionStorage.clear();
+    }
     return false;
   }
 }
@@ -369,7 +385,7 @@ function showSwipeHint() {
 function listarProdutos(searchQuery = "", categoriaId) {
   app.dialog.preloader("Carregando...");
 
-  var imgUrl = "https://vitatophomologa.tecskill.com.br/";
+  var imgUrl = "https://vitatophomologa.tecskill.com.br";
 
   // Cabeçalhos da requisição
   const headers = {
@@ -403,12 +419,18 @@ function listarProdutos(searchQuery = "", categoriaId) {
         responseJson.data.data
       ) {
         const produtos = responseJson.data.data;
+        let produtosFiltrados = produtos;
+        if (window.categoriasSelecionadasLojinha && Array.isArray(window.categoriasSelecionadasLojinha) && window.categoriasSelecionadasLojinha.length > 0) {
+          produtosFiltrados = produtos.filter(produto =>
+            window.categoriasSelecionadasLojinha.includes(String(produto.categoria_produto))
+          );
+        }
         $("#container-produtos").empty();
 
         produtos.forEach((produto) => {
           var produtoPreco = formatarMoeda(produto.preco_lojavirtual);
 
-          var imgUrl = "https://vitatophomologa.tecskill.com.br/";
+          var imgUrl = "https://vitatophomologa.tecskill.com.br";
           const imagemProduto = produto.foto
             ? imgUrl + produto.foto
             : "img/default.png";
@@ -429,7 +451,7 @@ function listarProdutos(searchQuery = "", categoriaId) {
                               <img src="${imagemProduto}" alt="${nomeProduto}">
                           </div>
                           <div class="nome-rating">
-                                  <span class="color-gray product-name">${nomeProduto.toLocaleUpperCase()}</span>                     
+                                  <span class="color-gray product-name">${nomeProduto.toLocaleUpperCase()}
                               <div class="star-rating">
                                   <span class="star"></span>
                                   <span class="star"></span>
@@ -600,7 +622,7 @@ function buscarProduto() {
   var produtoId = localStorage.getItem("produtoId");
   app.dialog.preloader("Carregando...");
 
-  var imgUrl = "https://vitatophomologa.tecskill.com.br/";
+  var imgUrl = "https://vitatophomologa.tecskill.com.br";
 
   // Cabeçalhos da requisição
   const headers = {
@@ -1003,7 +1025,7 @@ function buscarLinks() {
   var codigo_indicador = localStorage.getItem("codigo_indicador");
   app.dialog.preloader("Carregando...");
 
-  var imgUrl = "https://vitatophomologa.tecskill.com.br/";
+  var imgUrl = "https://vitatophomologa.tecskill.com.br";
 
   // Cabeçalhos da requisição
   const headers = {
@@ -1136,7 +1158,9 @@ function buscarPessoaId(userId) {
   const body = JSON.stringify({
     class: "PessoaRest",
     method: "loadAll",
-    filters: [["user_id", "=", userId]],
+    filters: [["user_id", "=", userId]], 
+    order: "id",
+    direction: "desc"
   });
 
   // Opções da requisição
@@ -1152,8 +1176,12 @@ function buscarPessoaId(userId) {
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (responseJson.status === "success") {
-        const pessoaId = responseJson.data[0].id;
-        localStorage.setItem("pessoaId", pessoaId);
+        const maiorId = responseJson.data.reduce((max, pessoa) => {
+          const idNum = parseInt(pessoa.id, 10);
+          return idNum > max ? idNum : max;
+        }, 0);
+
+        localStorage.setItem("pessoaId", maiorId);
         app.dialog.close();
       } else {
         app.dialog.close();
@@ -1182,7 +1210,7 @@ function buscarLinkAfiliado() {
   const pessoaId = localStorage.getItem("pessoaId");
   app.dialog.preloader("Carregando...");
 
-  var imgUrl = "https://vitatophomologa.tecskill.com.br/";
+  var imgUrl = "https://vitatophomologa.tecskill.com.br";
 
   // Cabeçalhos da requisição
   const headers = {
@@ -1711,7 +1739,8 @@ function detalhesVenda() {
         responseJson.data &&
         responseJson.data.data
       ) {
-        const detalhes = responseJson.data.data[0];
+        const detalhes = responseJson?.data?.data?.data?.[0];
+
         console.log(detalhes);
         const detalhesContainer = document.getElementById("detalhesVenda");
         detalhesContainer.innerHTML = "";
@@ -1767,7 +1796,7 @@ function detalhesVenda() {
                               <!-- Seção de pagamento -->
                               <div class="payment-method-a display-none" id="pagamentoPix">
                                   <div class="payment-center">
-                                      <img src="https://vitatophomologa.tecskill.com.br/${
+                                      <img src="https://vitatophomologa.tecskill.com.br${
                                         detalhes.forma_pagamento.pix_qrcode
                                       }" width="250px" alt="QR Code">
                                       <span class="pix-key" id="pixKey">${
@@ -1916,7 +1945,7 @@ function detalhesPedido() {
           .map(
             (item) => `
                       <li>
-                          <img src="https://vitatophomologa.tecskill.com.br/${
+                          <img src="https://vitatophomologa.tecskill.com.br${
                             item.foto
                           }" alt="${
               item.descricao
@@ -1982,7 +2011,7 @@ function detalhesPedido() {
                               <div class="payment-method-a display-none" id="pagamentoPix">
                                   <div class="payment-center">
                                       ${exibirPagamento ? `
-                                      <img src="https://vitatophomologa.tecskill.com.br/${
+                                      <img src="https://vitatophomologa.tecskill.com.br${
                                         detalhes.pix_qrcode
                                       }" width="250px" alt="QR Code">
                                       <span class="pix-key" id="pixKey">${
@@ -3108,7 +3137,7 @@ function listarPerfil(rota) {
         if(rota == "index"){
           $("#profileImageMenu").attr(
             "src",
-            "https://vitatophomologa.tecskill.com.br/" + pessoa.foto
+            "https://vitatophomologa.tecskill.com.br" + pessoa.foto
           );
           app.dialog.close();
           return;
@@ -3116,12 +3145,12 @@ function listarPerfil(rota) {
         
           $("#profileImageMenu").attr(
             "src",
-            "https://vitatophomologa.tecskill.com.br/" + pessoa.foto
+            "https://vitatophomologa.tecskill.com.br" + pessoa.foto
           );
 
         $("#profileImage").attr(
           "src",
-          "https://vitatophomologa.tecskill.com.br/" + pessoa.foto
+          "https://vitatophomologa.tecskill.com.br" + pessoa.foto
         );
         $("#usuarioNome").html(pessoa.nome);
         $("#emailUsuario").html(pessoa.email);
@@ -3545,7 +3574,7 @@ function listarCarrinho() {
               
                   <div class="flex space-x-4" style="margin-bottom: 18px;">
                     <img
-                      src="https://vitatophomologa.tecskill.com.br/${item.foto}"
+                      src="https://vitatophomologa.tecskill.com.br${item.foto}"
                       alt="${item.nome}"
                       class="w-20 h-20 rounded-lg object-cover"
                     />
@@ -4300,7 +4329,7 @@ function listarCarrinhoCheckout() {
             var itemLi = `
                           <!-- ITEM DO CARRINHO-->
                           <li class="item-carrinho">
-                                  <img src="https://vitatophomologa.tecskill.com.br/${
+                                  <img src="https://vitatophomologa.tecskill.com.br${
                                     item.foto
                                   }" width="40px">
                               <div class="area-details">
@@ -4778,7 +4807,7 @@ function listarCampanhas(categoriaId = "all") {
 
             // Define uma imagem padrão caso não tenha
             const imagemCampanha = campanha.imagem
-              ? "https://vitatophomologa.tecskill.com.br/" + campanha.imagem
+              ? "https://vitatophomologa.tecskill.com.br" + campanha.imagem
               : "img/default-campaign.jpg";
 
             // HTML do card da campanha
@@ -5051,3 +5080,55 @@ function oneSignalLogin(userId, oneSignalId) {
       });
   }
 }
+
+// Listar categorias da lojinha
+function listarCategoriasLojinha(lojinhaId, callback) {
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+  const body = JSON.stringify({
+    class: "LojinhaRestService",
+    method: "listarCategoriasLojinha",
+    lojinha_vitatop_id: lojinhaId
+  });
+  fetch(apiServerUrl, {
+    method: "POST",
+    headers,
+    body
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      if (typeof callback === 'function') callback(responseJson);
+    })
+    .catch((error) => {
+      if (typeof callback === 'function') callback({ status: 'error', error });
+    });
+}
+
+// Atualizar categorias da lojinha
+function atualizarCategoriasLojinha(lojinhaId, arrayCategorias, callback) {
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+  const body = JSON.stringify({
+    class: "LojinhaRestService",
+    method: "atualizarCategoriasLojinha",
+    lojinha_vitatop_id: lojinhaId,
+    categorias: arrayCategorias
+  });
+  fetch(apiServerUrl, {
+    method: "POST",
+    headers,
+    body
+  })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      if (typeof callback === 'function') callback(responseJson);
+    })
+    .catch((error) => {
+      if (typeof callback === 'function') callback({ status: 'error', error });
+    });
+}
+

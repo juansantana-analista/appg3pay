@@ -5,7 +5,7 @@
 
 // ========== CONFIGURAÇÕES E CONSTANTES ==========
 const CONFIG = {
-  API_BASE_URL: "https://vitatophomologa.tecskill.com.br/",
+  API_BASE_URL: "hhttps://vitatophomologa.tecskill.com.br/",
   API_ENDPOINT: "https://vitatophomologa.tecskill.com.br/rest.php",
   IMAGE_BASE_URL: "https://vitatophomologa.tecskill.com.br/",
   DEFAULT_IMAGE: "img/default.png",

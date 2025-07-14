@@ -1,6 +1,6 @@
 //DADOS BACKEND SERVER
-const apiServerUrl = "https://vitatophomologa.tecskill.com.br/rest.php";
-const versionApp = "2.3.2";
+const apiServerUrl = "https://vitatophomologa.tecskill.com.brrest.php";
+const versionApp = "2.3.8";
 var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
@@ -287,7 +287,7 @@ var app = new Framework7({
                 app.dialog.preloader("Carregando...");
 
               //START Fazendo a requisição
-                fetch('https://vitatophomologa.tecskill.com.br/api/request_reset.php', {
+                fetch('https://vitatophomologa.tecskill.com.brapi/request_reset.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -360,7 +360,7 @@ var app = new Framework7({
                   };
     
                   // Faz a requisição ao servidor
-                  fetch("https://vitatophomologa.tecskill.com.br/api/validate_code.php", options)
+                  fetch("https://vitatophomologa.tecskill.com.brapi/validate_code.php", options)
                     .then((response) => response.json())
                     .then((data) => {
                       app.dialog.close();
@@ -418,7 +418,7 @@ var app = new Framework7({
                   body: body,
                 };
     
-                fetch('https://vitatophomologa.tecskill.com.br/api/reset_password.php', options)
+                fetch('https://vitatophomologa.tecskill.com.brapi/reset_password.php', options)
                   .then((response) => response.json())
                   .then((data) => {
                     app.dialog.close();
@@ -475,7 +475,7 @@ var app = new Framework7({
               );
             } else {
               //START Fazendo a requisição
-              fetch('https://vitatophomologa.tecskill.com.br/api/auth_app_homolog.php', {
+              fetch('https://vitatophomologa.tecskill.com.brapi/auth_app_homolog.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1317,7 +1317,7 @@ var app = new Framework7({
           // Verifica se o objeto foi carregado corretamente
           if (produtoDetalhes && produtoDetalhes.detalhes) {
             var nomeProduto = produtoDetalhes.detalhes.nome;
-            var urlBaseImagem = "https://vitatophomologa.tecskill.com.br/";
+            var urlBaseImagem = "https://vitatophomologa.tecskill.com.br";
             var imagemProduto = urlBaseImagem + produtoDetalhes.detalhes.foto;
 
             // Atribui os valores com jQuery
@@ -1582,8 +1582,86 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
-    buscarQtdeNotif();
-    contarCarrinho();
+            const retryButton = document.getElementById('retryButton');
+            const connectionStatus = document.getElementById('connectionStatus');
+
+            // Função para verificar conexão
+            function checkConnection() {
+                return navigator.onLine;
+            }
+
+            // Função para atualizar status de conexão
+            function updateConnectionStatus() {
+                const isOnline = checkConnection();
+                
+                if (isOnline) {
+                    connectionStatus.innerHTML = '<i class="mdi mdi-wifi"></i> Conectado';
+                    connectionStatus.classList.add('online');
+                    
+                    // Redirecionar para home após 2 segundos
+                    setTimeout(() => {
+                        if (window.app && window.app.views && window.app.views.main) {
+                            window.app.views.main.router.navigate('/home/');
+                        } else {
+                            window.location.href = 'index.html';
+                        }
+                    }, 2000);
+                } else {
+                    connectionStatus.innerHTML = '<i class="mdi mdi-wifi-off"></i> Sem conexão';
+                    connectionStatus.classList.remove('online');
+                }
+            }
+
+            // Função para tentar reconectar
+            function attemptReconnection() {
+                const button = retryButton;
+                const icon = button.querySelector('i');
+                const originalText = button.innerHTML;
+                
+                // Mostrar estado de carregamento
+                button.classList.add('loading');
+                button.innerHTML = '<i class="mdi mdi-loading"></i> Verificando<span class="loading-dots"></span>';
+                button.disabled = true;
+                
+                // Simular verificação (tempo mínimo para melhor UX)
+                setTimeout(() => {
+                    updateConnectionStatus();
+                    
+                    // Restaurar botão
+                    button.classList.remove('loading');
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                    
+                    if (!checkConnection()) {
+                        // Mostrar feedback se ainda offline
+                        button.style.background = '#ff4757';
+                        button.innerHTML = '<i class="mdi mdi-close"></i> Ainda offline';
+                        
+                        setTimeout(() => {
+                            button.style.background = '';
+                            button.innerHTML = originalText;
+                        }, 2000);
+                    }
+                }, 1500);
+            }
+
+            // Event listeners
+            retryButton.addEventListener('click', attemptReconnection);
+
+            // Detectar mudanças na conexão
+            window.addEventListener('online', function() {
+                updateConnectionStatus();
+            });
+
+            window.addEventListener('offline', function() {
+                updateConnectionStatus();
+            });
+
+            // Verificação inicial
+            updateConnectionStatus();
+
+            // Verificação periódica (a cada 5 segundos)
+            setInterval(updateConnectionStatus, 5000);
     
           // fazer algo quando a página for inicializada      
         },
@@ -1895,6 +1973,223 @@ var app = new Framework7({
       }
     },    
     {
+      path: '/minha-loja/',
+      url: 'minha-loja.html?v=' + versionApp,
+      animate: false,
+      on: {
+        pageBeforeIn: async function (event, page) {
+          clearLocalStorage();
+          // Início função validar login
+          const isValid = await validarToken();
+          if (!isValid) {
+            window.location.reload(true);
+          }
+          // fazer algo antes da página ser exibida
+          $("#menuPrincipal").show("fast");
+          $("#menuPrincipal").removeClass("display-none");
+        },
+        pageAfterIn: function (event, page) {
+          // fazer algo depois da página ser exibida
+        },
+        pageInit: function (event, page) {   
+          buscarQtdeNotif();
+          contarCarrinho();
+          
+          // VERIFICAR SE JÁ FOI INICIALIZADO PARA EVITAR DUPLICAÇÃO
+          if (page.$el.hasClass('minha-loja-initialized')) {
+            return;
+          }
+          page.$el.addClass('minha-loja-initialized');
+          
+          // Verificar se usuário já tem loja criada
+          verificarLoja();
+
+          // FUNÇÃO PARA INICIALIZAR EVENTS APENAS UMA VEZ
+          function initializeMinhaLojaEvents() {
+            // Remover todos os event listeners existentes primeiro
+            $(document).off('click.minhaLoja');
+            $(document).off('input.minhaLoja');
+            $(document).off('change.minhaLoja');
+
+            // Event listeners para criação da loja - USANDO NAMESPACE
+            
+            // Botão criar loja
+            $(document).on('click.minhaLoja', "#btnCriarLoja", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              mostrarFormularioCriacao();
+            });
+
+            // Step 1 - Nome da loja
+            $(document).on('input.minhaLoja', "#nomeLoja", function(e) {
+              const nome = $(this).val().trim();
+              $("#previewNome").text(nome || "Nome da sua loja aparecerá aqui");
+              $("#btnStep1Next").prop("disabled", nome.length < 3);
+            });
+
+            $(document).on('click.minhaLoja', "#btnStep1Next", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              proximoStep(1);
+            });
+
+            // Step 2 - Finalizar
+            $(document).on('click.minhaLoja', "#btnStep2Back", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              stepAnterior(2);
+            });
+
+            $(document).on('click.minhaLoja', "#btnCopyLink", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              copiarLinkLoja();
+            });
+
+            $(document).on('click.minhaLoja', "#btnFinalizar", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              criarLoja();
+            });
+
+            // Event listeners para gerenciamento da loja
+            $(document).on('click.minhaLoja', "#editarNomeLoja", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              editarNomeLoja();
+            });
+
+            $(document).on('click.minhaLoja', "#btnSalvarNome", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              salvarNovoNome();
+            });
+
+            $(document).on('click.minhaLoja', "#gerenciarBanners", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              app.popup.open(".popup-banners");
+            });
+
+            $(document).on('click.minhaLoja', "#gerenciarCategorias", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              gerenciarCategorias();
+            });
+
+            $(document).on('click.minhaLoja', "#btnSalvarCategorias", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              salvarCategoriasSelecionadas();
+            });
+
+            $(document).on('click.minhaLoja', "#btnLimparCategorias", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              app.dialog.confirm("Tem certeza que deseja limpar todas as categorias selecionadas?", "Confirmar", function() {
+                limparCategoriasSelecionadas();
+                app.popup.close(".popup-categorias");
+                app.dialog.alert("Categorias limpas com sucesso!", "Sucesso");
+              });
+            });
+
+            $(document).on('click.minhaLoja', "#btnAdicionarBanner", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              adicionarNovoBannerSeguro();
+            });
+
+            // Função segura para adicionar banner
+            function adicionarNovoBannerSeguro() {
+              const lojaData = localStorage.getItem("minhaLoja");
+              if (!lojaData) {
+                app.dialog.alert("Erro ao obter dados da loja", "Erro");
+                return;
+              }
+              
+              const loja = JSON.parse(lojaData);
+              const lojaId = loja.id;
+              
+              // Criar input temporário
+              const tempInput = document.createElement('input');
+              tempInput.type = 'file';
+              tempInput.accept = 'image/*';
+              tempInput.style.display = 'none';
+              
+              tempInput.onchange = function() {
+                const file = this.files[0];
+                if (file) {
+                  processarNovoBanner(file);
+                }
+                document.body.removeChild(tempInput);
+              };
+              
+              document.body.appendChild(tempInput);
+              tempInput.click();
+            }
+
+            $(document).on('click.minhaLoja', "#btnCompartilharLoja", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              compartilharLoja();
+            });
+
+            $(document).on('click.minhaLoja', "#btnVisualizarLoja", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              visualizarLoja();
+            });
+
+            $(document).on('click.minhaLoja', "#btnCompartilharAgora", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              compartilharLoja();
+            });
+
+            $(document).on('click.minhaLoja', "#btnContinuar", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              app.popup.close(".popup-sucesso");
+              verificarLoja();
+            });
+
+            $(document).on('click.minhaLoja', "#configuracoes", function(e) {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              app.dialog.alert("Funcionalidade em desenvolvimento!", "Em breve");
+            });
+          }
+
+          // Inicializar eventos
+          initializeMinhaLojaEvents();
+              $('#novoNomeLoja').on('input', function() {
+                let valor = $(this).val();
+                // Substitui todos os espaços por "_"
+                valor = valor.replace(/ /g, '_');
+                // Atualiza o campo
+                $(this).val(valor);
+              });
+              
+              $('#nomeLoja').on('input', function() {
+                let valor = $(this).val();
+                // Substitui todos os espaços por "_"
+                valor = valor.replace(/ /g, '_');
+                // Atualiza o campo
+                $(this).val(valor);
+              });
+        },
+        pageBeforeRemove: function (event, page) {
+          // Limpar todos os event listeners quando a página for removida
+          $(document).off('click.minhaLoja');
+          $(document).off('input.minhaLoja');
+          $(document).off('change.minhaLoja');
+          
+          // Remover classe de inicialização
+          page.$el.removeClass('minha-loja-initialized');
+        },
+      }
+    },
+    {
       path: '/campanhas/',
       url: 'campanhas.html?v=' + versionApp,
       animate: false,
@@ -1914,8 +2209,8 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
-    buscarQtdeNotif();
-    contarCarrinho();
+        buscarQtdeNotif();
+        contarCarrinho();
     
           // fazer algo quando a página for inicializada
           carregarCategoriasCampanha();
@@ -1961,8 +2256,8 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
-    buscarQtdeNotif();
-    contarCarrinho();
+        buscarQtdeNotif();
+        contarCarrinho();
     
           // fazer algo quando a página for inicializada 
 
