@@ -491,8 +491,7 @@ function listarProdutos(searchQuery = "", categoriaId) {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de pedidos
       if (
@@ -726,8 +725,7 @@ function buscarProduto() {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de pedidos
       if (
@@ -1129,8 +1127,7 @@ function buscarLinks() {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de pedidos
       if (responseJson.status === "success") {
@@ -1253,8 +1250,7 @@ function buscarPessoaId(userId) {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (responseJson.status === "success") {
@@ -1314,8 +1310,7 @@ function buscarLinkAfiliado() {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       console.log(responseJson);
       // Verifica se o status é 'success' e se há dados de pedidos
@@ -1413,8 +1408,7 @@ function listarPedidos(loadMore = false, offset = 0) {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de pedidos
       if (
@@ -1619,8 +1613,7 @@ function listarVendas(loadMore = false, offset = 0) {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de vendas
       if (
@@ -1812,8 +1805,7 @@ function detalhesVenda() {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de pedidos
       if (
@@ -2004,8 +1996,7 @@ function detalhesPedido() {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de pedidos
       if (
@@ -2246,8 +2237,7 @@ function confirmarPagamento(pedidoId) {
     headers: headers,
     body: body,
   };
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       app.dialog.close();
       console.log(responseJson);
@@ -2295,8 +2285,7 @@ function listarBanners() {
     headers: headers,
     body: body,
   };
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       app.dialog.close();
       if (responseJson.status === "success") {
@@ -2354,8 +2343,7 @@ function cepEndereco(cep) {
     headers: headers,
     body: body,
   };
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       app.dialog.close();
       if (responseJson.status === "success") {
@@ -2399,8 +2387,7 @@ function cepEnderecoEdit(cep) {
     headers: headers,
     body: body,
   };
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       app.dialog.close();
       if (responseJson.status === "success") {
@@ -2449,8 +2436,7 @@ function listarNotificacoes() {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de notificações
       if (
@@ -2602,12 +2588,7 @@ function marcarComoLida(notificacaoId) {
   });
 
   // Fazendo a requisição
-  fetch(apiServerUrl, {
-    method: "POST",
-    headers: headers,
-    body: body,
-  })
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: { method: "NotificacaoLida", id_notificacao: notificacaoId, headers } })
     .then((responseJson) => {
       if (responseJson.status !== "success") {
         app.dialog.alert(
@@ -2644,8 +2625,7 @@ function apagarNotificacao(notificacaoId) {
     body: body,
   };
 
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       if (responseJson.status === "success") {
         app.dialog.close();
@@ -2687,8 +2667,7 @@ function saldoCarteira() {
     body: body,
   };
 
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       app.dialog.close(); // Fechar o loader aqui já é mais seguro
 
@@ -2747,8 +2726,7 @@ function listarCategoriasCurso() {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de pedidos
       if (responseJson.status === "success") {
@@ -2819,8 +2797,7 @@ function buscarQtdeNotif() {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       if (
         responseJson.status === "success" &&
@@ -2970,8 +2947,7 @@ function selecionarEndereco(enderecoSelecionado) {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       if (
         responseJson.status == "success" &&
@@ -3060,8 +3036,7 @@ function listarEnderecos() {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       if (responseJson.data.status === "success") {
         const enderecos = responseJson.data.data.enderecos;
@@ -3210,8 +3185,7 @@ function listarPerfil(rota) {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       if (responseJson.data.status === "success") {
         const pessoa = responseJson.data.data.pessoa;
@@ -3292,8 +3266,7 @@ function enviarFotoPerfil(base64Foto) {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       app.dialog.close(); // Fecha o preloader
 
@@ -3456,7 +3429,7 @@ function finalizarCompra(
     },
   };
 
-  HttpClient.request({ url: apiServerUrl, data })
+  HttpClient.request({ url: apiServerUrl, data: data })
     .then((responseJson) => {
       if (
         responseJson.status == "success" &&
@@ -3530,7 +3503,7 @@ function refazerPagamento(
     },
   };
 
-  HttpClient.request({ url: apiServerUrl, data })
+  HttpClient.request({ url: apiServerUrl, data: data })
     .then((responseJson) => {
       if (
         responseJson.status == "success" &&
@@ -3605,8 +3578,7 @@ function listarCarrinho() {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (
@@ -3845,8 +3817,7 @@ function alterarCarrinho(pessoaId, produtoId, quantidade) {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (
@@ -3918,8 +3889,7 @@ function adicionarEndereco() {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (
@@ -4004,8 +3974,7 @@ function editarEndereco() {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (
@@ -4069,8 +4038,7 @@ function adicionarItemCarrinho(produtoId) {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (
@@ -4134,8 +4102,7 @@ function removerItemCarrinho(pessoaId, produtoId) {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success'
       app.dialog.close();
@@ -4192,8 +4159,7 @@ function limparCarrinho() {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (
@@ -4244,8 +4210,7 @@ function contarCarrinho() {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (
@@ -4296,8 +4261,7 @@ function onDashboard() {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (
@@ -4356,8 +4320,7 @@ function listarCarrinhoCheckout() {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (
@@ -4461,8 +4424,7 @@ function listarEquipe(filtro = "all") {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (responseJson.status === "success") {
@@ -4726,8 +4688,7 @@ function carregarCategoriasCampanha() {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de categorias
       if (
@@ -4816,8 +4777,7 @@ function listarCampanhas(categoriaId = "all") {
   };
 
   // Fazendo a requisição
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: options })
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de campanhas
       if (
@@ -5138,12 +5098,7 @@ function listarCategoriasLojinha(lojinhaId, callback) {
     method: "listarCategoriasLojinha",
     lojinha_vitatop_id: lojinhaId
   });
-  fetch(apiServerUrl, {
-    method: "POST",
-    headers,
-    body
-  })
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: { method: "listarCategoriasLojinha", lojinha_vitatop_id: lojinhaId, headers } })
     .then((responseJson) => {
       if (typeof callback === 'function') callback(responseJson);
     })
@@ -5164,12 +5119,7 @@ function atualizarCategoriasLojinha(lojinhaId, arrayCategorias, callback) {
     lojinha_vitatop_id: lojinhaId,
     categorias: arrayCategorias
   });
-  fetch(apiServerUrl, {
-    method: "POST",
-    headers,
-    body
-  })
-    .then((response) => response.json())
+  HttpClient.request({ url: apiServerUrl, data: { method: "atualizarCategoriasLojinha", lojinha_vitatop_id: lojinhaId, categorias: arrayCategorias, headers } })
     .then((responseJson) => {
       if (typeof callback === 'function') callback(responseJson);
     })
