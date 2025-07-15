@@ -852,6 +852,11 @@ $(document).on('click', '#alterarLogoLoja', function() {
   app.popup.open('.popup-logo-loja');
 });
 
+// Botão para abrir o input file do logo
+$(document).on('click', '#btnSelecionarLogo', function() {
+  $('#novoLogoInput').trigger('click');
+});
+
 // Preview do logo
 $(document).on('change', '#novoLogoInput', function(e) {
   const file = e.target.files[0];

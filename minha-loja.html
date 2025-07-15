@@ -440,18 +440,19 @@
                 </div>
                 <div class="page-content">
                   <div class="block">
-                    <div class="form-card">
-                      <div class="form-group">
-                        <label for="novoLogoInput">Selecione o novo logo (800x200px recomendado)</label>
-                        <input type="file" id="novoLogoInput" accept="image/*">
-                        <small id="logoPreviewHelp">Pré-visualização abaixo:</small>
-                        <div id="logoPreview" style="margin-top:10px;"></div>
-                      </div>
-                      <button class="btn-save" id="btnSalvarLogo">
-                        <i class="mdi mdi-check"></i>
-                        Salvar Logo
+                    <div class="add-banner-card">
+                      <button class="btn-add-banner" id="btnSelecionarLogo">
+                        <i class="mdi mdi-upload"></i>
+                        Selecionar Logo
                       </button>
+                      <input type="file" id="novoLogoInput" accept="image/*" style="display: none;">
+                      <small id="logoPreviewHelp">Pré-visualização abaixo (800x200px recomendado):</small>
+                      <div id="logoPreview" style="margin-top:10px;"></div>
                     </div>
+                    <button class="btn-save" id="btnSalvarLogo" style="margin-top:20px; width:100%;">
+                      <i class="mdi mdi-check"></i>
+                      Salvar Logo
+                    </button>
                   </div>
                 </div>
               </div>
