@@ -122,6 +122,15 @@ function mostrarTelaGerenciamento(loja) {
   } catch (error) {
     console.error("Erro ao atualizar interface de categorias:", error);
   }
+
+  // Exibir/ocultar opções especiais
+  if (loja.is_especial === "S") {
+    $("#gerenciarBanners").show();
+    $("#alterarLogoLoja").show();
+  } else {
+    $("#gerenciarBanners").hide();
+    $("#alterarLogoLoja").hide();
+  }
 }
 
 // Mostrar formulário de criação
@@ -834,3 +843,86 @@ function atualizarInterfaceCategorias() {
     }
   });
 }
+
+// Lógica para abrir popup de logo
+$(document).on('click', '#alterarLogoLoja', function() {
+  $('#logoPreview').html('');
+  $('#novoLogoInput').val('');
+  $('.popup-logo-loja').addClass('modal-in');
+  app.popup.open('.popup-logo-loja');
+});
+
+// Preview do logo
+$(document).on('change', '#novoLogoInput', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    $('#logoPreview').html(`<img src="${ev.target.result}" style="max-width:100%;max-height:100px;">`);
+  };
+  reader.readAsDataURL(file);
+});
+
+// Salvar logo
+$(document).on('click', '#btnSalvarLogo', function() {
+  const file = $('#novoLogoInput')[0].files[0];
+  if (!file) {
+    app.dialog.alert('Selecione uma imagem para o logo.');
+    return;
+  }
+  if (file.size > 2 * 1024 * 1024) {
+    app.dialog.alert('O logo deve ter no máximo 2MB.');
+    return;
+  }
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+  if (!allowedTypes.includes(file.type)) {
+    app.dialog.alert('Apenas arquivos JPG, JPEG e PNG são permitidos.');
+    return;
+  }
+  const lojaData = localStorage.getItem('minhaLoja');
+  if (!lojaData) {
+    app.dialog.alert('Erro ao obter dados da loja.');
+    return;
+  }
+  const loja = JSON.parse(lojaData);
+  const lojaId = loja.id;
+  app.dialog.preloader('Enviando logo...');
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    const base64 = ev.target.result;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + userAuthToken,
+    };
+    const body = JSON.stringify({
+      class: "LojinhaRestService",
+      method: "atualizarLogo",
+      dados: {
+        id: lojaId,
+        logo_base64: base64
+      }
+    });
+    const options = {
+      method: "POST",
+      headers: headers,
+      body: body,
+    };
+    fetch(apiServerUrl, options)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        app.dialog.close();
+        if (responseJson.status === "success") {
+          app.dialog.alert('Logo atualizado com sucesso!');
+          app.popup.close('.popup-logo-loja');
+          buscarDadosCompletosLoja(lojaId);
+        } else {
+          app.dialog.alert('Erro ao atualizar logo: ' + (responseJson.message || 'Erro desconhecido'));
+        }
+      })
+      .catch((error) => {
+        app.dialog.close();
+        app.dialog.alert('Erro ao atualizar logo: ' + error.message);
+      });
+  };
+  reader.readAsDataURL(file);
+});

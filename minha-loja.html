@@ -239,8 +239,8 @@
                   <i class="mdi mdi-chevron-right"></i>
                 </div>
               </div>
-<!--
-              <div class="option-card" id="gerenciarBanners">
+
+              <div class="option-card" id="gerenciarBanners" style="display:none;">
                 <div class="option-icon">
                   <i class="mdi mdi-image-multiple"></i>
                 </div>
@@ -252,7 +252,20 @@
                   <i class="mdi mdi-chevron-right"></i>
                 </div>
               </div>
--->
+
+              <div class="option-card" id="alterarLogoLoja" style="display:none;">
+                <div class="option-icon">
+                  <i class="mdi mdi-image"></i>
+                </div>
+                <div class="option-content">
+                  <h4>Logo da Loja</h4>
+                  <p>Alterar logo (800x200 recomendado)</p>
+                </div>
+                <div class="option-arrow">
+                  <i class="mdi mdi-chevron-right"></i>
+                </div>
+              </div>
+
               <div class="option-card" id="gerenciarCategorias">
                 <div class="option-icon">
                   <i class="mdi mdi-tag-multiple"></i>
@@ -404,6 +417,39 @@
                       </button>
                       <button class="btn-continue" id="btnContinuar">
                         Continuar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Popup para Alterar Logo -->
+          <div class="popup popup-logo-loja">
+            <div class="view popup-view">
+              <div class="page">
+                <div class="top-nav">
+                  <div class="left">
+                    <a href="#" class="link btn-novo popup-close">
+                      <i class="mdi mdi-arrow-left"></i>
+                    </a>
+                  </div>
+                  <strong class="title-descricao">Alterar Logo</strong>
+                  <div style="width: 30px;"></div>
+                </div>
+                <div class="page-content">
+                  <div class="block">
+                    <div class="form-card">
+                      <div class="form-group">
+                        <label for="novoLogoInput">Selecione o novo logo (800x200px recomendado)</label>
+                        <input type="file" id="novoLogoInput" accept="image/*">
+                        <small id="logoPreviewHelp">Pré-visualização abaixo:</small>
+                        <div id="logoPreview" style="margin-top:10px;"></div>
+                      </div>
+                      <button class="btn-save" id="btnSalvarLogo">
+                        <i class="mdi mdi-check"></i>
+                        Salvar Logo
                       </button>
                     </div>
                   </div>
