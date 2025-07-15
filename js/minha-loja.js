@@ -848,7 +848,6 @@ function atualizarInterfaceCategorias() {
 $(document).on('click', '#alterarLogoLoja', function() {
   $('#logoPreview').html('');
   $('#novoLogoInput').val('');
-  $('.popup-logo-loja').addClass('modal-in');
   app.popup.open('.popup-logo-loja');
 });
 
