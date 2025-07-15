@@ -900,7 +900,7 @@ $(document).on('click', '#btnSalvarLogo', function() {
     };
     const body = JSON.stringify({
       class: "LojinhaRestService",
-      method: "atualizarLogo",
+      method: "atualizarLoja",
       dados: {
         id: lojaId,
         logo_base64: base64
