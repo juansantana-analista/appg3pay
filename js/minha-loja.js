@@ -848,6 +848,16 @@ function atualizarInterfaceCategorias() {
 $(document).on('click', '#alterarLogoLoja', function() {
   $('#logoPreview').html('');
   $('#novoLogoInput').val('');
+  // Exibir logo atual, se existir
+  const lojaData = localStorage.getItem('minhaLoja');
+  if (lojaData) {
+    const loja = JSON.parse(lojaData);
+    if (loja.logo_url) {
+      $('#logoAtualExibicao').html('<div style="text-align:center;margin-bottom:10px;"><img src="https://vitatop.tecskill.com.br/' + loja.logo_url + '" style="max-width:100%;max-height:80px;border-radius:6px;box-shadow:0 1px 4px #0001;"><br><small style="color:#888;">Logo atual</small></div>');
+    } else {
+      $('#logoAtualExibicao').html('');
+    }
+  }
   app.popup.open('.popup-logo-loja');
 });
 
