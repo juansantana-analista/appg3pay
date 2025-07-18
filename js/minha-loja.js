@@ -1037,10 +1037,14 @@ $(document).on('input', '#novaCorSecundariaHex', function() {
 });
 // Atualizar previews ao abrir
 function atualizarPreviewsCor() {
-  $('#previewCorPrincipal').css('background', $('#corPrincipalHex').val()).text($('#corPrincipalHex').val().toUpperCase());
-  $('#previewCorSecundaria').css('background', $('#corSecundariaHex').val()).text($('#corSecundariaHex').val().toUpperCase());
-  $('#previewNovaCorPrincipal').css('background', $('#novaCorPrincipalHex').val()).text($('#novaCorPrincipalHex').val().toUpperCase());
-  $('#previewNovaCorSecundaria').css('background', $('#novaCorSecundariaHex').val()).text($('#novaCorSecundariaHex').val().toUpperCase());
+  $('#previewCorPrincipal').css('background', $('#corPrincipal').val()).text($('#corPrincipal').val().toUpperCase());
+  $('#corPrincipalHex').val($('#corPrincipal').val().toUpperCase());
+  $('#previewCorSecundaria').css('background', $('#corSecundaria').val()).text($('#corSecundaria').val().toUpperCase());
+  $('#corSecundariaHex').val($('#corSecundaria').val().toUpperCase());
+  $('#previewNovaCorPrincipal').css('background', $('#novaCorPrincipal').val()).text($('#novaCorPrincipal').val().toUpperCase());
+  $('#novaCorPrincipalHex').val($('#novaCorPrincipal').val().toUpperCase());
+  $('#previewNovaCorSecundaria').css('background', $('#novaCorSecundaria').val()).text($('#novaCorSecundaria').val().toUpperCase());
+  $('#novaCorSecundariaHex').val($('#novaCorSecundaria').val().toUpperCase());
 }
 $(document).ready(function() { atualizarPreviewsCor(); });
 $(document).on('click', '#btnStep1Next, #btnStep2Back, #btnFinalizar, #editarNomeLoja, .popup-editar-nome', function() { setTimeout(atualizarPreviewsCor, 100); });
