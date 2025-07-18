@@ -1238,17 +1238,17 @@ function aplicarMascaraWhatsapp() {
     $('.whatsapp-mask').each(function() {
       var val = $(this).val().replace(/\D/g, '');
       if (val.length > 10) {
-        $(this).mask('(00) 00000-0000');
+        $(this).mask('(00) 00000-0000', {clearIfNotMatch: false});
       } else {
-        $(this).mask('(00) 0000-0000');
+        $(this).mask('(00) 0000-0000', {clearIfNotMatch: false});
       }
     });
     $('.whatsapp-mask').off('input.mask').on('input.mask', function() {
       var val = $(this).val().replace(/\D/g, '');
       if (val.length > 10) {
-        $(this).mask('(00) 00000-0000');
+        $(this).mask('(00) 00000-0000', {clearIfNotMatch: false});
       } else {
-        $(this).mask('(00) 0000-0000');
+        $(this).mask('(00) 0000-0000', {clearIfNotMatch: false});
       }
     });
   }
