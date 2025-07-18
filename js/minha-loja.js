@@ -213,8 +213,8 @@ function criarLoja() {
   app.dialog.preloader("Criando sua loja...");
   const pessoaId = localStorage.getItem("pessoaId");
   const nomeLoja = $("#nomeLoja").val();
-  const corPrincipal = $("#corPrincipal").val();
-  const corSecundaria = $("#corSecundaria").val();
+  const corPrincipal = $("#corPrincipalHex").val();
+  const corSecundaria = $("#corSecundariaHex").val();
   const whatsapp = $("#whatsappLoja").val();
 
   const headers = {
@@ -546,8 +546,10 @@ function editarNomeLoja() {
   
   const lojaAtual = JSON.parse(lojaData);
   $("#novoNomeLoja").val(lojaAtual.nome_loja);
-  $("#novaCorPrincipal").val(lojaAtual.cor_principal || "#FF5733");
-  $("#novaCorSecundaria").val(lojaAtual.cor_secundaria || "#C70039");
+  $("#novaCorPrincipalHex").val(lojaAtual.cor_principal || "#FF5733");
+  $("#previewNovaCorPrincipal").css('background', lojaAtual.cor_principal || "#FF5733").text((lojaAtual.cor_principal || "#FF5733").toUpperCase());
+  $("#novaCorSecundariaHex").val(lojaAtual.cor_secundaria || "#C70039");
+  $("#previewNovaCorSecundaria").css('background', lojaAtual.cor_secundaria || "#C70039").text((lojaAtual.cor_secundaria || "#C70039").toUpperCase());
   $("#novoWhatsappLoja").val(lojaAtual.whatsapp || "");
   app.popup.open(".popup-editar-nome");
 }
@@ -555,8 +557,8 @@ function editarNomeLoja() {
 // Salvar novo nome da loja
 function salvarNovoNome() {
   const novoNome = $("#novoNomeLoja").val().trim();
-  const novaCorPrincipal = $("#novaCorPrincipal").val();
-  const novaCorSecundaria = $("#novaCorSecundaria").val();
+  const novaCorPrincipal = $("#novaCorPrincipalHex").val();
+  const novaCorSecundaria = $("#novaCorSecundariaHex").val();
   const novoWhatsapp = $("#novoWhatsappLoja").val();
   
   if (!novoNome) {
@@ -591,6 +593,7 @@ function salvarNovoNome() {
       whatsapp: novoWhatsapp
     }
   });
+  console.log(body);
 
   const options = {
     method: "POST",
@@ -1034,14 +1037,10 @@ $(document).on('input', '#novaCorSecundariaHex', function() {
 });
 // Atualizar previews ao abrir
 function atualizarPreviewsCor() {
-  $('#previewCorPrincipal').css('background', $('#corPrincipal').val()).text($('#corPrincipal').val().toUpperCase());
-  $('#corPrincipalHex').val($('#corPrincipal').val().toUpperCase());
-  $('#previewCorSecundaria').css('background', $('#corSecundaria').val()).text($('#corSecundaria').val().toUpperCase());
-  $('#corSecundariaHex').val($('#corSecundaria').val().toUpperCase());
-  $('#previewNovaCorPrincipal').css('background', $('#novaCorPrincipal').val()).text($('#novaCorPrincipal').val().toUpperCase());
-  $('#novaCorPrincipalHex').val($('#novaCorPrincipal').val().toUpperCase());
-  $('#previewNovaCorSecundaria').css('background', $('#novaCorSecundaria').val()).text($('#novaCorSecundaria').val().toUpperCase());
-  $('#novaCorSecundariaHex').val($('#novaCorSecundaria').val().toUpperCase());
+  $('#previewCorPrincipal').css('background', $('#corPrincipalHex').val()).text($('#corPrincipalHex').val().toUpperCase());
+  $('#previewCorSecundaria').css('background', $('#corSecundariaHex').val()).text($('#corSecundariaHex').val().toUpperCase());
+  $('#previewNovaCorPrincipal').css('background', $('#novaCorPrincipalHex').val()).text($('#novaCorPrincipalHex').val().toUpperCase());
+  $('#previewNovaCorSecundaria').css('background', $('#novaCorSecundariaHex').val()).text($('#novaCorSecundariaHex').val().toUpperCase());
 }
 $(document).ready(function() { atualizarPreviewsCor(); });
 $(document).on('click', '#btnStep1Next, #btnStep2Back, #btnFinalizar, #editarNomeLoja, .popup-editar-nome', function() { setTimeout(atualizarPreviewsCor, 100); });
