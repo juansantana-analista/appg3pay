@@ -1045,3 +1045,25 @@ function atualizarPreviewsCor() {
 }
 $(document).ready(function() { atualizarPreviewsCor(); });
 $(document).on('click', '#btnStep1Next, #btnStep2Back, #btnFinalizar, #editarNomeLoja, .popup-editar-nome', function() { setTimeout(atualizarPreviewsCor, 100); });
+
+// Clique no retângulo color-preview abre o input de cor oculto
+$(document).on('click keypress', '#previewCorPrincipal', function(e) {
+  if (e.type === 'click' || e.key === 'Enter' || e.key === ' ') {
+    $('#corPrincipal').trigger('click');
+  }
+});
+$(document).on('click keypress', '#previewCorSecundaria', function(e) {
+  if (e.type === 'click' || e.key === 'Enter' || e.key === ' ') {
+    $('#corSecundaria').trigger('click');
+  }
+});
+$(document).on('click keypress', '#previewNovaCorPrincipal', function(e) {
+  if (e.type === 'click' || e.key === 'Enter' || e.key === ' ') {
+    $('#novaCorPrincipal').trigger('click');
+  }
+});
+$(document).on('click keypress', '#previewNovaCorSecundaria', function(e) {
+  if (e.type === 'click' || e.key === 'Enter' || e.key === ' ') {
+    $('#novaCorSecundaria').trigger('click');
+  }
+});
