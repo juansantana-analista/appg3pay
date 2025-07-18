@@ -1235,6 +1235,7 @@ function formatarWhatsappParaEnvio(valor) {
 // Função para aplicar máscara de WhatsApp
 function aplicarMascaraWhatsapp() {
   if ($.fn.mask) {
+    $('.whatsapp-mask').removeAttr('maxlength');
     var options = {
       clearIfNotMatch: false,
       translation: {
