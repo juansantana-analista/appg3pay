@@ -1225,11 +1225,18 @@ $(document).on('input', '#novaCorSecundariaHex', function() {
   }
 });
 // Máscara para WhatsApp
-$(document).ready(function() {
+function formatarWhatsappParaEnvio(valor) {
+  var limpo = (valor || '').replace(/\D/g, '');
+  if (limpo.length >= 10 && limpo.length <= 11) {
+    return '55' + limpo;
+  }
+  return '';
+}
+// Função para aplicar máscara de WhatsApp
+function aplicarMascaraWhatsapp() {
   if ($.fn.mask) {
     $('.whatsapp-mask').mask('(00) 00000-0000');
-    // Alterna para máscara de 8 dígitos se necessário
-    $('.whatsapp-mask').on('input', function() {
+    $('.whatsapp-mask').off('input.mask').on('input.mask', function() {
       var val = $(this).val().replace(/\D/g, '');
       if (val.length > 10) {
         $(this).mask('(00) 00000-0000');
@@ -1238,11 +1245,7 @@ $(document).ready(function() {
       }
     });
   }
-});
-function formatarWhatsappParaEnvio(valor) {
-  var limpo = (valor || '').replace(/\D/g, '');
-  if (limpo.length >= 10 && limpo.length <= 11) {
-    return '55' + limpo;
-  }
-  return '';
 }
+// Aplica máscara ao carregar e ao abrir popups/formulários
+$(document).ready(function() { aplicarMascaraWhatsapp(); });
+$(document).on('click', '#btnStep1Next, #btnStep2Back, #btnFinalizar, #editarNomeLoja, .popup-editar-nome', function() { setTimeout(aplicarMascaraWhatsapp, 100); });
