@@ -1068,6 +1068,26 @@ $(document).on('click keypress', '#previewNovaCorSecundaria', function(e) {
 });
 
 // Integração Vanilla Picker para cor principal e secundária
+function showInlinePicker(picker, previewId) {
+  // Fecha todos os pickers
+  $('.picker_wrapper').hide();
+  // Mostra o picker atual
+  if (picker && picker.domElement) {
+    $(picker.domElement).show();
+    // Posiciona logo abaixo do preview
+    var preview = document.getElementById(previewId);
+    if (preview) {
+      var rect = preview.getBoundingClientRect();
+      picker.domElement.style.position = 'absolute';
+      picker.domElement.style.left = rect.left + 'px';
+      picker.domElement.style.top = (rect.bottom + window.scrollY + 4) + 'px';
+      picker.domElement.style.zIndex = 99999;
+    }
+  }
+}
+function hideAllPickers() {
+  $('.picker_wrapper').hide();
+}
 function initVanillaPickers() {
   // Cor Principal (criação)
   var el1 = document.getElementById('previewCorPrincipal');
@@ -1075,7 +1095,8 @@ function initVanillaPickers() {
     if (!window.pickerCorPrincipal) {
       window.pickerCorPrincipal = new Picker({
         parent: el1,
-        popup: 'right',
+        inline: true,
+        showAlways: false,
         color: $('#corPrincipalHex').val() || '#FF5733',
         onChange: function(color) {
           var hex = color.hex.substring(0,7).toUpperCase();
@@ -1083,15 +1104,16 @@ function initVanillaPickers() {
           $('#previewCorPrincipal').css('background', hex).text(hex);
         },
         onDone: function(color) {
-          var hex = color.hex.substring(0,7).toUpperCase();
-          $('#corPrincipalHex').val(hex);
-          $('#previewCorPrincipal').css('background', hex).text(hex);
+          hideAllPickers();
         }
       });
-      console.log('Picker cor principal inicializado');
+      $(window.pickerCorPrincipal.domElement).hide();
+      console.log('Picker cor principal inicializado (inline)');
     }
-  } else {
-    console.warn('Elemento previewCorPrincipal não encontrado');
+    $(el1).off('click.picker').on('click.picker', function(e) {
+      e.stopPropagation();
+      showInlinePicker(window.pickerCorPrincipal, 'previewCorPrincipal');
+    });
   }
   // Cor Secundária (criação)
   var el2 = document.getElementById('previewCorSecundaria');
@@ -1099,7 +1121,8 @@ function initVanillaPickers() {
     if (!window.pickerCorSecundaria) {
       window.pickerCorSecundaria = new Picker({
         parent: el2,
-        popup: 'right',
+        inline: true,
+        showAlways: false,
         color: $('#corSecundariaHex').val() || '#C70039',
         onChange: function(color) {
           var hex = color.hex.substring(0,7).toUpperCase();
@@ -1107,15 +1130,16 @@ function initVanillaPickers() {
           $('#previewCorSecundaria').css('background', hex).text(hex);
         },
         onDone: function(color) {
-          var hex = color.hex.substring(0,7).toUpperCase();
-          $('#corSecundariaHex').val(hex);
-          $('#previewCorSecundaria').css('background', hex).text(hex);
+          hideAllPickers();
         }
       });
-      console.log('Picker cor secundária inicializado');
+      $(window.pickerCorSecundaria.domElement).hide();
+      console.log('Picker cor secundária inicializado (inline)');
     }
-  } else {
-    console.warn('Elemento previewCorSecundaria não encontrado');
+    $(el2).off('click.picker').on('click.picker', function(e) {
+      e.stopPropagation();
+      showInlinePicker(window.pickerCorSecundaria, 'previewCorSecundaria');
+    });
   }
   // Cor Principal (edição)
   var el3 = document.getElementById('previewNovaCorPrincipal');
@@ -1123,7 +1147,8 @@ function initVanillaPickers() {
     if (!window.pickerNovaCorPrincipal) {
       window.pickerNovaCorPrincipal = new Picker({
         parent: el3,
-        popup: 'right',
+        inline: true,
+        showAlways: false,
         color: $('#novaCorPrincipalHex').val() || '#FF5733',
         onChange: function(color) {
           var hex = color.hex.substring(0,7).toUpperCase();
@@ -1131,15 +1156,16 @@ function initVanillaPickers() {
           $('#previewNovaCorPrincipal').css('background', hex).text(hex);
         },
         onDone: function(color) {
-          var hex = color.hex.substring(0,7).toUpperCase();
-          $('#novaCorPrincipalHex').val(hex);
-          $('#previewNovaCorPrincipal').css('background', hex).text(hex);
+          hideAllPickers();
         }
       });
-      console.log('Picker nova cor principal inicializado');
+      $(window.pickerNovaCorPrincipal.domElement).hide();
+      console.log('Picker nova cor principal inicializado (inline)');
     }
-  } else {
-    console.warn('Elemento previewNovaCorPrincipal não encontrado');
+    $(el3).off('click.picker').on('click.picker', function(e) {
+      e.stopPropagation();
+      showInlinePicker(window.pickerNovaCorPrincipal, 'previewNovaCorPrincipal');
+    });
   }
   // Cor Secundária (edição)
   var el4 = document.getElementById('previewNovaCorSecundaria');
@@ -1147,7 +1173,8 @@ function initVanillaPickers() {
     if (!window.pickerNovaCorSecundaria) {
       window.pickerNovaCorSecundaria = new Picker({
         parent: el4,
-        popup: 'right',
+        inline: true,
+        showAlways: false,
         color: $('#novaCorSecundariaHex').val() || '#C70039',
         onChange: function(color) {
           var hex = color.hex.substring(0,7).toUpperCase();
@@ -1155,20 +1182,20 @@ function initVanillaPickers() {
           $('#previewNovaCorSecundaria').css('background', hex).text(hex);
         },
         onDone: function(color) {
-          var hex = color.hex.substring(0,7).toUpperCase();
-          $('#novaCorSecundariaHex').val(hex);
-          $('#previewNovaCorSecundaria').css('background', hex).text(hex);
+          hideAllPickers();
         }
       });
-      console.log('Picker nova cor secundária inicializado');
+      $(window.pickerNovaCorSecundaria.domElement).hide();
+      console.log('Picker nova cor secundária inicializado (inline)');
     }
-  } else {
-    console.warn('Elemento previewNovaCorSecundaria não encontrado');
+    $(el4).off('click.picker').on('click.picker', function(e) {
+      e.stopPropagation();
+      showInlinePicker(window.pickerNovaCorSecundaria, 'previewNovaCorSecundaria');
+    });
   }
 }
-// Inicializar pickers ao abrir os formulários
-$(document).ready(function() { setTimeout(initVanillaPickers, 300); });
-$(document).on('click', '#btnStep1Next, #btnStep2Back, #btnFinalizar, #editarNomeLoja, .popup-editar-nome', function() { setTimeout(initVanillaPickers, 300); });
+// Esconde o picker ao clicar fora
+$(document).off('click.picker').on('click.picker', function() { hideAllPickers(); });
 // Sincronizar input manual hex com picker
 $(document).on('input', '#corPrincipalHex', function() {
   var val = $(this).val().toUpperCase();
