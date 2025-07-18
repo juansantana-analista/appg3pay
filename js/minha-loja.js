@@ -1056,26 +1056,18 @@ function atualizarPreviewsCor() {
 $(document).ready(function() { atualizarPreviewsCor(); });
 $(document).on('click', '#btnStep1Next, #btnStep2Back, #btnFinalizar, #editarNomeLoja, .popup-editar-nome', function() { setTimeout(atualizarPreviewsCor, 100); });
 
-// Clique no retângulo color-preview abre o input de cor oculto
-$(document).on('click keypress', '#previewCorPrincipal', function(e) {
-  if (e.type === 'click' || e.key === 'Enter' || e.key === ' ') {
-    $('#corPrincipal').trigger('click');
-  }
+// Ao clicar no retângulo, aciona o input type=color escondido
+$(document).on('click', '#previewCorPrincipal', function() {
+  $('#corPrincipal').trigger('click');
 });
-$(document).on('click keypress', '#previewCorSecundaria', function(e) {
-  if (e.type === 'click' || e.key === 'Enter' || e.key === ' ') {
-    $('#corSecundaria').trigger('click');
-  }
+$(document).on('click', '#previewCorSecundaria', function() {
+  $('#corSecundaria').trigger('click');
 });
-$(document).on('click keypress', '#previewNovaCorPrincipal', function(e) {
-  if (e.type === 'click' || e.key === 'Enter' || e.key === ' ') {
-    $('#novaCorPrincipal').trigger('click');
-  }
+$(document).on('click', '#previewNovaCorPrincipal', function() {
+  $('#novaCorPrincipal').trigger('click');
 });
-$(document).on('click keypress', '#previewNovaCorSecundaria', function(e) {
-  if (e.type === 'click' || e.key === 'Enter' || e.key === ' ') {
-    $('#novaCorSecundaria').trigger('click');
-  }
+$(document).on('click', '#previewNovaCorSecundaria', function() {
+  $('#novaCorSecundaria').trigger('click');
 });
 
 // Integração Vanilla Picker para cor principal e secundária
