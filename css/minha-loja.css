@@ -1366,3 +1366,8 @@
   color: #333;
   font-size: 14px;
 }
+
+/* Garantir que o Vanilla Picker fique acima de tudo */
+.picker_wrapper {
+  z-index: 99999 !important;
+}
