@@ -1037,14 +1037,21 @@ $(document).on('input', '#novaCorSecundariaHex', function() {
 });
 // Atualizar previews ao abrir
 function atualizarPreviewsCor() {
-  $('#previewCorPrincipal').css('background', $('#corPrincipal').val()).text($('#corPrincipal').val().toUpperCase());
-  $('#corPrincipalHex').val($('#corPrincipal').val().toUpperCase());
-  $('#previewCorSecundaria').css('background', $('#corSecundaria').val()).text($('#corSecundaria').val().toUpperCase());
-  $('#corSecundariaHex').val($('#corSecundaria').val().toUpperCase());
-  $('#previewNovaCorPrincipal').css('background', $('#novaCorPrincipal').val()).text($('#novaCorPrincipal').val().toUpperCase());
-  $('#novaCorPrincipalHex').val($('#novaCorPrincipal').val().toUpperCase());
-  $('#previewNovaCorSecundaria').css('background', $('#novaCorSecundaria').val()).text($('#novaCorSecundaria').val().toUpperCase());
-  $('#novaCorSecundariaHex').val($('#novaCorSecundaria').val().toUpperCase());
+  var corPrincipal = $('#corPrincipalHex').val() || '';
+  $('#previewCorPrincipal').css('background', corPrincipal).text((corPrincipal || '').toUpperCase());
+  $('#corPrincipalHex').val((corPrincipal || '').toUpperCase());
+
+  var corSecundaria = $('#corSecundariaHex').val() || '';
+  $('#previewCorSecundaria').css('background', corSecundaria).text((corSecundaria || '').toUpperCase());
+  $('#corSecundariaHex').val((corSecundaria || '').toUpperCase());
+
+  var novaCorPrincipal = $('#novaCorPrincipalHex').val() || '';
+  $('#previewNovaCorPrincipal').css('background', novaCorPrincipal).text((novaCorPrincipal || '').toUpperCase());
+  $('#novaCorPrincipalHex').val((novaCorPrincipal || '').toUpperCase());
+
+  var novaCorSecundaria = $('#novaCorSecundariaHex').val() || '';
+  $('#previewNovaCorSecundaria').css('background', novaCorSecundaria).text((novaCorSecundaria || '').toUpperCase());
+  $('#novaCorSecundariaHex').val((novaCorSecundaria || '').toUpperCase());
 }
 $(document).ready(function() { atualizarPreviewsCor(); });
 $(document).on('click', '#btnStep1Next, #btnStep2Back, #btnFinalizar, #editarNomeLoja, .popup-editar-nome', function() { setTimeout(atualizarPreviewsCor, 100); });
