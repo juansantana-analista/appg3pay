@@ -1236,29 +1236,11 @@ function formatarWhatsappParaEnvio(valor) {
 function aplicarMascaraWhatsapp() {
   if ($.fn.mask) {
     $('.whatsapp-mask').removeAttr('maxlength');
-    var options = {
+    $('.whatsapp-mask').unmask();
+    $('.whatsapp-mask').mask('(00) 0 0000-0000', {
       clearIfNotMatch: false,
       translation: {
-        '0': {pattern: /[0-9]/},
-        '9': {pattern: /[0-9]/}
-      }
-    };
-    $('.whatsapp-mask').each(function() {
-      $(this).unmask();
-      var val = $(this).val().replace(/\D/g, '');
-      if (val.length > 10) {
-        $(this).mask('(00) 00000-0000', options);
-      } else {
-        $(this).mask('(00) 0000-0000', options);
-      }
-    });
-    $('.whatsapp-mask').off('input.mask').on('input.mask', function() {
-      $(this).unmask();
-      var val = $(this).val().replace(/\D/g, '');
-      if (val.length > 10) {
-        $(this).mask('(00) 00000-0000', options);
-      } else {
-        $(this).mask('(00) 0000-0000', options);
+        '0': {pattern: /[0-9]/}
       }
     });
   }
