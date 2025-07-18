@@ -963,3 +963,27 @@ $(document).on('click', '#btnSalvarLogo', function() {
   };
   reader.readAsDataURL(file);
 });
+
+// Atualização visual dos campos de cor
+$(document).on('input change', '#corPrincipal', function() {
+  $('#previewCorPrincipal').css('background', $(this).val()).text($(this).val().toUpperCase());
+});
+$(document).on('input change', '#corSecundaria', function() {
+  $('#previewCorSecundaria').css('background', $(this).val()).text($(this).val().toUpperCase());
+});
+$(document).on('input change', '#novaCorPrincipal', function() {
+  $('#previewNovaCorPrincipal').css('background', $(this).val()).text($(this).val().toUpperCase());
+});
+$(document).on('input change', '#novaCorSecundaria', function() {
+  $('#previewNovaCorSecundaria').css('background', $(this).val()).text($(this).val().toUpperCase());
+});
+// Ao abrir os formulários, garantir que o preview está correto
+function atualizarPreviewsCor() {
+  $('#previewCorPrincipal').css('background', $('#corPrincipal').val()).text($('#corPrincipal').val().toUpperCase());
+  $('#previewCorSecundaria').css('background', $('#corSecundaria').val()).text($('#corSecundaria').val().toUpperCase());
+  $('#previewNovaCorPrincipal').css('background', $('#novaCorPrincipal').val()).text($('#novaCorPrincipal').val().toUpperCase());
+  $('#previewNovaCorSecundaria').css('background', $('#novaCorSecundaria').val()).text($('#novaCorSecundaria').val().toUpperCase());
+}
+// Chamar ao abrir os formulários
+$(document).ready(function() { atualizarPreviewsCor(); });
+$(document).on('click', '#btnStep1Next, #btnStep2Back, #btnFinalizar, #editarNomeLoja, .popup-editar-nome', function() { setTimeout(atualizarPreviewsCor, 100); });
