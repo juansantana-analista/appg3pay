@@ -1235,20 +1235,27 @@ function formatarWhatsappParaEnvio(valor) {
 // Função para aplicar máscara de WhatsApp
 function aplicarMascaraWhatsapp() {
   if ($.fn.mask) {
+    var options = {
+      clearIfNotMatch: false,
+      translation: {
+        '0': {pattern: /[0-9]/},
+        '9': {pattern: /[0-9]/}
+      }
+    };
     $('.whatsapp-mask').each(function() {
       var val = $(this).val().replace(/\D/g, '');
       if (val.length > 10) {
-        $(this).mask('(00) 00000-0000', {clearIfNotMatch: false});
+        $(this).mask('(00) 00000-0000', options);
       } else {
-        $(this).mask('(00) 0000-0000', {clearIfNotMatch: false});
+        $(this).mask('(00) 0000-0000', options);
       }
     });
     $('.whatsapp-mask').off('input.mask').on('input.mask', function() {
       var val = $(this).val().replace(/\D/g, '');
       if (val.length > 10) {
-        $(this).mask('(00) 00000-0000', {clearIfNotMatch: false});
+        $(this).mask('(00) 00000-0000', options);
       } else {
-        $(this).mask('(00) 0000-0000', {clearIfNotMatch: false});
+        $(this).mask('(00) 0000-0000', options);
       }
     });
   }
