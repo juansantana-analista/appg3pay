@@ -1244,6 +1244,7 @@ function aplicarMascaraWhatsapp() {
       }
     };
     $('.whatsapp-mask').each(function() {
+      $(this).unmask();
       var val = $(this).val().replace(/\D/g, '');
       if (val.length > 10) {
         $(this).mask('(00) 00000-0000', options);
@@ -1252,6 +1253,7 @@ function aplicarMascaraWhatsapp() {
       }
     });
     $('.whatsapp-mask').off('input.mask').on('input.mask', function() {
+      $(this).unmask();
       var val = $(this).val().replace(/\D/g, '');
       if (val.length > 10) {
         $(this).mask('(00) 00000-0000', options);
