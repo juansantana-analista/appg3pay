@@ -127,9 +127,17 @@ function mostrarTelaGerenciamento(loja) {
   if (loja.is_especial === "S") {
     $("#gerenciarBanners").show();
     $("#alterarLogoLoja").show();
+    $("#grupoCorPrincipal").show();
+    $("#grupoCorSecundaria").show();
+    $("#grupoEditarCorPrincipal").show();
+    $("#grupoEditarCorSecundaria").show();
   } else {
     $("#gerenciarBanners").hide();
     $("#alterarLogoLoja").hide();
+    $("#grupoCorPrincipal").hide();
+    $("#grupoCorSecundaria").hide();
+    $("#grupoEditarCorPrincipal").hide();
+    $("#grupoEditarCorSecundaria").hide();
   }
 }
 
@@ -205,6 +213,9 @@ function criarLoja() {
   app.dialog.preloader("Criando sua loja...");
   const pessoaId = localStorage.getItem("pessoaId");
   const nomeLoja = $("#nomeLoja").val();
+  const corPrincipal = $("#corPrincipal").val();
+  const corSecundaria = $("#corSecundaria").val();
+  const whatsapp = $("#whatsappLoja").val();
 
   const headers = {
     "Content-Type": "application/json",
@@ -216,7 +227,10 @@ function criarLoja() {
     method: "criarLoja",
     dados: {
       pessoa_id: pessoaId,
-      nome_loja: nomeLoja
+      nome_loja: nomeLoja,
+      cor_principal: corPrincipal,
+      cor_secundaria: corSecundaria,
+      whatsapp: whatsapp
     }
   });
 
@@ -532,12 +546,18 @@ function editarNomeLoja() {
   
   const lojaAtual = JSON.parse(lojaData);
   $("#novoNomeLoja").val(lojaAtual.nome_loja);
+  $("#novaCorPrincipal").val(lojaAtual.cor_principal || "#FF5733");
+  $("#novaCorSecundaria").val(lojaAtual.cor_secundaria || "#C70039");
+  $("#novoWhatsappLoja").val(lojaAtual.whatsapp || "");
   app.popup.open(".popup-editar-nome");
 }
 
 // Salvar novo nome da loja
 function salvarNovoNome() {
   const novoNome = $("#novoNomeLoja").val().trim();
+  const novaCorPrincipal = $("#novaCorPrincipal").val();
+  const novaCorSecundaria = $("#novaCorSecundaria").val();
+  const novoWhatsapp = $("#novoWhatsappLoja").val();
   
   if (!novoNome) {
     app.dialog.alert("Por favor, digite um nome para a loja", "Erro");
@@ -565,7 +585,10 @@ function salvarNovoNome() {
     method: "atualizarLoja",
     dados: {
       id: lojaAtual.id,
-      nome_loja: novoNome
+      nome_loja: novoNome,
+      cor_principal: novaCorPrincipal,
+      cor_secundaria: novaCorSecundaria,
+      whatsapp: novoWhatsapp
     }
   });
 

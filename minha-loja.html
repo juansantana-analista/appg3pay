@@ -86,7 +86,7 @@
             <div class="step-indicator">
               <div class="step active" data-step="1">
                 <span>1</span>
-                <label>Nome da Loja</label>
+                <label>Informações Básicas</label>
               </div>
               <div class="step" data-step="2">
                 <span>2</span>
@@ -94,7 +94,7 @@
               </div>
             </div>
 
-            <!-- Passo 1: Nome da Loja -->
+            <!-- Passo 1: Informações Básicas -->
             <div class="step-content" id="step-1">
               <div class="form-card">
                 <div class="form-header">
@@ -102,13 +102,23 @@
                   <h3>Como quer chamar sua loja?</h3>
                   <p>Escolha um nome atrativo e fácil de lembrar</p>
                 </div>
-
                 <div class="form-group">
                   <label for="nomeLoja">Nome da Loja</label>
                   <input type="text" id="nomeLoja" placeholder="Ex: Loja da Maria, Suplementos do João..." maxlength="50">
                   <small>Máximo 50 caracteres</small>
                 </div>
-
+                <div class="form-group" id="grupoCorPrincipal" style="display:none;">
+                  <label for="corPrincipal">Cor Principal</label>
+                  <input type="color" id="corPrincipal" value="#FF5733">
+                </div>
+                <div class="form-group" id="grupoCorSecundaria" style="display:none;">
+                  <label for="corSecundaria">Cor Secundária</label>
+                  <input type="color" id="corSecundaria" value="#C70039">
+                </div>
+                <div class="form-group">
+                  <label for="whatsappLoja">Whatsapp da Loja</label>
+                  <input type="text" id="whatsappLoja" placeholder="Ex: 55999999999" maxlength="15">
+                </div>
                 <div class="preview-card">
                   <div class="preview-header">
                     <i class="mdi mdi-eye"></i>
@@ -122,7 +132,6 @@
                     <span class="preview-tag">Distribuidor VitaTop</span>
                   </div>
                 </div>
-
                 <button class="btn-next" id="btnStep1Next" disabled>
                   Próximo Passo
                   <i class="mdi mdi-arrow-right"></i>
@@ -304,7 +313,7 @@
                       <i class="mdi mdi-arrow-left"></i>
                     </a>
                   </div>
-                  <strong class="title-descricao">Editar Nome</strong>
+                  <strong class="title-descricao">Editar Informações Básicas</strong>
                   <div style="width: 30px;"></div>
                 </div>
                 <div class="page-content">
@@ -314,6 +323,18 @@
                         <label for="novoNomeLoja">Nome da Loja</label>
                         <input type="text" id="novoNomeLoja" placeholder="Digite o novo nome" maxlength="50">
                         <small>Máximo 50 caracteres</small>
+                      </div>
+                      <div class="form-group" id="grupoEditarCorPrincipal" style="display:none;">
+                        <label for="novaCorPrincipal">Cor Principal</label>
+                        <input type="color" id="novaCorPrincipal" value="#FF5733">
+                      </div>
+                      <div class="form-group" id="grupoEditarCorSecundaria" style="display:none;">
+                        <label for="novaCorSecundaria">Cor Secundária</label>
+                        <input type="color" id="novaCorSecundaria" value="#C70039">
+                      </div>
+                      <div class="form-group">
+                        <label for="novoWhatsappLoja">Whatsapp da Loja</label>
+                        <input type="text" id="novoWhatsappLoja" placeholder="Ex: 55999999999" maxlength="15">
                       </div>
                       <button class="btn-save" id="btnSalvarNome">
                         <i class="mdi mdi-check"></i>
