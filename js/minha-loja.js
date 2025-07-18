@@ -1067,3 +1067,115 @@ $(document).on('click keypress', '#previewNovaCorSecundaria', function(e) {
     $('#novaCorSecundaria').trigger('click');
   }
 });
+
+// Integração Vanilla Picker para cor principal e secundária
+function initVanillaPickers() {
+  // Cor Principal (criação)
+  if (!window.pickerCorPrincipal) {
+    window.pickerCorPrincipal = new Picker({
+      parent: document.getElementById('previewCorPrincipal'),
+      popup: 'right',
+      color: $('#corPrincipalHex').val() || '#FF5733',
+      onChange: function(color) {
+        var hex = color.hex.substring(0,7).toUpperCase();
+        $('#corPrincipalHex').val(hex);
+        $('#corPrincipal').val(hex);
+        $('#previewCorPrincipal').css('background', hex).text(hex);
+      },
+      onDone: function(color) {
+        var hex = color.hex.substring(0,7).toUpperCase();
+        $('#corPrincipalHex').val(hex);
+        $('#corPrincipal').val(hex);
+        $('#previewCorPrincipal').css('background', hex).text(hex);
+      }
+    });
+  }
+  // Cor Secundária (criação)
+  if (!window.pickerCorSecundaria) {
+    window.pickerCorSecundaria = new Picker({
+      parent: document.getElementById('previewCorSecundaria'),
+      popup: 'right',
+      color: $('#corSecundariaHex').val() || '#C70039',
+      onChange: function(color) {
+        var hex = color.hex.substring(0,7).toUpperCase();
+        $('#corSecundariaHex').val(hex);
+        $('#corSecundaria').val(hex);
+        $('#previewCorSecundaria').css('background', hex).text(hex);
+      },
+      onDone: function(color) {
+        var hex = color.hex.substring(0,7).toUpperCase();
+        $('#corSecundariaHex').val(hex);
+        $('#corSecundaria').val(hex);
+        $('#previewCorSecundaria').css('background', hex).text(hex);
+      }
+    });
+  }
+  // Cor Principal (edição)
+  if (!window.pickerNovaCorPrincipal) {
+    window.pickerNovaCorPrincipal = new Picker({
+      parent: document.getElementById('previewNovaCorPrincipal'),
+      popup: 'right',
+      color: $('#novaCorPrincipalHex').val() || '#FF5733',
+      onChange: function(color) {
+        var hex = color.hex.substring(0,7).toUpperCase();
+        $('#novaCorPrincipalHex').val(hex);
+        $('#novaCorPrincipal').val(hex);
+        $('#previewNovaCorPrincipal').css('background', hex).text(hex);
+      },
+      onDone: function(color) {
+        var hex = color.hex.substring(0,7).toUpperCase();
+        $('#novaCorPrincipalHex').val(hex);
+        $('#novaCorPrincipal').val(hex);
+        $('#previewNovaCorPrincipal').css('background', hex).text(hex);
+      }
+    });
+  }
+  // Cor Secundária (edição)
+  if (!window.pickerNovaCorSecundaria) {
+    window.pickerNovaCorSecundaria = new Picker({
+      parent: document.getElementById('previewNovaCorSecundaria'),
+      popup: 'right',
+      color: $('#novaCorSecundariaHex').val() || '#C70039',
+      onChange: function(color) {
+        var hex = color.hex.substring(0,7).toUpperCase();
+        $('#novaCorSecundariaHex').val(hex);
+        $('#novaCorSecundaria').val(hex);
+        $('#previewNovaCorSecundaria').css('background', hex).text(hex);
+      },
+      onDone: function(color) {
+        var hex = color.hex.substring(0,7).toUpperCase();
+        $('#novaCorSecundariaHex').val(hex);
+        $('#novaCorSecundaria').val(hex);
+        $('#previewNovaCorSecundaria').css('background', hex).text(hex);
+      }
+    });
+  }
+}
+// Inicializar pickers ao abrir os formulários
+$(document).ready(function() { setTimeout(initVanillaPickers, 300); });
+$(document).on('click', '#btnStep1Next, #btnStep2Back, #btnFinalizar, #editarNomeLoja, .popup-editar-nome', function() { setTimeout(initVanillaPickers, 300); });
+// Sincronizar input manual hex com picker
+$(document).on('input', '#corPrincipalHex', function() {
+  var val = $(this).val().toUpperCase();
+  if (/^#([0-9A-F]{6})$/.test(val)) {
+    window.pickerCorPrincipal && window.pickerCorPrincipal.setColor(val, true);
+  }
+});
+$(document).on('input', '#corSecundariaHex', function() {
+  var val = $(this).val().toUpperCase();
+  if (/^#([0-9A-F]{6})$/.test(val)) {
+    window.pickerCorSecundaria && window.pickerCorSecundaria.setColor(val, true);
+  }
+});
+$(document).on('input', '#novaCorPrincipalHex', function() {
+  var val = $(this).val().toUpperCase();
+  if (/^#([0-9A-F]{6})$/.test(val)) {
+    window.pickerNovaCorPrincipal && window.pickerNovaCorPrincipal.setColor(val, true);
+  }
+});
+$(document).on('input', '#novaCorSecundariaHex', function() {
+  var val = $(this).val().toUpperCase();
+  if (/^#([0-9A-F]{6})$/.test(val)) {
+    window.pickerNovaCorSecundaria && window.pickerNovaCorSecundaria.setColor(val, true);
+  }
+});
