@@ -1236,7 +1236,6 @@ function formatarWhatsappParaEnvio(valor) {
 function aplicarMascaraWhatsapp() {
   if ($.fn.mask) {
     $('.whatsapp-mask').removeAttr('maxlength');
-    $('.whatsapp-mask').unmask();
     $('.whatsapp-mask').mask('(00) 0 0000-0000', {
       clearIfNotMatch: false,
       translation: {
