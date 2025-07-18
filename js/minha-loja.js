@@ -559,6 +559,8 @@ function editarNomeLoja() {
   var whatsappSem55 = removerPrefixo55(lojaAtual.whatsapp);
   $("#novoWhatsappLoja").val(whatsappSem55);
   aplicarMascaraWhatsapp();
+  // Forçar a máscara no valor já preenchido
+  $("#novoWhatsappLoja").trigger('input');
   app.popup.open(".popup-editar-nome");
 }
 
