@@ -1070,84 +1070,100 @@ $(document).on('click keypress', '#previewNovaCorSecundaria', function(e) {
 // Integração Vanilla Picker para cor principal e secundária
 function initVanillaPickers() {
   // Cor Principal (criação)
-  if (!window.pickerCorPrincipal) {
-    window.pickerCorPrincipal = new Picker({
-      parent: document.getElementById('previewCorPrincipal'),
-      popup: 'right',
-      color: $('#corPrincipalHex').val() || '#FF5733',
-      onChange: function(color) {
-        var hex = color.hex.substring(0,7).toUpperCase();
-        $('#corPrincipalHex').val(hex);
-        $('#corPrincipal').val(hex);
-        $('#previewCorPrincipal').css('background', hex).text(hex);
-      },
-      onDone: function(color) {
-        var hex = color.hex.substring(0,7).toUpperCase();
-        $('#corPrincipalHex').val(hex);
-        $('#corPrincipal').val(hex);
-        $('#previewCorPrincipal').css('background', hex).text(hex);
-      }
-    });
+  var el1 = document.getElementById('previewCorPrincipal');
+  if (el1) {
+    if (!window.pickerCorPrincipal) {
+      window.pickerCorPrincipal = new Picker({
+        parent: el1,
+        popup: 'right',
+        color: $('#corPrincipalHex').val() || '#FF5733',
+        onChange: function(color) {
+          var hex = color.hex.substring(0,7).toUpperCase();
+          $('#corPrincipalHex').val(hex);
+          $('#previewCorPrincipal').css('background', hex).text(hex);
+        },
+        onDone: function(color) {
+          var hex = color.hex.substring(0,7).toUpperCase();
+          $('#corPrincipalHex').val(hex);
+          $('#previewCorPrincipal').css('background', hex).text(hex);
+        }
+      });
+      console.log('Picker cor principal inicializado');
+    }
+  } else {
+    console.warn('Elemento previewCorPrincipal não encontrado');
   }
   // Cor Secundária (criação)
-  if (!window.pickerCorSecundaria) {
-    window.pickerCorSecundaria = new Picker({
-      parent: document.getElementById('previewCorSecundaria'),
-      popup: 'right',
-      color: $('#corSecundariaHex').val() || '#C70039',
-      onChange: function(color) {
-        var hex = color.hex.substring(0,7).toUpperCase();
-        $('#corSecundariaHex').val(hex);
-        $('#corSecundaria').val(hex);
-        $('#previewCorSecundaria').css('background', hex).text(hex);
-      },
-      onDone: function(color) {
-        var hex = color.hex.substring(0,7).toUpperCase();
-        $('#corSecundariaHex').val(hex);
-        $('#corSecundaria').val(hex);
-        $('#previewCorSecundaria').css('background', hex).text(hex);
-      }
-    });
+  var el2 = document.getElementById('previewCorSecundaria');
+  if (el2) {
+    if (!window.pickerCorSecundaria) {
+      window.pickerCorSecundaria = new Picker({
+        parent: el2,
+        popup: 'right',
+        color: $('#corSecundariaHex').val() || '#C70039',
+        onChange: function(color) {
+          var hex = color.hex.substring(0,7).toUpperCase();
+          $('#corSecundariaHex').val(hex);
+          $('#previewCorSecundaria').css('background', hex).text(hex);
+        },
+        onDone: function(color) {
+          var hex = color.hex.substring(0,7).toUpperCase();
+          $('#corSecundariaHex').val(hex);
+          $('#previewCorSecundaria').css('background', hex).text(hex);
+        }
+      });
+      console.log('Picker cor secundária inicializado');
+    }
+  } else {
+    console.warn('Elemento previewCorSecundaria não encontrado');
   }
   // Cor Principal (edição)
-  if (!window.pickerNovaCorPrincipal) {
-    window.pickerNovaCorPrincipal = new Picker({
-      parent: document.getElementById('previewNovaCorPrincipal'),
-      popup: 'right',
-      color: $('#novaCorPrincipalHex').val() || '#FF5733',
-      onChange: function(color) {
-        var hex = color.hex.substring(0,7).toUpperCase();
-        $('#novaCorPrincipalHex').val(hex);
-        $('#novaCorPrincipal').val(hex);
-        $('#previewNovaCorPrincipal').css('background', hex).text(hex);
-      },
-      onDone: function(color) {
-        var hex = color.hex.substring(0,7).toUpperCase();
-        $('#novaCorPrincipalHex').val(hex);
-        $('#novaCorPrincipal').val(hex);
-        $('#previewNovaCorPrincipal').css('background', hex).text(hex);
-      }
-    });
+  var el3 = document.getElementById('previewNovaCorPrincipal');
+  if (el3) {
+    if (!window.pickerNovaCorPrincipal) {
+      window.pickerNovaCorPrincipal = new Picker({
+        parent: el3,
+        popup: 'right',
+        color: $('#novaCorPrincipalHex').val() || '#FF5733',
+        onChange: function(color) {
+          var hex = color.hex.substring(0,7).toUpperCase();
+          $('#novaCorPrincipalHex').val(hex);
+          $('#previewNovaCorPrincipal').css('background', hex).text(hex);
+        },
+        onDone: function(color) {
+          var hex = color.hex.substring(0,7).toUpperCase();
+          $('#novaCorPrincipalHex').val(hex);
+          $('#previewNovaCorPrincipal').css('background', hex).text(hex);
+        }
+      });
+      console.log('Picker nova cor principal inicializado');
+    }
+  } else {
+    console.warn('Elemento previewNovaCorPrincipal não encontrado');
   }
   // Cor Secundária (edição)
-  if (!window.pickerNovaCorSecundaria) {
-    window.pickerNovaCorSecundaria = new Picker({
-      parent: document.getElementById('previewNovaCorSecundaria'),
-      popup: 'right',
-      color: $('#novaCorSecundariaHex').val() || '#C70039',
-      onChange: function(color) {
-        var hex = color.hex.substring(0,7).toUpperCase();
-        $('#novaCorSecundariaHex').val(hex);
-        $('#novaCorSecundaria').val(hex);
-        $('#previewNovaCorSecundaria').css('background', hex).text(hex);
-      },
-      onDone: function(color) {
-        var hex = color.hex.substring(0,7).toUpperCase();
-        $('#novaCorSecundariaHex').val(hex);
-        $('#novaCorSecundaria').val(hex);
-        $('#previewNovaCorSecundaria').css('background', hex).text(hex);
-      }
-    });
+  var el4 = document.getElementById('previewNovaCorSecundaria');
+  if (el4) {
+    if (!window.pickerNovaCorSecundaria) {
+      window.pickerNovaCorSecundaria = new Picker({
+        parent: el4,
+        popup: 'right',
+        color: $('#novaCorSecundariaHex').val() || '#C70039',
+        onChange: function(color) {
+          var hex = color.hex.substring(0,7).toUpperCase();
+          $('#novaCorSecundariaHex').val(hex);
+          $('#previewNovaCorSecundaria').css('background', hex).text(hex);
+        },
+        onDone: function(color) {
+          var hex = color.hex.substring(0,7).toUpperCase();
+          $('#novaCorSecundariaHex').val(hex);
+          $('#previewNovaCorSecundaria').css('background', hex).text(hex);
+        }
+      });
+      console.log('Picker nova cor secundária inicializado');
+    }
+  } else {
+    console.warn('Elemento previewNovaCorSecundaria não encontrado');
   }
 }
 // Inicializar pickers ao abrir os formulários
