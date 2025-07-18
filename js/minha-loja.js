@@ -215,7 +215,7 @@ function criarLoja() {
   const nomeLoja = $("#nomeLoja").val();
   const corPrincipal = $("#corPrincipalHex").val();
   const corSecundaria = $("#corSecundariaHex").val();
-  const whatsapp = $("#whatsappLoja").val();
+  const whatsapp = formatarWhatsappParaEnvio($("#whatsappLoja").val());
 
   const headers = {
     "Content-Type": "application/json",
@@ -559,7 +559,7 @@ function salvarNovoNome() {
   const novoNome = $("#novoNomeLoja").val().trim();
   const novaCorPrincipal = $("#novaCorPrincipalHex").val();
   const novaCorSecundaria = $("#novaCorSecundariaHex").val();
-  const novoWhatsapp = $("#novoWhatsappLoja").val();
+  const novoWhatsapp = formatarWhatsappParaEnvio($("#novoWhatsappLoja").val());
   
   if (!novoNome) {
     app.dialog.alert("Por favor, digite um nome para a loja", "Erro");
@@ -1224,3 +1224,25 @@ $(document).on('input', '#novaCorSecundariaHex', function() {
     window.pickerNovaCorSecundaria && window.pickerNovaCorSecundaria.setColor(val, true);
   }
 });
+// Máscara para WhatsApp
+$(document).ready(function() {
+  if ($.fn.mask) {
+    $('.whatsapp-mask').mask('(00) 00000-0000');
+    // Alterna para máscara de 8 dígitos se necessário
+    $('.whatsapp-mask').on('input', function() {
+      var val = $(this).val().replace(/\D/g, '');
+      if (val.length > 10) {
+        $(this).mask('(00) 00000-0000');
+      } else {
+        $(this).mask('(00) 0000-0000');
+      }
+    });
+  }
+});
+function formatarWhatsappParaEnvio(valor) {
+  var limpo = (valor || '').replace(/\D/g, '');
+  if (limpo.length >= 10 && limpo.length <= 11) {
+    return '55' + limpo;
+  }
+  return '';
+}
