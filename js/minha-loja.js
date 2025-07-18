@@ -964,26 +964,84 @@ $(document).on('click', '#btnSalvarLogo', function() {
   reader.readAsDataURL(file);
 });
 
-// Atualização visual dos campos de cor
+// Sincronização dos campos de cor e hex
+function isHexColor(val) {
+  return /^#([0-9A-Fa-f]{6})$/.test(val);
+}
+// Cor Principal (criação)
 $(document).on('input change', '#corPrincipal', function() {
-  $('#previewCorPrincipal').css('background', $(this).val()).text($(this).val().toUpperCase());
+  var val = $(this).val().toUpperCase();
+  $('#corPrincipalHex').val(val);
+  $('#previewCorPrincipal').css('background', val).text(val);
 });
+$(document).on('input', '#corPrincipalHex', function() {
+  var val = $(this).val().toUpperCase();
+  if (val[0] !== '#') val = '#' + val.replace(/[^0-9A-F]/gi, '');
+  if (val.length > 7) val = val.slice(0,7);
+  $(this).val(val);
+  if (isHexColor(val)) {
+    $('#corPrincipal').val(val);
+    $('#previewCorPrincipal').css('background', val).text(val);
+  }
+});
+// Cor Secundária (criação)
 $(document).on('input change', '#corSecundaria', function() {
-  $('#previewCorSecundaria').css('background', $(this).val()).text($(this).val().toUpperCase());
+  var val = $(this).val().toUpperCase();
+  $('#corSecundariaHex').val(val);
+  $('#previewCorSecundaria').css('background', val).text(val);
 });
+$(document).on('input', '#corSecundariaHex', function() {
+  var val = $(this).val().toUpperCase();
+  if (val[0] !== '#') val = '#' + val.replace(/[^0-9A-F]/gi, '');
+  if (val.length > 7) val = val.slice(0,7);
+  $(this).val(val);
+  if (isHexColor(val)) {
+    $('#corSecundaria').val(val);
+    $('#previewCorSecundaria').css('background', val).text(val);
+  }
+});
+// Cor Principal (edição)
 $(document).on('input change', '#novaCorPrincipal', function() {
-  $('#previewNovaCorPrincipal').css('background', $(this).val()).text($(this).val().toUpperCase());
+  var val = $(this).val().toUpperCase();
+  $('#novaCorPrincipalHex').val(val);
+  $('#previewNovaCorPrincipal').css('background', val).text(val);
 });
+$(document).on('input', '#novaCorPrincipalHex', function() {
+  var val = $(this).val().toUpperCase();
+  if (val[0] !== '#') val = '#' + val.replace(/[^0-9A-F]/gi, '');
+  if (val.length > 7) val = val.slice(0,7);
+  $(this).val(val);
+  if (isHexColor(val)) {
+    $('#novaCorPrincipal').val(val);
+    $('#previewNovaCorPrincipal').css('background', val).text(val);
+  }
+});
+// Cor Secundária (edição)
 $(document).on('input change', '#novaCorSecundaria', function() {
-  $('#previewNovaCorSecundaria').css('background', $(this).val()).text($(this).val().toUpperCase());
+  var val = $(this).val().toUpperCase();
+  $('#novaCorSecundariaHex').val(val);
+  $('#previewNovaCorSecundaria').css('background', val).text(val);
 });
-// Ao abrir os formulários, garantir que o preview está correto
+$(document).on('input', '#novaCorSecundariaHex', function() {
+  var val = $(this).val().toUpperCase();
+  if (val[0] !== '#') val = '#' + val.replace(/[^0-9A-F]/gi, '');
+  if (val.length > 7) val = val.slice(0,7);
+  $(this).val(val);
+  if (isHexColor(val)) {
+    $('#novaCorSecundaria').val(val);
+    $('#previewNovaCorSecundaria').css('background', val).text(val);
+  }
+});
+// Atualizar previews ao abrir
 function atualizarPreviewsCor() {
   $('#previewCorPrincipal').css('background', $('#corPrincipal').val()).text($('#corPrincipal').val().toUpperCase());
+  $('#corPrincipalHex').val($('#corPrincipal').val().toUpperCase());
   $('#previewCorSecundaria').css('background', $('#corSecundaria').val()).text($('#corSecundaria').val().toUpperCase());
+  $('#corSecundariaHex').val($('#corSecundaria').val().toUpperCase());
   $('#previewNovaCorPrincipal').css('background', $('#novaCorPrincipal').val()).text($('#novaCorPrincipal').val().toUpperCase());
+  $('#novaCorPrincipalHex').val($('#novaCorPrincipal').val().toUpperCase());
   $('#previewNovaCorSecundaria').css('background', $('#novaCorSecundaria').val()).text($('#novaCorSecundaria').val().toUpperCase());
+  $('#novaCorSecundariaHex').val($('#novaCorSecundaria').val().toUpperCase());
 }
-// Chamar ao abrir os formulários
 $(document).ready(function() { atualizarPreviewsCor(); });
 $(document).on('click', '#btnStep1Next, #btnStep2Back, #btnFinalizar, #editarNomeLoja, .popup-editar-nome', function() { setTimeout(atualizarPreviewsCor, 100); });
