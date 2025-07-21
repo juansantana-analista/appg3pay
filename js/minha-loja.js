@@ -215,59 +215,119 @@ function prepararSummary() {
   $("#linkLoja").text(`vitatop.tecskill.com.br/lojinha_vitatop/${nomeLojaUrl}`);
 }
 
-// Criar loja
-function criarLoja() {
-  app.dialog.preloader("Criando sua loja...");
-  const pessoaId = localStorage.getItem("pessoaId");
-  const nomeLoja = $("#nomeLoja").val();
-  const corPrincipal = $("#corPrincipalHex").val();
-  const corSecundaria = $("#corSecundariaHex").val();
-  const whatsapp = formatarWhatsappParaEnvio($("#whatsappLoja").val());
-
+// Função para validar nome da loja (apenas letras, números, _ e espaço)
+function validarNomeLoja(str) {
+  // Permite letras, números, espaço e _
+  return /^[A-Za-zÀ-ÿ0-9_ ]+$/.test(str);
+}
+// Função para verificar se o nome da loja já existe
+function verificarNomeLojaDisponivel(nomeLoja, callback) {
+  const nomeUrl = removerAcentosECedilha(nomeLoja);
   const headers = {
     "Content-Type": "application/json",
     Authorization: "Bearer " + userAuthToken,
   };
-
   const body = JSON.stringify({
     class: "LojinhaRestService",
-    method: "criarLoja",
-    dados: {
-      pessoa_id: pessoaId,
-      nome_loja: nomeLoja,
-      cor_principal: corPrincipal,
-      cor_secundaria: corSecundaria,
-      whatsapp: whatsapp
-    }
+    method: "buscarLojaPorNome",
+    nome_loja: nomeUrl
   });
-
-  const options = {
+  fetch(apiServerUrl, {
     method: "POST",
     headers: headers,
     body: body,
-  };
-
-  fetch(apiServerUrl, options)
+  })
     .then((response) => response.json())
     .then((responseJson) => {
-      if (responseJson.status === "success") {
-        const lojaId = responseJson.data.data.id;
-        localStorage.setItem("lojaId", lojaId);
-        
-        // Criar banners padrão automaticamente
-        enviarBannerLoja(lojaId);
-        app.dialog.close();
-        mostrarSucessoCriacao();
+      if (responseJson.status === "success" && responseJson.data.status === "success") {
+        callback(false, responseJson.data.data); // Nome já existe
       } else {
-        app.dialog.close();
-        app.dialog.alert("Erro ao criar loja: " + responseJson.message, "Erro");
+        callback(true, null); // Nome disponível
       }
     })
     .catch((error) => {
-      app.dialog.close();
-      console.error("Erro:", error);
-      app.dialog.alert("Erro ao criar loja: " + error.message, "Erro");
+      callback(false, null, error);
     });
+}
+
+// Criar loja
+function criarLoja() {
+  app.dialog.preloader("Validando nome da loja...");
+  const pessoaId = localStorage.getItem("pessoaId");
+  let nomeLoja = $("#nomeLoja").val();
+  const corPrincipal = $("#corPrincipalHex").val();
+  const corSecundaria = $("#corSecundariaHex").val();
+  const whatsapp = formatarWhatsappParaEnvio($("#whatsappLoja").val());
+
+  // Substituir espaços por _
+  nomeLoja = nomeLoja.replace(/ /g, "_");
+
+  // Validar nome (apenas letras, números, _)
+  if (!validarNomeLoja(nomeLoja)) {
+    app.dialog.close();
+    app.dialog.alert("O nome da loja só pode conter letras, números, espaços e o caractere _.", "Nome inválido");
+    return;
+  }
+
+  // Novo: gerar nome_url sem acentuação e sem ç
+  const nomeUrl = removerAcentosECedilha(nomeLoja);
+
+  // Verificar se o nome já existe
+  verificarNomeLojaDisponivel(nomeLoja, function(disponivel, dados, erro) {
+    if (erro) {
+      app.dialog.close();
+      app.dialog.alert("Erro ao verificar nome da loja. Tente novamente.", "Erro");
+      return;
+    }
+    if (!disponivel) {
+      app.dialog.close();
+      app.dialog.alert("Este nome de loja já está em uso. Por favor, escolha outro nome.", "Nome indisponível");
+      return;
+    }
+    // Prosseguir com a criação
+    app.dialog.preloader("Criando sua loja...");
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + userAuthToken,
+    };
+    const body = JSON.stringify({
+      class: "LojinhaRestService",
+      method: "criarLoja",
+      dados: {
+        pessoa_id: pessoaId,
+        nome_loja: nomeLoja, // com acentuação e _
+        nome_url: nomeUrl,   // sem acentuação e sem ç
+        cor_principal: corPrincipal,
+        cor_secundaria: corSecundaria,
+        whatsapp: whatsapp
+      }
+    });
+    const options = {
+      method: "POST",
+      headers: headers,
+      body: body,
+    };
+    fetch(apiServerUrl, options)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.status === "success") {
+          const lojaId = responseJson.data.data.id;
+          localStorage.setItem("lojaId", lojaId);
+          // Criar banners padrão automaticamente
+          enviarBannerLoja(lojaId);
+          app.dialog.close();
+          mostrarSucessoCriacao();
+        } else {
+          app.dialog.close();
+          app.dialog.alert("Erro ao criar loja: " + responseJson.message, "Erro");
+        }
+      })
+      .catch((error) => {
+        app.dialog.close();
+        console.error("Erro:", error);
+        app.dialog.alert("Erro ao criar loja: " + error.message, "Erro");
+      });
+  });
 }
 
 // Enviar banner da loja - VERSÃO SEGURA
@@ -1271,4 +1331,12 @@ $(document).on('click', '#btnStep1Next, #btnStep2Back, #btnFinalizar, #editarNom
 // Função utilitária para remover acentuação
 function removerAcentos(str) {
   return str.normalize("NFD").replace(/\p{Diacritic}/gu, "");
+}
+// Função utilitária para remover acentuação e ç
+function removerAcentosECedilha(str) {
+  return str
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .replace(/ç/g, "c")
+    .replace(/Ç/g, "C");
 }
