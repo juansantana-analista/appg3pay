@@ -1405,3 +1405,101 @@ $(document).on('input.minhaLoja', "#nomeLoja", function(e) {
   // O botão só será habilitado pelo clique e validação, não por input
   $("#btnStep1Next").prop("disabled", false);
 });
+
+// Evento restritivo do botão Salvar novo nome da loja
+$(document).off('click.minhaLoja', "#btnSalvarNome");
+$(document).on('click.minhaLoja', "#btnSalvarNome", function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  let novoNome = $("#novoNomeLoja").val().trim();
+  let nomeParaValidar = novoNome.replace(/ /g, "_");
+  if (!validarNomeLoja(nomeParaValidar)) {
+    app.dialog.close();
+    app.dialog.alert("O nome da loja só pode conter letras, números, espaços e o caractere _.", "Nome inválido");
+    return;
+  }
+  app.dialog.preloader("Validando nome da loja...");
+  verificarNomeLojaDisponivel(nomeParaValidar, function(disponivel, dados, erro) {
+    app.dialog.close();
+    if (erro) {
+      app.dialog.alert("Erro ao verificar nome da loja. Tente novamente.", "Erro");
+      return;
+    }
+    if (!disponivel) {
+      app.dialog.alert("Este nome de loja já está em uso. Por favor, escolha outro nome.", "Nome indisponível");
+      return;
+    }
+    // Se passou, pode salvar
+    salvarNovoNomeRestritivo();
+  });
+});
+
+// Função para salvar novo nome da loja com validação restritiva
+function salvarNovoNomeRestritivo() {
+  const novoNome = $("#novoNomeLoja").val().trim();
+  const novaCorPrincipal = $("#novaCorPrincipalHex").val();
+  const novaCorSecundaria = $("#novaCorSecundariaHex").val();
+  const novoWhatsapp = formatarWhatsappParaEnvio($("#novoWhatsappLoja").val());
+
+  if (!novoNome) {
+    app.dialog.alert("Por favor, digite um nome para a loja", "Erro");
+    return;
+  }
+
+  app.dialog.preloader("Salvando...");
+
+  const lojaData = localStorage.getItem("minhaLoja");
+  if (!lojaData) {
+    app.dialog.close();
+    app.dialog.alert("Erro ao obter dados da loja", "Erro");
+    return;
+  }
+
+  const lojaAtual = JSON.parse(lojaData);
+
+  // Gerar nome_url sem acentuação e sem ç
+  const nomeUrl = removerAcentosECedilha(novoNome.replace(/ /g, "_"));
+
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "LojinhaRestService",
+    method: "atualizarLoja",
+    dados: {
+      id: lojaAtual.id,
+      nome_loja: novoNome, // com acentuação
+      nome_url: nomeUrl,   // sem acentuação e sem ç
+      cor_principal: novaCorPrincipal,
+      cor_secundaria: novaCorSecundaria,
+      whatsapp: novoWhatsapp
+    }
+  });
+
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      app.dialog.close();
+      if (responseJson.status === "success") {
+        // Recarregar dados completos da loja para atualizar visualizações
+        buscarDadosCompletosLoja(lojaAtual.id);
+        app.popup.close(".popup-editar-nome");
+        app.dialog.alert("Nome da loja atualizado com sucesso!", "Sucesso");
+      } else {
+        app.dialog.alert("Erro ao atualizar nome: " + responseJson.message, "Erro");
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+      app.dialog.alert("Erro ao atualizar nome: " + error.message, "Erro");
+    });
+}
