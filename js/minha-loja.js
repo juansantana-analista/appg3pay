@@ -656,10 +656,10 @@ function editarNomeLoja() {
 
 // Salvar novo nome da loja
 function salvarNovoNome() {
-  const novoNome = $("#nomeLoja").val().trim();
-  const novaCorPrincipal = $("#corPrincipalHex").val();
-  const novaCorSecundaria = $("#corSecundariaHex").val();
-  const novoWhatsapp = formatarWhatsappParaEnvio($("#whatsappLoja").val());
+  const novoNome = $("#novoNomeLoja").val().trim();
+  const novaCorPrincipal = $("#novaCorPrincipalHex").val();
+  const novaCorSecundaria = $("#novaCorSecundariaHex").val();
+  const novoWhatsapp = formatarWhatsappParaEnvio($("#novoWhatsappLoja").val());
   
   if (!novoNome) {
     app.dialog.alert("Por favor, digite um nome para a loja", "Erro");
@@ -1411,7 +1411,7 @@ $(document).off('click.minhaLoja', "#btnSalvarNome");
 $(document).on('click.minhaLoja', "#btnSalvarNome", function(e) {
   e.preventDefault();
   e.stopImmediatePropagation();
-  salvarNovoNomeBackend();
+  salvarNovoNome();
 });
 
 // Função para salvar novo nome da loja, exibindo mensagem da API
