@@ -656,10 +656,10 @@ function editarNomeLoja() {
 
 // Salvar novo nome da loja
 function salvarNovoNome() {
-  const novoNome = $("#novoNomeLoja").val().trim();
-  const novaCorPrincipal = $("#novaCorPrincipalHex").val();
-  const novaCorSecundaria = $("#novaCorSecundariaHex").val();
-  const novoWhatsapp = formatarWhatsappParaEnvio($("#novoWhatsappLoja").val());
+  const novoNome = $("#nomeLoja").val().trim();
+  const novaCorPrincipal = $("#corPrincipalHex").val();
+  const novaCorSecundaria = $("#corSecundariaHex").val();
+  const novoWhatsapp = formatarWhatsappParaEnvio($("#whatsappLoja").val());
   
   if (!novoNome) {
     app.dialog.alert("Por favor, digite um nome para a loja", "Erro");
@@ -1411,31 +1411,11 @@ $(document).off('click.minhaLoja', "#btnSalvarNome");
 $(document).on('click.minhaLoja', "#btnSalvarNome", function(e) {
   e.preventDefault();
   e.stopImmediatePropagation();
-  let novoNome = $("#novoNomeLoja").val().trim();
-  let nomeParaValidar = novoNome.replace(/ /g, "_");
-  if (!validarNomeLoja(nomeParaValidar)) {
-    app.dialog.close();
-    app.dialog.alert("O nome da loja só pode conter letras, números, espaços e o caractere _.", "Nome inválido");
-    return;
-  }
-  app.dialog.preloader("Validando nome da loja...");
-  verificarNomeLojaDisponivel(nomeParaValidar, function(disponivel, dados, erro) {
-    app.dialog.close();
-    if (erro) {
-      app.dialog.alert("Erro ao verificar nome da loja. Tente novamente.", "Erro");
-      return;
-    }
-    if (!disponivel) {
-      app.dialog.alert("Este nome de loja já está em uso. Por favor, escolha outro nome.", "Nome indisponível");
-      return;
-    }
-    // Se passou, pode salvar
-    salvarNovoNomeRestritivo();
-  });
+  salvarNovoNomeBackend();
 });
 
-// Função para salvar novo nome da loja com validação restritiva
-function salvarNovoNomeRestritivo() {
+// Função para salvar novo nome da loja, exibindo mensagem da API
+function salvarNovoNomeBackend() {
   const novoNome = $("#novoNomeLoja").val().trim();
   const novaCorPrincipal = $("#novaCorPrincipalHex").val();
   const novaCorSecundaria = $("#novaCorSecundariaHex").val();
@@ -1488,13 +1468,13 @@ function salvarNovoNomeRestritivo() {
     .then((response) => response.json())
     .then((responseJson) => {
       app.dialog.close();
-      if (responseJson.status === "success") {
+      if (responseJson.status === "success" && responseJson.data.status === "success") {
         // Recarregar dados completos da loja para atualizar visualizações
         buscarDadosCompletosLoja(lojaAtual.id);
         app.popup.close(".popup-editar-nome");
-        app.dialog.alert("Nome da loja atualizado com sucesso!", "Sucesso");
+        app.dialog.alert(responseJson.data.message || "Nome da loja atualizado com sucesso!", "Sucesso");
       } else {
-        app.dialog.alert("Erro ao atualizar nome: " + responseJson.message, "Erro");
+        app.dialog.alert(responseJson.data.message || "Erro ao atualizar nome.", "Erro");
       }
     })
     .catch((error) => {
