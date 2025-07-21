@@ -2027,13 +2027,6 @@ var app = new Framework7({
               $("#btnStep1Next").prop("disabled", nome.length < 3);
             });
 
-            $(document).on('click.minhaLoja', "#btnStep1Next", function(e) {
-              e.preventDefault();
-              e.stopImmediatePropagation();
-              proximoStep(1);
-            });
-
-            // Step 2 - Finalizar
             $(document).on('click.minhaLoja', "#btnStep2Back", function(e) {
               e.preventDefault();
               e.stopImmediatePropagation();
