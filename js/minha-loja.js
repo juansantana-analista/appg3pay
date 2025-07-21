@@ -660,23 +660,40 @@ function salvarNovoNome() {
   const novaCorPrincipal = $("#novaCorPrincipalHex").val();
   const novaCorSecundaria = $("#novaCorSecundariaHex").val();
   const novoWhatsapp = formatarWhatsappParaEnvio($("#novoWhatsappLoja").val());
-  
+
   if (!novoNome) {
     app.dialog.alert("Por favor, digite um nome para a loja", "Erro");
     return;
   }
 
   app.dialog.preloader("Salvando...");
-  
+
   const lojaData = localStorage.getItem("minhaLoja");
   if (!lojaData) {
     app.dialog.close();
     app.dialog.alert("Erro ao obter dados da loja", "Erro");
     return;
   }
-  
+
   const lojaAtual = JSON.parse(lojaData);
-  
+  const nomeUrl = removerAcentosECedilha(novoNome.replace(/ /g, "_"));
+
+  // Montar objeto de dados conforme regra do backend
+  const dados = {
+    id: lojaAtual.id,
+    nome_loja: novoNome,
+    nome_url: nomeUrl
+  };
+  // Só enviar cor se for especial
+  if (lojaAtual.is_especial === 'S') {
+    dados.cor_principal = novaCorPrincipal;
+    dados.cor_secundaria = novaCorSecundaria;
+  }
+  // Sempre enviar whatsapp se existir campo
+  if (novoWhatsapp) {
+    dados.whatsapp = novoWhatsapp;
+  }
+
   const headers = {
     "Content-Type": "application/json",
     Authorization: "Bearer " + userAuthToken,
@@ -685,15 +702,8 @@ function salvarNovoNome() {
   const body = JSON.stringify({
     class: "LojinhaRestService",
     method: "atualizarLoja",
-    dados: {
-      id: lojaAtual.id,
-      nome_loja: novoNome,
-      cor_principal: novaCorPrincipal,
-      cor_secundaria: novaCorSecundaria,
-      whatsapp: novoWhatsapp
-    }
+    dados: dados
   });
-  console.log(body);
 
   const options = {
     method: "POST",
@@ -705,14 +715,12 @@ function salvarNovoNome() {
     .then((response) => response.json())
     .then((responseJson) => {
       app.dialog.close();
-      if (responseJson.status === "success") {
-        // Recarregar dados completos da loja para atualizar visualizações
+      if (responseJson.status === "success" && responseJson.data.status === "success") {
         buscarDadosCompletosLoja(lojaAtual.id);
-        
         app.popup.close(".popup-editar-nome");
-        app.dialog.alert("Nome da loja atualizado com sucesso!", "Sucesso");
+        app.dialog.alert(responseJson.data.message || "Nome da loja atualizado com sucesso!", "Sucesso");
       } else {
-        app.dialog.alert("Erro ao atualizar nome: " + responseJson.message, "Erro");
+        app.dialog.alert(responseJson.data.message || "Erro ao atualizar nome.", "Erro");
       }
     })
     .catch((error) => {
