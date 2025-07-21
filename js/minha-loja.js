@@ -1368,3 +1368,15 @@ $(document).on('click.minhaLoja', "#btnStep1Next", function(e) {
     proximoStep(1);
   });
 });
+
+// Evento de input do campo nome da loja: só habilita o botão se o nome for válido
+$(document).off('input.minhaLoja', "#nomeLoja");
+$(document).on('input.minhaLoja', "#nomeLoja", function(e) {
+  const nome = $(this).val().trim().replace(/ /g, '_');
+  if (nome.length >= 3 && validarNomeLoja(nome)) {
+    $("#btnStep1Next").prop("disabled", false);
+  } else {
+    $("#btnStep1Next").prop("disabled", true);
+  }
+  $("#previewNome").text($(this).val() || "Nome da sua loja aparecerá aqui");
+});
