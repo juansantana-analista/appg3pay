@@ -1341,26 +1341,23 @@ function removerAcentosECedilha(str) {
     .replace(/Ç/g, "C");
 }
 
-// Substituir evento do botão Avançar para validar e checar nome da loja
+// Evento restritivo do botão Avançar: só avança se nome for válido e não existir
 $(document).off('click.minhaLoja', "#btnStep1Next");
 $(document).on('click.minhaLoja', "#btnStep1Next", function(e) {
   e.preventDefault();
   e.stopImmediatePropagation();
-  let nomeLoja = $("#nomeLoja").val();
+  let nomeLoja = $("#nomeLoja").val().trim();
   nomeLoja = nomeLoja.replace(/ /g, "_");
   if (!validarNomeLoja(nomeLoja)) {
-    $("#nomeLoja").val("");
     app.dialog.alert("O nome da loja só pode conter letras, números, espaços e o caractere _.", "Nome inválido");
     return;
   }
   verificarNomeLojaDisponivel(nomeLoja, function(disponivel, dados, erro) {
     if (erro) {
-      $("#nomeLoja").val("");
       app.dialog.alert("Erro ao verificar nome da loja. Tente novamente.", "Erro");
       return;
     }
     if (!disponivel) {
-      $("#nomeLoja").val("");
       app.dialog.alert("Este nome de loja já está em uso. Por favor, escolha outro nome.", "Nome indisponível");
       return;
     }
@@ -1368,15 +1365,10 @@ $(document).on('click.minhaLoja', "#btnStep1Next", function(e) {
     proximoStep(1);
   });
 });
-
-// Evento de input do campo nome da loja: só habilita o botão se o nome for válido
+// Remover habilitação automática do botão Avançar por input
 $(document).off('input.minhaLoja', "#nomeLoja");
 $(document).on('input.minhaLoja', "#nomeLoja", function(e) {
-  const nome = $(this).val().trim().replace(/ /g, '_');
-  if (nome.length >= 3 && validarNomeLoja(nome)) {
-    $("#btnStep1Next").prop("disabled", false);
-  } else {
-    $("#btnStep1Next").prop("disabled", true);
-  }
   $("#previewNome").text($(this).val() || "Nome da sua loja aparecerá aqui");
+  // O botão só será habilitado pelo clique e validação, não por input
+  $("#btnStep1Next").prop("disabled", false);
 });
