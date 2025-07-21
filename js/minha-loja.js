@@ -160,6 +160,37 @@ function mostrarFormularioCriacao() {
   // Garantir que o botão Avançar está habilitado
   $("#btnStep1Next").prop("disabled", false);
   console.log('[DEBUG] Botão #btnStep1Next habilitado:', $("#btnStep1Next").prop("disabled") === false);
+  // Reatribuir event listener do botão Avançar
+  $(document).off('click.minhaLoja', "#btnStep1Next");
+  $(document).on('click.minhaLoja', "#btnStep1Next", function(e) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    let nomeLoja = $("#nomeLoja").val().trim();
+    console.log('[DEBUG] Clique no botão Avançar. Nome digitado:', nomeLoja);
+    nomeLoja = nomeLoja.replace(/ /g, "_");
+    console.log('[DEBUG] Nome após replace espaço por _:', nomeLoja);
+    const nomeValido = validarNomeLoja(nomeLoja);
+    console.log('[DEBUG] Resultado da função validarNomeLoja:', nomeValido);
+    if (!nomeValido) {
+      app.dialog.alert("O nome da loja só pode conter letras, números, espaços e o caractere _.", "Nome inválido");
+      return;
+    }
+    console.log('[DEBUG] Chamando verificarNomeLojaDisponivel para:', nomeLoja);
+    verificarNomeLojaDisponivel(nomeLoja, function(disponivel, dados, erro) {
+      console.log('[DEBUG] Callback verificarNomeLojaDisponivel', {disponivel, dados, erro});
+      if (erro) {
+        app.dialog.alert("Erro ao verificar nome da loja. Tente novamente.", "Erro");
+        return;
+      }
+      if (!disponivel) {
+        app.dialog.alert("Este nome de loja já está em uso. Por favor, escolha outro nome.", "Nome indisponível");
+        return;
+      }
+      // Se passou, pode avançar
+      console.log('[DEBUG] Nome válido e disponível, chamando proximoStep(1)');
+      proximoStep(1);
+    });
+  });
 }
 
 // Resetar formulário
