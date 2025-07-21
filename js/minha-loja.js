@@ -280,7 +280,8 @@ function verificarNomeLojaDisponivel(nomeLoja, callback) {
 
 // Criar loja
 function criarLoja() {
-  app.dialog.preloader("Validando nome da loja...");
+  app.dialog.close(); // Fecha qualquer loader anterior
+  app.dialog.preloader("Criando sua loja...");
   const pessoaId = localStorage.getItem("pessoaId");
   let nomeLoja = $("#nomeLoja").val();
   const corPrincipal = $("#corPrincipalHex").val();
@@ -313,6 +314,7 @@ function criarLoja() {
       return;
     }
     // Prosseguir com a criação
+    app.dialog.close(); // Fecha loader de validação
     app.dialog.preloader("Criando sua loja...");
     const headers = {
       "Content-Type": "application/json",
@@ -338,15 +340,14 @@ function criarLoja() {
     fetch(apiServerUrl, options)
       .then((response) => response.json())
       .then((responseJson) => {
+        app.dialog.close();
         if (responseJson.status === "success") {
           const lojaId = responseJson.data.data.id;
           localStorage.setItem("lojaId", lojaId);
           // Criar banners padrão automaticamente
           enviarBannerLoja(lojaId);
-          app.dialog.close();
           mostrarSucessoCriacao();
         } else {
-          app.dialog.close();
           app.dialog.alert("Erro ao criar loja: " + responseJson.message, "Erro");
         }
       })
@@ -1378,10 +1379,13 @@ $(document).on('click.minhaLoja', "#btnStep1Next", function(e) {
   nomeLoja = nomeLoja.replace(/ /g, "_");
   const nomeValido = validarNomeLoja(nomeLoja);
   if (!nomeValido) {
+    app.dialog.close();
     app.dialog.alert("O nome da loja só pode conter letras, números, espaços e o caractere _.", "Nome inválido");
     return;
   }
+  app.dialog.preloader("Validando nome da loja...");
   verificarNomeLojaDisponivel(nomeLoja, function(disponivel, dados, erro) {
+    app.dialog.close(); // Sempre fechar loader de validação
     if (erro) {
       app.dialog.alert("Erro ao verificar nome da loja. Tente novamente.", "Erro");
       return;
