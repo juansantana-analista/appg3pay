@@ -112,8 +112,9 @@ function mostrarTelaGerenciamento(loja) {
   // Atualizar visualizações
   $("#visualizacoes").text(loja.visitas || 0);
   
-  // Gerar link da loja
-  const linkLoja = `https://vitatop.tecskill.com.br/lojinha_vitatop/${loja.nome_loja || "loja"}`;
+  // Gerar link da loja SEM acentuação
+  const nomeLojaUrl = removerAcentos(loja.nome_loja || "loja");
+  const linkLoja = `https://vitatop.tecskill.com.br/lojinha_vitatop/${nomeLojaUrl}`;
   localStorage.setItem("linkLoja", linkLoja);
   
   // Carregar categorias selecionadas
@@ -209,9 +210,9 @@ function stepAnterior(stepAtual) {
 // Preparar summary no step 2
 function prepararSummary() {
   const nomeLoja = $("#nomeLoja").val();
-  
+  const nomeLojaUrl = removerAcentos(nomeLoja);
   $("#summaryNome").text(nomeLoja);
-  $("#linkLoja").text(`vitatop.tecskill.com.br/lojinha_vitatop/${nomeLoja}`);
+  $("#linkLoja").text(`vitatop.tecskill.com.br/lojinha_vitatop/${nomeLojaUrl}`);
 }
 
 // Criar loja
@@ -644,23 +645,25 @@ function compartilharLoja() {
   
   const loja = JSON.parse(lojaData);
   const nomeLoja = loja.nome_loja;
-  
+  const nomeLojaUrl = removerAcentos(nomeLoja);
+  const linkCompartilhar = `https://vitatop.tecskill.com.br/lojinha_vitatop/${nomeLojaUrl}`;
   onCompartilhar(
     nomeLoja,
     "Conheça minha loja personalizada na VitaTop!",
-    linkLoja
+    linkCompartilhar
   );
 }
 
 // Visualizar loja
 function visualizarLoja() {
-  const linkLoja = localStorage.getItem("linkLoja");
-  
-  if (!linkLoja) {
-    app.dialog.alert("Erro ao obter link da loja", "Erro");
+  const lojaData = localStorage.getItem("minhaLoja");
+  if (!lojaData) {
+    app.dialog.alert("Erro ao obter dados da loja", "Erro");
     return;
   }
-  
+  const loja = JSON.parse(lojaData);
+  const nomeLojaUrl = removerAcentos(loja.nome_loja);
+  const linkLoja = `https://vitatop.tecskill.com.br/lojinha_vitatop/${nomeLojaUrl}`;
   app.dialog.confirm("Deseja abrir sua loja no navegador?", "Visualizar Loja", function() {
     window.open(linkLoja, '_blank');
   });
@@ -1264,3 +1267,8 @@ function aplicarMascaraWhatsapp() {
 // Aplica máscara ao carregar e ao abrir popups/formulários
 $(document).ready(function() { aplicarMascaraWhatsapp(); });
 $(document).on('click', '#btnStep1Next, #btnStep2Back, #btnFinalizar, #editarNomeLoja, .popup-editar-nome', function() { setTimeout(aplicarMascaraWhatsapp, 100); });
+
+// Função utilitária para remover acentuação
+function removerAcentos(str) {
+  return str.normalize("NFD").replace(/\p{Diacritic}/gu, "");
+}
