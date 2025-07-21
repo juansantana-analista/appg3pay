@@ -147,6 +147,7 @@ function mostrarTelaGerenciamento(loja) {
 
 // Mostrar formulário de criação
 function mostrarFormularioCriacao() {
+  console.log('[DEBUG] mostrarFormularioCriacao chamado');
   $("#welcome-screen").addClass("display-none");
   $("#create-form").removeClass("display-none");
   $("#manage-screen").addClass("display-none");
@@ -156,6 +157,9 @@ function mostrarFormularioCriacao() {
   // Limpar campo WhatsApp
   $("#whatsappLoja").val("");
   aplicarMascaraWhatsapp();
+  // Garantir que o botão Avançar está habilitado
+  $("#btnStep1Next").prop("disabled", false);
+  console.log('[DEBUG] Botão #btnStep1Next habilitado:', $("#btnStep1Next").prop("disabled") === false);
 }
 
 // Resetar formulário
