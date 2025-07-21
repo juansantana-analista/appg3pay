@@ -1340,3 +1340,31 @@ function removerAcentosECedilha(str) {
     .replace(/ç/g, "c")
     .replace(/Ç/g, "C");
 }
+
+// Substituir evento do botão Avançar para validar e checar nome da loja
+$(document).off('click.minhaLoja', "#btnStep1Next");
+$(document).on('click.minhaLoja', "#btnStep1Next", function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  let nomeLoja = $("#nomeLoja").val();
+  nomeLoja = nomeLoja.replace(/ /g, "_");
+  if (!validarNomeLoja(nomeLoja)) {
+    $("#nomeLoja").val("");
+    app.dialog.alert("O nome da loja só pode conter letras, números, espaços e o caractere _.", "Nome inválido");
+    return;
+  }
+  verificarNomeLojaDisponivel(nomeLoja, function(disponivel, dados, erro) {
+    if (erro) {
+      $("#nomeLoja").val("");
+      app.dialog.alert("Erro ao verificar nome da loja. Tente novamente.", "Erro");
+      return;
+    }
+    if (!disponivel) {
+      $("#nomeLoja").val("");
+      app.dialog.alert("Este nome de loja já está em uso. Por favor, escolha outro nome.", "Nome indisponível");
+      return;
+    }
+    // Se passou, pode avançar
+    proximoStep(1);
+  });
+});
