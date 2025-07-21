@@ -147,7 +147,6 @@ function mostrarTelaGerenciamento(loja) {
 
 // Mostrar formulário de criação
 function mostrarFormularioCriacao() {
-  console.log('[DEBUG] mostrarFormularioCriacao chamado');
   $("#welcome-screen").addClass("display-none");
   $("#create-form").removeClass("display-none");
   $("#manage-screen").addClass("display-none");
@@ -159,25 +158,19 @@ function mostrarFormularioCriacao() {
   aplicarMascaraWhatsapp();
   // Garantir que o botão Avançar está habilitado
   $("#btnStep1Next").prop("disabled", false);
-  console.log('[DEBUG] Botão #btnStep1Next habilitado:', $("#btnStep1Next").prop("disabled") === false);
   // Reatribuir event listener do botão Avançar
   $(document).off('click.minhaLoja', "#btnStep1Next");
   $(document).on('click.minhaLoja', "#btnStep1Next", function(e) {
     e.preventDefault();
     e.stopImmediatePropagation();
     let nomeLoja = $("#nomeLoja").val().trim();
-    console.log('[DEBUG] Clique no botão Avançar. Nome digitado:', nomeLoja);
     nomeLoja = nomeLoja.replace(/ /g, "_");
-    console.log('[DEBUG] Nome após replace espaço por _:', nomeLoja);
     const nomeValido = validarNomeLoja(nomeLoja);
-    console.log('[DEBUG] Resultado da função validarNomeLoja:', nomeValido);
     if (!nomeValido) {
       app.dialog.alert("O nome da loja só pode conter letras, números, espaços e o caractere _.", "Nome inválido");
       return;
     }
-    console.log('[DEBUG] Chamando verificarNomeLojaDisponivel para:', nomeLoja);
     verificarNomeLojaDisponivel(nomeLoja, function(disponivel, dados, erro) {
-      console.log('[DEBUG] Callback verificarNomeLojaDisponivel', {disponivel, dados, erro});
       if (erro) {
         app.dialog.alert("Erro ao verificar nome da loja. Tente novamente.", "Erro");
         return;
@@ -187,7 +180,6 @@ function mostrarFormularioCriacao() {
         return;
       }
       // Se passou, pode avançar
-      console.log('[DEBUG] Nome válido e disponível, chamando proximoStep(1)');
       proximoStep(1);
     });
   });
@@ -254,13 +246,11 @@ function prepararSummary() {
 function validarNomeLoja(str) {
   // Permite letras, números, espaço e _
   const resultado = /^[A-Za-zÀ-ÿ0-9_ ]+$/.test(str);
-  console.log('[DEBUG] validarNomeLoja chamada para:', str, 'Resultado:', resultado);
   return resultado;
 }
 // Função para verificar se o nome da loja já existe
 function verificarNomeLojaDisponivel(nomeLoja, callback) {
   const nomeUrl = removerAcentosECedilha(nomeLoja);
-  console.log('[DEBUG] verificarNomeLojaDisponivel chamada para:', nomeLoja, 'nome_url:', nomeUrl);
   const headers = {
     "Content-Type": "application/json",
     Authorization: "Bearer " + userAuthToken,
@@ -270,7 +260,6 @@ function verificarNomeLojaDisponivel(nomeLoja, callback) {
     method: "buscarLojaPorNome",
     nome_loja: nomeUrl
   });
-  console.log('[DEBUG] Body da requisição buscarLojaPorNome:', body);
   fetch(apiServerUrl, {
     method: "POST",
     headers: headers,
@@ -278,7 +267,6 @@ function verificarNomeLojaDisponivel(nomeLoja, callback) {
   })
     .then((response) => response.json())
     .then((responseJson) => {
-      console.log('[DEBUG] Resposta buscarLojaPorNome:', responseJson);
       if (responseJson.status === "success" && responseJson.data.status === "success") {
         callback(false, responseJson.data.data); // Nome já existe
       } else {
@@ -286,7 +274,6 @@ function verificarNomeLojaDisponivel(nomeLoja, callback) {
       }
     })
     .catch((error) => {
-      console.log('[DEBUG] Erro buscarLojaPorNome:', error);
       callback(false, null, error);
     });
 }
@@ -1388,18 +1375,13 @@ $(document).on('click.minhaLoja', "#btnStep1Next", function(e) {
   e.preventDefault();
   e.stopImmediatePropagation();
   let nomeLoja = $("#nomeLoja").val().trim();
-  console.log('[DEBUG] Clique no botão Avançar. Nome digitado:', nomeLoja);
   nomeLoja = nomeLoja.replace(/ /g, "_");
-  console.log('[DEBUG] Nome após replace espaço por _:', nomeLoja);
   const nomeValido = validarNomeLoja(nomeLoja);
-  console.log('[DEBUG] Resultado da função validarNomeLoja:', nomeValido);
   if (!nomeValido) {
     app.dialog.alert("O nome da loja só pode conter letras, números, espaços e o caractere _.", "Nome inválido");
     return;
   }
-  console.log('[DEBUG] Chamando verificarNomeLojaDisponivel para:', nomeLoja);
   verificarNomeLojaDisponivel(nomeLoja, function(disponivel, dados, erro) {
-    console.log('[DEBUG] Callback verificarNomeLojaDisponivel', {disponivel, dados, erro});
     if (erro) {
       app.dialog.alert("Erro ao verificar nome da loja. Tente novamente.", "Erro");
       return;
@@ -1409,7 +1391,6 @@ $(document).on('click.minhaLoja', "#btnStep1Next", function(e) {
       return;
     }
     // Se passou, pode avançar
-    console.log('[DEBUG] Nome válido e disponível, chamando proximoStep(1)');
     proximoStep(1);
   });
 });
