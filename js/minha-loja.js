@@ -140,8 +140,8 @@ function mostrarTelaGerenciamento(loja) {
     $("#grupoEditarCorPrincipal").hide();
     $("#grupoEditarCorSecundaria").hide();
   }
-  var whatsappSem55 = removerPrefixo55(loja.whatsapp);
-  $("#whatsappLoja").val(whatsappSem55);
+  var whatsapp = loja.whatsapp;
+  $("#whatsappLoja").val(whatsapp);
   aplicarMascaraWhatsapp();
 }
 
@@ -646,8 +646,8 @@ function editarNomeLoja() {
   $("#previewNovaCorPrincipal").css('background', lojaAtual.cor_principal || "#FF5733").text((lojaAtual.cor_principal || "#FF5733").toUpperCase());
   $("#novaCorSecundariaHex").val(lojaAtual.cor_secundaria || "#C70039");
   $("#previewNovaCorSecundaria").css('background', lojaAtual.cor_secundaria || "#C70039").text((lojaAtual.cor_secundaria || "#C70039").toUpperCase());
-  var whatsappSem55 = removerPrefixo55(lojaAtual.whatsapp);
-  $("#novoWhatsappLoja").val(whatsappSem55);
+  var whatsapp = lojaAtual.whatsapp;
+  $("#novoWhatsappLoja").val(whatsapp);
   aplicarMascaraWhatsapp();
   // Forçar a máscara no valor já preenchido
   $("#novoWhatsappLoja").trigger('input');
@@ -1338,17 +1338,11 @@ $(document).on('input', '#novaCorSecundariaHex', function() {
 function formatarWhatsappParaEnvio(valor) {
   var limpo = (valor || '').replace(/\D/g, '');
   if (limpo.length >= 10 && limpo.length <= 11) {
-    return '55' + limpo;
+    return limpo;
   }
   return '';
 }
-function removerPrefixo55(numero) {
-  var limpo = (numero || '').replace(/\D/g, '');
-  if (limpo.startsWith('55') && limpo.length > 11) {
-    return limpo.substring(2);
-  }
-  return limpo;
-}
+
 // Função para aplicar máscara de WhatsApp
 function aplicarMascaraWhatsapp() {
   if ($.fn.mask) {
