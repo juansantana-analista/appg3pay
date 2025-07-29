@@ -1,132 +1,4 @@
-// ========== CONFIGURAÇÕES E CONSTANTES ==========
-const CONFIG = {
-  API_BASE_URL: "https://vitatophomologa.tecskill.com.br/",
-  API_ENDPOINT: "https://vitatophomologa.tecskill.com.br/rest.php",
-  IMAGE_BASE_URL: "https://vitatophomologa.tecskill.com.br/",
-  DEFAULT_IMAGE: "img/default.png",
-  PAGINATION_LIMIT: 30,
-  SEARCH_DELAY: 1000,
-  COOKIE_EXPIRES_HOURS: 5
-};
-
-// ========== CLASSES E UTILITÁRIOS ==========
-
-class UIManager {
-  static showLoader(message = "Carregando...") {
-    app.dialog.preloader(message);
-  }
-  static hideLoader() {
-    app.dialog.close();
-  }
-  static showError(message, title = "Erro") {
-    this.hideLoader();
-    app.dialog.alert(message, title);
-  }
-  static showSuccess(message, duration = 2000) {
-    const toast = app.toast.create({
-      text: message,
-      position: "center",
-      closeTimeout: duration,
-    });
-    toast.open();
-  }
-  static showConfirm(message, callback, title = "Confirmação") {
-    app.dialog.confirm(message, title, callback);
-  }
-}
-
-class Formatter {
-  static currency(value) {
-    return parseFloat(value).toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    });
-  }
-  static date(date) {
-    const dateObj = new Date(date);
-    const months = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
-    const day = dateObj.getDate();
-    const month = months[dateObj.getMonth()];
-    const year = dateObj.getFullYear();
-    const hours = dateObj.getHours().toString().padStart(2, "0");
-    const minutes = dateObj.getMinutes().toString().padStart(2, "0");
-    return `${day} ${month} ${year} ${hours}:${minutes}`;
-  }
-  static truncateText(text, limit) {
-    return text.length > limit ? text.substring(0, limit) + "..." : text;
-  }
-}
-
-class AuthManager {
-  static getCookie(name) {
-    const nameEQ = name + "=";
-    const cookies = document.cookie.split(";");
-    for (let cookie of cookies) {
-      cookie = cookie.trim();
-      if (cookie.indexOf(nameEQ) === 0) {
-        return cookie.substring(nameEQ.length);
-      }
-    }
-    return null;
-  }
-  static setCookie(name, value, hours) {
-    let expires = "";
-    if (hours) {
-      const date = new Date();
-      date.setTime(date.getTime() + hours * 60 * 60 * 1000);
-      expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = `${name}=${value || ""}${expires}; path=/`;
-  }
-  static deleteCookie(name) {
-    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
-  }
-  static validateToken() {
-    const userAuthToken = this.getCookie("userAuthToken");
-    if (!userAuthToken) return false;
-    try {
-      const base64Url = userAuthToken.split(".")[1];
-      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-      const payload = JSON.parse(atob(base64));
-      const currentTime = Math.floor(Date.now() / 1000);
-      return payload.expires && payload.expires > currentTime;
-    } catch (error) {
-      console.error("Erro ao decodificar o token:", error);
-      return false;
-    }
-  }
-  static getAuthHeaders() {
-    const token = this.getCookie("userAuthToken");
-    return {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
-    };
-  }
-}
-
-// Funções utilitárias para uso no restante do código
-function setCookie(name, value, hours) {
-  return AuthManager.setCookie(name, value, hours);
-}
-function getCookie(name) {
-  return AuthManager.getCookie(name);
-}
-function deleteCookie(name) {
-  return AuthManager.deleteCookie(name);
-}
-function validarToken() {
-  return AuthManager.validateToken();
-}
-function formatarMoeda(valor) {
-  return Formatter.currency(valor);
-}
-function formatarData(data) {
-  return Formatter.date(data);
-}
-function truncarNome(nome, limite) {
-  return Formatter.truncateText(nome, limite);
-}
-
+var appId = "Bearer " + getCookie("userAuthToken");
 // Início função validar login
 function validarToken() {
   const userAuthToken = getCookie("userAuthToken");
@@ -199,20 +71,40 @@ function deleteCookie(name) {
 function listarCategorias() {
   app.dialog.preloader("Carregando...");
 
-  const data = {
-    class: "ProdutoCategoriaRest",
-    method: "listarCategorias",
+  // Cabeçalhos da requisição
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
   };
 
-  HttpClient.request({ url: apiServerUrl, data })
+  const body = JSON.stringify({
+    class: "ProdutoCategoriaRest",
+    method: "listarCategorias",
+  });
+
+  // Opções da requisição
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  // Fazendo a requisição
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
+      // Verifica se o status é 'success' e se há dados de categorias
       if (
         responseJson.status === "success" &&
         responseJson.data &&
         responseJson.data.data
       ) {
         const categorias = responseJson.data.data;
+
+        // Limpar o container de categorias
         $("#container-categorias").empty();
+
+        // Adiciona a opção Todas ao inicio
         var opcaoTodasHTML = `
           <div class="category-item active" data-id="todas">
             <div class="category-icon">
@@ -222,6 +114,8 @@ function listarCategorias() {
           </div>
         `;
         $("#container-categorias").append(opcaoTodasHTML);
+
+        // Adicione cada categoria
         categorias.forEach((categoria) => {
           var categoriaHTML = `
             <div class="category-item" data-id="${categoria.id}">
@@ -231,25 +125,49 @@ function listarCategorias() {
               <div class="category-name">${categoria.nome}</div>
             </div>
           `;
+
           $("#container-categorias").append(categoriaHTML);
         });
+
+        // Adicione manipuladores de eventos para os itens de categoria
         $(".category-item").on("click", function () {
+          // Remove a classe ativa de todos os itens
           $(".category-item").removeClass("active");
+
+          // Adiciona a classe ativa ao item clicado
           $(this).addClass("active");
+
+          // Pega o id da categoria clicada
           var categoriaId = $(this).data("id");
+
+          // Se for "todas", define como undefined para listar todos os produtos
           if (categoriaId === "todas") {
             categoriaId = undefined;
           }
+
+          // Chama a função listarProdutos com o id da categoria
           listarProdutos("", categoriaId);
+
+          // Centraliza o item selecionado
           scrollToCategory(this);
+
+          // Atualiza os indicadores de rolagem
           updateScrollIndicators();
         });
+
+        // Configurar os indicadores de rolagem
         setupScrollIndicators();
+
+        // Configurar botões de rolagem
         setupScrollButtons();
+
+        // Mostrar dica de rolagem na primeira vez
         showSwipeHint();
+
         app.dialog.close();
       } else {
         app.dialog.close();
+        // Verifica se há uma mensagem de erro definida
         const errorMessage =
           responseJson.message || "Formato de dados inválido";
         app.dialog.alert(
@@ -467,12 +385,12 @@ function showSwipeHint() {
 function listarProdutos(searchQuery = "", categoriaId) {
   app.dialog.preloader("Carregando...");
 
-  var imgUrl = "https://vitatophomologa.tecskill.com.br/";
+  var imgUrl = "https://vitatop.tecskill.com.br/";
 
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -491,7 +409,8 @@ function listarProdutos(searchQuery = "", categoriaId) {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de pedidos
       if (
@@ -511,7 +430,7 @@ function listarProdutos(searchQuery = "", categoriaId) {
         produtos.forEach((produto) => {
           var produtoPreco = formatarMoeda(produto.preco_lojavirtual);
 
-          var imgUrl = "https://vitatophomologa.tecskill.com.br/";
+          var imgUrl = "https://vitatop.tecskill.com.br/";
           const imagemProduto = produto.foto
             ? imgUrl + produto.foto
             : "img/default.png";
@@ -703,12 +622,12 @@ function buscarProduto() {
   var produtoId = localStorage.getItem("produtoId");
   app.dialog.preloader("Carregando...");
 
-  var imgUrl = "https://vitatophomologa.tecskill.com.br/";
+  var imgUrl = "https://vitatop.tecskill.com.br/";
 
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -725,7 +644,8 @@ function buscarProduto() {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de pedidos
       if (
@@ -1105,12 +1025,12 @@ function buscarLinks() {
   var codigo_indicador = localStorage.getItem("codigo_indicador");
   app.dialog.preloader("Carregando...");
 
-  var imgUrl = "https://vitatophomologa.tecskill.com.br/";
+  var imgUrl = "https://vitatop.tecskill.com.br/";
 
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -1127,7 +1047,8 @@ function buscarLinks() {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de pedidos
       if (responseJson.status === "success") {
@@ -1231,7 +1152,7 @@ function buscarPessoaId(userId) {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -1250,7 +1171,8 @@ function buscarPessoaId(userId) {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (responseJson.status === "success") {
@@ -1288,12 +1210,12 @@ function buscarLinkAfiliado() {
   const pessoaId = localStorage.getItem("pessoaId");
   app.dialog.preloader("Carregando...");
 
-  var imgUrl = "https://vitatophomologa.tecskill.com.br/";
+  var imgUrl = "https://vitatop.tecskill.com.br/";
 
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -1310,7 +1232,8 @@ function buscarLinkAfiliado() {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       console.log(responseJson);
       // Verifica se o status é 'success' e se há dados de pedidos
@@ -1389,7 +1312,7 @@ function listarPedidos(loadMore = false, offset = 0) {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -1408,7 +1331,8 @@ function listarPedidos(loadMore = false, offset = 0) {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de pedidos
       if (
@@ -1589,7 +1513,7 @@ function listarVendas(loadMore = false, offset = 0) {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   // Cabeçalhos da requisição - incluindo paginação
@@ -1613,7 +1537,8 @@ function listarVendas(loadMore = false, offset = 0) {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de vendas
       if (
@@ -1784,7 +1709,7 @@ function detalhesVenda() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
   const dados = {
     vendedor: pessoaId,
@@ -1805,7 +1730,8 @@ function detalhesVenda() {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de pedidos
       if (
@@ -1829,7 +1755,7 @@ function detalhesVenda() {
           .map(
             (item) => `
                       <li>
-                          <img src="https://vitatophomologa.tecskill.com.br/${
+                          <img src="https://vitatop.tecskill.com.br/${
                             item.foto
                           }" alt="${
               item.descricao
@@ -1870,7 +1796,7 @@ function detalhesVenda() {
                               <!-- Seção de pagamento -->
                               <div class="payment-method-a display-none" id="pagamentoPix">
                                   <div class="payment-center">
-                                      <img src="https://vitatophomologa.tecskill.com.br/${
+                                      <img src="https://vitatop.tecskill.com.br/${
                                         detalhes.forma_pagamento.pix_qrcode
                                       }" width="250px" alt="QR Code">
                                       <span class="pix-key" id="pixKey">${
@@ -1979,7 +1905,7 @@ function detalhesPedido() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -1996,7 +1922,8 @@ function detalhesPedido() {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de pedidos
       if (
@@ -2018,7 +1945,7 @@ function detalhesPedido() {
           .map(
             (item) => `
                       <li>
-                          <img src="https://vitatophomologa.tecskill.com.br/${
+                          <img src="https://vitatop.tecskill.com.br/${
                             item.foto
                           }" alt="${
               item.descricao
@@ -2084,7 +2011,7 @@ function detalhesPedido() {
                               <div class="payment-method-a display-none" id="pagamentoPix">
                                   <div class="payment-center">
                                       ${exibirPagamento ? `
-                                      <img src="https://vitatophomologa.tecskill.com.br/${
+                                      <img src="https://vitatop.tecskill.com.br/${
                                         detalhes.pix_qrcode
                                       }" width="250px" alt="QR Code">
                                       <span class="pix-key" id="pixKey">${
@@ -2224,7 +2151,7 @@ function confirmarPagamento(pedidoId) {
   }
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
   
   const body = JSON.stringify({
@@ -2237,7 +2164,8 @@ function confirmarPagamento(pedidoId) {
     headers: headers,
     body: body,
   };
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       app.dialog.close();
       console.log(responseJson);
@@ -2270,7 +2198,7 @@ function listarBanners() {
   app.dialog.preloader("Carregando...");
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
   const dados = {
     local: 1,
@@ -2285,7 +2213,8 @@ function listarBanners() {
     headers: headers,
     body: body,
   };
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       app.dialog.close();
       if (responseJson.status === "success") {
@@ -2328,7 +2257,7 @@ function cepEndereco(cep) {
   app.dialog.preloader("Carregando...");
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
   const dados = {
     cep: cep,
@@ -2343,7 +2272,8 @@ function cepEndereco(cep) {
     headers: headers,
     body: body,
   };
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       app.dialog.close();
       if (responseJson.status === "success") {
@@ -2372,7 +2302,7 @@ function cepEnderecoEdit(cep) {
   app.dialog.preloader("Carregando...");
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
   const dados = {
     cep: cep,
@@ -2387,7 +2317,8 @@ function cepEnderecoEdit(cep) {
     headers: headers,
     body: body,
   };
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       app.dialog.close();
       if (responseJson.status === "success") {
@@ -2419,7 +2350,7 @@ function listarNotificacoes() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -2436,7 +2367,8 @@ function listarNotificacoes() {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de notificações
       if (
@@ -2578,7 +2510,7 @@ function marcarComoLida(notificacaoId) {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -2588,7 +2520,12 @@ function marcarComoLida(notificacaoId) {
   });
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: { method: "NotificacaoLida", id_notificacao: notificacaoId, headers } })
+  fetch(apiServerUrl, {
+    method: "POST",
+    headers: headers,
+    body: body,
+  })
+    .then((response) => response.json())
     .then((responseJson) => {
       if (responseJson.status !== "success") {
         app.dialog.alert(
@@ -2610,7 +2547,7 @@ function apagarNotificacao(notificacaoId) {
 
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -2625,7 +2562,8 @@ function apagarNotificacao(notificacaoId) {
     body: body,
   };
 
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       if (responseJson.status === "success") {
         app.dialog.close();
@@ -2652,7 +2590,7 @@ function saldoCarteira() {
 
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -2667,7 +2605,8 @@ function saldoCarteira() {
     body: body,
   };
 
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       app.dialog.close(); // Fechar o loader aqui já é mais seguro
 
@@ -2710,7 +2649,7 @@ function listarCategoriasCurso() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -2726,7 +2665,8 @@ function listarCategoriasCurso() {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de pedidos
       if (responseJson.status === "success") {
@@ -2780,7 +2720,7 @@ function buscarQtdeNotif() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -2797,7 +2737,8 @@ function buscarQtdeNotif() {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       if (
         responseJson.status === "success" &&
@@ -2930,7 +2871,7 @@ function selecionarEndereco(enderecoSelecionado) {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -2947,7 +2888,8 @@ function selecionarEndereco(enderecoSelecionado) {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       if (
         responseJson.status == "success" &&
@@ -3019,7 +2961,7 @@ function listarEnderecos() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -3036,7 +2978,8 @@ function listarEnderecos() {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       if (responseJson.data.status === "success") {
         const enderecos = responseJson.data.data.enderecos;
@@ -3168,7 +3111,7 @@ function listarPerfil(rota) {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -3185,7 +3128,8 @@ function listarPerfil(rota) {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       if (responseJson.data.status === "success") {
         const pessoa = responseJson.data.data.pessoa;
@@ -3193,7 +3137,7 @@ function listarPerfil(rota) {
         if(rota == "index"){
           $("#profileImageMenu").attr(
             "src",
-            "https://vitatophomologa.tecskill.com.br/" + pessoa.foto
+            "https://vitatop.tecskill.com.br/" + pessoa.foto
           );
           app.dialog.close();
           return;
@@ -3201,12 +3145,12 @@ function listarPerfil(rota) {
         
           $("#profileImageMenu").attr(
             "src",
-            "https://vitatophomologa.tecskill.com.br/" + pessoa.foto
+            "https://vitatop.tecskill.com.br/" + pessoa.foto
           );
 
         $("#profileImage").attr(
           "src",
-          "https://vitatophomologa.tecskill.com.br/" + pessoa.foto
+          "https://vitatop.tecskill.com.br/" + pessoa.foto
         );
         $("#usuarioNome").html(pessoa.nome);
         $("#emailUsuario").html(pessoa.email);
@@ -3247,7 +3191,7 @@ function enviarFotoPerfil(base64Foto) {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    "Authorization": "Bearer " + AuthManager.getCookie('userAuthToken'),
+    "Authorization": "Bearer " + userAuthToken,
   };
 
   // Corpo da requisição, compatível com sua API
@@ -3266,7 +3210,8 @@ function enviarFotoPerfil(base64Foto) {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       app.dialog.close(); // Fecha o preloader
 
@@ -3315,7 +3260,7 @@ function salvarPerfil() {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                "Authorization": "Bearer " + AuthManager.getCookie('userAuthToken')
+                "Authorization": "Bearer " + userAuthToken
               },
               body: JSON.stringify({
                 class: "PessoaRestService",
@@ -3365,7 +3310,7 @@ function salvarSenha() {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                "Authorization": "Bearer " + AuthManager.getCookie('userAuthToken')
+                "Authorization": "Bearer " + userAuthToken
               },
               body: JSON.stringify({
                 class: "PessoaRestService",
@@ -3429,12 +3374,22 @@ function finalizarCompra(
     },
   };
 
-  HttpClient.request({ url: apiServerUrl, data: data })
+  fetch(apiServerUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + userAuthToken,
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => response.json())
     .then((responseJson) => {
+      // Verifica se o status é 'success'
       if (
         responseJson.status == "success" &&
         responseJson.data.status == "success"
       ) {
+        // Dados a serem armazenados
         var data = {
           formaSelecionada: formaPagamento,
           linhaDigitavel: responseJson.data.data.boleto_linhadigitavel,
@@ -3450,22 +3405,26 @@ function finalizarCompra(
           cartao_numero: responseJson.data.data.cartao_numero,
           nome_cartao: responseJson.data.data.nome_cartao,
         };
+
+        // Armazenar no localStorage
         localStorage.setItem("pagamentoData", JSON.stringify(data));
         localStorage.setItem(
           "pedidoIdPagamento",
           responseJson.data.data.pedido_id
         );
+
         app.dialog.close();
         app.views.main.router.navigate("/pagamento/");
+
+        /* Abrir navegador para baixar boleto
+              var ref = cordova.InAppBrowser.open(linkBoleto, '_system', 'location=no,zoom=no');
+              ref.show();*/
       } else {
         app.dialog.close();
-        let msg = "Erro ao finalizar compra.";
-        if (responseJson && (responseJson.message || (responseJson.data && responseJson.data.message))) {
-          msg += " " + (responseJson.message || responseJson.data.message);
-        } else {
-          msg += " " + JSON.stringify(responseJson);
-        }
-        app.dialog.alert(msg, "Falha na requisição!");
+        app.dialog.alert(
+          "Erro ao finalizar compra: " + responseJson,
+          "Falha na requisição!"
+        );
       }
     })
     .catch((error) => {
@@ -3477,7 +3436,9 @@ function finalizarCompra(
       console.error("Error:", error);
     });
 }
+//Fim Função Finalizar Compra
 
+//Inicio Função Refazer Pagamento
 function refazerPagamento(
   formaPagamento,
   titular,
@@ -3503,12 +3464,22 @@ function refazerPagamento(
     },
   };
 
-  HttpClient.request({ url: apiServerUrl, data: data })
+  fetch(apiServerUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + userAuthToken,
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => response.json())
     .then((responseJson) => {
+      // Verifica se o status é 'success'
       if (
         responseJson.status == "success" &&
         responseJson.data.status == "success"
       ) {
+        // Dados a serem armazenados
         var data = {
           formaSelecionada: formaPagamento,
           linhaDigitavel: responseJson.data.data.boleto_linhadigitavel,
@@ -3524,18 +3495,22 @@ function refazerPagamento(
           cartao_numero: responseJson.data.data.cartao_numero,
           nome_cartao: responseJson.data.data.nome_cartao,
         };
+
+        // Armazenar no localStorage
         localStorage.setItem("pagamentoData", JSON.stringify(data));
+
         app.dialog.close();
         app.views.main.router.navigate("/pagamento/");
+
+        /* Abrir navegador para baixar boleto
+              var ref = cordova.InAppBrowser.open(linkBoleto, '_system', 'location=no,zoom=no');
+              ref.show();*/
       } else {
         app.dialog.close();
-        let msg = "Erro ao finalizar compra.";
-        if (responseJson && (responseJson.message || (responseJson.data && responseJson.data.message))) {
-          msg += " " + (responseJson.message || responseJson.data.message);
-        } else {
-          msg += " " + JSON.stringify(responseJson);
-        }
-        app.dialog.alert(msg, "Falha na requisição!");
+        app.dialog.alert(
+          "Erro ao finalizar compra: " + responseJson,
+          "Falha na requisição!"
+        );
       }
     })
     .catch((error) => {
@@ -3547,7 +3522,7 @@ function refazerPagamento(
       console.error("Error:", error);
     });
 }
-//Fim Função Finalizar Compra
+//Fim Função Refazer Pagamento
 
 //Inicio Funçao Listar Carrinho
 function listarCarrinho() {
@@ -3561,7 +3536,7 @@ function listarCarrinho() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -3578,7 +3553,8 @@ function listarCarrinho() {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (
@@ -3598,7 +3574,7 @@ function listarCarrinho() {
               
                   <div class="flex space-x-4" style="margin-bottom: 18px;">
                     <img
-                      src="https://vitatophomologa.tecskill.com.br/${item.foto}"
+                      src="https://vitatop.tecskill.com.br/${item.foto}"
                       alt="${item.nome}"
                       class="w-20 h-20 rounded-lg object-cover"
                     />
@@ -3800,7 +3776,7 @@ function alterarCarrinho(pessoaId, produtoId, quantidade) {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -3817,7 +3793,8 @@ function alterarCarrinho(pessoaId, produtoId, quantidade) {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (
@@ -3872,7 +3849,7 @@ function adicionarEndereco() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -3889,7 +3866,8 @@ function adicionarEndereco() {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (
@@ -3957,7 +3935,7 @@ function editarEndereco() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -3974,7 +3952,8 @@ function editarEndereco() {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (
@@ -4021,7 +4000,7 @@ function adicionarItemCarrinho(produtoId) {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -4038,7 +4017,8 @@ function adicionarItemCarrinho(produtoId) {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (
@@ -4085,7 +4065,7 @@ function removerItemCarrinho(pessoaId, produtoId) {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -4102,7 +4082,8 @@ function removerItemCarrinho(pessoaId, produtoId) {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success'
       app.dialog.close();
@@ -4142,7 +4123,7 @@ function limparCarrinho() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -4159,7 +4140,8 @@ function limparCarrinho() {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (
@@ -4193,7 +4175,7 @@ function contarCarrinho() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -4210,7 +4192,8 @@ function contarCarrinho() {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (
@@ -4244,7 +4227,7 @@ function onDashboard() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -4261,7 +4244,8 @@ function onDashboard() {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (
@@ -4303,7 +4287,7 @@ function listarCarrinhoCheckout() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -4320,7 +4304,8 @@ function listarCarrinhoCheckout() {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (
@@ -4344,7 +4329,7 @@ function listarCarrinhoCheckout() {
             var itemLi = `
                           <!-- ITEM DO CARRINHO-->
                           <li class="item-carrinho">
-                                  <img src="https://vitatophomologa.tecskill.com.br/${
+                                  <img src="https://vitatop.tecskill.com.br/${
                                     item.foto
                                   }" width="40px">
                               <div class="area-details">
@@ -4407,7 +4392,7 @@ function listarEquipe(filtro = "all") {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -4424,7 +4409,8 @@ function listarEquipe(filtro = "all") {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success'
       if (responseJson.status === "success") {
@@ -4672,7 +4658,7 @@ function carregarCategoriasCampanha() {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
@@ -4688,7 +4674,8 @@ function carregarCategoriasCampanha() {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de categorias
       if (
@@ -4753,7 +4740,7 @@ function listarCampanhas(categoriaId = "all") {
   // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
 
   // Prepara o body da requisição, incluindo categoria_id se for necessário
@@ -4777,7 +4764,8 @@ function listarCampanhas(categoriaId = "all") {
   };
 
   // Fazendo a requisição
-  HttpClient.request({ url: apiServerUrl, data: options })
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
     .then((responseJson) => {
       // Verifica se o status é 'success' e se há dados de campanhas
       if (
@@ -4819,7 +4807,7 @@ function listarCampanhas(categoriaId = "all") {
 
             // Define uma imagem padrão caso não tenha
             const imagemCampanha = campanha.imagem
-              ? "https://vitatophomologa.tecskill.com.br/" + campanha.imagem
+              ? "https://vitatop.tecskill.com.br/" + campanha.imagem
               : "img/default-campaign.jpg";
 
             // HTML do card da campanha
@@ -4928,6 +4916,12 @@ function formatarMoeda(valor) {
   return precoFormatado;
 }
 //Fim da Funçao formatar Moeda
+
+// Função para truncar o nome do produto
+const truncarNome = (nome, limite) => {
+  return nome.length > limite ? nome.substring(0, limite) + "..." : nome;
+};
+// Fim Função para truncar o nome do produto
 
 // Função para limpar o local storage
 function clearLocalStorage() {
@@ -5091,14 +5085,19 @@ function oneSignalLogin(userId, oneSignalId) {
 function listarCategoriasLojinha(lojinhaId, callback) {
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
   const body = JSON.stringify({
     class: "LojinhaRestService",
     method: "listarCategoriasLojinha",
     lojinha_vitatop_id: lojinhaId
   });
-  HttpClient.request({ url: apiServerUrl, data: { method: "listarCategoriasLojinha", lojinha_vitatop_id: lojinhaId, headers } })
+  fetch(apiServerUrl, {
+    method: "POST",
+    headers,
+    body
+  })
+    .then((response) => response.json())
     .then((responseJson) => {
       if (typeof callback === 'function') callback(responseJson);
     })
@@ -5111,7 +5110,7 @@ function listarCategoriasLojinha(lojinhaId, callback) {
 function atualizarCategoriasLojinha(lojinhaId, arrayCategorias, callback) {
   const headers = {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + AuthManager.getCookie('userAuthToken'),
+    Authorization: "Bearer " + userAuthToken,
   };
   const body = JSON.stringify({
     class: "LojinhaRestService",
@@ -5119,31 +5118,17 @@ function atualizarCategoriasLojinha(lojinhaId, arrayCategorias, callback) {
     lojinha_vitatop_id: lojinhaId,
     categorias: arrayCategorias
   });
-  HttpClient.request({ url: apiServerUrl, data: { method: "atualizarCategoriasLojinha", lojinha_vitatop_id: lojinhaId, categorias: arrayCategorias, headers } })
+  fetch(apiServerUrl, {
+    method: "POST",
+    headers,
+    body
+  })
+    .then((response) => response.json())
     .then((responseJson) => {
       if (typeof callback === 'function') callback(responseJson);
     })
     .catch((error) => {
       if (typeof callback === 'function') callback({ status: 'error', error });
     });
-}
-
-// Classe utilitária para requisições HTTP padronizadas
-class HttpClient {
-  static async request({ url, method = 'POST', data = null, headers = {} }) {
-    const config = {
-      method,
-      headers: { ...AuthManager.getAuthHeaders(), ...headers }
-    };
-    if (data) config.body = JSON.stringify(data);
-    try {
-      const response = await fetch(url, config);
-      const json = await response.json();
-      return json;
-    } catch (error) {
-      console.error('Erro na requisição:', error);
-      throw error;
-    }
-  }
 }
 

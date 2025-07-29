@@ -86,7 +86,7 @@
             <div class="step-indicator">
               <div class="step active" data-step="1">
                 <span>1</span>
-                <label>Nome da Loja</label>
+                <label>Informações Básicas</label>
               </div>
               <div class="step" data-step="2">
                 <span>2</span>
@@ -94,7 +94,7 @@
               </div>
             </div>
 
-            <!-- Passo 1: Nome da Loja -->
+            <!-- Passo 1: Informações Básicas -->
             <div class="step-content" id="step-1">
               <div class="form-card">
                 <div class="form-header">
@@ -102,13 +102,31 @@
                   <h3>Como quer chamar sua loja?</h3>
                   <p>Escolha um nome atrativo e fácil de lembrar</p>
                 </div>
-
                 <div class="form-group">
                   <label for="nomeLoja">Nome da Loja</label>
                   <input type="text" id="nomeLoja" placeholder="Ex: Loja da Maria, Suplementos do João..." maxlength="50">
                   <small>Máximo 50 caracteres</small>
                 </div>
-
+                <div class="form-group" id="grupoCorPrincipal" style="display:none;">
+                  <div class="color-picker-group">
+                    <label class="color-picker-label" for="corPrincipal">Cor Principal</label>
+                    <input type="color" id="corPrincipal" value="#FF5733" style="display:none;">
+                    <div class="color-preview" id="previewCorPrincipal" tabindex="0" style="cursor:pointer;">#FF5733</div>
+                    <input type="text" id="corPrincipalHex" maxlength="7" style="width:120px; text-transform:uppercase;" placeholder="#FF5733">
+                  </div>
+                </div>
+                <div class="form-group" id="grupoCorSecundaria" style="display:none;">
+                  <div class="color-picker-group">
+                    <label class="color-picker-label" for="corSecundaria">Cor Secundária</label>
+                    <input type="color" id="corSecundaria" value="#C70039" style="display:none;">
+                    <div class="color-preview" id="previewCorSecundaria" tabindex="0" style="cursor:pointer;">#C70039</div>
+                    <input type="text" id="corSecundariaHex" maxlength="7" style="width:120px; text-transform:uppercase;" placeholder="#C70039">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="whatsappLoja">Whatsapp da Loja</label>
+                  <input type="text" id="whatsappLoja" class="whatsapp-mask" placeholder="Ex: (99) 99999-9999" maxlength="20">
+                </div>
                 <div class="preview-card">
                   <div class="preview-header">
                     <i class="mdi mdi-eye"></i>
@@ -122,7 +140,6 @@
                     <span class="preview-tag">Distribuidor VitaTop</span>
                   </div>
                 </div>
-
                 <button class="btn-next" id="btnStep1Next" disabled>
                   Próximo Passo
                   <i class="mdi mdi-arrow-right"></i>
@@ -232,15 +249,15 @@
                   <i class="mdi mdi-store-edit"></i>
                 </div>
                 <div class="option-content">
-                  <h4>Nome da Loja</h4>
-                  <p>Alterar o nome da sua loja</p>
+                  <h4>Informações Básicas</h4>
+                  <p>Nome da Loja, Cores e Whatsapp</p>
                 </div>
                 <div class="option-arrow">
                   <i class="mdi mdi-chevron-right"></i>
                 </div>
               </div>
-<!--
-              <div class="option-card" id="gerenciarBanners">
+
+              <div class="option-card" id="gerenciarBanners" style="display:none;">
                 <div class="option-icon">
                   <i class="mdi mdi-image-multiple"></i>
                 </div>
@@ -252,7 +269,20 @@
                   <i class="mdi mdi-chevron-right"></i>
                 </div>
               </div>
--->
+
+              <div class="option-card" id="alterarLogoLoja" style="display:none;">
+                <div class="option-icon">
+                  <i class="mdi mdi-image"></i>
+                </div>
+                <div class="option-content">
+                  <h4>Logo da Loja</h4>
+                  <p>Alterar logo (800x200 recomendado)</p>
+                </div>
+                <div class="option-arrow">
+                  <i class="mdi mdi-chevron-right"></i>
+                </div>
+              </div>
+
               <div class="option-card" id="gerenciarCategorias">
                 <div class="option-icon">
                   <i class="mdi mdi-tag-multiple"></i>
@@ -291,7 +321,7 @@
                       <i class="mdi mdi-arrow-left"></i>
                     </a>
                   </div>
-                  <strong class="title-descricao">Editar Nome</strong>
+                  <strong class="title-descricao">Editar Informações Básicas</strong>
                   <div style="width: 30px;"></div>
                 </div>
                 <div class="page-content">
@@ -301,6 +331,26 @@
                         <label for="novoNomeLoja">Nome da Loja</label>
                         <input type="text" id="novoNomeLoja" placeholder="Digite o novo nome" maxlength="50">
                         <small>Máximo 50 caracteres</small>
+                      </div>
+                      <div class="form-group" id="grupoEditarCorPrincipal" style="display:none;">
+                        <div class="color-picker-group">
+                          <label class="color-picker-label" for="novaCorPrincipal">Cor Principal</label>
+                          <input type="color" id="novaCorPrincipal" value="#FF5733" style="display:none;">
+                          <div class="color-preview" id="previewNovaCorPrincipal" tabindex="0" style="cursor:pointer;">#FF5733</div>
+                          <input type="text" id="novaCorPrincipalHex" maxlength="7" style="width:120px; text-transform:uppercase;" placeholder="#FF5733">
+                        </div>
+                      </div>
+                      <div class="form-group" id="grupoEditarCorSecundaria" style="display:none;">
+                        <div class="color-picker-group">
+                          <label class="color-picker-label" for="novaCorSecundaria">Cor Secundária</label>
+                          <input type="color" id="novaCorSecundaria" value="#C70039" style="display:none;">
+                          <div class="color-preview" id="previewNovaCorSecundaria" tabindex="0" style="cursor:pointer;">#C70039</div>
+                          <input type="text" id="novaCorSecundariaHex" maxlength="7" style="width:120px; text-transform:uppercase;" placeholder="#C70039">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="novoWhatsappLoja">Whatsapp da Loja</label>
+                        <input type="text" id="novoWhatsappLoja" class="whatsapp-mask" placeholder="Ex: (99) 99999-9999" maxlength="20">
                       </div>
                       <button class="btn-save" id="btnSalvarNome">
                         <i class="mdi mdi-check"></i>
@@ -406,6 +456,41 @@
                         Continuar
                       </button>
                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Popup para Alterar Logo -->
+          <div class="popup popup-logo-loja">
+            <div class="view popup-view">
+              <div class="page">
+                <div class="top-nav">
+                  <div class="left">
+                    <a href="#" class="link btn-novo popup-close">
+                      <i class="mdi mdi-arrow-left"></i>
+                    </a>
+                  </div>
+                  <strong class="title-descricao">Alterar Logo</strong>
+                  <div style="width: 30px;"></div>
+                </div>
+                <div class="page-content">
+                  <div class="block">
+                    <div id="logoAtualExibicao"></div>
+                    <div class="add-banner-card">
+                      <button class="btn-add-banner" id="btnSelecionarLogo">
+                        <i class="mdi mdi-upload"></i>
+                        Selecionar Logo
+                      </button>
+                      <input type="file" id="novoLogoInput" accept="image/*" style="display: none;">
+                    </div>
+                    <small id="logoPreviewHelp">Pré-visualização abaixo (800x200px recomendado):</small>
+                    <div id="logoPreview" style="margin-top:10px;"></div>
+                    <button class="btn-save" id="btnSalvarLogo" style="margin-top:20px; width:100%;">
+                      <i class="mdi mdi-check"></i>
+                      Salvar Logo
+                    </button>
                   </div>
                 </div>
               </div>

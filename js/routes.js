@@ -1,7 +1,7 @@
 //DADOS BACKEND SERVER
 const apiServerUrl = "https://vitatophomologa.tecskill.com.br/rest.php";
-const versionApp = "2.3.8";
-// Removido: var userAuthToken = "";
+const versionApp = "2.4.0";
+var userAuthToken = "";
 
 //INICIALIZAÇÃO DO F7 QUANDO DISPOSITIVO ESTÁ PRONTO
 document.addEventListener('deviceready', onDeviceReady, false);
@@ -32,17 +32,7 @@ var app = new Framework7({
         pageBeforeIn: async function (event, page) {    
           clearLocalStorage();
           
-          // Sempre utilize AuthManager.getCookie('userAuthToken') para obter o token
-          // Utilize UIManager para loaders, alerts e mensagens
-          // Utilize AuthManager.getAuthHeaders() para headers de requisição
-
-          // Exemplo de uso:
-          // const headers = AuthManager.getAuthHeaders();
-          // UIManager.showLoader();
-          // UIManager.hideLoader();
-          // UIManager.showError('Mensagem de erro');
-          // UIManager.showSuccess('Mensagem de sucesso');
-
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Obtém a URL atual do navegador
           const currentUrl = window.location.href;
 
@@ -218,8 +208,8 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
-    buscarQtdeNotif();
-    contarCarrinho();
+        buscarQtdeNotif();
+        contarCarrinho();
     
           // fazer algo quando a página for inicializada
           var swiper = app.swiper.create(".swiper", {
@@ -294,10 +284,10 @@ var app = new Framework7({
             const emailRecuperacao = this.querySelector('input[type="email"]').value;
             
             //START BOTÃO RECUPERAR SENHA     
-                UIManager.showLoader("Carregando...");
+                app.dialog.preloader("Carregando...");
 
               //START Fazendo a requisição
-                fetch('https://vitatophomologa.tecskill.com.br/api/request_reset.php', {
+                fetch('https://vitatop.tecskill.com.br/api/request_reset.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -311,17 +301,17 @@ var app = new Framework7({
                   console.log(data);
                   if (data.status == 'success' && data.data.status == 'success') {
                     localStorage.setItem("emailRecuperacao", emailRecuperacao);
-                      UIManager.hideLoader();
+                      app.dialog.close();
                       recoveryEmailForm.classList.add('hidden');
                       verificationCodeForm.classList.remove('hidden');
                   } else {
-                    UIManager.hideLoader();
-                    UIManager.showError("Erro na requisição: " + (data.message || "Dados inválidos"), "Falha");
+                    app.dialog.close();
+                    app.dialog.alert("Erro na requisição: " + (data.message || "Dados inválidos"), "Falha");
                   }
                 })
                 .catch(error => {
-                  UIManager.hideLoader();
-                  UIManager.showError("Erro na requisição: " + (error || "Dados inválidos"), "Falha");
+                  app.dialog.close();
+                  app.dialog.alert("Erro na requisição: " + (error || "Dados inválidos"), "Falha");
                     console.error('Error:', error);
                 })              
               //END Fazendo a requisição
@@ -347,7 +337,7 @@ var app = new Framework7({
         // Verification Code Form Submission
         verificationCodeForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            UIManager.showLoader("Carregando...");
+            app.dialog.preloader("Carregando...");
             const code = Array.from(codeInputs).map(input => input.value).join('');
             
             // Simulated code validation
@@ -370,16 +360,16 @@ var app = new Framework7({
                   };
     
                   // Faz a requisição ao servidor
-                  fetch("https://vitatophomologa.tecskill.com.br/api/validate_code.php", options)
+                  fetch("https://vitatop.tecskill.com.br/api/validate_code.php", options)
                     .then((response) => response.json())
                     .then((data) => {
-                      UIManager.hideLoader();
+                      app.dialog.close();
                       if (data.status === "success" && data.data.status === "success") {
                         localStorage.setItem("codigoRecuperacao", code);
                         verificationCodeForm.classList.add('hidden');
                         newPasswordForm.classList.remove('hidden');
                       } else {
-                        UIManager.showError(
+                        app.dialog.alert(
                           "Erro, Código informado inválido ou expirado.",
                           '<i class="mdi mdi-alert"></i> Código Inválido'
                         );
@@ -387,15 +377,15 @@ var app = new Framework7({
                     })
                     .catch((error) => {
                       console.error("Erro:", error);
-                      UIManager.hideLoader();
-                      UIManager.showError(
+                      app.dialog.close();
+                      app.dialog.alert(
                         "Erro, Código informado inválido ou expirado.",
                         '<i class="mdi mdi-alert"></i> Código Inválido'
                       );
                     });
             } else {           
-              UIManager.hideLoader();
-              return UIManager.showError(
+              app.dialog.close();   
+              return app.dialog.alert(
                 "Por favor, insira todos os 6 dígitos do código.",
                 '<i class="mdi mdi-alert"></i> Código Incompleto'
               );
@@ -405,7 +395,7 @@ var app = new Framework7({
         // New Password Form Submission
         newPasswordForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            UIManager.showLoader("Carregando...");
+            app.dialog.preloader("Carregando...");
             var emailRecuperacao = localStorage.getItem("emailRecuperacao");
             var codigoRecuperacao = localStorage.getItem("codigoRecuperacao");
             const newPassword = this.querySelectorAll('input[type="password"]')[0].value;
@@ -428,21 +418,21 @@ var app = new Framework7({
                   body: body,
                 };
     
-                fetch('https://vitatophomologa.tecskill.com.br/api/reset_password.php', options)
+                fetch('https://vitatop.tecskill.com.br/api/reset_password.php', options)
                   .then((response) => response.json())
                   .then((data) => {
-                    UIManager.hideLoader();
+                    app.dialog.close();
                     if (data.status == 'success' && data.data.status == 'success') {
                       // Reset all forms
                       newPasswordForm.classList.add('hidden');
                       loginForm.classList.remove('hidden');
-                      UIManager.showSuccess(
+                      app.dialog.alert(
                         "Sucesso, Senha alterada.",
                         '<i class="mdi mdi-alert"></i> Sucesso'
                       );                    
                     } else {
-                      UIManager.hideLoader();
-                      UIManager.showError(
+                      app.dialog.close();
+                      app.dialog.alert(
                         "Erro, Código informado invalido ou expirado.",
                         '<i class="mdi mdi-alert"></i> Código Inválido'
                       );
@@ -450,15 +440,15 @@ var app = new Framework7({
                   })
                   .catch((error) => {
                     console.error("Erro:", error);
-                    UIManager.hideLoader();
-                    UIManager.showError(
+                    app.dialog.close();
+                    app.dialog.alert(
                       "Erro, Código informado invalido ou expirado.",
                       '<i class="mdi mdi-alert"></i> Código Inválido'
                     );
                   });
             } else {
-              UIManager.hideLoader();
-              UIManager.showError(
+              app.dialog.close();
+              app.dialog.alert(
                 "As senhas não coincidem. Por favor, tente novamente",
                 '<i class="mdi mdi-alert"></i> Erro'
               );
@@ -467,7 +457,7 @@ var app = new Framework7({
         // Login Form Submission
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            UIManager.showLoader("Carregando...");
+            app.dialog.preloader("Carregando...");
             const userName = this.querySelector('input[type="email"]').value;
             const userPassword = this.querySelector('input[type="password"]').value;            
             
@@ -478,14 +468,14 @@ var app = new Framework7({
             }
 
             if (userName == "" || userPassword == "" || !validarEmail(userName)) {
-              UIManager.hideLoader();
-              UIManager.showError(
+              app.dialog.close();
+              app.dialog.alert(
                 "Por favor, verifique seu Email e Senha e tente novamente.",
                 '<i class="mdi mdi-alert"></i> Erro!'
               );
             } else {
               //START Fazendo a requisição
-              fetch('https://vitatophomologa.tecskill.com.br/api/auth_app_homolog.php', {
+              fetch('https://vitatop.tecskill.com.br/api/auth_app_homolog.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -498,10 +488,10 @@ var app = new Framework7({
                 .then(response => response.json())
                 .then(data => {
                   if (data.status == 'success') {
-                    UIManager.hideLoader();
+                    app.dialog.close();
                     const token = data.data;
-                    AuthManager.setCookie('userAuthToken', token, 5);
-                    appId = "Bearer " +  AuthManager.getCookie('userAuthToken');
+                    setCookie('userAuthToken', token, 5);
+                    appId = "Bearer " +  getCookie('userAuthToken');
                     userAuthToken = token;
                     const decodedToken = jwt_decode(token);
                     // Navegar para outra página ou realizar outras ações necessárias
@@ -513,6 +503,7 @@ var app = new Framework7({
                     localStorage.setItem("pessoaId", decodedToken.pessoa_id);
                     localStorage.setItem("codigo_indicador", decodedToken.codigo_indicador);
                     localStorage.setItem("validadeToken", decodedToken.expires);
+
                     //localStorage.setItem("validadeToken", decodedToken.expires);
 
                     buscarPessoaId(decodedToken.userid);
@@ -525,8 +516,8 @@ var app = new Framework7({
                     }, 300);
 
                   } else {
-                    UIManager.hideLoader();
-                    UIManager.showError("Erro no login: " + (data.message || "Dados inválidos"), "Falha no Login");
+                    app.dialog.close();
+                    app.dialog.alert("Erro no login: " + (data.message || "Dados inválidos"), "Falha no Login");
                   }
                 })
                 .catch(error => {
@@ -553,11 +544,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: async function (event, page) {
           clearLocalStorage();
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            AuthManager.deleteCookie('userAuthToken');
+            deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -658,8 +650,8 @@ var app = new Framework7({
           }
         },
         pageInit: function (event, page) {
-    buscarQtdeNotif();
-    contarCarrinho();
+        buscarQtdeNotif();
+        contarCarrinho();
     
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
@@ -692,17 +684,17 @@ var app = new Framework7({
     const appPopup = app.popup;
 
     $('#btnSacar').on('click', function () {      
-      UIManager.showError("Funcionalidade em desenvolvimento, disponível em Breve!", "Em Breve!");
+      app.dialog.alert("Funcionalidade em desenvolvimento, disponível em Breve!", "Em Breve!");
       //appPopup.open('.popup-saque');
     });
 
     $('#btnExtrato').on('click', function () {
-      UIManager.showError("Funcionalidade em desenvolvimento, disponível em Breve!", "Em Breve!");
+      app.dialog.alert("Funcionalidade em desenvolvimento, disponível em Breve!", "Em Breve!");
       //appPopup.open('.popup-extrato');
     });
 
     $('#btnTransferir').on('click', function () {
-      UIManager.showError("Funcionalidade em desenvolvimento, disponível em Breve!", "Em Breve!");
+      app.dialog.alert("Funcionalidade em desenvolvimento, disponível em Breve!", "Em Breve!");
       //appPopup.open('.popup-transferir');
     });
 
@@ -723,12 +715,12 @@ var app = new Framework7({
     on: {
       pageBeforeIn: function (event, page) {
         // fazer algo antes da página ser exibida
-        userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
+        userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
         // Início função validar login
         const isValid = validarToken();
         if (!isValid) {
           console.warn("Token inválido. Redirecionando para login via fallback.");
-          AuthManager.deleteCookie('userAuthToken');
+          deleteCookie('userAuthToken');
           app.views.main.router.navigate("/login-view/");
           setTimeout(() => {
             app.views.main.router.navigate("/login-view/");
@@ -786,12 +778,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            AuthManager.deleteCookie('userAuthToken');
+            deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -895,12 +887,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            AuthManager.deleteCookie('userAuthToken');
+            deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -931,12 +923,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            AuthManager.deleteCookie('userAuthToken');
+            deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -965,12 +957,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            AuthManager.deleteCookie('userAuthToken');
+            deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -1011,12 +1003,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            AuthManager.deleteCookie('userAuthToken');
+            deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -1047,12 +1039,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            AuthManager.deleteCookie('userAuthToken');
+            deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -1084,12 +1076,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            AuthManager.deleteCookie('userAuthToken');
+            deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -1119,11 +1111,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: async function (event, page) {
           clearLocalStorage();
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            AuthManager.deleteCookie('userAuthToken');
+            deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -1243,12 +1236,12 @@ var app = new Framework7({
         pageBeforeIn: function (event, page) {          
             
           // fazer algo antes da página ser exibida
-          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            AuthManager.deleteCookie('userAuthToken');
+            deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -1294,12 +1287,12 @@ var app = new Framework7({
         pageBeforeIn: function (event, page) {          
             
           // fazer algo antes da página ser exibida
-          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            AuthManager.deleteCookie('userAuthToken');
+            deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -1325,7 +1318,7 @@ var app = new Framework7({
           // Verifica se o objeto foi carregado corretamente
           if (produtoDetalhes && produtoDetalhes.detalhes) {
             var nomeProduto = produtoDetalhes.detalhes.nome;
-            var urlBaseImagem = "https://vitatophomologa.tecskill.com.br/";
+            var urlBaseImagem = "https://vitatop.tecskill.com.br/";
             var imagemProduto = urlBaseImagem + produtoDetalhes.detalhes.foto;
 
             // Atribui os valores com jQuery
@@ -1358,12 +1351,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            AuthManager.deleteCookie('userAuthToken');
+            deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -1405,9 +1398,9 @@ var app = new Framework7({
           $("#btnDesconto").on('click', function () {
             var cupomDesconto = $("#cupomDesconto").val();
             if(cupomDesconto) {
-              UIManager.showError("Cupom inválido ou expirado", "Cupom");
+              app.dialog.alert("Cupom inválido ou expirado", "Cupom");
             } else {
-              UIManager.showError("Digite um cupom de Desconto", "Cupom");
+              app.dialog.alert("Digite um cupom de Desconto", "Cupom");
             }
           });
 
@@ -1493,19 +1486,19 @@ var app = new Framework7({
 
               // Validações dos campos
               if (!nomeTitular) {
-                UIManager.showError("Por favor, preencha o nome do titular.", "Erro!");
+                app.dialog.alert("Por favor, preencha o nome do titular.", "Erro!");
                 return;
               }
               if (!numeroCartao || numeroCartao.length < 16) {
-                UIManager.showError("Por favor, insira um número de cartão válido com 16 dígitos.", "Erro!");
+                app.dialog.alert("Por favor, insira um número de cartão válido com 16 dígitos.", "Erro!");
                 return;
               }
               if (!dataExpiracao || !validarDataExpiracao(dataExpiracao)) {
-                UIManager.showError("Por favor, insira a data de expiração no formato MM/YYYY.", "Erro!");
+                app.dialog.alert("Por favor, insira a data de expiração no formato MM/YYYY.", "Erro!");
                 return;
               }
               if (!cvc || cvc.length < 3) {
-                UIManager.showError("Por favor, insira um código CVC válido de 3 dígitos.", "Erro!");
+                app.dialog.alert("Por favor, insira um código CVC válido de 3 dígitos.", "Erro!");
                 return;
               }
             } else if (formaPagamento == 2) {
@@ -1513,7 +1506,7 @@ var app = new Framework7({
             } else if (formaPagamento == 3) {
               formaPagamento = 3;
             } else {
-              UIManager.showError("Forma de pagamento não selecionada.", "Erro!");
+              app.dialog.alert("Forma de pagamento não selecionada.", "Erro!");
               return;
             }
 
@@ -1546,12 +1539,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            AuthManager.deleteCookie('userAuthToken');
+            deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -1687,12 +1680,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            AuthManager.deleteCookie('userAuthToken');
+            deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -1778,19 +1771,19 @@ var app = new Framework7({
 
               // Validações dos campos
               if (!nomeTitular) {
-                UIManager.showError("Por favor, preencha o nome do titular.", "Erro!");
+                app.dialog.alert("Por favor, preencha o nome do titular.", "Erro!");
                 return;
               }
               if (!numeroCartao || numeroCartao.length < 16) {
-                UIManager.showError("Por favor, insira um número de cartão válido com 16 dígitos.", "Erro!");
+                app.dialog.alert("Por favor, insira um número de cartão válido com 16 dígitos.", "Erro!");
                 return;
               }
               if (!dataExpiracao || !validarDataExpiracao(dataExpiracao)) {
-                UIManager.showError("Por favor, insira a data de expiração no formato MM/YYYY.", "Erro!");
+                app.dialog.alert("Por favor, insira a data de expiração no formato MM/YYYY.", "Erro!");
                 return;
               }
               if (!cvc || cvc.length < 3) {
-                UIManager.showError("Por favor, insira um código CVC válido de 3 dígitos.", "Erro!");
+                app.dialog.alert("Por favor, insira um código CVC válido de 3 dígitos.", "Erro!");
                 return;
               }
             } else if (method === "boleto") {
@@ -1798,7 +1791,7 @@ var app = new Framework7({
             } else if (method === "pix" || method == '') {
               formaPagamento = 3;
             } else {
-              UIManager.showError("Forma de pagamento não selecionada.", "Erro!");
+              app.dialog.alert("Forma de pagamento não selecionada.", "Erro!");
               return;
             }
 
@@ -1822,12 +1815,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            AuthManager.deleteCookie('userAuthToken');
+            deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -2035,13 +2028,6 @@ var app = new Framework7({
               $("#btnStep1Next").prop("disabled", nome.length < 3);
             });
 
-            $(document).on('click.minhaLoja', "#btnStep1Next", function(e) {
-              e.preventDefault();
-              e.stopImmediatePropagation();
-              proximoStep(1);
-            });
-
-            // Step 2 - Finalizar
             $(document).on('click.minhaLoja', "#btnStep2Back", function(e) {
               e.preventDefault();
               e.stopImmediatePropagation();
@@ -2097,7 +2083,7 @@ var app = new Framework7({
               app.dialog.confirm("Tem certeza que deseja limpar todas as categorias selecionadas?", "Confirmar", function() {
                 limparCategoriasSelecionadas();
                 app.popup.close(".popup-categorias");
-                UIManager.showSuccess("Categorias limpas com sucesso!", "Sucesso");
+                app.dialog.alert("Categorias limpas com sucesso!", "Sucesso");
               });
             });
 
@@ -2111,7 +2097,7 @@ var app = new Framework7({
             function adicionarNovoBannerSeguro() {
               const lojaData = localStorage.getItem("minhaLoja");
               if (!lojaData) {
-                UIManager.showError("Erro ao obter dados da loja", "Erro");
+                app.dialog.alert("Erro ao obter dados da loja", "Erro");
                 return;
               }
               
@@ -2164,7 +2150,7 @@ var app = new Framework7({
             $(document).on('click.minhaLoja', "#configuracoes", function(e) {
               e.preventDefault();
               e.stopImmediatePropagation();
-              UIManager.showError("Funcionalidade em desenvolvimento!", "Em breve");
+              app.dialog.alert("Funcionalidade em desenvolvimento!", "Em breve");
             });
           }
 
@@ -2247,12 +2233,12 @@ var app = new Framework7({
       on: {
         pageBeforeIn: function (event, page) {
           // fazer algo antes da página ser exibida
-          userAuthToken = AuthManager.getCookie('userAuthToken'); // Lê o token do cookie
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
           // Início função validar login
           const isValid = validarToken();
           if (!isValid) {
             console.warn("Token inválido. Redirecionando para login via fallback.");
-            AuthManager.deleteCookie('userAuthToken');
+            deleteCookie('userAuthToken');
             app.views.main.router.navigate("/login-view/");
             setTimeout(() => {
               app.views.main.router.navigate("/login-view/");
@@ -2325,7 +2311,7 @@ var app = new Framework7({
               formaPagamento = 3;
 
             } else {
-              UIManager.showError("Forma de pagamento não selecionada. ", "Erro!");
+              app.dialog.alert("Forma de pagamento não selecionada. ", "Erro!");
             }
 
             if (formaPagamento) {

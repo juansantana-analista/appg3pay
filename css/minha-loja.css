@@ -1323,3 +1323,51 @@
   font-style: normal;
   font-display: swap;
 }
+
+/* Campo de cor customizado */
+.color-picker-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.color-picker-group input[type="color"] {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+  transition: box-shadow 0.2s;
+}
+.color-picker-group input[type="color"]:focus {
+  outline: 2px solid #00591F;
+  box-shadow: 0 0 0 3px rgba(0, 89, 31, 0.15);
+}
+.color-preview {
+  width: 90px;
+  height: 40px;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  background: #fff;
+  letter-spacing: 1px;
+  transition: background 0.2s;
+}
+.color-picker-label {
+  min-width: 110px;
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+/* Garantir que o Vanilla Picker fique acima de tudo */
+.picker_wrapper {
+  z-index: 99999 !important;
+}

@@ -112,8 +112,9 @@ function mostrarTelaGerenciamento(loja) {
   // Atualizar visualizações
   $("#visualizacoes").text(loja.visitas || 0);
   
-  // Gerar link da loja
-  const linkLoja = `https://vitatophomologa.tecskill.com.br/lojinha_vitatop/${loja.nome_loja || "loja"}`;
+  // Gerar link da loja SEM acentuação
+  const nomeLojaUrl = removerAcentos(loja.nome_loja || "loja");
+  const linkLoja = `https://vitatop.tecskill.com.br/lojinha_vitatop/${nomeLojaUrl}`;
   localStorage.setItem("linkLoja", linkLoja);
   
   // Carregar categorias selecionadas
@@ -122,6 +123,26 @@ function mostrarTelaGerenciamento(loja) {
   } catch (error) {
     console.error("Erro ao atualizar interface de categorias:", error);
   }
+
+  // Exibir/ocultar opções especiais
+  if (loja.is_especial === "S") {
+    $("#gerenciarBanners").show();
+    $("#alterarLogoLoja").show();
+    $("#grupoCorPrincipal").show();
+    $("#grupoCorSecundaria").show();
+    $("#grupoEditarCorPrincipal").show();
+    $("#grupoEditarCorSecundaria").show();
+  } else {
+    $("#gerenciarBanners").hide();
+    $("#alterarLogoLoja").hide();
+    $("#grupoCorPrincipal").hide();
+    $("#grupoCorSecundaria").hide();
+    $("#grupoEditarCorPrincipal").hide();
+    $("#grupoEditarCorSecundaria").hide();
+  }
+  var whatsapp = loja.whatsapp;
+  $("#whatsappLoja").val(whatsapp);
+  aplicarMascaraWhatsapp();
 }
 
 // Mostrar formulário de criação
@@ -132,6 +153,36 @@ function mostrarFormularioCriacao() {
   
   // Reset do formulário
   resetarFormulario();
+  // Limpar campo WhatsApp
+  $("#whatsappLoja").val("");
+  aplicarMascaraWhatsapp();
+  // Garantir que o botão Avançar está habilitado
+  $("#btnStep1Next").prop("disabled", false);
+  // Reatribuir event listener do botão Avançar
+  $(document).off('click.minhaLoja', "#btnStep1Next");
+  $(document).on('click.minhaLoja', "#btnStep1Next", function(e) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    let nomeLoja = $("#nomeLoja").val().trim();
+    nomeLoja = nomeLoja.replace(/ /g, "_");
+    const nomeValido = validarNomeLoja(nomeLoja);
+    if (!nomeValido) {
+      app.dialog.alert("O nome da loja só pode conter letras, números, espaços e o caractere _.", "Nome inválido");
+      return;
+    }
+    verificarNomeLojaDisponivel(nomeLoja, function(disponivel, dados, erro) {
+      if (erro) {
+        app.dialog.alert("Erro ao verificar nome da loja. Tente novamente.", "Erro");
+        return;
+      }
+      if (!disponivel) {
+        app.dialog.alert("Este nome de loja já está em uso. Por favor, escolha outro nome.", "Nome indisponível");
+        return;
+      }
+      // Se passou, pode avançar
+      proximoStep(1);
+    });
+  });
 }
 
 // Resetar formulário
@@ -186,58 +237,126 @@ function stepAnterior(stepAtual) {
 // Preparar summary no step 2
 function prepararSummary() {
   const nomeLoja = $("#nomeLoja").val();
-  
+  const nomeLojaUrl = removerAcentos(nomeLoja);
   $("#summaryNome").text(nomeLoja);
-  $("#linkLoja").text(`vitatop.tecskill.com.br/lojinha_vitatop/${nomeLoja}`);
+  $("#linkLoja").text(`vitatop.tecskill.com.br/lojinha_vitatop/${nomeLojaUrl}`);
 }
 
-// Criar loja
-function criarLoja() {
-  app.dialog.preloader("Criando sua loja...");
-  const pessoaId = localStorage.getItem("pessoaId");
-  const nomeLoja = $("#nomeLoja").val();
-
+// Função para validar nome da loja (apenas letras, números, _ e espaço)
+function validarNomeLoja(str) {
+  // Permite letras, números, espaço e _
+  const resultado = /^[A-Za-zÀ-ÿ0-9_ ]+$/.test(str);
+  return resultado;
+}
+// Função para verificar se o nome da loja já existe
+function verificarNomeLojaDisponivel(nomeLoja, callback) {
+  const nomeUrl = removerAcentosECedilha(nomeLoja);
   const headers = {
     "Content-Type": "application/json",
     Authorization: "Bearer " + userAuthToken,
   };
-
   const body = JSON.stringify({
     class: "LojinhaRestService",
-    method: "criarLoja",
-    dados: {
-      pessoa_id: pessoaId,
-      nome_loja: nomeLoja
-    }
+    method: "buscarLojaPorNome",
+    nome_loja: nomeUrl
   });
-
-  const options = {
+  fetch(apiServerUrl, {
     method: "POST",
     headers: headers,
     body: body,
-  };
-
-  fetch(apiServerUrl, options)
+  })
     .then((response) => response.json())
     .then((responseJson) => {
-      if (responseJson.status === "success") {
-        const lojaId = responseJson.data.data.id;
-        localStorage.setItem("lojaId", lojaId);
-        
-        // Criar banners padrão automaticamente
-        enviarBannerLoja(lojaId);
-        app.dialog.close();
-        mostrarSucessoCriacao();
+      if (responseJson.status === "success" && responseJson.data.status === "success") {
+        callback(false, responseJson.data.data); // Nome já existe
       } else {
-        app.dialog.close();
-        app.dialog.alert("Erro ao criar loja: " + responseJson.message, "Erro");
+        callback(true, null); // Nome disponível
       }
     })
     .catch((error) => {
-      app.dialog.close();
-      console.error("Erro:", error);
-      app.dialog.alert("Erro ao criar loja: " + error.message, "Erro");
+      callback(false, null, error);
     });
+}
+
+// Criar loja
+function criarLoja() {
+  app.dialog.close(); // Fecha qualquer loader anterior
+  app.dialog.preloader("Criando sua loja...");
+  const pessoaId = localStorage.getItem("pessoaId");
+  let nomeLoja = $("#nomeLoja").val();
+  const corPrincipal = $("#corPrincipalHex").val();
+  const corSecundaria = $("#corSecundariaHex").val();
+  const whatsapp = formatarWhatsappParaEnvio($("#whatsappLoja").val());
+
+  // Substituir espaços por _
+  nomeLoja = nomeLoja.replace(/ /g, "_");
+
+  // Validar nome (apenas letras, números, _)
+  if (!validarNomeLoja(nomeLoja)) {
+    app.dialog.close();
+    app.dialog.alert("O nome da loja só pode conter letras, números, espaços e o caractere _.", "Nome inválido");
+    return;
+  }
+
+  // Novo: gerar nome_url sem acentuação e sem ç
+  const nomeUrl = removerAcentosECedilha(nomeLoja);
+
+  // Verificar se o nome já existe
+  verificarNomeLojaDisponivel(nomeLoja, function(disponivel, dados, erro) {
+    if (erro) {
+      app.dialog.close();
+      app.dialog.alert("Erro ao verificar nome da loja. Tente novamente.", "Erro");
+      return;
+    }
+    if (!disponivel) {
+      app.dialog.close();
+      app.dialog.alert("Este nome de loja já está em uso. Por favor, escolha outro nome.", "Nome indisponível");
+      return;
+    }
+    // Prosseguir com a criação
+    app.dialog.close(); // Fecha loader de validação
+    app.dialog.preloader("Criando sua loja...");
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + userAuthToken,
+    };
+    const body = JSON.stringify({
+      class: "LojinhaRestService",
+      method: "criarLoja",
+      dados: {
+        pessoa_id: pessoaId,
+        nome_loja: nomeLoja, // com acentuação e _
+        nome_url: nomeUrl,   // sem acentuação e sem ç
+        cor_principal: corPrincipal,
+        cor_secundaria: corSecundaria,
+        whatsapp: whatsapp
+      }
+    });
+    const options = {
+      method: "POST",
+      headers: headers,
+      body: body,
+    };
+    fetch(apiServerUrl, options)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        app.dialog.close();
+        if (responseJson.status === "success") {
+          const lojaId = responseJson.data.data.id;
+          localStorage.setItem("lojaId", lojaId);
+          // Criar banners padrão automaticamente
+          enviarBannerLoja(lojaId);
+          mostrarSucessoCriacao();
+        } else {
+          app.dialog.alert("Erro ao criar loja: " + responseJson.message, "Erro");
+        }
+      })
+      .catch((error) => {
+        app.dialog.close();
+        console.error("Erro:", error);
+        app.dialog.alert("Erro ao criar loja: " + error.message, "Erro");
+      });
+  });
 }
 
 // Enviar banner da loja - VERSÃO SEGURA
@@ -523,29 +642,58 @@ function editarNomeLoja() {
   
   const lojaAtual = JSON.parse(lojaData);
   $("#novoNomeLoja").val(lojaAtual.nome_loja);
+  $("#novaCorPrincipalHex").val(lojaAtual.cor_principal || "#FF5733");
+  $("#previewNovaCorPrincipal").css('background', lojaAtual.cor_principal || "#FF5733").text((lojaAtual.cor_principal || "#FF5733").toUpperCase());
+  $("#novaCorSecundariaHex").val(lojaAtual.cor_secundaria || "#C70039");
+  $("#previewNovaCorSecundaria").css('background', lojaAtual.cor_secundaria || "#C70039").text((lojaAtual.cor_secundaria || "#C70039").toUpperCase());
+  var whatsapp = lojaAtual.whatsapp;
+  $("#novoWhatsappLoja").val(whatsapp);
+  aplicarMascaraWhatsapp();
+  // Forçar a máscara no valor já preenchido
+  $("#novoWhatsappLoja").trigger('input');
   app.popup.open(".popup-editar-nome");
 }
 
 // Salvar novo nome da loja
 function salvarNovoNome() {
   const novoNome = $("#novoNomeLoja").val().trim();
-  
+  const novaCorPrincipal = $("#novaCorPrincipalHex").val();
+  const novaCorSecundaria = $("#novaCorSecundariaHex").val();
+  const novoWhatsapp = formatarWhatsappParaEnvio($("#novoWhatsappLoja").val());
+
   if (!novoNome) {
     app.dialog.alert("Por favor, digite um nome para a loja", "Erro");
     return;
   }
 
   app.dialog.preloader("Salvando...");
-  
+
   const lojaData = localStorage.getItem("minhaLoja");
   if (!lojaData) {
     app.dialog.close();
     app.dialog.alert("Erro ao obter dados da loja", "Erro");
     return;
   }
-  
+
   const lojaAtual = JSON.parse(lojaData);
-  
+  const nomeUrl = removerAcentosECedilha(novoNome.replace(/ /g, "_"));
+
+  // Montar objeto de dados conforme regra do backend
+  const dados = {
+    id: lojaAtual.id,
+    nome_loja: novoNome,
+    nome_url: nomeUrl
+  };
+  // Só enviar cor se for especial
+  if (lojaAtual.is_especial === 'S') {
+    dados.cor_principal = novaCorPrincipal;
+    dados.cor_secundaria = novaCorSecundaria;
+  }
+  // Sempre enviar whatsapp se existir campo
+  if (novoWhatsapp) {
+    dados.whatsapp = novoWhatsapp;
+  }
+
   const headers = {
     "Content-Type": "application/json",
     Authorization: "Bearer " + userAuthToken,
@@ -554,10 +702,7 @@ function salvarNovoNome() {
   const body = JSON.stringify({
     class: "LojinhaRestService",
     method: "atualizarLoja",
-    dados: {
-      id: lojaAtual.id,
-      nome_loja: novoNome
-    }
+    dados: dados
   });
 
   const options = {
@@ -570,14 +715,12 @@ function salvarNovoNome() {
     .then((response) => response.json())
     .then((responseJson) => {
       app.dialog.close();
-      if (responseJson.status === "success") {
-        // Recarregar dados completos da loja para atualizar visualizações
+      if (responseJson.status === "success" && responseJson.data.status === "success") {
         buscarDadosCompletosLoja(lojaAtual.id);
-        
         app.popup.close(".popup-editar-nome");
-        app.dialog.alert("Nome da loja atualizado com sucesso!", "Sucesso");
+        app.dialog.alert(responseJson.data.message || "Nome da loja atualizado com sucesso!", "Sucesso");
       } else {
-        app.dialog.alert("Erro ao atualizar nome: " + responseJson.message, "Erro");
+        app.dialog.alert(responseJson.data.message || "Erro ao atualizar nome.", "Erro");
       }
     })
     .catch((error) => {
@@ -599,23 +742,25 @@ function compartilharLoja() {
   
   const loja = JSON.parse(lojaData);
   const nomeLoja = loja.nome_loja;
-  
+  const nomeLojaUrl = removerAcentos(nomeLoja);
+  const linkCompartilhar = `https://vitatop.tecskill.com.br/lojinha_vitatop/${nomeLojaUrl}`;
   onCompartilhar(
     nomeLoja,
     "Conheça minha loja personalizada na VitaTop!",
-    linkLoja
+    linkCompartilhar
   );
 }
 
 // Visualizar loja
 function visualizarLoja() {
-  const linkLoja = localStorage.getItem("linkLoja");
-  
-  if (!linkLoja) {
-    app.dialog.alert("Erro ao obter link da loja", "Erro");
+  const lojaData = localStorage.getItem("minhaLoja");
+  if (!lojaData) {
+    app.dialog.alert("Erro ao obter dados da loja", "Erro");
     return;
   }
-  
+  const loja = JSON.parse(lojaData);
+  const nomeLojaUrl = removerAcentos(loja.nome_loja);
+  const linkLoja = `https://vitatop.tecskill.com.br/lojinha_vitatop/${nomeLojaUrl}`;
   app.dialog.confirm("Deseja abrir sua loja no navegador?", "Visualizar Loja", function() {
     window.open(linkLoja, '_blank');
   });
@@ -833,4 +978,510 @@ function atualizarInterfaceCategorias() {
       displayContainer.hide();
     }
   });
+}
+
+// Lógica para abrir popup de logo
+$(document).on('click', '#alterarLogoLoja', function() {
+  $('#logoPreview').html('');
+  $('#novoLogoInput').val('');
+  // Exibir logo atual, se existir
+  const lojaData = localStorage.getItem('minhaLoja');
+  if (lojaData) {
+    const loja = JSON.parse(lojaData);
+    if (loja.logo_url) {
+      $('#logoAtualExibicao').html('<div style="text-align:center;margin-bottom:10px;"><img src="https://vitatop.tecskill.com.br/' + loja.logo_url + '" style="max-width:100%;max-height:80px;border-radius:6px;box-shadow:0 1px 4px #0001;"><br><small style="color:#888;">Logo atual</small></div>');
+    } else {
+      $('#logoAtualExibicao').html('');
+    }
+  }
+  app.popup.open('.popup-logo-loja');
+});
+
+// Botão para abrir o input file do logo
+$(document).on('click', '#btnSelecionarLogo', function() {
+  $('#novoLogoInput').trigger('click');
+});
+
+// Preview do logo
+$(document).on('change', '#novoLogoInput', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    $('#logoPreview').html(`<img src="${ev.target.result}" style="max-width:100%;max-height:100px;">`);
+  };
+  reader.readAsDataURL(file);
+});
+
+// Salvar logo
+$(document).on('click', '#btnSalvarLogo', function() {
+  const file = $('#novoLogoInput')[0].files[0];
+  if (!file) {
+    app.dialog.alert('Selecione uma imagem para o logo.');
+    return;
+  }
+  if (file.size > 2 * 1024 * 1024) {
+    app.dialog.alert('O logo deve ter no máximo 2MB.');
+    return;
+  }
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+  if (!allowedTypes.includes(file.type)) {
+    app.dialog.alert('Apenas arquivos JPG, JPEG e PNG são permitidos.');
+    return;
+  }
+  const lojaData = localStorage.getItem('minhaLoja');
+  if (!lojaData) {
+    app.dialog.alert('Erro ao obter dados da loja.');
+    return;
+  }
+  const loja = JSON.parse(lojaData);
+  const lojaId = loja.id;
+  app.dialog.preloader('Enviando logo...');
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    const base64 = ev.target.result;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + userAuthToken,
+    };
+    const body = JSON.stringify({
+      class: "LojinhaRestService",
+      method: "atualizarLoja",
+      dados: {
+        id: lojaId,
+        logo_base64: base64
+      }
+    });
+    const options = {
+      method: "POST",
+      headers: headers,
+      body: body,
+    };
+    fetch(apiServerUrl, options)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        app.dialog.close();
+        if (responseJson.status === "success") {
+          app.dialog.alert('Logo atualizado com sucesso!');
+          app.popup.close('.popup-logo-loja');
+          buscarDadosCompletosLoja(lojaId);
+        } else {
+          app.dialog.alert('Erro ao atualizar logo: ' + (responseJson.message || 'Erro desconhecido'));
+        }
+      })
+      .catch((error) => {
+        app.dialog.close();
+        app.dialog.alert('Erro ao atualizar logo: ' + error.message);
+      });
+  };
+  reader.readAsDataURL(file);
+});
+
+// Sincronização dos campos de cor e hex
+function isHexColor(val) {
+  return /^#([0-9A-Fa-f]{6})$/.test(val);
+}
+// Cor Principal (criação)
+$(document).on('input change', '#corPrincipal', function() {
+  var val = $(this).val().toUpperCase();
+  $('#corPrincipalHex').val(val);
+  $('#previewCorPrincipal').css('background', val).text(val);
+});
+$(document).on('input', '#corPrincipalHex', function() {
+  var val = $(this).val().toUpperCase();
+  if (val[0] !== '#') val = '#' + val.replace(/[^0-9A-F]/gi, '');
+  if (val.length > 7) val = val.slice(0,7);
+  $(this).val(val);
+  if (isHexColor(val)) {
+    $('#corPrincipal').val(val);
+    $('#previewCorPrincipal').css('background', val).text(val);
+  }
+});
+// Cor Secundária (criação)
+$(document).on('input change', '#corSecundaria', function() {
+  var val = $(this).val().toUpperCase();
+  $('#corSecundariaHex').val(val);
+  $('#previewCorSecundaria').css('background', val).text(val);
+});
+$(document).on('input', '#corSecundariaHex', function() {
+  var val = $(this).val().toUpperCase();
+  if (val[0] !== '#') val = '#' + val.replace(/[^0-9A-F]/gi, '');
+  if (val.length > 7) val = val.slice(0,7);
+  $(this).val(val);
+  if (isHexColor(val)) {
+    $('#corSecundaria').val(val);
+    $('#previewCorSecundaria').css('background', val).text(val);
+  }
+});
+// Cor Principal (edição)
+$(document).on('input change', '#novaCorPrincipal', function() {
+  var val = $(this).val().toUpperCase();
+  $('#novaCorPrincipalHex').val(val);
+  $('#previewNovaCorPrincipal').css('background', val).text(val);
+});
+$(document).on('input', '#novaCorPrincipalHex', function() {
+  var val = $(this).val().toUpperCase();
+  if (val[0] !== '#') val = '#' + val.replace(/[^0-9A-F]/gi, '');
+  if (val.length > 7) val = val.slice(0,7);
+  $(this).val(val);
+  if (isHexColor(val)) {
+    $('#novaCorPrincipal').val(val);
+    $('#previewNovaCorPrincipal').css('background', val).text(val);
+  }
+});
+// Cor Secundária (edição)
+$(document).on('input change', '#novaCorSecundaria', function() {
+  var val = $(this).val().toUpperCase();
+  $('#novaCorSecundariaHex').val(val);
+  $('#previewNovaCorSecundaria').css('background', val).text(val);
+});
+$(document).on('input', '#novaCorSecundariaHex', function() {
+  var val = $(this).val().toUpperCase();
+  if (val[0] !== '#') val = '#' + val.replace(/[^0-9A-F]/gi, '');
+  if (val.length > 7) val = val.slice(0,7);
+  $(this).val(val);
+  if (isHexColor(val)) {
+    $('#novaCorSecundaria').val(val);
+    $('#previewNovaCorSecundaria').css('background', val).text(val);
+  }
+});
+// Atualizar previews ao abrir
+function atualizarPreviewsCor() {
+  var corPrincipal = $('#corPrincipalHex').val() || '';
+  $('#previewCorPrincipal').css('background', corPrincipal).text((corPrincipal || '').toUpperCase());
+  $('#corPrincipalHex').val((corPrincipal || '').toUpperCase());
+
+  var corSecundaria = $('#corSecundariaHex').val() || '';
+  $('#previewCorSecundaria').css('background', corSecundaria).text((corSecundaria || '').toUpperCase());
+  $('#corSecundariaHex').val((corSecundaria || '').toUpperCase());
+
+  var novaCorPrincipal = $('#novaCorPrincipalHex').val() || '';
+  $('#previewNovaCorPrincipal').css('background', novaCorPrincipal).text((novaCorPrincipal || '').toUpperCase());
+  $('#novaCorPrincipalHex').val((novaCorPrincipal || '').toUpperCase());
+
+  var novaCorSecundaria = $('#novaCorSecundariaHex').val() || '';
+  $('#previewNovaCorSecundaria').css('background', novaCorSecundaria).text((novaCorSecundaria || '').toUpperCase());
+  $('#novaCorSecundariaHex').val((novaCorSecundaria || '').toUpperCase());
+}
+$(document).ready(function() { atualizarPreviewsCor(); });
+$(document).on('click', '#btnStep1Next, #btnStep2Back, #btnFinalizar, #editarNomeLoja, .popup-editar-nome', function() { setTimeout(atualizarPreviewsCor, 100); });
+
+// Ao clicar no retângulo, aciona o input type=color escondido
+$(document).on('click', '#previewCorPrincipal', function() {
+  $('#corPrincipal').trigger('click');
+});
+$(document).on('click', '#previewCorSecundaria', function() {
+  $('#corSecundaria').trigger('click');
+});
+$(document).on('click', '#previewNovaCorPrincipal', function() {
+  $('#novaCorPrincipal').trigger('click');
+});
+$(document).on('click', '#previewNovaCorSecundaria', function() {
+  $('#novaCorSecundaria').trigger('click');
+});
+
+// Integração Vanilla Picker para cor principal e secundária
+function showInlinePicker(picker, previewId) {
+  // Fecha todos os pickers
+  $('.picker_wrapper').hide();
+  // Mostra o picker atual
+  if (picker && picker.domElement) {
+    $(picker.domElement).show();
+    // Posiciona logo abaixo do preview
+    var preview = document.getElementById(previewId);
+    if (preview) {
+      var rect = preview.getBoundingClientRect();
+      picker.domElement.style.position = 'absolute';
+      picker.domElement.style.left = rect.left + 'px';
+      picker.domElement.style.top = (rect.bottom + window.scrollY + 4) + 'px';
+      picker.domElement.style.zIndex = 99999;
+    }
+  }
+}
+function hideAllPickers() {
+  $('.picker_wrapper').hide();
+}
+function initVanillaPickers() {
+  // Cor Principal (criação)
+  var el1 = document.getElementById('previewCorPrincipal');
+  if (el1) {
+    if (!window.pickerCorPrincipal) {
+      window.pickerCorPrincipal = new Picker({
+        parent: el1,
+        inline: true,
+        showAlways: false,
+        color: $('#corPrincipalHex').val() || '#FF5733',
+        onChange: function(color) {
+          var hex = color.hex.substring(0,7).toUpperCase();
+          $('#corPrincipalHex').val(hex);
+          $('#previewCorPrincipal').css('background', hex).text(hex);
+        },
+        onDone: function(color) {
+          hideAllPickers();
+        }
+      });
+      $(window.pickerCorPrincipal.domElement).hide();
+      console.log('Picker cor principal inicializado (inline)');
+    }
+    $(el1).off('click.picker').on('click.picker', function(e) {
+      e.stopPropagation();
+      showInlinePicker(window.pickerCorPrincipal, 'previewCorPrincipal');
+    });
+  }
+  // Cor Secundária (criação)
+  var el2 = document.getElementById('previewCorSecundaria');
+  if (el2) {
+    if (!window.pickerCorSecundaria) {
+      window.pickerCorSecundaria = new Picker({
+        parent: el2,
+        inline: true,
+        showAlways: false,
+        color: $('#corSecundariaHex').val() || '#C70039',
+        onChange: function(color) {
+          var hex = color.hex.substring(0,7).toUpperCase();
+          $('#corSecundariaHex').val(hex);
+          $('#previewCorSecundaria').css('background', hex).text(hex);
+        },
+        onDone: function(color) {
+          hideAllPickers();
+        }
+      });
+      $(window.pickerCorSecundaria.domElement).hide();
+      console.log('Picker cor secundária inicializado (inline)');
+    }
+    $(el2).off('click.picker').on('click.picker', function(e) {
+      e.stopPropagation();
+      showInlinePicker(window.pickerCorSecundaria, 'previewCorSecundaria');
+    });
+  }
+  // Cor Principal (edição)
+  var el3 = document.getElementById('previewNovaCorPrincipal');
+  if (el3) {
+    if (!window.pickerNovaCorPrincipal) {
+      window.pickerNovaCorPrincipal = new Picker({
+        parent: el3,
+        inline: true,
+        showAlways: false,
+        color: $('#novaCorPrincipalHex').val() || '#FF5733',
+        onChange: function(color) {
+          var hex = color.hex.substring(0,7).toUpperCase();
+          $('#novaCorPrincipalHex').val(hex);
+          $('#previewNovaCorPrincipal').css('background', hex).text(hex);
+        },
+        onDone: function(color) {
+          hideAllPickers();
+        }
+      });
+      $(window.pickerNovaCorPrincipal.domElement).hide();
+      console.log('Picker nova cor principal inicializado (inline)');
+    }
+    $(el3).off('click.picker').on('click.picker', function(e) {
+      e.stopPropagation();
+      showInlinePicker(window.pickerNovaCorPrincipal, 'previewNovaCorPrincipal');
+    });
+  }
+  // Cor Secundária (edição)
+  var el4 = document.getElementById('previewNovaCorSecundaria');
+  if (el4) {
+    if (!window.pickerNovaCorSecundaria) {
+      window.pickerNovaCorSecundaria = new Picker({
+        parent: el4,
+        inline: true,
+        showAlways: false,
+        color: $('#novaCorSecundariaHex').val() || '#C70039',
+        onChange: function(color) {
+          var hex = color.hex.substring(0,7).toUpperCase();
+          $('#novaCorSecundariaHex').val(hex);
+          $('#previewNovaCorSecundaria').css('background', hex).text(hex);
+        },
+        onDone: function(color) {
+          hideAllPickers();
+        }
+      });
+      $(window.pickerNovaCorSecundaria.domElement).hide();
+      console.log('Picker nova cor secundária inicializado (inline)');
+    }
+    $(el4).off('click.picker').on('click.picker', function(e) {
+      e.stopPropagation();
+      showInlinePicker(window.pickerNovaCorSecundaria, 'previewNovaCorSecundaria');
+    });
+  }
+}
+// Esconde o picker ao clicar fora
+$(document).off('click.picker').on('click.picker', function() { hideAllPickers(); });
+// Sincronizar input manual hex com picker
+$(document).on('input', '#corPrincipalHex', function() {
+  var val = $(this).val().toUpperCase();
+  if (/^#([0-9A-F]{6})$/.test(val)) {
+    window.pickerCorPrincipal && window.pickerCorPrincipal.setColor(val, true);
+  }
+});
+$(document).on('input', '#corSecundariaHex', function() {
+  var val = $(this).val().toUpperCase();
+  if (/^#([0-9A-F]{6})$/.test(val)) {
+    window.pickerCorSecundaria && window.pickerCorSecundaria.setColor(val, true);
+  }
+});
+$(document).on('input', '#novaCorPrincipalHex', function() {
+  var val = $(this).val().toUpperCase();
+  if (/^#([0-9A-F]{6})$/.test(val)) {
+    window.pickerNovaCorPrincipal && window.pickerNovaCorPrincipal.setColor(val, true);
+  }
+});
+$(document).on('input', '#novaCorSecundariaHex', function() {
+  var val = $(this).val().toUpperCase();
+  if (/^#([0-9A-F]{6})$/.test(val)) {
+    window.pickerNovaCorSecundaria && window.pickerNovaCorSecundaria.setColor(val, true);
+  }
+});
+// Máscara para WhatsApp
+function formatarWhatsappParaEnvio(valor) {
+  var limpo = (valor || '').replace(/\D/g, '');
+  if (limpo.length >= 10 && limpo.length <= 11) {
+    return limpo;
+  }
+  return '';
+}
+
+// Função para aplicar máscara de WhatsApp
+function aplicarMascaraWhatsapp() {
+  if ($.fn.mask) {
+    $('.whatsapp-mask').removeAttr('maxlength');
+    $('.whatsapp-mask').mask('(00) 0 0000-0000', {
+      clearIfNotMatch: false,
+      translation: {
+        '0': {pattern: /[0-9]/}
+      }
+    });
+  }
+}
+// Aplica máscara ao carregar e ao abrir popups/formulários
+$(document).ready(function() { aplicarMascaraWhatsapp(); });
+$(document).on('click', '#btnStep1Next, #btnStep2Back, #btnFinalizar, #editarNomeLoja, .popup-editar-nome', function() { setTimeout(aplicarMascaraWhatsapp, 100); });
+
+// Função utilitária para remover acentuação
+function removerAcentos(str) {
+  return str.normalize("NFD").replace(/\p{Diacritic}/gu, "");
+}
+// Função utilitária para remover acentuação e ç
+function removerAcentosECedilha(str) {
+  return str
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .replace(/ç/g, "c")
+    .replace(/Ç/g, "C");
+}
+
+// Evento restritivo do botão Avançar: só avança se nome for válido e não existir
+$(document).off('click.minhaLoja', "#btnStep1Next");
+$(document).on('click.minhaLoja', "#btnStep1Next", function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  let nomeLoja = $("#nomeLoja").val().trim();
+  nomeLoja = nomeLoja.replace(/ /g, "_");
+  const nomeValido = validarNomeLoja(nomeLoja);
+  if (!nomeValido) {
+    app.dialog.close();
+    app.dialog.alert("O nome da loja só pode conter letras, números, espaços e o caractere _.", "Nome inválido");
+    return;
+  }
+  app.dialog.preloader("Validando nome da loja...");
+  verificarNomeLojaDisponivel(nomeLoja, function(disponivel, dados, erro) {
+    app.dialog.close(); // Sempre fechar loader de validação
+    if (erro) {
+      app.dialog.alert("Erro ao verificar nome da loja. Tente novamente.", "Erro");
+      return;
+    }
+    if (!disponivel) {
+      app.dialog.alert("Este nome de loja já está em uso. Por favor, escolha outro nome.", "Nome indisponível");
+      return;
+    }
+    // Se passou, pode avançar
+    proximoStep(1);
+  });
+});
+// Remover habilitação automática do botão Avançar por input
+$(document).off('input.minhaLoja', "#nomeLoja");
+$(document).on('input.minhaLoja', "#nomeLoja", function(e) {
+  $("#previewNome").text($(this).val() || "Nome da sua loja aparecerá aqui");
+  // O botão só será habilitado pelo clique e validação, não por input
+  $("#btnStep1Next").prop("disabled", false);
+});
+
+// Evento restritivo do botão Salvar novo nome da loja
+$(document).off('click.minhaLoja', "#btnSalvarNome");
+$(document).on('click.minhaLoja', "#btnSalvarNome", function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  salvarNovoNome();
+});
+
+// Função para salvar novo nome da loja, exibindo mensagem da API
+function salvarNovoNomeBackend() {
+  const novoNome = $("#novoNomeLoja").val().trim();
+  const novaCorPrincipal = $("#novaCorPrincipalHex").val();
+  const novaCorSecundaria = $("#novaCorSecundariaHex").val();
+  const novoWhatsapp = formatarWhatsappParaEnvio($("#novoWhatsappLoja").val());
+
+  if (!novoNome) {
+    app.dialog.alert("Por favor, digite um nome para a loja", "Erro");
+    return;
+  }
+
+  app.dialog.preloader("Salvando...");
+
+  const lojaData = localStorage.getItem("minhaLoja");
+  if (!lojaData) {
+    app.dialog.close();
+    app.dialog.alert("Erro ao obter dados da loja", "Erro");
+    return;
+  }
+
+  const lojaAtual = JSON.parse(lojaData);
+
+  // Gerar nome_url sem acentuação e sem ç
+  const nomeUrl = removerAcentosECedilha(novoNome.replace(/ /g, "_"));
+
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "LojinhaRestService",
+    method: "atualizarLoja",
+    dados: {
+      id: lojaAtual.id,
+      nome_loja: novoNome, // com acentuação
+      nome_url: nomeUrl,   // sem acentuação e sem ç
+      cor_principal: novaCorPrincipal,
+      cor_secundaria: novaCorSecundaria,
+      whatsapp: novoWhatsapp
+    }
+  });
+
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      app.dialog.close();
+      if (responseJson.status === "success" && responseJson.data.status === "success") {
+        // Recarregar dados completos da loja para atualizar visualizações
+        buscarDadosCompletosLoja(lojaAtual.id);
+        app.popup.close(".popup-editar-nome");
+        app.dialog.alert(responseJson.data.message || "Nome da loja atualizado com sucesso!", "Sucesso");
+      } else {
+        app.dialog.alert(responseJson.data.message || "Erro ao atualizar nome.", "Erro");
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+      app.dialog.alert("Erro ao atualizar nome: " + error.message, "Erro");
+    });
 }
