@@ -114,7 +114,7 @@ function mostrarTelaGerenciamento(loja) {
   
   // Gerar link da loja SEM acentuação
   const nomeLojaUrl = removerAcentos(loja.nome_loja || "loja");
-  const linkLoja = `https://vitatop.tecskill.com.br/lojinha_vitatop/${nomeLojaUrl}`;
+  const linkLoja = `https://vitatophomologa.tecskill.com.br/lojinha_vitatop/${nomeLojaUrl}`;
   localStorage.setItem("linkLoja", linkLoja);
   
   // Carregar categorias selecionadas
@@ -743,7 +743,7 @@ function compartilharLoja() {
   const loja = JSON.parse(lojaData);
   const nomeLoja = loja.nome_loja;
   const nomeLojaUrl = removerAcentos(nomeLoja);
-  const linkCompartilhar = `https://vitatop.tecskill.com.br/lojinha_vitatop/${nomeLojaUrl}`;
+  const linkCompartilhar = `https://vitatophomologa.tecskill.com.br/lojinha_vitatop/${nomeLojaUrl}`;
   onCompartilhar(
     nomeLoja,
     "Conheça minha loja personalizada na VitaTop!",
@@ -760,7 +760,7 @@ function visualizarLoja() {
   }
   const loja = JSON.parse(lojaData);
   const nomeLojaUrl = removerAcentos(loja.nome_loja);
-  const linkLoja = `https://vitatop.tecskill.com.br/lojinha_vitatop/${nomeLojaUrl}`;
+  const linkLoja = `https://vitatophomologa.tecskill.com.br/lojinha_vitatop/${nomeLojaUrl}`;
   app.dialog.confirm("Deseja abrir sua loja no navegador?", "Visualizar Loja", function() {
     window.open(linkLoja, '_blank');
   });
@@ -989,7 +989,7 @@ $(document).on('click', '#alterarLogoLoja', function() {
   if (lojaData) {
     const loja = JSON.parse(lojaData);
     if (loja.logo_url) {
-      $('#logoAtualExibicao').html('<div style="text-align:center;margin-bottom:10px;"><img src="https://vitatop.tecskill.com.br/' + loja.logo_url + '" style="max-width:100%;max-height:80px;border-radius:6px;box-shadow:0 1px 4px #0001;"><br><small style="color:#888;">Logo atual</small></div>');
+      $('#logoAtualExibicao').html('<div style="text-align:center;margin-bottom:10px;"><img src="https://vitatophomologa.tecskill.com.br/' + loja.logo_url + '" style="max-width:100%;max-height:80px;border-radius:6px;box-shadow:0 1px 4px #0001;"><br><small style="color:#888;">Logo atual</small></div>');
     } else {
       $('#logoAtualExibicao').html('');
     }
