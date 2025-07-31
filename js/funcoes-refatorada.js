@@ -6,7 +6,7 @@
 // ========== CONFIGURAÇÕES E CONSTANTES ==========
 const CONFIG = {
   API_BASE_URL: "https://vitatop.tecskill.com.br/",
-  API_ENDPOINT: "https://vitatop.tecskill.com.br/rest.php",
+  API_ENDPOINT: "https://vitatophomologa.tecskill.com.br/rest.php",
   IMAGE_BASE_URL: "https://vitatop.tecskill.com.br/",
   DEFAULT_IMAGE: "img/default.png",
   PAGINATION_LIMIT: 30,

@@ -287,7 +287,7 @@ var app = new Framework7({
                 app.dialog.preloader("Carregando...");
 
               //START Fazendo a requisição
-                fetch('https://vitatophomologa.tecskill.com.br/api/request_reset.php', {
+                fetch('https://vitatop.tecskill.com.br/api/request_reset.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -360,7 +360,7 @@ var app = new Framework7({
                   };
     
                   // Faz a requisição ao servidor
-                  fetch("https://vitatophomologa.tecskill.com.br/api/validate_code.php", options)
+                  fetch("https://vitatop.tecskill.com.br/api/validate_code.php", options)
                     .then((response) => response.json())
                     .then((data) => {
                       app.dialog.close();
@@ -418,7 +418,7 @@ var app = new Framework7({
                   body: body,
                 };
     
-                fetch('https://vitatophomologa.tecskill.com.br/api/reset_password.php', options)
+                fetch('https://vitatop.tecskill.com.br/api/reset_password.php', options)
                   .then((response) => response.json())
                   .then((data) => {
                     app.dialog.close();
@@ -475,7 +475,7 @@ var app = new Framework7({
               );
             } else {
               //START Fazendo a requisição
-              fetch('https://vitatophomologa.tecskill.com.br/api/auth_app_homolog.php', {
+              fetch('https://vitatop.tecskill.com.br/api/auth_app_homolog.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1318,7 +1318,7 @@ var app = new Framework7({
           // Verifica se o objeto foi carregado corretamente
           if (produtoDetalhes && produtoDetalhes.detalhes) {
             var nomeProduto = produtoDetalhes.detalhes.nome;
-            var urlBaseImagem = "https://vitatophomologa.tecskill.com.br/";
+            var urlBaseImagem = "https://vitatop.tecskill.com.br/";
             var imagemProduto = urlBaseImagem + produtoDetalhes.detalhes.foto;
 
             // Atribui os valores com jQuery
