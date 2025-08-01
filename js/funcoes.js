@@ -398,6 +398,7 @@ function listarProdutos(searchQuery = "", categoriaId) {
     method: "listarProdutos",
     categoria_id: categoriaId,
     search: searchQuery,
+    filtro:"telahome",
     limit: 30,
   });
 
