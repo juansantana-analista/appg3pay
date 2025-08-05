@@ -55,40 +55,31 @@
             <p>Confira as vendas realizadas através do seu link.</p>
           </div>
 
-          <!-- Campo de busca para cliente -->
+          <!-- Filtros das Vendas -->
           <div class="dashboard-section">
-            <h2 class="section-title">Buscar Cliente</h2>
+            <h2 class="section-title">Filtros</h2>
+            
+            <!-- Campo de busca para cliente -->
             <div class="search-container">
               <div class="search-input-wrapper">
                 <i class="mdi mdi-magnify search-icon"></i>
-                <input type="text" id="searchCliente" placeholder="Digite o nome do cliente..." class="search-input">
+                <input type="text" id="searchCliente" placeholder="Buscar por nome, email ou ID do cliente..." class="search-input">
                 <button id="clearSearch" class="clear-search-btn" style="display: none;">
                   <i class="mdi mdi-close"></i>
                 </button>
               </div>
             </div>
-          </div>
 
-          <!-- Filtro de Status do Pedido -->
-          <div class="dashboard-section">
-            <h2 class="section-title">Status do Pedido</h2>
-            <div class="status-filters">
-              <button class="status-filter-btn active" data-status="all">
-                <i class="mdi mdi-filter-outline"></i>
-                Todas
-              </button>
-              <button class="status-filter-btn" data-status="Pendente">
-                <i class="mdi mdi-clock-outline"></i>
-                Pendente
-              </button>
-              <button class="status-filter-btn" data-status="Pago">
-                <i class="mdi mdi-check-circle-outline"></i>
-                Pago
-              </button>
-              <button class="status-filter-btn" data-status="Cancelado">
-                <i class="mdi mdi-close-circle-outline"></i>
-                Cancelado
-              </button>
+            <!-- Filtro de Status -->
+            <div class="status-filter-container">
+              <label for="statusFilter" class="filter-label">Status da Venda:</label>
+              <select id="statusFilter" class="status-select">
+                <option value="all">Todos os Status</option>
+                <option value="Pendente" class="status-pendente">Pendente</option>
+                <option value="Autorizado" class="status-autorizado">Autorizado</option>
+                <option value="Cancelado" class="status-cancelado">Cancelado</option>
+                <option value="Bloqueado" class="status-bloqueado">Bloqueado</option>
+              </select>
             </div>
           </div>
 

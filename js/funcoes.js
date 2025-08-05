@@ -1717,7 +1717,7 @@ function setupVendasSearch() {
   $("#searchCliente").on("input", function() {
     const searchQuery = $(this).val().trim();
     const clearBtn = $("#clearSearch");
-    const currentStatusFilter = $(".status-filter-btn.active").data("status");
+    const currentStatusFilter = $("#statusFilter").val();
     
     // Mostra/esconde o botão de limpar
     if (searchQuery.length > 0) {
@@ -1737,7 +1737,7 @@ function setupVendasSearch() {
   $("#clearSearch").on("click", function() {
     $("#searchCliente").val("");
     $(this).hide();
-    const currentStatusFilter = $(".status-filter-btn.active").data("status");
+    const currentStatusFilter = $("#statusFilter").val();
     listarVendas(false, 0, "", currentStatusFilter);
   });
   
@@ -1745,7 +1745,7 @@ function setupVendasSearch() {
   $("#searchCliente").on("keypress", function(e) {
     if (e.which === 13) { // Enter key
       const searchQuery = $(this).val().trim();
-      const currentStatusFilter = $(".status-filter-btn.active").data("status");
+      const currentStatusFilter = $("#statusFilter").val();
       listarVendas(false, 0, searchQuery, currentStatusFilter);
     }
   });
@@ -1753,45 +1753,13 @@ function setupVendasSearch() {
 
 // Função para configurar os filtros de status
 function setupVendasStatusFilters() {
-  // Evento de clique nos botões de filtro de status
-  $(".status-filter-btn").on("click", function() {
-    const selectedStatus = $(this).data("status");
+  // Evento de mudança no select de status
+  $("#statusFilter").on("change", function() {
+    const selectedStatus = $(this).val();
     const currentSearchQuery = $("#searchCliente").val().trim();
-    
-    // Remove a classe active de todos os botões
-    $(".status-filter-btn").removeClass("active");
-    
-    // Adiciona a classe active ao botão clicado
-    $(this).addClass("active");
     
     // Lista as vendas com o filtro selecionado
     listarVendas(false, 0, currentSearchQuery, selectedStatus);
-  });
-  
-  // Detectar se há scroll no carrossel de filtros
-  function checkScroll() {
-    const statusFilters = $(".status-filters");
-    if (statusFilters.length > 0) {
-      const element = statusFilters[0];
-      const hasScroll = element.scrollWidth > element.clientWidth;
-      const scrollLeft = element.scrollLeft;
-      const maxScrollLeft = element.scrollWidth - element.clientWidth;
-      
-      statusFilters.toggleClass("has-scroll", hasScroll);
-      statusFilters.toggleClass("has-scroll-left", hasScroll && scrollLeft > 0);
-      statusFilters.toggleClass("has-scroll-right", hasScroll && scrollLeft < maxScrollLeft);
-    }
-  }
-  
-  // Verificar scroll inicial
-  checkScroll();
-  
-  // Verificar scroll quando a janela é redimensionada
-  $(window).on("resize", checkScroll);
-  
-  // Verificar scroll durante o scroll do carrossel
-  $(".status-filters").on("scroll", function() {
-    checkScroll();
   });
 }
 //Fim Função Lista Vendas
