@@ -3522,7 +3522,7 @@ select {
 
 /* Filtros das Vendas - Nova Versão com Busca Instantânea e Botões de Status */
 
-/* Campo de busca com ícone integrado */
+/* Campo de busca com ícone integrado - Design Moderno */
 .search-container {
     margin-bottom: 15px;
     width: 100%;
@@ -3533,97 +3533,130 @@ select {
 .search-input-wrapper {
     position: relative;
     background: #f5f5f5;
-    border-radius: 8px;
+    border-radius: 25px;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     width: 100%;
     box-sizing: border-box;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-input-wrapper:focus-within {
+    box-shadow: 0 4px 12px rgba(25, 196, 99, 0.15);
+    transform: translateY(-1px);
 }
 
 .search-input {
     width: 100%;
-    padding: 12px 45px 12px 15px;
+    padding: 12px 45px 12px 18px;
     border: none;
     outline: none;
     font-size: 14px;
     color: #333;
     background: transparent;
     box-sizing: border-box;
+    font-weight: 400;
 }
 
 .search-input::placeholder {
     color: #999;
+    font-weight: 400;
 }
 
 .search-icon {
     position: absolute;
-    right: 15px;
+    right: 18px;
     top: 50%;
     transform: translateY(-50%);
     color: #19c463;
-    font-size: 18px;
+    font-size: 16px;
     pointer-events: none;
+    opacity: 0.8;
 }
 
 .clear-search-btn {
     position: absolute;
-    right: 15px;
+    right: 18px;
     top: 50%;
     transform: translateY(-50%);
-    background: none;
+    background: rgba(255, 255, 255, 0.9);
     border: none;
     color: #999;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
     padding: 0;
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 50%;
+    backdrop-filter: blur(10px);
 }
 
 .clear-search-btn:hover {
     color: #666;
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
 }
 
-/* Botões de status do pedido */
+/* Botões de status do pedido - Design Moderno Pill Button */
 .status-filters {
     display: flex;
-    gap: 8px;
+    gap: 2px;
     margin-bottom: 15px;
     overflow-x: auto;
-    padding: 5px 0;
+    padding: 4px;
     width: 100%;
     box-sizing: border-box;
     -webkit-overflow-scrolling: touch;
+    background: #f5f5f5;
+    border-radius: 25px;
+    position: relative;
 }
 
 .status-filter-btn {
-    background: #fff;
-    border: 1px solid #ddd;
+    background: transparent;
+    border: none;
     border-radius: 20px;
-    padding: 8px 12px;
-    font-size: 12px;
+    padding: 8px 16px;
+    font-size: 11px;
+    font-weight: 500;
     color: #666;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     white-space: nowrap;
     flex-shrink: 0;
     min-width: auto;
     max-width: none;
+    position: relative;
+    z-index: 1;
+    letter-spacing: 0.3px;
 }
 
 .status-filter-btn:hover {
-    border-color: #19c463;
     color: #19c463;
+    transform: translateY(-0.5px);
 }
 
 .status-filter-btn.active {
-    background: #19c463;
-    border-color: #19c463;
-    color: #fff;
+    background: #fff;
+    color: #19c463;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-0.5px);
+}
+
+.status-filter-btn.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.95) 100%);
+    border-radius: 20px;
+    z-index: -1;
 }
 
 /* Responsividade para telas muito pequenas */
@@ -3636,32 +3669,35 @@ select {
     
     .status-filters {
         margin: 0 8px 12px 8px;
-        gap: 6px;
+        gap: 1px;
         width: calc(100% - 16px);
         max-width: calc(100% - 16px);
+        border-radius: 20px;
+        padding: 3px;
     }
     
     .search-input {
         font-size: 12px;
-        padding: 8px 35px 8px 10px;
+        padding: 10px 35px 10px 15px;
     }
     
     .search-icon {
         font-size: 14px;
-        right: 10px;
+        right: 12px;
     }
     
     .clear-search-btn {
-        right: 10px;
+        right: 12px;
         font-size: 12px;
-        width: 18px;
-        height: 18px;
+        width: 16px;
+        height: 16px;
     }
     
     .status-filter-btn {
-        font-size: 11px;
-        padding: 5px 10px;
-        border-radius: 15px;
+        font-size: 10px;
+        padding: 6px 12px;
+        border-radius: 16px;
+        letter-spacing: 0.2px;
     }
 }
 
@@ -3675,29 +3711,35 @@ select {
     
     .status-filters {
         margin: 0 10px 15px 10px;
-        gap: 8px;
+        gap: 2px;
         width: calc(100% - 20px);
         max-width: calc(100% - 20px);
+        border-radius: 22px;
+        padding: 3px;
     }
     
     .search-input {
         font-size: 13px;
-        padding: 10px 40px 10px 12px;
+        padding: 11px 40px 11px 16px;
     }
     
     .search-icon {
-        font-size: 16px;
-        right: 12px;
+        font-size: 15px;
+        right: 15px;
     }
     
     .clear-search-btn {
-        right: 12px;
-        font-size: 14px;
+        right: 15px;
+        font-size: 13px;
+        width: 17px;
+        height: 17px;
     }
     
     .status-filter-btn {
-        font-size: 12px;
-        padding: 6px 12px;
+        font-size: 11px;
+        padding: 7px 14px;
+        border-radius: 18px;
+        letter-spacing: 0.25px;
     }
 }
 
@@ -3710,29 +3752,35 @@ select {
     }
     
     .status-filters {
-        gap: 10px;
+        gap: 2px;
         width: 100%;
         max-width: 100%;
+        border-radius: 25px;
+        padding: 4px;
     }
     
     .search-input {
         font-size: 14px;
-        padding: 12px 45px 12px 15px;
+        padding: 12px 45px 12px 18px;
     }
     
     .search-icon {
-        font-size: 18px;
-        right: 15px;
+        font-size: 16px;
+        right: 18px;
     }
     
     .clear-search-btn {
-        right: 15px;
-        font-size: 16px;
+        right: 18px;
+        font-size: 14px;
+        width: 18px;
+        height: 18px;
     }
     
     .status-filter-btn {
-        font-size: 13px;
+        font-size: 11px;
         padding: 8px 16px;
+        border-radius: 20px;
+        letter-spacing: 0.3px;
     }
 }
 
