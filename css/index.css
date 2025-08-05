@@ -3628,7 +3628,7 @@ select {
 .status-filter-btn {
     flex: 1;
     min-width: 0;
-    padding: 10px 12px; /* Larger padding for better touch targets on iPhone */
+    padding: 12px 16px; /* Increased padding to make box larger than text */
     background-color: #ffffff;
     border-radius: 12px; /* More rounded for iPhone aesthetic */
     font-size: 13px; /* Larger font for better readability on iPhone */
@@ -3694,7 +3694,7 @@ select {
     
     .status-filter-btn {
         font-size: 12px;
-        padding: 8px 10px;
+        padding: 10px 12px; /* Increased padding for smaller screens */
         border-radius: 10px;
         flex: 1;
         min-width: 0;
@@ -3737,7 +3737,7 @@ select {
     
     .status-filter-btn {
         font-size: 13px;
-        padding: 9px 11px;
+        padding: 11px 14px; /* Increased padding for medium screens */
         border-radius: 11px;
         flex: 1;
         min-width: 0;
@@ -3779,7 +3779,7 @@ select {
     
     .status-filter-btn {
         font-size: 14px;
-        padding: 10px 12px;
+        padding: 12px 16px; /* Increased padding for larger screens */
         border-radius: 12px;
         flex: 1;
         min-width: 0;
