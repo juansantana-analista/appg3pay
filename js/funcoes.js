@@ -1500,7 +1500,7 @@ function listarPedidos(loadMore = false, offset = 0) {
 //Fim Função Lista tela Pedidos com Paginação
 
 //Inicio Funçao listar Vendas
-function listarVendas(loadMore = false, offset = 0, searchQuery = "") {
+function listarVendas(loadMore = false, offset = 0, searchQuery = "", statusFilter = "all") {
   if (!loadMore) {
     app.dialog.preloader("Carregando...");
   } else {
@@ -1517,12 +1517,13 @@ function listarVendas(loadMore = false, offset = 0, searchQuery = "") {
     Authorization: "Bearer " + userAuthToken,
   };
 
-  // Cabeçalhos da requisição - incluindo paginação e busca
+  // Cabeçalhos da requisição - incluindo paginação, busca e filtro de status
   const dados = {
     vendedor: pessoaId,
     limit: 15,
     offset: offset,
-    searchQuery: searchQuery
+    searchQuery: searchQuery,
+    statusFilter: statusFilter
   };
 
   const body = JSON.stringify({
@@ -1559,11 +1560,16 @@ function listarVendas(loadMore = false, offset = 0, searchQuery = "") {
 
         // Se não há vendas na primeira página
         if (vendas.length === 0 && !loadMore) {
+          let statusText = "";
+          if (statusFilter !== "all") {
+            statusText = ` com status "${statusFilter}"`;
+          }
+          
           vendasContainer.innerHTML = `
             <div class="empty-state" style="text-align: center; padding: 40px 20px; color: #666;">
               <i class="mdi mdi-cart-outline" style="font-size: 64px; margin-bottom: 20px; color: #ddd;"></i>
               <h3 style="margin-bottom: 10px;">Nenhuma venda encontrada</h3>
-              <p>Você ainda não realizou nenhuma venda${searchQuery ? ` para o cliente "${searchQuery}"` : ""}.</p>
+              <p>Você ainda não realizou nenhuma venda${searchQuery ? ` para o cliente "${searchQuery}"` : ""}${statusText}.</p>
             </div>
           `;
           app.dialog.close();
@@ -1613,7 +1619,7 @@ function listarVendas(loadMore = false, offset = 0, searchQuery = "") {
                 if (pagination && pagination.has_more) {
                   const loadMoreHTML = `
                     <div id="loadMoreContainer" style="text-align: center; margin: 30px 0; padding: 20px;">
-                      <button id="loadMoreButton" class="btn-large" data-next-offset="${pagination.next_offset}" data-search-query="${searchQuery}">
+                      <button id="loadMoreButton" class="btn-large" data-next-offset="${pagination.next_offset}" data-search-query="${searchQuery}" data-status-filter="${statusFilter}">
                         <i class="mdi mdi-refresh"></i> Carregar mais vendas
                       </button>
                       <div style="margin-top: 10px; font-size: 14px; color: #666;">
@@ -1627,7 +1633,8 @@ function listarVendas(loadMore = false, offset = 0, searchQuery = "") {
                   $("#loadMoreButton").off('click').on('click', function() {
                     const nextOffset = $(this).data('next-offset');
                     const currentSearchQuery = $(this).data('search-query');
-                    listarVendas(true, nextOffset, currentSearchQuery);
+                    const currentStatusFilter = $(this).data('status-filter');
+                    listarVendas(true, nextOffset, currentSearchQuery, currentStatusFilter);
                   });
                 } else if (pagination && pagination.current_page > 1) {
           // Se não há mais dados, mas já carregou algumas páginas, mostra mensagem
@@ -1710,6 +1717,7 @@ function setupVendasSearch() {
   $("#searchCliente").on("input", function() {
     const searchQuery = $(this).val().trim();
     const clearBtn = $("#clearSearch");
+    const currentStatusFilter = $(".status-filter-btn.active").data("status");
     
     // Mostra/esconde o botão de limpar
     if (searchQuery.length > 0) {
@@ -1721,7 +1729,7 @@ function setupVendasSearch() {
     // Debounce para evitar muitas requisições
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(() => {
-      listarVendas(false, 0, searchQuery);
+      listarVendas(false, 0, searchQuery, currentStatusFilter);
     }, 500);
   });
   
@@ -1729,15 +1737,35 @@ function setupVendasSearch() {
   $("#clearSearch").on("click", function() {
     $("#searchCliente").val("");
     $(this).hide();
-    listarVendas(false, 0, "");
+    const currentStatusFilter = $(".status-filter-btn.active").data("status");
+    listarVendas(false, 0, "", currentStatusFilter);
   });
   
   // Evento de pressionar Enter no campo de busca
   $("#searchCliente").on("keypress", function(e) {
     if (e.which === 13) { // Enter key
       const searchQuery = $(this).val().trim();
-      listarVendas(false, 0, searchQuery);
+      const currentStatusFilter = $(".status-filter-btn.active").data("status");
+      listarVendas(false, 0, searchQuery, currentStatusFilter);
     }
+  });
+}
+
+// Função para configurar os filtros de status
+function setupVendasStatusFilters() {
+  // Evento de clique nos botões de filtro de status
+  $(".status-filter-btn").on("click", function() {
+    const selectedStatus = $(this).data("status");
+    const currentSearchQuery = $("#searchCliente").val().trim();
+    
+    // Remove a classe active de todos os botões
+    $(".status-filter-btn").removeClass("active");
+    
+    // Adiciona a classe active ao botão clicado
+    $(this).addClass("active");
+    
+    // Lista as vendas com o filtro selecionado
+    listarVendas(false, 0, currentSearchQuery, selectedStatus);
   });
 }
 //Fim Função Lista Vendas

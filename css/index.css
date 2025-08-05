@@ -3587,6 +3587,50 @@ select {
     font-size: 16px;
 }
 
+/* Filtro de Status do Pedido */
+.status-filters {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    padding: 0 10px;
+}
+
+.status-filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    background-color: #fff;
+    color: #666;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    min-width: 80px;
+    justify-content: center;
+}
+
+.status-filter-btn:hover {
+    border-color: #00591F;
+    color: #00591F;
+    background-color: rgba(0, 89, 31, 0.05);
+}
+
+.status-filter-btn.active {
+    background-color: #00591F;
+    border-color: #00591F;
+    color: #fff;
+}
+
+.status-filter-btn i {
+    font-size: 16px;
+}
+
 @media (max-width: 480px) {
     .search-container {
         max-width: 100%;
@@ -3608,6 +3652,21 @@ select {
     }
     
     .clear-search-btn i {
+        font-size: 14px;
+    }
+    
+    .status-filters {
+        gap: 8px;
+        padding: 0 5px;
+    }
+    
+    .status-filter-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+        min-width: 70px;
+    }
+    
+    .status-filter-btn i {
         font-size: 14px;
     }
 }

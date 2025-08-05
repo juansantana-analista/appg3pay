@@ -913,6 +913,9 @@ var app = new Framework7({
     
     // Configura a busca de vendas
     setupVendasSearch();
+    
+    // Configura os filtros de status
+    setupVendasStatusFilters();
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
