@@ -59,23 +59,34 @@
           <div class="dashboard-section">
             <h2 class="section-title">Filtros</h2>
             
-            <!-- Campo de busca -->
-            <div class="search-box">
-              <input type="text" id="searchCliente" placeholder="Buscar cliente..." class="search-input">
-              <button id="searchBtn" class="search-btn">
-                <i class="mdi mdi-magnify"></i>
-              </button>
+            <!-- Campo de busca para cliente -->
+            <div class="search-container">
+              <div class="search-input-wrapper">
+                <input type="text" id="searchCliente" placeholder="Buscar cliente..." class="search-input">
+                <i class="mdi mdi-magnify search-icon"></i>
+                <button class="clear-search-btn" id="clearSearch" style="display: none;">
+                  <i class="mdi mdi-close"></i>
+                </button>
+              </div>
             </div>
 
-            <!-- Filtro de Status -->
-            <div class="filter-box">
-              <select id="statusFilter" class="filter-select">
-                <option value="all">Todos os Status</option>
-                <option value="Pendente">Pendente</option>
-                <option value="Autorizado">Autorizado</option>
-                <option value="Cancelado">Cancelado</option>
-                <option value="Bloqueado">Bloqueado</option>
-              </select>
+            <!-- Filtro de Status do Pedido -->
+            <div class="status-filters">
+              <button class="status-filter-btn active" data-status="all">
+                Todos
+              </button>
+              <button class="status-filter-btn" data-status="Pendente">
+                Pendente
+              </button>
+              <button class="status-filter-btn" data-status="Autorizado">
+                Autorizado
+              </button>
+              <button class="status-filter-btn" data-status="Cancelado">
+                Cancelado
+              </button>
+              <button class="status-filter-btn" data-status="Bloqueado">
+                Bloqueado
+              </button>
             </div>
           </div>
 

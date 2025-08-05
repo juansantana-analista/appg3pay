@@ -1711,18 +1711,40 @@ function listarVendas(loadMore = false, offset = 0, searchQuery = "", statusFilt
 
 // Função para configurar a busca de vendas
 function setupVendasSearch() {
-  // Evento de clique no botão de busca
-  $("#searchBtn").on("click", function() {
-    const searchQuery = $("#searchCliente").val().trim();
-    const currentStatusFilter = $("#statusFilter").val();
-    listarVendas(false, 0, searchQuery, currentStatusFilter);
+  let searchTimeout;
+  
+  // Evento de digitação no campo de busca (busca instantânea)
+  $("#searchCliente").on("input", function() {
+    const searchQuery = $(this).val().trim();
+    
+    // Mostra/esconde o botão de limpar
+    if (searchQuery.length > 0) {
+      $("#clearSearch").show();
+    } else {
+      $("#clearSearch").hide();
+    }
+    
+    // Debounce para evitar muitas requisições
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      const currentStatusFilter = $(".status-filter-btn.active").data("status");
+      listarVendas(false, 0, searchQuery, currentStatusFilter);
+    }, 300);
+  });
+  
+  // Evento de clique no botão de limpar busca
+  $("#clearSearch").on("click", function() {
+    $("#searchCliente").val("").focus();
+    $(this).hide();
+    const currentStatusFilter = $(".status-filter-btn.active").data("status");
+    listarVendas(false, 0, "", currentStatusFilter);
   });
   
   // Evento de pressionar Enter no campo de busca
   $("#searchCliente").on("keypress", function(e) {
     if (e.which === 13) { // Enter key
       const searchQuery = $(this).val().trim();
-      const currentStatusFilter = $("#statusFilter").val();
+      const currentStatusFilter = $(".status-filter-btn.active").data("status");
       listarVendas(false, 0, searchQuery, currentStatusFilter);
     }
   });
@@ -1730,9 +1752,16 @@ function setupVendasSearch() {
 
 // Função para configurar os filtros de status
 function setupVendasStatusFilters() {
-  // Evento de mudança no select de status
-  $("#statusFilter").on("change", function() {
-    const selectedStatus = $(this).val();
+  // Evento de clique nos botões de status
+  $(".status-filter-btn").on("click", function() {
+    // Remove a classe active de todos os botões
+    $(".status-filter-btn").removeClass("active");
+    
+    // Adiciona a classe active ao botão clicado
+    $(this).addClass("active");
+    
+    // Obtém o status selecionado
+    const selectedStatus = $(this).data("status");
     const currentSearchQuery = $("#searchCliente").val().trim();
     
     // Lista as vendas com o filtro selecionado
