@@ -3536,65 +3536,89 @@ select {
     width: 100%;
     display: flex;
     align-items: center;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.search-input-wrapper:focus-within {
+    box-shadow: 0 4px 12px rgba(0, 89, 31, 0.15);
+    transform: translateY(-1px);
 }
 
 .search-input {
     width: 100%;
-    padding: 12px 40px 12px 40px;
-    border: 1px solid #e0e0e0;
-    border-radius: 25px;
-    background-color: #fff;
+    padding: 14px 45px 14px 45px;
+    border: none;
+    border-radius: 15px;
+    background-color: transparent;
     color: #333;
     font-size: 14px;
+    font-weight: 500;
     transition: all 0.3s ease;
     outline: none;
 }
 
-.search-input:focus {
-    border-color: #00591F;
-    box-shadow: 0 0 0 2px rgba(0, 89, 31, 0.1);
+.search-input::placeholder {
+    color: #999;
+    font-weight: 400;
 }
 
 .search-icon {
     position: absolute;
-    left: 12px;
-    color: #666;
+    left: 15px;
+    color: #00591F;
     font-size: 18px;
     pointer-events: none;
+    transition: all 0.3s ease;
 }
 
 .clear-search-btn {
     position: absolute;
-    right: 8px;
-    background: none;
+    right: 10px;
+    background: rgba(0, 89, 31, 0.1);
     border: none;
-    color: #666;
+    color: #00591F;
     cursor: pointer;
-    padding: 4px;
+    padding: 6px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
+    width: 28px;
+    height: 28px;
 }
 
 .clear-search-btn:hover {
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: rgba(0, 89, 31, 0.2);
+    transform: scale(1.1);
 }
 
 .clear-search-btn i {
-    font-size: 16px;
+    font-size: 14px;
 }
 
-/* Filtro de Status do Pedido */
+/* Filtro de Status do Pedido - Carrossel Horizontal */
 .status-filters {
     display: flex;
-    justify-content: center;
-    gap: 10px;
+    gap: 8px;
     margin-bottom: 20px;
-    flex-wrap: wrap;
-    padding: 0 10px;
+    padding: 0 15px;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scroll-behavior: smooth;
+    position: relative;
+    /* Gradiente sutil nas bordas para indicar scroll */
+    mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+}
+
+.status-filters::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
 }
 
 .status-filter-btn {
@@ -3611,24 +3635,49 @@ select {
     cursor: pointer;
     transition: all 0.3s ease;
     outline: none;
-    min-width: 80px;
+    min-width: 90px;
     justify-content: center;
+    flex-shrink: 0;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .status-filter-btn:hover {
     border-color: #00591F;
     color: #00591F;
     background-color: rgba(0, 89, 31, 0.05);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 89, 31, 0.15);
 }
 
 .status-filter-btn.active {
     background-color: #00591F;
     border-color: #00591F;
     color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 89, 31, 0.3);
 }
 
 .status-filter-btn i {
     font-size: 16px;
+}
+
+/* Indicador de scroll para o carrossel */
+.status-filters::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.8));
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.status-filters.has-scroll::after {
+    opacity: 1;
 }
 
 @media (max-width: 480px) {
@@ -3639,31 +3688,34 @@ select {
     
     .search-input {
         font-size: 13px;
-        padding: 10px 35px 10px 35px;
+        padding: 12px 40px 12px 40px;
     }
     
     .search-icon {
         font-size: 16px;
-        left: 10px;
+        left: 12px;
     }
     
     .clear-search-btn {
-        right: 6px;
+        right: 8px;
+        width: 24px;
+        height: 24px;
     }
     
     .clear-search-btn i {
-        font-size: 14px;
+        font-size: 12px;
     }
     
     .status-filters {
-        gap: 8px;
-        padding: 0 5px;
+        gap: 6px;
+        padding: 0 10px;
+        margin-bottom: 15px;
     }
     
     .status-filter-btn {
         padding: 8px 12px;
         font-size: 12px;
-        min-width: 70px;
+        min-width: 80px;
     }
     
     .status-filter-btn i {

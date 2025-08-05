@@ -1767,6 +1767,21 @@ function setupVendasStatusFilters() {
     // Lista as vendas com o filtro selecionado
     listarVendas(false, 0, currentSearchQuery, selectedStatus);
   });
+  
+  // Detectar se há scroll no carrossel de filtros
+  function checkScroll() {
+    const statusFilters = $(".status-filters");
+    if (statusFilters.length > 0) {
+      const hasScroll = statusFilters[0].scrollWidth > statusFilters[0].clientWidth;
+      statusFilters.toggleClass("has-scroll", hasScroll);
+    }
+  }
+  
+  // Verificar scroll inicial
+  checkScroll();
+  
+  // Verificar scroll quando a janela é redimensionada
+  $(window).on("resize", checkScroll);
 }
 //Fim Função Lista Vendas
 
