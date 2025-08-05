@@ -1500,7 +1500,7 @@ function listarPedidos(loadMore = false, offset = 0) {
 //Fim Função Lista tela Pedidos com Paginação
 
 //Inicio Funçao listar Vendas
-function listarVendas(loadMore = false, offset = 0, filtro = "all") {
+function listarVendas(loadMore = false, offset = 0, searchQuery = "") {
   if (!loadMore) {
     app.dialog.preloader("Carregando...");
   } else {
@@ -1517,12 +1517,12 @@ function listarVendas(loadMore = false, offset = 0, filtro = "all") {
     Authorization: "Bearer " + userAuthToken,
   };
 
-  // Cabeçalhos da requisição - incluindo paginação e filtro
+  // Cabeçalhos da requisição - incluindo paginação e busca
   const dados = {
     vendedor: pessoaId,
     limit: 15,
     offset: offset,
-    filtro: filtro
+    searchQuery: searchQuery
   };
 
   const body = JSON.stringify({
@@ -1563,7 +1563,7 @@ function listarVendas(loadMore = false, offset = 0, filtro = "all") {
             <div class="empty-state" style="text-align: center; padding: 40px 20px; color: #666;">
               <i class="mdi mdi-cart-outline" style="font-size: 64px; margin-bottom: 20px; color: #ddd;"></i>
               <h3 style="margin-bottom: 10px;">Nenhuma venda encontrada</h3>
-              <p>Você ainda não realizou nenhuma venda${filtro !== "all" ? ` com este método de pagamento` : ""}.</p>
+              <p>Você ainda não realizou nenhuma venda${searchQuery ? ` para o cliente "${searchQuery}"` : ""}.</p>
             </div>
           `;
           app.dialog.close();
@@ -1609,27 +1609,27 @@ function listarVendas(loadMore = false, offset = 0, filtro = "all") {
           vendasContainer.innerHTML += vendasHTML;
         });
 
-        // Adiciona o botão "Carregar mais" se houver mais dados
-        if (pagination && pagination.has_more) {
-          const loadMoreHTML = `
-            <div id="loadMoreContainer" style="text-align: center; margin: 30px 0; padding: 20px;">
-              <button id="loadMoreButton" class="btn-large" data-next-offset="${pagination.next_offset}" data-filtro="${filtro}">
-                <i class="mdi mdi-refresh"></i> Carregar mais vendas
-              </button>
-              <div style="margin-top: 10px; font-size: 14px; color: #666;">
-                Mostrando ${(pagination.current_page - 1) * pagination.per_page + vendas.length} de ${pagination.total_records} vendas
-              </div>
-            </div>
-          `;
-          vendasContainer.innerHTML += loadMoreHTML;
+                        // Adiciona o botão "Carregar mais" se houver mais dados
+                if (pagination && pagination.has_more) {
+                  const loadMoreHTML = `
+                    <div id="loadMoreContainer" style="text-align: center; margin: 30px 0; padding: 20px;">
+                      <button id="loadMoreButton" class="btn-large" data-next-offset="${pagination.next_offset}" data-search-query="${searchQuery}">
+                        <i class="mdi mdi-refresh"></i> Carregar mais vendas
+                      </button>
+                      <div style="margin-top: 10px; font-size: 14px; color: #666;">
+                        Mostrando ${(pagination.current_page - 1) * pagination.per_page + vendas.length} de ${pagination.total_records} vendas
+                      </div>
+                    </div>
+                  `;
+                  vendasContainer.innerHTML += loadMoreHTML;
 
-          // Adiciona evento de clique ao botão "Carregar mais"
-          $("#loadMoreButton").off('click').on('click', function() {
-            const nextOffset = $(this).data('next-offset');
-            const currentFiltro = $(this).data('filtro');
-            listarVendas(true, nextOffset, currentFiltro);
-          });
-        } else if (pagination && pagination.current_page > 1) {
+                  // Adiciona evento de clique ao botão "Carregar mais"
+                  $("#loadMoreButton").off('click').on('click', function() {
+                    const nextOffset = $(this).data('next-offset');
+                    const currentSearchQuery = $(this).data('search-query');
+                    listarVendas(true, nextOffset, currentSearchQuery);
+                  });
+                } else if (pagination && pagination.current_page > 1) {
           // Se não há mais dados, mas já carregou algumas páginas, mostra mensagem
           const endMessageHTML = `
             <div id="loadMoreContainer" style="text-align: center; margin: 30px 0; padding: 20px;">
@@ -1702,20 +1702,42 @@ function listarVendas(loadMore = false, offset = 0, filtro = "all") {
     });
 }
 
-// Função para configurar os filtros de vendas
-function setupVendasFilters() {
-  $(".filter-btn-vendas").on("click", function () {
-    // Remove a classe ativa de todos os botões
-    $(".filter-btn-vendas").removeClass("active");
+// Função para configurar a busca de vendas
+function setupVendasSearch() {
+  let searchTimeout;
+  
+  // Evento de digitação no campo de busca
+  $("#searchCliente").on("input", function() {
+    const searchQuery = $(this).val().trim();
+    const clearBtn = $("#clearSearch");
     
-    // Adiciona a classe ativa ao botão clicado
-    $(this).addClass("active");
+    // Mostra/esconde o botão de limpar
+    if (searchQuery.length > 0) {
+      clearBtn.show();
+    } else {
+      clearBtn.hide();
+    }
     
-    // Pega o filtro selecionado
-    const filtro = $(this).data("filter");
-    
-    // Lista as vendas com o filtro selecionado
-    listarVendas(false, 0, filtro);
+    // Debounce para evitar muitas requisições
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      listarVendas(false, 0, searchQuery);
+    }, 500);
+  });
+  
+  // Evento de clique no botão de limpar
+  $("#clearSearch").on("click", function() {
+    $("#searchCliente").val("");
+    $(this).hide();
+    listarVendas(false, 0, "");
+  });
+  
+  // Evento de pressionar Enter no campo de busca
+  $("#searchCliente").on("keypress", function(e) {
+    if (e.which === 13) { // Enter key
+      const searchQuery = $(this).val().trim();
+      listarVendas(false, 0, searchQuery);
+    }
   });
 }
 //Fim Função Lista Vendas

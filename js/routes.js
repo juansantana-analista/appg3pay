@@ -911,8 +911,8 @@ var app = new Framework7({
               // Carrega as vendas inicialmente
     listarVendas();
     
-    // Configura os filtros de vendas
-    setupVendasFilters();
+    // Configura a busca de vendas
+    setupVendasSearch();
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM

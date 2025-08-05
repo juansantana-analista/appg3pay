@@ -55,26 +55,17 @@
             <p>Confira as vendas realizadas através do seu link.</p>
           </div>
 
-          <!-- Filtros das Vendas -->
+          <!-- Campo de busca para cliente -->
           <div class="dashboard-section">
-            <h2 class="section-title">Filtrar Vendas</h2>
-            <div class="vendas-filters">
-                <button class="filter-btn-vendas active" data-filter="all">
-                    <i class="mdi mdi-cart-outline"></i>
-                    Todas
+            <h2 class="section-title">Buscar Cliente</h2>
+            <div class="search-container">
+              <div class="search-input-wrapper">
+                <i class="mdi mdi-magnify search-icon"></i>
+                <input type="text" id="searchCliente" placeholder="Digite o nome do cliente..." class="search-input">
+                <button id="clearSearch" class="clear-search-btn" style="display: none;">
+                  <i class="mdi mdi-close"></i>
                 </button>
-                <button class="filter-btn-vendas" data-filter="pix">
-                    <i class="mdi mdi-qrcode"></i>
-                    PIX
-                </button>
-                <button class="filter-btn-vendas" data-filter="card">
-                    <i class="mdi mdi-credit-card"></i>
-                    Cartão
-                </button>
-                <button class="filter-btn-vendas" data-filter="boleto">
-                    <i class="mdi mdi-file-document"></i>
-                    Boleto
-                </button>
+              </div>
             </div>
           </div>
 

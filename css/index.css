@@ -3520,66 +3520,94 @@ select {
   box-sizing: border-box;
 }
 
-/* Filtros das Vendas */
-.vendas-filters {
+/* Campo de busca para cliente */
+.search-container {
     display: flex;
-    gap: 6px;
     justify-content: center;
     margin-bottom: 20px;
-    flex-wrap: nowrap;
     width: 100%;
     max-width: 400px;
     margin-left: auto;
     margin-right: auto;
 }
 
-.filter-btn-vendas {
-    padding: 6px 10px;
-    border: 1px solid #e0e0e0;
-    border-radius: 15px;
-    background-color: #fff;
-    color: #666;
-    font-size: 11px;
-    font-weight: 500;
+.search-input-wrapper {
+    position: relative;
+    width: 100%;
     display: flex;
     align-items: center;
-    gap: 3px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    justify-content: center;
-    white-space: nowrap;
-    flex: 1;
-    min-width: 0;
 }
 
-.filter-btn-vendas:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.filter-btn-vendas.active {
-    background-color: #00591F;
-    color: white;
-    border-color: #00591F;
-}
-
-.filter-btn-vendas i {
+.search-input {
+    width: 100%;
+    padding: 12px 40px 12px 40px;
+    border: 1px solid #e0e0e0;
+    border-radius: 25px;
+    background-color: #fff;
+    color: #333;
     font-size: 14px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.search-input:focus {
+    border-color: #00591F;
+    box-shadow: 0 0 0 2px rgba(0, 89, 31, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    color: #666;
+    font-size: 18px;
+    pointer-events: none;
+}
+
+.clear-search-btn {
+    position: absolute;
+    right: 8px;
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.clear-search-btn:hover {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.clear-search-btn i {
+    font-size: 16px;
 }
 
 @media (max-width: 480px) {
-    .vendas-filters {
-        gap: 4px;
+    .search-container {
         max-width: 100%;
         padding: 0 10px;
     }
     
-    .filter-btn-vendas {
-        font-size: 10px;
-        padding: 5px 8px;
+    .search-input {
+        font-size: 13px;
+        padding: 10px 35px 10px 35px;
     }
     
-    .filter-btn-vendas i {
-        font-size: 12px;
+    .search-icon {
+        font-size: 16px;
+        left: 10px;
+    }
+    
+    .clear-search-btn {
+        right: 6px;
+    }
+    
+    .clear-search-btn i {
+        font-size: 14px;
     }
 }
