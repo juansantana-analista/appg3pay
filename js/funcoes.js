@@ -1711,34 +1711,11 @@ function listarVendas(loadMore = false, offset = 0, searchQuery = "", statusFilt
 
 // Função para configurar a busca de vendas
 function setupVendasSearch() {
-  let searchTimeout;
-  
-  // Evento de digitação no campo de busca
-  $("#searchCliente").on("input", function() {
-    const searchQuery = $(this).val().trim();
-    const clearBtn = $("#clearSearch");
+  // Evento de clique no botão de busca
+  $("#searchBtn").on("click", function() {
+    const searchQuery = $("#searchCliente").val().trim();
     const currentStatusFilter = $("#statusFilter").val();
-    
-    // Mostra/esconde o botão de limpar
-    if (searchQuery.length > 0) {
-      clearBtn.show();
-    } else {
-      clearBtn.hide();
-    }
-    
-    // Debounce para evitar muitas requisições
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(() => {
-      listarVendas(false, 0, searchQuery, currentStatusFilter);
-    }, 500);
-  });
-  
-  // Evento de clique no botão de limpar
-  $("#clearSearch").on("click", function() {
-    $("#searchCliente").val("");
-    $(this).hide();
-    const currentStatusFilter = $("#statusFilter").val();
-    listarVendas(false, 0, "", currentStatusFilter);
+    listarVendas(false, 0, searchQuery, currentStatusFilter);
   });
   
   // Evento de pressionar Enter no campo de busca

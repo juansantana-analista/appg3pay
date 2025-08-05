@@ -59,26 +59,22 @@
           <div class="dashboard-section">
             <h2 class="section-title">Filtros</h2>
             
-            <!-- Campo de busca para cliente -->
-            <div class="search-container">
-              <div class="search-input-wrapper">
-                <i class="mdi mdi-magnify search-icon"></i>
-                <input type="text" id="searchCliente" placeholder="Buscar por nome, email ou ID do cliente..." class="search-input">
-                <button id="clearSearch" class="clear-search-btn" style="display: none;">
-                  <i class="mdi mdi-close"></i>
-                </button>
-              </div>
+            <!-- Campo de busca -->
+            <div class="search-box">
+              <input type="text" id="searchCliente" placeholder="Buscar cliente..." class="search-input">
+              <button id="searchBtn" class="search-btn">
+                <i class="mdi mdi-magnify"></i>
+              </button>
             </div>
 
             <!-- Filtro de Status -->
-            <div class="status-filter-container">
-              <label for="statusFilter" class="filter-label">Status da Venda:</label>
-              <select id="statusFilter" class="status-select">
+            <div class="filter-box">
+              <select id="statusFilter" class="filter-select">
                 <option value="all">Todos os Status</option>
-                <option value="Pendente" class="status-pendente">Pendente</option>
-                <option value="Autorizado" class="status-autorizado">Autorizado</option>
-                <option value="Cancelado" class="status-cancelado">Cancelado</option>
-                <option value="Bloqueado" class="status-bloqueado">Bloqueado</option>
+                <option value="Pendente">Pendente</option>
+                <option value="Autorizado">Autorizado</option>
+                <option value="Cancelado">Cancelado</option>
+                <option value="Bloqueado">Bloqueado</option>
               </select>
             </div>
           </div>
