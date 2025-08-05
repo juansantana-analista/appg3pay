@@ -3542,6 +3542,7 @@ select {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
     border: 2px solid transparent;
+    backdrop-filter: blur(10px);
 }
 
 .search-input-wrapper:focus-within {
@@ -3549,6 +3550,13 @@ select {
     transform: translateY(-2px);
     border-color: rgba(0, 89, 31, 0.2);
     background: linear-gradient(135deg, #ffffff 0%, #f0f8f0 100%);
+    animation: searchPulse 0.3s ease-out;
+}
+
+@keyframes searchPulse {
+    0% { transform: translateY(-2px) scale(1); }
+    50% { transform: translateY(-2px) scale(1.02); }
+    100% { transform: translateY(-2px) scale(1); }
 }
 
 .search-input {
