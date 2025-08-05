@@ -2,6 +2,8 @@
 .dashboard-section {
   margin-bottom: 25px;
   padding: 0 15px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .section-title {
