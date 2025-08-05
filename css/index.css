@@ -3604,22 +3604,29 @@ select {
 /* Botões de status do pedido - Design Moderno Pill Button */
 .status-filters {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+    flex-wrap: nowrap;
+    gap: 6px;
     padding: 10px 15px;
     background-color: white;
     margin-bottom: 15px;
     width: 100%;
     box-sizing: border-box;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.status-filters::-webkit-scrollbar {
+    display: none;
 }
 
 .status-filter-btn {
-    flex: 1;
+    flex-shrink: 0;
     min-width: 0;
-    padding: 6px 12px;
+    padding: 6px 10px;
     background-color: #f5f5f5;
     border-radius: 6px;
-    font-size: 12px;
+    font-size: 11px;
     cursor: pointer;
     transition: all 0.3s ease;
     color: #666;
@@ -3655,7 +3662,7 @@ select {
         width: calc(100% - 16px);
         max-width: calc(100% - 16px);
         padding: 8px;
-        gap: 6px;
+        gap: 4px;
     }
     
     .search-input {
@@ -3676,10 +3683,10 @@ select {
     }
     
     .status-filter-btn {
-        font-size: 11px;
-        padding: 5px 8px;
-        border-radius: 5px;
-        flex: 1 1 calc(50% - 3px);
+        font-size: 10px;
+        padding: 4px 6px;
+        border-radius: 4px;
+        flex-shrink: 0;
         min-width: 0;
     }
 }
@@ -3697,7 +3704,7 @@ select {
         width: calc(100% - 20px);
         max-width: calc(100% - 20px);
         padding: 10px;
-        gap: 7px;
+        gap: 5px;
     }
     
     .search-input {
@@ -3718,10 +3725,10 @@ select {
     }
     
     .status-filter-btn {
-        font-size: 12px;
-        padding: 6px 10px;
-        border-radius: 6px;
-        flex: 1 1 calc(33.333% - 5px);
+        font-size: 11px;
+        padding: 5px 8px;
+        border-radius: 5px;
+        flex-shrink: 0;
         min-width: 0;
     }
 }
@@ -3738,7 +3745,7 @@ select {
         width: 100%;
         max-width: 100%;
         padding: 12px 15px;
-        gap: 8px;
+        gap: 6px;
     }
     
     .search-input {
@@ -3759,10 +3766,10 @@ select {
     }
     
     .status-filter-btn {
-        font-size: 13px;
-        padding: 7px 12px;
+        font-size: 12px;
+        padding: 6px 10px;
         border-radius: 6px;
-        flex: 1 1 calc(20% - 6px);
+        flex-shrink: 0;
         min-width: 0;
     }
 }
