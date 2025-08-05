@@ -3605,28 +3605,21 @@ select {
 .status-filters {
     display: flex;
     flex-wrap: nowrap;
-    gap: 6px;
-    padding: 10px 15px;
+    gap: 4px;
+    padding: 8px 12px;
     background-color: white;
     margin-bottom: 15px;
     width: 100%;
     box-sizing: border-box;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-}
-
-.status-filters::-webkit-scrollbar {
-    display: none;
 }
 
 .status-filter-btn {
-    flex-shrink: 0;
+    flex: 1;
     min-width: 0;
-    padding: 6px 10px;
+    padding: 4px 6px;
     background-color: #f5f5f5;
-    border-radius: 6px;
-    font-size: 11px;
+    border-radius: 4px;
+    font-size: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
     color: #666;
@@ -3661,8 +3654,8 @@ select {
         margin: 0 8px 12px 8px;
         width: calc(100% - 16px);
         max-width: calc(100% - 16px);
-        padding: 8px;
-        gap: 4px;
+        padding: 6px;
+        gap: 3px;
     }
     
     .search-input {
@@ -3683,10 +3676,10 @@ select {
     }
     
     .status-filter-btn {
-        font-size: 10px;
-        padding: 4px 6px;
-        border-radius: 4px;
-        flex-shrink: 0;
+        font-size: 9px;
+        padding: 3px 4px;
+        border-radius: 3px;
+        flex: 1;
         min-width: 0;
     }
 }
@@ -3703,8 +3696,8 @@ select {
         margin: 0 10px 15px 10px;
         width: calc(100% - 20px);
         max-width: calc(100% - 20px);
-        padding: 10px;
-        gap: 5px;
+        padding: 8px;
+        gap: 4px;
     }
     
     .search-input {
@@ -3725,10 +3718,10 @@ select {
     }
     
     .status-filter-btn {
-        font-size: 11px;
-        padding: 5px 8px;
-        border-radius: 5px;
-        flex-shrink: 0;
+        font-size: 10px;
+        padding: 4px 6px;
+        border-radius: 4px;
+        flex: 1;
         min-width: 0;
     }
 }
@@ -3744,8 +3737,8 @@ select {
     .status-filters {
         width: 100%;
         max-width: 100%;
-        padding: 12px 15px;
-        gap: 6px;
+        padding: 10px 12px;
+        gap: 5px;
     }
     
     .search-input {
@@ -3766,10 +3759,10 @@ select {
     }
     
     .status-filter-btn {
-        font-size: 12px;
-        padding: 6px 10px;
-        border-radius: 6px;
-        flex-shrink: 0;
+        font-size: 11px;
+        padding: 5px 8px;
+        border-radius: 5px;
+        flex: 1;
         min-width: 0;
     }
 }
