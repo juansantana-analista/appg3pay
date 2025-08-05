@@ -1772,8 +1772,14 @@ function setupVendasStatusFilters() {
   function checkScroll() {
     const statusFilters = $(".status-filters");
     if (statusFilters.length > 0) {
-      const hasScroll = statusFilters[0].scrollWidth > statusFilters[0].clientWidth;
+      const element = statusFilters[0];
+      const hasScroll = element.scrollWidth > element.clientWidth;
+      const scrollLeft = element.scrollLeft;
+      const maxScrollLeft = element.scrollWidth - element.clientWidth;
+      
       statusFilters.toggleClass("has-scroll", hasScroll);
+      statusFilters.toggleClass("has-scroll-left", hasScroll && scrollLeft > 0);
+      statusFilters.toggleClass("has-scroll-right", hasScroll && scrollLeft < maxScrollLeft);
     }
   }
   
@@ -1782,6 +1788,11 @@ function setupVendasStatusFilters() {
   
   // Verificar scroll quando a janela é redimensionada
   $(window).on("resize", checkScroll);
+  
+  // Verificar scroll durante o scroll do carrossel
+  $(".status-filters").on("scroll", function() {
+    checkScroll();
+  });
 }
 //Fim Função Lista Vendas
 
