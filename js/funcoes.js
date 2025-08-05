@@ -1500,7 +1500,7 @@ function listarPedidos(loadMore = false, offset = 0) {
 //Fim Função Lista tela Pedidos com Paginação
 
 //Inicio Funçao listar Vendas
-function listarVendas(loadMore = false, offset = 0) {
+function listarVendas(loadMore = false, offset = 0, filtro = "all") {
   if (!loadMore) {
     app.dialog.preloader("Carregando...");
   } else {
@@ -1517,11 +1517,12 @@ function listarVendas(loadMore = false, offset = 0) {
     Authorization: "Bearer " + userAuthToken,
   };
 
-  // Cabeçalhos da requisição - incluindo paginação
+  // Cabeçalhos da requisição - incluindo paginação e filtro
   const dados = {
     vendedor: pessoaId,
     limit: 15,
-    offset: offset
+    offset: offset,
+    filtro: filtro
   };
 
   const body = JSON.stringify({
@@ -1562,7 +1563,7 @@ function listarVendas(loadMore = false, offset = 0) {
             <div class="empty-state" style="text-align: center; padding: 40px 20px; color: #666;">
               <i class="mdi mdi-cart-outline" style="font-size: 64px; margin-bottom: 20px; color: #ddd;"></i>
               <h3 style="margin-bottom: 10px;">Nenhuma venda encontrada</h3>
-              <p>Você ainda não realizou nenhuma venda.</p>
+              <p>Você ainda não realizou nenhuma venda${filtro !== "all" ? ` com este método de pagamento` : ""}.</p>
             </div>
           `;
           app.dialog.close();
@@ -1612,7 +1613,7 @@ function listarVendas(loadMore = false, offset = 0) {
         if (pagination && pagination.has_more) {
           const loadMoreHTML = `
             <div id="loadMoreContainer" style="text-align: center; margin: 30px 0; padding: 20px;">
-              <button id="loadMoreButton" class="btn-large" data-next-offset="${pagination.next_offset}">
+              <button id="loadMoreButton" class="btn-large" data-next-offset="${pagination.next_offset}" data-filtro="${filtro}">
                 <i class="mdi mdi-refresh"></i> Carregar mais vendas
               </button>
               <div style="margin-top: 10px; font-size: 14px; color: #666;">
@@ -1625,7 +1626,8 @@ function listarVendas(loadMore = false, offset = 0) {
           // Adiciona evento de clique ao botão "Carregar mais"
           $("#loadMoreButton").off('click').on('click', function() {
             const nextOffset = $(this).data('next-offset');
-            listarVendas(true, nextOffset);
+            const currentFiltro = $(this).data('filtro');
+            listarVendas(true, nextOffset, currentFiltro);
           });
         } else if (pagination && pagination.current_page > 1) {
           // Se não há mais dados, mas já carregou algumas páginas, mostra mensagem
@@ -1698,6 +1700,23 @@ function listarVendas(loadMore = false, offset = 0) {
         app.dialog.alert("Erro de conexão ao carregar mais vendas", "Erro");
       }
     });
+}
+
+// Função para configurar os filtros de vendas
+function setupVendasFilters() {
+  $(".filter-btn-vendas").on("click", function () {
+    // Remove a classe ativa de todos os botões
+    $(".filter-btn-vendas").removeClass("active");
+    
+    // Adiciona a classe ativa ao botão clicado
+    $(this).addClass("active");
+    
+    // Pega o filtro selecionado
+    const filtro = $(this).data("filter");
+    
+    // Lista as vendas com o filtro selecionado
+    listarVendas(false, 0, filtro);
+  });
 }
 //Fim Função Lista Vendas
 

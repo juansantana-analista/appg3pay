@@ -910,6 +910,9 @@ var app = new Framework7({
           // fazer algo quando a página for inicializada
               // Carrega as vendas inicialmente
     listarVendas();
+    
+    // Configura os filtros de vendas
+    setupVendasFilters();
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM

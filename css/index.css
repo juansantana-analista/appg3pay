@@ -3519,3 +3519,67 @@ select {
   padding-bottom: calc(56px + env(safe-area-inset-bottom, 24px));
   box-sizing: border-box;
 }
+
+/* Filtros das Vendas */
+.vendas-filters {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-wrap: nowrap;
+    width: 100%;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.filter-btn-vendas {
+    padding: 6px 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 15px;
+    background-color: #fff;
+    color: #666;
+    font-size: 11px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    justify-content: center;
+    white-space: nowrap;
+    flex: 1;
+    min-width: 0;
+}
+
+.filter-btn-vendas:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.filter-btn-vendas.active {
+    background-color: #00591F;
+    color: white;
+    border-color: #00591F;
+}
+
+.filter-btn-vendas i {
+    font-size: 14px;
+}
+
+@media (max-width: 480px) {
+    .vendas-filters {
+        gap: 4px;
+        max-width: 100%;
+        padding: 0 10px;
+    }
+    
+    .filter-btn-vendas {
+        font-size: 10px;
+        padding: 5px 8px;
+    }
+    
+    .filter-btn-vendas i {
+        font-size: 12px;
+    }
+}
