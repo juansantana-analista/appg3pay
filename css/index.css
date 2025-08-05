@@ -3534,35 +3534,40 @@ select {
 
 .search-input-wrapper {
     position: relative;
-    background: #f5f5f5;
-    border-radius: 25px;
+    background: #ffffff;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
     width: 85%;
     max-width: 350px;
     box-sizing: border-box;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid #e5e7eb;
 }
 
 .search-input-wrapper:focus-within {
-    box-shadow: 0 4px 12px rgba(25, 196, 99, 0.15);
+    box-shadow: 0 4px 12px rgba(25, 196, 99, 0.15), 0 0 0 3px rgba(25, 196, 99, 0.1);
     transform: translateY(-1px);
+    border-color: #19c463;
 }
 
 .search-input {
     width: 100%;
-    padding: 14px 45px 14px 18px; /* Increased padding for larger size */
+    padding: 16px 45px 16px 18px; /* Increased padding for better touch */
     border: none;
     outline: none;
-    font-size: 15px; /* Slightly larger font */
-    color: #333;
+    font-size: 16px; /* iOS standard font size */
+    color: #1f2937;
     background: transparent;
     box-sizing: border-box;
     font-weight: 400;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 .search-input::placeholder {
-    color: #999;
+    color: #9ca3af;
     font-weight: 400;
 }
 
@@ -3604,49 +3609,55 @@ select {
     transform: scale(1.1);
 }
 
-/* Botões de status do pedido - Design Compacto */
+/* Botões de status do pedido - Design iOS Moderno */
 .status-filters {
     display: flex;
     flex-wrap: nowrap;
-    gap: 6px;
-    padding: 8px 12px;
-    background-color: white;
-    margin-bottom: 15px;
+    gap: 8px;
+    padding: 12px 16px;
+    background-color: #f8fafc;
+    margin-bottom: 20px;
     width: 85%; /* Increased to 85% of screen width */
     max-width: 85%;
     box-sizing: border-box;
     margin-left: auto;
     margin-right: auto;
     justify-content: center;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
 }
 
 .status-filter-btn {
     flex: 1;
     min-width: 0;
-    padding: 8px 10px; /* Larger padding for better touch targets on iPhone */
-    background-color: #f5f5f5;
-    border-radius: 8px; /* More rounded for iPhone aesthetic */
-    font-size: 12px; /* Larger font for better readability on iPhone */
+    padding: 10px 12px; /* Larger padding for better touch targets on iPhone */
+    background-color: #ffffff;
+    border-radius: 12px; /* More rounded for iPhone aesthetic */
+    font-size: 13px; /* Larger font for better readability on iPhone */
     cursor: pointer;
-    transition: all 0.3s ease;
-    color: #666;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #64748b;
     white-space: nowrap;
     border: none;
     font-weight: 500;
     text-align: center;
-    border: 1px solid #e0e0e0;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .status-filter-btn:hover {
-    background-color: #e8e8e8;
-    border-color: #ccc;
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .status-filter-btn.active {
     background-color: var(--verde-escuro);
     color: white;
     border-color: var(--verde-escuro);
-    box-shadow: 0 2px 4px rgba(0, 89, 31, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 89, 31, 0.25);
+    transform: translateY(-1px);
 }
 
 /* Responsividade para telas muito pequenas */
@@ -3658,11 +3669,12 @@ select {
     }
     
     .status-filters {
-        margin: 0 auto 12px auto;
+        margin: 0 auto 16px auto;
         width: 90%; /* Larger on very small screens for better usability */
         max-width: 90%;
-        padding: 8px;
-        gap: 5px;
+        padding: 10px 12px;
+        gap: 6px;
+        border-radius: 14px;
     }
     
     .search-input {
@@ -3683,9 +3695,9 @@ select {
     }
     
     .status-filter-btn {
-        font-size: 11px;
-        padding: 6px 8px;
-        border-radius: 6px;
+        font-size: 12px;
+        padding: 8px 10px;
+        border-radius: 10px;
         flex: 1;
         min-width: 0;
     }
@@ -3700,11 +3712,12 @@ select {
     }
     
     .status-filters {
-        margin: 0 auto 15px auto;
+        margin: 0 auto 18px auto;
         width: 85%; /* Increased to 85% for better iPhone experience */
         max-width: 85%;
-        padding: 10px;
-        gap: 6px;
+        padding: 12px 14px;
+        gap: 7px;
+        border-radius: 16px;
     }
     
     .search-input {
@@ -3725,9 +3738,9 @@ select {
     }
     
     .status-filter-btn {
-        font-size: 12px;
-        padding: 7px 9px;
-        border-radius: 7px;
+        font-size: 13px;
+        padding: 9px 11px;
+        border-radius: 11px;
         flex: 1;
         min-width: 0;
     }
@@ -3744,10 +3757,11 @@ select {
     .status-filters {
         width: 85%;
         max-width: 85%;
-        padding: 12px 15px;
-        gap: 8px;
+        padding: 14px 18px;
+        gap: 10px;
         margin-left: auto;
         margin-right: auto;
+        border-radius: 18px;
     }
     
     .search-input {
@@ -3768,9 +3782,9 @@ select {
     }
     
     .status-filter-btn {
-        font-size: 13px;
-        padding: 8px 10px;
-        border-radius: 8px;
+        font-size: 14px;
+        padding: 10px 12px;
+        border-radius: 12px;
         flex: 1;
         min-width: 0;
     }
