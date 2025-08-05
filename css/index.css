@@ -3528,6 +3528,8 @@ select {
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
+    display: flex;
+    justify-content: center;
 }
 
 .search-input-wrapper {
@@ -3536,7 +3538,8 @@ select {
     border-radius: 25px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    width: 100%;
+    width: 90%;
+    max-width: 400px;
     box-sizing: border-box;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -3614,6 +3617,7 @@ select {
     box-sizing: border-box;
     margin-left: auto;
     margin-right: auto;
+    justify-content: center;
 }
 
 .status-filter-btn {
