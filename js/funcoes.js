@@ -5837,8 +5837,8 @@ function configurarAbasPedidoVenda() {
     
     // Atualizar placeholder da busca
     const placeholder = tab === 'pedidos' ? 
-      'Buscar por cliente, ID do pedido...' : 
-      'Buscar por cliente, ID da venda...';
+      'busca pedido pelo id' : 
+      'buscar cliente ou ide do compra';
     $('#buscaPedidoVenda').attr('placeholder', placeholder);
     
     // Atualizar tipo de dados
