@@ -3853,11 +3853,11 @@ select {
 
 #buscaVendas {
     width: 100%;
-    padding: 16px 60px 16px 20px;
+    padding: 18px 60px 18px 20px;
     border: none;
     outline: none;
     background: transparent;
-    font-size: 16px;
+    font-size: 18px;
     color: #1f2937;
     font-weight: 500;
 }

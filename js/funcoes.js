@@ -5939,46 +5939,194 @@ function carregarDadosIniciaisPedidoVenda() {
 function carregarDadosAbaPedidoVenda(tab) {
   if (tab === 'pedidos') {
     listarPedidos();
+    // Atualizar contadores de pedidos após carregar
+    setTimeout(() => {
+      buscarContadoresPedidos();
+    }, 1500);
   } else {
     listarVendas();
+    // Atualizar contadores de vendas após carregar
+    setTimeout(() => {
+      buscarContadoresVendas();
+    }, 1500);
   }
-  
-  // Atualizar contadores
-  setTimeout(() => {
-    atualizarContadoresPedidoVenda();
-  }, 1000);
 }
 
 // Função para aplicar filtros
 function aplicarFiltrosPedidoVenda() {
   if (filtrosPedidoVenda.tipo === 'pedidos') {
     listarPedidos();
+    // Atualizar contadores após aplicar filtros
+    setTimeout(() => {
+      buscarContadoresPedidos();
+    }, 1000);
   } else {
     listarVendas();
+    // Atualizar contadores após aplicar filtros
+    setTimeout(() => {
+      buscarContadoresVendas();
+    }, 1000);
   }
 }
 
 // Função para atualizar contadores
 function atualizarContadoresPedidoVenda() {
-  // Simular contadores baseados no tipo atual
-  const contadores = filtrosPedidoVenda.tipo === 'pedidos' ? {
-    todos: 25,
-    pendente: 8,
-    autorizado: 12,
-    cancelado: 5,
-    bloqueado: 2
-  } : {
-    todos: 18,
-    pendente: 5,
-    autorizado: 10,
-    cancelado: 3,
-    bloqueado: 1
-  };
+  // Buscar dados reais da API baseado no tipo atual
+  if (filtrosPedidoVenda.tipo === 'pedidos') {
+    // Buscar contadores de pedidos
+    buscarContadoresPedidos();
+  } else {
+    // Buscar contadores de vendas
+    buscarContadoresVendas();
+  }
+}
+
+// Função para buscar contadores de pedidos
+function buscarContadoresPedidos() {
+  var pessoaId = localStorage.getItem("pessoaId");
   
-  $('#contadorTodosPedidoVenda').text(contadores.todos);
-  $('#contadorPendentePedidoVenda').text(contadores.pendente);
-  $('#contadorAutorizadoPedidoVenda').text(contadores.autorizado);
-  $('#contadorCanceladoPedidoVenda').text(contadores.cancelado);
-  $('#contadorBloqueadoPedidoVenda').text(contadores.bloqueado);
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "PedidoVendaRest",
+    method: "ListarPedidos",
+    pessoa_id: pessoaId,
+    limit: 1000, // Buscar mais pedidos para contar corretamente
+    offset: 0
+  });
+
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      if (responseJson.status === "success" && responseJson.data && responseJson.data.data) {
+        const pagination = responseJson.data.data.pagination;
+        const contadores = {
+          todos: pagination.total || 0,
+          pendente: 0,
+          autorizado: 0,
+          cancelado: 0,
+          bloqueado: 0
+        };
+        
+        // Contar por status se houver dados
+        if (responseJson.data.data.data) {
+          responseJson.data.data.data.forEach(pedido => {
+            const status = pedido.status_compra == 3 ? pedido.status_pedido : pedido.mensagem_compra;
+            const statusLower = status.toLowerCase();
+            
+            if (statusLower.includes('pendente') || statusLower.includes('aguardando')) {
+              contadores.pendente++;
+            } else if (statusLower.includes('autorizado') || statusLower.includes('pago') || statusLower.includes('aprovado')) {
+              contadores.autorizado++;
+            } else if (statusLower.includes('cancelado') || statusLower.includes('cancelada')) {
+              contadores.cancelado++;
+            } else if (statusLower.includes('bloqueado') || statusLower.includes('bloqueada')) {
+              contadores.bloqueado++;
+            }
+          });
+        }
+        
+        atualizarContadoresPedidoVendaUI(contadores);
+      }
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar contadores de pedidos:", error);
+      // Fallback para contadores padrão
+      const contadores = { todos: 0, pendente: 0, autorizado: 0, cancelado: 0, bloqueado: 0 };
+      atualizarContadoresPedidoVendaUI(contadores);
+    });
+}
+
+// Função para buscar contadores de vendas
+function buscarContadoresVendas() {
+  var pessoaId = localStorage.getItem("pessoaId");
+  
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const dados = {
+    vendedor: pessoaId,
+    limit: 1000, // Buscar mais vendas para contar corretamente
+    offset: 0,
+    searchQuery: "",
+    statusFilter: "todos",
+    periodoFilter: "todos",
+    valorFilter: "todos"
+  };
+
+  const body = JSON.stringify({
+    class: "PedidoDigitalRest",
+    method: "MinhasVendasDigitais",
+    dados: dados,
+  });
+
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      if (responseJson.status === "success" && responseJson.data && responseJson.data.data) {
+        const vendas = responseJson.data.data.data;
+        const pagination = responseJson.data.data.pagination;
+        
+        const contadores = {
+          todos: pagination.total || vendas.length || 0,
+          pendente: 0,
+          autorizado: 0,
+          cancelado: 0,
+          bloqueado: 0
+        };
+        
+        // Contar por status se houver dados
+        if (vendas && vendas.length > 0) {
+          vendas.forEach(venda => {
+            const status = venda.status || venda.status_venda || '';
+            const statusLower = status.toLowerCase();
+            
+            if (statusLower.includes('pendente') || statusLower.includes('aguardando')) {
+              contadores.pendente++;
+            } else if (statusLower.includes('autorizado') || statusLower.includes('pago') || statusLower.includes('aprovado')) {
+              contadores.autorizado++;
+            } else if (statusLower.includes('cancelado') || statusLower.includes('cancelada')) {
+              contadores.cancelado++;
+            } else if (statusLower.includes('bloqueado') || statusLower.includes('bloqueada')) {
+              contadores.bloqueado++;
+            }
+          });
+        }
+        
+        atualizarContadoresPedidoVendaUI(contadores);
+      }
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar contadores de vendas:", error);
+      // Fallback para contadores padrão
+      const contadores = { todos: 0, pendente: 0, autorizado: 0, cancelado: 0, bloqueado: 0 };
+      atualizarContadoresPedidoVendaUI(contadores);
+    });
+}
+
+// Função para atualizar a UI dos contadores
+function atualizarContadoresPedidoVendaUI(contadores) {
+  $('#contadorTodosPedidoVenda').text(contadores.todos || 0);
+  $('#contadorPendentePedidoVenda').text(contadores.pendente || 0);
+  $('#contadorAutorizadoPedidoVenda').text(contadores.autorizado || 0);
+  $('#contadorCanceladoPedidoVenda').text(contadores.cancelado || 0);
+  $('#contadorBloqueadoPedidoVenda').text(contadores.bloqueado || 0);
 }
 
