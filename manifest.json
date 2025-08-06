@@ -2,9 +2,9 @@
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
   "background_color": "#ffffff",
   "dir": "ltr",
-  "name": "VitaTop",
+  "name": "VitaTop homologação",
   "scope": "/",
-  "short_name": "VitaTop",
+  "short_name": "VitaTop homolog",
   "start_url": "https://homologaappvitatop.tecskill.com.br/",
   "id": "br.com.g3pay",
   "display": "fullscreen",
@@ -13,8 +13,8 @@
   "orientation": "portrait",
   "shortcuts": [
     {
-      "name": "VitaTop",
-      "short_name": "VitaTop",
+      "name": "VitaTop homologação",
+      "short_name": "VitaTop homolog",
       "description": "Gerencie suas vendas e maximize seus ganhos com a VitaTop na palma da mão.",
       "url": "https://homologaappvitatop.tecskill.com.br/"
     }
