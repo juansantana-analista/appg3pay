@@ -3853,11 +3853,11 @@ select {
 
 #buscaVendas {
     width: 100%;
-    padding: 18px 60px 18px 20px;
+    padding: 16px 60px 16px 20px;
     border: none;
     outline: none;
     background: transparent;
-    font-size: 18px;
+    font-size: 16px;
     color: #1f2937;
     font-weight: 500;
 }
@@ -4828,6 +4828,19 @@ select {
 .aba-item.ativa {
   color: #00591F;
   border-bottom-color: #00591F;
+  position: relative;
+}
+
+.aba-item.ativa::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  background-color: #00591F;
+  border-radius: 2px;
 }
 
 .aba-item.ativa i {

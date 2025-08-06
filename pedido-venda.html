@@ -22,6 +22,8 @@
   <link rel="stylesheet" href="css/materialdesignicons.min.css" />
   <!-- Icones do Remix icon-->
   <link rel="stylesheet" href="css/remixicon/remixicon.css" />
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -62,11 +64,11 @@
             <div class="abas-container" style="background: #fff; margin-bottom: 16px; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
               <div class="abas-wrapper" style="display: flex;">
                 <div class="aba-item ativa" data-tab="pedidos" style="flex: 1; padding: 16px 20px; text-align: center; font-size: 16px; font-weight: 600; color: #666; border-bottom: 3px solid transparent; cursor: pointer; transition: all 0.3s ease;">
-                  <i class="mdi mdi-package-variant" style="margin-right: 8px;"></i>
+                  <i class="fa fa-list-alt" style="margin-right: 8px;"></i>
                   <span>Meus Pedidos</span>
                 </div>
                 <div class="aba-item" data-tab="vendas" style="flex: 1; padding: 16px 20px; text-align: center; font-size: 16px; font-weight: 600; color: #666; border-bottom: 3px solid transparent; cursor: pointer; transition: all 0.3s ease;">
-                  <i class="mdi mdi-sale" style="margin-right: 8px;"></i>
+                  <i class="fa fa-dollar-sign" style="margin-right: 8px;"></i>
                   <span>Minhas Vendas</span>
                 </div>
               </div>
@@ -84,7 +86,7 @@
                  placeholder="Buscar por cliente, ID do pedido..." 
                  autocomplete="off"
                  enterkeyhint="search"
-                 style="font-size: 18px; padding: 18px 60px 18px 20px;"
+                 style="font-size: 16px; padding: 16px 60px 16px 20px;"
                />
                   <i class="busca-icon mdi mdi-magnify"></i>
                   <button id="limparBuscaPedidoVenda" class="limpar-busca-btn" style="display: none;">
