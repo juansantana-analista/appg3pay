@@ -1859,8 +1859,8 @@ function configurarBusca() {
 
 // Função para configurar filtros de status
 function configurarFiltrosStatus() {
-  $(".filtro-btn").on("click", function() {
-    $(".filtro-btn").removeClass("ativo");
+  $(".status-card-pedidos-vendas").on("click", function() {
+    $(".status-card-pedidos-vendas").removeClass("ativo");
     $(this).addClass("ativo");
     
     const status = $(this).data("status");
@@ -1897,8 +1897,8 @@ function limparFiltros() {
   filtrosVendas.busca = "";
   
   // Resetar status para "todos"
-  $(".filtro-btn").removeClass("ativo");
-  $(".filtro-btn[data-status='todos']").addClass("ativo");
+  $(".status-card-pedidos-vendas").removeClass("ativo");
+  $(".status-card-pedidos-vendas[data-status='todos']").addClass("ativo");
   filtrosVendas.status = "todos";
   
   // Resetar filtros adicionais
@@ -5542,6 +5542,43 @@ if (typeof window.filtrosPedidos === 'undefined') {
   };
 }
 
+// Função para configurar filtros de pedidos (similar à de vendas)
+function configurarFiltrosPedidos() {
+  // Configurar busca para pedidos
+  $('#buscaVendas').off('input').on('input', function() {
+    let searchTimeout;
+    clearTimeout(searchTimeout);
+    const valor = $(this).val().trim();
+    
+    if (valor.length > 0) {
+      $('#limparBusca').show();
+    } else {
+      $('#limparBusca').hide();
+    }
+    
+    searchTimeout = setTimeout(() => {
+      // Implementar busca para pedidos se necessário
+      listarPedidos();
+    }, 500);
+  });
+  
+  // Configurar filtros de status para pedidos
+  $('.status-card-pedidos-vendas').off('click').on('click', function() {
+    const status = $(this).data('status');
+    $('.status-card-pedidos-vendas').removeClass('ativo');
+    $(this).addClass('ativo');
+    
+    // Implementar filtro de status para pedidos se necessário
+    listarPedidos();
+  });
+  
+  // Configurar filtros adicionais para pedidos
+  $('#filtroData, #filtroValor').off('change').on('change', function() {
+    // Implementar filtros adicionais para pedidos se necessário
+    listarPedidos();
+  });
+}
+
 // Funções específicas para pedido-vendas.html
 function inicializarPedidosVendas() {
   // Configurar eventos das abas
@@ -5578,56 +5615,77 @@ function configurarAbasPedidosVendas() {
       $('#conteudoVendas').addClass('ativo');
       $('#statusCardsVendas').show();
       $('#statusCardsPedidos').hide();
+      
+      // Atualizar placeholder da busca
+      $('#buscaVendas').attr('placeholder', 'Buscar por cliente, ID da venda...');
+      
+      // Configurar filtros para vendas
+      configurarFiltrosVendas();
+      
+      // Carregar dados de vendas
+      listarVendas();
     } else {
       $('#conteudoPedidos').addClass('ativo');
       $('#statusCardsVendas').hide();
       $('#statusCardsPedidos').show();
+      
+      // Atualizar placeholder da busca
+      $('#buscaVendas').attr('placeholder', 'Buscar por cliente, ID do pedido...');
+      
+      // Configurar filtros para pedidos
+      configurarFiltrosPedidos();
+      
+      // Carregar dados de pedidos
+      listarPedidos();
     }
-    
-    // Atualizar placeholder da busca
-    const placeholder = tab === 'vendas' ? 
-      'Buscar por cliente, ID da venda...' : 
-      'Buscar por cliente, ID do pedido...';
-    $('#buscaPedidosVendas').attr('placeholder', placeholder);
-    
-    // Resetar filtros
-    resetarFiltrosPedidosVendas();
-    
-    // Carregar dados da nova aba
-    carregarDadosAbaPedidosVendas(tab);
   });
 }
 
 function configurarBuscaPedidosVendas() {
   let searchTimeout;
   
-  $('#buscaPedidosVendas').on('input', function() {
+  $('#buscaVendas').on('input', function() {
     clearTimeout(searchTimeout);
     const valor = $(this).val().trim();
     
     // Mostrar/ocultar botão limpar
     if (valor.length > 0) {
-      $('#limparBuscaPedidosVendas').show();
+      $('#limparBusca').show();
     } else {
-      $('#limparBuscaPedidosVendas').hide();
+      $('#limparBusca').hide();
     }
     
     // Debounce da busca
     searchTimeout = setTimeout(() => {
-      aplicarFiltrosPedidosVendas(valor);
+      const abaAtual = $('.aba-pedidos-vendas.ativa').data('tab');
+      if (abaAtual === 'vendas') {
+        filtrosVendas.busca = valor;
+        listarVendas();
+      } else {
+        // Para pedidos, usar a busca existente
+        listarPedidos();
+      }
     }, 500);
   });
   
-  $('#limparBuscaPedidosVendas').on('click', function() {
-    $('#buscaPedidosVendas').val('');
+  $('#limparBusca').on('click', function() {
+    $('#buscaVendas').val('');
     $(this).hide();
-    aplicarFiltrosPedidosVendas('');
+    
+    const abaAtual = $('.aba-pedidos-vendas.ativa').data('tab');
+    if (abaAtual === 'vendas') {
+      filtrosVendas.busca = '';
+      listarVendas();
+    } else {
+      listarPedidos();
+    }
   });
 }
 
 function configurarFiltrosStatusPedidosVendas() {
   $('.status-card-pedidos-vendas').on('click', function() {
     const status = $(this).data('status');
+    const abaAtual = $('.aba-pedidos-vendas.ativa').data('tab');
     
     // Remover classe ativo de todos os cards
     $('.status-card-pedidos-vendas').removeClass('ativo');
@@ -5635,52 +5693,65 @@ function configurarFiltrosStatusPedidosVendas() {
     // Adicionar classe ativo ao card clicado
     $(this).addClass('ativo');
     
-    // Aplicar filtros
-    aplicarFiltrosPedidosVendas();
+    // Aplicar filtros baseado na aba atual
+    if (abaAtual === 'vendas') {
+      filtrosVendas.status = status;
+      listarVendas();
+    } else {
+      // Para pedidos, usar a lógica existente
+      listarPedidos();
+    }
   });
 }
 
 function configurarFiltrosAdicionaisPedidosVendas() {
-  $('#filtroDataPedidosVendas, #filtroValorPedidosVendas').on('change', function() {
-    aplicarFiltrosPedidosVendas();
+  $('#filtroData, #filtroValor').on('change', function() {
+    const abaAtual = $('.aba-pedidos-vendas.ativa').data('tab');
+    
+    if (abaAtual === 'vendas') {
+      filtrosVendas.periodo = $('#filtroData').val();
+      filtrosVendas.valor = $('#filtroValor').val();
+      listarVendas();
+    } else {
+      // Para pedidos, usar a lógica existente
+      listarPedidos();
+    }
   });
 }
 
 function configurarBotaoLimparPedidosVendas() {
-  $('#limparFiltrosPedidosVendas').on('click', function() {
-    resetarFiltrosPedidosVendas();
-    aplicarFiltrosPedidosVendas();
+  $('#limparFiltros').on('click', function() {
+    const abaAtual = $('.aba-pedidos-vendas.ativa').data('tab');
+    
+    if (abaAtual === 'vendas') {
+      limparFiltros();
+    } else {
+      // Para pedidos, resetar filtros
+      resetarFiltrosPedidosVendas();
+      listarPedidos();
+    }
   });
 }
 
 function resetarFiltrosPedidosVendas() {
   // Resetar busca
-  $('#buscaPedidosVendas').val('');
-  $('#limparBuscaPedidosVendas').hide();
+  $('#buscaVendas').val('');
+  $('#limparBusca').hide();
   
   // Resetar status
   $('.status-card-pedidos-vendas').removeClass('ativo');
   $('.status-card-pedidos-vendas[data-status="todos"]').addClass('ativo');
   
   // Resetar filtros adicionais
-  $('#filtroDataPedidosVendas').val('todos');
-  $('#filtroValorPedidosVendas').val('todos');
+  $('#filtroData').val('todos');
+  $('#filtroValor').val('todos');
 }
 
 function carregarDadosIniciaisPedidosVendas() {
-  carregarDadosAbaPedidosVendas('vendas');
-}
-
-function carregarDadosAbaPedidosVendas(tab) {
-  if (tab === 'vendas') {
-    carregarVendasPedidosVendas();
-  } else {
-    carregarPedidosPedidosVendas();
-  }
-}
-
-function carregarVendasPedidosVendas() {
-  // Usar a função existente listarVendas
+  // Configurar filtros para vendas inicialmente
+  configurarFiltrosVendas();
+  
+  // Carregar dados de vendas
   listarVendas();
   
   // Atualizar contadores
@@ -5689,29 +5760,19 @@ function carregarVendasPedidosVendas() {
   }, 1000);
 }
 
-function carregarPedidosPedidosVendas() {
-  // Usar a função existente listarPedidos
-  listarPedidos();
-  
-  // Atualizar contadores
-  setTimeout(() => {
-    atualizarContadoresPedidosPedidosVendas();
-  }, 1000);
-}
-
 function atualizarContadoresVendasPedidosVendas() {
   // Simular contadores baseados nos dados carregados
   const contadores = {
     todos: 25,
     pendente: 8,
-    concluido: 12,
+    autorizado: 12,
     cancelado: 5
   };
   
-  $('#contadorTodosVendas').text(contadores.todos);
-  $('#contadorPendenteVendas').text(contadores.pendente);
-  $('#contadorConcluidoVendas').text(contadores.concluido);
-  $('#contadorCanceladoVendas').text(contadores.cancelado);
+  $('#contadorTodos').text(contadores.todos);
+  $('#contadorPendente').text(contadores.pendente);
+  $('#contadorAutorizado').text(contadores.autorizado);
+  $('#contadorCancelado').text(contadores.cancelado);
 }
 
 function atualizarContadoresPedidosPedidosVendas() {
@@ -5731,27 +5792,3 @@ function atualizarContadoresPedidosPedidosVendas() {
   $('#contadorCanceladoPedidos').text(contadores.cancelado);
 }
 
-function aplicarFiltrosPedidosVendas(termoBusca = '') {
-  const statusAtual = $('.status-card-pedidos-vendas.ativo').data('status');
-  const filtroData = $('#filtroDataPedidosVendas').val();
-  const filtroValor = $('#filtroValorPedidosVendas').val();
-  const abaAtual = $('.aba-pedidos-vendas.ativa').data('tab');
-  
-  console.log('Aplicando filtros:', {
-    aba: abaAtual,
-    status: statusAtual,
-    busca: termoBusca,
-    data: filtroData,
-    valor: filtroValor
-  });
-  
-  // Aqui você implementaria a lógica de filtros
-  // Integrando com as funções existentes do app
-  if (abaAtual === 'vendas') {
-    // Aplicar filtros para vendas
-    listarVendas();
-  } else {
-    // Aplicar filtros para pedidos
-    listarPedidos();
-  }
-}

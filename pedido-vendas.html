@@ -468,12 +468,12 @@
               <input 
                 type="text" 
                 class="busca-input-pedidos-vendas" 
-                id="buscaPedidosVendas"
+                id="buscaVendas"
                 placeholder="Buscar por cliente, ID da venda..." 
                 autocomplete="off"
                 enterkeyhint="search"
               />
-              <button class="limpar-busca-pedidos-vendas" id="limparBuscaPedidosVendas">
+              <button class="limpar-busca-pedidos-vendas" id="limparBusca">
                 <i class="mdi mdi-close"></i>
               </button>
             </div>
@@ -483,7 +483,7 @@
           <div class="status-cards-pedidos-vendas" id="statusCardsVendas">
             <div class="status-grid-pedidos-vendas">
               <div class="status-card-pedidos-vendas todos ativo" data-status="todos">
-                <div class="status-count-pedidos-vendas" id="contadorTodosVendas">0</div>
+                <div class="status-count-pedidos-vendas" id="contadorTodos">0</div>
                 <div class="status-icon-pedidos-vendas">
                   <i class="mdi mdi-format-list-bulleted"></i>
                 </div>
@@ -491,23 +491,23 @@
               </div>
               
               <div class="status-card-pedidos-vendas pendente" data-status="pendente">
-                <div class="status-count-pedidos-vendas" id="contadorPendenteVendas">0</div>
+                <div class="status-count-pedidos-vendas" id="contadorPendente">0</div>
                 <div class="status-icon-pedidos-vendas">
                   <i class="mdi mdi-clock-outline"></i>
                 </div>
                 <div class="status-title-pedidos-vendas">Pendente</div>
               </div>
               
-              <div class="status-card-pedidos-vendas concluido" data-status="concluido">
-                <div class="status-count-pedidos-vendas" id="contadorConcluidoVendas">0</div>
+              <div class="status-card-pedidos-vendas autorizado" data-status="autorizado">
+                <div class="status-count-pedidos-vendas" id="contadorAutorizado">0</div>
                 <div class="status-icon-pedidos-vendas">
                   <i class="mdi mdi-check-circle-outline"></i>
                 </div>
-                <div class="status-title-pedidos-vendas">Concluído</div>
+                <div class="status-title-pedidos-vendas">Autorizado</div>
               </div>
               
               <div class="status-card-pedidos-vendas cancelado" data-status="cancelado">
-                <div class="status-count-pedidos-vendas" id="contadorCanceladoVendas">0</div>
+                <div class="status-count-pedidos-vendas" id="contadorCancelado">0</div>
                 <div class="status-icon-pedidos-vendas">
                   <i class="mdi mdi-close-circle-outline"></i>
                 </div>
@@ -565,8 +565,8 @@
           <div class="filtros-adicionais-pedidos-vendas">
             <div class="filtros-row-pedidos-vendas">
               <div class="filtro-item-pedidos-vendas">
-                <label class="filtro-label-pedidos-vendas" for="filtroDataPedidosVendas">Período:</label>
-                <select class="filtro-select-pedidos-vendas" id="filtroDataPedidosVendas">
+                <label class="filtro-label-pedidos-vendas" for="filtroData">Período:</label>
+                <select class="filtro-select-pedidos-vendas" id="filtroData">
                   <option value="todos">Todos os períodos</option>
                   <option value="hoje">Hoje</option>
                   <option value="semana">Última semana</option>
@@ -576,8 +576,8 @@
               </div>
               
               <div class="filtro-item-pedidos-vendas">
-                <label class="filtro-label-pedidos-vendas" for="filtroValorPedidosVendas">Valor:</label>
-                <select class="filtro-select-pedidos-vendas" id="filtroValorPedidosVendas">
+                <label class="filtro-label-pedidos-vendas" for="filtroValor">Valor:</label>
+                <select class="filtro-select-pedidos-vendas" id="filtroValor">
                   <option value="todos">Todos os valores</option>
                   <option value="baixo">Até R$ 50</option>
                   <option value="medio">R$ 50 - R$ 200</option>
@@ -586,7 +586,7 @@
               </div>
             </div>
             
-            <button class="limpar-filtros-pedidos-vendas" id="limparFiltrosPedidosVendas">
+            <button class="limpar-filtros-pedidos-vendas" id="limparFiltros">
               <i class="mdi mdi-refresh"></i> Limpar Filtros
             </button>
           </div>
@@ -595,7 +595,7 @@
           <div class="conteudo-pedidos-vendas">
             <!-- Conteúdo de Vendas -->
             <div class="conteudo-vendas-pedidos-vendas ativo" id="conteudoVendas">
-              <div class="container-order" id="container-vendas-pedidos-vendas">
+              <div class="container-order" id="container-vendas">
                 <!-- Loading inicial -->
                 <div class="loading-pedidos-vendas">
                   <i class="mdi mdi-loading mdi-spin"></i>
@@ -606,7 +606,7 @@
 
             <!-- Conteúdo de Pedidos -->
             <div class="conteudo-pedidos-pedidos-vendas" id="conteudoPedidos">
-              <div class="container-order" id="container-pedidos-pedidos-vendas">
+              <div class="container-order" id="container-pedidos">
                 <!-- Loading inicial -->
                 <div class="loading-pedidos-vendas">
                   <i class="mdi mdi-loading mdi-spin"></i>
@@ -637,6 +637,10 @@
           inicializarPedidosVendas();
         } else {
           console.error('Função inicializarPedidosVendas não encontrada');
+          // Fallback: tentar carregar vendas diretamente
+          if (typeof listarVendas === 'function') {
+            listarVendas();
+          }
         }
       }, 100);
     });
