@@ -5541,3 +5541,217 @@ if (typeof window.filtrosPedidos === 'undefined') {
     valor: "todos"
   };
 }
+
+// Funções específicas para pedido-vendas.html
+function inicializarPedidosVendas() {
+  // Configurar eventos das abas
+  configurarAbasPedidosVendas();
+  
+  // Configurar busca
+  configurarBuscaPedidosVendas();
+  
+  // Configurar filtros de status
+  configurarFiltrosStatusPedidosVendas();
+  
+  // Configurar filtros adicionais
+  configurarFiltrosAdicionaisPedidosVendas();
+  
+  // Configurar botão limpar
+  configurarBotaoLimparPedidosVendas();
+  
+  // Carregar dados iniciais
+  carregarDadosIniciaisPedidosVendas();
+}
+
+function configurarAbasPedidosVendas() {
+  $('.aba-pedidos-vendas').on('click', function() {
+    const tab = $(this).data('tab');
+    
+    // Atualizar abas
+    $('.aba-pedidos-vendas').removeClass('ativa');
+    $(this).addClass('ativa');
+    
+    // Atualizar conteúdo
+    $('.conteudo-vendas-pedidos-vendas, .conteudo-pedidos-pedidos-vendas').removeClass('ativo');
+    
+    if (tab === 'vendas') {
+      $('#conteudoVendas').addClass('ativo');
+      $('#statusCardsVendas').show();
+      $('#statusCardsPedidos').hide();
+    } else {
+      $('#conteudoPedidos').addClass('ativo');
+      $('#statusCardsVendas').hide();
+      $('#statusCardsPedidos').show();
+    }
+    
+    // Atualizar placeholder da busca
+    const placeholder = tab === 'vendas' ? 
+      'Buscar por cliente, ID da venda...' : 
+      'Buscar por cliente, ID do pedido...';
+    $('#buscaPedidosVendas').attr('placeholder', placeholder);
+    
+    // Resetar filtros
+    resetarFiltrosPedidosVendas();
+    
+    // Carregar dados da nova aba
+    carregarDadosAbaPedidosVendas(tab);
+  });
+}
+
+function configurarBuscaPedidosVendas() {
+  let searchTimeout;
+  
+  $('#buscaPedidosVendas').on('input', function() {
+    clearTimeout(searchTimeout);
+    const valor = $(this).val().trim();
+    
+    // Mostrar/ocultar botão limpar
+    if (valor.length > 0) {
+      $('#limparBuscaPedidosVendas').show();
+    } else {
+      $('#limparBuscaPedidosVendas').hide();
+    }
+    
+    // Debounce da busca
+    searchTimeout = setTimeout(() => {
+      aplicarFiltrosPedidosVendas(valor);
+    }, 500);
+  });
+  
+  $('#limparBuscaPedidosVendas').on('click', function() {
+    $('#buscaPedidosVendas').val('');
+    $(this).hide();
+    aplicarFiltrosPedidosVendas('');
+  });
+}
+
+function configurarFiltrosStatusPedidosVendas() {
+  $('.status-card-pedidos-vendas').on('click', function() {
+    const status = $(this).data('status');
+    
+    // Remover classe ativo de todos os cards
+    $('.status-card-pedidos-vendas').removeClass('ativo');
+    
+    // Adicionar classe ativo ao card clicado
+    $(this).addClass('ativo');
+    
+    // Aplicar filtros
+    aplicarFiltrosPedidosVendas();
+  });
+}
+
+function configurarFiltrosAdicionaisPedidosVendas() {
+  $('#filtroDataPedidosVendas, #filtroValorPedidosVendas').on('change', function() {
+    aplicarFiltrosPedidosVendas();
+  });
+}
+
+function configurarBotaoLimparPedidosVendas() {
+  $('#limparFiltrosPedidosVendas').on('click', function() {
+    resetarFiltrosPedidosVendas();
+    aplicarFiltrosPedidosVendas();
+  });
+}
+
+function resetarFiltrosPedidosVendas() {
+  // Resetar busca
+  $('#buscaPedidosVendas').val('');
+  $('#limparBuscaPedidosVendas').hide();
+  
+  // Resetar status
+  $('.status-card-pedidos-vendas').removeClass('ativo');
+  $('.status-card-pedidos-vendas[data-status="todos"]').addClass('ativo');
+  
+  // Resetar filtros adicionais
+  $('#filtroDataPedidosVendas').val('todos');
+  $('#filtroValorPedidosVendas').val('todos');
+}
+
+function carregarDadosIniciaisPedidosVendas() {
+  carregarDadosAbaPedidosVendas('vendas');
+}
+
+function carregarDadosAbaPedidosVendas(tab) {
+  if (tab === 'vendas') {
+    carregarVendasPedidosVendas();
+  } else {
+    carregarPedidosPedidosVendas();
+  }
+}
+
+function carregarVendasPedidosVendas() {
+  // Usar a função existente listarVendas
+  listarVendas();
+  
+  // Atualizar contadores
+  setTimeout(() => {
+    atualizarContadoresVendasPedidosVendas();
+  }, 1000);
+}
+
+function carregarPedidosPedidosVendas() {
+  // Usar a função existente listarPedidos
+  listarPedidos();
+  
+  // Atualizar contadores
+  setTimeout(() => {
+    atualizarContadoresPedidosPedidosVendas();
+  }, 1000);
+}
+
+function atualizarContadoresVendasPedidosVendas() {
+  // Simular contadores baseados nos dados carregados
+  const contadores = {
+    todos: 25,
+    pendente: 8,
+    concluido: 12,
+    cancelado: 5
+  };
+  
+  $('#contadorTodosVendas').text(contadores.todos);
+  $('#contadorPendenteVendas').text(contadores.pendente);
+  $('#contadorConcluidoVendas').text(contadores.concluido);
+  $('#contadorCanceladoVendas').text(contadores.cancelado);
+}
+
+function atualizarContadoresPedidosPedidosVendas() {
+  // Simular contadores baseados nos dados carregados
+  const contadores = {
+    todos: 18,
+    aguardando: 5,
+    processando: 3,
+    entregue: 8,
+    cancelado: 2
+  };
+  
+  $('#contadorTodosPedidos').text(contadores.todos);
+  $('#contadorAguardandoPedidos').text(contadores.aguardando);
+  $('#contadorProcessandoPedidos').text(contadores.processando);
+  $('#contadorEntreguePedidos').text(contadores.entregue);
+  $('#contadorCanceladoPedidos').text(contadores.cancelado);
+}
+
+function aplicarFiltrosPedidosVendas(termoBusca = '') {
+  const statusAtual = $('.status-card-pedidos-vendas.ativo').data('status');
+  const filtroData = $('#filtroDataPedidosVendas').val();
+  const filtroValor = $('#filtroValorPedidosVendas').val();
+  const abaAtual = $('.aba-pedidos-vendas.ativa').data('tab');
+  
+  console.log('Aplicando filtros:', {
+    aba: abaAtual,
+    status: statusAtual,
+    busca: termoBusca,
+    data: filtroData,
+    valor: filtroValor
+  });
+  
+  // Aqui você implementaria a lógica de filtros
+  // Integrando com as funções existentes do app
+  if (abaAtual === 'vendas') {
+    // Aplicar filtros para vendas
+    listarVendas();
+  } else {
+    // Aplicar filtros para pedidos
+    listarPedidos();
+  }
+}
