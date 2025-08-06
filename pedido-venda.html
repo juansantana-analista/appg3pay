@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Required meta tags-->
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <!-- Color theme for statusbar (Android only) -->
+  <meta name="theme-color" content="#FF4B00" />
+  <!-- Your app title -->
+  <title>VITATOP - Pedidos e Vendas</title>
+  <!-- Path to Framework7 Library Bundle CSS -->
+  <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
+  <!-- CSS PERSONALIZADO PARA MENU-->
+  <link rel="stylesheet" href="css/index.css" />
+  
+  <link rel="stylesheet" href="css/carrinho.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <!--Ícones Material Design-->
+  <link rel="stylesheet" href="css/materialdesignicons.min.css" />
+  <!-- Icones do Remix icon-->
+  <link rel="stylesheet" href="css/remixicon/remixicon.css" />
+</head>
+
+<body>
+  <!-- App root element -->
+  <div id="app">
+    <!-- Your main view, should have "view-main" class -->
+    <div class="view view-main">
+      <!-- Initial Page, "data-name" contains page name -->
+      <div data-name="pedido-venda" class="page color-theme-blue">
+               <!-- NAV TOPO-->
+               <div class="top-nav">
+                  <div class="left">
+                     <img src="img/logo-nav.png" class="title-logo" width="130px" style="margin-left: 10px;" />
+                  </div>
+                  <!-- Agrupe os ícones em uma div -->
+                  <div class="right-icons">
+                     <!-- Botão de Notificações -->
+                     <div class="btn-notificacao" data-count="0" onclick="app.views.main.router.navigate('/notificacoes/')">
+                        <i class="mdi mdi-bell-outline"></i>
+                     </div>
+                     <!-- Botão do Carrinho -->
+                     <div class="btn-cart" data-count="0" onclick="app.views.main.router.navigate('/carrinho/')">
+                        <i class="mdi mdi-cart-outline"></i>
+                     </div>
+                  </div>
+               </div>
+
+          <!-- Cabeçalho com título da página -->
+          <div class="dashboard-header">
+            <h1>Pedidos e Vendas</h1>
+            <p>Confira seus pedidos e vendas realizadas.</p>
+          </div>
+
+        <div class="page-content" style="background-color: #f7f9fa;">
+          <div class="block no-margin-top">
+            
+            <!-- Abas para Pedidos e Vendas -->
+            <div class="abas-container" style="background: #fff; margin-bottom: 16px; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+              <div class="abas-wrapper" style="display: flex;">
+                <div class="aba-item ativa" data-tab="pedidos" style="flex: 1; padding: 16px 20px; text-align: center; font-size: 16px; font-weight: 600; color: #666; border-bottom: 3px solid transparent; cursor: pointer; transition: all 0.3s ease;">
+                  <i class="mdi mdi-package-variant" style="margin-right: 8px;"></i>
+                  <span>Meus Pedidos</span>
+                </div>
+                <div class="aba-item" data-tab="vendas" style="flex: 1; padding: 16px 20px; text-align: center; font-size: 16px; font-weight: 600; color: #666; border-bottom: 3px solid transparent; cursor: pointer; transition: all 0.3s ease;">
+                  <i class="mdi mdi-sale" style="margin-right: 8px;"></i>
+                  <span>Minhas Vendas</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- NOVO SISTEMA DE FILTROS -->
+            <div class="filtros-container">
+              
+              <!-- Campo de busca avançado -->
+              <div class="busca-container">
+                <div class="busca-wrapper">
+                  <input 
+                    id="buscaPedidoVenda" 
+                    type="text" 
+                    placeholder="Buscar por cliente, ID do pedido..." 
+                    autocomplete="off"
+                    enterkeyhint="search"
+                  />
+                  <i class="busca-icon mdi mdi-magnify"></i>
+                  <button id="limparBuscaPedidoVenda" class="limpar-busca-btn" style="display: none;">
+                    <i class="mdi mdi-close"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Filtros de status modernos -->
+              <div class="filtros-status">
+                <div class="filtros-header">
+                  <span class="filtros-titulo">Status</span>
+                  <button id="limparFiltrosPedidoVenda" class="limpar-filtros-btn">
+                    <i class="mdi mdi-refresh"></i> Limpar
+                  </button>
+                </div>
+                
+                <div class="filtros-botoes">
+                  <button class="filtro-btn ativo" data-status="todos">
+                    <i class="mdi mdi-format-list-bulleted"></i>
+                    <span>Todos</span>
+                    <span class="contador" id="contadorTodosPedidoVenda">0</span>
+                  </button>
+                  
+                  <button class="filtro-btn" data-status="pendente">
+                    <i class="mdi mdi-clock-outline"></i>
+                    <span>Pendente</span>
+                    <span class="contador" id="contadorPendentePedidoVenda">0</span>
+                  </button>
+                  
+                  <button class="filtro-btn" data-status="autorizado">
+                    <i class="mdi mdi-check-circle-outline"></i>
+                    <span>Autorizado</span>
+                    <span class="contador" id="contadorAutorizadoPedidoVenda">0</span>
+                  </button>
+                  
+                  <button class="filtro-btn" data-status="cancelado">
+                    <i class="mdi mdi-close-circle-outline"></i>
+                    <span>Cancelado</span>
+                    <span class="contador" id="contadorCanceladoPedidoVenda">0</span>
+                  </button>
+                  
+                  <button class="filtro-btn" data-status="bloqueado">
+                    <i class="mdi mdi-alert-circle-outline"></i>
+                    <span>Bloqueado</span>
+                    <span class="contador" id="contadorBloqueadoPedidoVenda">0</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Filtros adicionais -->
+              <div class="filtros-adicionais">
+                <div class="filtro-data">
+                  <label for="filtroDataPedidoVenda">Período:</label>
+                  <select id="filtroDataPedidoVenda">
+                    <option value="todos">Todos os períodos</option>
+                    <option value="hoje">Hoje</option>
+                    <option value="semana">Última semana</option>
+                    <option value="mes">Último mês</option>
+                    <option value="trimestre">Último trimestre</option>
+                  </select>
+                </div>
+                
+                <div class="filtro-valor">
+                  <label for="filtroValorPedidoVenda">Valor:</label>
+                  <select id="filtroValorPedidoVenda">
+                    <option value="todos">Todos os valores</option>
+                    <option value="baixo">Até R$ 50</option>
+                    <option value="medio">R$ 50 - R$ 200</option>
+                    <option value="alto">Acima de R$ 200</option>
+                  </select>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Container dos pedidos/vendas -->
+            <div class="container-order" id="container-pedido-venda" style="margin-bottom: 120px; padding-bottom: 100px;">
+              <!-- Loading inicial -->
+              <div class="loading-skeleton">
+                <div class="skeleton-card" style="margin-bottom: 15px;">
+                  <div style="height: 60px; background: #f0f0f0; border-radius: 8px; margin-bottom: 10px;"></div>
+                  <div style="height: 20px; background: #f0f0f0; border-radius: 4px; margin-bottom: 8px; width: 70%;"></div>
+                  <div style="height: 16px; background: #f0f0f0; border-radius: 4px; width: 50%;"></div>
+                </div>
+                <div class="skeleton-card" style="margin-bottom: 15px;">
+                  <div style="height: 60px; background: #f0f0f0; border-radius: 8px; margin-bottom: 10px;"></div>
+                  <div style="height: 20px; background: #f0f0f0; border-radius: 4px; margin-bottom: 8px; width: 70%;"></div>
+                  <div style="height: 16px; background: #f0f0f0; border-radius: 4px; width: 50%;"></div>
+                </div>
+                <div class="skeleton-card" style="margin-bottom: 15px;">
+                  <div style="height: 60px; background: #f0f0f0; border-radius: 8px; margin-bottom: 10px;"></div>
+                  <div style="height: 20px; background: #f0f0f0; border-radius: 4px; margin-bottom: 8px; width: 70%;"></div>
+                  <div style="height: 16px; background: #f0f0f0; border-radius: 4px; width: 50%;"></div>
+                </div>
+              </div>
+            </div>     
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Path to Framework7 Library Bundle JS-->
+  <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
+  <!-- jQuery -->
+  <script type="text/javascript" src="lib/jquery-3.7.0.min.js"></script>
+  <!-- Roteamento do app-->
+  <script type="text/javascript" src="js/routes.js"></script>
+  <script src="cordova.js"></script>
+</body>
+
+</html> 

@@ -4786,3 +4786,83 @@ select {
   width: 200px;
   height: 200px;
 }
+
+/* ===== ESTILOS PARA PEDIDO-VENDA.HTML ===== */
+
+/* Abas para Pedidos e Vendas */
+.abas-container {
+  background: #fff;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.abas-wrapper {
+  display: flex;
+}
+
+.aba-item {
+  flex: 1;
+  padding: 16px 20px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: #666;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.aba-item i {
+  margin-right: 8px;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.aba-item span {
+  font-weight: 600;
+}
+
+.aba-item.ativa {
+  color: #00591F;
+  border-bottom-color: #00591F;
+}
+
+.aba-item.ativa i {
+  color: #00591F;
+}
+
+.aba-item:hover {
+  background-color: #f8f9fa;
+}
+
+.aba-item:hover i {
+  color: #00591F;
+}
+
+/* Responsividade para abas */
+@media (max-width: 480px) {
+  .aba-item {
+    padding: 14px 16px;
+    font-size: 14px;
+  }
+  
+  .aba-item i {
+    font-size: 16px;
+    margin-right: 6px;
+  }
+}
+
+@media (max-width: 360px) {
+  .aba-item {
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+  
+  .aba-item i {
+    font-size: 15px;
+    margin-right: 4px;
+  }
+}
