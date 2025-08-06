@@ -57,35 +57,93 @@
 
         <div class="page-content" style="background-color: #f7f9fa;">
           <div class="block no-margin-top">
-            <!-- Campo de busca para cliente -->
-            <form style="background-color: #f7f9fa" onsubmit="return false;">
-              <input 
-                id="searchCliente" 
-                placeholder="Buscar cliente..." 
-                type="text" 
-                autocomplete="off"
-                enterkeyhint="search"
-              />
-              <i class="icone-busca mdi mdi-magnify"></i>
-            </form>
+            
+            <!-- NOVO SISTEMA DE FILTROS -->
+            <div class="filtros-container">
+              
+              <!-- Campo de busca avançado -->
+              <div class="busca-container">
+                <div class="busca-wrapper">
+                  <input 
+                    id="buscaVendas" 
+                    type="text" 
+                    placeholder="Buscar por cliente, ID da venda..." 
+                    autocomplete="off"
+                    enterkeyhint="search"
+                  />
+                  <i class="busca-icon mdi mdi-magnify"></i>
+                  <button id="limparBusca" class="limpar-busca-btn" style="display: none;">
+                    <i class="mdi mdi-close"></i>
+                  </button>
+                </div>
+              </div>
 
-            <!-- Filtro de Status do Pedido -->
-            <div class="status-filters">
-              <button class="status-filter-btn active" data-status="all">
-                Todos
-              </button>
-              <button class="status-filter-btn" data-status="Pendente">
-                Pendente
-              </button>
-              <button class="status-filter-btn" data-status="Autorizado">
-                Autorizado
-              </button>
-              <button class="status-filter-btn" data-status="Cancelado">
-                Cancelado
-              </button>
-              <button class="status-filter-btn" data-status="Bloqueado">
-                Bloqueado
-              </button>
+              <!-- Filtros de status modernos -->
+              <div class="filtros-status">
+                <div class="filtros-header">
+                  <span class="filtros-titulo">Status do Pedido</span>
+                  <button id="limparFiltros" class="limpar-filtros-btn">
+                    <i class="mdi mdi-refresh"></i> Limpar
+                  </button>
+                </div>
+                
+                <div class="filtros-botoes">
+                  <button class="filtro-btn ativo" data-status="todos">
+                    <i class="mdi mdi-format-list-bulleted"></i>
+                    <span>Todos</span>
+                    <span class="contador" id="contadorTodos">0</span>
+                  </button>
+                  
+                  <button class="filtro-btn" data-status="pendente">
+                    <i class="mdi mdi-clock-outline"></i>
+                    <span>Pendente</span>
+                    <span class="contador" id="contadorPendente">0</span>
+                  </button>
+                  
+                  <button class="filtro-btn" data-status="autorizado">
+                    <i class="mdi mdi-check-circle-outline"></i>
+                    <span>Autorizado</span>
+                    <span class="contador" id="contadorAutorizado">0</span>
+                  </button>
+                  
+                  <button class="filtro-btn" data-status="cancelado">
+                    <i class="mdi mdi-close-circle-outline"></i>
+                    <span>Cancelado</span>
+                    <span class="contador" id="contadorCancelado">0</span>
+                  </button>
+                  
+                  <button class="filtro-btn" data-status="bloqueado">
+                    <i class="mdi mdi-alert-circle-outline"></i>
+                    <span>Bloqueado</span>
+                    <span class="contador" id="contadorBloqueado">0</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Filtros adicionais -->
+              <div class="filtros-adicionais">
+                <div class="filtro-data">
+                  <label for="filtroData">Período:</label>
+                  <select id="filtroData">
+                    <option value="todos">Todos os períodos</option>
+                    <option value="hoje">Hoje</option>
+                    <option value="semana">Última semana</option>
+                    <option value="mes">Último mês</option>
+                    <option value="trimestre">Último trimestre</option>
+                  </select>
+                </div>
+                
+                <div class="filtro-valor">
+                  <label for="filtroValor">Valor:</label>
+                  <select id="filtroValor">
+                    <option value="todos">Todos os valores</option>
+                    <option value="baixo">Até R$ 50</option>
+                    <option value="medio">R$ 50 - R$ 200</option>
+                    <option value="alto">Acima de R$ 200</option>
+                  </select>
+                </div>
+              </div>
+
             </div>
 
             <!-- Container das vendas -->

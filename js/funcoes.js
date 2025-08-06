@@ -1499,31 +1499,46 @@ function listarPedidos(loadMore = false, offset = 0) {
 }
 //Fim Função Lista tela Pedidos com Paginação
 
-//Inicio Funçao listar Vendas
-function listarVendas(loadMore = false, offset = 0, searchQuery = "", statusFilter = "all") {
+// ===== NOVO SISTEMA DE FILTROS DE VENDAS =====
+
+// Variáveis globais para controle dos filtros
+let filtrosVendas = {
+  busca: "",
+  status: "todos",
+  periodo: "todos",
+  valor: "todos",
+  offset: 0,
+  carregando: false
+};
+
+// Função principal para listar vendas com filtros avançados
+function listarVendas(loadMore = false) {
   if (!loadMore) {
-    app.dialog.preloader("Carregando...");
+    app.dialog.preloader("Carregando vendas...");
+    filtrosVendas.offset = 0;
   } else {
-    // Mostrar loading no botão "Carregar mais"
     $("#loadMoreButton").html('<i class="mdi mdi-loading mdi-spin"></i> Carregando...');
     $("#loadMoreButton").prop('disabled', true);
   }
 
+  filtrosVendas.carregando = true;
+  atualizarEstadoFiltros();
+
   var pessoaId = localStorage.getItem("pessoaId");
 
-  // Cabeçalhos da requisição
   const headers = {
     "Content-Type": "application/json",
     Authorization: "Bearer " + userAuthToken,
   };
 
-  // Cabeçalhos da requisição - incluindo paginação, busca e filtro de status
   const dados = {
     vendedor: pessoaId,
     limit: 15,
-    offset: offset,
-    searchQuery: searchQuery,
-    statusFilter: statusFilter
+    offset: filtrosVendas.offset,
+    searchQuery: filtrosVendas.busca,
+    statusFilter: filtrosVendas.status,
+    periodoFilter: filtrosVendas.periodo,
+    valorFilter: filtrosVendas.valor
   };
 
   const body = JSON.stringify({
@@ -1532,18 +1547,18 @@ function listarVendas(loadMore = false, offset = 0, searchQuery = "", statusFilt
     dados: dados,
   });
 
-  // Opções da requisição
   const options = {
     method: "POST",
     headers: headers,
     body: body,
   };
 
-  // Fazendo a requisição
   fetch(apiServerUrl, options)
     .then((response) => response.json())
     .then((responseJson) => {
-      // Verifica se o status é 'success' e se há dados de vendas
+      filtrosVendas.carregando = false;
+      atualizarEstadoFiltros();
+
       if (
         responseJson.status === "success" &&
         responseJson.data.status === "success" &&
@@ -1553,130 +1568,39 @@ function listarVendas(loadMore = false, offset = 0, searchQuery = "", statusFilt
         const pagination = responseJson.data.data.pagination;
         const vendasContainer = document.getElementById("container-vendas");
         
-        // Se não é loadMore, limpa o container
         if (!loadMore) {
           vendasContainer.innerHTML = "";
         }
 
-        // Se não há vendas na primeira página
         if (vendas.length === 0 && !loadMore) {
-          let statusText = "";
-          if (statusFilter !== "all") {
-            statusText = ` com status "${statusFilter}"`;
-          }
-          
-          vendasContainer.innerHTML = `
-            <div class="empty-state" style="text-align: center; padding: 40px 20px; color: #666;">
-              <i class="mdi mdi-cart-outline" style="font-size: 64px; margin-bottom: 20px; color: #ddd;"></i>
-              <h3 style="margin-bottom: 10px;">Nenhuma venda encontrada</h3>
-              <p>Você ainda não realizou nenhuma venda${searchQuery ? ` para o cliente "${searchQuery}"` : ""}${statusText}.</p>
-            </div>
-          `;
+          mostrarEstadoVazio();
           app.dialog.close();
           return;
         }
 
-        // Remove o botão "Carregar mais" anterior se existir
         $("#loadMoreContainer").remove();
 
         vendas.forEach((venda) => {
-          const vendasHTML = `                    
-            <div class="card-list" data-id-venda="${venda.venda_id}">
-               <div class="card-principal">
-                  <div class="card-header open header-pago">
-                     <div class="date">${formatarData(venda.data_criacao)}</div>
-                     <div class="status">${venda.status_compra}</div>
-                  </div>
-                  <div class="card-body">
-                     <div class="name">VENDA #${venda.venda_id}</div>
-                     <div class="details">
-                        <div class="detail">
-                           <span>Nº</span>
-                           <span>${venda.venda_id}</span>
-                        </div>
-                        <div class="detail">
-                           <span class="mdi mdi-cash-multiple"></span>
-                           <span>${venda.forma_pagamento.forma}</span>
-                        </div>
-                        <div class="detail">
-                           <span>Total</span>
-                           <span>${formatarMoeda(venda.valor_total)}</span>
-                        </div>
-                        <div class="detail">
-                           <span>Cliente</span>
-                           <span>${truncarNome(venda.cliente.nome_completo, 15)}</span>
-                        </div>
-                        <div class="items">${venda.quantidade_itens} ${venda.quantidade_itens === 1 ? 'item' : 'itens'}</div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-          `;
+          const vendasHTML = criarCardVenda(venda);
           vendasContainer.innerHTML += vendasHTML;
         });
 
-                        // Adiciona o botão "Carregar mais" se houver mais dados
-                if (pagination && pagination.has_more) {
-                  const loadMoreHTML = `
-                    <div id="loadMoreContainer" style="text-align: center; margin: 30px 0; padding: 20px;">
-                      <button id="loadMoreButton" class="btn-large" data-next-offset="${pagination.next_offset}" data-search-query="${searchQuery}" data-status-filter="${statusFilter}">
-                        <i class="mdi mdi-refresh"></i> Carregar mais vendas
-                      </button>
-                      <div style="margin-top: 10px; font-size: 14px; color: #666;">
-                        Mostrando ${(pagination.current_page - 1) * pagination.per_page + vendas.length} de ${pagination.total_records} vendas
-                      </div>
-                    </div>
-                  `;
-                  vendasContainer.innerHTML += loadMoreHTML;
-
-                  // Adiciona evento de clique ao botão "Carregar mais"
-                  $("#loadMoreButton").off('click').on('click', function() {
-                    const nextOffset = $(this).data('next-offset');
-                    const currentSearchQuery = $(this).data('search-query');
-                    const currentStatusFilter = $(this).data('status-filter');
-                    listarVendas(true, nextOffset, currentSearchQuery, currentStatusFilter);
-                  });
-                } else if (pagination && pagination.current_page > 1) {
-          // Se não há mais dados, mas já carregou algumas páginas, mostra mensagem
-          const endMessageHTML = `
-            <div id="loadMoreContainer" style="text-align: center; margin: 30px 0; padding: 20px;">
-              <div style="color: #666; font-size: 14px;">
-                <i class="mdi mdi-check-circle" style="color: #28a745;"></i>
-                Todas as ${pagination.total_records} vendas foram carregadas
-              </div>
-            </div>
-          `;
-          vendasContainer.innerHTML += endMessageHTML;
+        if (pagination && pagination.has_more) {
+          adicionarBotaoCarregarMais(pagination);
+        } else if (pagination && pagination.current_page > 1) {
+          mostrarMensagemFim();
         }
 
-        // Adiciona evento de clique às vendas (apenas aos novos)
-        $(".card-list").off('click').on('click', function () {
-          var vendaId = $(this).data("id-venda");
-          localStorage.setItem("vendaId", vendaId);
-          app.views.main.router.navigate("/resumo-venda/");
-        });
-
+        configurarEventosVendas();
+        atualizarContadores(responseJson.data.data.contadores || {});
         app.dialog.close();
       } else {
         app.dialog.close();
-        // Verifica se há uma mensagem de erro definida
-        const errorMessage = responseJson.message || "Formato de dados inválido";
+        const errorMessage = responseJson.message || "Erro ao carregar vendas";
         
         if (!loadMore) {
-          // Se é o primeiro carregamento e deu erro, mostra tela de erro
-          const vendasContainer = document.getElementById("container-vendas");
-          vendasContainer.innerHTML = `
-            <div class="error-state" style="text-align: center; padding: 40px 20px; color: #666;">
-              <i class="mdi mdi-alert-circle" style="font-size: 64px; margin-bottom: 20px; color: #f44336;"></i>
-              <h3 style="margin-bottom: 10px; color: #f44336;">Erro ao carregar vendas</h3>
-              <p>${errorMessage}</p>
-              <button onclick="listarVendas()" style="margin-top: 20px; padding: 10px 20px; background: var(--verde-escuro); color: white; border: none; border-radius: 5px;">
-                <i class="mdi mdi-refresh"></i> Tentar novamente
-              </button>
-            </div>
-          `;
+          mostrarErroCarregamento(errorMessage);
         } else {
-          // Se é carregamento de mais dados, restaura o botão
           $("#loadMoreButton").html('<i class="mdi mdi-refresh"></i> Carregar mais vendas');
           $("#loadMoreButton").prop('disabled', false);
           app.dialog.alert("Erro ao carregar mais vendas: " + errorMessage, "Erro");
@@ -1684,24 +1608,14 @@ function listarVendas(loadMore = false, offset = 0, searchQuery = "", statusFilt
       }
     })
     .catch((error) => {
+      filtrosVendas.carregando = false;
+      atualizarEstadoFiltros();
       app.dialog.close();
       console.error("Erro:", error);
       
       if (!loadMore) {
-        // Se é o primeiro carregamento e deu erro, mostra tela de erro
-        const vendasContainer = document.getElementById("container-vendas");
-        vendasContainer.innerHTML = `
-          <div class="error-state" style="text-align: center; padding: 40px 20px; color: #666;">
-            <i class="mdi mdi-wifi-off" style="font-size: 64px; margin-bottom: 20px; color: #f44336;"></i>
-            <h3 style="margin-bottom: 10px; color: #f44336;">Erro de conexão</h3>
-            <p>Verifique sua conexão com a internet e tente novamente.</p>
-            <button onclick="listarVendas()" style="margin-top: 20px; padding: 10px 20px; background: var(--verde-escuro); color: white; border: none; border-radius: 5px;">
-              <i class="mdi mdi-refresh"></i> Tentar novamente
-            </button>
-          </div>
-        `;
+        mostrarErroConexao();
       } else {
-        // Se é carregamento de mais dados, restaura o botão
         $("#loadMoreButton").html('<i class="mdi mdi-refresh"></i> Carregar mais vendas');
         $("#loadMoreButton").prop('disabled', false);
         app.dialog.alert("Erro de conexão ao carregar mais vendas", "Erro");
@@ -1709,65 +1623,294 @@ function listarVendas(loadMore = false, offset = 0, searchQuery = "", statusFilt
     });
 }
 
-// Função para configurar a busca de vendas
-function setupVendasSearch() {
+// Função para criar o card de uma venda
+function criarCardVenda(venda) {
+  const statusClass = getStatusClass(venda.status_compra);
+  const statusIcon = getStatusIcon(venda.status_compra);
+  
+  return `
+    <div class="card-list" data-id-venda="${venda.venda_id}" data-status="${venda.status_compra.toLowerCase()}">
+       <div class="card-principal">
+          <div class="card-header open ${statusClass}">
+             <div class="date">${formatarData(venda.data_criacao)}</div>
+             <div class="status">
+                <i class="mdi ${statusIcon}"></i>
+                ${venda.status_compra}
+             </div>
+          </div>
+          <div class="card-body">
+             <div class="name">VENDA #${venda.venda_id}</div>
+             <div class="details">
+                <div class="detail">
+                   <span>Nº</span>
+                   <span>${venda.venda_id}</span>
+                </div>
+                <div class="detail">
+                   <span class="mdi mdi-cash-multiple"></span>
+                   <span>${venda.forma_pagamento.forma}</span>
+                </div>
+                <div class="detail">
+                   <span>Total</span>
+                   <span>${formatarMoeda(venda.valor_total)}</span>
+                </div>
+                <div class="detail">
+                   <span>Cliente</span>
+                   <span>${truncarNome(venda.cliente.nome_completo, 15)}</span>
+                </div>
+                <div class="items">${venda.quantidade_itens} ${venda.quantidade_itens === 1 ? 'item' : 'itens'}</div>
+             </div>
+          </div>
+       </div>
+    </div>
+  `;
+}
+
+// Função para obter a classe CSS do status
+function getStatusClass(status) {
+  const statusMap = {
+    'Pendente': 'header-pendente',
+    'Autorizado': 'header-autorizado',
+    'Cancelado': 'header-cancelado',
+    'Bloqueado': 'header-bloqueado'
+  };
+  return statusMap[status] || 'header-pago';
+}
+
+// Função para obter o ícone do status
+function getStatusIcon(status) {
+  const iconMap = {
+    'Pendente': 'mdi-clock-outline',
+    'Autorizado': 'mdi-check-circle-outline',
+    'Cancelado': 'mdi-close-circle-outline',
+    'Bloqueado': 'mdi-alert-circle-outline'
+  };
+  return iconMap[status] || 'mdi-cash-multiple';
+}
+
+// Função para mostrar estado vazio
+function mostrarEstadoVazio() {
+  const vendasContainer = document.getElementById("container-vendas");
+  let filtrosTexto = "";
+  
+  if (filtrosVendas.busca) {
+    filtrosTexto += ` para "${filtrosVendas.busca}"`;
+  }
+  if (filtrosVendas.status !== "todos") {
+    filtrosTexto += ` com status "${filtrosVendas.status}"`;
+  }
+  
+  vendasContainer.innerHTML = `
+    <div class="empty-state" style="text-align: center; padding: 40px 20px; color: #666;">
+      <i class="mdi mdi-cart-outline" style="font-size: 64px; margin-bottom: 20px; color: #ddd;"></i>
+      <h3 style="margin-bottom: 10px;">Nenhuma venda encontrada</h3>
+      <p>Você ainda não realizou nenhuma venda${filtrosTexto}.</p>
+      <button onclick="limparFiltros()" style="margin-top: 15px; padding: 8px 16px; background: var(--verde-escuro); color: white; border: none; border-radius: 6px; font-size: 14px;">
+        <i class="mdi mdi-refresh"></i> Limpar filtros
+      </button>
+    </div>
+  `;
+}
+
+// Função para mostrar erro de carregamento
+function mostrarErroCarregamento(mensagem) {
+  const vendasContainer = document.getElementById("container-vendas");
+  vendasContainer.innerHTML = `
+    <div class="error-state" style="text-align: center; padding: 40px 20px; color: #666;">
+      <i class="mdi mdi-alert-circle" style="font-size: 64px; margin-bottom: 20px; color: #f44336;"></i>
+      <h3 style="margin-bottom: 10px; color: #f44336;">Erro ao carregar vendas</h3>
+      <p>${mensagem}</p>
+      <button onclick="listarVendas()" style="margin-top: 20px; padding: 10px 20px; background: var(--verde-escuro); color: white; border: none; border-radius: 5px;">
+        <i class="mdi mdi-refresh"></i> Tentar novamente
+      </button>
+    </div>
+  `;
+}
+
+// Função para mostrar erro de conexão
+function mostrarErroConexao() {
+  const vendasContainer = document.getElementById("container-vendas");
+  vendasContainer.innerHTML = `
+    <div class="error-state" style="text-align: center; padding: 40px 20px; color: #666;">
+      <i class="mdi mdi-wifi-off" style="font-size: 64px; margin-bottom: 20px; color: #f44336;"></i>
+      <h3 style="margin-bottom: 10px; color: #f44336;">Erro de conexão</h3>
+      <p>Verifique sua conexão com a internet e tente novamente.</p>
+      <button onclick="listarVendas()" style="margin-top: 20px; padding: 10px 20px; background: var(--verde-escuro); color: white; border: none; border-radius: 5px;">
+        <i class="mdi mdi-refresh"></i> Tentar novamente
+      </button>
+    </div>
+  `;
+}
+
+// Função para adicionar botão "Carregar mais"
+function adicionarBotaoCarregarMais(pagination) {
+  const loadMoreHTML = `
+    <div id="loadMoreContainer" style="text-align: center; margin: 30px 0; padding: 20px;">
+      <button id="loadMoreButton" class="btn-large" data-next-offset="${pagination.next_offset}">
+        <i class="mdi mdi-refresh"></i> Carregar mais vendas
+      </button>
+      <div style="margin-top: 10px; font-size: 14px; color: #666;">
+        Mostrando ${(pagination.current_page - 1) * pagination.per_page + pagination.total_records} de ${pagination.total_records} vendas
+      </div>
+    </div>
+  `;
+  document.getElementById("container-vendas").innerHTML += loadMoreHTML;
+
+  $("#loadMoreButton").off('click').on('click', function() {
+    filtrosVendas.offset = $(this).data('next-offset');
+    listarVendas(true);
+  });
+}
+
+// Função para mostrar mensagem de fim
+function mostrarMensagemFim() {
+  const endMessageHTML = `
+    <div id="loadMoreContainer" style="text-align: center; margin: 30px 0; padding: 20px;">
+      <div style="color: #666; font-size: 14px;">
+        <i class="mdi mdi-check-circle" style="color: #28a745;"></i>
+        Todas as vendas foram carregadas
+      </div>
+    </div>
+  `;
+  document.getElementById("container-vendas").innerHTML += endMessageHTML;
+}
+
+// Função para configurar eventos das vendas
+function configurarEventosVendas() {
+  $(".card-list").off('click').on('click', function () {
+    var vendaId = $(this).data("id-venda");
+    localStorage.setItem("vendaId", vendaId);
+    app.views.main.router.navigate("/resumo-venda/");
+  });
+}
+
+// Função para atualizar contadores
+function atualizarContadores(contadores) {
+  $("#contadorTodos").text(contadores.todos || 0);
+  $("#contadorPendente").text(contadores.pendente || 0);
+  $("#contadorAutorizado").text(contadores.autorizado || 0);
+  $("#contadorCancelado").text(contadores.cancelado || 0);
+  $("#contadorBloqueado").text(contadores.bloqueado || 0);
+}
+
+// Função para atualizar estado dos filtros
+function atualizarEstadoFiltros() {
+  const container = document.querySelector('.filtros-container');
+  if (filtrosVendas.carregando) {
+    container.classList.add('loading');
+  } else {
+    container.classList.remove('loading');
+  }
+}
+
+// ===== CONFIGURAÇÃO DOS FILTROS =====
+
+// Função para configurar o sistema de filtros
+function configurarFiltrosVendas() {
+  // Configurar busca
+  configurarBusca();
+  
+  // Configurar filtros de status
+  configurarFiltrosStatus();
+  
+  // Configurar filtros adicionais
+  configurarFiltrosAdicionais();
+  
+  // Configurar botão limpar filtros
+  configurarBotaoLimpar();
+}
+
+// Função para configurar busca
+function configurarBusca() {
   let searchTimeout;
   
-  // Evento de digitação no campo de busca (busca instantânea)
-  $("#searchCliente").on("input", function() {
-    const searchQuery = $(this).val().trim();
+  $("#buscaVendas").on("input", function() {
+    const busca = $(this).val().trim();
     
-    // Mostra/esconde o botão de limpar
-    if (searchQuery.length > 0) {
-      $("#clearSearch").show();
+    // Mostrar/esconder botão limpar
+    if (busca.length > 0) {
+      $("#limparBusca").show();
     } else {
-      $("#clearSearch").hide();
+      $("#limparBusca").hide();
     }
     
-    // Debounce para evitar muitas requisições
+    // Debounce
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(() => {
-      const currentStatusFilter = $(".status-filter-btn.active").data("status");
-      listarVendas(false, 0, searchQuery, currentStatusFilter);
-    }, 300);
+      filtrosVendas.busca = busca;
+      listarVendas();
+    }, 500);
   });
   
-  // Evento de clique no botão de limpar busca
-  $("#clearSearch").on("click", function() {
-    $("#searchCliente").val("").focus();
+  $("#limparBusca").on("click", function() {
+    $("#buscaVendas").val("").focus();
     $(this).hide();
-    const currentStatusFilter = $(".status-filter-btn.active").data("status");
-    listarVendas(false, 0, "", currentStatusFilter);
+    filtrosVendas.busca = "";
+    listarVendas();
   });
   
-  // Evento de pressionar Enter no campo de busca
-  $("#searchCliente").on("keypress", function(e) {
-    if (e.which === 13) { // Enter key
-      const searchQuery = $(this).val().trim();
-      const currentStatusFilter = $(".status-filter-btn.active").data("status");
-      listarVendas(false, 0, searchQuery, currentStatusFilter);
+  $("#buscaVendas").on("keypress", function(e) {
+    if (e.which === 13) {
+      const busca = $(this).val().trim();
+      filtrosVendas.busca = busca;
+      listarVendas();
     }
   });
 }
 
-// Função para configurar os filtros de status
-function setupVendasStatusFilters() {
-  // Evento de clique nos botões de status
-  $(".status-filter-btn").on("click", function() {
-    // Remove a classe active de todos os botões
-    $(".status-filter-btn").removeClass("active");
+// Função para configurar filtros de status
+function configurarFiltrosStatus() {
+  $(".filtro-btn").on("click", function() {
+    $(".filtro-btn").removeClass("ativo");
+    $(this).addClass("ativo");
     
-    // Adiciona a classe active ao botão clicado
-    $(this).addClass("active");
-    
-    // Obtém o status selecionado
-    const selectedStatus = $(this).data("status");
-    const currentSearchQuery = $("#searchCliente").val().trim();
-    
-    // Lista as vendas com o filtro selecionado
-    listarVendas(false, 0, currentSearchQuery, selectedStatus);
+    const status = $(this).data("status");
+    filtrosVendas.status = status;
+    listarVendas();
   });
 }
+
+// Função para configurar filtros adicionais
+function configurarFiltrosAdicionais() {
+  $("#filtroData").on("change", function() {
+    filtrosVendas.periodo = $(this).val();
+    listarVendas();
+  });
+  
+  $("#filtroValor").on("change", function() {
+    filtrosVendas.valor = $(this).val();
+    listarVendas();
+  });
+}
+
+// Função para configurar botão limpar filtros
+function configurarBotaoLimpar() {
+  $("#limparFiltros").on("click", function() {
+    limparFiltros();
+  });
+}
+
+// Função para limpar todos os filtros
+function limparFiltros() {
+  // Limpar busca
+  $("#buscaVendas").val("");
+  $("#limparBusca").hide();
+  filtrosVendas.busca = "";
+  
+  // Resetar status para "todos"
+  $(".filtro-btn").removeClass("ativo");
+  $(".filtro-btn[data-status='todos']").addClass("ativo");
+  filtrosVendas.status = "todos";
+  
+  // Resetar filtros adicionais
+  $("#filtroData").val("todos");
+  $("#filtroValor").val("todos");
+  filtrosVendas.periodo = "todos";
+  filtrosVendas.valor = "todos";
+  
+  // Recarregar vendas
+  listarVendas();
+}
+
 //Fim Função Lista Vendas
 
 // Início da função detalhesVendas

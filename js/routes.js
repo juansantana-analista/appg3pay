@@ -908,14 +908,11 @@ var app = new Framework7({
     contarCarrinho();
     
           // fazer algo quando a página for inicializada
-              // Carrega as vendas inicialmente
+              // Configura o novo sistema de filtros
+    configurarFiltrosVendas();
+    
+    // Carrega as vendas inicialmente
     listarVendas();
-    
-    // Configura a busca de vendas
-    setupVendasSearch();
-    
-    // Configura os filtros de status
-    setupVendasStatusFilters();
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
