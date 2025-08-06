@@ -89,12 +89,6 @@
       display: block;
     }
 
-    /* Estilos para os filtros específicos de cada aba */
-    .filtros-vendas,
-    .filtros-pedidos {
-      margin-bottom: 20px;
-    }
-
     /* Responsividade */
     @media (max-width: 480px) {
       .tabs-container {
@@ -163,94 +157,86 @@
 
               <!-- Conteúdo da aba Vendas -->
               <div id="tab-vendas" class="tab-content active">
-                <!-- Filtros das Vendas -->
-                <div class="filtros-vendas">
-                  <div class="filtros-container">
-                     
-                    <!-- Campo de busca avançado -->
-                    <div class="busca-container">
-                      <div class="busca-wrapper">
-                        <input 
-                          id="buscaVendas" 
-                          type="text" 
-                          placeholder="Buscar por cliente, ID da venda..." 
-                          autocomplete="off"
-                          enterkeyhint="search"
-                        />
-                        <i class="busca-icon mdi mdi-magnify"></i>
-                        <button id="limparBuscaVendas" class="limpar-busca-btn" style="display: none;">
-                          <i class="mdi mdi-close"></i>
-                        </button>
-                      </div>
+                <!-- NOVO SISTEMA DE FILTROS -->
+                <div class="filtros-container">
+                  
+                  <!-- Campo de busca avançado -->
+                  <div class="busca-container">
+                    <div class="busca-wrapper">
+                      <input 
+                        id="buscaVendas" 
+                        type="text" 
+                        placeholder="Buscar por cliente, ID da venda..." 
+                        autocomplete="off"
+                        enterkeyhint="search"
+                      />
+                      <i class="busca-icon mdi mdi-magnify"></i>
+                      <button id="limparBuscaVendas" class="limpar-busca-btn" style="display: none;">
+                        <i class="mdi mdi-close"></i>
+                      </button>
                     </div>
-
-                    <!-- Filtros de status modernos -->
-                    <div class="filtros-status">
-                      <div class="filtros-header">
-                        <span class="filtros-titulo">Status do Pedido</span>
-                        <button id="limparFiltrosVendas" class="limpar-filtros-btn">
-                          <i class="mdi mdi-refresh"></i> Limpar
-                        </button>
-                      </div>
-                      
-                      <div class="filtros-botoes">
-                        <button class="filtro-btn ativo" data-status="todos">
-                          <i class="mdi mdi-format-list-bulleted"></i>
-                          <span>Todos</span>
-                          <span class="contador" id="contadorTodosVendas">0</span>
-                        </button>
-                        
-                        <button class="filtro-btn" data-status="pendente">
-                          <i class="mdi mdi-clock-outline"></i>
-                          <span>Pendente</span>
-                          <span class="contador" id="contadorPendenteVendas">0</span>
-                        </button>
-                        
-                        <button class="filtro-btn" data-status="autorizado">
-                          <i class="mdi mdi-check-circle-outline"></i>
-                          <span>Autorizado</span>
-                          <span class="contador" id="contadorAutorizadoVendas">0</span>
-                        </button>
-                        
-                        <button class="filtro-btn" data-status="cancelado">
-                          <i class="mdi mdi-close-circle-outline"></i>
-                          <span>Cancelado</span>
-                          <span class="contador" id="contadorCanceladoVendas">0</span>
-                        </button>
-                        
-                        <button class="filtro-btn" data-status="bloqueado">
-                          <i class="mdi mdi-alert-circle-outline"></i>
-                          <span>Bloqueado</span>
-                          <span class="contador" id="contadorBloqueadoVendas">0</span>
-                        </button>
-                      </div>
-                    </div>
-
-                    <!-- Filtros adicionais -->
-                    <div class="filtros-adicionais">
-                      <div class="filtro-data">
-                        <label for="filtroDataVendas">Período:</label>
-                        <select id="filtroDataVendas">
-                          <option value="todos">Todos os períodos</option>
-                          <option value="hoje">Hoje</option>
-                          <option value="semana">Última semana</option>
-                          <option value="mes">Último mês</option>
-                          <option value="trimestre">Último trimestre</option>
-                        </select>
-                      </div>
-                      
-                      <div class="filtro-valor">
-                        <label for="filtroValorVendas">Valor:</label>
-                        <select id="filtroValorVendas">
-                          <option value="todos">Todos os valores</option>
-                          <option value="baixo">Até R$ 50</option>
-                          <option value="medio">R$ 50 - R$ 200</option>
-                          <option value="alto">Acima de R$ 200</option>
-                        </select>
-                      </div>
-                    </div>
-
                   </div>
+
+                  <!-- Filtros de status modernos -->
+                  <div class="filtros-status">
+                    <div class="filtros-header">
+                      <span class="filtros-titulo">Status do Pedido</span>
+                      <button id="limparFiltrosVendas" class="limpar-filtros-btn">
+                        <i class="mdi mdi-refresh"></i> Limpar
+                      </button>
+                    </div>
+                    
+                    <div class="filtros-botoes">
+                      <button class="filtro-btn ativo" data-status="todos">
+                        <i class="mdi mdi-format-list-bulleted"></i>
+                        <span>Todos</span>
+                        <span class="contador" id="contadorTodosVendas">8</span>
+                      </button>
+                      
+                      <button class="filtro-btn" data-status="pendente">
+                        <i class="mdi mdi-clock-outline"></i>
+                        <span>Pendente</span>
+                        <span class="contador" id="contadorPendenteVendas">3</span>
+                      </button>
+                      
+                      <button class="filtro-btn" data-status="autorizado">
+                        <i class="mdi mdi-check-circle-outline"></i>
+                        <span>Concluído</span>
+                        <span class="contador" id="contadorAutorizadoVendas">4</span>
+                      </button>
+                      
+                      <button class="filtro-btn" data-status="cancelado">
+                        <i class="mdi mdi-close-circle-outline"></i>
+                        <span>Cancelado</span>
+                        <span class="contador" id="contadorCanceladoVendas">1</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Filtros adicionais -->
+                  <div class="filtros-adicionais">
+                    <div class="filtro-data">
+                      <label for="filtroDataVendas">Período:</label>
+                      <select id="filtroDataVendas">
+                        <option value="todos">Todos os períodos</option>
+                        <option value="hoje">Hoje</option>
+                        <option value="semana">Última semana</option>
+                        <option value="mes">Último mês</option>
+                        <option value="trimestre">Último trimestre</option>
+                      </select>
+                    </div>
+                    
+                    <div class="filtro-valor">
+                      <label for="filtroValorVendas">Valor:</label>
+                      <select id="filtroValorVendas">
+                        <option value="todos">Todos os valores</option>
+                        <option value="baixo">Até R$ 50</option>
+                        <option value="medio">R$ 50 - R$ 200</option>
+                        <option value="alto">Acima de R$ 200</option>
+                      </select>
+                    </div>
+                  </div>
+
                 </div>
 
                 <!-- Container das vendas -->
@@ -278,94 +264,92 @@
 
               <!-- Conteúdo da aba Pedidos -->
               <div id="tab-pedidos" class="tab-content">
-                <!-- Filtros dos Pedidos -->
-                <div class="filtros-pedidos">
-                  <div class="filtros-container">
-                     
-                    <!-- Campo de busca avançado -->
-                    <div class="busca-container">
-                      <div class="busca-wrapper">
-                        <input 
-                          id="buscaPedidos" 
-                          type="text" 
-                          placeholder="Buscar por número do pedido, produtos..." 
-                          autocomplete="off"
-                          enterkeyhint="search"
-                        />
-                        <i class="busca-icon mdi mdi-magnify"></i>
-                        <button id="limparBuscaPedidos" class="limpar-busca-btn" style="display: none;">
-                          <i class="mdi mdi-close"></i>
-                        </button>
-                      </div>
+                <!-- NOVO SISTEMA DE FILTROS -->
+                <div class="filtros-container">
+                  
+                  <!-- Campo de busca avançado -->
+                  <div class="busca-container">
+                    <div class="busca-wrapper">
+                      <input 
+                        id="buscaPedidos" 
+                        type="text" 
+                        placeholder="Buscar por número do pedido, produtos..." 
+                        autocomplete="off"
+                        enterkeyhint="search"
+                      />
+                      <i class="busca-icon mdi mdi-magnify"></i>
+                      <button id="limparBuscaPedidos" class="limpar-busca-btn" style="display: none;">
+                        <i class="mdi mdi-close"></i>
+                      </button>
                     </div>
-
-                    <!-- Filtros de status modernos -->
-                    <div class="filtros-status">
-                      <div class="filtros-header">
-                        <span class="filtros-titulo">Status do Pedido</span>
-                        <button id="limparFiltrosPedidos" class="limpar-filtros-btn">
-                          <i class="mdi mdi-refresh"></i> Limpar
-                        </button>
-                      </div>
-                      
-                      <div class="filtros-botoes">
-                        <button class="filtro-btn ativo" data-status="todos">
-                          <i class="mdi mdi-format-list-bulleted"></i>
-                          <span>Todos</span>
-                          <span class="contador" id="contadorTodosPedidos">0</span>
-                        </button>
-                        
-                        <button class="filtro-btn" data-status="pendente">
-                          <i class="mdi mdi-clock-outline"></i>
-                          <span>Pendente</span>
-                          <span class="contador" id="contadorPendentePedidos">0</span>
-                        </button>
-                        
-                        <button class="filtro-btn" data-status="autorizado">
-                          <i class="mdi mdi-check-circle-outline"></i>
-                          <span>Autorizado</span>
-                          <span class="contador" id="contadorAutorizadoPedidos">0</span>
-                        </button>
-                        
-                        <button class="filtro-btn" data-status="cancelado">
-                          <i class="mdi mdi-close-circle-outline"></i>
-                          <span>Cancelado</span>
-                          <span class="contador" id="contadorCanceladoPedidos">0</span>
-                        </button>
-                        
-                        <button class="filtro-btn" data-status="bloqueado">
-                          <i class="mdi mdi-alert-circle-outline"></i>
-                          <span>Bloqueado</span>
-                          <span class="contador" id="contadorBloqueadoPedidos">0</span>
-                        </button>
-                      </div>
-                    </div>
-
-                    <!-- Filtros adicionais -->
-                    <div class="filtros-adicionais">
-                      <div class="filtro-data">
-                        <label for="filtroDataPedidos">Período:</label>
-                        <select id="filtroDataPedidos">
-                          <option value="todos">Todos os períodos</option>
-                          <option value="hoje">Hoje</option>
-                          <option value="semana">Última semana</option>
-                          <option value="mes">Último mês</option>
-                          <option value="trimestre">Último trimestre</option>
-                        </select>
-                      </div>
-                      
-                      <div class="filtro-valor">
-                        <label for="filtroValorPedidos">Valor:</label>
-                        <select id="filtroValorPedidos">
-                          <option value="todos">Todos os valores</option>
-                          <option value="baixo">Até R$ 50</option>
-                          <option value="medio">R$ 50 - R$ 200</option>
-                          <option value="alto">Acima de R$ 200</option>
-                        </select>
-                      </div>
-                    </div>
-
                   </div>
+
+                  <!-- Filtros de status modernos -->
+                  <div class="filtros-status">
+                    <div class="filtros-header">
+                      <span class="filtros-titulo">Status do Pedido</span>
+                      <button id="limparFiltrosPedidos" class="limpar-filtros-btn">
+                        <i class="mdi mdi-refresh"></i> Limpar
+                      </button>
+                    </div>
+                    
+                    <div class="filtros-botoes">
+                      <button class="filtro-btn ativo" data-status="todos">
+                        <i class="mdi mdi-format-list-bulleted"></i>
+                        <span>Todos</span>
+                        <span class="contador" id="contadorTodosPedidos">12</span>
+                      </button>
+                      
+                      <button class="filtro-btn" data-status="pendente">
+                        <i class="mdi mdi-clock-outline"></i>
+                        <span>Aguardando</span>
+                        <span class="contador" id="contadorPendentePedidos">2</span>
+                      </button>
+                      
+                      <button class="filtro-btn" data-status="processando">
+                        <i class="mdi mdi-sync"></i>
+                        <span>Processando</span>
+                        <span class="contador" id="contadorProcessandoPedidos">5</span>
+                      </button>
+                      
+                      <button class="filtro-btn" data-status="entregue">
+                        <i class="mdi mdi-check-circle-outline"></i>
+                        <span>Entregue</span>
+                        <span class="contador" id="contadorEntreguePedidos">4</span>
+                      </button>
+                      
+                      <button class="filtro-btn" data-status="cancelado">
+                        <i class="mdi mdi-close-circle-outline"></i>
+                        <span>Cancelado</span>
+                        <span class="contador" id="contadorCanceladoPedidos">1</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Filtros adicionais -->
+                  <div class="filtros-adicionais">
+                    <div class="filtro-data">
+                      <label for="filtroDataPedidos">Período:</label>
+                      <select id="filtroDataPedidos">
+                        <option value="todos">Todos os períodos</option>
+                        <option value="hoje">Hoje</option>
+                        <option value="semana">Última semana</option>
+                        <option value="mes">Último mês</option>
+                        <option value="trimestre">Último trimestre</option>
+                      </select>
+                    </div>
+                    
+                    <div class="filtro-valor">
+                      <label for="filtroValorPedidos">Valor:</label>
+                      <select id="filtroValorPedidos">
+                        <option value="todos">Todos os valores</option>
+                        <option value="baixo">Até R$ 50</option>
+                        <option value="medio">R$ 50 - R$ 200</option>
+                        <option value="alto">Acima de R$ 200</option>
+                      </select>
+                    </div>
+                  </div>
+
                 </div>
 
                 <!-- Container dos pedidos -->
