@@ -5345,3 +5345,199 @@ function atualizarCategoriasLojinha(lojinhaId, arrayCategorias, callback) {
     });
 }
 
+// ===== FUNÇÕES PARA O SISTEMA COMBINADO DE VENDAS E PEDIDOS =====
+
+// Função para configurar o sistema de filtros combinados
+function configurarFiltrosVendasCombinados() {
+  // Configura busca para vendas
+  configurarBuscaCombinada('vendas');
+  
+  // Configura filtros de status para vendas
+  configurarFiltrosStatusCombinados('vendas');
+  
+  // Configura filtros adicionais para vendas
+  configurarFiltrosAdicionaisCombinados('vendas');
+  
+  // Configura botão limpar para vendas
+  configurarBotaoLimparCombinado('vendas');
+  
+  // Configura busca para pedidos
+  configurarBuscaCombinada('pedidos');
+  
+  // Configura filtros de status para pedidos
+  configurarFiltrosStatusCombinados('pedidos');
+  
+  // Configura filtros adicionais para pedidos
+  configurarFiltrosAdicionaisCombinados('pedidos');
+  
+  // Configura botão limpar para pedidos
+  configurarBotaoLimparCombinado('pedidos');
+}
+
+// Função para configurar busca combinada
+function configurarBuscaCombinada(tipo) {
+  let searchTimeout;
+  const buscaId = tipo === 'vendas' ? 'buscaVendas' : 'buscaPedidos';
+  const limparId = tipo === 'vendas' ? 'limparBuscaVendas' : 'limparBuscaPedidos';
+  
+  $(`#${buscaId}`).on("input", function() {
+    const busca = $(this).val().trim();
+    
+    // Mostrar/esconder botão limpar
+    if (busca.length > 0) {
+      $(`#${limparId}`).show();
+    } else {
+      $(`#${limparId}`).hide();
+    }
+    
+    // Debounce
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      if (tipo === 'vendas') {
+        window.filtrosVendas.busca = busca;
+        listarVendas();
+      } else {
+        window.filtrosPedidos.busca = busca;
+        listarPedidos();
+      }
+    }, 500);
+  });
+  
+  $(`#${limparId}`).on("click", function() {
+    $(`#${buscaId}`).val("").focus();
+    $(this).hide();
+    if (tipo === 'vendas') {
+      window.filtrosVendas.busca = "";
+      listarVendas();
+    } else {
+      window.filtrosPedidos.busca = "";
+      listarPedidos();
+    }
+  });
+  
+  $(`#${buscaId}`).on("keypress", function(e) {
+    if (e.which === 13) {
+      const busca = $(this).val().trim();
+      if (tipo === 'vendas') {
+        window.filtrosVendas.busca = busca;
+        listarVendas();
+      } else {
+        window.filtrosPedidos.busca = busca;
+        listarPedidos();
+      }
+    }
+  });
+}
+
+// Função para configurar filtros de status combinados
+function configurarFiltrosStatusCombinados(tipo) {
+  const container = tipo === 'vendas' ? '.filtros-vendas' : '.filtros-pedidos';
+  
+  $(`${container} .filtro-btn`).on("click", function() {
+    $(`${container} .filtro-btn`).removeClass("ativo");
+    $(this).addClass("ativo");
+    
+    const status = $(this).data("status");
+    if (tipo === 'vendas') {
+      window.filtrosVendas.status = status;
+      listarVendas();
+    } else {
+      window.filtrosPedidos.status = status;
+      listarPedidos();
+    }
+  });
+}
+
+// Função para configurar filtros adicionais combinados
+function configurarFiltrosAdicionaisCombinados(tipo) {
+  const dataId = tipo === 'vendas' ? 'filtroDataVendas' : 'filtroDataPedidos';
+  const valorId = tipo === 'vendas' ? 'filtroValorVendas' : 'filtroValorPedidos';
+  
+  $(`#${dataId}`).on("change", function() {
+    if (tipo === 'vendas') {
+      window.filtrosVendas.periodo = $(this).val();
+      listarVendas();
+    } else {
+      window.filtrosPedidos.periodo = $(this).val();
+      listarPedidos();
+    }
+  });
+  
+  $(`#${valorId}`).on("change", function() {
+    if (tipo === 'vendas') {
+      window.filtrosVendas.valor = $(this).val();
+      listarVendas();
+    } else {
+      window.filtrosPedidos.valor = $(this).val();
+      listarPedidos();
+    }
+  });
+}
+
+// Função para configurar botão limpar combinado
+function configurarBotaoLimparCombinado(tipo) {
+  const limparId = tipo === 'vendas' ? 'limparFiltrosVendas' : 'limparFiltrosPedidos';
+  
+  $(`#${limparId}`).on("click", function() {
+    limparFiltrosCombinados(tipo);
+  });
+}
+
+// Função para limpar filtros combinados
+function limparFiltrosCombinados(tipo) {
+  const buscaId = tipo === 'vendas' ? 'buscaVendas' : 'buscaPedidos';
+  const limparId = tipo === 'vendas' ? 'limparBuscaVendas' : 'limparBuscaPedidos';
+  const dataId = tipo === 'vendas' ? 'filtroDataVendas' : 'filtroDataPedidos';
+  const valorId = tipo === 'vendas' ? 'filtroValorVendas' : 'filtroValorPedidos';
+  const container = tipo === 'vendas' ? '.filtros-vendas' : '.filtros-pedidos';
+  
+  // Limpar busca
+  $(`#${buscaId}`).val("");
+  $(`#${limparId}`).hide();
+  
+  // Resetar status para "todos"
+  $(`${container} .filtro-btn`).removeClass("ativo");
+  $(`${container} .filtro-btn[data-status='todos']`).addClass("ativo");
+  
+  // Resetar filtros adicionais
+  $(`#${dataId}`).val("todos");
+  $(`#${valorId}`).val("todos");
+  
+  // Limpar objetos de filtros
+  if (tipo === 'vendas') {
+    window.filtrosVendas = {
+      busca: "",
+      status: "todos",
+      periodo: "todos",
+      valor: "todos"
+    };
+    listarVendas();
+  } else {
+    window.filtrosPedidos = {
+      busca: "",
+      status: "todos",
+      periodo: "todos",
+      valor: "todos"
+    };
+    listarPedidos();
+  }
+}
+
+// Inicializar objetos de filtros se não existirem
+if (typeof window.filtrosVendas === 'undefined') {
+  window.filtrosVendas = {
+    busca: "",
+    status: "todos",
+    periodo: "todos",
+    valor: "todos"
+  };
+}
+
+if (typeof window.filtrosPedidos === 'undefined') {
+  window.filtrosPedidos = {
+    busca: "",
+    status: "todos",
+    periodo: "todos",
+    valor: "todos"
+  };
+}
