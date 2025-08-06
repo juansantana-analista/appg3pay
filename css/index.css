@@ -3853,7 +3853,7 @@ select {
 
 #buscaVendas {
     width: 100%;
-    padding: 16px 20px 16px 50px;
+    padding: 16px 60px 16px 20px;
     border: none;
     outline: none;
     background: transparent;
@@ -3879,7 +3879,7 @@ select {
 
 .limpar-busca-btn {
     position: absolute;
-    right: 50px;
+    right: 70px;
     top: 50%;
     transform: translateY(-50%);
     background: #f3f4f6;
@@ -3918,21 +3918,22 @@ select {
     color: #374151;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
 .limpar-filtros-btn {
     background: none;
     border: none;
     color: var(--verde-escuro);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 500;
     cursor: pointer;
-    padding: 4px 8px;
+    padding: 3px 6px;
     border-radius: 6px;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 3px;
 }
 
 .limpar-filtros-btn:hover {
