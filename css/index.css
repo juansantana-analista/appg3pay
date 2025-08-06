@@ -3853,7 +3853,7 @@ select {
 
 #buscaVendas {
     width: 100%;
-    padding: 16px 50px 16px 20px;
+    padding: 16px 20px 16px 50px;
     border: none;
     outline: none;
     background: transparent;
@@ -3869,7 +3869,7 @@ select {
 
 .busca-icon {
     position: absolute;
-    left: 16px;
+    right: 16px;
     top: 50%;
     transform: translateY(-50%);
     color: #6b7280;
@@ -3879,7 +3879,7 @@ select {
 
 .limpar-busca-btn {
     position: absolute;
-    right: 12px;
+    right: 50px;
     top: 50%;
     transform: translateY(-50%);
     background: #f3f4f6;
