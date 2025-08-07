@@ -698,3 +698,241 @@
   font-size: 14px;
   margin: 0;
 }
+
+/* Estilos específicos para a página de Pedido de Retirada */
+.pedido-retirada-page {
+  background-color: #f7f9fa;
+}
+
+.pedido-retirada-page .dashboard-header {
+  background: linear-gradient(135deg, #00591F 0%, #00752a 100%);
+  color: white;
+  padding: 30px 20px;
+  margin: -20px -20px 20px -20px;
+  border-radius: 0 0 20px 20px;
+}
+
+.pedido-retirada-page .dashboard-header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.pedido-retirada-page .dashboard-header p {
+  font-size: 16px;
+  opacity: 0.9;
+  margin: 0;
+}
+
+/* Estilos para o formulário de retirada */
+.retirada-form {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.retirada-form .item-content {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 15px 0;
+}
+
+.retirada-form .item-content:last-child {
+  border-bottom: none;
+}
+
+.retirada-form .item-label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.retirada-form input,
+.retirada-form select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.retirada-form input:focus,
+.retirada-form select:focus {
+  border-color: #00591F;
+  outline: none;
+}
+
+/* Estilos para informações de taxa */
+.taxa-info {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 15px;
+  margin: 15px 0;
+  border-left: 4px solid #00591F;
+}
+
+.taxa-info i {
+  color: #00591F;
+  margin-right: 8px;
+}
+
+.valor-liquido {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-top: 1px solid #e0e0e0;
+  margin-top: 15px;
+}
+
+.valor-liquido strong {
+  color: #00591F;
+  font-size: 18px;
+}
+
+/* Botão de confirmação */
+#confirmarRetirada {
+  background: linear-gradient(135deg, #00591F 0%, #00752a 100%);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+}
+
+#confirmarRetirada:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 89, 31, 0.3);
+}
+
+#confirmarRetirada:active {
+  transform: translateY(0);
+}
+
+/* Histórico de retiradas */
+.historico-retiradas {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.historico-item {
+  display: flex;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.historico-item:last-child {
+  border-bottom: none;
+}
+
+.historico-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+}
+
+.historico-icon.pendente {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.historico-icon.aprovado {
+  background: #d4edda;
+  color: #155724;
+}
+
+.historico-icon.cancelado {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.historico-info {
+  flex: 1;
+}
+
+.historico-valor {
+  font-weight: 600;
+  color: #00591F;
+}
+
+.historico-data {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.historico-status {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.historico-status.pendente {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.historico-status.aprovado {
+  background: #d4edda;
+  color: #155724;
+}
+
+.historico-status.cancelado {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* Estados vazios */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.empty-state i {
+  font-size: 48px;
+  color: #ccc;
+  margin-bottom: 15px;
+}
+
+.empty-state h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.empty-state p {
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+  .pedido-retirada-page .dashboard-header {
+    padding: 25px 15px;
+  }
+  
+  .pedido-retirada-page .dashboard-header h1 {
+    font-size: 20px;
+  }
+  
+  .retirada-form {
+    padding: 15px;
+  }
+  
+  .retirada-form input,
+  .retirada-form select {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
