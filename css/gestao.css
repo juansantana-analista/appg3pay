@@ -699,3 +699,256 @@
   margin: 0;
 }
 
+/* Estilos para a página de Pedido de Retirada */
+.page[data-name="pedido-retirada"] {
+    background-color: #f7f9fa;
+}
+
+.page[data-name="pedido-retirada"] .navbar {
+    background: linear-gradient(135deg, #1d4f91 0%, #2d6bc0 100%);
+    box-shadow: 0 2px 10px rgba(29, 79, 145, 0.3);
+}
+
+.page[data-name="pedido-retirada"] .navbar .title {
+    color: white;
+    font-weight: 600;
+}
+
+.page[data-name="pedido-retirada"] .navbar .link {
+    color: white;
+}
+
+.page[data-name="pedido-retirada"] .page-content {
+    padding-bottom: 20px;
+}
+
+/* Card de Saldo */
+.page[data-name="pedido-retirada"] .card {
+    background: linear-gradient(135deg, #1d4f91 0%, #2d6bc0 100%);
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(29, 79, 145, 0.2);
+    margin: 16px;
+    overflow: hidden;
+}
+
+.page[data-name="pedido-retirada"] .card-content {
+    padding: 20px;
+}
+
+.page[data-name="pedido-retirada"] .text-color-primary {
+    color: white !important;
+}
+
+.page[data-name="pedido-retirada"] .text-color-secondary {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.page[data-name="pedido-retirada"] .text-size-huge {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.page[data-name="pedido-retirada"] .text-size-large {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.page[data-name="pedido-retirada"] .text-size-medium {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Blocos de Conteúdo */
+.page[data-name="pedido-retirada"] .block {
+    margin: 16px;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.page[data-name="pedido-retirada"] .block-header {
+    padding: 16px 20px 8px;
+    border-bottom: 1px solid #e5e9f2;
+}
+
+.page[data-name="pedido-retirada"] .block-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1d4f91;
+}
+
+/* Lista de Formulário */
+.page[data-name="pedido-retirada"] .list {
+    margin: 0;
+}
+
+.page[data-name="pedido-retirada"] .list ul {
+    background: transparent;
+}
+
+.page[data-name="pedido-retirada"] .item-content {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f2f5;
+}
+
+.page[data-name="pedido-retirada"] .item-content:last-child {
+    border-bottom: none;
+}
+
+.page[data-name="pedido-retirada"] .item-title {
+    font-weight: 500;
+    color: #2c3e50;
+    font-size: 14px;
+}
+
+.page[data-name="pedido-retirada"] .item-input-wrap {
+    margin-top: 8px;
+}
+
+.page[data-name="pedido-retirada"] .input {
+    border: 2px solid #e5e9f2;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.page[data-name="pedido-retirada"] .input:focus {
+    border-color: #1d4f91;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(29, 79, 145, 0.1);
+}
+
+.page[data-name="pedido-retirada"] .input::placeholder {
+    color: #a0a6b1;
+}
+
+/* Resumo da Retirada */
+.page[data-name="pedido-retirada"] .item-after {
+    font-weight: 600;
+    color: #1d4f91;
+}
+
+.page[data-name="pedido-retirada"] .text-color-primary.text-size-medium {
+    color: #1d4f91 !important;
+    font-weight: 600;
+}
+
+/* Botão Confirmar */
+.page[data-name="pedido-retirada"] .button {
+    background: linear-gradient(135deg, #1d4f91 0%, #2d6bc0 100%);
+    border: none;
+    border-radius: 12px;
+    padding: 16px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    box-shadow: 0 4px 15px rgba(29, 79, 145, 0.3);
+    transition: all 0.3s ease;
+}
+
+.page[data-name="pedido-retirada"] .button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(29, 79, 145, 0.4);
+}
+
+.page[data-name="pedido-retirada"] .button .icon {
+    margin-right: 8px;
+}
+
+/* Histórico de Retiradas */
+.page[data-name="pedido-retirada"] #historicoRetiradas {
+    padding: 0;
+}
+
+.page[data-name="pedido-retirada"] .card-list {
+    margin: 0;
+    background: transparent;
+}
+
+.page[data-name="pedido-retirada"] .card-principal {
+    background: white;
+    border-radius: 12px;
+    margin: 8px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+.page[data-name="pedido-retirada"] .card-principal .card-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 16px 20px;
+    border-bottom: 1px solid #e5e9f2;
+}
+
+.page[data-name="pedido-retirada"] .card-principal .card-content {
+    padding: 16px 20px;
+}
+
+.page[data-name="pedido-retirada"] .card-principal .card-footer {
+    padding: 12px 20px;
+    background: #f8f9fa;
+    border-top: 1px solid #e5e9f2;
+}
+
+.page[data-name="pedido-retirada"] .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #6c757d;
+}
+
+.page[data-name="pedido-retirada"] .empty-state i {
+    font-size: 48px;
+    margin-bottom: 16px;
+    color: #dee2e6;
+}
+
+.page[data-name="pedido-retirada"] .empty-state h3 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.page[data-name="pedido-retirada"] .empty-state p {
+    margin: 0;
+    font-size: 14px;
+    color: #a0a6b1;
+}
+
+/* Status dos Pedidos */
+.page[data-name="pedido-retirada"] .status-pendente {
+    color: #ffc107;
+}
+
+.page[data-name="pedido-retirada"] .status-aprovado {
+    color: #28a745;
+}
+
+.page[data-name="pedido-retirada"] .status-rejeitado {
+    color: #dc3545;
+}
+
+.page[data-name="pedido-retirada"] .status-processado {
+    color: #17a2b8;
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+    .page[data-name="pedido-retirada"] .card-content {
+        padding: 16px;
+    }
+    
+    .page[data-name="pedido-retirada"] .block {
+        margin: 12px;
+    }
+    
+    .page[data-name="pedido-retirada"] .item-content {
+        padding: 12px 16px;
+    }
+    
+    .page[data-name="pedido-retirada"] .text-size-huge {
+        font-size: 24px;
+    }
+}
+

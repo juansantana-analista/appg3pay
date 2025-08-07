@@ -6184,12 +6184,12 @@ function carregarSaldoDisponivel() {
       if (responseJson.status === "success" && responseJson.data) {
         const saldoDisponivel = responseJson.data.saldo_disponivel || 0;
         const saldoFormatado = formatarMoeda(saldoDisponivel);
-        $("#saldoDisponivelRetirada").text(saldoFormatado);
+        $("#saldoDisponivel").text(saldoFormatado);
       }
     })
     .catch((error) => {
       console.error("Erro ao carregar saldo:", error);
-      $("#saldoDisponivelRetirada").text("R$ 0,00");
+      $("#saldoDisponivel").text("R$ 0,00");
     });
 }
 
@@ -6199,17 +6199,13 @@ function configurarMascarasRetirada() {
   $("#valorRetirada").mask("#.##0,00", { reverse: true });
   
   // Máscara para CPF/CNPJ
-  $("#cpfTitularRetirada").mask("000.000.000-00");
+  $("#cpfCnpj").mask("000.000.000-00");
   
-  // Máscara para telefone (se selecionado)
-  $("#tipoChavePixRetirada").on("change", function() {
-    const tipo = $(this).val();
-    if (tipo === "telefone") {
-      $("#chavePixRetirada").mask("(00) 00000-0000");
-    } else {
-      $("#chavePixRetirada").unmask();
-    }
-  });
+  // Máscara para agência
+  $("#agencia").mask("0000");
+  
+  // Máscara para conta
+  $("#conta").mask("00000-0");
 }
 
 // Função para configurar eventos da página de retirada
@@ -6232,20 +6228,26 @@ function calcularValorLiquido() {
   const taxa = 2.50;
   const valorLiquido = valorNumerico - taxa;
   
+  // Atualizar valores no resumo
+  $("#valorSolicitado").text(formatarMoeda(valorNumerico));
+  $("#taxaProcessamento").text(formatarMoeda(taxa));
+  
   if (valorLiquido > 0) {
-    $("#valorLiquidoRetirada").text(formatarMoeda(valorLiquido));
+    $("#valorLiquido").text(formatarMoeda(valorLiquido));
   } else {
-    $("#valorLiquidoRetirada").text("R$ 0,00");
+    $("#valorLiquido").text("R$ 0,00");
   }
 }
 
 // Função para confirmar pedido de retirada
 function confirmarPedidoRetirada() {
   const valorRetirada = $("#valorRetirada").val().replace(/[^\d,]/g, "").replace(",", ".");
-  const tipoChavePix = $("#tipoChavePixRetirada").val();
-  const chavePix = $("#chavePixRetirada").val();
-  const nomeTitular = $("#nomeTitularRetirada").val();
-  const cpfTitular = $("#cpfTitularRetirada").val();
+  const nomeCompleto = $("#nomeCompleto").val();
+  const cpfCnpj = $("#cpfCnpj").val();
+  const banco = $("#banco").val();
+  const agencia = $("#agencia").val();
+  const conta = $("#conta").val();
+  const tipoConta = $("#tipoConta").val();
   
   // Validações
   if (!valorRetirada || parseFloat(valorRetirada) <= 0) {
@@ -6253,23 +6255,33 @@ function confirmarPedidoRetirada() {
     return;
   }
   
-  if (!tipoChavePix) {
-    app.dialog.alert("Por favor, selecione o tipo de chave PIX.", "Tipo de Chave");
+  if (!nomeCompleto) {
+    app.dialog.alert("Por favor, informe seu nome completo.", "Nome Completo");
     return;
   }
   
-  if (!chavePix) {
-    app.dialog.alert("Por favor, informe sua chave PIX.", "Chave PIX");
+  if (!cpfCnpj) {
+    app.dialog.alert("Por favor, informe seu CPF/CNPJ.", "CPF/CNPJ");
     return;
   }
   
-  if (!nomeTitular) {
-    app.dialog.alert("Por favor, informe o nome do titular.", "Nome do Titular");
+  if (!banco) {
+    app.dialog.alert("Por favor, informe o nome do banco.", "Banco");
     return;
   }
   
-  if (!cpfTitular) {
-    app.dialog.alert("Por favor, informe o CPF/CNPJ do titular.", "CPF/CNPJ");
+  if (!agencia) {
+    app.dialog.alert("Por favor, informe a agência.", "Agência");
+    return;
+  }
+  
+  if (!conta) {
+    app.dialog.alert("Por favor, informe o número da conta.", "Conta");
+    return;
+  }
+  
+  if (!tipoConta) {
+    app.dialog.alert("Por favor, selecione o tipo de conta.", "Tipo de Conta");
     return;
   }
   
@@ -6279,10 +6291,12 @@ function confirmarPedidoRetirada() {
     function() {
       enviarPedidoRetirada({
         valor: parseFloat(valorRetirada),
-        tipo_chave_pix: tipoChavePix,
-        chave_pix: chavePix,
-        nome_titular: nomeTitular,
-        cpf_titular: cpfTitular
+        nome_completo: nomeCompleto,
+        cpf_cnpj: cpfCnpj,
+        banco: banco,
+        agencia: agencia,
+        conta: conta,
+        tipo_conta: tipoConta
       });
     }
   );
@@ -6344,11 +6358,15 @@ function enviarPedidoRetirada(dados) {
 // Função para limpar formulário de retirada
 function limparFormularioRetirada() {
   $("#valorRetirada").val("");
-  $("#tipoChavePixRetirada").val("");
-  $("#chavePixRetirada").val("");
-  $("#nomeTitularRetirada").val("");
-  $("#cpfTitularRetirada").val("");
-  $("#valorLiquidoRetirada").text("R$ 0,00");
+  $("#nomeCompleto").val("");
+  $("#cpfCnpj").val("");
+  $("#banco").val("");
+  $("#agencia").val("");
+  $("#conta").val("");
+  $("#tipoConta").val("");
+  $("#valorSolicitado").text("R$ 0,00");
+  $("#taxaProcessamento").text("R$ 0,00");
+  $("#valorLiquido").text("R$ 0,00");
 }
 
 // Função para carregar histórico de retiradas
