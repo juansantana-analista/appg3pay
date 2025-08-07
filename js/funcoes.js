@@ -6401,28 +6401,16 @@ function criarListaHistoricoRetiradas(retiradas) {
     const statusIcon = getStatusIconRetirada(status);
     
     html += `
-      <div class="card-list">
-        <div class="card-principal ${statusClass}">
-          <div class="card-header">
-            <div class="date">${data}</div>
-            <div class="status">
-              <i class="${statusIcon}"></i>
-              ${status.charAt(0).toUpperCase() + status.slice(1)}
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="name">Pedido de Retirada</div>
-            <div class="details">
-              <div class="detail">
-                <span>Valor:</span>
-                <span>${valor}</span>
-              </div>
-              <div class="detail">
-                <span>Chave PIX:</span>
-                <span>${retirada.chave_pix || "N/A"}</span>
-              </div>
-            </div>
-          </div>
+      <div class="pedido-retirada-historico-item">
+        <div class="pedido-retirada-historico-icon ${status}">
+          <i class="${statusIcon}"></i>
+        </div>
+        <div class="pedido-retirada-historico-info">
+          <div class="pedido-retirada-historico-valor">${valor}</div>
+          <div class="pedido-retirada-historico-data">${data}</div>
+        </div>
+        <div class="pedido-retirada-historico-status ${status}">
+          ${status.charAt(0).toUpperCase() + status.slice(1)}
         </div>
       </div>
     `;
@@ -6434,7 +6422,7 @@ function criarListaHistoricoRetiradas(retiradas) {
 // Função para mostrar estado vazio do histórico
 function mostrarEstadoVazioHistorico() {
   $("#historicoRetiradas").html(`
-    <div class="empty-state">
+    <div class="pedido-retirada-empty-state">
       <i class="mdi mdi-history"></i>
       <h3>Nenhum pedido encontrado</h3>
       <p>Seus pedidos de retirada aparecerão aqui</p>
