@@ -684,8 +684,8 @@ var app = new Framework7({
     const appPopup = app.popup;
 
     $('#btnSacar').on('click', function () {      
-      app.dialog.alert("Funcionalidade em desenvolvimento, disponível em Breve!", "Em Breve!");
-      //appPopup.open('.popup-saque');
+      // Abrir WhatsApp com mensagem padrão
+      abrirWhatsAppSaque();
     });
 
     $('#btnExtrato').on('click', function () {

@@ -6130,3 +6130,33 @@ function atualizarContadoresPedidoVendaUI(contadores) {
   $('#contadorBloqueadoPedidoVenda').text(contadores.bloqueado || 0);
 }
 
+// Função para abrir WhatsApp com mensagem padrão
+function abrirWhatsAppSaque() {
+  const mensagem = "Olá! Gostaria de solicitar o saque dos meus bônus. Aguardo o retorno.";
+  const numeroWhatsApp = "5543999049868"; // Número do suporte VitaTop
+  
+  // Verificar se o plugin SocialSharing está disponível
+  if (window.plugins && window.plugins.socialsharing) {
+    // Usar plugin do Cordova
+    window.plugins.socialsharing.shareViaWhatsAppToPhone(
+      numeroWhatsApp,
+      mensagem,
+      null,
+      null,
+      function() {
+        console.log('WhatsApp aberto com sucesso');
+      },
+      function(error) {
+        console.log('Erro ao abrir WhatsApp:', error);
+        // Fallback para URL do WhatsApp
+        const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+        window.open(urlWhatsApp, '_blank');
+      }
+    );
+  } else {
+    // Fallback para URL do WhatsApp
+    const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+    window.open(urlWhatsApp, '_blank');
+  }
+}
+
