@@ -34,8 +34,8 @@
 
                     <!-- Page Content -->
                     <div class="page-content">
+                        <!-- Saldo Disponível -->
                         <div class="block block-strong inset">
-                            <!-- Saldo Disponível -->
                             <div class="card">
                                 <div class="card-content card-content-padding">
                                     <div class="row">
@@ -56,70 +56,18 @@
                             </div>
                         </div>
 
-                        <!-- Formulário de Retirada -->
+                        <!-- Chave PIX -->
                         <div class="block block-strong inset">
                             <div class="block-header">
-                                <h3>Dados da Retirada</h3>
+                                <h3>Chave PIX</h3>
                             </div>
                             <div class="list list-strong inset">
                                 <ul>
-                                    <li class="item-content item-input">
+                                    <li class="item-content">
                                         <div class="item-inner">
-                                            <div class="item-title item-label">Valor a Sacar</div>
-                                            <div class="item-input-wrap">
-                                                <input type="text" id="valorRetirada" class="input" placeholder="R$ 0,00">
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="item-content item-input">
-                                        <div class="item-inner">
-                                            <div class="item-title item-label">Nome Completo</div>
-                                            <div class="item-input-wrap">
-                                                <input type="text" id="nomeCompleto" class="input" placeholder="Digite seu nome completo">
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="item-content item-input">
-                                        <div class="item-inner">
-                                            <div class="item-title item-label">CPF/CNPJ</div>
-                                            <div class="item-input-wrap">
-                                                <input type="text" id="cpfCnpj" class="input" placeholder="000.000.000-00">
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="item-content item-input">
-                                        <div class="item-inner">
-                                            <div class="item-title item-label">Banco</div>
-                                            <div class="item-input-wrap">
-                                                <input type="text" id="banco" class="input" placeholder="Nome do banco">
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="item-content item-input">
-                                        <div class="item-inner">
-                                            <div class="item-title item-label">Agência</div>
-                                            <div class="item-input-wrap">
-                                                <input type="text" id="agencia" class="input" placeholder="0000">
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="item-content item-input">
-                                        <div class="item-inner">
-                                            <div class="item-title item-label">Conta</div>
-                                            <div class="item-input-wrap">
-                                                <input type="text" id="conta" class="input" placeholder="00000-0">
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="item-content item-input">
-                                        <div class="item-inner">
-                                            <div class="item-title item-label">Tipo de Conta</div>
-                                            <div class="item-input-wrap">
-                                                <select id="tipoConta" class="input">
-                                                    <option value="">Selecione</option>
-                                                    <option value="corrente">Conta Corrente</option>
-                                                    <option value="poupanca">Conta Poupança</option>
-                                                </select>
+                                            <div class="item-title item-label">Chave PIX Cadastrada</div>
+                                            <div class="item-after">
+                                                <span id="chavePix" class="text-color-primary">Não cadastrada</span>
                                             </div>
                                         </div>
                                     </li>
@@ -127,7 +75,26 @@
                             </div>
                         </div>
 
-                        <!-- Taxas e Valores -->
+                        <!-- Valor a Sacar -->
+                        <div class="block block-strong inset">
+                            <div class="block-header">
+                                <h3>Valor a Sacar</h3>
+                            </div>
+                            <div class="list list-strong inset">
+                                <ul>
+                                    <li class="item-content item-input">
+                                        <div class="item-inner">
+                                            <div class="item-title item-label">Valor</div>
+                                            <div class="item-input-wrap">
+                                                <input type="text" id="valorRetirada" class="input" placeholder="R$ 0,00">
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Resumo da Retirada -->
                         <div class="block block-strong inset">
                             <div class="block-header">
                                 <h3>Resumo da Retirada</h3>
@@ -156,13 +123,19 @@
                             </div>
                         </div>
 
-                        <!-- Botão Confirmar -->
+                        <!-- Botões de Ação -->
                         <div class="block block-strong inset">
                             <div class="row">
-                                <div class="col">
-                                    <button id="confirmarRetirada" class="button button-fill button-large">
-                                        <i class="icon icon-check"></i>
-                                        Confirmar Pedido de Retirada
+                                <div class="col-50">
+                                    <button id="cadastrarPix" class="button button-fill button-large" style="background-color: var(--verde);">
+                                        <i class="icon icon-plus"></i>
+                                        Cadastrar PIX
+                                    </button>
+                                </div>
+                                <div class="col-50">
+                                    <button id="sacarValor" class="button button-fill button-large" style="background-color: var(--laranja);">
+                                        <i class="icon icon-money"></i>
+                                        Sacar
                                     </button>
                                 </div>
                             </div>
@@ -189,5 +162,91 @@
     <script src="lib/jwt-decode.min.js"></script>
     <script src="js/funcoes.js"></script>
     <script src="js/routes.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Máscara para o campo de valor
+            $('#valorRetirada').mask('R$ #.##0,00', {reverse: true});
+            
+            // Atualizar resumo quando valor mudar
+            $('#valorRetirada').on('input', function() {
+                atualizarResumo();
+            });
+            
+            // Botão cadastrar PIX
+            $('#cadastrarPix').on('click', function() {
+                cadastrarChavePix();
+            });
+            
+            // Botão sacar
+            $('#sacarValor').on('click', function() {
+                realizarSaque();
+            });
+            
+            // Carregar dados iniciais
+            carregarDadosIniciais();
+        });
+        
+        function atualizarResumo() {
+            let valor = $('#valorRetirada').val().replace('R$ ', '').replace('.', '').replace(',', '.');
+            valor = parseFloat(valor) || 0;
+            
+            let taxa = valor * 0.02; // 2% de taxa
+            let liquido = valor - taxa;
+            
+            $('#valorSolicitado').text('R$ ' + valor.toFixed(2).replace('.', ','));
+            $('#taxaProcessamento').text('R$ ' + taxa.toFixed(2).replace('.', ','));
+            $('#valorLiquido').text('R$ ' + liquido.toFixed(2).replace('.', ','));
+        }
+        
+        function cadastrarChavePix() {
+            // Simular cadastro de chave PIX
+            let chave = prompt('Digite sua chave PIX:');
+            if (chave && chave.trim() !== '') {
+                $('#chavePix').text(chave);
+                $('#chavePix').addClass('text-color-success');
+                app.dialog.alert('Chave PIX cadastrada com sucesso!', 'Sucesso');
+            }
+        }
+        
+        function realizarSaque() {
+            let valor = $('#valorRetirada').val().replace('R$ ', '').replace('.', '').replace(',', '.');
+            valor = parseFloat(valor) || 0;
+            
+            if (valor < 50) {
+                app.dialog.alert('Valor mínimo para saque é R$ 50,00', 'Valor Insuficiente');
+                return;
+            }
+            
+            if ($('#chavePix').text() === 'Não cadastrada') {
+                app.dialog.alert('Cadastre uma chave PIX primeiro', 'Chave PIX Necessária');
+                return;
+            }
+            
+            // Simular saque
+            app.dialog.confirm(
+                'Confirmar saque de R$ ' + valor.toFixed(2).replace('.', ',') + '?',
+                'Confirmar Saque',
+                function() {
+                    app.dialog.alert('Saque solicitado com sucesso!', 'Sucesso');
+                    $('#valorRetirada').val('');
+                    atualizarResumo();
+                }
+            );
+        }
+        
+        function carregarDadosIniciais() {
+            // Simular carregamento de saldo
+            $('#saldoDisponivel').text('R$ 1.250,00');
+            
+            // Verificar se já tem chave PIX cadastrada
+            // Aqui você pode carregar do localStorage ou API
+            let chaveSalva = localStorage.getItem('chavePix');
+            if (chaveSalva) {
+                $('#chavePix').text(chaveSalva);
+                $('#chavePix').addClass('text-color-success');
+            }
+        }
+    </script>
 </body>
 </html> 
