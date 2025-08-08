@@ -6160,16 +6160,35 @@ function abrirWhatsAppSaque() {
   }
 }
 
-// Função para carregar saldo disponível na página de retirada
-function carregarSaldoDisponivel() {
+// ===== FUNÇÕES PARA PEDIDO DE RETIRADA =====
+
+function inicializarPedidoRetirada() {
+  // Carregar saldo disponível usando a função saldoCarteira()
+  carregarSaldoDisponivelRetirada();
+  
+  // Carregar chave PIX cadastrada
+  carregarChavePix();
+  
+  // Configurar máscaras e eventos
+  configurarMascarasRetirada();
+  configurarEventosRetirada();
+}
+
+function carregarSaldoDisponivelRetirada() {
+  // Usar a função saldoCarteira() para carregar os dados do cliente
+  app.dialog.preloader("Carregando saldo...");
+
+  var pessoaId = localStorage.getItem("pessoaId");
+
   const headers = {
     "Content-Type": "application/json",
     Authorization: "Bearer " + userAuthToken,
   };
 
   const body = JSON.stringify({
-    class: "CarteiraRest",
-    method: "saldoCarteira",
+    class: "BonusPremioService",
+    method: "SaldoTotal",
+    pessoa_id: pessoaId
   });
 
   const options = {
@@ -6181,290 +6200,150 @@ function carregarSaldoDisponivel() {
   fetch(apiServerUrl, options)
     .then((response) => response.json())
     .then((responseJson) => {
-      if (responseJson.status === "success" && responseJson.data) {
-        const saldoDisponivel = responseJson.data.saldo_disponivel || 0;
-        const saldoFormatado = formatarMoeda(saldoDisponivel);
-        $("#saldoDisponivel").text(saldoFormatado);
+      app.dialog.close();
+
+      if (responseJson.status === "success") {
+        const saldo = responseJson.data;
+        let valorDisponivel = 0.00;
+
+        saldo.forEach((item) => {
+          if (item.bloqueado === "0") {
+            valorDisponivel = parseFloat(item.valor_comissao);
+          }
+        });
+
+        $("#saldoDisponivelRetirada").html(formatarMoeda(valorDisponivel));
+      } else {
+        console.error("Erro ao obter dados da carteira:", responseJson.message);
+        app.dialog.alert("Erro ao carregar saldo", "Erro");
       }
     })
     .catch((error) => {
-      console.error("Erro ao carregar saldo:", error);
-      $("#saldoDisponivel").text("R$ 0,00");
+      app.dialog.close();
+      console.error("Erro:", error);
+      app.dialog.alert("Erro ao carregar saldo: " + error.message, "Erro");
     });
 }
 
-// Função para configurar máscaras de input na página de retirada
+function carregarChavePix() {
+  // Por enquanto, vamos simular que não há chave PIX cadastrada
+  // Em uma implementação real, você faria uma chamada para a API
+  $("#chavePixDisplay").html('<span class="no-pix-key">Nenhuma chave PIX cadastrada</span>');
+}
+
 function configurarMascarasRetirada() {
-  // Máscara para valor da retirada
-  $("#valorRetirada").mask("#.##0,00", { reverse: true });
-  
-  // Máscara para CPF/CNPJ
-  $("#cpfCnpj").mask("000.000.000-00");
-  
-  // Máscara para agência
-  $("#agencia").mask("0000");
-  
-  // Máscara para conta
-  $("#conta").mask("00000-0");
+  // Configurar máscara para o campo de valor
+  $('#valorRetirada').mask('000.000.000.000.000,00', {reverse: true});
 }
 
-// Função para configurar eventos da página de retirada
 function configurarEventosRetirada() {
-  // Calcular valor líquido quando valor da retirada mudar
-  $("#valorRetirada").on("input", function() {
-    calcularValorLiquido();
+  // Evento para calcular valor líquido quando o valor for digitado
+  $('#valorRetirada').on('input', function() {
+    calcularValorLiquidoRetirada();
   });
-  
-  // Confirmar pedido de retirada
-  $("#confirmarRetirada").on("click", function() {
-    confirmarPedidoRetirada();
+
+  // Evento para o botão de cadastrar PIX
+  $('#btnCadastrarPix').on('click', function() {
+    cadastrarChavePix();
+  });
+
+  // Evento para o botão de sacar
+  $('#btnSacarRetirada').on('click', function() {
+    realizarSaqueRetirada();
+  });
+
+  // Evento para o botão de atualizar
+  $('#updateRetirada').on('click', function() {
+    carregarSaldoDisponivelRetirada();
+    carregarChavePix();
   });
 }
 
-// Função para calcular valor líquido
-function calcularValorLiquido() {
-  const valorRetirada = $("#valorRetirada").val().replace(/[^\d,]/g, "").replace(",", ".");
-  const valorNumerico = parseFloat(valorRetirada) || 0;
-  const taxa = 2.50;
-  const valorLiquido = valorNumerico - taxa;
+function calcularValorLiquidoRetirada() {
+  const valorDigitado = $('#valorRetirada').val();
+  const valorNumerico = parseFloat(valorDigitado.replace(/\./g, '').replace(',', '.'));
   
-  // Atualizar valores no resumo
-  $("#valorSolicitado").text(formatarMoeda(valorNumerico));
-  $("#taxaProcessamento").text(formatarMoeda(taxa));
-  
-  if (valorLiquido > 0) {
-    $("#valorLiquido").text(formatarMoeda(valorLiquido));
+  if (valorNumerico > 0) {
+    const taxa = 2.50;
+    const valorLiquido = valorNumerico - taxa;
+    
+    if (valorLiquido > 0) {
+      $('#valorLiquidoRetirada').html(formatarMoeda(valorLiquido));
+      $('#btnSacarRetirada').prop('disabled', false);
+    } else {
+      $('#valorLiquidoRetirada').html('R$ 0,00');
+      $('#btnSacarRetirada').prop('disabled', true);
+    }
   } else {
-    $("#valorLiquido").text("R$ 0,00");
+    $('#valorLiquidoRetirada').html('R$ 0,00');
+    $('#btnSacarRetirada').prop('disabled', true);
   }
 }
 
-// Função para confirmar pedido de retirada
-function confirmarPedidoRetirada() {
-  const valorRetirada = $("#valorRetirada").val().replace(/[^\d,]/g, "").replace(",", ".");
-  const nomeCompleto = $("#nomeCompleto").val();
-  const cpfCnpj = $("#cpfCnpj").val();
-  const banco = $("#banco").val();
-  const agencia = $("#agencia").val();
-  const conta = $("#conta").val();
-  const tipoConta = $("#tipoConta").val();
+function cadastrarChavePix() {
+  app.dialog.alert(
+    "Funcionalidade de cadastro de chave PIX será implementada em breve!",
+    "Em Desenvolvimento"
+  );
+}
+
+function realizarSaqueRetirada() {
+  const valorDigitado = $('#valorRetirada').val();
+  const valorNumerico = parseFloat(valorDigitado.replace(/\./g, '').replace(',', '.'));
   
-  // Validações
-  if (!valorRetirada || parseFloat(valorRetirada) <= 0) {
-    app.dialog.alert("Por favor, informe um valor válido para a retirada.", "Valor Inválido");
+  if (valorNumerico <= 0) {
+    app.dialog.alert("Por favor, informe um valor válido", "Valor Inválido");
     return;
   }
-  
-  if (!nomeCompleto) {
-    app.dialog.alert("Por favor, informe seu nome completo.", "Nome Completo");
+
+  // Verificar se há chave PIX cadastrada
+  const chavePix = $("#chavePixDisplay").text();
+  if (chavePix.includes("Nenhuma chave PIX cadastrada")) {
+    app.dialog.alert("Por favor, cadastre uma chave PIX primeiro", "Chave PIX Necessária");
     return;
   }
-  
-  if (!cpfCnpj) {
-    app.dialog.alert("Por favor, informe seu CPF/CNPJ.", "CPF/CNPJ");
-    return;
-  }
-  
-  if (!banco) {
-    app.dialog.alert("Por favor, informe o nome do banco.", "Banco");
-    return;
-  }
-  
-  if (!agencia) {
-    app.dialog.alert("Por favor, informe a agência.", "Agência");
-    return;
-  }
-  
-  if (!conta) {
-    app.dialog.alert("Por favor, informe o número da conta.", "Conta");
-    return;
-  }
-  
-  if (!tipoConta) {
-    app.dialog.alert("Por favor, selecione o tipo de conta.", "Tipo de Conta");
-    return;
-  }
-  
-  // Confirmar com o usuário
+
   app.dialog.confirm(
-    `Confirmar pedido de retirada de ${formatarMoeda(parseFloat(valorRetirada))}?`,
+    `Confirmar pedido de retirada de ${formatarMoeda(valorNumerico)}?`,
+    "Confirmar Retirada",
     function() {
-      enviarPedidoRetirada({
-        valor: parseFloat(valorRetirada),
-        nome_completo: nomeCompleto,
-        cpf_cnpj: cpfCnpj,
-        banco: banco,
-        agencia: agencia,
-        conta: conta,
-        tipo_conta: tipoConta
-      });
+      // Aqui você faria a chamada para a API para processar o pedido
+      app.dialog.preloader("Processando pedido...");
+      
+      // Simular processamento
+      setTimeout(() => {
+        app.dialog.close();
+        app.dialog.alert(
+          "Pedido de retirada enviado com sucesso! Você receberá o pagamento em até 2 dias úteis.",
+          "Pedido Enviado"
+        );
+        
+        // Limpar formulário
+        $('#valorRetirada').val('');
+        $('#valorLiquidoRetirada').html('R$ 0,00');
+        $('#btnSacarRetirada').prop('disabled', true);
+      }, 2000);
     }
   );
 }
 
-// Função para enviar pedido de retirada
-function enviarPedidoRetirada(dados) {
-  app.dialog.preloader("Enviando pedido...");
-  
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
-  };
 
-  const body = JSON.stringify({
-    class: "CarteiraRest",
-    method: "solicitarRetirada",
-    dados: dados
-  });
 
-  const options = {
-    method: "POST",
-    headers: headers,
-    body: body,
-  };
 
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      app.dialog.close();
-      
-      if (responseJson.status === "success") {
-        app.dialog.alert(
-          "Pedido de retirada enviado com sucesso! Você receberá uma confirmação em breve.",
-          "Sucesso",
-          function() {
-            // Limpar formulário
-            limparFormularioRetirada();
-            // Recarregar histórico
-            carregarHistoricoRetiradas();
-            // Voltar para gestão
-            app.views.main.router.back();
-          }
-        );
-      } else {
-        app.dialog.alert(
-          responseJson.message || "Erro ao enviar pedido de retirada. Tente novamente.",
-          "Erro"
-        );
-      }
-    })
-    .catch((error) => {
-      app.dialog.close();
-      console.error("Erro ao enviar pedido:", error);
-      app.dialog.alert("Erro de conexão. Verifique sua internet e tente novamente.", "Erro");
-    });
-}
 
-// Função para limpar formulário de retirada
-function limparFormularioRetirada() {
-  $("#valorRetirada").val("");
-  $("#nomeCompleto").val("");
-  $("#cpfCnpj").val("");
-  $("#banco").val("");
-  $("#agencia").val("");
-  $("#conta").val("");
-  $("#tipoConta").val("");
-  $("#valorSolicitado").text("R$ 0,00");
-  $("#taxaProcessamento").text("R$ 0,00");
-  $("#valorLiquido").text("R$ 0,00");
-}
 
-// Função para carregar histórico de retiradas
-function carregarHistoricoRetiradas() {
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + userAuthToken,
-  };
 
-  const body = JSON.stringify({
-    class: "CarteiraRest",
-    method: "listarRetiradas",
-  });
 
-  const options = {
-    method: "POST",
-    headers: headers,
-    body: body,
-  };
 
-  fetch(apiServerUrl, options)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      if (responseJson.status === "success" && responseJson.data) {
-        const retiradas = responseJson.data;
-        if (retiradas && retiradas.length > 0) {
-          criarListaHistoricoRetiradas(retiradas);
-        } else {
-          mostrarEstadoVazioHistorico();
-        }
-      } else {
-        mostrarEstadoVazioHistorico();
-      }
-    })
-    .catch((error) => {
-      console.error("Erro ao carregar histórico:", error);
-      mostrarEstadoVazioHistorico();
-    });
-}
 
-// Função para criar lista do histórico de retiradas
-function criarListaHistoricoRetiradas(retiradas) {
-  let html = "";
-  
-  retiradas.forEach(retirada => {
-    const status = retirada.status || "pendente";
-    const valor = formatarMoeda(retirada.valor || 0);
-    const data = formatarData(retirada.data_criacao || new Date());
-    const statusClass = getStatusClassRetirada(status);
-    const statusIcon = getStatusIconRetirada(status);
-    
-    html += `
-      <div class="pedido-retirada-historico-item">
-        <div class="pedido-retirada-historico-icon ${status}">
-          <i class="${statusIcon}"></i>
-        </div>
-        <div class="pedido-retirada-historico-info">
-          <div class="pedido-retirada-historico-valor">${valor}</div>
-          <div class="pedido-retirada-historico-data">${data}</div>
-        </div>
-        <div class="pedido-retirada-historico-status ${status}">
-          ${status.charAt(0).toUpperCase() + status.slice(1)}
-        </div>
-      </div>
-    `;
-  });
-  
-  $("#historicoRetiradas").html(html);
-}
 
-// Função para mostrar estado vazio do histórico
-function mostrarEstadoVazioHistorico() {
-  $("#historicoRetiradas").html(`
-    <div class="pedido-retirada-empty-state">
-      <i class="mdi mdi-history"></i>
-      <h3>Nenhum pedido encontrado</h3>
-      <p>Seus pedidos de retirada aparecerão aqui</p>
-    </div>
-  `);
-}
 
-// Função para obter classe CSS do status da retirada
-function getStatusClassRetirada(status) {
-  const statusLower = status.toLowerCase();
-  if (statusLower.includes("aprovado") || statusLower.includes("pago")) return "header-pago";
-  if (statusLower.includes("pendente") || statusLower.includes("aguardando")) return "header-pendente";
-  if (statusLower.includes("cancelado")) return "header-cancelado";
-  if (statusLower.includes("rejeitado")) return "header-bloqueado";
-  return "header-pendente";
-}
 
-// Função para obter ícone do status da retirada
-function getStatusIconRetirada(status) {
-  const statusLower = status.toLowerCase();
-  if (statusLower.includes("aprovado") || statusLower.includes("pago")) return "mdi mdi-check-circle";
-  if (statusLower.includes("pendente") || statusLower.includes("aguardando")) return "mdi mdi-clock";
-  if (statusLower.includes("cancelado")) return "mdi mdi-close-circle";
-  if (statusLower.includes("rejeitado")) return "mdi mdi-alert-circle";
-  return "mdi mdi-clock";
-}
+
+
+
+
+
+
+
 

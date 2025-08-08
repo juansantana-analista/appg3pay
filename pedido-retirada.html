@@ -1,252 +1,149 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>Pedido de Retirada</title>
-    <link rel="stylesheet" href="lib/framework7-bundle.min.css">
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/gestao.css">
-    <link rel="stylesheet" href="css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="css/remixicon/remixicon.css">
-</head>
-<body>
-    <div id="app">
-        <div class="views">
-            <div class="view view-main">
-                <div class="page" data-name="pedido-retirada">
-                    <!-- Header -->
-                    <div class="navbar">
-                        <div class="navbar-bg"></div>
-                        <div class="navbar-inner">
-                            <div class="left">
-                                <a href="#" class="link back">
-                                    <i class="icon icon-back"></i>
-                                    <span>Voltar</span>
-                                </a>
-                            </div>
-                            <div class="title">Pedido de Retirada</div>
-                            <div class="right"></div>
-                        </div>
-                    </div>
-
-                    <!-- Page Content -->
-                    <div class="page-content">
-                        <!-- Saldo Disponível -->
-                        <div class="block block-strong inset">
-                            <div class="card">
-                                <div class="card-content card-content-padding">
-                                    <div class="row">
-                                        <div class="col-50">
-                                            <div class="text-align-center">
-                                                <div class="text-color-primary text-size-large">Saldo Disponível</div>
-                                                <div class="text-size-huge text-color-primary" id="saldoDisponivel">R$ 0,00</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-50">
-                                            <div class="text-align-center">
-                                                <div class="text-color-secondary text-size-medium">Valor Mínimo</div>
-                                                <div class="text-size-large text-color-secondary">R$ 50,00</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Chave PIX -->
-                        <div class="block block-strong inset">
-                            <div class="block-header">
-                                <h3>Chave PIX</h3>
-                            </div>
-                            <div class="list list-strong inset">
-                                <ul>
-                                    <li class="item-content">
-                                        <div class="item-inner">
-                                            <div class="item-title item-label">Chave PIX Cadastrada</div>
-                                            <div class="item-after">
-                                                <span id="chavePix" class="text-color-primary">Não cadastrada</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- Valor a Sacar -->
-                        <div class="block block-strong inset">
-                            <div class="block-header">
-                                <h3>Valor a Sacar</h3>
-                            </div>
-                            <div class="list list-strong inset">
-                                <ul>
-                                    <li class="item-content item-input">
-                                        <div class="item-inner">
-                                            <div class="item-title item-label">Valor</div>
-                                            <div class="item-input-wrap">
-                                                <input type="text" id="valorRetirada" class="input" placeholder="R$ 0,00">
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- Resumo da Retirada -->
-                        <div class="block block-strong inset">
-                            <div class="block-header">
-                                <h3>Resumo da Retirada</h3>
-                            </div>
-                            <div class="list list-strong inset">
-                                <ul>
-                                    <li class="item-content">
-                                        <div class="item-inner">
-                                            <div class="item-title">Valor Solicitado</div>
-                                            <div class="item-after" id="valorSolicitado">R$ 0,00</div>
-                                        </div>
-                                    </li>
-                                    <li class="item-content">
-                                        <div class="item-inner">
-                                            <div class="item-title">Taxa de Processamento</div>
-                                            <div class="item-after" id="taxaProcessamento">R$ 0,00</div>
-                                        </div>
-                                    </li>
-                                    <li class="item-content">
-                                        <div class="item-inner">
-                                            <div class="item-title text-color-primary text-size-medium">Valor Líquido</div>
-                                            <div class="item-after text-color-primary text-size-medium" id="valorLiquido">R$ 0,00</div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- Botões de Ação -->
-                        <div class="block block-strong inset">
-                            <div class="row">
-                                <div class="col-50">
-                                    <button id="cadastrarPix" class="button button-fill button-large" style="background-color: var(--verde);">
-                                        <i class="icon icon-plus"></i>
-                                        Cadastrar PIX
-                                    </button>
-                                </div>
-                                <div class="col-50">
-                                    <button id="sacarValor" class="button button-fill button-large" style="background-color: var(--laranja);">
-                                        <i class="icon icon-money"></i>
-                                        Sacar
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Histórico de Retiradas -->
-                        <div class="block block-strong inset">
-                            <div class="block-header">
-                                <h3>Histórico de Retiradas</h3>
-                            </div>
-                            <div id="historicoRetiradas">
-                                <!-- Conteúdo será carregado dinamicamente -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
+   <head>
+      <!-- Required meta tags-->
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <!-- Color theme for statusbar (Android only) -->
+      <meta name="theme-color" content="#00591F" />
+      <!-- Your app title -->
+      <title>VitaTop</title>
+      <!-- Path to Framework7 Library Bundle CSS -->
+      <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
+      <!-- CSS PERSONALIZADO PARA MENU-->
+      <link rel="stylesheet" href="css/index.css" />
+      <link rel="stylesheet" href="css/gestao.css" />
+      <!--Ícones Material Design-->
+      <link rel="stylesheet" href="css/materialdesignicons.min.css" />
+      <!-- Icones do Remix icon-->
+      <link rel="stylesheet" href="css/remixicon/remixicon.css" />
+   </head>
+   <body>
+      <!-- App root element -->
+      <div id="app">
+      <!-- Your main view, should have "view-main" class -->
+      <div class="view view-main">
+         <!-- Initial Page, "data-name" contains page name -->
+         <div data-name="pedido-retirada" class="page color-theme-blue">
+            <!-- NAV TOPO-->
+            <div class="top-nav">
+               <div class="left">
+                  <a href="#" class="link btn-novo" onclick="app.views.main.router.back()">
+                     <i class="mdi mdi-arrow-left"></i>
+                  </a>
+               </div>
+               <div class="center">
+                  <strong class="title-descricao">Pedido de Retirada</strong>
+               </div>
+               <div class="right">
+                  <div style="width: 30px;"></div>
+               </div>
             </div>
-        </div>
-    </div>
+            <!-- Scrollable page content -->
+            <div class="page-content" style="background-color: #f7f9fa; padding-bottom: 160px">
+               
+               <!-- Dashboard Header -->
+               <div class="dashboard-header">
+                  <h1>Solicitar Retirada</h1>
+                  <p>Faça o pedido de retirada do seu saldo</p>
+               </div>
 
-    <script src="lib/framework7-bundle.min.js"></script>
-    <script src="lib/jquery-3.7.0.min.js"></script>
-    <script src="lib/jquery.mask.min.js"></script>
-    <script src="lib/jwt-decode.min.js"></script>
-    <script src="js/funcoes.js"></script>
-    <script src="js/routes.js"></script>
-    
-    <script>
-        $(document).ready(function() {
-            // Máscara para o campo de valor
-            $('#valorRetirada').mask('R$ #.##0,00', {reverse: true});
-            
-            // Atualizar resumo quando valor mudar
-            $('#valorRetirada').on('input', function() {
-                atualizarResumo();
-            });
-            
-            // Botão cadastrar PIX
-            $('#cadastrarPix').on('click', function() {
-                cadastrarChavePix();
-            });
-            
-            // Botão sacar
-            $('#sacarValor').on('click', function() {
-                realizarSaque();
-            });
-            
-            // Carregar dados iniciais
-            carregarDadosIniciais();
-        });
-        
-        function atualizarResumo() {
-            let valor = $('#valorRetirada').val().replace('R$ ', '').replace('.', '').replace(',', '.');
-            valor = parseFloat(valor) || 0;
-            
-            let taxa = valor * 0.02; // 2% de taxa
-            let liquido = valor - taxa;
-            
-            $('#valorSolicitado').text('R$ ' + valor.toFixed(2).replace('.', ','));
-            $('#taxaProcessamento').text('R$ ' + taxa.toFixed(2).replace('.', ','));
-            $('#valorLiquido').text('R$ ' + liquido.toFixed(2).replace('.', ','));
-        }
-        
-        function cadastrarChavePix() {
-            // Simular cadastro de chave PIX
-            let chave = prompt('Digite sua chave PIX:');
-            if (chave && chave.trim() !== '') {
-                $('#chavePix').text(chave);
-                $('#chavePix').addClass('text-color-success');
-                app.dialog.alert('Chave PIX cadastrada com sucesso!', 'Sucesso');
-            }
-        }
-        
-        function realizarSaque() {
-            let valor = $('#valorRetirada').val().replace('R$ ', '').replace('.', '').replace(',', '.');
-            valor = parseFloat(valor) || 0;
-            
-            if (valor < 50) {
-                app.dialog.alert('Valor mínimo para saque é R$ 50,00', 'Valor Insuficiente');
-                return;
-            }
-            
-            if ($('#chavePix').text() === 'Não cadastrada') {
-                app.dialog.alert('Cadastre uma chave PIX primeiro', 'Chave PIX Necessária');
-                return;
-            }
-            
-            // Simular saque
-            app.dialog.confirm(
-                'Confirmar saque de R$ ' + valor.toFixed(2).replace('.', ',') + '?',
-                'Confirmar Saque',
-                function() {
-                    app.dialog.alert('Saque solicitado com sucesso!', 'Sucesso');
-                    $('#valorRetirada').val('');
-                    atualizarResumo();
-                }
-            );
-        }
-        
-        function carregarDadosIniciais() {
-            // Simular carregamento de saldo
-            $('#saldoDisponivel').text('R$ 1.250,00');
-            
-            // Verificar se já tem chave PIX cadastrada
-            // Aqui você pode carregar do localStorage ou API
-            let chaveSalva = localStorage.getItem('chavePix');
-            if (chaveSalva) {
-                $('#chavePix').text(chaveSalva);
-                $('#chavePix').addClass('text-color-success');
-            }
-        }
-    </script>
-</body>
-</html> 
+               <!-- Carteira Digital Section -->
+               <div class="dashboard-section">
+                  <h2 class="section-title">Seu Saldo</h2>
+                  <div class="wallet-card">
+                     <div class="wallet-header">
+                        <div class="wallet-icon">
+                           <i class="mdi mdi-wallet"></i>
+                        </div>
+                        <div class="wallet-info">
+                           <div class="wallet-label">Saldo Disponível</div>
+                           <div class="wallet-balance">
+                              <span id="saldoDisponivelRetirada">R$ 0,00</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <!-- Chave PIX Section -->
+               <div class="dashboard-section">
+                  <h2 class="section-title">Chave PIX</h2>
+                  <div class="card-dash">
+                     <div class="card-header-dash">
+                        <div class="card-title">
+                           <i class="mdi mdi-qrcode"></i>
+                           Chave PIX Cadastrada
+                        </div>
+                     </div>
+                     <div class="pix-key-display">
+                        <div class="pix-key-info">
+                           <div class="pix-key-label">Chave PIX:</div>
+                           <div class="pix-key-value" id="chavePixDisplay">
+                              <span class="no-pix-key">Nenhuma chave PIX cadastrada</span>
+                           </div>
+                        </div>
+                        <button class="btn-cadastrar-pix" id="btnCadastrarPix">
+                           <i class="mdi mdi-plus-circle"></i>
+                           Cadastrar PIX
+                        </button>
+                     </div>
+                  </div>
+               </div>
+
+               <!-- Valor de Retirada Section -->
+               <div class="dashboard-section">
+                  <h2 class="section-title">Valor de Retirada</h2>
+                  <div class="card-dash">
+                     <div class="card-header-dash">
+                        <div class="card-title">
+                           <i class="mdi mdi-cash"></i>
+                           Informe o Valor
+                        </div>
+                     </div>
+                     <div class="valor-retirada-container">
+                        <div class="input-group">
+                           <label for="valorRetirada">Valor (R$)</label>
+                           <input type="text" id="valorRetirada" placeholder="0,00" class="money-input">
+                        </div>
+                        <div class="valor-info">
+                           <div class="taxa-info">
+                              <i class="mdi mdi-information-outline"></i>
+                              <span>Taxa de retirada: R$ 2,50</span>
+                           </div>
+                           <div class="valor-liquido">
+                              <span>Valor líquido:</span>
+                              <strong id="valorLiquidoRetirada">R$ 0,00</strong>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <!-- Botão de Saque -->
+               <div class="dashboard-section">
+                  <button class="btn-sacar-retirada" id="btnSacarRetirada" disabled>
+                     <i class="mdi mdi-cash-refund"></i>
+                     Solicitar Retirada
+                  </button>
+               </div>
+
+               <!-- Refresh Button -->
+               <button class="refresh-button update-button" id="updateRetirada">
+                  <i class="mdi mdi-refresh"></i>
+               </button>
+            </div>
+         </div>
+      </div>
+      <!-- Path to Framework7 Library Bundle JS-->
+      <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
+      <!-- jQuery -->
+      <script type="text/javascript" src="lib/jquery-3.7.0.min.js"></script>
+      <script type="text/javascript" src="lib/jquery.mask.min.js"></script>
+      <!-- Roteamento do app-->
+      <script type="text/javascript" src="js/routes.js"></script>
+      <script type="text/javascript" src="js/funcoes.js"></script>
+      <script src="cordova.js"></script>
+   </body>
+</html>

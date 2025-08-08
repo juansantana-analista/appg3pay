@@ -684,7 +684,7 @@ var app = new Framework7({
     const appPopup = app.popup;
 
     $('#btnSacar').on('click', function () {      
-      // Navegar para a página de pedido de retirada
+      // Navegar para a tela de pedido de retirada
       app.views.main.router.navigate('/pedido-retirada/');
     });
 
@@ -708,53 +708,7 @@ var app = new Framework7({
         },
       }
     },
-    {
-      path: "/pedido-retirada/",
-      url: "pedido-retirada.html?v=" + versionApp,
-      animate: false,
-      on: {
-        pageBeforeIn: function (event, page) {
-          // fazer algo antes da página ser exibida
-          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
-          // Início função validar login
-          const isValid = validarToken();
-          if (!isValid) {
-            console.warn("Token inválido. Redirecionando para login via fallback.");
-            deleteCookie('userAuthToken');
-            app.views.main.router.navigate("/login-view/");
-            setTimeout(() => {
-              app.views.main.router.navigate("/login-view/");
-            }, 500); // Adiciona um fallback com pequeno delay
-          }
-          
-          // fazer algo antes da página ser exibida
-          $("#menuPrincipal").show("fast");
-          $("#menuPrincipal").removeClass("display-none");
-        },
-        pageAfterIn: function (event, page) {
-          // fazer algo depois da página ser exibida
-        },
-        pageInit: function (event, page) {
-          buscarQtdeNotif();
-          contarCarrinho();
-          
-          // Carregar saldo disponível
-          carregarSaldoDisponivel();
-          
-          // Configurar máscaras de input
-          configurarMascarasRetirada();
-          
-          // Configurar eventos
-          configurarEventosRetirada();
-          
-          // Carregar histórico de retiradas
-          carregarHistoricoRetiradas();
-        },
-        pageBeforeRemove: function (event, page) {
-          // fazer algo antes da página ser removida do DOM
-        },
-      },
-    },
+
     {
     path: "/equipe/",
     url: "equipe.html?v=" + versionApp,
@@ -1148,6 +1102,41 @@ var app = new Framework7({
     
           // fazer algo quando a página for inicializada
           // A página já tem seu próprio JavaScript para inicialização
+        },
+        pageBeforeRemove: function (event, page) {
+          // fazer algo antes da página ser removida do DOM
+        },
+      },
+    },
+    {
+      path: "/pedido-retirada/",
+      url: "pedido-retirada.html?v=" + versionApp,
+      animate: false,
+      on: {
+        pageBeforeIn: function (event, page) {
+          // fazer algo antes da página ser exibida
+          userAuthToken = getCookie('userAuthToken'); // Lê o token do cookie
+          // Início função validar login
+          const isValid = validarToken();
+          if (!isValid) {
+            console.warn("Token inválido. Redirecionando para login via fallback.");
+            deleteCookie('userAuthToken');
+            app.views.main.router.navigate("/login-view/");
+            setTimeout(() => {
+              app.views.main.router.navigate("/login-view/");
+            }, 500); // Adiciona um fallback com pequeno delay
+          }
+          $("#menuPrincipal").hide("fast");
+        },
+        pageAfterIn: function (event, page) {
+          // fazer algo depois da página ser exibida
+        },
+        pageInit: function (event, page) {
+          buscarQtdeNotif();
+          contarCarrinho();
+    
+          // fazer algo quando a página for inicializada
+          inicializarPedidoRetirada();
         },
         pageBeforeRemove: function (event, page) {
           // fazer algo antes da página ser removida do DOM
