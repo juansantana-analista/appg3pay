@@ -99,6 +99,19 @@
                               <i class="mdi mdi-chevron-right"></i>
                            </div>
                         </div>
+
+                        <div class="option-item" id="editarChavePix">
+                           <div class="option-icon">
+                              <i class="mdi mdi-qrcode"></i>
+                           </div>
+                           <div class="option-content">
+                              <div class="option-title">Chave PIX</div>
+                              <div class="option-subtitle">Editar chave para recebimentos</div>
+                           </div>
+                           <div class="option-arrow">
+                              <i class="mdi mdi-chevron-right"></i>
+                           </div>
+                        </div>
                         <!--
                         <div class="option-item" id="enderecosEntrega">
                            <div class="option-icon">
@@ -271,6 +284,65 @@
                      </div>
                   </div>
                   <!-- FIM POPUP ALTERAR SENHA -->
+
+                  <!-- INÍCIO POPUP EDITAR CHAVE PIX -->
+                  <div class="popup popup-editar-pix">
+                     <div class="view popup-view">
+                        <div class="page">
+                           <div class="top-nav">
+                              <div class="left">
+                                 <a href="#" class="link btn-novo popup-close">
+                                 <i class="mdi mdi-arrow-left"></i>
+                                 </a>
+                              </div>
+                              <strong class="title-descricao">
+                                 <i class="mdi mdi-qrcode"></i> Chave PIX
+                              </strong>
+                              <div style="width: 30px;"></div>
+                           </div>
+                           <div class="page-content">
+
+                           <div class="modal-body">
+                              <div class="pix-info-alert">
+                                 <i class="mdi mdi-information-outline"></i>
+                                 <p><strong>Importante:</strong> O nome da chave PIX deve ser o mesmo do seu cadastro no aplicativo.</p>
+                              </div>
+                              
+                              <div class="form-group">
+                                 <label>Tipo de Chave PIX</label>
+                                 <select class="form-input" id="editTipoChavePix">
+                                    <option value="">Selecione o tipo</option>
+                                    <option value="cpf">CPF</option>
+                                    <option value="cnpj">CNPJ</option>
+                                    <option value="email">E-mail</option>
+                                    <option value="celular">Celular</option>
+                                    <option value="aleatoria">Chave Aleatória</option>
+                                 </select>
+                              </div>
+                              
+                              <div class="form-group">
+                                 <label>Chave PIX</label>
+                                 <input type="text" class="form-input" id="editValorChavePix" placeholder="Digite sua chave PIX">
+                              </div>
+                              
+                              <div class="form-group">
+                                 <label>Nome da Chave PIX</label>
+                                 <input type="text" class="form-input" id="editNomeChavePix" placeholder="Nome completo" readonly>
+                                 <small>Nome será preenchido automaticamente com seus dados</small>
+                              </div>
+                           </div>
+                           <div class="modal-footer">
+                              <button class="btn btn-secondary" data-dismiss="modal-pix">Cancelar</button>
+                              <button class="btn btn-primary" id="salvarChavePixPerfil">
+                                 <i class="mdi mdi-check"></i>
+                                 Salvar Chave PIX
+                              </button>
+                           </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- FIM POPUP EDITAR CHAVE PIX -->
                </div>
             </div>
          </div>

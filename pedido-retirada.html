@@ -136,6 +136,57 @@
             </div>
          </div>
       </div>
+
+      <!-- Modal de Cadastro de PIX -->
+      <div class="popup popup-cadastro-pix">
+         <div class="popup-inner">
+            <div class="popup-header">
+               <h2>Cadastrar Chave PIX</h2>
+               <button class="popup-close" onclick="app.popup.close('.popup-cadastro-pix')">
+                  <i class="mdi mdi-close"></i>
+               </button>
+            </div>
+            <div class="popup-body">
+               <div class="pix-info-alert">
+                  <i class="mdi mdi-information-outline"></i>
+                  <p><strong>Importante:</strong> O nome da chave PIX deve ser o mesmo do seu cadastro no aplicativo.</p>
+               </div>
+               
+               <div class="form-group">
+                  <label for="tipoChavePix">Tipo de Chave PIX</label>
+                  <select id="tipoChavePix" class="form-control">
+                     <option value="">Selecione o tipo</option>
+                     <option value="cpf">CPF</option>
+                     <option value="cnpj">CNPJ</option>
+                     <option value="email">E-mail</option>
+                     <option value="celular">Celular</option>
+                     <option value="aleatoria">Chave Aleatória</option>
+                  </select>
+               </div>
+               
+               <div class="form-group">
+                  <label for="valorChavePix">Chave PIX</label>
+                  <input type="text" id="valorChavePix" class="form-control" placeholder="Digite sua chave PIX">
+               </div>
+               
+               <div class="form-group">
+                  <label for="nomeChavePix">Nome da Chave PIX</label>
+                  <input type="text" id="nomeChavePix" class="form-control" placeholder="Nome completo" readonly>
+                  <small class="form-text">Nome será preenchido automaticamente com seus dados</small>
+               </div>
+               
+               <div class="form-actions">
+                  <button class="btn-cancelar" onclick="app.popup.close('.popup-cadastro-pix')">
+                     Cancelar
+                  </button>
+                  <button class="btn-salvar-pix" id="btnSalvarPix">
+                     <i class="mdi mdi-check"></i>
+                     Salvar Chave PIX
+                  </button>
+               </div>
+            </div>
+         </div>
+      </div>
       <!-- Path to Framework7 Library Bundle JS-->
       <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
       <!-- jQuery -->

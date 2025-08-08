@@ -820,10 +820,16 @@ var app = new Framework7({
             app.popup.open('.popup-senha');
           });
 
-
+          $('#editarChavePix').on('click', function() {
+            abrirEditarChavePix();
+          });
 
           $('.modal-close, [data-dismiss="modal-senha"]').on('click', function() {
               app.popup.close('.popup-senha');
+          });
+
+          $('.modal-close, [data-dismiss="modal-pix"]').on('click', function() {
+              app.popup.close('.popup-editar-pix');
           });
 
           

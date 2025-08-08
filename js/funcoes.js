@@ -6226,9 +6226,40 @@ function carregarSaldoDisponivelRetirada() {
 }
 
 function carregarChavePix() {
-  // Por enquanto, vamos simular que não há chave PIX cadastrada
-  // Em uma implementação real, você faria uma chamada para a API
-  $("#chavePixDisplay").html('<span class="no-pix-key">Nenhuma chave PIX cadastrada</span>');
+  // Verificar se há chave PIX cadastrada no localStorage
+  const chavePixData = localStorage.getItem('chavePix');
+  
+  if (chavePixData) {
+    try {
+      const chavePix = JSON.parse(chavePixData);
+      const tipoLabel = getTipoChavePixLabel(chavePix.tipo);
+      
+      $("#chavePixDisplay").html(`
+        <div class="pix-key-details">
+          <div class="pix-key-type">${tipoLabel}</div>
+          <div class="pix-key-value-display">${chavePix.valor}</div>
+          <div class="pix-key-name">${chavePix.nome}</div>
+        </div>
+      `);
+    } catch (error) {
+      console.error("Erro ao carregar chave PIX:", error);
+      $("#chavePixDisplay").html('<span class="no-pix-key">Erro ao carregar chave PIX</span>');
+    }
+  } else {
+    $("#chavePixDisplay").html('<span class="no-pix-key">Nenhuma chave PIX cadastrada</span>');
+  }
+}
+
+// Função para obter o label do tipo de chave PIX
+function getTipoChavePixLabel(tipo) {
+  const labels = {
+    'cpf': 'CPF',
+    'cnpj': 'CNPJ',
+    'email': 'E-mail',
+    'celular': 'Celular',
+    'aleatoria': 'Chave Aleatória'
+  };
+  return labels[tipo] || 'Desconhecido';
 }
 
 function configurarMascarasRetirada() {
@@ -6281,10 +6312,14 @@ function calcularValorLiquidoRetirada() {
 }
 
 function cadastrarChavePix() {
-  app.dialog.alert(
-    "Funcionalidade de cadastro de chave PIX será implementada em breve!",
-    "Em Desenvolvimento"
-  );
+  // Abrir modal de cadastro de PIX
+  app.popup.open('.popup-cadastro-pix');
+  
+  // Carregar dados do usuário para preencher o nome automaticamente
+  carregarDadosUsuarioParaPix();
+  
+  // Configurar eventos do modal
+  configurarEventosModalPix();
 }
 
 function realizarSaqueRetirada() {
@@ -6325,6 +6360,306 @@ function realizarSaqueRetirada() {
       }, 2000);
     }
   );
+}
+
+// Função para carregar dados do usuário para o modal de PIX
+function carregarDadosUsuarioParaPix() {
+  const userName = localStorage.getItem('userName');
+  if (userName) {
+    $('#nomeChavePix').val(userName);
+  }
+}
+
+// Função para configurar eventos do modal de PIX
+function configurarEventosModalPix() {
+  // Evento para salvar chave PIX
+  $('#btnSalvarPix').off('click').on('click', function() {
+    salvarChavePix();
+  });
+  
+  // Evento para validar tipo de chave PIX
+  $('#tipoChavePix').on('change', function() {
+    validarTipoChavePix();
+  });
+  
+  // Evento para validar valor da chave PIX
+  $('#valorChavePix').on('input', function() {
+    validarValorChavePix();
+  });
+}
+
+// Função para validar tipo de chave PIX
+function validarTipoChavePix() {
+  const tipo = $('#tipoChavePix').val();
+  const valorInput = $('#valorChavePix');
+  
+  // Limpar máscaras anteriores
+  valorInput.unmask();
+  
+  switch(tipo) {
+    case 'cpf':
+      valorInput.mask('000.000.000-00');
+      valorInput.attr('placeholder', '000.000.000-00');
+      break;
+    case 'cnpj':
+      valorInput.mask('00.000.000/0000-00');
+      valorInput.attr('placeholder', '00.000.000/0000-00');
+      break;
+    case 'celular':
+      valorInput.mask('(00) 00000-0000');
+      valorInput.attr('placeholder', '(00) 00000-0000');
+      break;
+    case 'email':
+      valorInput.unmask();
+      valorInput.attr('placeholder', 'seu@email.com');
+      break;
+    case 'aleatoria':
+      valorInput.unmask();
+      valorInput.attr('placeholder', 'Chave aleatória');
+      break;
+    default:
+      valorInput.unmask();
+      valorInput.attr('placeholder', 'Digite sua chave PIX');
+  }
+}
+
+// Função para validar valor da chave PIX
+function validarValorChavePix() {
+  const tipo = $('#tipoChavePix').val();
+  const valor = $('#valorChavePix').val();
+  const btnSalvar = $('#btnSalvarPix');
+  
+  if (!tipo || !valor) {
+    btnSalvar.prop('disabled', true);
+    return;
+  }
+  
+  let isValid = false;
+  
+  switch(tipo) {
+    case 'cpf':
+      isValid = valor.replace(/\D/g, '').length === 11;
+      break;
+    case 'cnpj':
+      isValid = valor.replace(/\D/g, '').length === 14;
+      break;
+    case 'celular':
+      isValid = valor.replace(/\D/g, '').length === 11;
+      break;
+    case 'email':
+      isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
+      break;
+    case 'aleatoria':
+      isValid = valor.length >= 10;
+      break;
+  }
+  
+  btnSalvar.prop('disabled', !isValid);
+}
+
+// Função para salvar chave PIX
+function salvarChavePix() {
+  const tipo = $('#tipoChavePix').val();
+  const valor = $('#valorChavePix').val();
+  const nome = $('#nomeChavePix').val();
+  
+  if (!tipo || !valor || !nome) {
+    app.dialog.alert("Por favor, preencha todos os campos", "Campos Obrigatórios");
+    return;
+  }
+  
+  app.dialog.preloader("Salvando chave PIX...");
+  
+  // Simular salvamento (aqui você faria a chamada para a API)
+  setTimeout(() => {
+    app.dialog.close();
+    
+    // Salvar no localStorage para demonstração
+    const chavePix = {
+      tipo: tipo,
+      valor: valor,
+      nome: nome,
+      dataCadastro: new Date().toISOString()
+    };
+    
+    localStorage.setItem('chavePix', JSON.stringify(chavePix));
+    
+    // Atualizar exibição da chave PIX
+    carregarChavePix();
+    
+    // Fechar modal
+    app.popup.close('.popup-cadastro-pix');
+    
+    // Limpar formulário
+    $('#tipoChavePix').val('');
+    $('#valorChavePix').val('');
+    $('#nomeChavePix').val('');
+    $('#btnSalvarPix').prop('disabled', true);
+    
+    app.dialog.alert(
+      "Chave PIX cadastrada com sucesso!",
+      "Sucesso"
+    );
+  }, 1500);
+}
+
+// Função para abrir modal de edição de chave PIX no perfil
+function abrirEditarChavePix() {
+  app.popup.open('.popup-editar-pix');
+  
+  // Carregar dados do usuário
+  carregarDadosUsuarioParaPix();
+  
+  // Carregar chave PIX existente se houver
+  carregarChavePixExistente();
+  
+  // Configurar eventos do modal de edição
+  configurarEventosModalPixPerfil();
+}
+
+// Função para carregar chave PIX existente no modal de edição
+function carregarChavePixExistente() {
+  const chavePixData = localStorage.getItem('chavePix');
+  
+  if (chavePixData) {
+    try {
+      const chavePix = JSON.parse(chavePixData);
+      
+      $('#editTipoChavePix').val(chavePix.tipo);
+      $('#editValorChavePix').val(chavePix.valor);
+      $('#editNomeChavePix').val(chavePix.nome);
+      
+      // Aplicar máscara baseada no tipo
+      validarTipoChavePixEdit();
+      
+    } catch (error) {
+      console.error("Erro ao carregar chave PIX existente:", error);
+    }
+  }
+}
+
+// Função para configurar eventos do modal de edição de PIX no perfil
+function configurarEventosModalPixPerfil() {
+  // Evento para salvar chave PIX
+  $('#salvarChavePixPerfil').off('click').on('click', function() {
+    salvarChavePixPerfil();
+  });
+  
+  // Evento para validar tipo de chave PIX
+  $('#editTipoChavePix').on('change', function() {
+    validarTipoChavePixEdit();
+  });
+  
+  // Evento para validar valor da chave PIX
+  $('#editValorChavePix').on('input', function() {
+    validarValorChavePixEdit();
+  });
+}
+
+// Função para validar tipo de chave PIX no modal de edição
+function validarTipoChavePixEdit() {
+  const tipo = $('#editTipoChavePix').val();
+  const valorInput = $('#editValorChavePix');
+  
+  // Limpar máscaras anteriores
+  valorInput.unmask();
+  
+  switch(tipo) {
+    case 'cpf':
+      valorInput.mask('000.000.000-00');
+      valorInput.attr('placeholder', '000.000.000-00');
+      break;
+    case 'cnpj':
+      valorInput.mask('00.000.000/0000-00');
+      valorInput.attr('placeholder', '00.000.000/0000-00');
+      break;
+    case 'celular':
+      valorInput.mask('(00) 00000-0000');
+      valorInput.attr('placeholder', '(00) 00000-0000');
+      break;
+    case 'email':
+      valorInput.unmask();
+      valorInput.attr('placeholder', 'seu@email.com');
+      break;
+    case 'aleatoria':
+      valorInput.unmask();
+      valorInput.attr('placeholder', 'Chave aleatória');
+      break;
+    default:
+      valorInput.unmask();
+      valorInput.attr('placeholder', 'Digite sua chave PIX');
+  }
+}
+
+// Função para validar valor da chave PIX no modal de edição
+function validarValorChavePixEdit() {
+  const tipo = $('#editTipoChavePix').val();
+  const valor = $('#editValorChavePix').val();
+  const btnSalvar = $('#salvarChavePixPerfil');
+  
+  if (!tipo || !valor) {
+    btnSalvar.prop('disabled', true);
+    return;
+  }
+  
+  let isValid = false;
+  
+  switch(tipo) {
+    case 'cpf':
+      isValid = valor.replace(/\D/g, '').length === 11;
+      break;
+    case 'cnpj':
+      isValid = valor.replace(/\D/g, '').length === 14;
+      break;
+    case 'celular':
+      isValid = valor.replace(/\D/g, '').length === 11;
+      break;
+    case 'email':
+      isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
+      break;
+    case 'aleatoria':
+      isValid = valor.length >= 10;
+      break;
+  }
+  
+  btnSalvar.prop('disabled', !isValid);
+}
+
+// Função para salvar chave PIX no perfil
+function salvarChavePixPerfil() {
+  const tipo = $('#editTipoChavePix').val();
+  const valor = $('#editValorChavePix').val();
+  const nome = $('#editNomeChavePix').val();
+  
+  if (!tipo || !valor || !nome) {
+    app.dialog.alert("Por favor, preencha todos os campos", "Campos Obrigatórios");
+    return;
+  }
+  
+  app.dialog.preloader("Salvando chave PIX...");
+  
+  // Simular salvamento (aqui você faria a chamada para a API)
+  setTimeout(() => {
+    app.dialog.close();
+    
+    // Salvar no localStorage para demonstração
+    const chavePix = {
+      tipo: tipo,
+      valor: valor,
+      nome: nome,
+      dataCadastro: new Date().toISOString()
+    };
+    
+    localStorage.setItem('chavePix', JSON.stringify(chavePix));
+    
+    // Fechar modal
+    app.popup.close('.popup-editar-pix');
+    
+    app.dialog.alert(
+      "Chave PIX atualizada com sucesso!",
+      "Sucesso"
+    );
+  }, 1500);
 }
 
 

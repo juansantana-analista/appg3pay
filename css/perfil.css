@@ -636,3 +636,59 @@ input:checked + .slider:before {
   color: #333;
   margin-left: 10px;
 }
+
+/* ===== ESTILOS PARA MODAL DE EDITAR PIX ===== */
+
+.popup-editar-pix .pix-info-alert {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.popup-editar-pix .pix-info-alert i {
+  color: #856404;
+  font-size: 18px;
+  margin-top: 2px;
+}
+
+.popup-editar-pix .pix-info-alert p {
+  margin: 0;
+  color: #856404;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.popup-editar-pix .form-input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #333;
+  background: #fff;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.popup-editar-pix .form-input:focus {
+  outline: none;
+  border-color: #00591F;
+  box-shadow: 0 0 0 3px rgba(0, 89, 31, 0.1);
+}
+
+.popup-editar-pix .form-input:read-only {
+  background: #f8f9fa;
+  color: #666;
+}
+
+.popup-editar-pix .form-group small {
+  font-size: 12px;
+  color: #666;
+  margin-top: 5px;
+  display: block;
+}

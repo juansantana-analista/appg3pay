@@ -737,6 +737,34 @@
   font-family: inherit;
 }
 
+.pix-key-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.pix-key-type {
+  font-size: 12px;
+  color: #00591F;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pix-key-value-display {
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+  font-family: monospace;
+  word-break: break-all;
+}
+
+.pix-key-name {
+  font-size: 14px;
+  color: #666;
+  font-style: italic;
+}
+
 .btn-cadastrar-pix {
   width: 100%;
   background: linear-gradient(135deg, #00591F 0%, #00752a 100%);
@@ -925,3 +953,197 @@
 .dashboard-section:nth-child(2) { animation-delay: 0.2s; }
 .dashboard-section:nth-child(3) { animation-delay: 0.3s; }
 .dashboard-section:nth-child(4) { animation-delay: 0.4s; }
+
+/* ===== ESTILOS DO MODAL DE CADASTRO PIX ===== */
+
+.popup-cadastro-pix {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.popup-cadastro-pix .popup-inner {
+  background: #fff;
+  border-radius: 15px;
+  max-width: 90%;
+  width: 400px;
+  margin: 20px auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.popup-cadastro-pix .popup-header {
+  background: linear-gradient(135deg, #00591F 0%, #00752a 100%);
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popup-cadastro-pix .popup-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.popup-cadastro-pix .popup-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.popup-cadastro-pix .popup-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.popup-cadastro-pix .popup-body {
+  padding: 25px;
+}
+
+.pix-info-alert {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.pix-info-alert i {
+  color: #856404;
+  font-size: 18px;
+  margin-top: 2px;
+}
+
+.pix-info-alert p {
+  margin: 0;
+  color: #856404;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.popup-cadastro-pix .form-group {
+  margin-bottom: 20px;
+}
+
+.popup-cadastro-pix .form-group label {
+  display: block;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.popup-cadastro-pix .form-control {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #333;
+  background: #fff;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.popup-cadastro-pix .form-control:focus {
+  outline: none;
+  border-color: #00591F;
+  box-shadow: 0 0 0 3px rgba(0, 89, 31, 0.1);
+}
+
+.popup-cadastro-pix .form-control:read-only {
+  background: #f8f9fa;
+  color: #666;
+}
+
+.popup-cadastro-pix .form-text {
+  font-size: 12px;
+  color: #666;
+  margin-top: 5px;
+  display: block;
+}
+
+.popup-cadastro-pix .form-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.popup-cadastro-pix .btn-cancelar {
+  flex: 1;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.popup-cadastro-pix .btn-cancelar:hover {
+  background: #5a6268;
+  transform: translateY(-1px);
+}
+
+.popup-cadastro-pix .btn-salvar-pix {
+  flex: 1;
+  background: linear-gradient(135deg, #00591F 0%, #00752a 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 89, 31, 0.3);
+}
+
+.popup-cadastro-pix .btn-salvar-pix:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 89, 31, 0.4);
+}
+
+.popup-cadastro-pix .btn-salvar-pix:active {
+  transform: translateY(0);
+}
+
+.popup-cadastro-pix .btn-salvar-pix i {
+  font-size: 18px;
+}
+
+@media (max-width: 480px) {
+  .popup-cadastro-pix .popup-inner {
+    max-width: 95%;
+    margin: 10px auto;
+  }
+  
+  .popup-cadastro-pix .popup-header {
+    padding: 15px;
+  }
+  
+  .popup-cadastro-pix .popup-header h2 {
+    font-size: 16px;
+  }
+  
+  .popup-cadastro-pix .popup-body {
+    padding: 20px;
+  }
+  
+  .popup-cadastro-pix .form-actions {
+    flex-direction: column;
+  }
+}
