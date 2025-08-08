@@ -1147,3 +1147,27 @@
     flex-direction: column;
   }
 }
+
+/* Estilos para campos desabilitados */
+.disabled-input {
+  background-color: #f5f5f5 !important;
+  color: #999 !important;
+  cursor: not-allowed !important;
+  border-color: #ddd !important;
+}
+
+.disabled-input::placeholder {
+  color: #ccc !important;
+}
+
+.disabled-button {
+  background-color: #ccc !important;
+  color: #999 !important;
+  cursor: not-allowed !important;
+  opacity: 0.6;
+}
+
+.disabled-button:hover {
+  background-color: #ccc !important;
+  transform: none !important;
+}

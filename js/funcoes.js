@@ -6172,6 +6172,9 @@ function inicializarPedidoRetirada() {
   // Configurar máscaras e eventos
   configurarMascarasRetirada();
   configurarEventosRetirada();
+  
+  // Desabilitar campos de retirada por padrão até que uma chave PIX seja cadastrada
+  habilitarCamposRetirada(false);
 }
 
 function carregarSaldoDisponivelRetirada() {
@@ -6241,12 +6244,17 @@ function carregarChavePix() {
           <div class="pix-key-name">${chavePix.nome}</div>
         </div>
       `);
+      
+      // Habilitar campos de retirada quando há chave PIX cadastrada
+      habilitarCamposRetirada(true);
     } catch (error) {
       console.error("Erro ao carregar chave PIX:", error);
       $("#chavePixDisplay").html('<span class="no-pix-key">Erro ao carregar chave PIX</span>');
+      habilitarCamposRetirada(false);
     }
   } else {
     $("#chavePixDisplay").html('<span class="no-pix-key">Nenhuma chave PIX cadastrada</span>');
+    habilitarCamposRetirada(false);
   }
 }
 
@@ -6261,6 +6269,22 @@ function getTipoChavePixLabel(tipo) {
   };
   return labels[tipo] || 'Desconhecido';
 }
+
+                // Função para habilitar/desabilitar campos de retirada baseado na presença de chave PIX
+                function habilitarCamposRetirada(habilitar) {
+                  if (habilitar) {
+                    $('#valorRetirada').prop('disabled', false).removeClass('disabled-input');
+                    $('#btnSacarRetirada').prop('disabled', false).removeClass('disabled-button');
+                    $('#pixValidationMessage').hide();
+                  } else {
+                    $('#valorRetirada').prop('disabled', true).addClass('disabled-input');
+                    $('#btnSacarRetirada').prop('disabled', true).addClass('disabled-button');
+                    $('#pixValidationMessage').show();
+                    // Limpar valor quando desabilitado
+                    $('#valorRetirada').val('');
+                    $('#valorLiquidoRetirada').html('R$ 0,00');
+                  }
+                }
 
 function configurarMascarasRetirada() {
   // Configurar máscara para o campo de valor
@@ -6280,6 +6304,11 @@ function configurarEventosRetirada() {
 
   // Evento para o botão de sacar
   $('#btnSacarRetirada').on('click', function() {
+    // Verificar se o botão está habilitado
+    if ($(this).prop('disabled')) {
+      app.dialog.alert("Cadastre uma chave PIX válida primeiro", "Chave PIX Necessária");
+      return;
+    }
     realizarSaqueRetirada();
   });
 
@@ -6287,6 +6316,18 @@ function configurarEventosRetirada() {
   $('#updateRetirada').on('click', function() {
     carregarSaldoDisponivelRetirada();
     carregarChavePix();
+  });
+  
+  // Evento para o botão de extrato (se existir)
+  $('#btnExtratoRetirada').on('click', function() {
+    // Verificar se há chave PIX cadastrada antes de permitir acesso ao extrato
+    const chavePix = $("#chavePixDisplay").text();
+    if (chavePix.includes("Nenhuma chave PIX cadastrada")) {
+      app.dialog.alert("Cadastre uma chave PIX válida primeiro para acessar o extrato", "Chave PIX Necessária");
+      return;
+    }
+    // Aqui você implementaria a lógica para abrir o extrato
+    app.dialog.alert("Funcionalidade de extrato será implementada em breve", "Em Desenvolvimento");
   });
 }
 
@@ -6297,6 +6338,13 @@ function calcularValorLiquidoRetirada() {
   if (valorNumerico > 0) {
     const taxa = 2.50;
     const valorLiquido = valorNumerico - taxa;
+    
+                      // Verificar valor mínimo de R$ 100,00
+                  if (valorNumerico < 100.00) {
+                    $('#valorLiquidoRetirada').html('R$ 0,00');
+                    $('#btnSacarRetirada').prop('disabled', true);
+                    return;
+                  }
     
     if (valorLiquido > 0) {
       $('#valorLiquidoRetirada').html(formatarMoeda(valorLiquido));
@@ -6330,6 +6378,12 @@ function realizarSaqueRetirada() {
     app.dialog.alert("Por favor, informe um valor válido", "Valor Inválido");
     return;
   }
+
+                    // Verificar valor mínimo de R$ 100,00
+                  if (valorNumerico < 100.00) {
+                    app.dialog.alert("O valor mínimo para retirada é R$ 100,00", "Valor Mínimo");
+                    return;
+                  }
 
   // Verificar se há chave PIX cadastrada
   const chavePix = $("#chavePixDisplay").text();
@@ -6486,6 +6540,9 @@ function salvarChavePix() {
     
     // Atualizar exibição da chave PIX
     carregarChavePix();
+    
+    // Habilitar campos de retirada após cadastrar chave PIX
+    habilitarCamposRetirada(true);
     
     // Fechar modal
     app.popup.close('.popup-cadastro-pix');

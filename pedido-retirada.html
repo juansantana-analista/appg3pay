@@ -106,6 +106,13 @@
                         <div class="input-group">
                            <label for="valorRetirada">Valor (R$)</label>
                            <input type="text" id="valorRetirada" placeholder="0,00" class="money-input">
+                           <small style="color: #666; font-size: 12px; margin-top: 5px; display: block;">
+                              Valor mínimo para retirada: R$ 100,00
+                           </small>
+                           <div id="pixValidationMessage" style="display: none; margin-top: 10px; padding: 10px; background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 5px; color: #856404; font-size: 12px;">
+                              <i class="mdi mdi-information-outline" style="margin-right: 5px;"></i>
+                              <strong>Atenção:</strong> O valor só pode ser adicionado após cadastrar uma chave PIX válida.
+                           </div>
                         </div>
                         <div class="valor-info">
                            <div class="taxa-info">
