@@ -798,6 +798,9 @@ var app = new Framework7({
           buscarQtdeNotif();
           contarCarrinho();
           listarPerfil();
+          
+          // Inicializar sistema de status da conta
+          inicializarStatusConta();
 
           $('#editarFoto').on('click', function() {
              $('#inputFotoGaleria').click();

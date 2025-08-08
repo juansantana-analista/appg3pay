@@ -3377,6 +3377,13 @@ function listarPerfil(rota) {
           $("#editDocumento").mask("00.000.000/0000-00");
         }
         app.dialog.close();
+        
+        // Carregar status da conta
+        carregarStatusConta();
+        
+        // Configurar eventos de upload de documentos
+        configurarUploadDocumentos();
+        
       } else {
         app.dialog.close();
         console.error(
@@ -6684,39 +6691,293 @@ function validarValorChavePixEdit() {
 
 // Função para salvar chave PIX no perfil
 function salvarChavePixPerfil() {
-  const tipo = $('#editTipoChavePix').val();
-  const valor = $('#editValorChavePix').val();
-  const nome = $('#editNomeChavePix').val();
-  
-  if (!tipo || !valor || !nome) {
-    app.dialog.alert("Por favor, preencha todos os campos", "Campos Obrigatórios");
+  const tipoChave = $('#editTipoChavePix').val();
+  const valorChave = $('#editValorChavePix').val().trim();
+  const nomeChave = $('#editNomeChavePix').val().trim();
+
+  if (!tipoChave || !valorChave) {
+    return app.dialog.alert("Preencha todos os campos obrigatórios.");
+  }
+
+  if (!validarTipoChavePixEdit(tipoChave, valorChave)) {
     return;
   }
-  
-  app.dialog.preloader("Salvando chave PIX...");
-  
-  // Simular salvamento (aqui você faria a chamada para a API)
-  setTimeout(() => {
+
+  app.dialog.preloader('Salvando...');
+
+  fetch(apiServerUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + userAuthToken
+    },
+    body: JSON.stringify({
+      class: "PessoaRestService",
+      method: "editarPessoa",
+      id: localStorage.getItem("pessoaId"),
+      tipo_chave_pix: tipoChave,
+      valor_chave_pix: valorChave,
+      nome_chave_pix: nomeChave
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
     app.dialog.close();
+    if (data.status === "success") {
+      app.popup.close('.popup-editar-pix');
+      app.dialog.alert("Chave PIX atualizada com sucesso!");
+    } else {
+      app.dialog.alert("Erro: " + data.message);
+    }
+  })
+  .catch(err => {
+    app.dialog.close();
+    console.error(err);
+    app.dialog.alert("Erro ao atualizar chave PIX.");
+  });
+}
+
+// ===== FUNÇÕES PARA STATUS DA CONTA =====
+
+// Função para carregar o status da conta
+function carregarStatusConta() {
+  const pessoaId = localStorage.getItem("pessoaId");
+  
+  app.dialog.preloader("Carregando status...");
+  
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "PessoaRestService",
+    method: "listarPessoa",
+    pessoa_id: pessoaId,
+  });
+
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      app.dialog.close();
+      if (responseJson.data.status === "success") {
+        const pessoa = responseJson.data.data.pessoa;
+        atualizarStatusConta(pessoa.status_verificacao || 'pendente');
+      } else {
+        console.error("Erro ao obter status da conta:", responseJson.message);
+        atualizarStatusConta('pendente');
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+      atualizarStatusConta('pendente');
+    });
+}
+
+// Função para atualizar a interface do status da conta
+function atualizarStatusConta(status) {
+  const statusIcon = $('#statusIcon');
+  const statusTitle = $('#statusTitle');
+  const statusDescription = $('#statusDescription');
+  const verificationSection = $('#verificationSection');
+  
+  // Remove todas as classes de status
+  $('.status-icon').removeClass('verified pending blocked');
+  
+  switch(status) {
+    case 'verificado':
+      statusIcon.removeClass().addClass('mdi mdi-account-check');
+      $('.status-icon').addClass('verified');
+      statusTitle.text('Conta Verificada');
+      statusDescription.text('Sua conta foi verificada e está ativa');
+      verificationSection.hide();
+      break;
+      
+    case 'pendente':
+      statusIcon.removeClass().addClass('mdi mdi-clock-outline');
+      $('.status-icon').addClass('pending');
+      statusTitle.text('Conta em Análise');
+      statusDescription.text('Sua documentação está sendo analisada');
+      verificationSection.hide();
+      break;
+      
+    case 'bloqueado':
+      statusIcon.removeClass().addClass('mdi mdi-account-lock');
+      $('.status-icon').addClass('blocked');
+      statusTitle.text('Conta Bloqueada');
+      statusDescription.text('Sua conta foi bloqueada. Entre em contato com o suporte.');
+      verificationSection.hide();
+      break;
+      
+    case 'nao_verificado':
+    default:
+      statusIcon.removeClass().addClass('mdi mdi-account-alert');
+      $('.status-icon').addClass('pending');
+      statusTitle.text('Conta Não Verificada');
+      statusDescription.text('Envie seus documentos para verificar sua conta');
+      verificationSection.show();
+      break;
+  }
+}
+
+// Função para configurar os eventos de upload de documentos
+function configurarUploadDocumentos() {
+  // Evento para upload da frente do documento
+  $('#uploadFrente').on('click', function() {
+    $('#inputFrente').click();
+  });
+  
+  $('#inputFrente').on('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      processarImagem(file, 'frente');
+    }
+  });
+  
+  // Evento para upload do verso do documento
+  $('#uploadVerso').on('click', function() {
+    $('#inputVerso').click();
+  });
+  
+  $('#inputVerso').on('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      processarImagem(file, 'verso');
+    }
+  });
+  
+  // Evento para enviar documentos
+  $('#enviarDocumentos').on('click', function() {
+    enviarDocumentos();
+  });
+}
+
+// Função para processar a imagem selecionada
+function processarImagem(file, tipo) {
+  const reader = new FileReader();
+  
+  reader.onload = function(e) {
+    const base64 = e.target.result;
     
-    // Salvar no localStorage para demonstração
-    const chavePix = {
-      tipo: tipo,
-      valor: valor,
-      nome: nome,
-      dataCadastro: new Date().toISOString()
-    };
+    if (tipo === 'frente') {
+      $('#imgFrente').attr('src', base64);
+      $('#uploadFrente').hide();
+      $('#previewFrente').show();
+      localStorage.setItem('documentoFrente', base64);
+    } else if (tipo === 'verso') {
+      $('#imgVerso').attr('src', base64);
+      $('#uploadVerso').hide();
+      $('#previewVerso').show();
+      localStorage.setItem('documentoVerso', base64);
+    }
     
-    localStorage.setItem('chavePix', JSON.stringify(chavePix));
-    
-    // Fechar modal
-    app.popup.close('.popup-editar-pix');
-    
-    app.dialog.alert(
-      "Chave PIX atualizada com sucesso!",
-      "Sucesso"
-    );
-  }, 1500);
+    verificarDocumentosCompletos();
+  };
+  
+  reader.readAsDataURL(file);
+}
+
+// Função para remover imagem
+function removerImagem(tipo) {
+  if (tipo === 'frente') {
+    $('#previewFrente').hide();
+    $('#uploadFrente').show();
+    $('#inputFrente').val('');
+    localStorage.removeItem('documentoFrente');
+  } else if (tipo === 'verso') {
+    $('#previewVerso').hide();
+    $('#uploadVerso').show();
+    $('#inputVerso').val('');
+    localStorage.removeItem('documentoVerso');
+  }
+  
+  verificarDocumentosCompletos();
+}
+
+// Função para verificar se ambos os documentos foram enviados
+function verificarDocumentosCompletos() {
+  const frente = localStorage.getItem('documentoFrente');
+  const verso = localStorage.getItem('documentoVerso');
+  
+  if (frente && verso) {
+    $('#enviarDocumentos').prop('disabled', false);
+  } else {
+    $('#enviarDocumentos').prop('disabled', true);
+  }
+}
+
+// Função para enviar documentos para o servidor
+function enviarDocumentos() {
+  const frente = localStorage.getItem('documentoFrente');
+  const verso = localStorage.getItem('documentoVerso');
+  
+  if (!frente || !verso) {
+    return app.dialog.alert("Por favor, envie ambos os documentos (frente e verso).");
+  }
+  
+  app.dialog.preloader("Enviando documentos...");
+  
+  const pessoaId = localStorage.getItem("pessoaId");
+  
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + userAuthToken,
+  };
+
+  const body = JSON.stringify({
+    class: "PessoaRestService",
+    method: "enviarDocumentos",
+    pessoa_id: pessoaId,
+    documento_frente: frente,
+    documento_verso: verso
+  });
+
+  const options = {
+    method: "POST",
+    headers: headers,
+    body: body,
+  };
+
+  fetch(apiServerUrl, options)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      app.dialog.close();
+      if (responseJson.data.status === "success") {
+        app.dialog.alert("Documentos enviados com sucesso! Sua conta será verificada em breve.", "Sucesso!");
+        
+        // Limpa os documentos do localStorage
+        localStorage.removeItem('documentoFrente');
+        localStorage.removeItem('documentoVerso');
+        
+        // Atualiza o status da conta
+        atualizarStatusConta('pendente');
+        
+        // Esconde a seção de verificação
+        $('#verificationSection').hide();
+        
+      } else {
+        app.dialog.alert("Erro ao enviar documentos: " + responseJson.data.message, "Erro!");
+      }
+    })
+    .catch((error) => {
+      app.dialog.close();
+      console.error("Erro:", error);
+      app.dialog.alert("Erro ao enviar documentos. Tente novamente.", "Erro!");
+    });
+}
+
+// Função para inicializar o sistema de status da conta
+function inicializarStatusConta() {
+  carregarStatusConta();
+  configurarUploadDocumentos();
+  verificarDocumentosCompletos();
 }
 
 

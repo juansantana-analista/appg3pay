@@ -146,6 +146,66 @@
                      </div>
                   </div>
 
+                  <!-- Status da Conta -->
+                  <div class="dashboard-section">
+                     <h2 class="section-title">Status da Conta</h2>
+                     <div class="account-status-container">
+                        <div class="status-indicator" id="statusConta">
+                           <div class="status-icon">
+                              <i class="mdi mdi-account-check" id="statusIcon"></i>
+                           </div>
+                           <div class="status-info">
+                              <div class="status-title" id="statusTitle">Conta Verificada</div>
+                              <div class="status-description" id="statusDescription">Sua conta foi verificada e está ativa</div>
+                           </div>
+                        </div>
+                        
+                        <div class="verification-section" id="verificationSection" style="display: none;">
+                           <div class="verification-info">
+                              <i class="mdi mdi-information-outline"></i>
+                              <p>Para verificar sua conta, envie uma foto da frente e verso do seu documento de identidade ou carteira de motorista.</p>
+                           </div>
+                           
+                           <div class="document-upload">
+                              <div class="upload-group">
+                                 <label class="upload-label">Frente do Documento</label>
+                                 <div class="upload-area" id="uploadFrente">
+                                    <i class="mdi mdi-camera-plus"></i>
+                                    <span>Clique para tirar foto</span>
+                                    <input type="file" accept="image/*" id="inputFrente" style="display:none" capture="environment">
+                                 </div>
+                                 <div class="upload-preview" id="previewFrente" style="display: none;">
+                                    <img id="imgFrente" src="" alt="Frente do documento">
+                                    <button class="btn-remove" onclick="removerImagem('frente')">
+                                       <i class="mdi mdi-close"></i>
+                                    </button>
+                                 </div>
+                              </div>
+                              
+                              <div class="upload-group">
+                                 <label class="upload-label">Verso do Documento</label>
+                                 <div class="upload-area" id="uploadVerso">
+                                    <i class="mdi mdi-camera-plus"></i>
+                                    <span>Clique para tirar foto</span>
+                                    <input type="file" accept="image/*" id="inputVerso" style="display:none" capture="environment">
+                                 </div>
+                                 <div class="upload-preview" id="previewVerso" style="display: none;">
+                                    <img id="imgVerso" src="" alt="Verso do documento">
+                                    <button class="btn-remove" onclick="removerImagem('verso')">
+                                       <i class="mdi mdi-close"></i>
+                                    </button>
+                                 </div>
+                              </div>
+                              
+                              <button class="btn btn-primary btn-upload" id="enviarDocumentos" disabled>
+                                 <i class="mdi mdi-upload"></i>
+                                 Enviar Documentos
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+
                   <!-- Support Section -->
                   <div class="dashboard-section" id="suporteClick">
                      <h2 class="section-title">Suporte</h2>

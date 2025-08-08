@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Status Conta - VitaTop</title>
+    <link rel="stylesheet" href="css/perfil.css">
+    <link rel="stylesheet" href="css/materialdesignicons.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f7f9fa;
+        }
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+        .test-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .test-btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            background: #00591F;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .test-btn:hover {
+            background: #7CBE42;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Teste do Sistema de Status da Conta</h1>
+        
+        <div class="test-buttons">
+            <button class="test-btn" onclick="testarStatus('verificado')">Status: Verificado</button>
+            <button class="test-btn" onclick="testarStatus('pendente')">Status: Pendente</button>
+            <button class="test-btn" onclick="testarStatus('bloqueado')">Status: Bloqueado</button>
+            <button class="test-btn" onclick="testarStatus('nao_verificado')">Status: Não Verificado</button>
+        </div>
+
+        <!-- Status da Conta -->
+        <div class="dashboard-section">
+            <h2 class="section-title">Status da Conta</h2>
+            <div class="account-status-container">
+                <div class="status-indicator" id="statusConta">
+                    <div class="status-icon">
+                        <i class="mdi mdi-account-check" id="statusIcon"></i>
+                    </div>
+                    <div class="status-info">
+                        <div class="status-title" id="statusTitle">Conta Verificada</div>
+                        <div class="status-description" id="statusDescription">Sua conta foi verificada e está ativa</div>
+                    </div>
+                </div>
+                
+                <div class="verification-section" id="verificationSection" style="display: none;">
+                    <div class="verification-info">
+                        <i class="mdi mdi-information-outline"></i>
+                        <p>Para verificar sua conta, envie uma foto da frente e verso do seu documento de identidade ou carteira de motorista.</p>
+                    </div>
+                    
+                    <div class="document-upload">
+                        <div class="upload-group">
+                            <label class="upload-label">Frente do Documento</label>
+                            <div class="upload-area" id="uploadFrente">
+                                <i class="mdi mdi-camera-plus"></i>
+                                <span>Clique para tirar foto</span>
+                                <input type="file" accept="image/*" id="inputFrente" style="display:none" capture="environment">
+                            </div>
+                            <div class="upload-preview" id="previewFrente" style="display: none;">
+                                <img id="imgFrente" src="" alt="Frente do documento">
+                                <button class="btn-remove" onclick="removerImagem('frente')">
+                                    <i class="mdi mdi-close"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="upload-group">
+                            <label class="upload-label">Verso do Documento</label>
+                            <div class="upload-area" id="uploadVerso">
+                                <i class="mdi mdi-camera-plus"></i>
+                                <span>Clique para tirar foto</span>
+                                <input type="file" accept="image/*" id="inputVerso" style="display:none" capture="environment">
+                            </div>
+                            <div class="upload-preview" id="previewVerso" style="display: none;">
+                                <img id="imgVerso" src="" alt="Verso do documento">
+                                <button class="btn-remove" onclick="removerImagem('verso')">
+                                    <i class="mdi mdi-close"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-upload" id="enviarDocumentos" disabled>
+                            <i class="mdi mdi-upload"></i>
+                            Enviar Documentos
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="lib/jquery-3.7.0.min.js"></script>
+    <script>
+        // Simulação das funções do sistema
+        function testarStatus(status) {
+            atualizarStatusConta(status);
+        }
+
+        function atualizarStatusConta(status) {
+            const statusIcon = $('#statusIcon');
+            const statusTitle = $('#statusTitle');
+            const statusDescription = $('#statusDescription');
+            const verificationSection = $('#verificationSection');
+            
+            // Remove todas as classes de status
+            $('.status-icon').removeClass('verified pending blocked');
+            
+            switch(status) {
+                case 'verificado':
+                    statusIcon.removeClass().addClass('mdi mdi-account-check');
+                    $('.status-icon').addClass('verified');
+                    statusTitle.text('Conta Verificada');
+                    statusDescription.text('Sua conta foi verificada e está ativa');
+                    verificationSection.hide();
+                    break;
+                    
+                case 'pendente':
+                    statusIcon.removeClass().addClass('mdi mdi-clock-outline');
+                    $('.status-icon').addClass('pending');
+                    statusTitle.text('Conta em Análise');
+                    statusDescription.text('Sua documentação está sendo analisada');
+                    verificationSection.hide();
+                    break;
+                    
+                case 'bloqueado':
+                    statusIcon.removeClass().addClass('mdi mdi-account-lock');
+                    $('.status-icon').addClass('blocked');
+                    statusTitle.text('Conta Bloqueada');
+                    statusDescription.text('Sua conta foi bloqueada. Entre em contato com o suporte.');
+                    verificationSection.hide();
+                    break;
+                    
+                case 'nao_verificado':
+                default:
+                    statusIcon.removeClass().addClass('mdi mdi-account-alert');
+                    $('.status-icon').addClass('pending');
+                    statusTitle.text('Conta Não Verificada');
+                    statusDescription.text('Envie seus documentos para verificar sua conta');
+                    verificationSection.show();
+                    break;
+            }
+        }
+
+        function configurarUploadDocumentos() {
+            // Evento para upload da frente do documento
+            $('#uploadFrente').on('click', function() {
+                $('#inputFrente').click();
+            });
+            
+            $('#inputFrente').on('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    processarImagem(file, 'frente');
+                }
+            });
+            
+            // Evento para upload do verso do documento
+            $('#uploadVerso').on('click', function() {
+                $('#inputVerso').click();
+            });
+            
+            $('#inputVerso').on('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    processarImagem(file, 'verso');
+                }
+            });
+            
+            // Evento para enviar documentos
+            $('#enviarDocumentos').on('click', function() {
+                alert('Documentos enviados com sucesso! (Simulação)');
+            });
+        }
+
+        function processarImagem(file, tipo) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const base64 = e.target.result;
+                
+                if (tipo === 'frente') {
+                    $('#imgFrente').attr('src', base64);
+                    $('#uploadFrente').hide();
+                    $('#previewFrente').show();
+                    localStorage.setItem('documentoFrente', base64);
+                } else if (tipo === 'verso') {
+                    $('#imgVerso').attr('src', base64);
+                    $('#uploadVerso').hide();
+                    $('#previewVerso').show();
+                    localStorage.setItem('documentoVerso', base64);
+                }
+                
+                verificarDocumentosCompletos();
+            };
+            
+            reader.readAsDataURL(file);
+        }
+
+        function removerImagem(tipo) {
+            if (tipo === 'frente') {
+                $('#previewFrente').hide();
+                $('#uploadFrente').show();
+                $('#inputFrente').val('');
+                localStorage.removeItem('documentoFrente');
+            } else if (tipo === 'verso') {
+                $('#previewVerso').hide();
+                $('#uploadVerso').show();
+                $('#inputVerso').val('');
+                localStorage.removeItem('documentoVerso');
+            }
+            
+            verificarDocumentosCompletos();
+        }
+
+        function verificarDocumentosCompletos() {
+            const frente = localStorage.getItem('documentoFrente');
+            const verso = localStorage.getItem('documentoVerso');
+            
+            if (frente && verso) {
+                $('#enviarDocumentos').prop('disabled', false);
+            } else {
+                $('#enviarDocumentos').prop('disabled', true);
+            }
+        }
+
+        // Inicializar quando a página carregar
+        $(document).ready(function() {
+            configurarUploadDocumentos();
+            verificarDocumentosCompletos();
+            atualizarStatusConta('nao_verificado'); // Status inicial para teste
+        });
+    </script>
+</body>
+</html>
