@@ -1,12 +1,13 @@
 :root {
-  --branco: #ffff;
-  --gelo: #f1f1f1;
-  --verde: #19c463;
-  --preto: #2a2a2a;
-  --laranja: #ff5500;
-  --verde-escuro: #00591f;
-  --verde-claro: #7cbe42;
-  --rosa: #ffc0cb;
+  /* Cores do SkillHub - Sistema unificado */
+  --branco: var(--skillhub-bg-white);
+  --gelo: var(--skillhub-bg-light);
+  --verde: var(--skillhub-success);
+  --preto: var(--skillhub-text-primary);
+  --laranja: var(--skillhub-warning);
+  --verde-escuro: var(--skillhub-primary);
+  --verde-claro: var(--skillhub-secondary);
+  --rosa: var(--skillhub-accent);
 }
 
 /* Impede a seleção de texto em todo o aplicativo */
@@ -17,7 +18,7 @@
   user-select: none; /* Standard */
 }
 
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 @font-face {
   font-family: SFProDisplayLight; /* Nome que você deseja dar à fonte */
@@ -28,8 +29,8 @@
 }
 
 body {
-  background-color: var(--verde-escuro);
-  font-family: "SFProDisplayLight", sans-serif;
+  background-color: var(--skillhub-bg-light);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .toolbar {
@@ -115,7 +116,7 @@ body {
 
 .bottom-nav .cart-badge::before {
   content: attr(data-count);
-  background: #7cbe42;
+  background: var(--skillhub-secondary);
   width: 17px;
   height: 17px;
   border-radius: 50%;
@@ -173,7 +174,7 @@ body {
 .buy-button {
   width: 100%;
   padding: 10px;
-  background-color: #19c463;
+  background-color: var(--skillhub-success);
   color: #ffffff;
   font-size: 16px;
   font-weight: bold;
@@ -184,7 +185,7 @@ body {
 }
 
 .buy-button:hover {
-  background-color: #0056b3;
+  background-color: var(--skillhub-accent);
 }
 
 .tab-link {
@@ -198,7 +199,7 @@ body {
   height: 80px;
   line-height: 25px;
   font-weight: bold;
-  color: #ff3d00;
+  color: var(--skillhub-warning);
 }
 
 .toolbar-inner .link:not(.active) {
@@ -213,7 +214,7 @@ body {
 .top-nav {
   width: 100%;
   height: 60px;
-  background: var(--verde-escuro);
+  background: var(--skillhub-primary);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -234,7 +235,7 @@ body {
 }
 
 .skin {
-  background: var(--verde-escuro) !important;
+  background: var(--skillhub-primary) !important;
   /*AZUL #0061ab; */
   /*VERMELHO #0061ab; */
 }
@@ -296,7 +297,7 @@ body {
 /* Badge do carrinho */
 .btn-cart::before {
   content: attr(data-count);
-  background: #7cbe42;
+  background: var(--skillhub-secondary);
   width: 17px;
   height: 17px;
   border-radius: 50%;
@@ -377,7 +378,7 @@ body {
 /* Badge de notificação */
 .btn-notificacao::before {
   content: attr(data-count);
-  background: #7cbe42;
+  background: var(--skillhub-secondary);
   width: 17px;
   height: 17px;
   border-radius: 50%;
@@ -443,7 +444,7 @@ body {
 
 /* Debug - remover depois que funcionar */
 .btn-notificacao[data-count="1"]::before {
-  background: #7cbe42 !important; /* Para teste, depois mude para var(--verde-escuro) */
+  background: var(--skillhub-secondary) !important;
 }
 
 .btn-notifi {
@@ -533,7 +534,7 @@ form {
 }
 
 .filter-btn.active {
-  background: var(--verde-escuro);
+  background: var(--skillhub-primary);
   color: var(--branco);
   border: none;
 }
@@ -663,7 +664,7 @@ form {
 .price {
   font-size: 18px;
   font-weight: 600;
-  color: var(--verde-escuro);
+  color: var(--skillhub-primary);
   margin-top: 5px;
   text-align: left;
 }
@@ -677,7 +678,7 @@ form {
   height: 50px;
   border-radius: 15px;
   border: none;
-  background-color: var(--verde-escuro);
+  background-color: var(--skillhub-primary);
   color: #fff;
   cursor: pointer;
   font-size: 18px;
@@ -720,7 +721,7 @@ form {
 
 .progress-bar {
   height: 100%;
-  background-color: #4caf50;
+  background-color: var(--skillhub-success);
 }
 
 .balance-medal {
@@ -1697,7 +1698,7 @@ form {
 .categoria i {
   font-size: 24px;
   color: #fff;
-  background-color: #3b5998; /* Cor padrão, pode ser modificada */
+  background-color: var(--skillhub-secondary);
   border-radius: 50%;
   width: 45px; /* Adicionado */
   height: 45px; /* Adicionado */
@@ -1761,7 +1762,7 @@ form {
   display: block;
   width: 100%;
   padding: 12px;
-  background-color: #ff4b00;
+  background-color: var(--skillhub-warning);
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -1771,7 +1772,7 @@ form {
 }
 
 .btn-primary:hover {
-  background-color: #e04300;
+  background-color: var(--skillhub-accent);
 }
 
 #payment-details {
@@ -3333,11 +3334,11 @@ select {
 
 /* Estilo para a seção de boas-vindas */
 .welcome-section {
-  background: linear-gradient(135deg, #004d00 0%, #006400 100%);
+  background: linear-gradient(135deg, var(--skillhub-primary) 0%, var(--skillhub-secondary) 100%);
   border-radius: 15px;
   padding: 20px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 15px rgba(0, 77, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(10, 26, 47, 0.2);
   color: white;
   position: relative;
   overflow: hidden;
@@ -3372,7 +3373,7 @@ select {
 }
 
 .welcome-section #nomeUsuarioHome {
-  color: #7cbe42;
+  color: var(--skillhub-secondary);
   font-weight: 700;
   position: relative;
   display: inline-block;
@@ -3400,7 +3401,7 @@ select {
 }
 
 .welcome-section #nomeUsuarioHome {
-  background: linear-gradient(90deg, #7cbe42, #b4ff65, #7cbe42);
+  background: linear-gradient(90deg, var(--skillhub-secondary), var(--skillhub-accent), var(--skillhub-secondary));
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -3562,9 +3563,9 @@ select {
 }
 
 .search-input-wrapper:focus-within {
-    box-shadow: 0 4px 12px rgba(25, 196, 99, 0.15), 0 0 0 3px rgba(25, 196, 99, 0.1);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15), 0 0 0 3px rgba(59, 130, 246, 0.1);
     transform: translateY(-1px);
-    border-color: #19c463;
+    border-color: var(--skillhub-success);
 }
 
 .search-input {
@@ -3592,7 +3593,7 @@ select {
     right: 18px;
     top: 50%;
     transform: translateY(-50%);
-    color: #19c463;
+    color: var(--skillhub-success);
     font-size: 16px;
     pointer-events: none;
     opacity: 0.8;
@@ -4201,21 +4202,21 @@ select {
 }
 
 .aba-pedidos-vendas.ativa {
-  color: #00591F;
-  border-bottom-color: #00591F;
+  color: var(--skillhub-primary);
+  border-bottom-color: var(--skillhub-primary);
 }
 
 .aba-pedidos-vendas.ativa i {
-  color: #00591F;
+  color: var(--skillhub-primary);
 }
 
 .aba-pedidos-vendas:hover {
   background-color: #f8f9fa;
-  color: #00591F;
+  color: var(--skillhub-primary);
 }
 
 .aba-pedidos-vendas:hover i {
-  color: #00591F;
+  color: var(--skillhub-primary);
 }
 
 /* Área de Busca */
@@ -4238,8 +4239,8 @@ select {
 
 .busca-wrapper-pedidos-vendas:focus-within {
   background: #fff;
-  border-color: #00591F;
-  box-shadow: 0 0 0 3px rgba(0, 89, 31, 0.1);
+  border-color: var(--skillhub-primary);
+  box-shadow: 0 0 0 3px rgba(10, 26, 47, 0.1);
 }
 
 .busca-input-pedidos-vendas {
@@ -4329,17 +4330,17 @@ select {
 }
 
 .status-card-pedidos-vendas.ativo {
-  border-color: #00591F;
+  border-color: var(--skillhub-primary);
   background: #f0f8f0;
-  box-shadow: 0 0 0 2px rgba(0, 89, 31, 0.2);
+  box-shadow: 0 0 0 2px rgba(10, 26, 47, 0.2);
 }
 
 /* Card Todos - Ocupa toda largura */
 .status-card-pedidos-vendas.todos {
   grid-column: 1 / -1;
-  background: linear-gradient(135deg, #00591F, #19c463);
+  background: linear-gradient(135deg, var(--skillhub-primary), var(--skillhub-secondary));
   color: #fff;
-  border-color: #00591F;
+  border-color: var(--skillhub-primary);
   position: relative;
   overflow: hidden;
 }
@@ -4356,9 +4357,9 @@ select {
 }
 
 .status-card-pedidos-vendas.todos.ativo {
-  background: linear-gradient(135deg, #004a1a, #15a052);
+  background: linear-gradient(135deg, var(--skillhub-primary), var(--skillhub-secondary));
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 89, 31, 0.3);
+  box-shadow: 0 6px 20px rgba(10, 26, 47, 0.3);
 }
 
 /* Status específicos para Vendas */
@@ -4450,7 +4451,7 @@ select {
   position: absolute;
   top: 8px;
   right: 8px;
-  background: #00591F;
+  background: var(--skillhub-primary);
   color: #fff;
   border-radius: 50%;
   width: 24px;
@@ -4508,12 +4509,12 @@ select {
 }
 
 .filtro-select-pedidos-vendas:focus {
-  border-color: #00591F;
-  box-shadow: 0 0 0 3px rgba(0, 89, 31, 0.1);
+  border-color: var(--skillhub-primary);
+  box-shadow: 0 0 0 3px rgba(10, 26, 47, 0.1);
 }
 
 .filtro-select-pedidos-vendas:hover {
-  border-color: #00591F;
+  border-color: var(--skillhub-primary);
 }
 
 /* Botão Limpar */
@@ -4583,7 +4584,7 @@ select {
 .loading-pedidos-vendas i {
   font-size: 32px;
   margin-bottom: 16px;
-  color: #00591F;
+  color: var(--skillhub-primary);
   animation: spin 1s linear infinite;
 }
 
@@ -4711,7 +4712,7 @@ select {
 
 /* Melhorias para acessibilidade */
 .status-card-pedidos-vendas:focus {
-  outline: 2px solid #00591F;
+  outline: 2px solid var(--skillhub-primary);
   outline-offset: 2px;
 }
 
@@ -4720,7 +4721,7 @@ select {
 }
 
 .limpar-filtros-pedidos-vendas:focus {
-  outline: 2px solid #00591F;
+  outline: 2px solid var(--skillhub-primary);
   outline-offset: 2px;
 }
 
@@ -4739,7 +4740,7 @@ select {
   height: 20px;
   margin: -10px 0 0 -10px;
   border: 2px solid #f3f3f3;
-  border-top: 2px solid #00591F;
+  border-top: 2px solid var(--skillhub-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -4777,7 +4778,7 @@ select {
   width: 0;
   height: 0;
   border-radius: 50%;
-  background: rgba(0, 89, 31, 0.1);
+  background: rgba(10, 26, 47, 0.1);
   transform: translate(-50%, -50%);
   transition: width 0.3s ease, height 0.3s ease;
 }
@@ -4826,8 +4827,8 @@ select {
 }
 
 .aba-item.ativa {
-  color: #00591F;
-  border-bottom-color: #00591F;
+  color: var(--skillhub-primary);
+  border-bottom-color: var(--skillhub-primary);
   position: relative;
 }
 
@@ -4839,12 +4840,12 @@ select {
   transform: translateX(-50%);
   width: 20px;
   height: 3px;
-  background-color: #00591F;
+  background-color: var(--skillhub-primary);
   border-radius: 2px;
 }
 
 .aba-item.ativa i {
-  color: #00591F;
+  color: var(--skillhub-primary);
 }
 
 .aba-item:hover {
@@ -4852,7 +4853,7 @@ select {
 }
 
 .aba-item:hover i {
-  color: #00591F;
+  color: var(--skillhub-primary);
 }
 
 /* Responsividade para abas */

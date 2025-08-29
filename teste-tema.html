@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Tema SkillHub</title>
+    
+    <!-- CSS do SkillHub -->
+    <link rel="stylesheet" href="css/skillhub-theme.css?v=3.0.0" />
+    <link rel="stylesheet" href="css/skillhub-override.css?v=3.0.0" />
+    <link rel="stylesheet" href="css/skillhub-colors.css?v=3.0.0" />
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--skillhub-bg-light);
+        }
+        
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .test-title {
+            color: var(--skillhub-primary);
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--skillhub-border-light);
+        }
+        
+        .test-section h3 {
+            color: var(--skillhub-text-primary);
+            margin-top: 0;
+            font-weight: 600;
+        }
+        
+        .color-test {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .color-swatch {
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .color-swatch.primary { background-color: var(--skillhub-primary); }
+        .color-swatch.secondary { background-color: var(--skillhub-secondary); }
+        .color-swatch.accent { background-color: var(--skillhub-accent); }
+        .color-swatch.success { background-color: var(--skillhub-success); }
+        .color-swatch.warning { background-color: var(--skillhub-warning); }
+        .color-swatch.error { background-color: var(--skillhub-error); }
+        
+        .button-test {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary { background-color: var(--skillhub-primary); color: white; }
+        .btn-secondary { background-color: var(--skillhub-secondary); color: white; }
+        .btn-accent { background-color: var(--skillhub-accent); color: white; }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-test {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+            box-shadow: var(--skillhub-shadow-small);
+            border: 1px solid var(--skillhub-border-light);
+        }
+        
+        .input-test {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--skillhub-border-light);
+            border-radius: 8px;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: all 0.2s ease;
+        }
+        
+        .input-test:focus {
+            outline: none;
+            border-color: var(--skillhub-accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 5px;
+        }
+        
+        .status-success { background-color: var(--skillhub-success); color: white; }
+        .status-warning { background-color: var(--skillhub-warning); color: white; }
+        .status-error { background-color: var(--skillhub-error); color: white; }
+        
+        .font-test {
+            margin-top: 15px;
+        }
+        
+        .font-test h1 { font-size: 32px; font-weight: 700; color: var(--skillhub-text-primary); }
+        .font-test h2 { font-size: 24px; font-weight: 600; color: var(--skillhub-text-primary); }
+        .font-test h3 { font-size: 20px; font-weight: 500; color: var(--skillhub-text-secondary); }
+        .font-test p { font-size: 16px; font-weight: 400; color: var(--skillhub-text-secondary); line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1 class="test-title">🎨 Teste do Tema SkillHub</h1>
+        
+        <div class="test-section">
+            <h3>Paleta de Cores</h3>
+            <div class="color-test">
+                <div class="color-swatch primary">Primary<br>#0A1A2F</div>
+                <div class="color-swatch secondary">Secondary<br>#1E3A8A</div>
+                <div class="color-swatch accent">Accent<br>#3B82F6</div>
+                <div class="color-swatch success">Success<br>#10B981</div>
+                <div class="color-swatch warning">Warning<br>#F59E0B</div>
+                <div class="color-swatch error">Error<br>#EF4444</div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Botões</h3>
+            <div class="button-test">
+                <button class="btn btn-primary">Botão Primário</button>
+                <button class="btn btn-secondary">Botão Secundário</button>
+                <button class="btn btn-accent">Botão Accent</button>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Cards e Sombras</h3>
+            <div class="card-test">
+                <h4>Card de Exemplo</h4>
+                <p>Este é um exemplo de card com sombra e bordas arredondadas seguindo o design system do SkillHub.</p>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Inputs e Formulários</h3>
+            <input type="text" class="input-test" placeholder="Digite algo aqui...">
+            <input type="email" class="input-test" placeholder="seu@email.com">
+        </div>
+        
+        <div class="test-section">
+            <h3>Indicadores de Status</h3>
+            <span class="status-indicator status-success">Sucesso</span>
+            <span class="status-indicator status-warning">Atenção</span>
+            <span class="status-indicator status-error">Erro</span>
+        </div>
+        
+        <div class="test-section">
+            <h3>Tipografia</h3>
+            <div class="font-test">
+                <h1>Título H1 - Inter Bold 700</h1>
+                <h2>Título H2 - Inter SemiBold 600</h2>
+                <h3>Título H3 - Inter Medium 500</h3>
+                <p>Texto de corpo - Inter Regular 400. Esta é uma fonte moderna e legível que transmite confiança e profissionalismo, características essenciais para o SkillHub.</p>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Variáveis CSS Verificadas</h3>
+            <div class="card-test">
+                <p><strong>Primary:</strong> <span style="color: var(--skillhub-primary);">var(--skillhub-primary)</span></p>
+                <p><strong>Secondary:</strong> <span style="color: var(--skillhub-secondary);">var(--skillhub-secondary)</span></p>
+                <p><strong>Accent:</strong> <span style="color: var(--skillhub-accent);">var(--skillhub-accent)</span></p>
+                <p><strong>Background:</strong> <span style="background-color: var(--skillhub-bg-light); padding: 5px; border-radius: 4px;">var(--skillhub-bg-light)</span></p>
+                <p><strong>Text Primary:</strong> <span style="color: var(--skillhub-text-primary);">var(--skillhub-text-primary)</span></p>
+                <p><strong>Border Radius:</strong> <span style="background-color: var(--skillhub-accent); color: white; padding: 5px; border-radius: var(--skillhub-border-radius-medium);">var(--skillhub-border-radius-medium)</span></p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Verificar se as variáveis CSS estão sendo carregadas
+        document.addEventListener('DOMContentLoaded', function() {
+            const root = getComputedStyle(document.documentElement);
+            const primary = root.getPropertyValue('--skillhub-primary').trim();
+            const secondary = root.getPropertyValue('--skillhub-secondary').trim();
+            const accent = root.getPropertyValue('--skillhub-accent').trim();
+            
+            console.log('🎨 Tema SkillHub carregado:');
+            console.log('Primary:', primary);
+            console.log('Secondary:', secondary);
+            console.log('Accent:', accent);
+            
+            if (primary && secondary && accent) {
+                console.log('✅ Todas as variáveis CSS estão funcionando!');
+            } else {
+                console.log('❌ Algumas variáveis CSS não foram carregadas');
+            }
+        });
+    </script>
+</body>
+</html>

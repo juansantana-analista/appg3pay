@@ -2,21 +2,21 @@
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
   "background_color": "#ffffff",
   "dir": "ltr",
-  "name": "VitaTop homologação",
+  "name": "SkillHub",
   "scope": "/",
-  "short_name": "VitaTop homolog",
-  "start_url": "https://homologaappvitatop.tecskill.com.br/",
-  "id": "br.com.g3pay",
+  "short_name": "SkillHub",
+  "start_url": "https://skillhub.com/",
+  "id": "com.skillhub.app",
   "display": "fullscreen",
   "display_override": ["standalone", "window-controls-overlay"],
-  "theme_color": "#00591F",
+  "theme_color": "#0A1A2F",
   "orientation": "portrait",
   "shortcuts": [
     {
-      "name": "VitaTop homologação",
-      "short_name": "VitaTop homolog",
-      "description": "Gerencie suas vendas e maximize seus ganhos com a VitaTop na palma da mão.",
-      "url": "https://homologaappvitatop.tecskill.com.br/"
+      "name": "SkillHub",
+      "short_name": "SkillHub",
+      "description": "Desenvolva habilidades, gerencie equipes e maximize resultados com o SkillHub na palma da mão.",
+      "url": "https://skillhub.com/"
     }
   ],
   "icons": [

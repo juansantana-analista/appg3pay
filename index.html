@@ -8,15 +8,17 @@
       <meta name="mobile-web-app-capable" content="yes">
       <meta name="apple-touch-fullscreen" content="yes">
       <meta name="apple-mobile-web-app-status-bar-style" content="default">
-      <meta name="apple-mobile-web-app-title" content="VitaTop">
+      <meta name="apple-mobile-web-app-title" content="SkillHub">
       <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
       <meta http-equiv="Pragma" content="no-cache">
       <meta http-equiv="Expires" content="0">
       <link rel="manifest" href="/manifest.json">
+      <link rel="icon" type="image/svg+xml" href="img/logo-skillhub.svg">
+      <link rel="shortcut icon" href="img/logo-skillhub.svg">
       <!-- Color theme for statusbar (Android only) -->
-      <meta name="theme-color" content="#00591F" />
+      <meta name="theme-color" content="#0A1A2F" />
       <!-- Your app title -->
-      <title>VITATOP</title>
+      <title>SkillHub</title>
       <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
       <script>
          if (typeof navigator.serviceWorker !== 'undefined') {
@@ -26,11 +28,11 @@
          window.OneSignalDeferred = window.OneSignalDeferred || [];
          OneSignalDeferred.push(async function(OneSignal) {
            await OneSignal.init({
-             appId: "7bfc9cb0-b251-4b3a-be5c-be82c1a143e2",
+             appId: "skillhub-app-id", // Substituir pelo ID real do OneSignal
              external_id: '11',
              welcomeNotification: {
                disable: false, // Ativa a notificação de boas-vindas
-               title: "Bem-vindo!",
+               title: "Bem-vindo ao SkillHub!",
                message: "Obrigado por se inscrever! Você receberá nossas últimas atualizações.",
              },
            });
@@ -85,9 +87,17 @@
       }
       })();
       </script>   
+      <!-- Fonte Inter do Google Fonts -->
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+      
       <!-- Path to Framework7 Library Bundle CSS -->
       <link rel="stylesheet" href="lib/framework7-bundle.min.css" />
-      <!-- CSS PERSONALIZADO PARA MENU-->
+      <!-- CSS PRINCIPAL DO SKILLHUB -->
+      <link rel="stylesheet" href="css/skillhub-theme.css?v=3.0.0" />
+      <link rel="stylesheet" href="css/skillhub-override.css?v=3.0.0" />
+      <link rel="stylesheet" href="css/skillhub-colors.css?v=3.0.0" />
       <link rel="stylesheet" href="css/index.css?v=2.4.0" />
       <link rel="stylesheet" href="css/carrinho.css?v=2.4.0" />
       <link rel="stylesheet" href="css/gestao.css?v=2.4.0" />
@@ -147,7 +157,7 @@
                            <img src="img/user.jpg" alt="" id="profileImageMenu">
                         </div>
                         <div class="col-80">
-                           <strong id="menuLateralNome">VITATOP</strong><br />
+                           <strong id="menuLateralNome">SKILLHUB</strong><br />
                            <small id="nomeUsuarioLateral"></small>
                         </div>
                      </div>
@@ -241,7 +251,7 @@
                      <li class="menu-logo">
                         <div class="item-content">
                            <div class="item-inner">
-                              <center><img src="img/logo.png" width="130px" alt="VitaTop"></center>
+                              <center><img src="img/logo-skillhub.svg" width="130px" alt="SkillHub"></center>
                            </div>
                         </div>
                      </li>
@@ -250,7 +260,7 @@
             </div>
             <div id="installBanner" class="install-banner display-none">
                <div class="col-15">
-                  <img src="favicon.png" alt="VitaTop Logo" class="app-logo">
+                  <img src="img/logo-skillhub.svg" alt="SkillHub Logo" class="app-logo">
                </div>
                <div class="banner-text col-85" id="conteudoInstall">
                </div>

@@ -1,0 +1,167 @@
+/* ===== SKILLHUB COLORS - SOBRESCREVE CORES ANTIGAS ===== */
+
+/* Substituir todas as cores antigas do VitaTop pelas cores do SkillHub */
+
+/* Cores principais antigas -> novas */
+:root {
+  --old-primary: #00591F;
+  --old-secondary: #7CBE42;
+  --old-accent: #19c463;
+  --old-warning: #ff5500;
+}
+
+/* Sobrescrever cores específicas em todos os arquivos CSS */
+/* Substituir #00591F por var(--skillhub-primary) */
+[style*="#00591F"] {
+  background: var(--skillhub-primary) !important;
+}
+
+[style*="background: #00591F"] {
+  background: var(--skillhub-primary) !important;
+}
+
+[style*="background-color: #00591F"] {
+  background-color: var(--skillhub-primary) !important;
+}
+
+[style*="background: linear-gradient(135deg, #00591F"] {
+  background: linear-gradient(135deg, var(--skillhub-primary) 0%, var(--skillhub-secondary) 100%) !important;
+}
+
+[style*="border-color: #00591F"] {
+  border-color: var(--skillhub-primary) !important;
+}
+
+[style*="border: 2px solid #00591F"] {
+  border-color: var(--skillhub-primary) !important;
+}
+
+[style*="border: 2px dashed #00591F"] {
+  border-color: var(--skillhub-primary) !important;
+}
+
+[style*="border-left: 4px solid #00591F"] {
+  border-left-color: var(--skillhub-primary) !important;
+}
+
+[style*="border-top: 2px solid #00591F"] {
+  border-top-color: var(--skillhub-primary) !important;
+}
+
+[style*="outline: 2px solid #00591F"] {
+  outline-color: var(--skillhub-primary) !important;
+}
+
+[style*="color: #00591F"] {
+  color: var(--skillhub-primary) !important;
+}
+
+/* Substituir #7CBE42 por var(--skillhub-secondary) */
+[style*="#7CBE42"] {
+  background: var(--skillhub-secondary) !important;
+}
+
+[style*="background: #7CBE42"] {
+  background: var(--skillhub-secondary) !important;
+}
+
+[style*="background-color: #7CBE42"] {
+  background-color: var(--skillhub-secondary) !important;
+}
+
+[style*="border-color: #7CBE42"] {
+  border-color: var(--skillhub-secondary) !important;
+}
+
+[style*="color: #7CBE42"] {
+  color: var(--skillhub-secondary) !important;
+}
+
+/* Substituir #19c463 por var(--skillhub-success) */
+[style*="#19c463"] {
+  background: var(--skillhub-success) !important;
+}
+
+[style*="background: #19c463"] {
+  background: var(--skillhub-success) !important;
+}
+
+[style*="background-color: #19c463"] {
+  background-color: var(--skillhub-success) !important;
+}
+
+[style*="border-color: #19c463"] {
+  border-color: var(--skillhub-success) !important;
+}
+
+[style*="color: #19c463"] {
+  color: var(--skillhub-success) !important;
+}
+
+/* Substituir #ff5500 por var(--skillhub-warning) */
+[style*="#ff5500"] {
+  background: var(--skillhub-warning) !important;
+}
+
+[style*="background: #ff5500"] {
+  background: var(--skillhub-warning) !important;
+}
+
+[style*="background-color: #ff5500"] {
+  background-color: var(--skillhub-warning) !important;
+}
+
+[style*="border-color: #ff5500"] {
+  border-color: var(--skillhub-warning) !important;
+}
+
+[style*="color: #ff5500"] {
+  color: var(--skillhub-warning) !important;
+}
+
+/* Classes específicas para gradientes */
+.gradient-primary {
+  background: linear-gradient(135deg, var(--skillhub-primary) 0%, var(--skillhub-secondary) 100%) !important;
+}
+
+.gradient-secondary {
+  background: linear-gradient(135deg, var(--skillhub-secondary) 0%, var(--skillhub-accent) 100%) !important;
+}
+
+/* Botões e elementos interativos */
+.btn-primary, .button-primary {
+  background-color: var(--skillhub-primary) !important;
+  color: var(--skillhub-bg-white) !important;
+}
+
+.btn-secondary, .button-secondary {
+  background-color: var(--skillhub-secondary) !important;
+  color: var(--skillhub-bg-white) !important;
+}
+
+.btn-accent, .button-accent {
+  background-color: var(--skillhub-accent) !important;
+  color: var(--skillhub-bg-white) !important;
+}
+
+/* Links e elementos de navegação */
+.nav-link.active, .tab-link.active {
+  color: var(--skillhub-secondary) !important;
+  border-color: var(--skillhub-secondary) !important;
+}
+
+/* Status e indicadores */
+.status-active, .status-success {
+  color: var(--skillhub-success) !important;
+  border-color: var(--skillhub-success) !important;
+}
+
+.status-warning {
+  color: var(--skillhub-warning) !important;
+  border-color: var(--skillhub-warning) !important;
+}
+
+.status-error {
+  color: var(--skillhub-error) !important;
+  border-color: var(--skillhub-error) !important;
+}

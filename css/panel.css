@@ -31,9 +31,9 @@
 }
 
 .item-menu-lateral:hover {
-  background-color: rgba(0, 89, 31, 0.1);
+  background-color: rgba(30, 58, 138, 0.1);
   transform: translateX(-5px);
-  color: var(--verde-escuro);
+  color: var(--skillhub-secondary);
 }
 
 .item-menu-lateral .item-content {
@@ -49,7 +49,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  color: var(--verde-escuro);
+  color: var(--skillhub-secondary);
 }
 
 .item-menu-lateral .item-inner {
@@ -73,15 +73,15 @@
 }
 
 .item-menu-lateral:hover .item-title {
-  color: var(--verde-escuro);
+  color: var(--skillhub-secondary);
 }
 
-.item-menu-lateral:hover .item-subtitle {
-  color: var(--verde-escuro);
+.item-menu-lateral:hover .item-title {
+  color: var(--skillhub-secondary);
 }
 
 .item-menu-lateral:hover .item-media {
-  color: var(--verde-escuro);
+  color: var(--skillhub-secondary);
 }
 
 /* Badge para notificações no menu */

@@ -1,0 +1,47 @@
+/* ===== TESTE SKILLHUB - ARQUIVO SIMPLES ===== */
+
+/* Variáveis CSS para o tema SkillHub */
+:root {
+  /* Cores Principais */
+  --skillhub-primary: #0A1A2F;
+  --skillhub-secondary: #1E3A8A;
+  --skillhub-accent: #3B82F6;
+  
+  /* Cores de Fundo */
+  --skillhub-bg-light: #F9FAFB;
+  --skillhub-bg-dark: #111827;
+  --skillhub-bg-white: #FFFFFF;
+  
+  /* Cores de Texto */
+  --skillhub-text-primary: #111827;
+  --skillhub-text-secondary: #6B7280;
+  --skillhub-text-light: #9CA3AF;
+  
+  /* Cores de Status */
+  --skillhub-success: #10B981;
+  --skillhub-warning: #F59E0B;
+  --skillhub-error: #EF4444;
+  --skillhub-info: #3B82F6;
+}
+
+/* Teste básico */
+body {
+  background-color: var(--skillhub-bg-light);
+  color: var(--skillhub-text-primary);
+  font-family: Arial, sans-serif;
+}
+
+.test-primary {
+  background-color: var(--skillhub-primary);
+  color: white;
+}
+
+.test-secondary {
+  background-color: var(--skillhub-secondary);
+  color: white;
+}
+
+.test-accent {
+  background-color: var(--skillhub-accent);
+  color: white;
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Mínimo - SkillHub</title>
+    
+    <!-- CSS do SkillHub -->
+    <link rel="stylesheet" href="css/skillhub-theme.css?v=3.0.0" />
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+        }
+        
+        .test-box {
+            width: 200px;
+            height: 100px;
+            margin: 20px;
+            display: inline-block;
+            text-align: center;
+            line-height: 100px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .primary { background-color: var(--skillhub-primary); }
+        .secondary { background-color: var(--skillhub-secondary); }
+        .accent { background-color: var(--skillhub-accent); }
+        
+        .debug {
+            background: #f0f0f0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste Mínimo do Tema SkillHub</h1>
+    
+    <div class="test-box primary">Primary</div>
+    <div class="test-box secondary">Secondary</div>
+    <div class="test-box accent">Accent</div>
+    
+    <div class="debug">
+        <h3>Debug Info:</h3>
+        <div id="debug-content">Carregando...</div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const root = getComputedStyle(document.documentElement);
+            const debugContent = document.getElementById('debug-content');
+            
+            // Verificar variáveis CSS
+            const primary = root.getPropertyValue('--skillhub-primary').trim();
+            const secondary = root.getPropertyValue('--skillhub-secondary').trim();
+            const accent = root.getPropertyValue('--skillhub-accent').trim();
+            
+            let debugHTML = '<h4>Variáveis CSS:</h4>';
+            debugHTML += `<p>--skillhub-primary: ${primary || 'NÃO DEFINIDA'}</p>`;
+            debugHTML += `<p>--skillhub-secondary: ${secondary || 'NÃO DEFINIDA'}</p>`;
+            debugHTML += `<p>--skillhub-accent: ${accent || 'NÃO DEFINIDA'}</p>`;
+            
+            // Verificar se as cores estão sendo aplicadas
+            const testBoxes = document.querySelectorAll('.test-box');
+            debugHTML += '<h4>Verificação Visual:</h4>';
+            
+            testBoxes.forEach((box, index) => {
+                const computedStyle = getComputedStyle(box);
+                const bgColor = computedStyle.backgroundColor;
+                debugHTML += `<p>Box ${index + 1}: ${bgColor}</p>`;
+            });
+            
+            debugContent.innerHTML = debugHTML;
+            
+            // Log no console
+            console.log('🎨 Tema SkillHub - Debug Info:');
+            console.log('Primary:', primary);
+            console.log('Secondary:', secondary);
+            console.log('Accent:', accent);
+            
+            if (primary && secondary && accent) {
+                console.log('✅ Todas as variáveis CSS estão funcionando!');
+            } else {
+                console.log('❌ Algumas variáveis CSS não foram carregadas');
+            }
+        });
+    </script>
+</body>
+</html>

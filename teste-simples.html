@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Simples - SkillHub</title>
+    
+    <!-- CSS do SkillHub -->
+    <link rel="stylesheet" href="css/skillhub-theme.css?v=3.0.0" />
+    <link rel="stylesheet" href="css/skillhub-override.css?v=3.0.0" />
+    <link rel="stylesheet" href="css/skillhub-colors.css?v=3.0.0" />
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 20px;
+            background-color: var(--skillhub-bg-light);
+        }
+        
+        .test-box {
+            background-color: var(--skillhub-primary);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .test-box.secondary {
+            background-color: var(--skillhub-secondary);
+        }
+        
+        .test-box.accent {
+            background-color: var(--skillhub-accent);
+        }
+        
+        .debug-info {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste Simples do Tema SkillHub</h1>
+    
+    <div class="test-box">
+        <h2>Primary Color</h2>
+        <p>Este box deve ter fundo azul marinho escuro (#0A1A2F)</p>
+    </div>
+    
+    <div class="test-box secondary">
+        <h2>Secondary Color</h2>
+        <p>Este box deve ter fundo azul médio (#1E3A8A)</p>
+    </div>
+    
+    <div class="test-box accent">
+        <h2>Accent Color</h2>
+        <p>Este box deve ter fundo azul claro (#3B82F6)</p>
+    </div>
+    
+    <div class="debug-info">
+        <h3>Debug Info:</h3>
+        <div id="debug-content">Carregando...</div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const root = getComputedStyle(document.documentElement);
+            const debugContent = document.getElementById('debug-content');
+            
+            // Verificar variáveis CSS
+            const variables = {
+                '--skillhub-primary': root.getPropertyValue('--skillhub-primary').trim(),
+                '--skillhub-secondary': root.getPropertyValue('--skillhub-secondary').trim(),
+                '--skillhub-accent': root.getPropertyValue('--skillhub-accent').trim(),
+                '--skillhub-bg-light': root.getPropertyValue('--skillhub-bg-light').trim(),
+                '--skillhub-text-primary': root.getPropertyValue('--skillhub-text-primary').trim()
+            };
+            
+            let debugHTML = '<h4>Variáveis CSS:</h4>';
+            for (const [name, value] of Object.entries(variables)) {
+                const status = value ? '✅' : '❌';
+                debugHTML += `<p>${status} ${name}: ${value || 'NÃO DEFINIDA'}</p>`;
+            }
+            
+            // Verificar se as cores estão sendo aplicadas
+            const testBoxes = document.querySelectorAll('.test-box');
+            debugHTML += '<h4>Verificação Visual:</h4>';
+            
+            testBoxes.forEach((box, index) => {
+                const computedStyle = getComputedStyle(box);
+                const bgColor = computedStyle.backgroundColor;
+                debugHTML += `<p>Box ${index + 1}: ${bgColor}</p>`;
+            });
+            
+            debugContent.innerHTML = debugHTML;
+            
+            // Log no console
+            console.log('🎨 Tema SkillHub - Debug Info:');
+            console.log('Variáveis CSS:', variables);
+            console.log('Test Boxes:', Array.from(testBoxes).map(box => getComputedStyle(box).backgroundColor));
+        });
+    </script>
+</body>
+</html>

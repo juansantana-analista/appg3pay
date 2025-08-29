@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste CSS - SkillHub</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+        }
+        
+        .test-box {
+            width: 200px;
+            height: 100px;
+            margin: 20px;
+            display: inline-block;
+            text-align: center;
+            line-height: 100px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .debug {
+            background: #f0f0f0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+        
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste CSS do Tema SkillHub</h1>
+    
+    <div class="debug">
+        <h3>Status do Carregamento:</h3>
+        <div id="status-content">Verificando...</div>
+    </div>
+    
+    <div class="test-box" id="primary-box" style="background-color: #ccc;">Primary</div>
+    <div class="test-box" id="secondary-box" style="background-color: #ccc;">Secondary</div>
+    <div class="test-box" id="accent-box" style="background-color: #ccc;">Accent</div>
+    
+    <div class="debug">
+        <h3>Debug Info:</h3>
+        <div id="debug-content">Carregando...</div>
+    </div>
+    
+    <script>
+        // Função para carregar CSS dinamicamente
+        function loadCSS(href) {
+            return new Promise((resolve, reject) => {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = href;
+                link.onload = () => resolve(href);
+                link.onerror = () => reject(new Error(`Falha ao carregar: ${href}`));
+                document.head.appendChild(link);
+            });
+        }
+        
+        // Função para verificar variáveis CSS
+        function checkCSSVariables() {
+            const root = getComputedStyle(document.documentElement);
+            const variables = {
+                '--skillhub-primary': root.getPropertyValue('--skillhub-primary').trim(),
+                '--skillhub-secondary': root.getPropertyValue('--skillhub-secondary').trim(),
+                '--skillhub-accent': root.getPropertyValue('--skillhub-accent').trim(),
+                '--skillhub-bg-light': root.getPropertyValue('--skillhub-bg-light').trim(),
+                '--skillhub-text-primary': root.getPropertyValue('--skillhub-text-primary').trim()
+            };
+            
+            return variables;
+        }
+        
+        // Função para aplicar cores aos boxes de teste
+        function applyColors() {
+            const root = getComputedStyle(document.documentElement);
+            const primary = root.getPropertyValue('--skillhub-primary').trim();
+            const secondary = root.getPropertyValue('--skillhub-secondary').trim();
+            const accent = root.getPropertyValue('--skillhub-accent').trim();
+            
+            if (primary) {
+                document.getElementById('primary-box').style.backgroundColor = primary;
+            }
+            if (secondary) {
+                document.getElementById('secondary-box').style.backgroundColor = secondary;
+            }
+            if (accent) {
+                document.getElementById('accent-box').style.backgroundColor = accent;
+            }
+        }
+        
+        // Função principal
+        async function testCSS() {
+            const statusContent = document.getElementById('status-content');
+            const debugContent = document.getElementById('debug-content');
+            
+            try {
+                // Carregar CSS do SkillHub
+                statusContent.innerHTML = '<p>🔄 Carregando CSS do SkillHub...</p>';
+                
+                await loadCSS('css/skillhub-theme.css?v=3.0.0');
+                statusContent.innerHTML = '<p class="success">✅ CSS do SkillHub carregado com sucesso!</p>';
+                
+                // Aguardar um pouco para o CSS ser aplicado
+                setTimeout(() => {
+                    // Verificar variáveis CSS
+                    const variables = checkCSSVariables();
+                    
+                    let debugHTML = '<h4>Variáveis CSS:</h4>';
+                    for (const [name, value] of Object.entries(variables)) {
+                        const status = value ? '✅' : '❌';
+                        const color = value ? 'success' : 'error';
+                        debugHTML += `<p class="${color}">${status} ${name}: ${value || 'NÃO DEFINIDA'}</p>`;
+                    }
+                    
+                    // Aplicar cores aos boxes
+                    applyColors();
+                    
+                    // Verificar se as cores estão sendo aplicadas
+                    const testBoxes = document.querySelectorAll('.test-box');
+                    debugHTML += '<h4>Verificação Visual:</h4>';
+                    
+                    testBoxes.forEach((box, index) => {
+                        const computedStyle = getComputedStyle(box);
+                        const bgColor = computedStyle.backgroundColor;
+                        debugHTML += `<p>Box ${index + 1}: ${bgColor}</p>`;
+                    });
+                    
+                    debugContent.innerHTML = debugHTML;
+                    
+                    // Log no console
+                    console.log('🎨 Tema SkillHub - Debug Info:');
+                    console.log('Variáveis CSS:', variables);
+                    console.log('Test Boxes:', Array.from(testBoxes).map(box => getComputedStyle(box).backgroundColor));
+                    
+                    if (variables['--skillhub-primary'] && variables['--skillhub-secondary'] && variables['--skillhub-accent']) {
+                        statusContent.innerHTML += '<p class="success">✅ Todas as variáveis CSS estão funcionando!</p>';
+                    } else {
+                        statusContent.innerHTML += '<p class="error">❌ Algumas variáveis CSS não foram carregadas</p>';
+                    }
+                }, 100);
+                
+            } catch (error) {
+                statusContent.innerHTML = `<p class="error">❌ Erro ao carregar CSS: ${error.message}</p>`;
+                console.error('Erro ao carregar CSS:', error);
+            }
+        }
+        
+        // Iniciar teste quando a página carregar
+        document.addEventListener('DOMContentLoaded', testCSS);
+    </script>
+</body>
+</html>

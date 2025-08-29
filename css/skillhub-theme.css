@@ -1,0 +1,46 @@
+/* ===== SKILLHUB THEME - IDENTIDADE VISUAL MODERNA ===== */
+
+/* Variáveis CSS para o tema SkillHub */
+:root {
+  /* Cores Principais */
+  --skillhub-primary: #0A1A2F;
+  --skillhub-secondary: #1E3A8A;
+  --skillhub-accent: #3B82F6;
+  
+  /* Cores de Fundo */
+  --skillhub-bg-light: #F9FAFB;
+  --skillhub-bg-dark: #111827;
+  --skillhub-bg-white: #FFFFFF;
+  
+  /* Cores de Texto */
+  --skillhub-text-primary: #111827;
+  --skillhub-text-secondary: #6B7280;
+  --skillhub-text-light: #9CA3AF;
+  
+  /* Cores de Status */
+  --skillhub-success: #10B981;
+  --skillhub-warning: #F59E0B;
+  --skillhub-error: #EF4444;
+  --skillhub-info: #3B82F6;
+  
+  /* Bordas e Sombras */
+  --skillhub-border-radius-small: 8px;
+  --skillhub-border-radius-medium: 12px;
+  --skillhub-border-radius-large: 16px;
+  --skillhub-border-radius-xlarge: 20px;
+  
+  --skillhub-shadow-small: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --skillhub-shadow-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --skillhub-shadow-large: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  
+  /* Espaçamentos */
+  --skillhub-spacing-xs: 4px;
+  --skillhub-spacing-sm: 8px;
+  --skillhub-spacing-md: 16px;
+  --skillhub-spacing-lg: 24px;
+  --skillhub-spacing-xl: 32px;
+  --skillhub-spacing-xxl: 48px;
+  
+  /* Bordas */
+  --skillhub-border-light: #E5E7EB;
+}
