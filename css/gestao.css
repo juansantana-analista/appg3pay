@@ -7,17 +7,17 @@
 }
 
 .section-title {
-  color: #00591F;
+  color: #0A1A2F;
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 15px;
   padding-left: 5px;
-  border-left: 4px solid #7CBE42;
+  border-left: 4px solid #1E3A8A;
 }
 
 /* Estilos da Carteira Digital */
 .wallet-card {
-  background: linear-gradient(135deg, #00591F 0%, #00752a 100%);
+  background: linear-gradient(135deg, #0A1A2F 0%, #1E3A8A 100%);
   border-radius: 16px;
   padding: 20px;
   color: white;
@@ -234,7 +234,7 @@
 .saldo-value {
   font-size: 24px;
   font-weight: 600;
-  color: #00591F;
+  color: #0A1A2F;
 }
 
 .money-input {
@@ -273,7 +273,7 @@
 }
 
 .valor-liquido strong {
-  color: #00591F;
+  color: #0A1A2F;
   font-size: 18px;
 }
 
@@ -303,9 +303,9 @@
 }
 
 .filter-btn.active {
-  background: #00591F;
+  background: #0A1A2F;
   color: white;
-  border-color: #00591F;
+  border-color: #0A1A2F;
 }
 
 .extrato-list {
@@ -333,8 +333,8 @@
 }
 
 .extrato-icon.entrada {
-  background: rgba(124, 190, 66, 0.1);
-  color: #7CBE42;
+  background: rgba(30, 58, 138, 0.1);
+  color: #1E3A8A;
 }
 
 .extrato-icon.saida {
@@ -387,7 +387,7 @@
 
 .info-card i {
   font-size: 32px;
-  color: #00591F;
+  color: #0A1A2F;
 }
 
 .destinatario-nome {
@@ -445,7 +445,7 @@
 .card-value {
   font-size: 22px;
   font-weight: 600;
-  color: #00591F;
+  color: #0A1A2F;
   margin-bottom: 5px;
 }
 
@@ -488,8 +488,8 @@
 }
 
 .transaction-icon.entrada {
-  background-color: rgba(124, 190, 66, 0.1);
-  color: #7CBE42;
+  background-color: rgba(30, 58, 138, 0.1);
+  color: #1E3A8A;
 }
 
 .transaction-icon.saida {
@@ -581,7 +581,7 @@
 
 /* Cabeçalho do Dashboard */
 .dashboard-header {
-  background-color: #00591F;
+  background-color: #0A1A2F;
   padding: 20px 15px;
   color: white;
   border-radius: 0 0 12px 12px;
@@ -607,7 +607,7 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: #00591F;
+  background-color: #0A1A2F;
   color: white;
   display: flex;
   align-items: center;
@@ -745,7 +745,7 @@
 
 .pix-key-type {
   font-size: 12px;
-  color: #00591F;
+  color: #0A1A2F;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -767,7 +767,7 @@
 
 .btn-cadastrar-pix {
   width: 100%;
-  background: linear-gradient(135deg, #00591F 0%, #00752a 100%);
+  background: linear-gradient(135deg, #0A1A2F 0%, #1E3A8A 100%);
   color: white;
   border: none;
   border-radius: 10px;
@@ -780,12 +780,12 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 4px 12px rgba(0, 89, 31, 0.3);
+  box-shadow: 0 4px 12px rgba(10, 26, 47, 0.3);
 }
 
 .btn-cadastrar-pix:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 89, 31, 0.4);
+  box-shadow: 0 6px 16px rgba(10, 26, 47, 0.4);
 }
 
 .btn-cadastrar-pix:active {
@@ -826,8 +826,8 @@
 
 .valor-retirada-container input:focus {
   outline: none;
-  border-color: #00591F;
-  box-shadow: 0 0 0 3px rgba(0, 89, 31, 0.1);
+  border-color: #0A1A2F;
+  box-shadow: 0 0 0 3px rgba(10, 26, 47, 0.1);
 }
 
 .valor-retirada-container input::placeholder {
@@ -838,7 +838,7 @@
   background: #f8f9fa;
   border-radius: 8px;
   padding: 15px;
-  border-left: 4px solid #00591F;
+  border-left: 4px solid #0A1A2F;
 }
 
 .taxa-info {
@@ -851,7 +851,7 @@
 }
 
 .taxa-info i {
-  color: #00591F;
+  color: #0A1A2F;
   font-size: 16px;
 }
 
@@ -864,13 +864,13 @@
 }
 
 .valor-liquido strong {
-  color: #00591F;
+  color: #0A1A2F;
   font-size: 18px;
 }
 
 .btn-sacar-retirada {
   width: 100%;
-  background: linear-gradient(135deg, #00591F 0%, #00752a 100%);
+  background: linear-gradient(135deg, #0A1A2F 0%, #1E3A8A 100%);
   color: white;
   border: none;
   border-radius: 12px;
@@ -883,13 +883,13 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  box-shadow: 0 4px 12px rgba(0, 89, 31, 0.3);
+  box-shadow: 0 4px 12px rgba(10, 26, 47, 0.3);
   margin-top: 10px;
 }
 
 .btn-sacar-retirada:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 89, 31, 0.4);
+  box-shadow: 0 6px 16px rgba(10, 26, 47, 0.4);
 }
 
 .btn-sacar-retirada:active:not(:disabled) {
@@ -971,7 +971,7 @@
 }
 
 .popup-cadastro-pix .popup-header {
-  background: linear-gradient(135deg, #00591F 0%, #00752a 100%);
+  background: linear-gradient(135deg, #0A1A2F 0%, #1E3A8A 100%);
   color: white;
   padding: 20px;
   display: flex;
@@ -1054,8 +1054,8 @@
 
 .popup-cadastro-pix .form-control:focus {
   outline: none;
-  border-color: #00591F;
-  box-shadow: 0 0 0 3px rgba(0, 89, 31, 0.1);
+  border-color: #0A1A2F;
+  box-shadow: 0 0 0 3px rgba(10, 26, 47, 0.1);
 }
 
 .popup-cadastro-pix .form-control:read-only {
@@ -1096,7 +1096,7 @@
 
 .popup-cadastro-pix .btn-salvar-pix {
   flex: 1;
-  background: linear-gradient(135deg, #00591F 0%, #00752a 100%);
+  background: linear-gradient(135deg, #0A1A2F 0%, #1E3A8A 100%);
   color: white;
   border: none;
   border-radius: 8px;
@@ -1109,12 +1109,12 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 4px 12px rgba(0, 89, 31, 0.3);
+  box-shadow: 0 4px 12px rgba(10, 26, 47, 0.3);
 }
 
 .popup-cadastro-pix .btn-salvar-pix:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 89, 31, 0.4);
+  box-shadow: 0 6px 16px rgba(10, 26, 47, 0.4);
 }
 
 .popup-cadastro-pix .btn-salvar-pix:active {

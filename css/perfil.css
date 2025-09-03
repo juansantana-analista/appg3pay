@@ -2,7 +2,7 @@
 
 /* Profile Header */
 .profile-header {
-  background: #00591F;
+  background: #0A1A2F;
   padding: 30px 20px;
   text-align: center;
   border-radius: 0 0 25px 25px;
@@ -113,7 +113,7 @@
 }
 
 .profile-name {
-  color: #00591F;
+  color: #0A1A2F;
   font-size: 24px;
   font-weight: 600;
   margin: 0 0 5px 0;
@@ -158,7 +158,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #00591F, #7CBE42);
+  background: linear-gradient(135deg, #0A1A2F, #1E3A8A);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -173,7 +173,7 @@
 .stat-value {
   font-size: 24px;
   font-weight: 600;
-  color: #00591F;
+  color: #0A1A2F;
   margin-bottom: 5px;
 }
 
@@ -229,7 +229,7 @@
 
 .option-icon i {
   font-size: 20px;
-  color: #00591F;
+  color: #0A1A2F;
 }
 
 .option-content {
@@ -255,7 +255,7 @@
 }
 
 .option-item:hover .option-arrow {
-  color: #00591F;
+  color: #0A1A2F;
   transform: translateX(3px);
 }
 
@@ -306,7 +306,7 @@
 }
 
 input:checked + .slider {
-  background-color: #00591F;
+  background-color: #0A1A2F;
 }
 
 input:checked + .slider:before {
@@ -382,7 +382,7 @@ input:checked + .slider:before {
 }
 
 .modal-header {
-  background: linear-gradient(135deg, #00591F, #7CBE42);
+  background: linear-gradient(135deg, #0A1A2F, #1E3A8A);
   color: white;
   padding: 20px;
   display: flex;
@@ -441,7 +441,7 @@ input:checked + .slider:before {
 
 .form-input:focus {
   outline: none !important;
-  border-color: #00591F !important;
+  border-color: #0A1A2F !important;
   background: white !important;
   box-shadow: 0 0 0 3px rgba(0, 89, 31, 0.1) !important;
 }
@@ -489,13 +489,13 @@ input:checked + .slider:before {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #00591F, #7CBE42);
+  background: linear-gradient(135deg, #0A1A2F, #1E3A8A);
   color: white;
 }
 
 .btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 89, 31, 0.3);
+  box-shadow: 0 4px 12px rgba(10, 26, 47, 0.3);
 }
 
 /* Animations */
@@ -568,7 +568,7 @@ input:checked + .slider:before {
   height: 20px;
   margin: -10px 0 0 -10px;
   border: 2px solid #f3f3f3;
-  border-top: 2px solid #00591F;
+  border-top: 2px solid #0A1A2F;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -619,14 +619,14 @@ input:checked + .slider:before {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #00591F;
+  color: #0A1A2F;
   text-decoration: none;
   font-weight: 600;
   transition: all 0.3s ease;
 }
 
 .back-button:hover {
-  color: #7CBE42;
+  color: #1E3A8A;
   text-decoration: none;
 }
 
@@ -677,8 +677,8 @@ input:checked + .slider:before {
 
 .popup-editar-pix .form-input:focus {
   outline: none;
-  border-color: #00591F;
-  box-shadow: 0 0 0 3px rgba(0, 89, 31, 0.1);
+  border-color: #0A1A2F;
+  box-shadow: 0 0 0 3px rgba(10, 26, 47, 0.1);
 }
 
 .popup-editar-pix .form-input:read-only {
@@ -812,13 +812,13 @@ input:checked + .slider:before {
 }
 
 .upload-area:hover {
-  border-color: #00591F;
-  background: rgba(0, 89, 31, 0.05);
+  border-color: #0A1A2F;
+  background: rgba(10, 26, 47, 0.05);
 }
 
 .upload-area i {
   font-size: 32px;
-  color: #00591F;
+  color: #0A1A2F;
   margin-bottom: 10px;
   display: block;
 }
@@ -872,7 +872,7 @@ input:checked + .slider:before {
 .btn-upload {
   width: 100%;
   padding: 15px 20px;
-  background: linear-gradient(135deg, #00591F, #7CBE42);
+  background: linear-gradient(135deg, #0A1A2F, #1E3A8A);
   color: white;
   border: none;
   border-radius: 8px;
