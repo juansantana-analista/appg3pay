@@ -840,7 +840,7 @@ form {
 }
 
 .green {
-  background-color: #28a745;
+  background-color: #10B981;
 }
 
 .black {
@@ -1719,7 +1719,7 @@ form {
 }
 
 .categoria[data-color="green"] i {
-  background-color: #28a745;
+  background-color: #10B981;
 }
 
 .categoria[data-color="orange"] i {
@@ -1873,7 +1873,7 @@ form {
 }
 
 .discounted-price {
-  color: green;
+  color: #10B981;
   font-weight: bold;
 }
 
