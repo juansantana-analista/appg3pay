@@ -96,11 +96,9 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   font-size: 2.5rem;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: var(--skillhub-primary);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-weight: 800;
 }
 
 h2 {
@@ -145,10 +143,8 @@ h6 {
 
 /* Texto com efeitos especiais */
 .text-gradient {
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--skillhub-primary);
+  font-weight: 700;
 }
 
 .text-glow {
@@ -261,7 +257,7 @@ a:hover {
 
 /* Botões com variações especiais */
 .btn-outline {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.9);
   border: 2px solid var(--skillhub-primary);
   color: var(--skillhub-primary);
   position: relative;
@@ -290,9 +286,9 @@ a:hover {
 }
 
 .btn-ghost {
-  background: rgba(26, 58, 138, 0.1);
+  background: rgba(26, 58, 138, 0.15);
   color: var(--skillhub-primary);
-  border: 1px solid rgba(26, 58, 138, 0.2);
+  border: 1px solid rgba(26, 58, 138, 0.3);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
@@ -352,20 +348,22 @@ a:hover {
 
 /* Cards com glassmorphism */
 .card, .block, .list {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-radius: var(--border-radius-lg);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: var(--shadow-soft);
   transition: var(--transition-medium);
   overflow: hidden;
+  color: var(--skillhub-text-primary);
 }
 
 .card:hover, .block:hover, .list:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-medium);
-  border-color: rgba(26, 58, 138, 0.2);
+  border-color: var(--skillhub-secondary);
+  background: rgba(255, 255, 255, 1);
 }
 
 /* Cards de destaque */
@@ -423,14 +421,16 @@ a:hover {
 }
 
 .card-minimal {
-  background: transparent;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: none;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-soft);
+  color: var(--skillhub-text-primary);
 }
 
 .card-minimal:hover {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.9);
   border-color: var(--skillhub-secondary);
+  box-shadow: var(--shadow-medium);
 }
 
 /* Cards com animações especiais */
@@ -466,10 +466,11 @@ a:hover {
 
 /* Cards com efeito de vidro */
 .card-glass {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: var(--skillhub-text-primary);
 }
 
 /* Cards com sombra colorida */
@@ -485,33 +486,34 @@ a:hover {
 
 /* Inputs com design moderno */
 input, textarea, select {
-  background: rgba(255, 255, 255, 0.9);
-  border: 2px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 1);
+  border: 2px solid rgba(0, 0, 0, 0.15);
   border-radius: var(--border-radius-md);
   padding: 12px 16px;
   transition: var(--transition-medium);
   font-size: 16px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  color: var(--skillhub-text-primary);
+  box-shadow: var(--shadow-soft);
 }
 
 input:focus, textarea:focus, select:focus {
-  border-color: var(--skillhub-secondary);
-  box-shadow: 0 0 0 3px rgba(26, 58, 138, 0.1);
+  border-color: var(--skillhub-primary);
+  box-shadow: 0 0 0 3px rgba(26, 58, 138, 0.15);
   background: rgba(255, 255, 255, 1);
   transform: translateY(-1px);
+  outline: none;
 }
 
 /* Variações de inputs */
 .input-outline {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.8);
   border: 2px solid var(--skillhub-border-light);
   color: var(--skillhub-text-primary);
 }
 
 .input-outline:focus {
   border-color: var(--skillhub-primary);
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 1);
 }
 
 .input-filled {
@@ -804,7 +806,7 @@ label {
 }
 
 .badge-outline {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.9);
   border: 1px solid var(--skillhub-primary);
   color: var(--skillhub-primary);
 }
@@ -813,7 +815,7 @@ label {
 .progress {
   width: 100%;
   height: 8px;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.15);
   border-radius: var(--border-radius-full);
   overflow: hidden;
   position: relative;
@@ -852,7 +854,7 @@ label {
 .tooltip .tooltip-text {
   visibility: hidden;
   width: 120px;
-  background: var(--skillhub-text-primary);
+  background: rgba(0, 0, 0, 0.9);
   color: white;
   text-align: center;
   border-radius: var(--border-radius-sm);
@@ -865,6 +867,7 @@ label {
   opacity: 0;
   transition: var(--transition-fast);
   font-size: 0.75rem;
+  box-shadow: var(--shadow-medium);
 }
 
 .tooltip .tooltip-text::after {
@@ -875,7 +878,7 @@ label {
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: var(--skillhub-text-primary) transparent transparent transparent;
+  border-color: rgba(0, 0, 0, 0.9) transparent transparent transparent;
 }
 
 .tooltip:hover .tooltip-text {
@@ -910,27 +913,31 @@ label {
 }
 
 .alert-success {
-  background: rgba(16, 185, 129, 0.1);
+  background: rgba(16, 185, 129, 0.15);
   border-left-color: var(--skillhub-success);
   color: var(--skillhub-success);
+  border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .alert-warning {
-  background: rgba(245, 158, 11, 0.1);
+  background: rgba(245, 158, 11, 0.15);
   border-left-color: var(--skillhub-warning);
   color: var(--skillhub-warning);
+  border: 1px solid rgba(245, 158, 11, 0.2);
 }
 
 .alert-error {
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(239, 68, 68, 0.15);
   border-left-color: var(--skillhub-error);
   color: var(--skillhub-error);
+  border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
 .alert-info {
-  background: rgba(59, 130, 246, 0.1);
+  background: rgba(59, 130, 246, 0.15);
   border-left-color: var(--skillhub-info);
   color: var(--skillhub-info);
+  border: 1px solid rgba(59, 130, 246, 0.2);
 }
 
 /* Dividers */
