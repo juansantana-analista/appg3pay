@@ -28,10 +28,26 @@
   --skillhub-border-radius-medium: 12px;
   --skillhub-border-radius-large: 16px;
   --skillhub-border-radius-xlarge: 20px;
+  --skillhub-border-radius-xxlarge: 24px;
   
   --skillhub-shadow-small: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --skillhub-shadow-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --skillhub-shadow-large: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --skillhub-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --skillhub-shadow-colored: 0 8px 32px rgba(26, 58, 138, 0.2);
+  
+  /* Gradientes */
+  --skillhub-gradient-primary: linear-gradient(135deg, #0A1A2F 0%, #1E3A8A 50%, #3B82F6 100%);
+  --skillhub-gradient-secondary: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 50%, #10B981 100%);
+  --skillhub-gradient-accent: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #EC4899 100%);
+  --skillhub-gradient-success: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+  --skillhub-gradient-warning: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+  --skillhub-gradient-error: linear-gradient(135deg, #EF4444 0%, #F87171 100%);
+  
+  /* Animações */
+  --skillhub-transition-fast: 0.2s ease-out;
+  --skillhub-transition-medium: 0.3s ease-out;
+  --skillhub-transition-slow: 0.5s ease-out;
   
   /* Espaçamentos */
   --skillhub-spacing-xs: 4px;

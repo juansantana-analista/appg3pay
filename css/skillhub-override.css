@@ -32,22 +32,117 @@
 
 /* Botões principais */
 .button, .btn {
-  background-color: var(--skillhub-secondary) !important;
+  background: var(--skillhub-gradient-primary) !important;
   color: var(--skillhub-bg-white) !important;
   border-radius: var(--skillhub-border-radius-medium) !important;
   border: none !important;
-  transition: all 0.2s ease-in-out !important;
+  transition: var(--skillhub-transition-medium) !important;
+  box-shadow: var(--skillhub-shadow-small) !important;
+  font-weight: 600 !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.button::before, .btn::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: -100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent) !important;
+  transition: var(--skillhub-transition-medium) !important;
+}
+
+.button:hover::before, .btn:hover::before {
+  left: 100% !important;
 }
 
 .button:hover, .btn:hover {
-  background-color: var(--skillhub-accent) !important;
-  transform: translateY(-1px) !important;
+  transform: translateY(-2px) !important;
   box-shadow: var(--skillhub-shadow-medium) !important;
+}
+
+.button:active, .btn:active {
+  transform: translateY(0) !important;
+  box-shadow: var(--skillhub-shadow-small) !important;
 }
 
 /* Links ativos */
 .link.active, .tab-link.active {
   color: var(--skillhub-secondary) !important;
+}
+
+/* Cards e componentes visuais */
+.card, .block, .list {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-radius: var(--skillhub-border-radius-large) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: var(--skillhub-shadow-small) !important;
+  transition: var(--skillhub-transition-medium) !important;
+  overflow: hidden !important;
+}
+
+.card:hover, .block:hover, .list:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--skillhub-shadow-medium) !important;
+  border-color: rgba(26, 58, 138, 0.2) !important;
+}
+
+/* Inputs melhorados */
+input, textarea, select {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 2px solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: var(--skillhub-border-radius-medium) !important;
+  padding: 12px 16px !important;
+  transition: var(--skillhub-transition-medium) !important;
+  font-size: 16px !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--skillhub-secondary) !important;
+  box-shadow: 0 0 0 3px rgba(26, 58, 138, 0.1) !important;
+  background: rgba(255, 255, 255, 1) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Navegação melhorada */
+.top-nav {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: var(--skillhub-shadow-small) !important;
+}
+
+.bottom-nav {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.1) !important;
+}
+
+.bottom-nav a {
+  transition: var(--skillhub-transition-medium) !important;
+  border-radius: var(--skillhub-border-radius-small) !important;
+  margin: 4px !important;
+  padding: 8px 12px !important;
+}
+
+.bottom-nav a:hover {
+  background: rgba(26, 58, 138, 0.1) !important;
+  transform: translateY(-2px) !important;
+}
+
+.bottom-nav a.active {
+  background: var(--skillhub-gradient-primary) !important;
+  color: white !important;
+  box-shadow: var(--skillhub-shadow-small) !important;
 }
 
 /* Cards e containers */
