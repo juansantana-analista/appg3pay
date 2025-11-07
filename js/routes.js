@@ -208,8 +208,8 @@ var app = new Framework7({
           // fazer algo depois da página ser exibida
         },
         pageInit: function (event, page) {
-    buscarQtdeNotif();
-    contarCarrinho();
+        buscarQtdeNotif();
+        contarCarrinho();
     
           // fazer algo quando a página for inicializada
           var swiper = app.swiper.create(".swiper", {
@@ -503,6 +503,7 @@ var app = new Framework7({
                     localStorage.setItem("pessoaId", decodedToken.pessoa_id);
                     localStorage.setItem("codigo_indicador", decodedToken.codigo_indicador);
                     localStorage.setItem("validadeToken", decodedToken.expires);
+
                     //localStorage.setItem("validadeToken", decodedToken.expires);
 
                     buscarPessoaId(decodedToken.userid);
@@ -649,8 +650,8 @@ var app = new Framework7({
           }
         },
         pageInit: function (event, page) {
-    buscarQtdeNotif();
-    contarCarrinho();
+        buscarQtdeNotif();
+        contarCarrinho();
     
           // fazer algo quando a página for inicializada  
           $.getScript('js/qrcode.min.js');
